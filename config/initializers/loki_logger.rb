@@ -37,7 +37,7 @@ if ENV['LOKI_URL'].present?
           streams: [
             {
               stream: {
-                app: 'dsf-chatwoot',
+                app: 'cms-kai',
                 environment: ENV.fetch('ENVIRONMENT_NAME', Rails.env),
                 level: level.to_s,
                 host: Socket.gethostname
