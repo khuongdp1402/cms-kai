@@ -1,0 +1,47 @@
+===============================================================================
+DSFSOFT PROPRIETARY & COMMERCIAL SOFTWARE LICENSE AGREEMENT
+===============================================================================
+
+Copyright (c) 2026 DSFSoft Software Corporation (https://dsfsoft.vn).
+All Rights Reserved.
+
+1. PROPRIETARY EXTENSIONS & MODIFICATIONS
+-------------------------------------------------------------------------------
+This repository contains proprietary additions, enterprise extensions, and 
+custom integration modules developed by DSFSoft Software Corporation, including 
+but not limited to:
+- Zalo Official Account Integration Engine (`lib/integrations/zalo`)
+- Shopee Open Platform & TikTok Shop Partners Integration Clients
+- Custom AI & LLM Service Connectors (`app/services/ai/custom_llm_service.rb`)
+- Unified Patient 360 View & Hospital EMR/OMS Context Extensions
+- DSFSoft SaaS Admin Multi-Tenant Control Interfaces
+
+2. DUAL-LICENSING TERMS & COMMERCIAL RIGHTS
+-------------------------------------------------------------------------------
+The core open-source components of this software remain subject to the original 
+MIT Expat License defined in the `LICENSE` file.
+
+However, all proprietary extensions, custom modules, brand trademarks, and 
+commercial SaaS management software created by DSFSoft Software Corporation 
+are provided under this Private Commercial License.
+
+Authorized clients and tenants holding an active Commercial Subscription Agreement 
+with DSFSoft Software Corporation are granted a non-exclusive, non-transferable 
+right to operate and utilize the Software for their internal business operations.
+
+3. RESTRICTIONS
+-------------------------------------------------------------------------------
+Unless explicitly permitted under a written commercial contract with DSFSoft:
+- You may not reverse engineer, decompile, or unbundle proprietary DSFSoft extensions.
+- You may not re-license, sell, or sub-license proprietary DSFSoft trademarks 
+  and brand assets to third parties.
+
+4. DISCLAIMER OF WARRANTY
+-------------------------------------------------------------------------------
+THIS SOFTWARE IS PROVIDED BY DSFSOFT SOFTWARE CORPORATION "AS IS" AND ANY 
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. 
+
+===============================================================================
+For commercial licensing inquiries, contact: support@dsfsoft.vn
+===============================================================================

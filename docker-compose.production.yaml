@@ -1,0 +1,96 @@
+version: '3'
+
+services:
+  base: &base
+    build: .
+    image: chatwoot:local
+    env_file: .env ## External Postgres (192.168.82.155:30411) & External Redis
+    volumes:
+      - storage_data:/app/storage
+      - ./public:/app/public
+      - ./app:/app/app
+      - ./config:/app/config
+      - ./lib:/app/lib
+
+  rails:
+    <<: *base
+    ports:
+      - '127.0.0.1:3000:3000'
+    depends_on:
+      - redis
+      - zalo_personal_bridge
+      - zalo_oa_web_bridge
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - DISABLE_ENTERPRISE=true
+      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
+      - ZALO_OA_WEB_BRIDGE_URL=http://zalo_oa_web_bridge:5002
+      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+    entrypoint: docker/entrypoints/rails.sh
+    command: ['bundle', 'exec', 'rails', 's', '-p', '3000', '-b', '0.0.0.0']
+    restart: always
+
+  sidekiq:
+    <<: *base
+    depends_on:
+      - redis
+      - zalo_personal_bridge
+      - zalo_oa_web_bridge
+    environment:
+      - NODE_ENV=production
+      - RAILS_ENV=production
+      - INSTALLATION_ENV=docker
+      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
+      - ZALO_OA_WEB_BRIDGE_URL=http://zalo_oa_web_bridge:5002
+      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+    command: ['bundle', 'exec', 'sidekiq', '-C', 'config/sidekiq.yml']
+    restart: always
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - '127.0.0.1:6379:6379'
+    volumes:
+      - redis_data:/data
+
+  zalo_personal_bridge:
+    build:
+      context: ./zalo-personal-bridge
+    image: zalo-personal-bridge:local
+    restart: always
+    ports:
+      - '127.0.0.1:5001:5001'
+    environment:
+      - PORT=5001
+      - DATABASE_URL=${DATABASE_URL:-postgresql://postgres:postgres@postgres:5432/chatwoot}
+      - REDIS_URL=${REDIS_URL:-redis://redis:6379}
+      - CHATWOOT_WEBHOOK_URL=${CHATWOOT_WEBHOOK_URL:-http://rails:3000/webhooks/zalo_personal}
+      - ZALO_BRIDGE_SERVICE_SECRET=${ZALO_BRIDGE_SERVICE_SECRET}
+      - ZALO_BRIDGE_ACTIVE_KEY_ID=${ZALO_BRIDGE_ACTIVE_KEY_ID:-k1}
+      - ZALO_BRIDGE_ENCRYPTION_KEYS=${ZALO_BRIDGE_ENCRYPTION_KEYS}
+    depends_on:
+      - redis
+
+  zalo_oa_web_bridge:
+    build:
+      context: ./zalo-oa-web-bridge
+    image: zalo-oa-web-bridge:local
+    restart: always
+    ports:
+      - '5002:5002'
+    environment:
+      - PORT=5002
+      - CHATWOOT_URL=http://rails:3000
+      - CHATWOOT_ACCOUNT_ID=1
+      - CHATWOOT_INBOX_IDENTIFIER=aMUh5V1yL4pxDBkEV55qNZmV
+      - CHATWOOT_API_TOKEN=AwFHbo4denMgr7yh9u2aHK1D
+    volumes:
+      - ./zalo-oa-web-bridge:/app
+
+volumes:
+  storage_data:
+  redis_data:
+

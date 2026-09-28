@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZaloPersonalStatusV1",
+  "type": "object",
+  "required": [
+    "integration_id",
+    "status",
+    "session_generation",
+    "capabilities"
+  ],
+  "properties": {
+    "integration_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "needs_qr",
+        "qr_pending",
+        "awaiting_confirmation",
+        "connecting",
+        "connected",
+        "degraded",
+        "reconnecting",
+        "reauth_required",
+        "stopping"
+      ]
+    },
+    "session_generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "lease_owner": {
+      "type": ["string", "null"]
+    },
+    "lease_until": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "display_name": { "type": "string" },
+        "avatar_url": { "type": ["string", "null"] }
+      }
+    },
+    "capabilities": {
+      "type": "object"
+    },
+    "last_heartbeat_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

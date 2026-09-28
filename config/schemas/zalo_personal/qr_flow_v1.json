@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZaloPersonalQrFlowV1",
+  "type": "object",
+  "required": [
+    "flow_id",
+    "status",
+    "expires_at"
+  ],
+  "properties": {
+    "flow_id": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "qr_ready",
+        "scanned",
+        "awaiting_confirmation",
+        "authenticated",
+        "expired",
+        "declined",
+        "cancelled",
+        "failed"
+      ]
+    },
+    "qr_data_url": {
+      "type": ["string", "null"]
+    },
+    "expires_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authenticated_at": {
+      "type": ["string", "null"],
+      "format": "date-time"
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "user_id": { "type": "string" },
+        "display_name": { "type": "string" },
+        "avatar_url": { "type": ["string", "null"] }
+      }
+    },
+    "capabilities": {
+      "type": "object"
+    },
+    "error_code": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,61 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: zalo-personal-bridge-netpol
+  namespace: chatwoot
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: zalo-personal-bridge
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: chatwoot
+      ports:
+        - protocol: TCP
+          port: 5001
+  egress:
+    # 1. Chatwoot Rails Webhook
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: chatwoot
+      ports:
+        - protocol: TCP
+          port: 3000
+    # 2. Postgres
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgres
+      ports:
+        - protocol: TCP
+          port: 5432
+    # 3. Redis
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: redis
+      ports:
+        - protocol: TCP
+          port: 6379
+    # 4. External Internet (Zalo APIs & CDNs)
+    - to:
+        - ipBlock:
+            cidr: 0.0.0.0/0
+            except:
+              - 10.0.0.0/8
+              - 172.16.0.0/12
+              - 192.168.0.0/16
+              - 169.254.169.254/32
+      ports:
+        - protocol: TCP
+          port: 443
+        - protocol: TCP
+          port: 80
+        - protocol: UDP
+          port: 53

@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zalo-personal-bridge
+  namespace: chatwoot
+  labels:
+    app.kubernetes.io/name: zalo-personal-bridge
+    app.kubernetes.io/part-of: chatwoot
+spec:
+  # QR login state (including the one-time credentials returned by Zalo) lives
+  # in the bridge process until Chatwoot consumes it. Keep a single process
+  # until that state is moved to a shared, encrypted store.
+  replicas: 1
+  strategy:
+    # A rolling update briefly creates two bridge processes and the Service can
+    # route QR create/status/consume requests to different in-memory stores.
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: zalo-personal-bridge
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: zalo-personal-bridge
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
+      containers:
+        - name: bridge
+          image: zalo-personal-bridge:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5001
+              name: http
+          envFrom:
+            - configMapRef:
+                name: zalo-personal-bridge-config
+            - secretRef:
+                name: zalo-personal-bridge-secrets
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1024Mi"
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: 5001
+            initialDelaySeconds: 10
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: 5001
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          startupProbe:
+            httpGet:
+              path: /health/startup
+              port: 5001
+            failureThreshold: 30
+            periodSeconds: 2

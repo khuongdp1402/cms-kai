@@ -1,0 +1,60 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZaloPersonalInboundEventV1",
+  "type": "object",
+  "required": [
+    "version",
+    "event_id",
+    "type",
+    "sequence",
+    "occurred_at",
+    "session_generation",
+    "data"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "enum": [1]
+    },
+    "event_id": {
+      "type": "string",
+      "pattern": "^evt_[a-zA-Z0-9_-]+$"
+    },
+    "type": {
+      "type": "string",
+      "enum": [
+        "message.created",
+        "message.edited",
+        "message.recalled",
+        "message.delivered",
+        "message.read",
+        "message.failed",
+        "reaction.added",
+        "reaction.removed",
+        "typing.started",
+        "typing.stopped",
+        "thread.updated",
+        "participant.updated",
+        "session.connected",
+        "session.disconnected",
+        "session.expired"
+      ]
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "session_generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "data": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,155 @@
+version: '3'
+
+services:
+  base: &base
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+      args:
+        BUNDLE_WITHOUT: ''
+        EXECJS_RUNTIME: 'Node'
+        RAILS_ENV: 'development'
+        RAILS_SERVE_STATIC_FILES: 'false'
+    tty: true
+    stdin_open: true
+    image: chatwoot:development
+    env_file: .env
+
+  rails:
+    <<: *base
+    build:
+      context: .
+      dockerfile: ./docker/dockerfiles/rails.Dockerfile
+    image: chatwoot-rails:development
+    volumes:
+      - ./:/app:delegated
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+      - cache:/app/tmp/cache
+      - bundle:/gems
+    depends_on:
+      - postgres
+      - redis
+      - vite
+      - mailhog
+      - sidekiq
+      - zalo_personal_bridge
+    ports:
+      - 3000:3000
+    env_file: .env
+    environment:
+      - VITE_RUBY_HOST=vite
+      - VITE_RUBY_PORT=3036
+      - VITE_RUBY_CLIENT_HOST=localhost
+      - VITE_RUBY_AUTO_BUILD=false
+      - VITE_DEV_SERVER_HOST=vite
+      - NODE_ENV=development
+      - RAILS_ENV=development
+      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
+      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+    entrypoint: docker/entrypoints/rails.sh
+    command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+
+  sidekiq:
+    <<: *base
+    image: chatwoot-rails:development
+    volumes:
+      - ./:/app:delegated
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+      - cache:/app/tmp/cache
+      - bundle:/gems
+    depends_on:
+      - postgres
+      - redis
+      - mailhog
+      - zalo_personal_bridge
+    environment:
+      - NODE_ENV=development
+      - RAILS_ENV=development
+      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
+      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+    command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+
+  vite:
+    <<: *base
+    build:
+      context: .
+      dockerfile: ./docker/dockerfiles/vite.Dockerfile
+    image: chatwoot-vite:development
+    volumes:
+      - ./:/app:delegated
+      - node_modules:/app/node_modules
+      - packs:/app/public/packs
+      - cache:/app/tmp/cache
+      - bundle:/gems
+    ports:
+      - "3036:3036" # Vite dev server
+    environment:
+      - VITE_RUBY_HOST=0.0.0.0
+      - VITE_RUBY_PORT=3036
+      - VITE_DEV_SERVER_HOST=0.0.0.0
+      - NODE_ENV=development
+      - RAILS_ENV=development
+    entrypoint: docker/entrypoints/vite.sh
+    command: bin/vite dev
+
+  postgres:
+    image: pgvector/pgvector:pg16
+    restart: always
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres:/data/postgres
+    environment:
+      - POSTGRES_DB=chatwoot
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  redis:
+    image: redis:alpine
+    restart: always
+    command: ["sh", "-c", "redis-server --requirepass \"$REDIS_PASSWORD\""]
+    env_file: .env
+    volumes:
+      - redis:/data/redis
+    ports:
+      - '6379:6379'
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
+
+  zalo_personal_bridge:
+    build:
+      context: ./zalo-personal-bridge
+    image: zalo-personal-bridge:local
+    restart: always
+    volumes:
+      - ./zalo-personal-bridge/dist:/app/dist
+    ports:
+      - '5001:5001'
+    environment:
+      - PORT=5001
+      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/chatwoot
+      - REDIS_URL=redis://redis:6379
+      - CHATWOOT_WEBHOOK_URL=http://rails:3000/webhooks/zalo_personal
+      - ZALO_BRIDGE_SERVICE_SECRET=dev_service_secret_32bytes_long_key!
+      - ZALO_BRIDGE_ACTIVE_KEY_ID=k1
+      - ZALO_BRIDGE_ENCRYPTION_KEYS={"k1":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"}
+    depends_on:
+      - postgres
+      - redis
+
+
+
+volumes:
+  postgres:
+  redis:
+  packs:
+  node_modules:
+  cache:
+  bundle:

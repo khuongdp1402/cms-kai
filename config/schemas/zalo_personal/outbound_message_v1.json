@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ZaloPersonalOutboundMessageV1",
+  "type": "object",
+  "required": [
+    "version",
+    "delivery_id",
+    "idempotency_key",
+    "session_generation",
+    "thread",
+    "message"
+  ],
+  "properties": {
+    "version": {
+      "type": "integer",
+      "enum": [1]
+    },
+    "delivery_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "session_generation": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "thread": {
+      "type": "object",
+      "required": ["id", "type"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "type": "string",
+          "enum": ["direct", "group"]
+        }
+      },
+      "additionalProperties": false
+    },
+    "message": {
+      "type": "object",
+      "properties": {
+        "text": {
+          "type": ["string", "null"]
+        },
+        "reply_to_id": {
+          "type": ["string", "null"]
+        },
+        "mentions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["user_id", "pos", "len"],
+            "properties": {
+              "user_id": { "type": "string" },
+              "pos": { "type": "integer", "minimum": 0 },
+              "len": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["chatwoot_attachment_id", "type", "download_url"],
+            "properties": {
+              "chatwoot_attachment_id": { "type": "integer" },
+              "type": {
+                "type": "string",
+                "enum": ["image", "gif", "video", "audio", "voice", "file", "sticker", "location", "contact", "link", "unsupported"]
+              },
+              "download_url": { "type": "string" },
+              "filename": { "type": "string" },
+              "mime_type": { "type": "string" },
+              "byte_size": { "type": "integer" },
+              "checksum": { "type": "string" }
+            }
+          }
+        },
+        "sticker": {
+          "type": ["object", "null"],
+          "properties": {
+            "id": { "type": "string" },
+            "pack_id": { "type": "string" },
+            "category_id": { "type": "string" }
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

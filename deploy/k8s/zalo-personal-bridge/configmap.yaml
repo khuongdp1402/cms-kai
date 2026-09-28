@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zalo-personal-bridge-config
+  namespace: chatwoot
+data:
+  PORT: "5001"
+  HOST: "0.0.0.0"
+  LOG_LEVEL: "info"
+  CHATWOOT_WEBHOOK_URL: "http://chatwoot-web:3000/webhooks/zalo_personal"
+  ZALO_BRIDGE_ACTIVE_KEY_ID: "k1"
+  LEASE_TTL_MS: "30000"
+  LEASE_RENEW_MS: "10000"
