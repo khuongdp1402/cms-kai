@@ -1,0 +1,36 @@
+{
+  "extraKnownMarketplaces": {
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "superpowers@superpowers-marketplace": true
+  },
+  "enabledMcpjsonServers": ["codegraph"],
+  "permissions": {
+    "allow": [
+      "mcp__codegraph",
+      "Bash(codegraph query:*)",
+      "Bash(codegraph explore:*)",
+      "Bash(codegraph context:*)",
+      "Bash(codegraph node:*)",
+      "Bash(codegraph callers:*)",
+      "Bash(codegraph callees:*)",
+      "Bash(codegraph impact:*)",
+      "Bash(codegraph affected:*)",
+      "Bash(codegraph status:*)",
+      "Bash(codegraph sync:*)"
+    ],
+    "deny": [
+      "Edit(~/Projects/DSF/**)",
+      "Write(~/Projects/DSF/**)",
+      "NotebookEdit(~/Projects/DSF/**)",
+      "WebFetch(domain:dsfsoft.vn)",
+      "WebFetch(domain:*.dsfsoft.vn)"
+    ]
+  }
+}
