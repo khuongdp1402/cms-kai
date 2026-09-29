@@ -117,6 +117,14 @@ export const router = createRouter({
           name: 'profile',
           component: () => import('../views/profile/ProfileView.vue'),
         },
+
+        // ── Super Admin ──
+        {
+          path: 'super-admin',
+          name: 'super-admin',
+          component: () => import('../views/SuperAdminView.vue'),
+          meta: { requiresRole: 'administrator' },
+        },
       ],
     },
 
