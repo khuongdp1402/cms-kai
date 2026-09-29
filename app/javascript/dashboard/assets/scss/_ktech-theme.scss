@@ -110,6 +110,14 @@
     --label-background: 40 33 29;
     --border-blue: 194, 65, 12, 0.5;
     --solid-iris: 52 40 33;
+    // Cards, popovers and buttons: warm charcoal instead of cool gray
+    --surface-active: 58 48 42;
+    --solid-1: 26 21 18;
+    --solid-2: 33 27 23;
+    --solid-3: 48 39 34;
+    --solid-active: 58 48 42;
+    --card-color: 33 27 23;
+    --button-color: 46 38 33;
   }
 
   // Ombre sidebar: re-scope the text/hover variables so every Tailwind class
