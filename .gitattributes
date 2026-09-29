@@ -1,0 +1,7 @@
+# The repo is bind-mounted into Linux containers (docker-compose.yaml), so
+# scripts must keep LF even on Windows checkouts with core.autocrlf=true.
+* text=auto eol=lf
+
+*.pdf binary
+app/javascript/dashboard/assets/images/lock.svg -text
+public/dashboard/images/agent-bots/webhook.svg -text

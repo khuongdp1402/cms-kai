@@ -1,4 +1,16 @@
-version: '3'
+# Local development stack. First run: `make docker_setup`, then `make docker_up`.
+# See docs/reference/dev-setup.md.
+
+x-zalo-bridge-env: &zalo_bridge_env
+  ZALO_PERSONAL_BRIDGE_URL: http://zalo_personal_bridge:5001
+  ZALO_BRIDGE_SERVICE_SECRET: ${ZALO_BRIDGE_SERVICE_SECRET:-dev_service_secret_32bytes_long_key!}
+
+x-rails-volumes: &rails_volumes
+  - ./:/app:delegated
+  - node_modules:/app/node_modules
+  - packs:/app/public/packs
+  - cache:/app/tmp/cache
+  - bundle:/gems
 
 services:
   base: &base
@@ -14,6 +26,7 @@ services:
     stdin_open: true
     image: chatwoot:development
     env_file: .env
+    profiles: ['build']
 
   rails:
     <<: *base
@@ -21,54 +34,59 @@ services:
       context: .
       dockerfile: ./docker/dockerfiles/rails.Dockerfile
     image: chatwoot-rails:development
-    volumes:
-      - ./:/app:delegated
-      - node_modules:/app/node_modules
-      - packs:/app/public/packs
-      - cache:/app/tmp/cache
-      - bundle:/gems
+    profiles: []
+    volumes: *rails_volumes
     depends_on:
-      - postgres
-      - redis
-      - vite
-      - mailhog
-      - sidekiq
-      - zalo_personal_bridge
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      vite:
+        condition: service_started
+      mailhog:
+        condition: service_started
+      zalo_personal_bridge:
+        condition: service_healthy
     ports:
       - 3000:3000
-    env_file: .env
     environment:
-      - VITE_RUBY_HOST=vite
-      - VITE_RUBY_PORT=3036
-      - VITE_RUBY_CLIENT_HOST=localhost
-      - VITE_RUBY_AUTO_BUILD=false
-      - VITE_DEV_SERVER_HOST=vite
-      - NODE_ENV=development
-      - RAILS_ENV=development
-      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
-      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+      <<: *zalo_bridge_env
+      VITE_RUBY_HOST: vite
+      VITE_RUBY_PORT: 3036
+      VITE_RUBY_CLIENT_HOST: localhost
+      VITE_RUBY_AUTO_BUILD: 'false'
+      VITE_DEV_SERVER_HOST: vite
+      NODE_ENV: development
+      RAILS_ENV: development
+      SAFE_FETCH_ALLOW_PRIVATE_NETWORK: 'true'
     entrypoint: docker/entrypoints/rails.sh
     command: ["bundle", "exec", "rails", "s", "-p", "3000", "-b", "0.0.0.0"]
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:3000/api > /dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 60s
 
   sidekiq:
     <<: *base
     image: chatwoot-rails:development
-    volumes:
-      - ./:/app:delegated
-      - node_modules:/app/node_modules
-      - packs:/app/public/packs
-      - cache:/app/tmp/cache
-      - bundle:/gems
+    profiles: []
+    volumes: *rails_volumes
     depends_on:
-      - postgres
-      - redis
-      - mailhog
-      - zalo_personal_bridge
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+      zalo_personal_bridge:
+        condition: service_healthy
     environment:
-      - NODE_ENV=development
-      - RAILS_ENV=development
-      - SAFE_FETCH_ALLOW_PRIVATE_NETWORK=true
-      - ZALO_PERSONAL_BRIDGE_URL=http://zalo_personal_bridge:5001
+      <<: *zalo_bridge_env
+      NODE_ENV: development
+      RAILS_ENV: development
+      SAFE_FETCH_ALLOW_PRIVATE_NETWORK: 'true'
     command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
 
   vite:
@@ -77,20 +95,16 @@ services:
       context: .
       dockerfile: ./docker/dockerfiles/vite.Dockerfile
     image: chatwoot-vite:development
-    volumes:
-      - ./:/app:delegated
-      - node_modules:/app/node_modules
-      - packs:/app/public/packs
-      - cache:/app/tmp/cache
-      - bundle:/gems
+    profiles: []
+    volumes: *rails_volumes
     ports:
       - "3036:3036" # Vite dev server
     environment:
-      - VITE_RUBY_HOST=0.0.0.0
-      - VITE_RUBY_PORT=3036
-      - VITE_DEV_SERVER_HOST=0.0.0.0
-      - NODE_ENV=development
-      - RAILS_ENV=development
+      VITE_RUBY_HOST: 0.0.0.0
+      VITE_RUBY_PORT: 3036
+      VITE_DEV_SERVER_HOST: 0.0.0.0
+      NODE_ENV: development
+      RAILS_ENV: development
     entrypoint: docker/entrypoints/vite.sh
     command: bin/vite dev
 
@@ -100,12 +114,17 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - postgres:/data/postgres
+      - postgres:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=chatwoot
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST_AUTH_METHOD=trust
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chatwoot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   redis:
     image: redis:alpine
@@ -113,9 +132,14 @@ services:
     command: ["sh", "-c", "redis-server --requirepass \"$REDIS_PASSWORD\""]
     env_file: .env
     volumes:
-      - redis:/data/redis
+      - redis:/data
     ports:
       - '6379:6379'
+    healthcheck:
+      test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli ping | grep -q PONG"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   mailhog:
     image: mailhog/mailhog
@@ -128,23 +152,27 @@ services:
       context: ./zalo-personal-bridge
     image: zalo-personal-bridge:local
     restart: always
-    volumes:
-      - ./zalo-personal-bridge/dist:/app/dist
     ports:
       - '5001:5001'
     environment:
-      - PORT=5001
-      - DATABASE_URL=postgresql://postgres:postgres@postgres:5432/chatwoot
-      - REDIS_URL=redis://redis:6379
-      - CHATWOOT_WEBHOOK_URL=http://rails:3000/webhooks/zalo_personal
-      - ZALO_BRIDGE_SERVICE_SECRET=dev_service_secret_32bytes_long_key!
-      - ZALO_BRIDGE_ACTIVE_KEY_ID=k1
-      - ZALO_BRIDGE_ENCRYPTION_KEYS={"k1":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"}
+      PORT: 5001
+      LOG_LEVEL: debug
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/chatwoot
+      REDIS_URL: ${ZALO_BRIDGE_REDIS_URL:-redis://redis:6379}
+      CHATWOOT_WEBHOOK_URL: http://rails:3000/webhooks/zalo_personal
+      ZALO_BRIDGE_SERVICE_SECRET: ${ZALO_BRIDGE_SERVICE_SECRET:-dev_service_secret_32bytes_long_key!}
+      # ZALO_BRIDGE_ACTIVE_KEY_ID / ZALO_BRIDGE_ENCRYPTION_KEYS fall back to dev keys in src/config/env.ts
     depends_on:
-      - postgres
-      - redis
-
-
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://localhost:5001/health/ready').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
 
 volumes:
   postgres:
