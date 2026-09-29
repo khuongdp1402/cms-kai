@@ -4,7 +4,7 @@
 > Trạng thái: `todo` · `in-progress` · `done` · `blocked` · `skipped`
 
 **Phase hiện tại:** Phase 0 — Chuẩn bị
-**Việc đang làm:** P0-02 (ma trận tính năng)
+**Việc đang làm:** P0-05 (môi trường dev Docker), sau đó quay lại P0-02
 **Cập nhật lần cuối:** 2026-09-29
 
 ## Phase 0 — Chuẩn bị
@@ -15,9 +15,9 @@
 | P0-02 | Ma trận tính năng | todo | |
 | P0-03 | Chốt câu hỏi mở Q1–Q3 | blocked | Chờ chủ dự án trả lời (xem DECISIONS.md) |
 | P0-04 | Remote upstream và quy trình merge | todo | |
-| P0-05 | Môi trường dev local đầy đủ | todo | |
+| P0-05 | Môi trường dev local đầy đủ | in-progress | Nhánh `feat/P0-05-docker-dev-env`: sửa docker-compose (healthcheck, volume, secret chung Rails/bridge, bỏ mount `dist`), `.gitattributes` ép LF, lệnh `make docker_*`, hướng dẫn ở `docs/reference/dev-setup.md` |
 | P0-06 | Staging và CI | todo | Gồm cả dọn workflow Chatwoot thừa hưởng |
-| P0-07 | Chiến lược nhánh git | in-progress | ADR-006 `proposed`; đã tạo nhánh `docs/roadmap-crm-zalo-k8s`, chưa có `develop` và branch protection |
+| P0-07 | Chiến lược nhánh git | in-progress | ADR-006 `proposed`; đã có `develop` (local, chưa push) và nhánh `feat/*` đầu tiên; chưa bật branch protection |
 | P0-08 | Manifest K8s toàn stack | todo | Hiện `deploy/k8s/` chỉ có bridge |
 
 ## Phase 1 → 9
