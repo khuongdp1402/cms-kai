@@ -22,6 +22,15 @@
 ## ADR-005 — Code custom backend trong namespace `kchat`, mở rộng bằng `prepend_mod_with` · `proposed`
 - Hạn chế sửa file core của Chatwoot để vẫn merge được bản vá upstream (xem `config/initializers/01_inject_enterprise_edition_module.rb`).
 
+## ADR-006 — Chiến lược nhánh git · `proposed` (2026-09-29)
+- **Bối cảnh:** repo vừa chứa Chatwoot core (cần nhận bản vá upstream) vừa chứa code KChat (CMS mới, namespace `kchat`, bridge). Nếu làm thẳng trên `main` thì khó tách bản ổn định với việc đang làm dở.
+- **Quyết định:**
+  - `main`: bản ổn định, chỉ nhận merge từ `develop` hoặc `hotfix/*`, deploy production.
+  - `develop`: nhánh tích hợp, deploy staging.
+  - `feat/<task-id>-<mô-tả>` (ví dụ `feat/P2-01-kchat-web-scaffold`), `fix/*`, `docs/*`: tách từ `develop`, merge lại bằng PR khi CI xanh.
+  - `upstream-sync`: chỉ dùng để merge bản vá từ remote `upstream` (Chatwoot), review riêng rồi mới đưa vào `develop` (quy trình ở P0-04).
+- **Đánh đổi:** thêm một bước merge `develop → main`, đổi lại `main` luôn deploy được và việc cập nhật upstream không trộn với code tính năng.
+
 ---
 
 ## Câu hỏi mở (chờ chủ dự án)
@@ -29,3 +38,5 @@
 - **Q1:** Nhóm tính năng enterprise (Captain AI, SLA, Custom Roles, Audit Logs, Companies, SAML, Calls) cần cái nào? Cái nào cần thì phải tự viết backend, không được copy code enterprise của Chatwoot.
 - **Q2:** Shopee, TikTok Shop và Zalo OA có nằm trong phạm vi parity không, hay để Phase 9?
 - **Q3:** Quyền sở hữu: file `LICENSE-PROPRIETARY` ghi DSFSoft. Cần làm rõ quan hệ giữa KTech và DSFSoft trước khi đầu tư lớn. License MIT bắt buộc giữ file `LICENSE`.
+- **Q4:** CRM/ERP của KTech: hệ thống nào, có tài liệu API không, xác thực kiểu gì, bên nào là nguồn gốc dữ liệu khách hàng? Chặn P4-08.
+- **Q5:** Zalo Personal dùng `zca-js` (thư viện không chính thức), nên có rủi ro bị khóa tài khoản và vi phạm điều khoản Zalo. Chủ dự án có chấp nhận rủi ro này không, và mỗi account được phép gửi tối đa bao nhiêu tin/phút? Ảnh hưởng tới P1-09.

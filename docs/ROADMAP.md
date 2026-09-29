@@ -33,7 +33,9 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | P0-03 | Chốt các câu hỏi mở (Q1–Q3 trong DECISIONS.md) với chủ dự án | Cập nhật ADR |
 | P0-04 | Thêm remote `upstream` Chatwoot, ghi quy trình merge bản vá bảo mật | `docs/reference/upstream-sync.md` |
 | P0-05 | Dựng môi trường dev local đầy đủ (docker compose: pg, redis, rails, sidekiq, bridge) và seed | Hướng dẫn chạy trong docs |
-| P0-06 | Khung staging và CI (lint, rspec, vitest) | Pipeline chạy xanh |
+| P0-06 | Khung staging và CI (lint, rspec, vitest). Tắt hoặc viết lại các workflow thừa hưởng từ Chatwoot (`.github/workflows/publish_*_docker.yml` đang push lên `chatwoot/chatwoot`, `.circleci/`) | Pipeline chạy xanh, build image KChat vào registry của KTech |
+| P0-07 | Chiến lược nhánh git (ADR-006): `main` / `develop` / `feat/*` / `upstream-sync`, bật branch protection | `docs/reference/branching.md` |
+| P0-08 | Manifest K8s cho **toàn bộ stack**, không chỉ bridge: Rails web, Sidekiq, zalo-personal-bridge, kchat-web, migration job, ingress `api.`/`cms.`; Postgres 16 + pgvector và Redis (managed hoặc StatefulSet); secrets, HPA, probe | `deploy/k8s/<service>/`, staging chạy được từ manifest |
 
 ## Phase 1 — Làm cứng backend headless (2–3 tuần)
 
@@ -47,6 +49,8 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | P1-06 | Inventory API: sinh OpenAPI từ `swagger/`, đối chiếu với 58 client trong `app/javascript/dashboard/api/`, bổ sung phần thiếu |
 | P1-07 | Contract test (rspec request specs) cho các endpoint CMS dùng |
 | P1-08 | Rà soát bảo mật: token rotation, rate limit (rack-attack), CSRF/`forgery_protection_origin_check`, headers |
+| P1-09 | Làm cứng Zalo Personal Bridge: media 2 chiều (ảnh, file, video, voice) với giới hạn kích thước và retry; chống khóa tài khoản (giới hạn tốc độ gửi theo account, giãn cách, cảnh báo khi Zalo trả lỗi bất thường); reconnect và khôi phục session sau restart; metrics và alert (`prom-client`) |
+| P1-10 | Dọn Zalo Personal Bridge: bỏ `server.js` cũ (Dockerfile đã chạy `dist/main.js`), thống nhất package manager (hiện dùng npm `package-lock.json`, CLAUDE.md ghi pnpm), bổ sung test contract giữa bridge và Rails |
 
 ## Phase 2 — Nền tảng CMS (3–4 tuần)
 
@@ -85,6 +89,8 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | P4-05 | Automation rule builder |
 | P4-06 | Webhooks, Integrations (Slack, Dyte, Linear, Notion, Shopify, Dialogflow…), Agent bots, Dashboard apps |
 | P4-07 | Account settings, Profile, Notification settings, MFA, sessions |
+| P4-08 | Tích hợp CRM/ERP KTech (backend, namespace `kchat`): đồng bộ contact 2 chiều, tự tạo lead từ hội thoại mới hoặc theo label, lưu mapping ID ngoài trong custom attributes, gửi qua Sidekiq có retry và idempotency. Cần spec API CRM/ERP trước (Q4) |
+| P4-09 | UI tích hợp CRM trong CMS: cấu hình kết nối, xem lead/đơn hàng liên quan trong sidebar contact, trạng thái đồng bộ và log lỗi |
 
 ## Phase 5 — Báo cáo, Campaign, Help Center (3–5 tuần)
 
@@ -133,3 +139,4 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | Ngày | Thay đổi | Lý do |
 |---|---|---|
 | 2026-09-28 | Tạo roadmap ban đầu | Chủ dự án chọn phương án 2 (CMS riêng, Chatwoot headless) |
+| 2026-09-29 | Thêm P0-07 (chiến lược nhánh), P0-08 (K8s toàn stack), P1-09/P1-10 (làm cứng và dọn Zalo bridge), P4-08/P4-09 (tích hợp CRM/ERP KTech); mở rộng P0-06 (dọn CI thừa hưởng từ Chatwoot) | Rà soát kế hoạch do Antigravity đề xuất: giữ ADR-001, chỉ lấy các mục roadmap còn thiếu |
