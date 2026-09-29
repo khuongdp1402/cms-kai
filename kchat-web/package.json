@@ -1,0 +1,23 @@
+{
+  "name": "kchat-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "KChat CMS — New frontend workspace (Vue 3 + TypeScript + Vite)",
+  "packageManager": "pnpm@10.2.0",
+  "workspaces": [
+    "apps/cms",
+    "packages/api-client",
+    "packages/ui"
+  ],
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @kchat/cms dev",
+    "build": "pnpm --filter @kchat/ui build && pnpm --filter @kchat/api-client build && pnpm --filter @kchat/cms build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint",
+    "type-check": "pnpm -r type-check"
+  }
+}
