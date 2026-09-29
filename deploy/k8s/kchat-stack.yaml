@@ -1,0 +1,189 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kchat-rails
+  labels:
+    app: kchat-rails
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kchat-rails
+  template:
+    metadata:
+      labels:
+        app: kchat-rails
+    spec:
+      containers:
+      - name: rails
+        image: ktech/chatwoot-rails:latest
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - secretRef:
+            name: kchat-secrets
+        env:
+        - name: RAILS_ENV
+          value: "production"
+        - name: POSTGRES_HOST
+          value: "kchat-postgres"
+        - name: REDIS_URL
+          value: "redis://kchat-redis:6379/0"
+        - name: ZALO_PERSONAL_BRIDGE_URL
+          value: "http://kchat-zalo-bridge:5001"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kchat-rails
+spec:
+  ports:
+  - port: 80
+    targetPort: 3000
+  selector:
+    app: kchat-rails
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kchat-sidekiq
+  labels:
+    app: kchat-sidekiq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kchat-sidekiq
+  template:
+    metadata:
+      labels:
+        app: kchat-sidekiq
+    spec:
+      containers:
+      - name: sidekiq
+        image: ktech/chatwoot-rails:latest
+        command: ["bundle", "exec", "sidekiq", "-C", "config/sidekiq.yml"]
+        envFrom:
+        - secretRef:
+            name: kchat-secrets
+        env:
+        - name: RAILS_ENV
+          value: "production"
+        - name: POSTGRES_HOST
+          value: "kchat-postgres"
+        - name: REDIS_URL
+          value: "redis://kchat-redis:6379/0"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kchat-zalo-bridge
+  labels:
+    app: kchat-zalo-bridge
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kchat-zalo-bridge
+  template:
+    metadata:
+      labels:
+        app: kchat-zalo-bridge
+    spec:
+      containers:
+      - name: zalo-bridge
+        image: ktech/zalo-personal-bridge:latest
+        ports:
+        - containerPort: 5001
+        envFrom:
+        - secretRef:
+            name: kchat-secrets
+        env:
+        - name: DATABASE_URL
+          value: "postgresql://postgres:postgres@kchat-postgres:5432/chatwoot_production"
+        - name: REDIS_URL
+          value: "redis://kchat-redis:6379/0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kchat-zalo-bridge
+spec:
+  ports:
+  - port: 5001
+    targetPort: 5001
+  selector:
+    app: kchat-zalo-bridge
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kchat-redis
+  labels:
+    app: kchat-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kchat-redis
+  template:
+    metadata:
+      labels:
+        app: kchat-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        ports:
+        - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kchat-redis
+spec:
+  ports:
+  - port: 6379
+    targetPort: 6379
+  selector:
+    app: kchat-redis
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kchat-postgres
+  labels:
+    app: kchat-postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kchat-postgres
+  template:
+    metadata:
+      labels:
+        app: kchat-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: pgvector/pgvector:pg16
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_DB
+          value: "chatwoot_production"
+        - name: POSTGRES_USER
+          value: "postgres"
+        - name: POSTGRES_PASSWORD
+          value: "postgres"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kchat-postgres
+spec:
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: kchat-postgres
