@@ -40,6 +40,13 @@
   - Triệu chứng: lệnh `s/Chatwoot/KTech/g` đổi luôn `Chatwoot.config` và `ChatwootApp` trong `_navigation.html.erb`, sẽ làm hỏng trang super admin.
   - Nguyên nhân: bước kiểm tra định danh và lệnh `sed` nằm trong cùng một lệnh shell, nên sed vẫn chạy dù kiểm tra đã in ra kết quả.
   - Quy tắc: thay chữ thương hiệu thì dùng regex có ranh giới, không khớp với định danh (ví dụ `s/Chatwoot\b\([^A-Z.]\)/KTech\1/`), hoặc tách kiểm tra và thay thành 2 lệnh riêng. Sau khi thay phải chạy `git diff -U0 | grep -E "^\+.*KTech[A-Z.]"` để bắt lỗi.
+- **B9 (2026-09-29): Vite trong Docker không nhận thay đổi file.**
+  - Triệu chứng: sửa SCSS/Vue nhưng trang vẫn hiện bản cũ; phải restart container `vite` mới thấy.
+  - Nguyên nhân: repo mount từ Windows vào container, sự kiện file (inotify) không truyền qua bind mount.
+  - Quy tắc: service `vite` phải có `CHOKIDAR_USEPOLLING=true` (đã thêm vào docker-compose). Khi nghi CSS cũ thì kiểm tra log `vite` có dòng `hmr update` chưa.
+- **B10 (2026-09-29): `git checkout -- <file>` để gỡ một dòng test làm mất thay đổi chưa commit.**
+  - Triệu chứng: mất 3 biến vừa thêm vào `_ktech-theme.scss`.
+  - Quy tắc: không bao giờ dùng `git checkout --`/`git restore` để hoàn tác một phần file đang có thay đổi chưa commit. Muốn test tạm thì sửa một file khác, hoặc gỡ đúng dòng đã thêm (`sed -i '$ d'`) sau khi kiểm tra nội dung.
 - **B4 (2026-09-28): Tưởng tính năng có route là tính năng chạy được.**
   - Triệu chứng: routes và frontend có Captain, SLA, Custom Roles… nhưng không có controller.
   - Nguyên nhân: thư mục `enterprise/` đã bị bỏ khỏi repo.

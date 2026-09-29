@@ -51,3 +51,22 @@ Seed tạo sẵn tài khoản đăng nhập: `john@acme.inc` / `Password1!`.
 - Bridge không có channel sẽ bị Rails trả 404 ở webhook, vì `set_channel` chạy trước bước verify chữ ký. Đó là hành vi đúng, không phải lỗi secret.
 - Windows: repo có `.gitattributes` ép LF vì code được mount thẳng vào container Linux. Xem LESSONS B5.
 - Compose này chỉ dành cho dev. Staging/production dùng manifest K8s (P0-08).
+
+## Script KTech branding (`script/ktech/`)
+
+Công cụ cài vào `tmp/ktech-brand/` (đã gitignore), không thêm package vào project. Phải cài **tất cả trong một lệnh**, vì `npm i --no-save` sẽ gỡ các package không có trong lệnh:
+
+```bash
+npm i --no-save --prefix tmp/ktech-brand opentype.js@1 sharp@0.33 @fontsource/inter@5 playwright@1
+npx --prefix tmp/ktech-brand playwright install chromium
+```
+
+| Script | Việc | Lệnh |
+|---|---|---|
+| `generate_brand_assets.cjs` | Tạo lại logo (`public/brand-assets/`), favicon và icon PWA từ SVG | `node script/ktech/generate_brand_assets.cjs` |
+| `check_contrast.mjs` | Kiểm tra độ tương phản của `_ktech-theme.scss`, fail nếu có cặp < 4.5:1 | `node script/ktech/check_contrast.mjs` |
+| `brand_audit.cjs` | Mở các trang chính ở vi/en, light/dark; fail nếu còn chữ "chatwoot" hoặc trang trống; ảnh chụp ở `tmp/ktech-brand/screens/` | `KTECH_WIDGET_TOKEN=<token> node script/ktech/brand_audit.cjs [--only=login,inbox]` |
+
+- Lấy widget token: `docker compose exec rails bundle exec rails runner 'puts Channel::WebWidget.first&.website_token'`.
+- Audit dùng một phiên API duy nhất và đăng xuất khi chạy xong. Nếu từng bị lỗi "Active session limit reached" thì xoá token của user seed: `rails runner 'User.find_by(email: "john@acme.inc").update_columns(tokens: {})'`.
+- Màu widget chat do từng inbox tự cấu hình (Cài đặt → Hộp thư đến → Widget), theme không đổi màu này.
