@@ -24,6 +24,13 @@
   - Triệu chứng: không cài plugin bằng CLI được.
   - Nguyên nhân: CLI đi kèm extension, không expose ra shell.
   - Quy tắc: khai báo plugin/marketplace theo kiểu declarative trong `.claude/settings.json` (`extraKnownMarketplaces` + `enabledPlugins`) rồi để người dùng xác nhận qua `/plugin`.
+- **B5 (2026-09-29): Script trong container lỗi do CRLF.**
+  - Triệu chứng: working tree trên Windows có CRLF (`core.autocrlf=true`), trong khi repo được mount thẳng vào container Linux, nên `docker/entrypoints/*.sh` và `bin/*` chạy lỗi `/bin/sh^M`.
+  - Nguyên nhân: git tự đổi LF sang CRLF khi checkout trên Windows.
+  - Quy tắc: `.gitattributes` đã ép `eol=lf`. Không bỏ dòng đó. Khi clone mới mà file vẫn là CRLF thì xoá file rồi chạy `git checkout-index -f -a`, sau đó `git add --renormalize .`.
+- **B6 (2026-09-29): Mount thư mục build rỗng đè lên image.**
+  - Triệu chứng: compose cũ mount `./zalo-personal-bridge/dist:/app/dist`, nhưng `dist/` bị gitignore nên trên máy không có, dẫn tới container bridge mất `dist/main.js` và crash.
+  - Quy tắc: service chạy từ image build sẵn thì không mount thư mục build output. Muốn cập nhật thì rebuild image.
 - **B4 (2026-09-28): Tưởng tính năng có route là tính năng chạy được.**
   - Triệu chứng: routes và frontend có Captain, SLA, Custom Roles… nhưng không có controller.
   - Nguyên nhân: thư mục `enterprise/` đã bị bỏ khỏi repo.
