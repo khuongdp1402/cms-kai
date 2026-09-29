@@ -1,5 +1,5 @@
 # Local development stack. First run: `make docker_setup`, then `make docker_up`.
-# See docs/reference/dev-setup.md.
+# See docs/reference/dev-setup.md. Host ports can be overridden with KCHAT_*_PORT in .env.
 
 x-zalo-bridge-env: &zalo_bridge_env
   ZALO_PERSONAL_BRIDGE_URL: http://zalo_personal_bridge:5001
@@ -48,7 +48,7 @@ services:
       zalo_personal_bridge:
         condition: service_healthy
     ports:
-      - 3000:3000
+      - ${KCHAT_RAILS_PORT:-3000}:3000
     environment:
       <<: *zalo_bridge_env
       VITE_RUBY_HOST: vite
@@ -98,7 +98,7 @@ services:
     profiles: []
     volumes: *rails_volumes
     ports:
-      - "3036:3036" # Vite dev server
+      - "${KCHAT_VITE_PORT:-3036}:3036" # Vite dev server
     environment:
       VITE_RUBY_HOST: 0.0.0.0
       VITE_RUBY_PORT: 3036
@@ -112,16 +112,16 @@ services:
     image: pgvector/pgvector:pg16
     restart: always
     ports:
-      - '5432:5432'
+      - '${KCHAT_POSTGRES_PORT:-5432}:5432'
     volumes:
       - postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=chatwoot
+      - POSTGRES_DB=chatwoot_dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres -d chatwoot"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d chatwoot_dev"]
       interval: 5s
       timeout: 5s
       retries: 20
@@ -134,7 +134,7 @@ services:
     volumes:
       - redis:/data
     ports:
-      - '6379:6379'
+      - '${KCHAT_REDIS_PORT:-6379}:6379'
     healthcheck:
       test: ["CMD-SHELL", "REDISCLI_AUTH=\"$$REDIS_PASSWORD\" redis-cli ping | grep -q PONG"]
       interval: 5s
@@ -144,8 +144,8 @@ services:
   mailhog:
     image: mailhog/mailhog
     ports:
-      - 1025:1025
-      - 8025:8025
+      - ${KCHAT_SMTP_PORT:-1025}:1025
+      - ${KCHAT_MAILHOG_PORT:-8025}:8025
 
   zalo_personal_bridge:
     build:
@@ -153,11 +153,12 @@ services:
     image: zalo-personal-bridge:local
     restart: always
     ports:
-      - '5001:5001'
+      - '${KCHAT_BRIDGE_PORT:-5001}:5001'
     environment:
       PORT: 5001
       LOG_LEVEL: debug
-      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/chatwoot
+      # Same DB as Rails development (config/database.yml)
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/chatwoot_dev
       REDIS_URL: ${ZALO_BRIDGE_REDIS_URL:-redis://redis:6379}
       CHATWOOT_WEBHOOK_URL: http://rails:3000/webhooks/zalo_personal
       ZALO_BRIDGE_SERVICE_SECRET: ${ZALO_BRIDGE_SERVICE_SECRET:-dev_service_secret_32bytes_long_key!}

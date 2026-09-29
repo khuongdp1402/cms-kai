@@ -50,7 +50,7 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | P1-07 | Contract test (rspec request specs) cho các endpoint CMS dùng |
 | P1-08 | Rà soát bảo mật: token rotation, rate limit (rack-attack), CSRF/`forgery_protection_origin_check`, headers |
 | P1-09 | Làm cứng Zalo Personal Bridge: media 2 chiều (ảnh, file, video, voice) với giới hạn kích thước và retry; chống khóa tài khoản (giới hạn tốc độ gửi theo account, giãn cách, cảnh báo khi Zalo trả lỗi bất thường); reconnect và khôi phục session sau restart; metrics và alert (`prom-client`) |
-| P1-10 | Dọn Zalo Personal Bridge: bỏ `server.js` cũ (Dockerfile đã chạy `dist/main.js`), thống nhất package manager (hiện dùng npm `package-lock.json`, CLAUDE.md ghi pnpm), bổ sung test contract giữa bridge và Rails |
+| P1-10 | Dọn Zalo Personal Bridge: bỏ `server.js` cũ (Dockerfile đã chạy `dist/main.js`), thống nhất package manager (hiện dùng npm `package-lock.json`, CLAUDE.md ghi pnpm), bổ sung test contract giữa bridge và Rails. Tách quyền sở hữu schema: bảng `zalo_integrations`, `zalo_threads`, `zalo_outbound_deliveries`… của bridge đang bị dump vào `db/schema.rb` dù Rails không dùng (chuyển sang schema Postgres riêng hoặc loại khỏi dump) |
 
 ## Phase 2 — Nền tảng CMS (3–4 tuần)
 
