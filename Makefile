@@ -60,7 +60,29 @@ debug:
 debug_worker:
 	overmind connect worker
 
-docker: 
+docker:
 	docker build -t $(APP_NAME) -f ./docker/Dockerfile .
 
-.PHONY: setup db_create db_migrate db_seed db_reset db console server burn docker run force_run force_run_tunnel debug debug_worker
+# Local docker compose stack (docs/reference/dev-setup.md)
+docker_build:
+	docker compose --profile build build base
+	docker compose build
+
+docker_setup: docker_build
+	docker compose run --rm rails bundle exec rails db:chatwoot_prepare
+
+docker_up:
+	docker compose up -d
+	docker compose ps
+
+docker_down:
+	docker compose down
+
+docker_logs:
+	docker compose logs -f --tail=100
+
+docker_console:
+	docker compose exec rails bundle exec rails console
+
+.PHONY: setup db_create db_migrate db_seed db_reset db console server burn docker run force_run force_run_tunnel debug debug_worker \
+	docker_build docker_setup docker_up docker_down docker_logs docker_console
