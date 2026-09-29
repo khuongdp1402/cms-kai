@@ -1,0 +1,131 @@
+// KTech "Terracotta Sunset" (ADR-007). Overrides the next design system
+// variables from _next-colors.scss; imported at the end of that file.
+// scss-lint:disable PropertySortOrder
+@layer base {
+  :root {
+    --blue-1: 255 251 247;
+    --blue-2: 255 247 237;
+    --blue-3: 255 237 213;
+    --blue-4: 254 223 188;
+    --blue-5: 253 205 160;
+    --blue-6: 252 186 130;
+    --blue-7: 249 158 94;
+    --blue-8: 240 125 60;
+    --blue-9: 194 65 12;
+    --blue-10: 173 55 10;
+    --blue-11: 154 52 18;
+    --blue-12: 67 20 7;
+
+    --slate-1: 253 252 251;
+    --slate-2: 250 248 246;
+    --slate-3: 243 239 236;
+    --slate-4: 236 231 227;
+    --slate-5: 229 223 218;
+    --slate-6: 221 214 208;
+    --slate-7: 207 198 190;
+    --slate-8: 188 177 168;
+    --slate-9: 145 134 125;
+    --slate-10: 134 123 114;
+    --slate-11: 100 90 82;
+    --slate-12: 41 32 27;
+
+    --gray-1: 253 252 251;
+    --gray-2: 250 248 246;
+    --gray-3: 243 239 236;
+    --gray-4: 236 231 227;
+    --gray-5: 229 223 218;
+    --gray-6: 221 214 208;
+    --gray-7: 207 198 190;
+    --gray-8: 188 177 168;
+    --gray-9: 145 134 125;
+    --gray-10: 134 123 114;
+    --gray-11: 100 90 82;
+    --gray-12: 41 32 27;
+
+    --background-color: 250 246 242;
+    --surface-1: 255 252 249;
+    --surface-2: 255 255 255;
+    --text-blue: 67 20 7;
+    --border-container: 237 231 226;
+    --border-strong: 228 220 213;
+    --border-weak: 236 230 225;
+    --border-blue-strong: 124 45 18;
+    --solid-blue: 255 237 213;
+    --solid-blue-2: 255 251 247;
+    --label-background: 247 242 238;
+    --border-blue: 194, 65, 12, 0.5;
+  }
+
+  .dark {
+    --blue-1: 26 16 12;
+    --blue-2: 32 20 15;
+    --blue-3: 50 28 18;
+    --blue-4: 66 33 18;
+    --blue-5: 82 40 20;
+    --blue-6: 100 48 24;
+    --blue-7: 125 60 30;
+    --blue-8: 160 76 36;
+    --blue-9: 194 65 12;
+    --blue-10: 214 90 40;
+    --blue-11: 253 160 110;
+    --blue-12: 255 228 205;
+
+    --slate-1: 20 17 16;
+    --slate-2: 26 22 20;
+    --slate-3: 35 30 27;
+    --slate-4: 42 36 33;
+    --slate-5: 50 43 39;
+    --slate-6: 59 51 46;
+    --slate-7: 73 63 57;
+    --slate-8: 97 85 77;
+    --slate-9: 112 100 92;
+    --slate-10: 126 114 105;
+    --slate-11: 183 172 164;
+    --slate-12: 240 234 229;
+
+    --gray-1: 20 17 16;
+    --gray-2: 26 22 20;
+    --gray-3: 35 30 27;
+    --gray-4: 42 36 33;
+    --gray-5: 50 43 39;
+    --gray-6: 59 51 46;
+    --gray-7: 73 63 57;
+    --gray-8: 97 85 77;
+    --gray-9: 112 100 92;
+    --gray-10: 126 114 105;
+    --gray-11: 183 172 164;
+    --gray-12: 240 234 229;
+
+    --background-color: 28 22 19;
+    --surface-1: 22 18 16;
+    --surface-2: 25 20 18;
+    --text-blue: 255 228 205;
+    --border-strong: 52 44 40;
+    --border-weak: 38 32 29;
+    --border-blue-strong: 253 186 116;
+    --solid-blue: 80 38 18;
+    --solid-blue-2: 32 24 20;
+    --label-background: 40 33 29;
+    --border-blue: 194, 65, 12, 0.5;
+  }
+
+  // Ombre sidebar: re-scope the text/hover variables so every Tailwind class
+  // inside the sidebar (text-n-slate-11, bg-n-alpha-2, ...) reads on dark orange.
+  .ktech-sidebar {
+    background-image: linear-gradient(
+      180deg,
+      #b03a0e 0%,
+      #8a3010 45%,
+      #4a1a09 100%
+    );
+    --background-color: 74 26 9;
+    --slate-10: 254 215 170;
+    --slate-11: 255 237 213;
+    --slate-12: 255 251 247;
+    --blue-9: 255 247 237;
+    --blue-11: 255 237 213;
+    --border-weak: 138 48 16;
+    --alpha-1: 255, 255, 255, 0.08;
+    --alpha-2: 255, 255, 255, 0.14;
+  }
+}
