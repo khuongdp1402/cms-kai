@@ -28,6 +28,7 @@
   - Triệu chứng: working tree trên Windows có CRLF (`core.autocrlf=true`), trong khi repo được mount thẳng vào container Linux, nên `docker/entrypoints/*.sh` và `bin/*` chạy lỗi `/bin/sh^M`.
   - Nguyên nhân: git tự đổi LF sang CRLF khi checkout trên Windows.
   - Quy tắc: `.gitattributes` đã ép `eol=lf`. Không bỏ dòng đó. Khi clone mới mà file vẫn là CRLF thì xoá file rồi chạy `git checkout-index -f -a`, sau đó `git add --renormalize .`.
+  - Bổ sung (2026-09-29): tạo worktree hoặc checkout từ một commit **chưa có** `.gitattributes` (ví dụ `develop` cũ) thì file vẫn ra CRLF, kể cả khi sau đó cherry-pick `.gitattributes` vào. Sau khi tạo worktree phải chạy `file docker/entrypoints/rails.sh` để kiểm tra, rồi làm lại bước ở trên nếu cần.
 - **B6 (2026-09-29): Mount thư mục build rỗng đè lên image.**
   - Triệu chứng: compose cũ mount `./zalo-personal-bridge/dist:/app/dist`, nhưng `dist/` bị gitignore nên trên máy không có, dẫn tới container bridge mất `dist/main.js` và crash.
   - Quy tắc: service chạy từ image build sẵn thì không mount thư mục build output. Muốn cập nhật thì rebuild image.
@@ -35,6 +36,10 @@
   - Triệu chứng: container `vite` đứng ở 0% CPU, log dừng ở "modules directory will be removed… Proceed? (Y/n)".
   - Nguyên nhân: service có `tty: true` nên pnpm coi là phiên tương tác và chờ người trả lời.
   - Quy tắc: lệnh trong entrypoint/CI luôn chạy dạng không tương tác (`--config.confirmModulesPurge=false`, `-y`, `--frozen-lockfile`…). Khi chờ container thì vòng lặp chờ phải bắt cả trường hợp treo, không chỉ bắt dòng báo thành công.
+- **B8 (2026-09-29): `sed` thay tên thương hiệu làm hỏng định danh code.**
+  - Triệu chứng: lệnh `s/Chatwoot/KTech/g` đổi luôn `Chatwoot.config` và `ChatwootApp` trong `_navigation.html.erb`, sẽ làm hỏng trang super admin.
+  - Nguyên nhân: bước kiểm tra định danh và lệnh `sed` nằm trong cùng một lệnh shell, nên sed vẫn chạy dù kiểm tra đã in ra kết quả.
+  - Quy tắc: thay chữ thương hiệu thì dùng regex có ranh giới, không khớp với định danh (ví dụ `s/Chatwoot\b\([^A-Z.]\)/KTech\1/`), hoặc tách kiểm tra và thay thành 2 lệnh riêng. Sau khi thay phải chạy `git diff -U0 | grep -E "^\+.*KTech[A-Z.]"` để bắt lỗi.
 - **B4 (2026-09-28): Tưởng tính năng có route là tính năng chạy được.**
   - Triệu chứng: routes và frontend có Captain, SLA, Custom Roles… nhưng không có controller.
   - Nguyên nhân: thư mục `enterprise/` đã bị bỏ khỏi repo.
