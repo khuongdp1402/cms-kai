@@ -54,6 +54,8 @@
     --solid-blue-2: 255 251 247;
     --label-background: 247 242 238;
     --border-blue: 194, 65, 12, 0.5;
+    // Bot and template bubbles: warm sand, distinct from agent peach
+    --solid-iris: 243 232 220;
   }
 
   .dark {
@@ -107,6 +109,7 @@
     --solid-blue-2: 32 24 20;
     --label-background: 40 33 29;
     --border-blue: 194, 65, 12, 0.5;
+    --solid-iris: 52 40 33;
   }
 
   // Ombre sidebar: re-scope the text/hover variables so every Tailwind class
@@ -125,6 +128,7 @@
     --blue-9: 255 247 237;
     --blue-11: 255 237 213;
     --border-weak: 138 48 16;
+    --button-color: 128 42 14;
     --alpha-1: 255, 255, 255, 0.08;
     --alpha-2: 255, 255, 255, 0.14;
   }

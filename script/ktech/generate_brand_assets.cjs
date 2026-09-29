@@ -1,6 +1,6 @@
 // Regenerates KTech logos and icons. Dependencies are installed in tmp/ so the
 // project gets no new packages:
-//   npm i --no-save --prefix tmp/ktech-brand opentype.js@1 sharp@0.33 @fontsource/inter@5
+//   npm i --no-save --prefix tmp/ktech-brand opentype.js@1 sharp@0.33 @fontsource/inter@5 playwright@1
 //   node script/ktech/generate_brand_assets.cjs
 const fs = require('fs');
 const path = require('path');

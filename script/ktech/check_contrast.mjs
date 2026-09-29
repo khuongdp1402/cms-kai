@@ -44,6 +44,9 @@ const pairs = [
   ['dark blue-11 / background', dark['blue-11'], dark['background-color']],
   ['dark slate-11 / background', dark['slate-11'], dark['background-color']],
   ['dark slate-12 / surface-1', dark['slate-12'], dark['surface-1']],
+  ['light slate-12 / bot bubble', light['slate-12'], light['solid-iris']],
+  ['dark slate-12 / bot bubble', dark['slate-12'], dark['solid-iris']],
+  ['sidebar slate-11 / button', sidebar['slate-11'], sidebar['button-color']],
   ['sidebar slate-11 / top #B03A0E', sidebar['slate-11'], SIDEBAR_TOP],
   ['sidebar slate-12 / top #B03A0E', sidebar['slate-12'], SIDEBAR_TOP],
 ];
