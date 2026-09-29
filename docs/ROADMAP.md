@@ -1,5 +1,13 @@
 # Lộ trình KChat CMS (A–Z)
 
+> **Cập nhật 2026-09-29 (ADR-007):** dự án đổi hướng sang **giữ giao diện Chatwoot và đổi thương hiệu thành KTech**. Việc đang làm là task B-01 bên dưới. Các phase 2–8 (viết CMS riêng) tạm dừng. Các task backend và vận hành ở Phase 0, Phase 1, P4-08/09 (CRM) và Phase 9 vẫn còn hiệu lực.
+
+## Phase B — KTech branding trên giao diện Chatwoot
+
+| ID | Việc | Kết quả |
+|---|---|---|
+| B-01 | Đổi tên hiển thị sang KTech, logo và icon mới, theme Terracotta Sunset (light/dark), ẩn banner của Chatwoot | Spec `docs/superpowers/specs/2026-09-29-ktech-branding-design.md`, nhánh `feat/ktech-branding` |
+
 > Mục tiêu: người dùng không bao giờ thấy giao diện Chatwoot. Xây một CMS mới (hiện đại, đẹp, dễ custom) dùng Chatwoot làm **backend headless**, đạt parity với toàn bộ tính năng core đang chạy được, rồi mở rộng.
 >
 > Tiến độ thực tế: [STATUS.md](STATUS.md) · Quyết định: [DECISIONS.md](DECISIONS.md) · Hiện trạng backend: [reference/backend-audit.md](reference/backend-audit.md)
@@ -139,4 +147,5 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | Ngày | Thay đổi | Lý do |
 |---|---|---|
 | 2026-09-28 | Tạo roadmap ban đầu | Chủ dự án chọn phương án 2 (CMS riêng, Chatwoot headless) |
+| 2026-09-29 | Thêm Phase B, tạm dừng Phase 2–8 | ADR-007: chủ dự án chọn giữ giao diện Chatwoot và đổi thương hiệu thay vì viết CMS mới |
 | 2026-09-29 | Thêm P0-07 (chiến lược nhánh), P0-08 (K8s toàn stack), P1-09/P1-10 (làm cứng và dọn Zalo bridge), P4-08/P4-09 (tích hợp CRM/ERP KTech); mở rộng P0-06 (dọn CI thừa hưởng từ Chatwoot) | Rà soát kế hoạch do Antigravity đề xuất: giữ ADR-001, chỉ lấy các mục roadmap còn thiếu |

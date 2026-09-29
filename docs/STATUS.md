@@ -3,9 +3,15 @@
 > File sống, cập nhật sau mỗi phiên làm việc. Đọc file này **đầu tiên** trước khi bắt tay vào việc.
 > Trạng thái: `todo` · `in-progress` · `done` · `blocked` · `skipped`
 
-**Phase hiện tại:** Phase 0 — Chuẩn bị
-**Việc đang làm:** P0-02 (ma trận tính năng); tiếp theo P0-04 (remote upstream)
+**Phase hiện tại:** Phase B — KTech branding (ADR-007)
+**Việc đang làm:** B-01 trên nhánh `feat/ktech-branding` (worktree `../cms-kai-ktech`)
 **Cập nhật lần cuối:** 2026-09-29
+
+## Phase B — KTech branding
+
+| ID | Việc | Trạng thái | Ghi chú |
+|---|---|---|---|
+| B-01 | Đổi tên, logo, theme Terracotta Sunset, ẩn banner Chatwoot | in-progress | Spec đã duyệt; plan ở `docs/plans/` |
 
 ## Phase 0 — Chuẩn bị
 
@@ -31,9 +37,11 @@ Việc ngoài kế hoạch mà chủ dự án yêu cầu thì ghi vào đây. N�
 | Ngày | Yêu cầu | Trạng thái | Ảnh hưởng tới plan |
 |---|---|---|---|
 | 2026-09-29 | Rà soát kế hoạch Antigravity, bổ sung phần còn thiếu, tách nhánh để làm việc | done | Thêm P0-07, P0-08, P1-09, P1-10, P4-08, P4-09, ADR-006, Q4–Q5. Giữ ADR-001 (CMS riêng, Chatwoot headless); bỏ phần rebrand dashboard cũ trong kế hoạch Antigravity |
+| 2026-09-29 | Đổi hướng: giữ UI Chatwoot, rebrand KTech, giao diện ombre cam–nâu | in-progress | ADR-007 thay ADR-001; thêm Phase B, tạm dừng Phase 2–8 |
 
 ## Nhật ký
 
+- **2026-09-29**: Chốt hướng ADR-007 và thiết kế Terracotta Sunset (phương án A). Tạo nhánh `feat/ktech-branding` từ `develop` cộng 3 commit Docker, không lấy `kchat-web` và `.agents/` của Antigravity.
 - **2026-09-29**: Hoàn thành P0-05: stack Docker dev chạy đầy đủ và đã kiểm tra đầu-cuối. Sửa 6 lỗi cấu hình: CRLF, mount `dist`, volume sai path, lệch tên DB, Rails thiếu secret HMAC, pnpm treo; thêm port tuỳ chỉnh (xem LESSONS B5–B7).
 - **2026-09-29**: Rà soát kế hoạch do Antigravity đề xuất, bổ sung các mục CRM/ERP, Zalo bridge, K8s và chiến lược nhánh vào roadmap. Làm trên nhánh `docs/roadmap-crm-zalo-k8s`.
 - **2026-09-28**: Audit dự án, chốt phương án 2 (CMS riêng, Chatwoot headless), dựng bộ docs, CLAUDE.md, codegraph và superpowers.
