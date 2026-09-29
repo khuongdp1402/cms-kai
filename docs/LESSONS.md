@@ -31,6 +31,10 @@
 - **B6 (2026-09-29): Mount thư mục build rỗng đè lên image.**
   - Triệu chứng: compose cũ mount `./zalo-personal-bridge/dist:/app/dist`, nhưng `dist/` bị gitignore nên trên máy không có, dẫn tới container bridge mất `dist/main.js` và crash.
   - Quy tắc: service chạy từ image build sẵn thì không mount thư mục build output. Muốn cập nhật thì rebuild image.
+- **B7 (2026-09-29): Lệnh trong entrypoint treo vì chờ prompt.**
+  - Triệu chứng: container `vite` đứng ở 0% CPU, log dừng ở "modules directory will be removed… Proceed? (Y/n)".
+  - Nguyên nhân: service có `tty: true` nên pnpm coi là phiên tương tác và chờ người trả lời.
+  - Quy tắc: lệnh trong entrypoint/CI luôn chạy dạng không tương tác (`--config.confirmModulesPurge=false`, `-y`, `--frozen-lockfile`…). Khi chờ container thì vòng lặp chờ phải bắt cả trường hợp treo, không chỉ bắt dòng báo thành công.
 - **B4 (2026-09-28): Tưởng tính năng có route là tính năng chạy được.**
   - Triệu chứng: routes và frontend có Captain, SLA, Custom Roles… nhưng không có controller.
   - Nguyên nhân: thư mục `enterprise/` đã bị bỏ khỏi repo.
