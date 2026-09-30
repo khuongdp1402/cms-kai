@@ -1,4 +1,4 @@
-﻿#Files in the config/locales directory are used for internationalization
+#Files in the config/locales directory are used for internationalization
 #and are automatically loaded by Rails. If you want to use locales other
 #than English, add the necessary files in this directory.
 #To use the locales, use `I18n.t`:
@@ -17,7 +17,7 @@
 #To learn more, please read the Rails Internationalization guide
 #available at https://guides.rubyonrails.org/i18n.html.
 vi:
-  hello: 'ChÃ o tháº¿ giá»›i'
+  hello: 'Chào thế giới'
   inbox:
     reauthorization:
       success: 'Channel reauthorized successfully'
@@ -25,14 +25,14 @@ vi:
       invalid_channel: 'Invalid channel type for reauthorization'
   auth:
     saml:
-      invalid_email: 'Vui lÃ²ng nháº­p má»™t Ä‘á»‹a chá»‰ email há»£p lá»‡'
+      invalid_email: 'Vui lòng nhập một địa chỉ email hợp lệ'
       authentication_failed: 'Authentication failed. Please check your credentials and try again.'
   messages:
     reset_password: Request for password reset is successful. A email with instructions will be sent to your email if it exists.
     reset_password_saml_user: This account uses SAML authentication. Password reset is not available. Please contact your administrator.
     login_saml_user: This account uses SAML authentication. Please sign in through your organization's SAML provider.
     saml_not_available: SAML authentication is not available in this installation.
-    inbox_deletetion_response: YÃªu cáº§u xoÃ¡ há»™p thÆ° cá»§a báº¡n sáº½ Ä‘Æ°á»£c xá»­ lÃ½.
+    inbox_deletetion_response: Yêu cầu xoá hộp thư của bạn sẽ được xử lý.
   data_imports:
     intercom:
       activities:
@@ -65,16 +65,16 @@ vi:
       support_email:
         invalid: is not a valid email address
     validations:
-      presence: khÃ´ng Ä‘Æ°á»£c Ä‘á»ƒ trá»‘ng
+      presence: không được để trống
     webhook:
-      invalid: Sá»± kiá»‡n khÃ´ng há»£p lá»‡
+      invalid: Sự kiện không hợp lệ
     signup:
-      disposable_email: ChÃºng tÃ´i khÃ´ng cho phÃ©p cÃ¡c email dÃ¹ng má»™t láº§n
+      disposable_email: Chúng tôi không cho phép các email dùng một lần
       blocked_domain: This domain is not allowed. If you believe this is a mistake, please contact support.
-      invalid_email: Báº¡n Ä‘Ã£ nháº­p má»™t email khÃ´ng há»£p lá»‡
-      email_already_exists: 'Báº¡n Ä‘Ã£ Ä‘Äƒng kÃ½ má»™t tÃ i khoáº£n vá»›i %{email}'
+      invalid_email: Bạn đã nhập một email không hợp lệ
+      email_already_exists: 'Bạn đã đăng ký một tài khoản với %{email}'
       invalid_params: 'Invalid, please check the signup paramters and try again'
-      failed: ÄÄƒng kÃ½ thÃ¢t báº¡i
+      failed: Đăng ký thât bại
     voice:
       call_already_accepted: '%{agent_name} is already handling the call.'
     assignment_policy:
@@ -99,16 +99,16 @@ vi:
         feature_not_enabled: Conversation unread counts feature not enabled for this account
     data_import:
       data_type:
-        invalid: Kiá»ƒu dá»¯ liá»‡u khÃ´ng há»£p lá»‡
+        invalid: Kiểu dữ liệu không hợp lệ
     contacts:
       import:
-        failed: ChÆ°a chá»n tá»‡p
+        failed: Chưa chọn tệp
       export:
-        success: ChÃºng tÃ´i sáº½ thÃ´ng bÃ¡o khi tá»‡p xuáº¥t danh sÃ¡ch liÃªn há»‡ Ä‘Ã£ sáºµn sÃ ng.
+        success: Chúng tôi sẽ thông báo khi tệp xuất danh sách liên hệ đã sẵn sàng.
       email:
-        invalid: Email khÃ´ng há»£p lá»‡
+        invalid: Email không hợp lệ
       phone_number:
-        invalid: nÃªn theo Ä‘inh dáº¡ng e164
+        invalid: nên theo đinh dạng e164
     companies:
       domain:
         invalid: must be a valid domain name
@@ -119,9 +119,9 @@ vi:
         time_range_limit_exceeded: 'Search is limited to the last %{days} days'
     categories:
       locale:
-        unique: pháº£i lÃ  duy nháº¥t trong danh má»¥c vÃ  cá»•ng thÃ´ng tin
+        unique: phải là duy nhất trong danh mục và cổng thông tin
     dyte:
-      invalid_message_type: 'Loáº¡i tin nháº¯n khÃ´ng há»£p lá»‡. HÃ nh Ä‘á»™ng khÃ´ng Ä‘Æ°á»£c phÃ©p'
+      invalid_message_type: 'Loại tin nhắn không hợp lệ. Hành động không được phép'
       realtimekit_credentials_required: 'Cloudflare RealtimeKit credentials are required. Delete the existing Dyte integration and create it again with Cloudflare RealtimeKit credentials.'
     cloudflare:
       realtimekit:
@@ -153,20 +153,20 @@ vi:
       invalid_api_key: 'OpenAI API key is invalid or revoked. Please check your key in your OpenAI dashboard.'
     inboxes:
       imap:
-        socket_error: Vui lÃ²ng kiá»ƒm tra káº¿t ná»‘i máº¡ng, Ä‘á»‹a chá»‰ IMAP vÃ  thá»­ láº¡i.
-        no_response_error: Vui lÃ²ng kiá»ƒm tra thÃ´ng tin Ä‘Äƒng nháº­p IMAP vÃ  thá»­ láº¡i.
-        host_unreachable_error: MÃ¡y chá»§ khÃ´ng thá»ƒ truy cáº­p Ä‘Æ°á»£c, Vui lÃ²ng kiá»ƒm tra Ä‘á»‹a chá»‰ IMAP, cá»•ng IMAP vÃ  thá»­ láº¡i.
-        connection_timed_out_error: Káº¿t ná»‘i Ä‘Ã£ háº¿t thá»i gian chá» %{address}:%{port}
-        connection_closed_error: KÃªt ná»‘i biÌ£ Ä‘Ã³ng.
+        socket_error: Vui lòng kiểm tra kết nối mạng, địa chỉ IMAP và thử lại.
+        no_response_error: Vui lòng kiểm tra thông tin đăng nhập IMAP và thử lại.
+        host_unreachable_error: Máy chủ không thể truy cập được, Vui lòng kiểm tra địa chỉ IMAP, cổng IMAP và thử lại.
+        connection_timed_out_error: Kết nối đã hết thời gian chờ %{address}:%{port}
+        connection_closed_error: Kêt nối bị đóng.
       smtp:
         authentication_error: SMTP authentication failed. Please verify your login credentials.
         connection_error: Could not connect to SMTP server. Please check the server address and port.
         ssl_error: SSL/TLS error. Please verify your encryption settings.
         smtp_error: SMTP server error. Please check your configuration and try again.
       validations:
-        name: khÃ´ng nÃªn báº¯t Ä‘áº§u hoáº·c káº¿t thÃºc báº±ng cÃ¡c kÃ½ hiá»‡u vÃ  khÃ´ng nÃªn cÃ³ kÃ­ tá»± < > / \ @.
+        name: không nên bắt đầu hoặc kết thúc bằng các ký hiệu và không nên có kí tự < > / \ @.
     custom_filters:
-      number_of_records: ÄÃ£ Ä‘áº¡t giá»›i háº¡n. Sá»‘ lÆ°á»£ng tuá»³ chá»n lá»c tá»‘i Ä‘a cho má»—i má»—i ngÆ°á»i dÃ¹ng má»—i tÃ i khoáº£n lÃ  1000.
+      number_of_records: Đã đạt giới hạn. Số lượng tuỳ chọn lọc tối đa cho mỗi mỗi người dùng mỗi tài khoản là 1000.
       invalid_attribute: Invalid attribute key - [%{key}]. The key should be one of [%{allowed_keys}] or a custom attribute defined in the account.
       invalid_operator: Invalid operator. The allowed operators for %{attribute_name} are [%{allowed_keys}].
       invalid_query_operator: Query operator must be either "AND" or "OR".
@@ -201,65 +201,65 @@ vi:
     account_saml_settings:
       invalid_certificate: must be a valid X.509 certificate in PEM format
   reports:
-    period: Thá»i gian bÃ¡o cÃ¡o tá»« %{since} Ä‘áº¿n %{until}
-    utc_warning: BÃ¡o cÃ¡o Ä‘Ã£ Ä‘Æ°á»£c táº¡o vá»›i mÃºi giá» UTC
+    period: Thời gian báo cáo từ %{since} đến %{until}
+    utc_warning: Báo cáo đã được tạo với múi giờ UTC
     agent_csv:
-      agent_name: TÃªn tá»•ng Ä‘Ã i viÃªn
+      agent_name: Tên tổng đài viên
       conversations_count: Assigned conversations
       avg_first_response_time: Avg first response time
       avg_resolution_time: Avg resolution time
-      resolution_count: Sá»‘ lÆ°á»£ng giáº£i quyáº¿t
+      resolution_count: Số lượng giải quyết
       avg_customer_waiting_time: Avg customer waiting time
     inbox_csv:
-      inbox_name: TÃªn kÃªnh
-      inbox_type: Kiá»ƒu kÃªnh
-      conversations_count: Sá»‘ há»™i thoáº¡i
+      inbox_name: Tên kênh
+      inbox_type: Kiểu kênh
+      conversations_count: Số hội thoại
       avg_first_response_time: Avg first response time
       avg_resolution_time: Avg resolution time
     label_csv:
-      label_title: NhÃ£n
-      conversations_count: Sá»‘ há»™i thoáº¡i
+      label_title: Nhãn
+      conversations_count: Số hội thoại
       avg_first_response_time: Avg first response time
       avg_resolution_time: Avg resolution time
       avg_reply_time: Avg reply time
-      resolution_count: Sá»‘ lÆ°á»£ng giáº£i quyáº¿t
+      resolution_count: Số lượng giải quyết
     team_csv:
-      team_name: TÃªn nhÃ³m
-      conversations_count: Sá»‘ há»™i thoáº¡i
+      team_name: Tên nhóm
+      conversations_count: Số hội thoại
       avg_first_response_time: Avg first response time
       avg_resolution_time: Avg resolution time
-      resolution_count: Sá»‘ lÆ°á»£ng giáº£i quyáº¿t
+      resolution_count: Số lượng giải quyết
       avg_customer_waiting_time: Avg customer waiting time
     conversation_csv:
-      conversations_count: CÃ¡c cuá»™c há»™i thoáº¡i
-      incoming_messages_count: Tin nháº¯n nháº­n Ä‘Æ°á»£c
-      outgoing_messages_count: Tin nháº¯n gá»­i Ä‘i
+      conversations_count: Các cuộc hội thoại
+      incoming_messages_count: Tin nhắn nhận được
+      outgoing_messages_count: Tin nhắn gửi đi
       avg_first_response_time: Avg first response time
       avg_resolution_time: Avg resolution time
       resolution_count: Resolution count
       avg_customer_waiting_time: Avg customer waiting time
     conversation_traffic_csv:
-      timezone: MÃºi giá»
+      timezone: Múi giờ
     sla_csv:
       conversation_id: Conversation ID
       sla_policy_breached: SLA Policy
       assignee: Assignee
-      team: NhÃ³m
-      inbox: Há»™p thÆ° Ä‘áº¿n
-      labels: NhÃ£n
+      team: Nhóm
+      inbox: Hộp thư đến
+      labels: Nhãn
       conversation_link: Link to the Conversation
       breached_events: Breached Events
-    default_group_by: ngÃ y
+    default_group_by: ngày
     csat:
       headers:
-        contact_name: TÃªn liÃªn há»‡
-        contact_email_address: Äá»‹a chá»‰ email cá»§a liÃªn há»‡
-        contact_phone_number: Sá»‘ Ä‘iá»‡n thoáº¡i cá»§a liÃªn há»‡
-        link_to_the_conversation: LiÃªn káº¿ tá»›i há»™i thoáº¡i
-        agent_name: TÃªn nhÃ  cung cáº¥p
-        rating: ÄÃ¡nh giÃ¡
-        feedback: BÃ¬nh luáº­n pháº£n há»“i
-        recorded_at: NgÃ y nghi
+        contact_name: Tên liên hệ
+        contact_email_address: Địa chỉ email của liên hệ
+        contact_phone_number: Số điện thoại của liên hệ
+        link_to_the_conversation: Liên kế tới hội thoại
+        agent_name: Tên nhà cung cấp
+        rating: Đánh giá
+        feedback: Bình luận phản hồi
+        recorded_at: Ngày nghi
         review_notes: Review Notes
   notifications:
     notification_title:
@@ -276,11 +276,11 @@ vi:
     captain:
       handoff: 'Transferring to another agent for further assistance.'
     messages:
-      instagram_story_content: '%{story_sender} Ä‘Ã£ Ä‘á» cáº­p Ä‘áº¿n báº¡n trong há»™i thoáº¡i: '
-      instagram_deleted_story_content: Há»™i thoáº¡i nÃ y khÃ´ng cÃ²n ná»¯a.
+      instagram_story_content: '%{story_sender} đã đề cập đến bạn trong hội thoại: '
+      instagram_deleted_story_content: Hội thoại này không còn nữa.
       instagram_shared_story_content: 'Shared story'
       instagram_shared_post_content: 'Shared post'
-      deleted: Tin nháº¯n Ä‘Ã£ bá»‹ xoÃ¡
+      deleted: Tin nhắn đã bị xoá
       whatsapp:
         list_button_label: 'Choose an item'
         call_permission_request_body: 'We would like to call you regarding your conversation.'
@@ -301,30 +301,30 @@ vi:
       agent_bot:
         error_moved_to_open: 'Conversation was marked open by system due to an error with the agent bot.'
       status:
-        resolved: 'Cuá»™c trÃ² chuyá»‡n Ä‘Æ°á»£c Ä‘Ã¡nh dáº¥u lÃ  Ä‘Ã£ giáº£i quyáº¿t bá»Ÿi %{user_name}'
-        contact_resolved: 'Há»™i thoáº¡i Ä‘Ã£ Ä‘Æ°á»£c giáº£i quyáº¿t bá»Ÿi %{contact_name}'
-        open: 'Cuá»™c trÃ² chuyá»‡n Ä‘Ã£ Ä‘Æ°á»£c má»Ÿ láº¡i bá»Ÿi %{user_name}'
-        pending: 'Há»™i thoáº¡i Ä‘Æ°á»£c Ä‘Ã¡nh dáº¥u lÃ  chÆ°a giáº£i quyáº¿t bá»Ÿi %{user_name}'
-        snoozed: 'Há»™i thoáº¡i Ä‘Ã£ Ä‘Æ°á»£c táº¡m dá»«ng láº¡i bá»Ÿi %{user_name}'
-        auto_resolved_days: 'Há»™i thoáº¡i Ä‘Æ°á»£c Ä‘Ã¡nh dáº¥u lÃ  Ä‘Ã£ giáº£i quyáº¿t bá»Ÿi há»‡ thá»‘ng vÃ¬ %{count} ngÃ y khÃ´ng hoáº¡t Ä‘á»™ng'
+        resolved: 'Cuộc trò chuyện được đánh dấu là đã giải quyết bởi %{user_name}'
+        contact_resolved: 'Hội thoại đã được giải quyết bởi %{contact_name}'
+        open: 'Cuộc trò chuyện đã được mở lại bởi %{user_name}'
+        pending: 'Hội thoại được đánh dấu là chưa giải quyết bởi %{user_name}'
+        snoozed: 'Hội thoại đã được tạm dừng lại bởi %{user_name}'
+        auto_resolved_days: 'Hội thoại được đánh dấu là đã giải quyết bởi hệ thống vì %{count} ngày không hoạt động'
         auto_resolved_hours: 'Conversation was marked resolved by system due to %{count} hours of inactivity'
         auto_resolved_minutes: 'Conversation was marked resolved by system due to %{count} minutes of inactivity'
-        system_auto_open: Há»‡ thá»‘ng má»Ÿ láº¡i há»™i thoáº¡i do cÃ³ tin nháº¯n má»›i.
+        system_auto_open: Hệ thống mở lại hội thoại do có tin nhắn mới.
       priority:
-        added: '%{user_name} thiáº¿t láº­p Ä‘á»™ Æ°u tiÃªn thÃ nh %{new_priority}'
-        updated: '%{user_name} thay Ä‘á»•i má»©c Ä‘á»™ Æ°u tiÃªn tá»« %{old_priority} thÃ nh %{new_priority}'
-        removed: '%{user_name} bá» má»©c Ä‘á»™ Æ°u tiÃªn'
+        added: '%{user_name} thiết lập độ ưu tiên thành %{new_priority}'
+        updated: '%{user_name} thay đổi mức độ ưu tiên từ %{old_priority} thành %{new_priority}'
+        removed: '%{user_name} bỏ mức độ ưu tiên'
       assignee:
-        self_assigned: '%{user_name} phÃ¢n cÃ´ng chÃ­nh mÃ¬nh vÃ o há»™i thoáº¡i nÃ y'
-        assigned: 'Chá»‰ Ä‘á»‹nh %{assignee_name} bá»Ÿi %{user_name}'
-        removed: 'Cuá»™c há»™i thoáº¡i chÆ°a Ä‘Æ°á»£c chá»‰ Ä‘á»‹nh bá»Ÿi %{user_name}'
+        self_assigned: '%{user_name} phân công chính mình vào hội thoại này'
+        assigned: 'Chỉ định %{assignee_name} bởi %{user_name}'
+        removed: 'Cuộc hội thoại chưa được chỉ định bởi %{user_name}'
       team:
-        assigned: 'Chá»‰ Ä‘á»‹nh %{team_name} bá»Ÿi %{user_name}'
-        assigned_with_assignee: 'PhÃ¢n cÃ´ng cho %{assignee_name} thÃ´ng qua %{team_name} bá»Ÿi %{user_name}'
-        removed: 'Huá»· phÃ¢n cÃ´ng cho %{team_name} bá»Ÿi %{user_name}'
+        assigned: 'Chỉ định %{team_name} bởi %{user_name}'
+        assigned_with_assignee: 'Phân công cho %{assignee_name} thông qua %{team_name} bởi %{user_name}'
+        removed: 'Huỷ phân công cho %{team_name} bởi %{user_name}'
       labels:
-        added: '%{user_name} thÃªm %{labels}'
-        removed: '%{user_name} xoÃ¡ %{labels}'
+        added: '%{user_name} thêm %{labels}'
+        removed: '%{user_name} xoá %{labels}'
       sla:
         added: '%{user_name} added SLA policy %{sla_name}'
         removed: '%{user_name} removed SLA policy %{sla_name}'
@@ -339,50 +339,50 @@ vi:
         not_sent_due_to_messaging_window: 'CSAT survey not sent due to outgoing message restrictions'
       auto_resolve:
         not_sent_due_to_messaging_window: 'Auto-resolve message not sent due to outgoing message restrictions'
-      muted: '%{user_name} Ä‘Ã£ táº¯t tiáº¿ng há»™i thoáº¡i'
-      unmuted: '%{user_name} Ä‘Ã£ báº­t tiáº¿ng cuá»™c trÃ² chuyá»‡n'
+      muted: '%{user_name} đã tắt tiếng hội thoại'
+      unmuted: '%{user_name} đã bật tiếng cuộc trò chuyện'
       auto_resolution_message: 'Resolving the conversation as it has been inactive for a while. Please start a new conversation if you need further assistance.'
     templates:
-      greeting_message_body: '%{account_name} thÆ°á»ng tráº£ lá»i trong vÃ i giá».'
-      ways_to_reach_you_message_body: 'Trong lÃºc chá» Ä‘á»™i ngÅ© há»— trá»£ pháº£n há»“i, báº¡n hÃ£y Ä‘á»ƒ láº¡i email Ä‘á»ƒ nháº­n Ä‘Æ°á»£c thÃ´ng bÃ¡o nhanh nháº¥t nhÃ©.'
-      email_input_box_message_body: 'Nháº­n thÃ´ng bÃ¡o qua email'
-      csat_input_message_body: 'Báº¡n hÃ£y vui lÃ²ng Ä‘Ã¡nh giÃ¡ há»™i thoáº¡i'
+      greeting_message_body: '%{account_name} thường trả lời trong vài giờ.'
+      ways_to_reach_you_message_body: 'Trong lúc chờ đội ngũ hỗ trợ phản hồi, bạn hãy để lại email để nhận được thông báo nhanh nhất nhé.'
+      email_input_box_message_body: 'Nhận thông báo qua email'
+      csat_input_message_body: 'Bạn hãy vui lòng đánh giá hội thoại'
     reply:
       email:
         header:
-          notifications: 'ThÃ´ng bÃ¡o'
-          from_with_name: '%{assignee_name} tá»« %{inbox_name} <%{from_email}>'
-          reply_with_name: '%{assignee_name} tá»« %{inbox_name} <reply+%{reply_email}>'
-          friendly_name: '%{sender_name} tá»« %{business_name} <%{from_email}>'
+          notifications: 'Thông báo'
+          from_with_name: '%{assignee_name} từ %{inbox_name} <%{from_email}>'
+          reply_with_name: '%{assignee_name} từ %{inbox_name} <reply+%{reply_email}>'
+          friendly_name: '%{sender_name} từ %{business_name} <%{from_email}>'
           professional_name: '%{business_name} <%{from_email}>'
       channel_email:
         header:
-          reply_with_name: '%{assignee_name} tá»« %{inbox_name} <%{from_email}>'
+          reply_with_name: '%{assignee_name} từ %{inbox_name} <%{from_email}>'
           reply_with_inbox_name: '%{inbox_name} <%{from_email}>'
-      email_subject: 'Tin nháº¯n má»›i vá» cuá»™c trÃ² chuyá»‡n nÃ y'
-      transcript_subject: 'Báº£n ghi cuá»™c há»™i thoáº¡i'
+      email_subject: 'Tin nhắn mới về cuộc trò chuyện này'
+      transcript_subject: 'Bản ghi cuộc hội thoại'
     survey:
-      response: 'Báº¡n hÃ£y vui lÃ²ng Ä‘Ã¡nh giÃ¡ há»™i thoáº¡i, %{link}'
+      response: 'Bạn hãy vui lòng đánh giá hội thoại, %{link}'
   contacts:
     online:
-      delete: '%{contact_name} Ä‘ang trá»±c tiáº¿ng, vui lÃ²ng thá»­ láº¡i sau'
+      delete: '%{contact_name} đang trực tiếng, vui lòng thử lại sau'
   integration_apps:
     #Note: webhooks and dashboard_apps don't need short_description as they use different modal components
     dashboard_apps:
-      name: 'á»¨ng dá»¥ng báº£ng Ä‘iá»u khiá»ƒn'
+      name: 'Ứng dụng bảng điều khiển'
       description: 'Dashboard Apps allow you to create and embed applications that display user information, orders, or payment history, providing more context to your customer support agents.'
     dyte:
       name: 'Dyte'
-      short_description: 'Start video/voice calls with customers directly from KChat.'
-      description: 'Dyte is a product that integrates audio and video functionalities into your application. With this integration, your agents can start video/voice calls with your customers directly from KChat.'
-      meeting_name: '%{agent_name} Ä‘Ã£ báº¯t Ä‘áº§u má»™t cuá»™c há»p'
+      short_description: 'Start video/voice calls with customers directly from Chatwoot.'
+      description: 'Dyte is a product that integrates audio and video functionalities into your application. With this integration, your agents can start video/voice calls with your customers directly from Chatwoot.'
+      meeting_name: '%{agent_name} đã bắt đầu một cuộc họp'
     slack:
       name: 'Slack'
       short_description: 'Receive notifications and respond to conversations directly in Slack.'
-      description: "Integrate KChat with Slack to keep your team in sync. This integration allows you to receive notifications for new conversations and respond to them directly within Slack's interface."
+      description: "Integrate Chatwoot with Slack to keep your team in sync. This integration allows you to receive notifications for new conversations and respond to them directly within Slack's interface."
     webhooks:
       name: 'Webhooks'
-      description: 'Webhook events provide real-time updates about activities in your KChat account. You can subscribe to your preferred events, and KChat will send you HTTP callbacks with the updates.'
+      description: 'Webhook events provide real-time updates about activities in your Chatwoot account. You can subscribe to your preferred events, and Chatwoot will send you HTTP callbacks with the updates.'
     dialogflow:
       name: 'Dialogflow'
       short_description: 'Build chatbots to handle initial queries before transferring to agents.'
@@ -413,17 +413,17 @@ vi:
       short_description: 'Sync your contacts and conversations with LeadSquared CRM.'
       description: 'Sync your contacts and conversations with LeadSquared CRM. This integration automatically creates leads in LeadSquared when new contacts are added, and logs conversation activity to provide your sales team with complete context.'
   captain:
-    copilot_message_required: ThÃ´ng Ä‘iá»‡p báº¯t buá»™c cÃ³
+    copilot_message_required: Thông điệp bắt buộc có
     copilot_error: 'Please connect an assistant to this inbox to use Copilot'
     copilot_limit: 'You are out of Copilot credits. You can buy more credits from the billing section.'
-    upgrade: 'NÃ¢ng cáº¥p gÃ³i cá»§a báº¡n Ä‘á»ƒ báº­t Captain AI'
-    disabled: 'Captain AI bá»‹ vÃ´ hiá»‡u hÃ³a cho tÃ i khoáº£n nÃ y.'
-    api_key_missing: 'ChÆ°a cáº¥u hÃ¬nh khÃ³a API Captain AI.'
+    upgrade: 'Nâng cấp gói của bạn để bật Captain AI'
+    disabled: 'Captain AI bị vô hiệu hóa cho tài khoản này.'
+    api_key_missing: 'Chưa cấu hình khóa API Captain AI.'
     copilot:
-      using_tool: 'Äang sá»­ dá»¥ng cÃ´ng cá»¥ %{function_name}'
-      completed_tool_call: 'ÄÃ£ hoÃ n thÃ nh cuá»™c gá»i cÃ´ng cá»¥ %{function_name}'
-      invalid_tool_call: 'Cuá»™c gá»i cÃ´ng cá»¥ khÃ´ng há»£p lá»‡'
-      tool_not_available: 'CÃ´ng cá»¥ khÃ´ng kháº£ dá»¥ng'
+      using_tool: 'Đang sử dụng công cụ %{function_name}'
+      completed_tool_call: 'Đã hoàn thành cuộc gọi công cụ %{function_name}'
+      invalid_tool_call: 'Cuộc gọi công cụ không hợp lệ'
+      tool_not_available: 'Công cụ không khả dụng'
     documents:
       limit_exceeded: 'Document limit exceeded'
       pdf_format_error: 'must be a PDF file'
@@ -452,24 +452,24 @@ vi:
       limit_exceeded: 'You can create a maximum of %{limit} custom tools per account'
   public_portal:
     search:
-      search_placeholder: TÃ¬m bÃ i viáº¿t theo tiÃªu Ä‘á» hoáº·c ná»™i dung...
-      empty_placeholder: KhÃ´ng tÃ¬m tháº¥y káº¿t quáº£.
-      loading_placeholder: Äang tÃ¬m kiáº¿m...
-      results_title: CÃ¡c káº¿t quáº£ tÃ¬m kiáº¿m
-      results: CÃ¡c káº¿t quáº£ tÃ¬m kiáº¿m
+      search_placeholder: Tìm bài viết theo tiêu đề hoặc nội dung...
+      empty_placeholder: Không tìm thấy kết quả.
+      loading_placeholder: Đang tìm kiếm...
+      results_title: Các kết quả tìm kiếm
+      results: Các kết quả tìm kiếm
       results_for: "Search Results for '%{query}'"
       no_results: "No results found for '%{query}'"
       found_results:
         other: 'Found %{count} results'
-      submit: TÃ¬m kiáº¿m
-    toc_header: 'TrÃªn trang nÃ y'
+      submit: Tìm kiếm
+    toc_header: 'Trên trang này'
     sidebar:
       help_center: Help Center
-      categories: Danh má»¥c
-      language: NgÃ´n ngá»¯
+      categories: Danh mục
+      language: Ngôn ngữ
       theme: Theme
-      open_sidebar: Má»Ÿ thanh bÃªn
-      close_sidebar: ÄÃ³ng thanh bÃªn
+      open_sidebar: Mở thanh bên
+      close_sidebar: Đóng thanh bên
       browse: Browse
       back_to_category: Back to %{name}
       browse_by_topic: Browse by topic
@@ -483,19 +483,19 @@ vi:
       authors_others: "%{names} and %{count} others"
       primary_nav: Primary
     hero:
-      sub_title: TÃ¬m trong bÃ i viáº¿t hoáº·c xem danh má»¥c dÆ°á»›i Ä‘Ã¢y.
+      sub_title: Tìm trong bài viết hoặc xem danh mục dưới đây.
     common:
-      home: Trang Chá»§
-      last_updated_on: 'Cáº­p nháº­t láº§n cuá»‘i: %{last_updated_on}'
+      home: Trang Chủ
+      last_updated_on: 'Cập nhật lần cuối: %{last_updated_on}'
       view_all_articles: View all
-      article: bÃ i viáº¿t
-      articles: bÃ i viáº¿t
-      author: tÃ¡c giáº£
+      article: bài viết
+      articles: bài viết
+      author: tác giả
       authors: authors
       other: other
       others: others
       by: By
-      no_articles: KhÃ´ng tÃ¬m tháº¥y bÃ i viáº¿t
+      no_articles: Không tìm thấy bài viết
       previous: Previous
       next: Next
     article_actions:
@@ -505,7 +505,7 @@ vi:
       open_in_claude: Open in Claude
       llm_prompt: "Read the following article and help me understand it: %{url}"
     footer:
-      made_with: Táº¡o bá»Ÿi
+      made_with: Tạo bởi
     header:
       go_to_homepage: Website
       visit_website: Visit website
@@ -516,7 +516,7 @@ vi:
         dark: Dark
       featured_articles: Featured Articles
       recommended: Recommended articles
-      uncategorized: ChÆ°a Ä‘Æ°á»£c phÃ¢n loáº¡i
+      uncategorized: Chưa được phân loại
     404:
       title: Page not found
       description: We couldn't find the page you were looking for.
@@ -527,13 +527,13 @@ vi:
       action: If you are the administrator, please upgrade your plan to restore access.
   slack_unfurl:
     fields:
-      name: TÃªn
+      name: Tên
       email: Email
       phone_number: Phone
-      company_name: CÃ´ng ty
-      inbox_name: Há»™p thÆ° Ä‘áº¿n
+      company_name: Công ty
+      inbox_name: Hộp thư đến
       inbox_type: Inbox Type
-    button: Má»Ÿ cuá»™c trÃ² chuyá»‡n
+    button: Mở cuộc trò chuyện
   time_units:
     days:
       other: '%{count} days'
@@ -578,7 +578,7 @@ vi:
       no_articles_found: 'No articles found to process'
       invalid_status: 'Invalid status value'
     send_instructions:
-      email_required: 'Email báº¯t buá»™c cÃ³'
+      email_required: 'Email bắt buộc có'
       invalid_email_format: 'Invalid email format'
       custom_domain_not_configured: 'Custom domain is not configured'
       instructions_sent_successfully: 'Instructions sent successfully'
@@ -596,10 +596,10 @@ vi:
         model: 'Model'
       sources:
         account_override: 'Account override'
-        default: 'Máº·c Ä‘á»‹nh'
+        default: 'Mặc định'
       features:
         editor: 'Editor'
-        assistant: 'Trá»£ lÃ½'
+        assistant: 'Trợ lý'
         copilot: 'Copilot'
         label_suggestion: 'Label suggestion'
         document_faq_generation: 'Document FAQ generation'
