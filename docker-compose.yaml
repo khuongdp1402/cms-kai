@@ -41,8 +41,6 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-      vite:
-        condition: service_started
       mailhog:
         condition: service_started
       zalo_personal_bridge:
@@ -51,11 +49,13 @@ services:
       - ${KCHAT_RAILS_PORT:-3000}:3000
     environment:
       <<: *zalo_bridge_env
-      VITE_RUBY_HOST: vite
+      # Default: serve the prebuilt bundle (fast). Set KCHAT_VITE_HOST=vite and run the
+      # `hmr` profile for live reload. A stopped `vite` host costs ~5s per DNS lookup.
+      VITE_RUBY_HOST: ${KCHAT_VITE_HOST:-localhost}
       VITE_RUBY_PORT: 3036
       VITE_RUBY_CLIENT_HOST: localhost
       VITE_RUBY_AUTO_BUILD: 'false'
-      VITE_DEV_SERVER_HOST: vite
+      VITE_DEV_SERVER_HOST: ${KCHAT_VITE_HOST:-localhost}
       NODE_ENV: development
       RAILS_ENV: development
       SAFE_FETCH_ALLOW_PRIVATE_NETWORK: 'true'
@@ -95,7 +95,7 @@ services:
       context: .
       dockerfile: ./docker/dockerfiles/vite.Dockerfile
     image: chatwoot-vite:development
-    profiles: []
+    profiles: [hmr]
     volumes: *rails_volumes
     ports:
       - "${KCHAT_VITE_PORT:-3036}:3036" # Vite dev server
