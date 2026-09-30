@@ -78,11 +78,24 @@ async function request<T = unknown>(
   path: string,
   { method = 'GET', params, body, signal }: ApiRequestOptions = {}
 ): Promise<T> {
-  const url = new URL(`${BASE_URL}${path}`)
-  if (params) {
-    Object.entries(params).forEach(([k, v]) => {
-      if (v !== undefined) url.searchParams.set(k, String(v))
-    })
+  // Nếu BASE_URL trống → dùng relative path (qua Vite proxy)
+  // Nếu có BASE_URL → absolute URL (production)
+  let fetchUrl: string
+  if (BASE_URL) {
+    const url = new URL(`${BASE_URL}${path}`)
+    if (params) {
+      Object.entries(params).forEach(([k, v]) => {
+        if (v !== undefined) url.searchParams.set(k, String(v))
+      })
+    }
+    fetchUrl = url.toString()
+  } else {
+    const searchParams = params
+      ? '?' + new URLSearchParams(
+          Object.fromEntries(Object.entries(params).filter(([, v]) => v !== undefined).map(([k, v]) => [k, String(v)]))
+        ).toString()
+      : ''
+    fetchUrl = `${path}${searchParams}`
   }
 
   const headers: Record<string, string> = {
@@ -94,12 +107,13 @@ async function request<T = unknown>(
     Object.assign(headers, authHeaders.value)
   }
 
-  const res = await fetch(url.toString(), {
+  const res = await fetch(fetchUrl, {
     method,
     headers,
     body: body ? JSON.stringify(body) : undefined,
     signal,
   })
+
 
   // Cập nhật auth headers từ response (token rotation)
   const newToken = res.headers.get('access-token')
@@ -131,13 +145,38 @@ async function request<T = unknown>(
 // ── Typed API methods ──
 export const api = {
   auth: {
-    signIn: (email: string, password: string) =>
-      request<{ data: { id: number; name: string; email: string; role: string } }>(
-        '/auth/sign_in', { method: 'POST', body: { email, password } }
-      ),
+    signIn: async (email: string, password: string) => {
+      // Dùng fetch trực tiếp để lấy headers từ response
+      const res = await fetch('/auth/sign_in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      // Đọc JSON một lần duy nhất
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        throw new Error((data as any)?.errors?.[0] ?? 'Đăng nhập thất bại')
+      }
+
+      // Lưu auth headers từ response (devise_token_auth)
+      const accessToken = res.headers.get('access-token')
+      const client      = res.headers.get('client')
+      const uid         = res.headers.get('uid')
+      const expiry      = res.headers.get('expiry')
+      const tokenType   = res.headers.get('token-type') ?? 'Bearer'
+
+      if (accessToken && client && uid && expiry) {
+        saveAuth({ 'access-token': accessToken, client, uid, expiry, 'token-type': tokenType })
+      }
+
+      return data as { data: { id: number; name: string; email: string; role: string } }
+    },
     signOut: () => request('/auth/sign_out', { method: 'DELETE' }),
     validateToken: () => request('/auth/validate_token'),
   },
+
 
   profile: {
     get: () => request('/api/v1/profile'),
