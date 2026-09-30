@@ -13,6 +13,62 @@
     },
     "RESEND_VERIFICATION_MAIL": "Gửi lại email xác minh"
   },
+  "AUTOMATION": {
+    "ACTION": {
+      "EMAIL_INPUT_PLACEHOLDER": "Nhập email",
+      "URL_INPUT_PLACEHOLDER": "Nhập URL"
+    },
+    "ACTIONS": {
+      "ADD_LABEL": "Gắn nhãn",
+      "ADD_PRIVATE_NOTE": "Thêm ghi chú nội bộ",
+      "ADD_SLA": "Gắn chính sách SLA",
+      "ASSIGN_AGENT": "Giao cho nhân viên",
+      "ASSIGN_TEAM": "Giao cho nhóm",
+      "CHANGE_PRIORITY": "Đổi mức ưu tiên",
+      "PENDING_CONVERSATION": "Đánh dấu cuộc trò chuyện là đang chờ",
+      "REMOVE_ASSIGNED_AGENT": "Hủy giao nhân viên",
+      "REMOVE_ASSIGNED_TEAM": "Hủy giao nhóm",
+      "REMOVE_LABEL": "Gỡ nhãn",
+      "SEND_ATTACHMENT": "Gửi tệp đính kèm",
+      "SEND_EMAIL_TO_TEAM": "Gửi email cho nhóm",
+      "SEND_EMAIL_TRANSCRIPT": "Gửi bản ghi hội thoại qua email",
+      "SEND_MESSAGE": "Gửi tin nhắn",
+      "SEND_WEBHOOK_EVENT": "Gửi sự kiện Webhook"
+    },
+    "ATTRIBUTES": {
+      "ASSIGNEE_NAME": "Người được giao",
+      "CONVERSATION_LANGUAGE": "Ngôn ngữ cuộc trò chuyện",
+      "EMAIL": "Email",
+      "MAIL_SUBJECT": "Tiêu đề email",
+      "MESSAGE_CONTAINS": "Nội dung tin nhắn chứa",
+      "MESSAGE_TYPE": "Loại tin nhắn",
+      "REFERER_LINK": "Đường dẫn giới thiệu"
+    },
+    "COUNT": "{n} quy tắc tự động | {n} quy tắc tự động",
+    "DESCRIPTION": "Quy trình tự động hóa giúp thay thế và tối ưu các thao tác thủ công thường nhật, như gắn nhãn và giao cuộc trò chuyện cho nhân viên phù hợp nhất. Nhờ đó đội ngũ có thể tập trung vào thế mạnh của mình và tiết kiệm thời gian.",
+    "ERRORS": {
+      "ACTION_PARAMETERS_REQUIRED": "Tham số hành động là bắt buộc",
+      "ATLEAST_ONE_ACTION_REQUIRED": "Cần ít nhất một hành động",
+      "ATLEAST_ONE_CONDITION_REQUIRED": "Cần ít nhất một điều kiện",
+      "ATTRIBUTE_KEY_REQUIRED": "Khóa thuộc tính là bắt buộc",
+      "FILTER_OPERATOR_REQUIRED": "Toán tử lọc là bắt buộc",
+      "VALUE_MUST_BE_BETWEEN_1_AND_998": "Giá trị phải từ 1 đến 998"
+    },
+    "EVENTS": {
+      "CONVERSATION_OPENED": "Cuộc trò chuyện đã mở",
+      "CONVERSATION_RESOLVED": "Cuộc trò chuyện đã giải quyết",
+      "MESSAGE_CREATED": "Tin nhắn mới được tạo"
+    },
+    "HEADER_BTN_TXT": "Tạo quy tắc tự động",
+    "LAST_RESPONDING_AGENT": "Nhân viên phản hồi gần nhất",
+    "LEARN_MORE": "Tìm hiểu thêm về tự động hóa",
+    "MESSAGE_TYPES": {
+      "INCOMING": "Tin nhắn đến",
+      "OUTGOING": "Tin nhắn đi"
+    },
+    "NO_RESULTS": "Không tìm thấy quy tắc tự động nào phù hợp với tìm kiếm",
+    "SEARCH_PLACEHOLDER": "Tìm kiếm quy tắc tự động..."
+  },
   "BREADCRUMB": {
     "ARIA_LABEL": "Đường dẫn"
   },
@@ -42,6 +98,109 @@
     "UNASSIGN_AGENT_CONFIRMATION_LABEL": "Bạn có chắc muốn hủy giao {n} cuộc trò chuyện? | Bạn có chắc muốn hủy giao {n} cuộc trò chuyện?",
     "UPDATE": {
       "UPDATE_FAILED": "Không cập nhật được cuộc trò chuyện, vui lòng thử lại."
+    }
+  },
+  "CAMPAIGN": {
+    "CONFIRM_DELETE": {
+      "DESCRIPTION": "Thao tác xóa là vĩnh viễn và không thể khôi phục."
+    },
+    "LIVE_CHAT": {
+      "CARD": {
+        "CAMPAIGN_DETAILS": {
+          "BOT": "Bot",
+          "URL": "URL:"
+        }
+      },
+      "CREATE": {
+        "FORM": {
+          "API": {
+            "SUCCESS_MESSAGE": "Tạo chiến dịch live chat thành công"
+          },
+          "END_POINT": {
+            "LABEL": "URL"
+          },
+          "OTHER_PREFERENCES": {
+            "TITLE": "Tùy chọn khác"
+          },
+          "SENT_BY": {
+            "PLACEHOLDER": "Vui lòng chọn người gửi"
+          }
+        },
+        "TITLE": "Tạo chiến dịch live chat"
+      },
+      "EDIT": {
+        "FORM": {
+          "API": {
+            "SUCCESS_MESSAGE": "Cập nhật chiến dịch live chat thành công"
+          }
+        },
+        "TITLE": "Chỉnh sửa chiến dịch live chat"
+      },
+      "EMPTY_STATE": {
+        "SUBTITLE": "Kết nối chủ động với khách hàng bằng tin nhắn mở đầu. Nhấn 'Tạo chiến dịch' để bắt đầu.",
+        "TITLE": "Chưa có chiến dịch live chat nào"
+      },
+      "HEADER_TITLE": "Chiến dịch Live chat",
+      "NEW_CAMPAIGN": "Tạo chiến dịch"
+    },
+    "SMS": {
+      "CARD": {
+        "CAMPAIGN_DETAILS": {
+          "ON": "vào lúc",
+          "SENT_FROM": "Gửi từ"
+        },
+        "STATUS": {
+          "PROCESSING": "Đang xử lý",
+          "SCHEDULED": "Đã lên lịch"
+        }
+      },
+      "CREATE": {
+        "FORM": {
+          "API": {
+            "SUCCESS_MESSAGE": "Tạo chiến dịch SMS thành công"
+          }
+        },
+        "TITLE": "Tạo chiến dịch SMS"
+      },
+      "EMPTY_STATE": {
+        "SUBTITLE": "Khởi tạo chiến dịch SMS để tiếp cận khách hàng trực tiếp. Gửi ưu đãi hoặc thông báo dễ dàng. Nhấn 'Tạo chiến dịch' để bắt đầu.",
+        "TITLE": "Chưa có chiến dịch SMS nào"
+      },
+      "HEADER_TITLE": "Chiến dịch SMS",
+      "NEW_CAMPAIGN": "Tạo chiến dịch"
+    },
+    "WHATSAPP": {
+      "CARD": {
+        "CAMPAIGN_DETAILS": {
+          "ON": "vào lúc",
+          "SENT_FROM": "Gửi từ"
+        },
+        "STATUS": {
+          "PROCESSING": "Đang xử lý",
+          "SCHEDULED": "Đã lên lịch"
+        }
+      },
+      "CREATE": {
+        "FORM": {
+          "API": {
+            "SUCCESS_MESSAGE": "Tạo chiến dịch WhatsApp thành công"
+          },
+          "TEMPLATE": {
+            "ERROR": "Mẫu tin nhắn là bắt buộc",
+            "INFO": "Chọn mẫu tin nhắn để sử dụng cho chiến dịch này.",
+            "LABEL": "Mẫu tin nhắn WhatsApp",
+            "PLACEHOLDER": "Chọn mẫu tin nhắn",
+            "VARIABLE_PLACEHOLDER": "Nhập giá trị cho {variable}"
+          }
+        },
+        "TITLE": "Tạo chiến dịch WhatsApp"
+      },
+      "EMPTY_STATE": {
+        "SUBTITLE": "Khởi tạo chiến dịch WhatsApp để tiếp cận khách hàng trực tiếp. Gửi ưu đãi hoặc thông báo dễ dàng. Nhấn 'Tạo chiến dịch' để bắt đầu.",
+        "TITLE": "Chưa có chiến dịch WhatsApp nào"
+      },
+      "HEADER_TITLE": "Chiến dịch WhatsApp",
+      "NEW_CAMPAIGN": "Tạo chiến dịch"
     }
   },
   "CHANNEL_SELECTOR": {
@@ -122,6 +281,31 @@
     "MORE": "+{count} mục khác",
     "PLACEHOLDER": "Chọn một mục...",
     "SEARCH_PLACEHOLDER": "Tìm kiếm..."
+  },
+  "COMMAND_BAR": {
+    "COMMANDS": {
+      "AI_ASSIST": "Trợ lý AI",
+      "AN_HOUR_FROM_NOW": "Sau một giờ nữa",
+      "ASSIGN_PRIORITY": "Gán mức ưu tiên",
+      "CHANGE_APPEARANCE": "Thay đổi giao diện",
+      "DARK_MODE": "Tối",
+      "LIGHT_MODE": "Sáng",
+      "SNOOZE_NOTIFICATION": "Tạm ẩn thông báo",
+      "SYSTEM_MODE": "Theo hệ thống",
+      "UNTIL_CUSTOM_TIME": "Tùy chỉnh...",
+      "UNTIL_NEXT_MONTH": "Đến tháng sau"
+    },
+    "SECTIONS": {
+      "AI_ASSIST": "Trợ lý AI",
+      "APPEARANCE": "Giao diện",
+      "BULK_ACTIONS": "Thao tác hàng loạt",
+      "CHANGE_PRIORITY": "Đổi mức ưu tiên",
+      "SNOOZE_NOTIFICATION": "Tạm ẩn thông báo"
+    },
+    "SNOOZE_PLACEHOLDER": "Nhập thời gian ví dụ: ngày mai, 2 giờ, thứ sáu tới, 15/01..."
+  },
+  "COMMON": {
+    "OR": "Hoặc"
   },
   "COMPONENTS": {
     "CODE": {
@@ -656,6 +840,11 @@
   "FEATURE_SPOTLIGHT": {
     "WATCH_VIDEO": "Xem video"
   },
+  "FORMS": {
+    "MULTISELECT": {
+      "NO_OPTIONS": "Danh sách trống"
+    }
+  },
   "GALLERY_VIEW": {
     "ERROR_DOWNLOADING": "Không tải được tệp đính kèm, vui lòng thử lại"
   },
@@ -665,6 +854,89 @@
     "DISCARD": "Bỏ",
     "PREFERRED": "Ưu tiên",
     "SHOWING_RESULTS": "Hiển thị {firstIndex}-{lastIndex} trên {totalCount} mục"
+  },
+  "GENERAL_SETTINGS": {
+    "ACCOUNT_DELETE_SECTION": {
+      "BUTTON_TEXT": "Xóa tài khoản của bạn",
+      "CONFIRM": {
+        "MESSAGE": "Hành động xóa tài khoản không thể hoàn tác. Nhập tên tài khoản của bạn bên dưới để xác nhận bạn muốn xóa vĩnh viễn.",
+        "TITLE": "Xóa tài khoản"
+      },
+      "FAILURE": "Không thể xóa tài khoản, vui lòng thử lại!",
+      "NOTE": "Sau khi xóa tài khoản, tất cả dữ liệu của bạn sẽ bị xóa vĩnh viễn.",
+      "SCHEDULED_DELETION": {
+        "CLEAR_BUTTON": "Hủy lên lịch xóa",
+        "MESSAGE_INACTIVITY": "Tài khoản này được lên lịch xóa vào ngày {deletionDate} do không hoạt động. Bạn có thể hủy yêu cầu xóa trước ngày này.",
+        "MESSAGE_MANUAL": "Tài khoản này được lên lịch xóa vào ngày {deletionDate} theo yêu cầu của quản trị viên. Bạn có thể hủy yêu cầu xóa trước ngày này.",
+        "TITLE": "Tài khoản đã được lên lịch xóa"
+      },
+      "SUCCESS": "Tài khoản đã được lên lịch xóa",
+      "TITLE": "Xóa tài khoản của bạn"
+    },
+    "DISMISS": "Bỏ qua",
+    "FORM": {
+      "AUDIO_TRANSCRIPTION": {
+        "API": {
+          "ERROR": "Không thể cập nhật cài đặt chuyển âm thanh thành văn bản",
+          "SUCCESS": "Đã cập nhật cài đặt chuyển âm thanh thành văn bản"
+        },
+        "NOTE": "Tự động phiên âm tin nhắn âm thanh trong các cuộc trò chuyện. Tạo bản ghi văn bản mỗi khi tin nhắn thoại được gửi hoặc nhận, và hiển thị bên cạnh tin nhắn.",
+        "TITLE": "Chuyển âm thanh thành văn bản"
+      },
+      "AUTO_RESOLVE": {
+        "DURATION": {
+          "API": {
+            "ERROR": "Không thể cập nhật cài đặt tự động giải quyết",
+            "SUCCESS": "Đã cập nhật cài đặt tự động giải quyết"
+          },
+          "ERROR": "Thời gian tự động giải quyết phải từ 10 phút đến 999 ngày",
+          "HELP": "Khoảng thời gian không có hoạt động trước khi cuộc trò chuyện được tự động giải quyết",
+          "LABEL": "Thời gian không hoạt động"
+        },
+        "IGNORE_WAITING": {
+          "LABEL": "Bỏ qua các cuộc trò chuyện đang chờ nhân viên trả lời"
+        },
+        "LABEL": {
+          "LABEL": "Thêm nhãn sau khi tự động giải quyết",
+          "PLACEHOLDER": "Chọn một nhãn"
+        },
+        "MESSAGE": {
+          "HELP": "Tin nhắn gửi tới khách hàng sau khi cuộc trò chuyện được tự động giải quyết",
+          "LABEL": "Tin nhắn tự động giải quyết tùy chỉnh",
+          "PLACEHOLDER": "Cuộc trò chuyện đã được hệ thống đánh dấu giải quyết do không có hoạt động sau 15 ngày"
+        },
+        "NOTE": "Cấu hình này cho phép tự động giải quyết cuộc trò chuyện sau một khoảng thời gian không có hoạt động.",
+        "PREFERENCES": "Tùy chọn",
+        "TITLE": "Tự động giải quyết cuộc trò chuyện",
+        "UPDATE_BUTTON": "Lưu thay đổi"
+      },
+      "AUTO_RESOLVE_DURATION": {
+        "API": {
+          "ERROR": "Không thể cập nhật cài đặt tự động giải quyết",
+          "SUCCESS": "Đã cập nhật cài đặt tự động giải quyết"
+        },
+        "ERROR": "Thời gian tự động giải quyết phải từ 10 phút đến 999 ngày",
+        "HELP": "Khoảng thời gian sau đó cuộc trò chuyện sẽ tự động giải quyết nếu không có hoạt động",
+        "LABEL": "Thời gian không hoạt động để giải quyết",
+        "MESSAGE_HELP": "Tin nhắn này được gửi tới khách hàng khi cuộc trò chuyện tự động giải quyết do không hoạt động.",
+        "MESSAGE_LABEL": "Tin nhắn giải quyết tùy chỉnh",
+        "MESSAGE_PLACEHOLDER": "Cuộc trò chuyện đã được hệ thống đánh dấu giải quyết do không có hoạt động sau 15 ngày"
+      },
+      "AUTO_RESOLVE_IGNORE_WAITING": {
+        "HELP": "Khi bật, hệ thống sẽ bỏ qua việc giải quyết các cuộc trò chuyện vẫn đang chờ nhân viên phản hồi.",
+        "LABEL": "Loại trừ các cuộc trò chuyện chưa được xử lý"
+      }
+    },
+    "LIMITS_UPGRADE": "Tài khoản của bạn đã vượt quá giới hạn sử dụng, vui lòng nâng cấp gói để tiếp tục sử dụng",
+    "LIMIT_MESSAGES": {
+      "AGENTS": "Bạn đã vượt quá giới hạn nhân viên. Gói của bạn chỉ cho phép {allowedAgents} nhân viên.",
+      "CONVERSATION": "Bạn đã vượt quá giới hạn cuộc trò chuyện. Gói hiện tại chỉ cho phép 500 cuộc trò chuyện.",
+      "INBOXES": "Bạn đã vượt quá giới hạn hộp thư. Gói hiện tại chỉ hỗ trợ live-chat trên trang web. Các hộp thư bổ sung như email, WhatsApp... yêu cầu gói trả phí.",
+      "NON_ADMIN": "Vui lòng liên hệ quản trị viên để nâng cấp gói và tiếp tục sử dụng tất cả các tính năng."
+    },
+    "OPEN_BILLING": "Mở trang thanh toán",
+    "PAYMENT_PENDING": "Khoản thanh toán của bạn đang chờ xử lý. Vui lòng cập nhật thông tin thanh toán để tiếp tục sử dụng",
+    "UPGRADE": "Nâng cấp để tiếp tục sử dụng"
   },
   "INBOX": {
     "ALERTS": {
@@ -733,6 +1005,175 @@
       "SNOOZED_UNTIL": "Tạm hoãn {time}"
     }
   },
+  "INBOX_MGMT": {
+    "ASSIGNMENT": {
+      "ASSIGNMENT_METHOD_LABEL": "Phương thức phân công",
+      "ASSIGNMENT_ORDER_LABEL": "Thứ tự phân công",
+      "CREATE_NEW_POLICY": "Tạo chính sách mới",
+      "CURRENT_BEHAVIOR": "Hiện đang áp dụng quy tắc mặc định:",
+      "CUSTOMIZE_POLICY": "Tùy chỉnh chính sách phân công",
+      "CUSTOMIZE_WITH_POLICY": "Tùy chỉnh bằng chính sách phân công",
+      "DEFAULT_POLICY_DESCRIPTION": "Liên kết một chính sách tùy chỉnh để điều chỉnh cách giao cuộc trò chuyện cho nhân viên trong hộp thư này.",
+      "DEFAULT_POLICY_LINKED": "Đã liên kết chính sách mặc định",
+      "DEFAULT_RULES_DESCRIPTION": "Sử dụng hành vi phân công mặc định cho tất cả các cuộc trò chuyện",
+      "DEFAULT_RULES_TITLE": "Quy tắc phân công mặc định",
+      "DEFAULT_RULE_1": "Ưu tiên cuộc trò chuyện được tạo sớm nhất",
+      "DEFAULT_RULE_2": "Phân phối xoay vòng (Round robin)",
+      "DELETE_POLICY": "Xóa chính sách",
+      "LINK_ERROR": "Không thể liên kết chính sách phân công",
+      "LINK_EXISTING_POLICY": "Liên kết chính sách có sẵn",
+      "LINK_SUCCESS": "Đã liên kết chính sách phân công",
+      "METHOD": {
+        "BALANCED": "Phân công cân bằng",
+        "ROUND_ROBIN": "Xoay vòng (Round robin)"
+      },
+      "NO_POLICIES": "Không tìm thấy chính sách phân công nào",
+      "POLICY_LABEL": "Chính sách phân công",
+      "POLICY_STATUS": {
+        "INACTIVE": "Không hoạt động"
+      },
+      "PRIORITY": {
+        "EARLIEST_CREATED": "Tạo sớm nhất",
+        "LONGEST_WAITING": "Chờ lâu nhất"
+      },
+      "UPGRADE_PROMPT": "Chính sách phân công tùy chỉnh có sẵn trên gói Doanh nghiệp",
+      "UPGRADE_TO_BUSINESS": "Nâng cấp lên Doanh nghiệp",
+      "USING_POLICY": "Đang dùng chính sách phân công tùy chỉnh cho hộp thư này",
+      "VIEW_ALL_POLICIES": "Xem tất cả chính sách"
+    },
+    "ASSIGNMENT_POLICY": {
+      "DELETE_CONFIRM_MESSAGE": "Bạn có chắc muốn gỡ chính sách này khỏi hộp thư? Hộp thư sẽ quay về quy tắc phân công mặc định.",
+      "DELETE_CONFIRM_TITLE": "Xóa chính sách phân công?",
+      "DELETE_ERROR": "Không thể gỡ chính sách phân công"
+    },
+    "BUSINESS_HOURS": {
+      "DAY": {
+        "HOURS": "Giờ"
+      },
+      "TOGGLE_HELP": "Bật giờ làm việc sẽ hiển thị khung giờ hoạt động trên widget chat ngay cả khi tất cả nhân viên đều vắng mặt. Ngoài giờ làm việc, khách có thể nhận thông báo cảnh báo và biểu mẫu trước khi chat."
+    },
+    "CHANNELS": {
+      "EMAIL": "Email",
+      "INSTAGRAM": "Instagram",
+      "LINE": "Line",
+      "MESSENGER": "Messenger",
+      "SMS": "Tin nhắn SMS",
+      "TELEGRAM": "Telegram",
+      "TWILIO_SMS": "Twilio SMS",
+      "TWITTER_PROFILE": "Twitter / X",
+      "VOICE": "Thoại (Voice)",
+      "WEB_WIDGET": "Trang web (Website)",
+      "WHATSAPP": "WhatsApp"
+    },
+    "CSAT": {
+      "API": {
+        "ERROR_MESSAGE": "Không thể cập nhật cài đặt CSAT. Vui lòng thử lại sau.",
+        "SUCCESS_MESSAGE": "Cập nhật cài đặt CSAT thành công"
+      },
+      "BUTTON_TEXT": {
+        "LABEL": "Nội dung nút",
+        "PLACEHOLDER": "Vui lòng đánh giá dịch vụ"
+      },
+      "DISPLAY_TYPE": {
+        "LABEL": "Kiểu hiển thị"
+      },
+      "LANGUAGE": {
+        "PLACEHOLDER": "Chọn ngôn ngữ mẫu tin nhắn"
+      },
+      "MESSAGE": {
+        "PLACEHOLDER": "Nhập tin nhắn hiển thị kèm biểu mẫu khảo sát cho khách hàng"
+      },
+      "MESSAGE_PREVIEW": {
+        "LABEL": "Xem trước tin nhắn",
+        "TOOLTIP": "Hình thức hiển thị thực tế trên WhatsApp có thể khác biệt đôi chút."
+      },
+      "NOTE": "Lưu ý: Khảo sát CSAT chỉ gửi một lần duy nhất cho mỗi cuộc trò chuyện",
+      "SUBTITLE": "Tự động kích hoạt khảo sát mức độ hài lòng (CSAT) khi kết thúc cuộc trò chuyện để nắm bắt trải nghiệm khách hàng. Theo dõi xu hướng hài lòng và xác định điểm cần cải thiện.",
+      "SURVEY_RULE": {
+        "DESCRIPTION_PREFIX": "Gửi khảo sát nếu cuộc trò chuyện",
+        "DESCRIPTION_SUFFIX": "bất kỳ nhãn nào trong số các nhãn",
+        "LABEL": "Quy tắc gửi khảo sát",
+        "SELECT_PLACEHOLDER": "chọn nhãn"
+      },
+      "TEMPLATE_CREATION": {
+        "ERROR_MESSAGE": "Không thể tạo mẫu WhatsApp",
+        "SUCCESS_MESSAGE": "Đã tạo mẫu WhatsApp và gửi yêu cầu phê duyệt thành công"
+      },
+      "TEMPLATE_STATUS": {
+        "APPROVED": "Đã được WhatsApp phê duyệt",
+        "DEFAULT": "Cần WhatsApp phê duyệt",
+        "NOT_FOUND": "Mẫu tin nhắn không tồn tại trên nền tảng Meta.",
+        "PENDING": "Đang chờ WhatsApp phê duyệt",
+        "REJECTED": "Meta đã từ chối mẫu tin nhắn"
+      },
+      "TEMPLATE_UPDATE_DIALOG": {
+        "CONFIRM": "Tạo mẫu mới",
+        "DESCRIPTION": "Hệ thống sẽ xóa mẫu cũ và tạo mẫu mới gửi lại cho WhatsApp phê duyệt",
+        "TITLE": "Chỉnh sửa thông tin khảo sát"
+      },
+      "UTILITY_ANALYZER": {
+        "ACTION": "Kiểm tra tính phù hợp Utility",
+        "APPLY": "Dùng bản viết lại này",
+        "CLASSIFICATION": {
+          "LIKELY_MARKETING": "Khả năng cao là Marketing (Tiếp thị)",
+          "LIKELY_UTILITY": "Khả năng cao là Utility (Tiện ích)",
+          "UNCLEAR": "Cần làm rõ thêm"
+        },
+        "ERROR_MESSAGE": "Không thể phân tích nội dung tin nhắn. Vui lòng thử lại.",
+        "GUIDANCE_NOTE": "Đây là kiểm tra tham khảo, không đảm bảo 100% Meta sẽ phê duyệt.",
+        "HELPER_NOTE": "Kiểm tra trước khi gửi để tăng tỷ lệ duyệt nhóm Tiện ích (Utility). Meta vẫn có thể xếp lại vào Tiếp thị (Marketing) tùy nội dung.",
+        "RESULT_LABEL": "Dự đoán danh mục Meta",
+        "SUGGESTION_LABEL": "Đề xuất viết lại an toàn cho Utility"
+      },
+      "WHATSAPP_NOTE": "Lưu ý: Khi lưu, hệ thống tạo mẫu CSAT chuyên dụng trên WhatsApp (để ghi nhận điểm và phản hồi) và gửi duyệt dạng Utility. Sau khi duyệt, khảo sát sẽ được gửi theo quy tắc."
+    },
+    "EMAIL_PROVIDERS": {
+      "GOOGLE": {
+        "DESCRIPTION": "Kết nối với Google",
+        "TITLE": "Google"
+      },
+      "MICROSOFT": {
+        "DESCRIPTION": "Kết nối với Microsoft",
+        "TITLE": "Microsoft"
+      },
+      "OTHER_PROVIDERS": {
+        "DESCRIPTION": "Kết nối với nhà cung cấp email khác",
+        "TITLE": "Nhà cung cấp khác"
+      }
+    },
+    "IMAP": {
+      "PORT": {
+        "LABEL": "Cổng (Port)",
+        "PLACE_HOLDER": "Cổng"
+      },
+      "TITLE": "IMAP",
+      "TOGGLE_HELP": "Bật IMAP để hệ thống có thể nhận email từ hộp thư của bạn"
+    },
+    "MICROSOFT": {
+      "SUBTITLE": "Xác thực lại tài khoản Microsoft của bạn",
+      "TITLE": "Microsoft"
+    },
+    "SMTP": {
+      "PORT": {
+        "LABEL": "Cổng (Port)",
+        "PLACE_HOLDER": "Cổng"
+      },
+      "SSL_TLS": "SSL/TLS",
+      "START_TLS": "STARTTLS"
+    },
+    "WIDGET_BUILDER": {
+      "WIDGET_OPTIONS": {
+        "WIDGET_BUBBLE": "Bong bóng chat",
+        "WIDGET_BUBBLE_LAUNCHER_TITLE": {
+          "LABEL": "Tiêu đề nút mở"
+        },
+        "WIDGET_BUBBLE_POSITION_LABEL": "Vị trí:"
+      },
+      "WIDGET_SCREEN": {
+        "CHAT": "Chế độ chat"
+      }
+    }
+  },
   "LABEL": {
     "TAG_BUTTON": "gắn nhãn"
   },
@@ -770,12 +1211,25 @@
       "ERROR_MESSAGE": "Đã có lỗi, vui lòng thử lại sau."
     }
   },
+  "NETWORK": {
+    "NOTIFICATION": {
+      "RECONNECTING": "Đang kết nối lại...",
+      "RECONNECT_SUCCESS": "Đã kết nối lại"
+    }
+  },
   "NEW_CONVERSATION": {
     "FORM": {
       "INBOX": {
         "LABEL": "Qua hộp thư",
         "PLACEHOLDER": "Chọn hộp thư gửi"
       }
+    }
+  },
+  "NOTIFICATIONS_PAGE": {
+    "TYPE_LABEL": {
+      "sla_missed_first_response": "Trễ hạn SLA phản hồi đầu",
+      "sla_missed_next_response": "Trễ hạn SLA phản hồi tiếp",
+      "sla_missed_resolution": "Trễ hạn SLA giải quyết"
     }
   },
   "ONBOARDING": {
@@ -787,6 +1241,84 @@
     "GREETING_AFTERNOON": "👋 Chào buổi chiều, {name}. Chào mừng bạn đến với {installationName}.",
     "GREETING_EVENING": "👋 Chào buổi tối, {name}. Chào mừng bạn đến với {installationName}.",
     "GREETING_MORNING": "👋 Chào buổi sáng, {name}. Chào mừng bạn đến với {installationName}."
+  },
+  "ONBOARDING_INBOX_SETUP": {
+    "CHANNELS": {
+      "CONNECTED": "Đã kết nối",
+      "GMAIL": "Gmail",
+      "HEADER": "Chúng tôi tìm thấy một vài kênh bạn có thể kết nối",
+      "MORE_CHANNELS_EMAIL": "Email",
+      "MORE_CHANNELS_NOTE": "Thiết lập các kênh {email} và {voice} sau trong ứng dụng",
+      "MORE_CHANNELS_VOICE": "Thoại (Voice)",
+      "OTHER_EMAIL": "Nhà cung cấp Email khác",
+      "OUTLOOK": "Outlook",
+      "TITLE": "Kết nối tất cả các kênh trò chuyện của bạn",
+      "VIEW_ALL": "Xem tất cả"
+    },
+    "CHANNELS_DIALOG": {
+      "CONNECT_SUBTITLE": "Điền các thông tin nhanh sau",
+      "CONNECT_TITLE": "Kết nối tài khoản {name} của bạn",
+      "FACEBOOK_ERROR": "Không thể kết nối với Facebook. Vui lòng thử lại.",
+      "FACEBOOK_LAUNCH": "Tiếp tục với Facebook",
+      "FACEBOOK_LOADING": "Đang tải các Trang Facebook của bạn…",
+      "FACEBOOK_NO_PAGES": "Không tìm thấy Trang nào có thể kết nối. Tất cả Trang của bạn đều đã được kết nối.",
+      "FACEBOOK_SELECT_PAGE": "Chọn một Trang để kết nối",
+      "FACEBOOK_SUBTITLE": "Cấp quyền truy cập và chọn một Trang (Page) để kết nối.",
+      "NOTE": "SMS, API, Thoại và các nhà cung cấp email khác có thể được thiết lập sau từ bảng điều khiển.",
+      "SETUP_LATER": "Thiết lập sau trong ứng dụng",
+      "SUBTITLE": "Quản lý tất cả từ một bảng điều khiển duy nhất. Bạn cũng có thể thiết lập và chỉnh sửa hộp thư sau trong ứng dụng.",
+      "TITLE": "Kết nối tất cả các kênh của bạn tức thì"
+    },
+    "CONTINUE": "Tiếp tục",
+    "CREATED_FOR_YOU": {
+      "HELP_CENTER": "Trung tâm trợ giúp",
+      "HELP_CENTER_ANALYZING_WEBSITE": "Đang phân tích trang web của bạn…",
+      "HELP_CENTER_ARTICLES": "Đã tạo {count} bài viết | Đã tạo {count} bài viết",
+      "HELP_CENTER_CATEGORIES": "{count} danh mục | {count} danh mục",
+      "HELP_CENTER_CURATING_ARTICLES": "Đang biên tập bài viết…",
+      "HELP_CENTER_DESCRIPTION": "Bách khoa toàn thư số của bạn",
+      "HELP_CENTER_GENERATING": "Đang tạo trung tâm trợ giúp…",
+      "HELP_CENTER_SETTING_UP_CATEGORIES": "Đang thiết lập danh mục…",
+      "HELP_CENTER_SUMMARY": "Đã tạo {count} bài viết trong {categories} | Đã tạo {count} bài viết trong {categories}",
+      "LIVE_CHAT": "Widget Chat trực tuyến",
+      "LIVE_CHAT_DESCRIPTION": "Tin nhắn tức thì cho trang web của bạn",
+      "LIVE_CHAT_READY": "Sẵn sàng",
+      "LIVE_CHAT_STATUS": "Sắp xong rồi…",
+      "TITLE": "Chúng tôi đã tạo sẵn cho bạn các mục sau"
+    },
+    "FACEBOOK_CONNECTED": "Kết nối Facebook thành công",
+    "GREETING": "Hãy cùng thiết lập một vài thứ",
+    "SKIP": "Bỏ qua",
+    "SUBTITLE": "Bước này sẽ giúp bạn khởi đầu thuận lợi trong không gian làm việc",
+    "WHATSAPP_CONNECTED": "Kết nối WhatsApp thành công"
+  },
+  "ONBOARDING_NEXT": {
+    "COMPANY_DETAILS": "Thông tin công ty",
+    "CONTINUE": "Tiếp tục",
+    "EMAIL_VERIFIED": "Email đã được xác minh",
+    "ERROR": "Không thể lưu thông tin. Vui lòng thử lại.",
+    "FIELDS": {
+      "COMPANY_SIZE": "Quy mô công ty",
+      "EMAIL": "Email",
+      "INDUSTRY": "Ngành nghề",
+      "REFERRAL_SOURCE": "Bạn biết đến chúng tôi qua đâu?",
+      "WEBSITE": "Trang web",
+      "YOUR_ROLE": "Vai trò của bạn"
+    },
+    "GREETING": "Xin chào {name}!",
+    "PLACEHOLDERS": {
+      "ENTER_WEBSITE": "www.example.com",
+      "SELECT_COMPANY_SIZE": "Chọn quy mô công ty",
+      "SELECT_INDUSTRY": "Chọn ngành nghề",
+      "SELECT_LANGUAGE": "Chọn ngôn ngữ",
+      "SELECT_REFERRAL_SOURCE": "Chọn nguồn giới thiệu",
+      "SELECT_ROLE": "Chọn vai trò của bạn"
+    },
+    "SETTING_UP": "Đang thiết lập tài khoản của bạn...",
+    "SUBTITLE": "Vui lòng kiểm tra các thông tin sau",
+    "SUCCESS": "Lưu thông tin thành công",
+    "VALIDATION_ERROR": "Vui lòng điền đầy đủ các trường bắt buộc",
+    "YOUR_DETAILS": "Thông tin của bạn"
   },
   "PHONE_INPUT": {
     "DIAL_CODE_ERROR": "Vui lòng chọn mã quốc gia trong danh sách",
