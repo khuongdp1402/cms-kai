@@ -5,6 +5,7 @@
 
 **Phase hiện tại:** Phase B — KTech branding (ADR-007)
 **Việc đang làm:** B-03 (Dịch nốt tiếng Việt: onboarding, settings, campaigns, automations, inboxMgmt đã dịch 316 chuỗi)
+**Báo cáo tiến độ mới nhất:** [docs/reports/2026-09-30-bao-cao-tien-do.md](reports/2026-09-30-bao-cao-tien-do.md)
 **Cập nhật lần cuối:** 2026-09-30
 
 ## Phase B — KTech branding
