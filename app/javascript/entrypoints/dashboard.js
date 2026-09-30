@@ -15,6 +15,8 @@ import {
   brandMessages,
   installationBrandName,
 } from 'shared/helpers/brandMessages';
+import { applyLocaleOverrides } from 'shared/helpers/localeOverrides';
+import ktechLocaleOverrides from 'dashboard/i18n/ktech';
 import createAxios from 'dashboard/helper/APIHelper';
 
 import commonHelpers, { isJSONValid } from 'dashboard/helper/commons';
@@ -40,7 +42,10 @@ import 'floating-vue/dist/style.css';
 const i18n = createI18n({
   legacy: false, // https://github.com/intlify/vue-i18n/issues/1902
   locale: 'en',
-  messages: brandMessages(i18nMessages, installationBrandName()),
+  messages: brandMessages(
+    applyLocaleOverrides(i18nMessages, ktechLocaleOverrides),
+    installationBrandName()
+  ),
 });
 
 sync(store, router);
