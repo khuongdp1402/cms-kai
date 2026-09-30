@@ -7,6 +7,8 @@
 | ID | Việc | Kết quả |
 |---|---|---|
 | B-01 | Đổi tên hiển thị sang KTech, logo và icon mới, theme Terracotta Sunset (light/dark), ẩn banner của Chatwoot | Spec `docs/superpowers/specs/2026-09-29-ktech-branding-design.md`, nhánh `feat/ktech-branding` |
+| B-02 | Màu mặc định widget/portal/avatar theo thương hiệu; tiếng Việt cho các màn hình dùng hằng ngày qua overlay `ktech/vi.json` | Nhánh `feat/ktech-branding-polish` |
+| B-03 | Dịch nốt tiếng Việt cho cài đặt, tích hợp, help center, báo cáo (khoảng 2.700 chuỗi) | Overlay, không sửa file Crowdin |
 
 > Mục tiêu: người dùng không bao giờ thấy giao diện Chatwoot. Xây một CMS mới (hiện đại, đẹp, dễ custom) dùng Chatwoot làm **backend headless**, đạt parity với toàn bộ tính năng core đang chạy được, rồi mở rộng.
 >

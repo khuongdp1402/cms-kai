@@ -70,3 +70,17 @@ npx --prefix tmp/ktech-brand playwright install chromium
 - Lấy widget token: `docker compose exec rails bundle exec rails runner 'puts Channel::WebWidget.first&.website_token'`.
 - Audit dùng một phiên API duy nhất và đăng xuất khi chạy xong. Nếu từng bị lỗi "Active session limit reached" thì xoá token của user seed: `rails runner 'User.find_by(email: "john@acme.inc").update_columns(tokens: {})'`.
 - Màu widget chat do từng inbox tự cấu hình (Cài đặt → Hộp thư đến → Widget), theme không đổi màu này.
+
+### Bản dịch tiếng Việt của KTech
+
+Không sửa `app/javascript/**/i18n/locale/vi*` (file Crowdin của upstream). Bản dịch bổ sung nằm ở `app/javascript/dashboard/i18n/ktech/vi.json` và `app/javascript/widget/i18n/ktech/vi.json`, được trộn đè lúc nạp (`applyLocaleOverrides`).
+
+```bash
+node script/ktech/i18n_untranslated.mjs vi                      # đếm chuỗi còn thiếu
+node script/ktech/i18n_untranslated.mjs vi inboxMgmt.json --json > tmp/todo.json
+# dịch tmp/todo.json thành tmp/done.json (giữ nguyên {placeholder}, '@:key', dạng "a | b")
+node script/ktech/i18n_merge_overrides.mjs vi tmp/done.json
+docker compose exec vite pnpm vitest run app/javascript/dashboard/i18n/ktech
+```
+
+Test `ktech/specs/overrides.spec.js` fail nếu key không có trong bản tiếng Anh, chuỗi rỗng, hoặc placeholder bị đổi. Không dịch `SNOOZE_PARSER.*` (từ khoá bộ phân tích câu lệnh hẹn giờ).

@@ -1,0 +1,42 @@
+{
+  "EMOJI": {
+    "ARIA_LABEL": "Chọn emoji"
+  },
+  "EMOJI_ICON_PICKER": {
+    "FREQUENTLY_USED": "Hay dùng",
+    "NO_EMOJI": "Không có emoji phù hợp",
+    "SEARCH_EMOJI": "Tìm emoji…"
+  },
+  "FOOTER_REPLY_TO": {
+    "REPLY_TO": "Đang trả lời:"
+  },
+  "PORTAL": {
+    "IFRAME_LOAD_ERROR": "Không tải được bài viết, vui lòng tải lại trang và thử lại.",
+    "POPULAR_ARTICLES": "Bài viết phổ biến"
+  },
+  "PRE_CHAT_FORM": {
+    "FIELDS": {
+      "PHONE_NUMBER": {
+        "DROPDOWN_SEARCH": "Tìm quốc gia"
+      }
+    },
+    "REGEX_ERROR": "Vui lòng nhập thông tin hợp lệ"
+  },
+  "REPLY_TIME": {
+    "BACK_AT_TIME": "Chúng tôi sẽ trực tuyến lại lúc {time}",
+    "BACK_IN_HOURS": "Chúng tôi sẽ trực tuyến lại sau {n} giờ | Chúng tôi sẽ trực tuyến lại sau {n} giờ",
+    "BACK_IN_MINUTES": "Chúng tôi sẽ trực tuyến lại sau {time} phút",
+    "BACK_IN_SOME_TIME": "Chúng tôi sẽ sớm trực tuyến trở lại",
+    "BACK_ON_DAY": "Chúng tôi sẽ trực tuyến lại vào {day}",
+    "BACK_TOMORROW": "Chúng tôi sẽ trực tuyến lại vào ngày mai"
+  },
+  "TEAM_AVAILABILITY": {
+    "BACK_AS_SOON_AS_POSSIBLE": "Chúng tôi sẽ quay lại sớm nhất có thể"
+  },
+  "THUMBNAIL": {
+    "AUTHOR": {
+      "NOT_AVAILABLE": "Không có"
+    }
+  },
+  "YOU": "Bạn"
+}
