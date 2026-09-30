@@ -4,7 +4,7 @@
 > Trạng thái: `todo` · `in-progress` · `done` · `blocked` · `skipped`
 
 **Phase hiện tại:** Phase B — KTech branding (ADR-007)
-**Việc đang làm:** B-01 xong, chờ chủ dự án duyệt giao diện và merge `feat/ktech-branding` vào `develop`
+**Việc đang làm:** B-02 xong, đã merge vào `develop`; tiếp theo B-03 hoặc theo yêu cầu chủ dự án
 **Cập nhật lần cuối:** 2026-09-29
 
 ## Phase B — KTech branding
@@ -12,6 +12,8 @@
 | ID | Việc | Trạng thái | Ghi chú |
 |---|---|---|---|
 | B-01 | Đổi tên, logo, theme Terracotta Sunset, ẩn banner Chatwoot | done | Đổi tên lúc nạp i18n (FE `brandMessages`, BE `Ktech::BrandedI18n`), logo và 30 icon, theme light/dark, ombre ở sidebar/nút/login. Kiểm chứng: `brand_audit.cjs` 9 trang × vi/en × light/dark không còn "chatwoot"; `check_contrast.mjs` 13/13 cặp ≥ 4.5; vitest 286/286; rspec 181/181 (initializers, mailers, super_admin) |
+| B-02 | Hoàn thiện: màu mặc định widget/portal/avatar, tiếng Việt cho màn hình hằng ngày | done | Overlay `dashboard/i18n/ktech/vi.json` (626 chuỗi: sidebar, hồ sơ, danh sách chat, hộp thư, khung chat, liên hệ, tìm kiếm, thao tác hàng loạt, đăng nhập) + `widget/i18n/ktech/vi.json` (19 chuỗi khách thấy). Sửa từ dịch sai có sẵn ("Đại lý" → "Nhân viên"…). Test toàn vẹn overlay 1.878 + 54 ca |
+| B-03 | Dịch nốt tiếng Việt: cài đặt inbox (498), tích hợp (568), cài đặt khác (322), help center (278), báo cáo (116)… tổng còn 2.731 chuỗi | todo | Dùng `script/ktech/i18n_untranslated.mjs` + `i18n_merge_overrides.mjs`; bỏ qua phần enterprise (Captain, SAML, Billing) |
 
 ## Phase 0 — Chuẩn bị
 
@@ -41,6 +43,7 @@ Việc ngoài kế hoạch mà chủ dự án yêu cầu thì ghi vào đây. N�
 
 ## Nhật ký
 
+- **2026-09-30**: Merge B-01 vào `develop`. Hoàn thành B-02: màu mặc định terracotta cho widget/portal/avatar, overlay tiếng Việt 645 chuỗi không sửa file Crowdin.
 - **2026-09-29**: Hoàn thành B-01 (KTech branding). Sửa thêm môi trường dev: Vite trong Docker không nhận thay đổi file (bật polling), worktree bị CRLF (LESSONS B5, B9, B10).
 - **2026-09-29**: Chốt hướng ADR-007 và thiết kế Terracotta Sunset (phương án A). Tạo nhánh `feat/ktech-branding` từ `develop` cộng 3 commit Docker, không lấy `kchat-web` và `.agents/` của Antigravity.
 - **2026-09-29**: Hoàn thành P0-05: stack Docker dev chạy đầy đủ và đã kiểm tra đầu-cuối. Sửa 6 lỗi cấu hình: CRLF, mount `dist`, volume sai path, lệch tên DB, Rails thiếu secret HMAC, pnpm treo; thêm port tuỳ chỉnh (xem LESSONS B5–B7).
