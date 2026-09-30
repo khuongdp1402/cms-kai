@@ -2,7 +2,7 @@
 
 > Mỗi quyết định gồm: bối cảnh, quyết định, đánh đổi, trạng thái (`proposed` / `accepted` / `superseded`).
 
-## ADR-001 — CMS riêng, Chatwoot làm backend headless · `accepted` (2026-09-28)
+## ADR-001 — CMS riêng, Chatwoot làm backend headless · `superseded` bởi ADR-007 (2026-09-29)
 - **Bối cảnh:** không muốn người dùng nhận ra giao diện Chatwoot, và cần khả năng custom mạnh.
 - **Quyết định:** xây CMS frontend mới hoàn toàn, chỉ giao tiếp với Chatwoot qua REST và ActionCable.
 - **Đánh đổi:** khối lượng lớn (dashboard cũ khoảng 1.000 file Vue, 234 nghìn dòng). Đổi lại được toàn quyền kiểm soát UX và branding.
@@ -30,6 +30,12 @@
   - `feat/<task-id>-<mô-tả>` (ví dụ `feat/P2-01-kchat-web-scaffold`), `fix/*`, `docs/*`: tách từ `develop`, merge lại bằng PR khi CI xanh.
   - `upstream-sync`: chỉ dùng để merge bản vá từ remote `upstream` (Chatwoot), review riêng rồi mới đưa vào `develop` (quy trình ở P0-04).
 - **Đánh đổi:** thêm một bước merge `develop → main`, đổi lại `main` luôn deploy được và việc cập nhật upstream không trộn với code tính năng.
+
+## ADR-007 — Giữ giao diện Chatwoot, đổi thương hiệu sang KTech · `accepted` (2026-09-29)
+- **Bối cảnh:** viết lại CMS riêng (ADR-001) là khối lượng rất lớn: dashboard cũ khoảng 1.000 file Vue, lộ trình ước lượng khoảng 25 tuần. Lần thử làm nhanh bằng agent khác ra code không build được. Chủ dự án chọn đổi hướng.
+- **Quyết định:** dùng lại nguyên dashboard, widget, survey, portal và email của Chatwoot. Đổi toàn bộ tên hiển thị sang KTech, làm bộ nhận diện "Terracotta Sunset" (ombre cam–nâu, light và dark). Đổi tên lúc nạp bản dịch (frontend: `brandMessages`, backend: bọc `I18n.t`), không sửa file ngôn ngữ. Đổi màu bằng cách ghi đè biến CSS trong `_ktech-theme.scss`.
+- **Đánh đổi:** UX vẫn theo khuôn Chatwoot và bị giới hạn bởi cấu trúc component gốc. Đổi lại ra sản phẩm dùng được ngay, và vẫn merge được bản vá upstream. Các ADR-002/003/004 (stack và cách chuyển đổi của CMS riêng) không còn áp dụng.
+- Spec: [superpowers/specs/2026-09-29-ktech-branding-design.md](superpowers/specs/2026-09-29-ktech-branding-design.md).
 
 ---
 

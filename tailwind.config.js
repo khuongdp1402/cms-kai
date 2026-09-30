@@ -202,6 +202,14 @@ const tailwindConfig = {
       '2xl': '1536px',
       '3xl': '1900px',
     },
+    backgroundImage: {
+      ...defaultTheme.backgroundImage,
+      'ktech-ombre':
+        'linear-gradient(135deg, #FDBA74 0%, #EA580C 50%, #7C2D12 100%)',
+      'ktech-ombre-strong': 'linear-gradient(135deg, #C2410C 0%, #7C2D12 100%)',
+      'ktech-ombre-soft':
+        'linear-gradient(160deg, #FFF7ED 0%, #FFEDD5 45%, #FED7AA 100%)',
+    },
     fontSize: {
       ...defaultTheme.fontSize,
       xxs: '0.625rem',

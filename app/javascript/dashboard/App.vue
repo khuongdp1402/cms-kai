@@ -61,6 +61,7 @@ export default {
       isRTL: 'accounts/isRTL',
       currentUser: 'getCurrentUser',
       authUIFlags: 'getAuthUIFlags',
+      isACustomBrandedInstance: 'globalConfig/isACustomBrandedInstance',
     }),
     hideOnOnboardingView() {
       return !isOnOnboardingView(this.$route);
@@ -138,7 +139,10 @@ export default {
     class="flex flex-col w-full h-screen min-h-0 bg-n-background"
     :dir="isRTL ? 'rtl' : 'ltr'"
   >
-    <UpdateBanner :latest-chatwoot-version="latestChatwootVersion" />
+    <UpdateBanner
+      v-if="!isACustomBrandedInstance"
+      :latest-chatwoot-version="latestChatwootVersion"
+    />
     <StatusBanner />
     <template v-if="currentAccountId">
       <PendingEmailVerificationBanner v-if="hideOnOnboardingView" />
