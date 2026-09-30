@@ -1442,23 +1442,26 @@
       "VOICE": "Voice",
       "ZALO_PERSONAL": "Zalo Personal"
     },
-    "SETTINGS": {
-      "ZALO_PERSONAL": {
-        "TITLE": "Zalo Personal Connection",
-        "STATUS_LABEL": "Connection Status",
-        "ACCOUNT_NAME": "Zalo Account",
-        "LAST_SYNC": "Last Synchronized",
-        "RECONNECT_BUTTON": "Reconnect via QR Code",
-        "DISCONNECT_BUTTON": "Disconnect",
-        "DISCONNECT_CONFIRM": "Are you sure you want to disconnect this Zalo Personal inbox? Incoming and outgoing messages will stop.",
-        "DISCONNECT_SUCCESS": "Zalo Personal inbox disconnected successfully",
-        "DISCONNECT_ERROR": "Failed to disconnect Zalo Personal inbox",
-        "RECONNECT_SUCCESS": "Zalo Personal reconnected successfully!",
-        "RECONNECT_ERROR": "Failed to initiate reconnection",
-        "SCAN_QR_RECONNECT": "Scan QR Code to Reconnect",
-        "REMAINING": "remaining",
-        "CLOSE": "Close"
-      }
+    "ZALO_PERSONAL_SETTINGS": {
+      "TITLE": "Zalo Personal Connection",
+      "STATUS_LABEL": "Connection Status",
+      "ACCOUNT_NAME": "Zalo Account",
+      "ZALO_ID": "Zalo User ID",
+      "LAST_SYNC": "Last Synchronized",
+      "RECONNECT_BUTTON": "Reconnect via QR Code",
+      "DISCONNECT_BUTTON": "Logout / Disconnect Zalo",
+      "DISCONNECT_CONFIRM": "Are you sure you want to disconnect this Zalo Personal account? Incoming and outgoing messages will stop.",
+      "DISCONNECT_SUCCESS": "Zalo Personal account disconnected successfully",
+      "DISCONNECT_ERROR": "Failed to disconnect Zalo Personal account",
+      "RECONNECT_SUCCESS": "Zalo Personal reconnected successfully!",
+      "RECONNECT_ERROR": "Failed to initiate reconnection",
+      "SCAN_QR_RECONNECT": "Scan QR Code to Reconnect",
+      "REMAINING": "remaining",
+      "CLOSE": "Close",
+      "STATUS_CONNECTED": "Connected",
+      "STATUS_DISCONNECTED": "Disconnected / Logged out",
+      "STATUS_REAUTH": "Reauthorization Required",
+      "STATUS_CONNECTING": "Connecting..."
     }
   }
 }

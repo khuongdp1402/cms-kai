@@ -1349,6 +1349,27 @@
       "VOICE": "Voice",
       "ZALO_PERSONAL": "Zalo Cá nhân",
       "ZALO": "Zalo OA"
+    },
+    "ZALO_PERSONAL_SETTINGS": {
+      "TITLE": "Cấu hình tài khoản Zalo Cá nhân",
+      "STATUS_LABEL": "Trạng thái kết nối",
+      "ACCOUNT_NAME": "Tài khoản Zalo",
+      "ZALO_ID": "Zalo User ID",
+      "LAST_SYNC": "Lần đồng bộ gần nhất",
+      "RECONNECT_BUTTON": "Quét mã QR kết nối lại",
+      "DISCONNECT_BUTTON": "Đăng xuất tài khoản Zalo",
+      "DISCONNECT_CONFIRM": "Bạn có chắc chắn muốn đăng xuất tài khoản Zalo này? Sau khi đăng xuất, hệ thống sẽ ngừng nhận và gửi tin nhắn qua tài khoản này.",
+      "DISCONNECT_SUCCESS": "Đã đăng xuất tài khoản Zalo Cá nhân thành công.",
+      "DISCONNECT_ERROR": "Lỗi khi đăng xuất tài khoản Zalo Cá nhân.",
+      "RECONNECT_SUCCESS": "Đã kết nối lại tài khoản Zalo Cá nhân thành công!",
+      "RECONNECT_ERROR": "Không thể khởi tạo phiên kết nối lại.",
+      "SCAN_QR_RECONNECT": "Quét mã QR trên điện thoại để đăng nhập lại",
+      "REMAINING": "giây còn lại",
+      "CLOSE": "Đóng",
+      "STATUS_CONNECTED": "Đang hoạt động",
+      "STATUS_DISCONNECTED": "Đã đăng xuất / Ngắt kết nối",
+      "STATUS_REAUTH": "Cần quét lại mã QR",
+      "STATUS_CONNECTING": "Đang kết nối..."
     }
   }
 }

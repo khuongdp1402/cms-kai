@@ -40,9 +40,11 @@ Việc ngoài kế hoạch mà chủ dự án yêu cầu thì ghi vào đây. N�
 |---|---|---|---|
 | 2026-09-29 | Rà soát kế hoạch Antigravity, bổ sung phần còn thiếu, tách nhánh để làm việc | done | Thêm P0-07, P0-08, P1-09, P1-10, P4-08, P4-09, ADR-006, Q4–Q5. Giữ ADR-001 (CMS riêng, Chatwoot headless); bỏ phần rebrand dashboard cũ trong kế hoạch Antigravity |
 | 2026-09-29 | Đổi hướng: giữ UI Chatwoot, rebrand KTech, giao diện ombre cam–nâu | in-progress | ADR-007 thay ADR-001; thêm Phase B, tạm dừng Phase 2–8 |
+| 2026-09-30 | Bổ sung xem Profile Zalo Cá nhân và chức năng Đăng xuất (Logout), kết nối lại QR | done | Hiển thị tab Cấu hình cho Zalo Personal, card hồ sơ (avatar, Zalo User ID, trạng thái), nút Đăng xuất Zalo có dialog xác nhận, banner trên tab Cài đặt |
 
 ## Nhật ký
 
+- **2026-09-30 (buổi 3):** Hoàn thiện tính năng xem Profile Zalo Cá nhân và Đăng xuất (Logout): kích hoạt tab Cấu hình cho kênh `Channel::ZaloPersonal` trong `Settings.vue` và `ConfigurationPage.vue`; nâng cấp `ZaloPersonal.vue` hiển thị avatar, Zalo User ID, trạng thái hoạt động, thời gian đồng bộ, dialog xác nhận đăng xuất và modal quét lại mã QR; bổ sung bộ bản dịch `ZALO_PERSONAL_SETTINGS` cho tiếng Việt và tiếng Anh. Build lại bundle Vite và kiểm thử giao diện thành công.
 - **2026-09-30 (buổi 2):** Tiếp tục công việc của Claude Code trên `cms-kai-ktech`. Tối ưu `docker-compose.yaml` (VITE_RUBY_HOST mặc định localhost để Rails không bị trễ DNS 5s khi tắt Vite container, web response giảm xuống dưới 2s). Bắt đầu task B-03: dịch 316 chuỗi tiếng Việt mới cho Onboarding, General Settings, Campaigns, Automations và Inbox Management qua overlay `ktech/vi.json`, untranslated strings giảm từ 2.731 xuống 2.415; biên dịch lại bundle Vite sạch sẽ trên container.
 - **2026-09-30 (buổi 1):** Merge B-01 vào `develop`. Hoàn thành B-02: màu mặc định terracotta cho widget/portal/avatar, overlay tiếng Việt 645 chuỗi không sửa file Crowdin.
 - **2026-09-29**: Hoàn thành B-01 (KTech branding). Sửa thêm môi trường dev: Vite trong Docker không nhận thay đổi file (bật polling), worktree bị CRLF (LESSONS B5, B9, B10).

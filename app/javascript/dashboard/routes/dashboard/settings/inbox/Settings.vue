@@ -206,7 +206,8 @@ export default {
         this.isAPIInbox ||
         (this.isAnEmailChannel && !this.inbox.provider) ||
         this.shouldShowWhatsAppConfiguration ||
-        this.isAWebWidgetInbox
+        this.isAWebWidgetInbox ||
+        this.isAZaloPersonalChannel
       ) {
         visibleToAllChannelTabs = [
           ...visibleToAllChannelTabs,
@@ -841,6 +842,52 @@ export default {
               'max-w-4xl': !isAWebWidgetInbox,
             }"
           >
+            <!-- Zalo Personal Account Summary Banner -->
+            <div
+              v-if="isAZaloPersonalChannel"
+              class="mb-6 p-4 rounded-xl border border-n-weak bg-n-solid-2 flex items-center justify-between gap-4"
+            >
+              <div class="flex items-center gap-3 min-w-0">
+                <img
+                  v-if="inbox.avatar_url"
+                  :src="inbox.avatar_url"
+                  alt="Zalo Avatar"
+                  class="size-12 rounded-full border-2 border-blue-500 shadow-sm object-cover shrink-0"
+                />
+                <div
+                  v-else
+                  class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 font-bold text-lg flex items-center justify-center shrink-0 border border-blue-500/30"
+                >
+                  {{ (inbox.display_name || inbox.name || 'Z')[0] }}
+                </div>
+                <div class="min-w-0">
+                  <div class="text-sm font-bold text-n-slate-12 truncate">
+                    {{ inbox.display_name || inbox.name }}
+                  </div>
+                  <div class="text-xs text-n-slate-11 flex items-center gap-2 mt-0.5">
+                    <span
+                      class="inline-flex items-center gap-1 font-medium"
+                      :class="inbox.connection_status === 'connected' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'"
+                    >
+                      <span
+                        class="size-1.5 rounded-full"
+                        :class="inbox.connection_status === 'connected' ? 'bg-emerald-500' : 'bg-rose-500'"
+                      />
+                      {{ inbox.connection_status === 'connected' ? 'Đang kết nối' : 'Đã ngắt kết nối' }}
+                    </span>
+                    <span v-if="inbox.zalo_user_id" class="text-n-slate-10">• ID: {{ inbox.zalo_user_id }}</span>
+                  </div>
+                </div>
+              </div>
+              <NextButton
+                ghost
+                blue
+                size="sm"
+                label="Xem hồ sơ & Đăng xuất →"
+                @click="selectedTabKey = 'configuration'"
+              />
+            </div>
+
             <div class="flex flex-col gap-1 items-start mb-4">
               <label class="text-heading-3 text-n-slate-12">
                 {{ $t('INBOX_MGMT.ADD.WEBSITE_CHANNEL.CHANNEL_AVATAR.LABEL') }}

@@ -15,6 +15,7 @@ import { required } from '@vuelidate/validators';
 import NextButton from 'dashboard/components-next/button/Button.vue';
 import TextArea from 'next/textarea/TextArea.vue';
 import { sanitizeAllowedDomains } from 'dashboard/helper/URLHelper';
+import ZaloPersonalConfiguration from '../channel-configuration/ZaloPersonal.vue';
 
 export default {
   components: {
@@ -25,6 +26,7 @@ export default {
     SmtpSettings,
     NextButton,
     TextArea,
+    ZaloPersonalConfiguration,
   },
   mixins: [inboxMixin],
   props: {
@@ -432,7 +434,10 @@ export default {
 </script>
 
 <template>
-  <div v-if="isATwilioChannel">
+  <div v-if="isAZaloPersonalChannel">
+    <ZaloPersonalConfiguration :inbox="inbox" />
+  </div>
+  <div v-else-if="isATwilioChannel">
     <SettingsFieldSection
       :label="$t('INBOX_MGMT.ADD.TWILIO.API_CALLBACK.TITLE')"
       :help-text="$t('INBOX_MGMT.ADD.TWILIO.API_CALLBACK.SUBTITLE')"
