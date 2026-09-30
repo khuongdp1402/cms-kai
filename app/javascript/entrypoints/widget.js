@@ -10,6 +10,8 @@ import {
   brandMessages,
   installationBrandName,
 } from '../shared/helpers/brandMessages';
+import { applyLocaleOverrides } from '../shared/helpers/localeOverrides';
+import ktechLocaleOverrides from '../widget/i18n/ktech';
 import router from '../widget/router';
 import { directive as onClickaway } from 'vue3-click-away';
 import { domPurifyConfig } from '../shared/helpers/HTMLSanitizer';
@@ -23,7 +25,10 @@ import {
 const i18n = createI18n({
   legacy: false, // https://github.com/intlify/vue-i18n/issues/1902
   locale: 'en',
-  messages: brandMessages(i18nMessages, installationBrandName()),
+  messages: brandMessages(
+    applyLocaleOverrides(i18nMessages, ktechLocaleOverrides),
+    installationBrandName()
+  ),
 });
 
 const app = createApp(App);
