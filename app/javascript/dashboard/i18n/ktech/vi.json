@@ -136,6 +136,66 @@
       "LOADING_FAILED": "Tải thất bại"
     }
   },
+  "COMPOSE_NEW_CONVERSATION": {
+    "CONTACT_SEARCH": {
+      "ERROR_MESSAGE": "Không tìm kiếm được, vui lòng thử lại."
+    },
+    "FORM": {
+      "ACTION_BUTTONS": {
+        "DISCARD": "Bỏ",
+        "SEND": "Gửi ({keyCode})"
+      },
+      "CONTACT_SELECTOR": {
+        "CONTACT_CREATING": "Đang tạo liên hệ...",
+        "TAG_INPUT_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo tên, email hoặc số điện thoại"
+      },
+      "EMAIL_OPTIONS": {
+        "BCC_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo email",
+        "CC_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo email",
+        "SUBJECT_PLACEHOLDER": "Nhập tiêu đề email"
+      },
+      "ERROR_MESSAGE": "Có lỗi khi tạo cuộc trò chuyện, vui lòng thử lại sau.",
+      "INBOX_SELECTOR": {
+        "BUTTON": "Xem hộp thư",
+        "LABEL": "Qua:"
+      },
+      "NO_INBOX_ALERT": "Không có hộp thư nào dùng được để bắt đầu trò chuyện với liên hệ này.",
+      "SUCCESS_MESSAGE": "Đã gửi tin nhắn!",
+      "TWILIO_OPTIONS": {
+        "EMPTY_STATE": "Không có mẫu tin nhắn nào",
+        "LABEL": "Chọn mẫu tin nhắn",
+        "SEARCH_PLACEHOLDER": "Tìm mẫu tin nhắn"
+      },
+      "WHATSAPP_OPTIONS": {
+        "EMPTY_STATE": "Không có mẫu tin nhắn nào",
+        "LABEL": "Chọn mẫu tin nhắn",
+        "SEARCH_PLACEHOLDER": "Tìm mẫu tin nhắn",
+        "TEMPLATE_PARSER": {
+          "TEMPLATE_NAME": "Mẫu WhatsApp: {templateName}"
+        }
+      }
+    }
+  },
+  "CONTACTS_BULK_ACTIONS": {
+    "ASSIGN_LABELS_FAILED": "Không gắn được nhãn",
+    "CLEAR_SELECTION": "Bỏ chọn",
+    "DELETE_DIALOG": {
+      "CONFIRM_MULTIPLE": "Xóa liên hệ",
+      "DESCRIPTION": "Thao tác này sẽ xóa vĩnh viễn {count} liên hệ đã chọn và không thể hoàn tác.",
+      "SINGULAR_DESCRIPTION": "Thao tác này sẽ xóa vĩnh viễn liên hệ đã chọn và không thể hoàn tác.",
+      "SINGULAR_TITLE": "Xóa liên hệ đã chọn",
+      "TITLE": "Xóa các liên hệ đã chọn"
+    },
+    "DELETE_FAILED": "Không xóa được liên hệ.",
+    "DELETE_SUCCESS": "Đã xóa liên hệ.",
+    "DESCRIPTION": "Chọn nhãn muốn gắn cho các liên hệ đã chọn.",
+    "NO_LABELS_FOUND": "Chưa có nhãn nào.",
+    "REMOVE_LABELS": "Gỡ nhãn",
+    "REMOVE_LABELS_FAILED": "Không gỡ được nhãn",
+    "REMOVE_LABELS_SUCCESS": "Đã gỡ nhãn.",
+    "SELECTED_COUNT": "Đã chọn {count}",
+    "SELECT_ALL": "Chọn tất cả ({count})"
+  },
   "CONTACTS_FILTER": {
     "ATTRIBUTES": {
       "BLOCKED": "Đã chặn",
@@ -147,6 +207,437 @@
     "SEGMENT_QUERY_LABEL": "Điều kiện phân khúc",
     "UPDATE_BUTTON_LABEL": "Cập nhật phân khúc"
   },
+  "CONTACTS_LAYOUT": {
+    "CARD": {
+      "DELETE_CONTACT": {
+        "BUTTON": "Xóa ngay",
+        "MESSAGE": "Thao tác này là vĩnh viễn và không thể hoàn tác."
+      },
+      "EDIT_DETAILS_FORM": {
+        "ERROR_MESSAGE": "Không cập nhật được liên hệ, vui lòng thử lại sau.",
+        "FORM": {
+          "BIO": {
+            "PLACEHOLDER": "Nhập giới thiệu"
+          },
+          "CITY": {
+            "PLACEHOLDER": "Nhập tên thành phố"
+          },
+          "COUNTRY": {
+            "PLACEHOLDER": "Chọn quốc gia"
+          },
+          "EMAIL_ADDRESS": {
+            "PLACEHOLDER": "Nhập địa chỉ email"
+          },
+          "FIRST_NAME": {
+            "PLACEHOLDER": "Nhập tên"
+          },
+          "LAST_NAME": {
+            "PLACEHOLDER": "Nhập họ"
+          },
+          "PHONE_NUMBER": {
+            "PLACEHOLDER": "Nhập số điện thoại"
+          }
+        },
+        "SUCCESS_MESSAGE": "Đã cập nhật liên hệ",
+        "UPDATE_BUTTON": "Cập nhật liên hệ"
+      },
+      "SOCIAL_MEDIA": {
+        "FORM": {
+          "FACEBOOK": {
+            "PLACEHOLDER": "Thêm Facebook"
+          },
+          "GITHUB": {
+            "PLACEHOLDER": "Thêm Github"
+          },
+          "INSTAGRAM": {
+            "PLACEHOLDER": "Thêm Instagram"
+          },
+          "LINKEDIN": {
+            "PLACEHOLDER": "Thêm LinkedIn"
+          },
+          "TELEGRAM": {
+            "PLACEHOLDER": "Thêm Telegram"
+          },
+          "TIKTOK": {
+            "PLACEHOLDER": "Thêm TikTok"
+          },
+          "TWITTER": {
+            "PLACEHOLDER": "Thêm Twitter"
+          }
+        },
+        "TITLE": "Sửa liên kết mạng xã hội"
+      }
+    },
+    "DETAILS": {
+      "AVATAR": {
+        "DELETE": {
+          "ERROR_MESSAGE": "Không xóa được ảnh đại diện, vui lòng thử lại sau."
+        },
+        "UPLOAD": {
+          "ERROR_MESSAGE": "Không tải được ảnh đại diện, vui lòng thử lại sau.",
+          "SUCCESS_MESSAGE": "Đã tải ảnh đại diện lên"
+        }
+      },
+      "CREATED_AT": "Tạo {date}",
+      "DELETE_CONTACT_DESCRIPTION": "Xóa vĩnh viễn liên hệ này. Thao tác không thể hoàn tác",
+      "DELETE_DIALOG": {
+        "DESCRIPTION": "Bạn có chắc muốn xóa liên hệ này?"
+      },
+      "LAST_ACTIVITY": "Hoạt động {date}"
+    },
+    "EMPTY_STATE": {
+      "ACTIVE_EMPTY_STATE_TITLE": "Hiện không có liên hệ nào đang hoạt động 🌙",
+      "BUTTON_LABEL": "Thêm liên hệ",
+      "LIST_EMPTY_STATE_TITLE": "Chế độ xem này chưa có liên hệ nào 📋",
+      "SUBTITLE": "Bắt đầu thêm liên hệ bằng nút bên dưới",
+      "TITLE": "Tài khoản chưa có liên hệ nào"
+    },
+    "FILTER": {
+      "ACTIVE_FILTERS": {
+        "MORE_FILTERS": "+ {count} bộ lọc khác"
+      },
+      "BLOCKED": "Đã chặn",
+      "BUTTONS": {
+        "UPDATE_SEGMENT": "Cập nhật phân khúc"
+      },
+      "SEGMENT": {
+        "INPUT_PLACEHOLDER": "Nhập tên phân khúc",
+        "LABEL": "Tên phân khúc"
+      }
+    },
+    "HEADER": {
+      "ACTIONS": {
+        "BLOCK_ERROR_MESSAGE": "Không chặn được liên hệ, vui lòng thử lại sau.",
+        "BLOCK_SUCCESS_MESSAGE": "Đã chặn liên hệ",
+        "CONTACT_CREATION": {
+          "ADD_CONTACT": "Thêm liên hệ",
+          "ERROR_MESSAGE": "Không lưu được liên hệ, vui lòng thử lại sau.",
+          "EXPORT_CONTACT": "Xuất danh sách liên hệ",
+          "IMPORT_CONTACT": "Nhập danh sách liên hệ",
+          "SAVE_CONTACT": "Lưu liên hệ"
+        },
+        "EXPORT_CONTACT": {
+          "CONFIRM": "Xuất",
+          "DESCRIPTION": "Xuất nhanh tệp CSV chứa đầy đủ thông tin liên hệ",
+          "TITLE": "Xuất danh sách liên hệ"
+        },
+        "FILTERS": {
+          "CREATE_SEGMENT": {
+            "ERROR": "Vui lòng nhập tên hợp lệ",
+            "ERROR_MESSAGE": "Không lưu được bộ lọc, vui lòng thử lại sau.",
+            "PLACEHOLDER": "Nhập tên bộ lọc",
+            "SUCCESS_MESSAGE": "Đã lưu bộ lọc"
+          },
+          "DELETE_SEGMENT": {
+            "CANCEL": "Không, hủy",
+            "DESCRIPTION": "Bạn có chắc muốn xóa bộ lọc này?",
+            "ERROR_MESSAGE": "Không xóa được bộ lọc, vui lòng thử lại sau.",
+            "SUCCESS_MESSAGE": "Đã xóa bộ lọc"
+          }
+        },
+        "IMPORT_CONTACT": {
+          "CHOOSE_FILE": "Chọn tệp",
+          "SUCCESS_MESSAGE": "Bạn sẽ nhận email khi quá trình nhập hoàn tất.",
+          "TITLE": "Nhập danh sách liên hệ"
+        },
+        "ORDER": {
+          "LABEL": "Thứ tự",
+          "OPTIONS": {
+            "ASCENDING": "Tăng dần",
+            "DESCENDING": "Giảm dần"
+          }
+        },
+        "UNBLOCK_ERROR_MESSAGE": "Không bỏ chặn được liên hệ, vui lòng thử lại sau.",
+        "UNBLOCK_SUCCESS_MESSAGE": "Đã bỏ chặn liên hệ"
+      },
+      "ACTIVE_TITLE": "Liên hệ đang hoạt động",
+      "BLOCK_CONTACT": "Chặn liên hệ",
+      "UNBLOCK_CONTACT": "Bỏ chặn liên hệ"
+    },
+    "LOAD_MORE": "Tải thêm",
+    "SIDEBAR": {
+      "ATTRIBUTES": {
+        "EMPTY_STATE": "Tài khoản chưa có thuộc tính tùy chỉnh cho liên hệ. Bạn có thể tạo trong phần cài đặt.",
+        "SEARCH_PLACEHOLDER": "Tìm thuộc tính",
+        "TRIGGER": {
+          "INPUT": "Nhập giá trị"
+        },
+        "UNUSED_ATTRIBUTES": "{count} thuộc tính chưa dùng | {count} thuộc tính chưa dùng",
+        "VALIDATIONS": {
+          "INVALID_DATE": "Ngày không hợp lệ",
+          "INVALID_INPUT": "Giá trị không hợp lệ",
+          "INVALID_NUMBER": "Số không hợp lệ"
+        }
+      },
+      "MERGE": {
+        "DESCRIPTION": "Gộp hai hồ sơ thành một, bao gồm mọi thuộc tính và cuộc trò chuyện. Nếu có xung đột, thuộc tính của liên hệ chính sẽ được giữ.",
+        "EMPTY_STATE": "Không tìm thấy liên hệ",
+        "PARENT": "Sẽ được gộp",
+        "PLACEHOLDER": "Tìm liên hệ chính",
+        "PRIMARY_HELP_LABEL": "Được giữ lại",
+        "PRIMARY_REQUIRED_ERROR": "Vui lòng chọn liên hệ để gộp trước khi tiếp tục",
+        "SEARCH_ERROR_MESSAGE": "Không tìm được liên hệ, vui lòng thử lại sau."
+      },
+      "NOTES": {
+        "ADD_NOTE": "Thêm ghi chú",
+        "COLLAPSE": "Thu gọn",
+        "CONVERSATION_EMPTY_STATE": "Chưa có ghi chú. Dùng nút Thêm ghi chú để tạo.",
+        "EMPTY_STATE": "Liên hệ này chưa có ghi chú. Hãy nhập vào ô phía trên để thêm.",
+        "EXPAND": "Mở rộng",
+        "NO_NOTES": "Chưa có ghi chú. Bạn có thể thêm ghi chú ở trang chi tiết liên hệ.",
+        "SAVE": "Lưu ghi chú",
+        "WROTE": "đã viết",
+        "YOU": "Bạn"
+      },
+      "TABS": {
+        "ATTRIBUTES": "Thuộc tính",
+        "HISTORY": "Lịch sử",
+        "MEDIA": "Tệp phương tiện",
+        "MERGE": "Gộp"
+      }
+    }
+  },
+  "CONTACT_FORM": {
+    "FORM": {
+      "CITY": {
+        "PLACEHOLDER": "Nhập tên thành phố"
+      },
+      "COUNTRY": {
+        "SELECT_COUNTRY": "Chọn quốc gia"
+      },
+      "PHONE_NUMBER": {
+        "DIAL_CODE_ERROR": "Vui lòng chọn mã quốc gia trong danh sách",
+        "HELP": "Số điện thoại theo định dạng E.164, ví dụ: +84912345678 [+][mã quốc gia][số thuê bao]. Bạn có thể chọn mã quốc gia trong danh sách."
+      }
+    }
+  },
+  "CONTACT_PANEL": {
+    "CALL": "Gọi",
+    "CALL_FAILED": "Không thực hiện được cuộc gọi, vui lòng thử lại.",
+    "CALL_INITIATED": "Đang gọi cho khách…",
+    "CLICK_TO_EDIT": "Nhấn để sửa",
+    "MUTED_SUCCESS": "Đã chặn liên hệ. Bạn sẽ không nhận thông báo về các cuộc trò chuyện sau này của liên hệ này.",
+    "MUTE_CONTACT": "Chặn liên hệ",
+    "UNMUTED_SUCCESS": "Đã bỏ chặn liên hệ.",
+    "UNMUTE_CONTACT": "Bỏ chặn liên hệ",
+    "VOICE_INBOX_PICKER": {
+      "TITLE": "Chọn hộp thư thoại"
+    },
+    "WHATSAPP_CALL_PERMISSION_PENDING": "Yêu cầu cho phép gọi vừa được gửi. Hãy thử lại khi khách đồng ý.",
+    "WHATSAPP_CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cho phép gọi tới khách. Hãy thử lại khi khách đồng ý."
+  },
+  "CONVERSATION": {
+    "API_HOURS_WINDOW": "Bạn chỉ có thể trả lời cuộc trò chuyện này trong vòng {hours} giờ",
+    "BOT_HANDOFF_ACTION": "Mở lại và giao cho tôi",
+    "BOT_HANDOFF_ERROR": "Không tiếp nhận được cuộc trò chuyện, vui lòng thử lại.",
+    "BOT_HANDOFF_MESSAGE": "Cuộc trò chuyện này đang do trợ lý hoặc bot xử lý.",
+    "BOT_HANDOFF_REOPEN_ACTION": "Mở lại cuộc trò chuyện",
+    "BOT_HANDOFF_SUCCESS": "Cuộc trò chuyện đã được chuyển cho bạn",
+    "CARD": {
+      "LABELS_COUNT": "{count} nhãn"
+    },
+    "CARD_CONTEXT_MENU": {
+      "API": {
+        "LABEL_ASSIGNMENT": {
+          "SUCCESFUL": "Đã gắn nhãn #{labelName} cho cuộc trò chuyện {conversationId}"
+        },
+        "LABEL_REMOVAL": {
+          "FAILED": "Không gỡ được nhãn, vui lòng thử lại.",
+          "SUCCESFUL": "Đã gỡ nhãn #{labelName} khỏi cuộc trò chuyện {conversationId}"
+        }
+      },
+      "COPY_LINK": "Sao chép liên kết cuộc trò chuyện",
+      "COPY_LINK_SUCCESS": "Đã sao chép liên kết cuộc trò chuyện",
+      "DELETE": "Xóa cuộc trò chuyện",
+      "MARK_AS_READ": "Đánh dấu đã đọc",
+      "NO_LABELS_FOUND": "Không có nhãn nào",
+      "OPEN_IN_NEW_TAB": "Mở trong tab mới",
+      "SEARCH_LABELS": "Tìm nhãn"
+    },
+    "CONTEXT_MENU": {
+      "COPY_PERMALINK": "Sao chép liên kết tin nhắn",
+      "DELETE_CONFIRMATION": {
+        "MESSAGE": "Thao tác này không thể hoàn tác",
+        "TITLE": "Bạn có chắc muốn xóa tin nhắn này?"
+      },
+      "LINK_COPIED": "Đã sao chép liên kết tin nhắn",
+      "REPLY_TO": "Trả lời tin nhắn này",
+      "TRANSLATE": "Dịch"
+    },
+    "DELETE_CONVERSATION": {
+      "DESCRIPTION": "Bạn có chắc muốn xóa cuộc trò chuyện này?",
+      "TITLE": "Xóa cuộc trò chuyện #{conversationId}"
+    },
+    "EMPTY_STATE": {
+      "CMD_BAR": "để mở bảng lệnh",
+      "KEYBOARD_SHORTCUTS": "để xem phím tắt"
+    },
+    "FAIL_DELETE_CONVERSATION": "Không xóa được cuộc trò chuyện, vui lòng thử lại",
+    "FILE_TYPE_NOT_SUPPORTED": "Cuộc trò chuyện này không hỗ trợ loại tệp {fileName}",
+    "FOOTER": {
+      "MESSAGING_RESTRICTED": "Bạn không thể trả lời cuộc trò chuyện này",
+      "MESSAGING_RESTRICTED_API": "Đã quá khung thời gian trả lời nên bạn chỉ có thể trả lời bằng tin nhắn mẫu",
+      "MESSAGING_RESTRICTED_WHATSAPP": "Đã quá khung 24 giờ nên bạn chỉ có thể trả lời bằng tin nhắn mẫu"
+    },
+    "HEADER": {
+      "COPY_ID_SUCCESS": "Đã sao chép mã cuộc trò chuyện",
+      "MORE_ACTIONS": "Thao tác khác",
+      "SLA_STATUS": {
+        "MISSED": "trễ"
+      },
+      "SNOOZED_UNTIL": "Tạm hoãn đến",
+      "VOICE_CALL": "Gọi điện",
+      "VOICE_CALL_FAILED": "Không thực hiện được cuộc gọi.",
+      "WHATSAPP_CALL": "Gọi WhatsApp",
+      "WHATSAPP_CALL_FAILED": "Không thực hiện được cuộc gọi WhatsApp.",
+      "WHATSAPP_CALL_PERMISSION_PENDING": "Yêu cầu cho phép gọi vừa được gửi. Hãy thử lại khi khách đồng ý.",
+      "WHATSAPP_CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cho phép gọi tới khách. Hãy thử lại khi khách đồng ý."
+    },
+    "NATIVE_APP": "Ứng dụng gốc",
+    "NATIVE_APP_ADVISORY": "Tin nhắn này được gửi từ ứng dụng gốc. Hãy trả lời từ hệ thống để giữ khung thời gian nhắn tin.",
+    "OLD_INSTAGRAM_INBOX_REPLY_BANNER": "Tài khoản Instagram này đã chuyển sang hộp thư Instagram mới. Tin nhắn mới sẽ hiển thị ở đó và bạn không thể gửi tin từ cuộc trò chuyện này nữa.",
+    "PARTICIPANTS_HEADER": "Thành viên nhóm",
+    "PRIORITY": {
+      "CHANGE_PRIORITY": {
+        "FAILED": "Không đổi được mức ưu tiên, vui lòng thử lại.",
+        "SUCCESSFUL": "Đã đổi mức ưu tiên của cuộc trò chuyện {conversationId} thành {priority}"
+      }
+    },
+    "REPLIED_TO_STORY": "Đã trả lời story của bạn",
+    "REPLYBOX": {
+      "AUDIO_CONVERSION_FAILED": "Không chuyển đổi được âm thanh, vui lòng thử lại.",
+      "DISMISS_REPLY": "Bỏ trả lời",
+      "EMAIL_HEAD": {
+        "TO": "ĐẾN"
+      },
+      "QUOTED_REPLY": {
+        "COLLAPSE": "Thu gọn",
+        "DISABLE_TOOLTIP": "Không kèm chuỗi email được trích dẫn",
+        "ENABLE_TOOLTIP": "Kèm chuỗi email được trích dẫn",
+        "EXPAND": "Mở rộng",
+        "REMOVE_PREVIEW": "Gỡ chuỗi email được trích dẫn"
+      },
+      "REPLYING_TO": "Đang trả lời:",
+      "UNDEFINED_VARIABLES": {
+        "MESSAGE": "Tin nhắn có {undefinedVariablesCount} biến chưa được định nghĩa: {undefinedVariables}. Bạn vẫn muốn gửi?",
+        "TITLE": "Biến chưa được định nghĩa"
+      }
+    },
+    "REPLY_MESSAGE_NOT_FOUND": "Tin nhắn không còn",
+    "RESPONSE": "Phản hồi",
+    "SHARED_ATTACHMENT": {
+      "CONTACT": "{sender} đã chia sẻ một liên hệ",
+      "FILE": "{sender} đã chia sẻ một tệp",
+      "LOCATION": "{sender} đã chia sẻ một vị trí"
+    },
+    "SUCCESS_DELETE_CONVERSATION": "Đã xóa cuộc trò chuyện",
+    "UNSUPPORTED_MESSAGE_FACEBOOK": "Chưa hỗ trợ hiển thị tin nhắn này. Bạn có thể xem trên ứng dụng Facebook Messenger.",
+    "UNSUPPORTED_MESSAGE_INSTAGRAM": "Chưa hỗ trợ hiển thị tin nhắn này. Bạn có thể xem trên ứng dụng Instagram.",
+    "UNSUPPORTED_MESSAGE_TIKTOK": "Chưa hỗ trợ hiển thị tin nhắn này. Bạn có thể xem trên ứng dụng TikTok.",
+    "UNSUPPORTED_MESSAGE_WHATSAPP": "Chưa hỗ trợ hiển thị tin nhắn này. Bạn có thể xem trên ứng dụng WhatsApp.",
+    "VIEW_ORIGINAL": "Xem bản gốc",
+    "VIEW_TRANSLATED": "Xem bản dịch",
+    "VOICE_CALL": {
+      "AGENT_ANSWERED": "{agentName} đã nghe máy",
+      "CALLING": "Đang gọi…",
+      "CALL_BACK": "Gọi lại",
+      "CALL_ENDED": "Cuộc gọi đã kết thúc",
+      "CALL_IN_PROGRESS": "Đang trong cuộc gọi",
+      "HANDLED_BY": "{agentName} đã xử lý",
+      "INCOMING_CALL": "Cuộc gọi đến",
+      "JOIN_CALL": "Tham gia cuộc gọi",
+      "MISSED_CALL": "Cuộc gọi nhỡ",
+      "MISSED_CALL_DECLINED_BY": "{agentName} đã từ chối",
+      "MISSED_CALL_INBOUND_SUBTEXT": "Không nhân viên nào nghe máy",
+      "NOT_ANSWERED_YET": "Chưa trả lời",
+      "NO_ANSWER": "Không trả lời",
+      "NO_ANSWER_OUTBOUND_LABEL": "Không trả lời",
+      "NO_ANSWER_OUTBOUND_SUBTEXT": "Khách không nghe máy",
+      "OUTGOING_CALL": "Cuộc gọi đi",
+      "THEY_ANSWERED": "Khách đã nghe máy",
+      "TRANSCRIPT_SHOW_LESS": "Thu gọn",
+      "TRANSCRIPT_SHOW_MORE": "Xem thêm",
+      "YOU_ANSWERED": "Bạn đã nghe máy"
+    },
+    "VOICE_WIDGET": {
+      "CALL_IN_PROGRESS": "Đang trong cuộc gọi",
+      "DISMISS_CALL": "Bỏ qua",
+      "END_CALL": "Kết thúc",
+      "GO_TO_CONVERSATION": "Đi tới cuộc trò chuyện",
+      "HANDLED_IN_ANOTHER_TAB": "Đang xử lý ở tab khác",
+      "INCOMING_CALL": "Cuộc gọi đến",
+      "JOIN_CALL": "Tham gia cuộc gọi",
+      "MUTE": "Tắt mic",
+      "NOT_ANSWERED_YET": "Chưa trả lời",
+      "OUTGOING_CALL": "Cuộc gọi đi",
+      "REJECT_CALL": "Từ chối",
+      "UNMUTE": "Bật mic",
+      "VIEW_CHAT_HISTORY": "Xem lịch sử trò chuyện"
+    }
+  },
+  "CONVERSATION_PARTICIPANTS": {
+    "ADD_PARTICIPANTS": "Chọn người tham gia",
+    "API": {
+      "ERROR_MESSAGE": "Không cập nhật được, vui lòng thử lại!",
+      "SUCCESS_MESSAGE": "Đã cập nhật người tham gia!"
+    },
+    "NO_PARTICIPANTS_TEXT": "Chưa có ai tham gia.",
+    "REMANING_PARTICIPANTS_TEXT": "+{count} người khác",
+    "REMANING_PARTICIPANT_TEXT": "+{count} người khác",
+    "SIDEBAR_MENU_TITLE": "Đang tham gia",
+    "SIDEBAR_TITLE": "Người tham gia",
+    "TOTAL_PARTICIPANTS_TEXT": "{count} người đang tham gia.",
+    "TOTAL_PARTICIPANT_TEXT": "{count} người đang tham gia.",
+    "WATCH_CONVERSATION": "Tham gia cuộc trò chuyện",
+    "YOU_ARE_WATCHING": "Bạn đang tham gia"
+  },
+  "CONVERSATION_SIDEBAR": {
+    "ACCORDION": {
+      "LINEAR_ISSUES": "Issue Linear liên kết",
+      "MACROS": "Macro",
+      "SHARED_FILES": "Tệp đính kèm",
+      "SHOPIFY_ORDERS": "Đơn hàng Shopify"
+    },
+    "SHARED_FILES": {
+      "DOWNLOAD": "Tải tệp xuống",
+      "DOWNLOAD_ERROR": "Không tải được tệp, vui lòng thử lại.",
+      "EMPTY": "Chưa có tệp đính kèm",
+      "FILES_HEADING": "Tệp",
+      "JUMP_TO_MESSAGE": "Tới tin nhắn",
+      "MEDIA_HEADING": "Ảnh và video",
+      "SHOW_LESS": "Thu gọn",
+      "UNTITLED_FILE": "Tệp chưa đặt tên",
+      "VIEW_ALL": "Xem tất cả"
+    },
+    "SHOPIFY": {
+      "ERROR": "Không tải được đơn hàng",
+      "FINANCIAL_STATUS": {
+        "AUTHORIZED": "Đã cấp phép",
+        "PAID": "Đã thanh toán",
+        "PARTIALLY_PAID": "Đã thanh toán một phần",
+        "PARTIALLY_REFUNDED": "Đã hoàn tiền một phần",
+        "REFUNDED": "Đã hoàn tiền",
+        "VOIDED": "Đã hủy"
+      },
+      "FULFILLMENT_STATUS": {
+        "FULFILLED": "Đã giao hàng",
+        "PARTIALLY_FULFILLED": "Đã giao một phần",
+        "UNFULFILLED": "Chưa giao hàng"
+      },
+      "NO_SHOPIFY_ORDERS": "Không có đơn hàng nào",
+      "ORDER_ID": "Đơn hàng #{id}"
+    }
+  },
+  "COPILOT": {
+    "TRY_THESE_PROMPTS": "Thử các gợi ý sau"
+  },
+  "CUSTOM_ATTRIBUTES": {
+    "SHOW_LESS": "Thu gọn thuộc tính",
+    "SHOW_MORE": "Xem tất cả thuộc tính",
+    "VALIDATIONS": {
+      "INVALID_INPUT": "Giá trị không hợp lệ"
+    }
+  },
   "DROPDOWN_MENU": {
     "SEARCH_PLACEHOLDER": "Tìm kiếm..."
   },
@@ -156,8 +647,17 @@
     "MINUTES": "Phút",
     "PLACEHOLDER": "Nhập thời lượng"
   },
+  "EMAIL_HEADER": {
+    "EXPAND": "Mở rộng email"
+  },
+  "EMAIL_TRANSCRIPT": {
+    "SEND_EMAIL_PAYMENT_REQUIRED": "Gói hiện tại chưa hỗ trợ gửi bản ghi qua email. Vui lòng nâng cấp để dùng tính năng này."
+  },
   "FEATURE_SPOTLIGHT": {
     "WATCH_VIDEO": "Xem video"
+  },
+  "GALLERY_VIEW": {
+    "ERROR_DOWNLOADING": "Không tải được tệp đính kèm, vui lòng thử lại"
   },
   "GENERAL": {
     "ACCEPT": "Chấp nhận",
@@ -261,6 +761,32 @@
         "PLACEHOLDER": "Nhập email công việc"
       }
     }
+  },
+  "MERGE_CONTACTS": {
+    "DROPDOWN_ITEM": {
+      "ID": "(Mã: {identifier})"
+    },
+    "SEARCH": {
+      "ERROR_MESSAGE": "Đã có lỗi, vui lòng thử lại sau."
+    }
+  },
+  "NEW_CONVERSATION": {
+    "FORM": {
+      "INBOX": {
+        "LABEL": "Qua hộp thư",
+        "PLACEHOLDER": "Chọn hộp thư gửi"
+      }
+    }
+  },
+  "ONBOARDING": {
+    "CANNED_RESPONSES": {
+      "DESCRIPTION": "Câu trả lời mẫu viết sẵn giúp bạn phản hồi nhanh. Nhân viên chỉ cần gõ ký tự '/' kèm mã rút gọn để chèn câu trả lời.",
+      "NEW_LINK": "Nhấn vào đây để tạo câu trả lời mẫu",
+      "TITLE": "Tạo câu trả lời mẫu"
+    },
+    "GREETING_AFTERNOON": "👋 Chào buổi chiều, {name}. Chào mừng bạn đến với {installationName}.",
+    "GREETING_EVENING": "👋 Chào buổi tối, {name}. Chào mừng bạn đến với {installationName}.",
+    "GREETING_MORNING": "👋 Chào buổi sáng, {name}. Chào mừng bạn đến với {installationName}."
   },
   "PHONE_INPUT": {
     "DIAL_CODE_ERROR": "Vui lòng chọn mã quốc gia trong danh sách",
@@ -516,5 +1042,17 @@
     "AUTHOR": {
       "NOT_AVAILABLE": "Không có thông tin tác giả"
     }
+  },
+  "TRANSLATE_MODAL": {
+    "DESC": "Bạn có thể xem nội dung đã dịch theo từng ngôn ngữ.",
+    "NO_TRANSLATIONS_AVAILABLE": "Chưa có bản dịch cho nội dung này",
+    "ORIGINAL_CONTENT": "Nội dung gốc",
+    "TITLE": "Xem bản dịch",
+    "TRANSLATED_CONTENT": "Nội dung đã dịch"
+  },
+  "TYPING": {
+    "MULTIPLE": "{user} và {count} người khác đang soạn tin",
+    "ONE": "{user} đang soạn tin",
+    "TWO": "{user} và {secondUser} đang soạn tin"
   }
 }
