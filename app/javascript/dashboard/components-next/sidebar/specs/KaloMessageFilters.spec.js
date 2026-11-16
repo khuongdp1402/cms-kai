@@ -1,4 +1,4 @@
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import KaloMessageFilters from '../KaloMessageFilters.vue';
 import { createKaloTestEnv } from './kaloTestHelpers';
 
@@ -59,18 +59,23 @@ describe('KaloMessageFilters', () => {
     expect(wrapper.text()).toContain('Zalo shop');
   });
 
-  it('stays open when the compose trigger is clicked and closes when a link is clicked', async () => {
+  it('stays open for clicks in the teleported compose form, closes on outside clicks and link clicks', async () => {
     const { router, store, i18n } = createKaloTestEnv({
       inboxes: [{ id: 3, name: 'Zalo shop' }],
     });
     await router.push({ name: 'home', params: { accountId: 1 } });
+    const outside = document.createElement('div');
+    document.body.appendChild(outside);
     const wrapper = mount(KaloMessageFilters, {
+      attachTo: document.body,
       global: {
         plugins: [router, store, i18n],
         stubs: {
+          // Mirrors the real Popover: content is teleported to body and
+          // carries the data-popover-content attribute.
           ComposeConversation: {
-            template:
-              '<div data-test-id="compose-root"><slot name="trigger" /><form data-test-id="compose-form" /></div>',
+            template: `<div data-test-id="compose-root"><slot name="trigger" />
+              <Teleport to="body"><form data-popover-content data-test-id="compose-form" /></Teleport></div>`,
           },
           RouterLink: {
             name: 'RouterLink',
@@ -80,16 +85,37 @@ describe('KaloMessageFilters', () => {
         },
       },
     });
-    await wrapper
-      .find('[data-test-id="kalo-filters-trigger"]')
-      .trigger('click');
-    await wrapper
-      .find('[data-test-id="kalo-new-conversation"]')
-      .trigger('click');
-    expect(wrapper.find('[data-test-id="compose-form"]').exists()).toBe(true);
-    await wrapper.find('[data-test-id="compose-form"]').trigger('click');
-    expect(wrapper.find('[data-test-id="compose-root"]').exists()).toBe(true);
-    await wrapper.find('[data-test-id="filter-link"]').trigger('click');
-    expect(wrapper.find('[data-test-id="compose-root"]').exists()).toBe(false);
+    const isPanelOpen = () =>
+      wrapper.find('[data-test-id="compose-root"]').exists();
+    const click = async el => {
+      // vueuse drops clicks that arrive before its 0ms processing timer resets.
+      await new Promise(resolve => {
+        setTimeout(resolve, 5);
+      });
+      // vueuse click-outside arms itself on pointerdown before the click.
+      el.dispatchEvent(new Event('pointerdown', { bubbles: true }));
+      el.dispatchEvent(new MouseEvent('click', { bubbles: true, detail: 1 }));
+      await flushPromises();
+    };
+
+    await click(wrapper.find('[data-test-id="kalo-filters-trigger"]').element);
+    expect(isPanelOpen()).toBe(true);
+
+    await click(wrapper.find('[data-test-id="kalo-new-conversation"]').element);
+    expect(isPanelOpen()).toBe(true);
+
+    await click(document.querySelector('[data-test-id="compose-form"]'));
+    expect(isPanelOpen()).toBe(true);
+
+    await click(outside);
+    expect(isPanelOpen()).toBe(false);
+
+    await click(wrapper.find('[data-test-id="kalo-filters-trigger"]').element);
+    expect(isPanelOpen()).toBe(true);
+    await click(wrapper.find('[data-test-id="filter-link"]').element);
+    expect(isPanelOpen()).toBe(false);
+
+    wrapper.unmount();
+    outside.remove();
   });
 });

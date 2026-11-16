@@ -19,6 +19,11 @@ const teams = useMapGetter('teams/getMyTeams');
 const folders = useMapGetter('customViews/getConversationCustomViews');
 
 const isOpen = ref(false);
+const closePanel = () => {
+  isOpen.value = false;
+};
+// ComposeConversation teleports its popover to body (see popover/Popover.vue).
+const clickOutsideIgnore = ['[data-popover-content]'];
 
 const sections = computed(() =>
   [
@@ -60,7 +65,7 @@ const sections = computed(() =>
 
 <template>
   <div
-    v-on-click-outside="() => (isOpen = false)"
+    v-on-click-outside="[closePanel, { ignore: clickOutsideIgnore }]"
     class="relative"
     data-test-id="kalo-message-filters"
   >
