@@ -125,6 +125,11 @@ describe('useAccountEnrichment', () => {
       });
       expect(other.locale.value).toBe('de');
     });
+
+    it('keeps a Vietnamese account locale instead of the browser language (Kalo)', () => {
+      const { fields } = mountComposable({ account: { locale: 'vi' } });
+      expect(fields.locale.value).toBe('vi');
+    });
   });
 
   describe('isEnriching', () => {

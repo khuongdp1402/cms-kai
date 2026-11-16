@@ -2025,5 +2025,8 @@
       "RECENT": "Đơn gần đây",
       "EMPTY": "Khách chưa có đơn nào."
     }
+  },
+  "KALO_ONBOARDING": {
+    "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
   }
 }

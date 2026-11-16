@@ -31,6 +31,9 @@ export function useAccountEnrichment(fields) {
     const codes = (enabledLanguages || []).map(l => l.iso_639_1_code);
     const browserLang = navigator.language?.replace('-', '_');
     const accountLocale = currentAccount.value?.locale || 'en';
+    // Kalo: Kalo strings are Vietnamese-first, so a Vietnamese account (DEFAULT_LOCALE=vi)
+    // keeps its language instead of being switched to the browser's.
+    if (accountLocale === 'vi') return accountLocale;
     if (!browserLang) return accountLocale;
 
     if (codes.includes(browserLang)) return browserLang;
