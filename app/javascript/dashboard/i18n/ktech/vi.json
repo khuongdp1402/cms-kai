@@ -1650,5 +1650,120 @@
       "FOLDERS": "Thư mục đã lưu",
       "NEW_CONVERSATION": "Tạo cuộc trò chuyện"
     }
+  },
+  "KALO_REPORTS": {
+    "TITLE": "Báo cáo",
+    "RANGES": {
+      "TODAY": "Hôm nay",
+      "SEVEN_DAYS": "7 ngày",
+      "MONTH": "Tháng này"
+    },
+    "RANGE_LABEL": "Khoảng thời gian",
+    "KPI": {
+      "REVENUE": "Doanh thu",
+      "ORDERS": "Đơn mới",
+      "WAITING": "Tin nhắn chờ trả lời",
+      "CONTACTS": "Khách mới"
+    },
+    "CHART": {
+      "TITLE": "Doanh thu theo ngày",
+      "TOTAL": "Tổng {total}"
+    },
+    "WEEKDAYS": [
+      "CN",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ],
+    "CHANNELS": {
+      "TITLE": "Đơn đến từ đâu",
+      "web_widget": "Website",
+      "facebook_page": "Facebook",
+      "twilio_sms": "SMS",
+      "twitter_profile": "Twitter",
+      "zalo_personal": "Zalo",
+      "whatsapp": "WhatsApp",
+      "sms": "SMS",
+      "email": "Email",
+      "instagram": "Instagram",
+      "telegram": "Telegram",
+      "line": "Line",
+      "tiktok": "TikTok",
+      "chat": "Tin nhắn",
+      "pos": "Tại quầy",
+      "manual": "Tạo tay",
+      "OTHER": "Khác"
+    },
+    "PRODUCTS": {
+      "TITLE": "Bán chạy",
+      "SOLD": "Đã bán",
+      "REVENUE": "Doanh thu",
+      "STOCK": "Còn trong kho",
+      "LOW": "Còn {count} · sắp hết",
+      "NO_STOCK_TRACKING": "—"
+    },
+    "EMPTY": "Chưa có đơn nào trong khoảng này. Tạo đơn đầu tiên để thấy báo cáo.",
+    "EMPTY_ACTION": "Tạo đơn",
+    "ERROR": "Chưa tải được báo cáo. Thử lại sau ít phút.",
+    "LOADING": "Đang tải"
+  },
+  "KALO_MARKETING": {
+    "TITLE": "Marketing",
+    "TABS_LABEL": "Marketing",
+    "TABS": {
+      "CAMPAIGNS": "Chiến dịch",
+      "IDEAS": "Ý tưởng nội dung"
+    },
+    "IDEAS": {
+      "TOPIC_LABEL": "Bạn muốn viết về gì?",
+      "TOPIC_PLACEHOLDER": "Ví dụ: nến thơm mùa Tết",
+      "SUBMIT": "Tạo ý tưởng",
+      "ANGLE_TITLE": "Hướng {index}: {angle}",
+      "APPROVE": "Duyệt",
+      "REJECT": "Bỏ qua",
+      "APPROVED": "Đã duyệt",
+      "REJECTED": "Đã bỏ qua",
+      "AI_OFF": "Gợi ý nội dung chưa được bật cho cửa hàng của bạn.",
+      "EXPIRED": "Gói của bạn đã hết hạn. Gia hạn để tiếp tục dùng gợi ý nội dung.",
+      "RENEW": "Gia hạn",
+      "ERROR": "Chưa tạo được ý tưởng. Thử lại sau ít phút.",
+      "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút.",
+      "ASK_ADMIN": "Hãy nhờ quản trị viên gia hạn."
+    },
+    "CAMPAIGN_LINKS": {
+      "SMS": "Tin nhắn SMS",
+      "WHATSAPP": "WhatsApp"
+    }
+  },
+  "KALO_BILLING": {
+    "TITLE": "Gói cước",
+    "PLAN": "Gói hiện tại",
+    "TRIAL": "Dùng thử",
+    "PLANS": {
+      "starter": "Cơ bản",
+      "growth": "Tăng trưởng",
+      "enterprise": "Doanh nghiệp"
+    },
+    "STATUS": {
+      "trial": "Đang dùng thử",
+      "active": "Đang hoạt động",
+      "expired": "Đã hết hạn"
+    },
+    "DAYS_LEFT": "Còn {count} ngày",
+    "VALID_UNTIL": "Hết hạn ngày {date}",
+    "PRICES_TITLE": "Giá các gói mỗi tháng",
+    "RENEW_TITLE": "Gia hạn",
+    "RENEW_STEPS": "Chuyển khoản đúng số tiền của gói bạn chọn vào tài khoản bên dưới. Ghi đúng nội dung chuyển khoản để hệ thống nhận ra cửa hàng của bạn.",
+    "BANK": "Ngân hàng",
+    "ACCOUNT_NUMBER": "Số tài khoản",
+    "ACCOUNT_NAME": "Chủ tài khoản",
+    "MEMO": "Nội dung chuyển khoản",
+    "COPY": "Chép nội dung",
+    "COPIED": "Đã chép",
+    "ERROR": "Chưa tải được thông tin gói cước. Thử lại sau ít phút.",
+    "LOADING": "Đang tải"
   }
 }

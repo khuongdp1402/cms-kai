@@ -60,6 +60,10 @@ const groups = computed(() => [
       link('PROFILE', 'profile_settings_index'),
       link('ACCOUNT', 'general_settings_index'),
       link('BILLING', 'billing_settings_index'),
+      {
+        labelKey: 'KALO_BILLING.TITLE',
+        to: accountScopedRoute('kalo_billing'),
+      },
     ],
   },
 ]);
