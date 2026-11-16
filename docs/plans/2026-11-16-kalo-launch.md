@@ -60,6 +60,8 @@ Tiền tố `/api/v1/accounts/:account_id/kchat`. Xác thực như API tài kho�
 - Danh sách trả `{ "payload": [...], "meta": {...} }`: `GET /products` → `meta: {count}`; `GET /orders` → `meta: {count, current_page, per_page}` (25 đơn mỗi trang, mới nhất trước, `query` khớp số đơn, tên khách, tên dòng hàng).
 - `conversation_id` trong đơn hàng (nhận vào và trả ra) là `display_id` của hội thoại (số mà dashboard dùng), không phải khóa DB.
 - Người không đủ quyền nhận 401 (đúng cách Chatwoot đang làm), không phải 403. Lỗi kiểm tra dữ liệu khác: 422 `{error:'validation_failed', message}`.
+- `PATCH /payment_settings` kiểm tra trên giá trị sau khi gộp: lần đầu cấu hình phải gửi đủ cả bốn trường; `bank_bin` đúng 6 chữ số, `account_number` 6–19 chữ số.
+- `send_qr` thêm mã lỗi 422: `invalid_amount` (tổng 0đ), `order_not_payable` (đơn không ở `pending_payment`), `conversation_contact_mismatch`; ảnh sản phẩm chỉ nhận png/jpeg/gif/webp ≤ 5 MB.
 
 **Console** (tiền tố `/api/v1/console`, chỉ `SuperAdmin`, người khác nhận 403):
 - `GET /overview` → `{ shops, revenue_month, expiring_7d, unmatched_payments, recent_payments:[…], shops_by_plan:{starter,growth,enterprise} }`
