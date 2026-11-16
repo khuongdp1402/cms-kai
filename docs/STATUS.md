@@ -16,7 +16,7 @@
 - Kalo Console cho SuperAdmin: tổng quan, shop, giao dịch Casso.
 - Landing có video; hạ tầng production (compose, Nginx, backup, hướng dẫn `reference/deploy.md`).
 
-**Bằng chứng kiểm thử (12A, chạy trên `1b184d5`, TRƯỚC khi gộp sec-fix `68170d1`; sẽ chạy lại cả bộ ở HEAD cuối):** rspec 6245 ví dụ, 74 lỗi **có sẵn từ upstream, không đụng tới** (loại `spec/enterprise`); vitest 426 file / 4095 test, 0 lỗi; rubocop sạch; `zeitwerk:check` ổn; landing test 7/7. **Rà soát bảo mật (12C):** Critical 0, High 0, Medium 4, Low 9, Info 8; Medium 4 và Low L-1, L-2, L-5, L-6, L-8 đã sửa có spec hồi quy (chỉ chạy 369 spec liên quan ở vòng cuối, chưa chạy cả bộ sau khi gộp; sửa qua review ban đầu + 2 vòng sửa, review lại vòng 2: approved, không còn mục mở; Low ghi nhận: bộ parse ISO của Ruby lỏng hơn SQL guard ở 6 trường hợp biên không làm shop trả phí bị coi là hết hạn, `AiThrottle` nhớ store production); còn lại ghi trong [reference/security-review-2026-11.md](reference/security-review-2026-11.md). **12B (khói + trình duyệt thật):** xem báo cáo QA.
+**Bằng chứng kiểm thử (cổng cuối, 2026-11-17, chạy ở `feat/kalo-launch` @`361a46f` + sửa wrapper `e42683a`):** rspec 6327 ví dụ, 74 lỗi, 66 pending; 74 lỗi **có sẵn từ upstream, không đụng tới** (loại `spec/enterprise`; phân loại bằng chạy lại trên base `7a88e29`: 73 lỗi giống hệt + `agent_builder_spec:47` phụ thuộc thứ tự); lần chạy đầu có thêm 6 lỗi do `DEFAULT_LOCALE=vi` trong `.env.example`, đã sửa ở `rspec.sh` (LESSONS B17); vitest 428 file / 4112 test, 0 lỗi; rubocop (69 file) và `zeitwerk:check` sạch; landing test 8/8; nginx, compose, contrast đạt; eslint/prettier chỉ còn lỗi ở file có sẵn từ base hoặc ngoài cấu hình app (xem báo cáo QA). **Rà soát bảo mật (12C):** Critical 0, High 0, Medium 4, Low 9, Info 8; Medium 4 và Low L-1, L-2, L-5, L-6, L-8 đã sửa có spec hồi quy (369 spec liên quan ở vòng cuối, sau đó cả bộ đã chạy ở cổng cuối; sửa qua review ban đầu + 2 vòng sửa, review lại vòng 2: approved, không còn mục mở; Low ghi nhận: bộ parse ISO của Ruby lỏng hơn SQL guard ở 6 trường hợp biên không làm shop trả phí bị coi là hết hạn, `AiThrottle` nhớ store production); còn lại ghi trong [reference/security-review-2026-11.md](reference/security-review-2026-11.md). **12B (khói + trình duyệt thật):** smoke script 44/44 trên stack thật (development), trình duyệt thật 0 lỗi console sau các vòng sửa F1-F8; chưa kiểm: simulate 404 ở server production, Sidekiq/realtime, AI ngoài 503, hoàn tất onboarding. Chi tiết: báo cáo QA mục 6.
 
 ### Mockup cũ đã bỏ (không có backend)
 
@@ -44,7 +44,7 @@ Các mục sau từng được ghi "hoàn thành" ở phiên bản trước như
 | K-T10 | Báo cáo, Marketing, Gói cước (UI) | done | 2 vòng sửa (race, khóa kênh snake_case) |
 | K-T11 | Kalo Console (UI) | done | 2 vòng sửa (redirect, lỗi gán `description_ambiguous`) |
 | K-i18n | Sửa spec overlay i18n (468 ca hỏng) | done | `overrides.spec.js` bỏ qua khóa `KALO_*` không có khóa Anh (LESSONS B16) |
-| K-T12A | QA đầy đủ: rspec, vitest, lint, kiểm tĩnh | done | Số liệu ở trên; sửa KPI Console `shops_by_plan` đếm cả shop hết hạn/khóa |
+| K-T12A | QA đầy đủ: rspec, vitest, lint, kiểm tĩnh | done | Số liệu 12A đã được thay bằng lần chạy cổng cuối (xem trên); sửa KPI Console `shops_by_plan` đếm cả shop hết hạn/khóa |
 | K-T12C | Rà soát bảo mật (opus, chỉ đọc) | done | 0/0/4/9/8 |
 | K-sec | Vá bảo mật từ 12C | done | M-1..M-4, L-1, L-2, L-5, L-6, L-8; review ban đầu + 2 vòng sửa (bypass `1%2E5`, `Forwarded`, throttle trước auth), review vòng 2 approved |
 | K-T12B | Kiểm tra khói và trình duyệt thật | in-progress | Controller đang chạy; kết quả bổ sung vào báo cáo QA |
@@ -102,7 +102,7 @@ Việc ngoài kế hoạch mà chủ dự án yêu cầu thì ghi vào đây. N�
 
 > Các mục từ 2026-10-01 đến 2026-10-28 mô tả giao diện mẫu và cấu hình cũ (Super Admin/Tenant Admin tĩnh, Brand OS, CDP :9222, `storage/kchat_commercial_state.json`); nhiều phần đã bị xóa hoặc thay (ADR-016, ADR-017). Đọc như lịch sử, không như hiện trạng.
 
-- **2026-11-17:** Hoàn tất Kalo launch trên `feat/kalo-launch` (T0–T11, i18n-fix, 12A, 12C, vá bảo mật). 18 vòng sửa theo review. Tài liệu và go-live checklist (T13). 12B đang chạy.
+- **2026-11-17:** Hoàn tất Kalo launch trên `feat/kalo-launch` (T0–T11, i18n-fix, 12A, 12C, vá bảo mật). 18 vòng sửa theo review. Tài liệu và go-live checklist (T13). 12B xong (smoke 44/44 trên stack thật, F1-F8 đã sửa). Cổng cuối 2026-11-17: rspec 6327 ví dụ / 74 lỗi có sẵn, vitest 428 file / 4112 test.
 - **2026-11-16:** Quét dự án, ADR-016/017/018, kế hoạch Kalo launch, thiết kế được chủ dự án duyệt.
 
 - **2026-10-28 (buổi 3):** Hoàn tất kế hoạch kỹ thuật thương mại hóa & tích hợp nền tảng AI thực tế (**ADR-015**):
