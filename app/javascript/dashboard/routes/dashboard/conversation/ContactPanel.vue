@@ -24,6 +24,7 @@ import ShopifyOrdersList from 'dashboard/components/widgets/conversation/Shopify
 import SidebarActionsHeader from 'dashboard/components-next/SidebarActionsHeader.vue';
 import LinearIssuesList from 'dashboard/components/widgets/conversation/linear/IssuesList.vue';
 import LinearSetupCTA from 'dashboard/components/widgets/conversation/linear/LinearSetupCTA.vue';
+import KaloContactOrders from './contact/KaloContactOrders.vue';
 
 const props = defineProps({
   conversationId: {
@@ -138,6 +139,7 @@ onMounted(() => {
       @close="closeContactPanel"
     />
     <ContactInfo :contact="contact" :channel-type="channelType" />
+    <KaloContactOrders :contact-id="contactId" />
     <div class="px-2 pb-8 list-group">
       <Draggable
         :list="conversationSidebarItems"

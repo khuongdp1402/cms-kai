@@ -16,6 +16,8 @@ import ArticleSearchPopover from 'dashboard/routes/dashboard/helpcenter/componen
 import CopilotEditorSection from './CopilotEditorSection.vue';
 import MessageSignatureMissingAlert from './MessageSignatureMissingAlert.vue';
 import ReplyBoxBanner from './ReplyBoxBanner.vue';
+import KaloAiSuggestions from './KaloAiSuggestions.vue';
+import KaloComposerActions from './KaloComposerActions.vue';
 import QuotedEmailPreview from './QuotedEmailPreview.vue';
 import { REPLY_EDITOR_MODES } from 'dashboard/components/widgets/WootWriter/constants';
 import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor.vue';
@@ -81,6 +83,8 @@ export default {
     QuotedEmailPreview,
     CopilotEditorSection,
     CopilotReplyBottomPanel,
+    KaloAiSuggestions,
+    KaloComposerActions,
   },
   mixins: [inboxMixin, fileUploadMixin, keyboardEventListenerMixins],
   emits: ['toggleEditorSize'],
@@ -1253,6 +1257,11 @@ export default {
 
 <template>
   <ReplyBoxBanner :message="message" :is-on-private-note="isOnPrivateNote" />
+  <KaloAiSuggestions
+    :messages="currentChat.messages"
+    :is-private="isOnPrivateNote"
+    @select="message = $event"
+  />
   <div ref="replyEditor" class="reply-box" :class="replyBoxClass">
     <ReplyTopPanel
       :mode="replyType"
@@ -1390,6 +1399,12 @@ export default {
         />
       </div>
     </Transition>
+
+    <KaloComposerActions
+      v-if="!isOnPrivateNote && !copilot.isActive.value"
+      :contact-id="currentChat.meta?.sender?.id"
+      :conversation-id="currentChat.id"
+    />
 
     <Transition
       mode="out-in"

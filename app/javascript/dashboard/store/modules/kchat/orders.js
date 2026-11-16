@@ -53,6 +53,12 @@ export const actions = {
       return data;
     }),
 
+  fetchOne: async ({ commit }, id) => {
+    const { data } = await KchatOrdersAPI.show(id);
+    commit(UPSERT_ORDER, data);
+    return data;
+  },
+
   transition: ({ commit }, { id, event }) =>
     withFlag({ commit }, 'isUpdating', async () => {
       const { data } = await KchatOrdersAPI.transition(id, event);
@@ -79,9 +85,10 @@ export const mutations = {
     $state.records = [order, ...$state.records];
   },
   [UPSERT_ORDER]($state, order) {
-    $state.records = $state.records.map(record =>
-      record.id === order.id ? order : record
-    );
+    const exists = $state.records.some(record => record.id === order.id);
+    $state.records = exists
+      ? $state.records.map(record => (record.id === order.id ? order : record))
+      : [order, ...$state.records];
   },
 };
 
