@@ -262,4 +262,21 @@ RSpec.describe Casso::WebhookHandler do
       expect(run(description: 'KALO Hana TOKEN 1', amount: 5000)[:account_id]).to eq(account_hana.id)
     end
   end
+
+  describe 'a corrupt stored subscription_valid_until' do
+    [['unparseable string', 'garbage'], ['number', 20_261_231], ['array', ['x']]].each do |label, bad|
+      it "still credits a plan payment starting from now when the stored value is a #{label}" do
+        account_hana.update!(custom_attributes: account_hana.custom_attributes.merge('subscription_valid_until' => bad))
+        allow(Rails.logger).to receive(:warn)
+
+        result = run(description: 'KALO HANA 1', amount: 299_000)
+
+        expect(result[:status]).to eq('matched_and_activated')
+        attrs = account_hana.reload.custom_attributes
+        expect(attrs['subscription_plan']).to eq('starter')
+        expect(Time.zone.parse(attrs['subscription_valid_until'])).to be_within(1.minute).of(30.days.from_now)
+        expect(Rails.logger).to have_received(:warn).with(satisfy { |m| m.include?('[Casso]') && m.exclude?('garbage') })
+      end
+    end
+  end
 end

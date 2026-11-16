@@ -35,4 +35,15 @@ RSpec.describe Kchat::Entitlements do
       expect(described_class.status(account_created(30, 'subscription_valid_until' => Time.current.iso8601))).to eq(:expired)
     end
   end
+
+  describe 'a stored subscription_valid_until that is not a parseable string' do
+    [20_261_231, 12.5, true, ['2026-01-01'], { 'a' => 1 }, 'garbage'].each do |bad|
+      it "treats #{bad.inspect} as no paid period instead of raising" do
+        account = account_created(1, 'subscription_valid_until' => bad)
+
+        expect(described_class.paid_until(account)).to be_nil
+        expect(described_class.status(account)).to eq(:trial)
+      end
+    end
+  end
 end

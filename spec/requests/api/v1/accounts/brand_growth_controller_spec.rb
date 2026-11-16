@@ -123,6 +123,22 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
       expect(sent_messages.drop(1).sum { |t| t['content'].length }).to eq(7 * 2000)
     end
 
+    it 'treats history sent as an object instead of an array as empty' do
+      stub_ai('ok')
+      post "#{base}/chat_reply", params: { message: 'hi', history: { '0' => { role: 'user', content: 'x' } } },
+                                 headers: headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(sent_messages.size).to eq(2) # system prompt + the message only
+    end
+
+    it 'treats history sent as a string as empty' do
+      stub_ai('ok')
+      post "#{base}/chat_reply", params: { message: 'hi', history: 'nope' }, headers: headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+    end
+
     it 'rejects a topic over 300 characters with 422 topic_too_long' do
       stub = stub_ai('{}')
       post "#{base}/repurpose", params: { topic: 't' * 301 }, headers: headers, as: :json

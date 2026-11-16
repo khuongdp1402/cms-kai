@@ -9,6 +9,7 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
 
   before_action :check_admin_authorization?, only: [:save_profile, :approve_job]
   before_action :require_active_subscription!, only: [:chat_reply, :repurpose]
+  before_action :throttle_ai_calls!, only: [:chat_reply, :repurpose]
 
   rescue_from Kchat::Entitlements::Expired do
     render json: { error: 'subscription_expired' }, status: :forbidden
@@ -56,6 +57,15 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
 
   private
 
+  # Authoritative cap on paid AI calls, keyed on the authorized account id (not on the request path, which has many spellings).
+  # Shares the Rack::Attack cache store so the counter is the same across processes.
+  def throttle_ai_calls!
+    limit = ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i
+    return if Rack::Attack.cache.count("brand_growth_ai/controller:#{Current.account.id}", 1.minute) <= limit
+
+    render json: { error: 'rate_limited' }, status: :too_many_requests
+  end
+
   def require_active_subscription!
     Kchat::Entitlements.require_active!(Current.account)
   end
@@ -65,6 +75,9 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
   end
 
   def history_params
+    raw = params[:history]
+    return [] unless raw.is_a?(Array)
+
     items = params.permit(history: [:role, :content]).fetch(:history, []).last(MAX_HISTORY_ITEMS).map(&:to_h)
     items.each { |item| item['content'] = item['content'].to_s.first(MAX_HISTORY_CONTENT_CHARS) if item.key?('content') }
   end

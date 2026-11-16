@@ -49,10 +49,22 @@ class Casso::WebhookHandler
   end
 
   def self.subscription_active?(account)
-    valid_until = account&.custom_attributes&.dig('subscription_valid_until')
-    return false if valid_until.blank?
+    valid_until = parse_valid_until(account&.custom_attributes&.dig('subscription_valid_until'))
+    valid_until.present? && valid_until > Time.current
+  end
 
-    Time.zone.parse(valid_until) > Time.current
+  # nil for a blank or unparseable stored value (hand-edited, wrong type): never raise, because an exception here would make
+  # the webhook answer 500 and Casso would retry that payment forever. The value itself is not logged.
+  def self.parse_valid_until(value)
+    return if value.blank?
+
+    parsed = begin
+      Time.zone.parse(value)
+    rescue StandardError
+      nil
+    end
+    Rails.logger.warn '[Casso] ignoring unparseable stored subscription_valid_until' if parsed.nil?
+    parsed
   end
 
   # Order type (PLAN|TOKEN|SEED) and order id written in a transfer description; PLAN when it has none,
@@ -102,7 +114,7 @@ class Casso::WebhookHandler
       return 'underpaid_recorded'
     end
 
-    current_until = attrs['subscription_valid_until'].present? ? Time.zone.parse(attrs['subscription_valid_until']) : Time.current
+    current_until = parse_valid_until(attrs['subscription_valid_until']) || Time.current
     attrs['subscription_plan'] = plan
     attrs['subscription_valid_until'] = ([current_until, Time.current].max + 30.days).iso8601
     attrs['subscription_status'] = 'active'

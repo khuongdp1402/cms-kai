@@ -45,7 +45,11 @@ RSpec.describe 'Rack::Attack throttles', type: :request do
       '/api/v1/accounts//7/brand_growth/chat_reply',
       '/API/V1/Accounts/7/Brand_Growth/Chat_Reply',
       '/api/v1/accounts/%37/brand_growth/chat_reply',
-      '/api/v1/accounts/+7/brand_growth/chat_reply'
+      '/api/v1/accounts/+7/brand_growth/chat_reply',
+      '/api/v1/accounts/7%2E5/brand_growth/chat_reply',
+      '/api/v1/accounts/7.5/brand_growth/chat_reply',
+      '/api/v1/accounts/7%2Fx/brand_growth/chat_reply',
+      '/api/v1/accounts/7%2fx/brand_growth/repurpose.json'
     ].each do |variant|
       it "counts #{variant} in the same bucket as account 7" do
         limit.times { hit('/api/v1/accounts/7/brand_growth/chat_reply') }
@@ -82,6 +86,29 @@ RSpec.describe 'Rack::Attack throttles', type: :request do
       (casso_limit + 1).times { get '/api/v1/casso/status', headers: { 'REMOTE_ADDR' => '203.0.113.11' } }
 
       expect(response.status).not_to eq(429)
+    end
+  end
+
+  describe 'client IP used by throttles' do
+    let(:casso_limit) { ENV.fetch('CASSO_WEBHOOK_LIMIT', '120').to_i }
+
+    # nginx runs on a private (trusted proxy) address and sets X-Forwarded-For to the real client.
+    def post_via_proxy(client_ip, forwarded)
+      post '/api/v1/casso/webhook', params: { a: 1 }, as: :json,
+                                    headers: { 'REMOTE_ADDR' => '172.18.0.5', 'X-Forwarded-For' => client_ip, 'Forwarded' => forwarded }
+      response.status
+    end
+
+    it 'counts requests under the real client ip even when each one carries a different spoofed Forwarded header' do
+      casso_limit.times { |i| post_via_proxy('203.0.113.20', "for=198.51.100.#{(i % 250) + 1}") }
+
+      expect(post_via_proxy('203.0.113.20', 'for=198.51.100.250')).to eq(429)
+    end
+
+    it 'does not let a spoofed Forwarded header exhaust another client bucket' do
+      casso_limit.times { post_via_proxy('203.0.113.30', 'for=203.0.113.31') }
+
+      expect(post_via_proxy('203.0.113.31', 'for=203.0.113.31')).not_to eq(429)
     end
   end
 end
