@@ -144,7 +144,10 @@ describe('kchatOrders store', () => {
     OrdersAPI.transition.mockResolvedValue({ data: order(99, 'paid') });
     const store = makeStore();
     await store.dispatch('kchatOrders/fetchOne', 99);
-    await store.dispatch('kchatOrders/transition', { id: 99, event: 'mark_paid' });
+    await store.dispatch('kchatOrders/transition', {
+      id: 99,
+      event: 'mark_paid',
+    });
     expect(store.getters['kchatOrders/getOrderById'](99).status).toBe('paid');
     expect(store.getters['kchatOrders/getOrders']).toHaveLength(0);
   });

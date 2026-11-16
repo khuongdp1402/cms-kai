@@ -92,7 +92,8 @@ export const mutations = {
     $state.records = $state.records.map(record =>
       record.id === order.id ? order : record
     );
-    if ($state.byId[order.id]) $state.byId = { ...$state.byId, [order.id]: order };
+    if ($state.byId[order.id])
+      $state.byId = { ...$state.byId, [order.id]: order };
   },
   [SET_FETCHED_ORDER]($state, order) {
     $state.byId = { ...$state.byId, [order.id]: order };

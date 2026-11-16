@@ -58,10 +58,18 @@ const pairs = [
   ['kalo warn #B45309 / white', hex('#B45309'), WHITE],
 ];
 const AVATAR_PAIRS = [
-  ['#7F2A16', '#FFE9E1'], ['#0E4F63', '#A5F3FC'], ['#3A2F29', '#E6D6CD'],
-  ['#064E3B', '#A7F3D0'], ['#5C3A0B', '#FDE68A'], ['#4C0519', '#FBCFE8'],
-  ['#FFE9E1', '#A3361D'], ['#CFFAFE', '#0E7490'], ['#F0E4DD', '#4A3F39'],
-  ['#D1FAE5', '#065F46'], ['#FDF0DC', '#8A4204'], ['#FCE7F3', '#9D174D'],
+  ['#7F2A16', '#FFE9E1'],
+  ['#0E4F63', '#A5F3FC'],
+  ['#3A2F29', '#E6D6CD'],
+  ['#064E3B', '#A7F3D0'],
+  ['#5C3A0B', '#FDE68A'],
+  ['#4C0519', '#FBCFE8'],
+  ['#FFE9E1', '#A3361D'],
+  ['#CFFAFE', '#0E7490'],
+  ['#F0E4DD', '#4A3F39'],
+  ['#D1FAE5', '#065F46'],
+  ['#FDF0DC', '#8A4204'],
+  ['#FCE7F3', '#9D174D'],
   ['#FFF1EC', '#A3361D'],
 ];
 AVATAR_PAIRS.forEach(([bg, text]) =>
