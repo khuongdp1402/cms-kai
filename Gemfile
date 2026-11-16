@@ -278,3 +278,6 @@ group :development, :test do
   gem 'spring'
   gem 'spring-watcher-listen'
 end
+
+# VietQR image rendering (local, no external API)
+gem 'rqrcode', '~> 3.0'

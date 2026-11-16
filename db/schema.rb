@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_07_20_000006) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_16_000001) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -1111,6 +1111,71 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_20_000006) do
     t.jsonb "settings", default: {}
   end
 
+  create_table "kchat_order_items", force: :cascade do |t|
+    t.bigint "order_id", null: false
+    t.bigint "product_id"
+    t.string "name", null: false
+    t.bigint "unit_price", null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_kchat_order_items_on_order_id"
+    t.index ["product_id"], name: "index_kchat_order_items_on_product_id"
+  end
+
+  create_table "kchat_orders", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "contact_id"
+    t.bigint "conversation_id"
+    t.integer "number", null: false
+    t.string "status", default: "pending_payment", null: false
+    t.string "source", null: false
+    t.string "payment_method", null: false
+    t.bigint "subtotal", default: 0, null: false
+    t.bigint "shipping_fee", default: 0, null: false
+    t.bigint "total", default: 0, null: false
+    t.text "shipping_address"
+    t.string "shipping_carrier"
+    t.string "tracking_code"
+    t.datetime "paid_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "number"], name: "index_kchat_orders_on_account_id_and_number", unique: true
+    t.index ["account_id", "paid_at"], name: "index_kchat_orders_on_account_id_and_paid_at"
+    t.index ["account_id", "status"], name: "index_kchat_orders_on_account_id_and_status"
+    t.index ["account_id"], name: "index_kchat_orders_on_account_id"
+    t.index ["contact_id"], name: "index_kchat_orders_on_contact_id"
+    t.index ["conversation_id"], name: "index_kchat_orders_on_conversation_id"
+  end
+
+  create_table "kchat_payment_events", force: :cascade do |t|
+    t.bigint "account_id"
+    t.string "tid", null: false
+    t.bigint "amount", null: false
+    t.text "description"
+    t.string "status", default: "unmatched", null: false
+    t.jsonb "raw", default: {}, null: false
+    t.datetime "received_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_kchat_payment_events_on_account_id"
+    t.index ["status"], name: "index_kchat_payment_events_on_status"
+    t.index ["tid"], name: "index_kchat_payment_events_on_tid", unique: true
+  end
+
+  create_table "kchat_products", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "name", null: false
+    t.string "sku"
+    t.bigint "price", default: 0, null: false
+    t.integer "stock"
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "active"], name: "index_kchat_products_on_account_id_and_active"
+    t.index ["account_id"], name: "index_kchat_products_on_account_id"
+  end
+
   create_table "labels", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -1686,6 +1751,13 @@ ActiveRecord::Schema[7.1].define(version: 2026_07_20_000006) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "channel_zalo_personal", "accounts", on_delete: :cascade
   add_foreign_key "inboxes", "portals"
+  add_foreign_key "kchat_order_items", "kchat_orders", column: "order_id", on_delete: :cascade
+  add_foreign_key "kchat_order_items", "kchat_products", column: "product_id", on_delete: :nullify
+  add_foreign_key "kchat_orders", "accounts", on_delete: :cascade
+  add_foreign_key "kchat_orders", "contacts", on_delete: :nullify
+  add_foreign_key "kchat_orders", "conversations", on_delete: :nullify
+  add_foreign_key "kchat_payment_events", "accounts", on_delete: :nullify
+  add_foreign_key "kchat_products", "accounts", on_delete: :cascade
   add_foreign_key "user_sessions", "users"
   add_foreign_key "zalo_inbound_events", "zalo_integrations", column: "integration_id", name: "zalo_inbound_events_integration_id_fkey", on_delete: :cascade
   add_foreign_key "zalo_integration_leases", "zalo_integrations", column: "integration_id", name: "zalo_integration_leases_integration_id_fkey", on_delete: :cascade
