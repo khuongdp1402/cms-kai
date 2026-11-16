@@ -143,7 +143,7 @@ onMounted(async () => {
         <h2 class="mb-3 text-base font-bold text-n-slate-12">
           {{ t('KALO_BILLING.PRICES_TITLE') }}
         </h2>
-        <ul class="grid gap-3 sm:grid-cols-3">
+        <ul class="grid gap-3 sm:grid-cols-3 list-none">
           <li
             v-for="key in PLAN_KEYS"
             :key="key"

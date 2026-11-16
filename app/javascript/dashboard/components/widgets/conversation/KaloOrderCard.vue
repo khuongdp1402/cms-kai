@@ -96,7 +96,7 @@ onMounted(async () => {
         {{ t(chip.label) }}
       </span>
     </div>
-    <ul class="flex flex-col gap-1 text-sm">
+    <ul class="flex flex-col gap-1 text-sm list-none">
       <li v-for="item in order.items" :key="item.id">
         <span>{{ item.name }}</span>
         <span class="block text-xs text-n-slate-11">

@@ -204,7 +204,7 @@ onMounted(() => load(1));
                 >
                   {{ t('KALO_CONSOLE.PAYMENTS.ASSIGN_EMPTY') }}
                 </p>
-                <ul class="flex flex-wrap gap-2 mt-2">
+                <ul class="flex flex-wrap gap-2 mt-2 list-none">
                   <li v-for="account in options" :key="account.id">
                     <button
                       data-testid="account-option"

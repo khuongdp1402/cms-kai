@@ -70,7 +70,7 @@ watch(() => props.contactId, load, { immediate: true });
       >
         {{ t('KALO_CHAT.PANEL.EMPTY') }}
       </p>
-      <ul v-else class="flex flex-col gap-2">
+      <ul v-else class="flex flex-col gap-2 list-none">
         <li
           v-for="order in recent"
           :key="order.id"

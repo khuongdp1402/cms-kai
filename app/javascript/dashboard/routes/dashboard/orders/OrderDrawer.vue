@@ -105,7 +105,7 @@ const canCancel = computed(() =>
         <h3 class="mb-2 text-xs font-semibold text-n-slate-11">
           {{ t('KALO_ORDERS.DRAWER.ITEMS') }}
         </h3>
-        <ul class="flex flex-col divide-y divide-n-weak">
+        <ul class="flex flex-col divide-y divide-n-weak list-none">
           <li
             v-for="item in order.items"
             :key="item.id"

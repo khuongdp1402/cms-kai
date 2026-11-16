@@ -228,7 +228,7 @@ const dialogClass =
           >
             {{ t('KALO_CHAT.QR_PICKER.EMPTY') }}
           </p>
-          <ul v-else class="flex flex-col gap-2">
+          <ul v-else class="flex flex-col gap-2 list-none">
             <li v-for="order in qrOptions" :key="order.id">
               <button
                 type="button"

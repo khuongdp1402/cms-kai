@@ -104,7 +104,7 @@ const decide = async (index, action) => {
       </span>
     </div>
 
-    <ul v-if="job" class="flex flex-col gap-3">
+    <ul v-if="job" class="flex flex-col gap-3 list-none">
       <li
         v-for="(item, index) in job.angles"
         :key="index"

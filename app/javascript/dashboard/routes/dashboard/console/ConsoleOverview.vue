@@ -124,7 +124,7 @@ onMounted(load);
           >
             {{ t('KALO_CONSOLE.OVERVIEW.EMPTY_PAYMENTS') }}
           </p>
-          <ul v-else>
+          <ul v-else class="list-none">
             <li
               v-for="payment in data.recent_payments"
               :key="payment.id"
