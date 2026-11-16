@@ -1,6 +1,8 @@
 class Api::V1::Console::AccountsController < Api::V1::Console::BaseController
   FILTERS = %w[all trial expiring locked].freeze
 
+  before_action :require_string_query!, only: :index
+
   def index
     scope = filtered(Account.all)
     accounts = paginate(scope.order(created_at: :desc, id: :desc))
@@ -21,6 +23,10 @@ class Api::V1::Console::AccountsController < Api::V1::Console::BaseController
   end
 
   private
+
+  def require_string_query!
+    render_error('invalid_query', :unprocessable_entity) if params.key?(:query) && !params[:query].is_a?(String)
+  end
 
   def filtered(scope)
     scope = search(scope) if params[:query].present?

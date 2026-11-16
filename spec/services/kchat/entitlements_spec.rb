@@ -27,4 +27,12 @@ RSpec.describe Kchat::Entitlements do
     expect(described_class.days_left(account)).to eq(4)
     expect(described_class.days_left(account_created(30))).to eq(0)
   end
+
+  it 'is expired exactly 14 days after creation and when valid_until is exactly now' do
+    freeze_time do
+      expect(described_class.status(account_created(14))).to eq(:expired)
+      expect(described_class.status(create(:account, created_at: 14.days.ago + 1.second))).to eq(:trial)
+      expect(described_class.status(account_created(30, 'subscription_valid_until' => Time.current.iso8601))).to eq(:expired)
+    end
+  end
 end

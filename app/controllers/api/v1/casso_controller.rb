@@ -19,7 +19,7 @@ class Api::V1::CassoController < ApplicationController
       bank: ENV.fetch('CASSO_BANK_NAME'),
       account_number: ENV.fetch('CASSO_ACCOUNT_NUMBER'),
       account_name: ENV.fetch('CASSO_ACCOUNT_NAME'),
-      syntax: 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] <ORDER_ID>'
+      syntax: 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] [ORDER_ID]'
     }, status: :ok
   end
 

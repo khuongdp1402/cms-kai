@@ -12,7 +12,7 @@ class Kchat::Reports
 
     @account = account
     @range = range
-    @zone = ActiveSupport::TimeZone[account.reporting_timezone.presence || Time.zone.name]
+    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone['UTC']
   end
 
   def summary

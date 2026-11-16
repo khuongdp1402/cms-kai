@@ -43,7 +43,7 @@ RSpec.describe 'Casso webhook', type: :request do
         get '/api/v1/casso/status'
       end
       expect(response.parsed_body).to eq('bank' => 'MB', 'account_number' => '123', 'account_name' => 'KTECH',
-                                         'syntax' => 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] <ORDER_ID>')
+                                         'syntax' => 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] [ORDER_ID]')
     end
   end
 end

@@ -16,6 +16,7 @@
 # Indexes
 #
 #  index_kchat_payment_events_on_account_id  (account_id)
+#  index_kchat_payment_events_on_received_at (received_at)
 #  index_kchat_payment_events_on_status      (status)
 #  index_kchat_payment_events_on_tid         (tid) UNIQUE
 #

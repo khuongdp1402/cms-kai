@@ -51,6 +51,14 @@ RSpec.describe 'Console accounts API', type: :request do
     expect(names(query: trial.id.to_s)).to eq(['Trial Shop'])
   end
 
+  it 'rejects a non-string query with 422' do
+    get "#{base}?query[]=a&query[]=b", headers: headers, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.parsed_body['error']).to eq('invalid_query')
+    get "#{base}?query[a]=b", headers: headers, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
+
   describe 'PATCH' do
     it 'locked true suspends the account and false restores it' do
       patch "#{base}/#{trial.id}", params: { locked: true }, headers: headers, as: :json

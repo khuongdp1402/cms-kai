@@ -9,7 +9,11 @@
 # Every transaction is stored as a Kchat::PaymentEvent. The unique index on `tid` is the idempotency source of truth:
 # the event is inserted in the same DB transaction as the credit, and a RecordNotUnique means it was already handled.
 class Casso::WebhookHandler
-  DESCRIPTION_PATTERN = /KALO[\s\-_]+([A-Za-z0-9_-]+?)(?:[\s\-_]+(PLAN|TOKEN|SEED))?[\s\-_]+([0-9]+)/i
+  # The order id is optional: the memo shown to customers is "KALO <account_id> PLAN". Banks wrap the memo in their own text
+  # ("MBVCB.123.KALO 12 PLAN.CT tu ..."), so only require non-alphanumeric boundaries around it.
+  DESCRIPTION_PATTERN = /(?<![A-Za-z0-9])KALO[\s\-_]+([A-Za-z0-9_-]+?)(?:[\s\-_]+(PLAN|TOKEN|SEED))?(?:[\s\-_]+([0-9]+))?(?![A-Za-z0-9])/i
+  # Casso reports `when` as Vietnam local time without a zone.
+  CASSO_TIME_ZONE = ActiveSupport::TimeZone['Asia/Ho_Chi_Minh']
   # Monthly plan prices in VND, highest first.
   PLAN_PRICES = { 'enterprise' => 1_990_000, 'growth' => 699_000, 'starter' => 299_000 }.freeze
   SEED_CREDIT_PRICE = 500
@@ -22,7 +26,7 @@ class Casso::WebhookHandler
   end
 
   def process
-    results = transactions.map { |tx| process_single_transaction(tx.to_h.stringify_keys) }
+    results = transactions.map { |tx| tx.is_a?(Hash) ? process_single_transaction(tx.stringify_keys) : { status: 'invalid_transaction' } }
     { error: 0, processed_count: results.size, results: results }
   end
 
@@ -92,7 +96,7 @@ class Casso::WebhookHandler
       tid: (transaction['tid'] || transaction['id']).to_s.strip,
       amount: transaction['amount'].to_i,
       description: transaction['description'].to_s,
-      received_at: (Time.zone.parse(transaction['when'].to_s) || Time.current).iso8601
+      received_at: parse_received_at(transaction['when']).iso8601
     }
     return log_data.merge(status: 'invalid_transaction') if log_data[:tid].blank? || log_data[:amount] <= 0
 
@@ -100,6 +104,12 @@ class Casso::WebhookHandler
     log_data.merge(status: store_and_apply(account, log_data, transaction))
   rescue ActiveRecord::RecordNotUnique
     log_data.merge(status: 'duplicate_ignored')
+  end
+
+  def parse_received_at(value)
+    CASSO_TIME_ZONE.parse(value.to_s) || Time.current
+  rescue ArgumentError
+    Time.current
   end
 
   # Fills log_data with the parsed order and returns the matching account, or nil when none matches.

@@ -51,4 +51,14 @@ RSpec.describe 'Kchat subscription API', type: :request do
     end
     expect(response).to have_http_status(:internal_server_error)
   end
+
+  it 'returns a memo that the Casso webhook matches and credits' do
+    get url, headers: agent.create_new_auth_token, as: :json
+    memo = response.parsed_body['memo']
+
+    result = Casso::WebhookHandler.new('data' => [{ 'tid' => 'MEMO1', 'description' => memo, 'amount' => 699_000 }]).process[:results].first
+
+    expect(result).to include(status: 'matched_and_activated', account_id: account.id)
+    expect(account.reload.custom_attributes['subscription_plan']).to eq('growth')
+  end
 end

@@ -86,4 +86,58 @@ RSpec.describe Casso::WebhookHandler do
     expect(result[:status]).to eq('unmatched_account_recorded')
     expect(named_only.reload.custom_attributes['subscription_status']).to be_nil
   end
+
+  describe 'description matching' do
+    {
+      'KALO 12 PLAN' => ['12', 'PLAN', nil],
+      'MBVCB.123.KALO 12 PLAN.CT tu NGUYEN VAN A' => ['12', 'PLAN', nil],
+      'KALO 12 PLAN 9812' => %w[12 PLAN 9812],
+      'KALO HANA TOKEN 55' => %w[HANA TOKEN 55],
+      'KALO 12 9812' => %w[12 PLAN 9812],
+      'kalo 12 plan' => ['12', 'PLAN', nil],
+      'KALO 12' => ['12', 'PLAN', nil]
+    }.each do |text, (ref, type, order_id)|
+      it "matches #{text.inspect}" do
+        match = text.match(described_class::DESCRIPTION_PATTERN)
+        expect([match[1], (match[2] || 'PLAN').upcase, match[3]]).to eq([ref, type, order_id])
+        expect(described_class.parse_description(text)).to eq(order_type: type, order_id: order_id)
+      end
+    end
+
+    ['KALOX 12 PLAN', 'XKALO 12 PLAN', 'KALO'].each do |text|
+      it "does not match #{text.inspect}" do
+        expect(text).not_to match(described_class::DESCRIPTION_PATTERN)
+      end
+    end
+
+    it 'credits an account for a bank-wrapped memo without an order id' do
+      result = run(description: "MBVCB.123.KALO #{account_hana.id} PLAN.CT tu A", amount: 299_000)
+
+      expect(result).to include(status: 'matched_and_activated', account_id: account_hana.id, order_id: nil)
+      expect(account_hana.reload.custom_attributes['subscription_plan']).to eq('starter')
+    end
+  end
+
+  describe 'malformed input' do
+    it 'does not abort the batch on a bad date or a non-hash entry' do
+      batch = [
+        { 'tid' => 'B1', 'description' => 'KALO HANA TOKEN 1', 'amount' => 1000, 'when' => '2026-13-45' },
+        'garbage',
+        42,
+        { 'tid' => 'B2', 'description' => 'KALO HANA TOKEN 2', 'amount' => 2000 }
+      ]
+      results = described_class.new('data' => batch).process[:results]
+
+      expect(results.pluck(:status)).to eq(%w[matched_and_activated invalid_transaction invalid_transaction matched_and_activated])
+      expect(account_hana.reload.custom_attributes['ai_tokens_balance']).to eq(3000)
+      expect(Kchat::PaymentEvent.find_by(tid: 'B1').received_at).to be_within(1.minute).of(Time.current)
+    end
+
+    it 'reads the Casso `when` as Vietnam local time' do
+      described_class.new('data' => [{ 'tid' => 'V1', 'description' => 'KALO HANA TOKEN 1', 'amount' => 1000,
+                                       'when' => '2026-11-16 00:30:00' }]).process
+
+      expect(Kchat::PaymentEvent.find_by(tid: 'V1').received_at.utc.iso8601).to eq('2026-11-15T17:30:00Z')
+    end
+  end
 end

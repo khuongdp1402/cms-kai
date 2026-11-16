@@ -101,6 +101,13 @@ RSpec.describe Kchat::Reports do
     expect(count_queries { summary('month') }).to eq(few)
   end
 
+  it 'falls back to UTC for an invalid reporting_timezone instead of failing' do
+    account.update_columns(settings: account.settings.merge('reporting_timezone' => 'Mars/Base')) # rubocop:disable Rails/SkipsModelValidations
+    order(price: 1000, paid_at: Time.utc(2026, 11, 16, 0, 30))
+
+    expect(summary('today')[:revenue]).to eq(1000)
+  end
+
   it 'rejects an unknown range' do
     expect { summary('year') }.to raise_error(ArgumentError)
   end

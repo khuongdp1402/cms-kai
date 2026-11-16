@@ -5,7 +5,8 @@ class Api::V1::Console::OverviewController < Api::V1::Console::BaseController
   def show
     render json: {
       shops: Account.count,
-      revenue_month: Kchat::PaymentEvent.where(status: %w[matched applied], received_at: Time.current.beginning_of_month..).sum(:amount),
+      revenue_month: Kchat::PaymentEvent.where(status: %w[matched applied],
+                                               received_at: Casso::WebhookHandler::CASSO_TIME_ZONE.now.beginning_of_month..).sum(:amount),
       expiring_7d: Account.where(Kchat::AccountScopes::EXPIRING_SQL, now: Time.current, soon: 7.days.from_now).count,
       unmatched_payments: Kchat::PaymentEvent.where(status: 'unmatched').count,
       recent_payments: recent_payments.map { |e| payment_event_json(e) },
