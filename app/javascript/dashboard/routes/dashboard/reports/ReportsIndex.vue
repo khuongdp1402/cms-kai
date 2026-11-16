@@ -129,7 +129,7 @@ onMounted(load);
       </div>
       <template v-else>
         <div class="grid gap-4 mt-4 lg:grid-cols-[1.6fr_1fr]">
-          <SalesChart :daily="summary.daily" />
+          <SalesChart :daily="summary.daily" :today="summary.today" />
           <ChannelShare :channels="summary.channels" />
         </div>
         <div class="mt-4">

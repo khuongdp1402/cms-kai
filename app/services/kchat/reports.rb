@@ -21,7 +21,7 @@ class Kchat::Reports
   def summary
     totals = paid_orders.pick(Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'), Arel.sql('COUNT(*)'))
     {
-      range: @range, revenue: totals[0].to_i, orders_count: totals[1].to_i,
+      range: @range, today: today.iso8601, revenue: totals[0].to_i, orders_count: totals[1].to_i,
       new_contacts: Contact.where(account_id: @account.id, created_at: window).count,
       waiting_messages: Conversation.where(account_id: @account.id, status: :open).where.not(waiting_since: nil).count,
       channels: channels, daily: daily, top_products: top_products

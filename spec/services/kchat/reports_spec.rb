@@ -116,6 +116,7 @@ RSpec.describe Kchat::Reports do
     result = summary('today', plain)
     expect(result[:revenue]).to eq(1000)
     expect(result[:daily]).to eq([{ date: '2026-11-16', revenue: 1000 }])
+    expect(result[:today]).to eq('2026-11-16')
   end
 
   it 'prefers an explicit account timezone over the default' do

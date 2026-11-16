@@ -5,6 +5,8 @@ import { formatMoney } from './formatMoney';
 
 const props = defineProps({
   daily: { type: Array, required: true },
+  // Today in the account timezone (from the API). Only the bar with this date is highlighted.
+  today: { type: String, default: '' },
 });
 
 const { t, tm } = useI18n();
@@ -17,8 +19,7 @@ const bars = computed(() => {
   const max = Math.max(...props.daily.map(day => day.revenue), 0);
   const weekdays = tm('KALO_REPORTS.WEEKDAYS');
   const useWeekdays = props.daily.length <= 7;
-  // The server returns days up to today in the account timezone, so the last bar is today.
-  return props.daily.map((day, index) => {
+  return props.daily.map(day => {
     const [year, month, date] = day.date.split('-').map(Number);
     const label = useWeekdays
       ? weekdays[new Date(year, month - 1, date).getDay()]
@@ -26,7 +27,7 @@ const bars = computed(() => {
     return {
       ...day,
       label,
-      isToday: index === props.daily.length - 1,
+      isToday: day.date === props.today,
       height: max > 0 ? Math.max((day.revenue / max) * 100, 2) : 2,
     };
   });
