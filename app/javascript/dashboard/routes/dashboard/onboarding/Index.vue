@@ -275,7 +275,8 @@ const handleSubmit = async () => {
             </span>
           </div>
           <OnboardingFormRow
-            :title="`${t('ONBOARDING_NEXT.FIELDS.WEBSITE')} *`"
+            :title="t('ONBOARDING_NEXT.FIELDS.WEBSITE')"
+            required
             icon="i-lucide-globe"
           >
             <div>
@@ -303,6 +304,7 @@ const handleSubmit = async () => {
               </div>
               <p
                 v-if="v$.website.$error"
+                id="onboarding-website-error"
                 role="alert"
                 data-test="website-required"
                 class="mt-1 text-xs text-end text-n-ruby-11"
