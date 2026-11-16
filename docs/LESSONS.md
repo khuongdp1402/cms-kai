@@ -20,11 +20,11 @@
   - Quy tắc: endpoint đổi dữ liệu tiền/gói phải có xác thực bắt buộc, thiếu cấu hình thì từ chối (không "tùy chọn"). Endpoint theo tenant đặt dưới `/api/v1/accounts/:account_id` kế thừa `Api::V1::Accounts::BaseController`. Endpoint thử nghiệm chỉ khai route trong development.
   - Bổ sung: không gộp whitelist CORS với `/public/api/*` và `/packs/*`, vì widget nhúng trên website khách cần `*`.
 
-- **B12 (2026-11-16): `account.limits` của Chatwoot không giới hạn gì.**
+- **B14 (2026-11-16): `account.limits` của Chatwoot không giới hạn gì.**
   - Triệu chứng: đặt `limits: {agents: 2}` cho tài khoản nhưng vẫn thêm được nhân viên thứ 3.
   - Nguyên nhân: `Account#usage_limits` (bản không có enterprise) trả cứng `ChatwootApp.max_limit`, không đọc cột `limits`.
   - Quy tắc: muốn áp giới hạn gói phải kiểm bằng spec chạy thật (thêm nhân viên vượt mức), không dựa vào việc cột `limits` tồn tại. Không ghi `limits` rồi coi như đã áp dụng.
-- **B13 (2026-11-16): Spec không dùng transaction làm bẩn các spec sau.**
+- **B15 (2026-11-16): Spec không dùng transaction làm bẩn các spec sau.**
   - Triệu chứng: spec đếm tài khoản/liên hệ lệch ngẫu nhiên vì còn dữ liệu của spec đồng thời.
   - Nguyên nhân: `let!` của group ngoài vẫn chạy trong example `use_transactional_tests = false`, và dữ liệu đó không được dọn.
   - Quy tắc: spec cần nhiều kết nối thật nằm file riêng, tự tạo và tự xoá toàn bộ dữ liệu trong `after`.
