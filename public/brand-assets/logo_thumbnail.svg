@@ -1,7 +1,7 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
   <defs><linearGradient id="kt-mark" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#FDBA74"/><stop offset=".5" stop-color="#EA580C"/><stop offset="1" stop-color="#7C2D12"/>
+    <stop offset="0" stop-color="#60A5FA"/><stop offset=".5" stop-color="#1E5EFF"/><stop offset="1" stop-color="#103599"/>
   </linearGradient></defs>
   <rect x="2" y="2" width="44" height="40" rx="12" fill="url(#kt-mark)"/>
-  <path d="M10 41 L6 47 L19 41Z" fill="#9A3412"/>
+  <path d="M10 41 L6 47 L19 41Z" fill="#103599"/>
   <path d="M17 12v20M17 22l12-10M20 20l10 12" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>

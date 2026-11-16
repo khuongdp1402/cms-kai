@@ -30,7 +30,7 @@ const ratio = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 const WHITE = [255, 255, 255];
-const SIDEBAR_TOP = [176, 58, 14];
+const SIDEBAR_TOP = [16, 53, 153]; // #103599 Glacier & Cobalt Studio sidebar top
 
 const light = block(':root');
 const dark = block('.dark');
@@ -47,8 +47,8 @@ const pairs = [
   ['light slate-12 / bot bubble', light['slate-12'], light['solid-iris']],
   ['dark slate-12 / bot bubble', dark['slate-12'], dark['solid-iris']],
   ['sidebar slate-11 / button', sidebar['slate-11'], sidebar['button-color']],
-  ['sidebar slate-11 / top #B03A0E', sidebar['slate-11'], SIDEBAR_TOP],
-  ['sidebar slate-12 / top #B03A0E', sidebar['slate-12'], SIDEBAR_TOP],
+  ['sidebar slate-11 / top #103599', sidebar['slate-11'], SIDEBAR_TOP],
+  ['sidebar slate-12 / top #103599', sidebar['slate-12'], SIDEBAR_TOP],
 ];
 let failed = false;
 pairs.forEach(([name, fg, bg]) => {

@@ -62,7 +62,7 @@ const getRecordPluginOptions = audioFormat => {
 const initWaveSurfer = () => {
   wavesurfer.value = WaveSurfer.create({
     container: waveformContainer.value,
-    waveColor: '#C2410C',
+    waveColor: '#1E5EFF',
     progressColor: '#6E6F73',
     height: 100,
     barWidth: 2,

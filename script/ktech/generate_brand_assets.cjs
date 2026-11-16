@@ -18,10 +18,10 @@ const pub = p => path.join(root, 'public', p);
 
 const MARK = `
   <defs><linearGradient id="kt-mark" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#FDBA74"/><stop offset=".5" stop-color="#EA580C"/><stop offset="1" stop-color="#7C2D12"/>
+    <stop offset="0" stop-color="#60A5FA"/><stop offset=".5" stop-color="#1E5EFF"/><stop offset="1" stop-color="#103599"/>
   </linearGradient></defs>
   <rect x="2" y="2" width="44" height="40" rx="12" fill="url(#kt-mark)"/>
-  <path d="M10 41 L6 47 L19 41Z" fill="#9A3412"/>
+  <path d="M10 41 L6 47 L19 41Z" fill="#103599"/>
   <path d="M17 12v20M17 22l12-10M20 20l10 12" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
 
 const FONT_SIZE = 30;
@@ -43,11 +43,11 @@ const logo = ({ k, from, to }) => `<svg xmlns="http://www.w3.org/2000/svg" width
 
 fs.writeFileSync(
   pub('brand-assets/logo.svg'),
-  logo({ k: '#431407', from: '#EA580C', to: '#7C2D12' })
+  logo({ k: '#09111E', from: '#1E5EFF', to: '#0891B2' })
 );
 fs.writeFileSync(
   pub('brand-assets/logo_dark.svg'),
-  logo({ k: '#FFF7ED', from: '#FDBA74', to: '#FB923C' })
+  logo({ k: '#F8FAFC', from: '#D7EFFF', to: '#38BDF8' })
 );
 const thumb = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">${MARK}</svg>\n`;
 fs.writeFileSync(pub('brand-assets/logo_thumbnail.svg'), thumb);

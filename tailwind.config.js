@@ -41,7 +41,9 @@ const tailwindConfig = {
       fontFamily: {
         sans: defaultSansFonts,
         inter: ['Inter', ...defaultSansFonts],
-        interDisplay: ['InterDisplay', ...defaultSansFonts],
+        interDisplay: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
+        display: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
+        mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
       },
       fontWeight: {
         420: '420',
@@ -205,10 +207,11 @@ const tailwindConfig = {
     backgroundImage: {
       ...defaultTheme.backgroundImage,
       'ktech-ombre':
-        'linear-gradient(135deg, #FDBA74 0%, #EA580C 50%, #7C2D12 100%)',
-      'ktech-ombre-strong': 'linear-gradient(135deg, #C2410C 0%, #7C2D12 100%)',
+        'linear-gradient(135deg, #60A5FA 0%, #1E5EFF 55%, #103599 100%)',
+      'ktech-ombre-strong':
+        'linear-gradient(135deg, #2563EB 0%, #1E5EFF 50%, #1749CC 100%)',
       'ktech-ombre-soft':
-        'linear-gradient(160deg, #FFF7ED 0%, #FFEDD5 45%, #FED7AA 100%)',
+        'linear-gradient(160deg, #F6FAFF 0%, #EBF5FF 48%, #D7EFFF 100%)',
     },
     fontSize: {
       ...defaultTheme.fontSize,

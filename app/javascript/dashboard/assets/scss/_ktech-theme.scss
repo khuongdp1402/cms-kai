@@ -1,143 +1,142 @@
-// KTech "Terracotta Sunset" (ADR-007). Overrides the next design system
-// variables from _next-colors.scss; imported at the end of that file.
+// KChat "Glacier & Cobalt Studio" (2026-2027) Theme.
+// Overrides the design system variables from _next-colors.scss.
+// Brand Tint: #D7EFFF (RGB: 215 239 255) | Primary Action: #1E5EFF (RGB: 30 94 255) | AI Accent: #0891B2
 // scss-lint:disable PropertySortOrder
 @layer base {
   :root {
-    --blue-1: 255 251 247;
-    --blue-2: 255 247 237;
-    --blue-3: 255 237 213;
-    --blue-4: 254 223 188;
-    --blue-5: 253 205 160;
-    --blue-6: 252 186 130;
-    --blue-7: 249 158 94;
-    --blue-8: 240 125 60;
-    --blue-9: 194 65 12;
-    --blue-10: 173 55 10;
-    --blue-11: 154 52 18;
-    --blue-12: 67 20 7;
+    --blue-1: 246 250 255; // #F6FAFF — Ice Alabaster
+    --blue-2: 235 245 255; // #EBF5FF
+    --blue-3: 215 239 255; // #D7EFFF — GLACIER COOL BLUE
+    --blue-4: 195 228 255; // #C3E4FF
+    --blue-5: 165 210 255; // #A5D2FF
+    --blue-6: 147 197 253; // #93C5FD
+    --blue-7: 96 165 250;  // #60A5FA
+    --blue-8: 59 130 246;  // #3B82F6
+    --blue-9: 30 94 255;   // #1E5EFF — Electric Cobalt Primary
+    --blue-10: 23 73 204;  // #1749CC
+    --blue-11: 16 53 153;  // #103599
+    --blue-12: 9 17 30;    // #09111E — Deep Obsidian Slate
 
-    --slate-1: 253 252 251;
-    --slate-2: 250 248 246;
-    --slate-3: 243 239 236;
-    --slate-4: 236 231 227;
-    --slate-5: 229 223 218;
-    --slate-6: 221 214 208;
-    --slate-7: 207 198 190;
-    --slate-8: 188 177 168;
-    --slate-9: 145 134 125;
-    --slate-10: 134 123 114;
-    --slate-11: 100 90 82;
-    --slate-12: 41 32 27;
+    --slate-1: 250 252 255;
+    --slate-2: 246 250 255;
+    --slate-3: 237 244 252;
+    --slate-4: 224 235 248;
+    --slate-5: 210 224 242;
+    --slate-6: 194 211 234;
+    --slate-7: 152 174 204;
+    --slate-8: 110 133 166;
+    --slate-9: 75 96 127;
+    --slate-10: 61 80 109;
+    --slate-11: 41 57 82;
+    --slate-12: 9 17 30;
 
-    --gray-1: 253 252 251;
-    --gray-2: 250 248 246;
-    --gray-3: 243 239 236;
-    --gray-4: 236 231 227;
-    --gray-5: 229 223 218;
-    --gray-6: 221 214 208;
-    --gray-7: 207 198 190;
-    --gray-8: 188 177 168;
-    --gray-9: 145 134 125;
-    --gray-10: 134 123 114;
-    --gray-11: 100 90 82;
-    --gray-12: 41 32 27;
+    --gray-1: 250 252 255;
+    --gray-2: 246 250 255;
+    --gray-3: 237 244 252;
+    --gray-4: 224 235 248;
+    --gray-5: 210 224 242;
+    --gray-6: 194 211 234;
+    --gray-7: 152 174 204;
+    --gray-8: 110 133 166;
+    --gray-9: 75 96 127;
+    --gray-10: 61 80 109;
+    --gray-11: 41 57 82;
+    --gray-12: 9 17 30;
 
-    --background-color: 250 246 242;
-    --surface-1: 255 252 249;
-    --surface-2: 255 255 255;
-    --text-blue: 67 20 7;
-    --border-container: 237 231 226;
-    --border-strong: 228 220 213;
-    --border-weak: 236 230 225;
-    --border-blue-strong: 124 45 18;
-    --solid-blue: 255 237 213;
-    --solid-blue-2: 255 251 247;
-    --label-background: 247 242 238;
-    --border-blue: 194, 65, 12, 0.5;
-    // Bot and template bubbles: warm sand, distinct from agent peach
-    --solid-iris: 243 232 220;
+    --background-color: 246 250 255; // #F6FAFF Tactile Daylight Ice Alabaster
+    --surface-1: 255 255 255;
+    --surface-2: 237 245 255;
+    --text-blue: 16 53 153;
+    --border-container: 222 235 250; // #DEEBFA
+    --border-strong: 194 216 245;
+    --border-weak: 233 242 252;
+    --border-blue-strong: 30 94 255;
+    --solid-blue: 215 239 255; // #D7EFFF Glacier Cool Blue bubbles
+    --solid-blue-2: 235 245 255;
+    --label-background: 235 245 255;
+    --border-blue: 30, 94, 255, 0.38;
+    --solid-iris: 215 239 255; // Bot/AI bubble harmonised with Glacier Cool Blue
   }
 
   .dark {
-    --blue-1: 26 16 12;
-    --blue-2: 32 20 15;
-    --blue-3: 50 28 18;
-    --blue-4: 66 33 18;
-    --blue-5: 82 40 20;
-    --blue-6: 100 48 24;
-    --blue-7: 125 60 30;
-    --blue-8: 160 76 36;
-    --blue-9: 194 65 12;
-    --blue-10: 214 90 40;
-    --blue-11: 253 160 110;
-    --blue-12: 255 228 205;
+    --blue-1: 8 14 30;
+    --blue-2: 15 29 58;
+    --blue-3: 22 43 82;
+    --blue-4: 26 54 110;
+    --blue-5: 23 73 204;
+    --blue-6: 30 94 255;
+    --blue-7: 59 130 246;
+    --blue-8: 96 165 250;
+    --blue-9: 30 94 255;
+    --blue-10: 96 165 250;
+    --blue-11: 195 228 255;
+    --blue-12: 215 239 255; // #D7EFFF
 
-    --slate-1: 20 17 16;
-    --slate-2: 26 22 20;
-    --slate-3: 35 30 27;
-    --slate-4: 42 36 33;
-    --slate-5: 50 43 39;
-    --slate-6: 59 51 46;
-    --slate-7: 73 63 57;
-    --slate-8: 97 85 77;
-    --slate-9: 112 100 92;
-    --slate-10: 126 114 105;
-    --slate-11: 183 172 164;
-    --slate-12: 240 234 229;
+    --slate-1: 8 14 30;
+    --slate-2: 12 21 42;
+    --slate-3: 17 30 58;
+    --slate-4: 24 41 76;
+    --slate-5: 33 54 96;
+    --slate-6: 46 72 122;
+    --slate-7: 70 100 156;
+    --slate-8: 100 132 190;
+    --slate-9: 148 166 196;
+    --slate-10: 204 216 235;
+    --slate-11: 228 236 247;
+    --slate-12: 248 251 255;
 
-    --gray-1: 20 17 16;
-    --gray-2: 26 22 20;
-    --gray-3: 35 30 27;
-    --gray-4: 42 36 33;
-    --gray-5: 50 43 39;
-    --gray-6: 59 51 46;
-    --gray-7: 73 63 57;
-    --gray-8: 97 85 77;
-    --gray-9: 112 100 92;
-    --gray-10: 126 114 105;
-    --gray-11: 183 172 164;
-    --gray-12: 240 234 229;
+    --gray-1: 8 14 30;
+    --gray-2: 12 21 42;
+    --gray-3: 17 30 58;
+    --gray-4: 24 41 76;
+    --gray-5: 33 54 96;
+    --gray-6: 46 72 122;
+    --gray-7: 70 100 156;
+    --gray-8: 100 132 190;
+    --gray-9: 148 166 196;
+    --gray-10: 204 216 235;
+    --gray-11: 228 236 247;
+    --gray-12: 248 251 255;
 
-    --background-color: 28 22 19;
-    --surface-1: 22 18 16;
-    --surface-2: 25 20 18;
-    --text-blue: 255 228 205;
-    --border-strong: 52 44 40;
-    --border-weak: 38 32 29;
-    --border-blue-strong: 253 186 116;
-    --solid-blue: 80 38 18;
-    --solid-blue-2: 32 24 20;
-    --label-background: 40 33 29;
-    --border-blue: 194, 65, 12, 0.5;
-    --solid-iris: 52 40 33;
-    // Cards, popovers and buttons: warm charcoal instead of cool gray
-    --surface-active: 58 48 42;
-    --solid-1: 26 21 18;
-    --solid-2: 33 27 23;
-    --solid-3: 48 39 34;
-    --solid-active: 58 48 42;
-    --card-color: 33 27 23;
-    --button-color: 46 38 33;
+    --background-color: 8 14 30;
+    --surface-1: 12 21 42;
+    --surface-2: 17 30 58;
+    --text-blue: 215 239 255;
+    --border-strong: 33 54 96;
+    --border-weak: 24 41 76;
+    --border-blue-strong: 96 165 250;
+    --solid-blue: 22 43 82;
+    --solid-blue-2: 15 29 58;
+    --label-background: 24 41 76;
+    --border-blue: 30, 94, 255, 0.5;
+    --solid-iris: 33 54 96;
+    --surface-active: 46 72 122;
+    --solid-1: 12 21 42;
+    --solid-2: 17 30 58;
+    --solid-3: 24 41 76;
+    --solid-active: 46 72 122;
+    --card-color: 12 21 42;
+    --button-color: 23 73 204;
   }
 
-  // Ombre sidebar: re-scope the text/hover variables so every Tailwind class
-  // inside the sidebar (text-n-slate-11, bg-n-alpha-2, ...) reads on dark orange.
+  // Sidebar styling with 2026-2027 Abyssal Midnight Navy & Cobalt Specular Gradient
   .ktech-sidebar {
     background-image: linear-gradient(
       180deg,
-      #b03a0e 0%,
-      #8a3010 45%,
-      #4a1a09 100%
+      #103599 0%,
+      #0D266B 48%,
+      #080E1E 100%
     );
-    --background-color: 74 26 9;
-    --slate-10: 254 215 170;
-    --slate-11: 255 237 213;
-    --slate-12: 255 251 247;
-    --blue-9: 255 247 237;
-    --blue-11: 255 237 213;
-    --border-weak: 138 48 16;
-    --button-color: 128 42 14;
-    --alpha-1: 255, 255, 255, 0.08;
-    --alpha-2: 255, 255, 255, 0.14;
+    box-shadow: inset -1px 0 0 rgba(215, 239, 255, 0.14);
+    --background-color: 8 14 30;
+    --slate-10: 195 228 255;
+    --slate-11: 215 239 255; // #D7EFFF
+    --slate-12: 255 255 255;
+    --blue-9: 215 239 255;
+    --blue-11: 195 228 255;
+    --border-weak: 26 54 110;
+    --button-color: 23 73 204;
+    --alpha-1: 215, 239, 255, 0.08;
+    --alpha-2: 215, 239, 255, 0.15;
   }
 }
