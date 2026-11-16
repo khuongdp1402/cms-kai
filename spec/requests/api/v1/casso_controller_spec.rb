@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Casso webhook', type: :request do
   let!(:account) { create(:account, custom_attributes: { 'tenant_slug' => 'hana' }) }
-  let(:payload) { { error: 0, data: [{ tid: 'FT9', description: 'KCHAT HANA 1', amount: 699_000 }] } }
+  let(:payload) { { error: 0, data: [{ tid: 'FT9', description: 'KALO HANA 1', amount: 699_000 }] } }
 
   context 'with CASSO_SECURE_TOKEN configured' do
     around { |ex| with_modified_env(CASSO_SECURE_TOKEN: 'secret-token') { ex.run } }
@@ -35,5 +35,15 @@ RSpec.describe 'Casso webhook', type: :request do
   it 'does not expose the simulate endpoint outside development' do
     paths = Rails.application.routes.routes.map { |route| route.path.spec.to_s }
     expect(paths.grep(%r{/casso/simulate})).to be_empty
+  end
+
+  describe 'GET status' do
+    it 'publishes bank details and the KALO transfer syntax' do
+      with_modified_env(CASSO_BANK_NAME: 'MB', CASSO_ACCOUNT_NUMBER: '123', CASSO_ACCOUNT_NAME: 'KTECH') do
+        get '/api/v1/casso/status'
+      end
+      expect(response.parsed_body).to eq('bank' => 'MB', 'account_number' => '123', 'account_name' => 'KTECH',
+                                         'syntax' => 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] [ORDER_ID]')
+    end
   end
 end

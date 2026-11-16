@@ -19,7 +19,7 @@ class Api::V1::CassoController < ApplicationController
       bank: ENV.fetch('CASSO_BANK_NAME'),
       account_number: ENV.fetch('CASSO_ACCOUNT_NUMBER'),
       account_name: ENV.fetch('CASSO_ACCOUNT_NAME'),
-      syntax: 'KCHAT <ACCOUNT_ID> <ORDER_ID>'
+      syntax: 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] [ORDER_ID]'
     }, status: :ok
   end
 
@@ -27,7 +27,7 @@ class Api::V1::CassoController < ApplicationController
   def simulate
     tx = {
       'tid' => "SIM#{SecureRandom.hex(6)}",
-      'description' => "KCHAT #{params.require(:account_ref)} #{params[:order_type]} #{params[:order_id] || rand(1000..9999)}".squish,
+      'description' => "KALO #{params.require(:account_ref)} #{params[:order_type]} #{params[:order_id] || rand(1000..9999)}".squish,
       'amount' => params.require(:amount).to_i,
       'when' => Time.current.iso8601
     }

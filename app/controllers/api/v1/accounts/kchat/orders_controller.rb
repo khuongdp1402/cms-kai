@@ -1,6 +1,7 @@
 class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::BaseController
   PER_PAGE = 25
 
+  before_action :require_active_subscription!, only: :create
   before_action :fetch_order, only: [:show, :transition, :send_qr, :qr]
 
   def index

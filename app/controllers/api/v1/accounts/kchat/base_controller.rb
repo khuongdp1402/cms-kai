@@ -5,7 +5,13 @@ class Api::V1::Accounts::Kchat::BaseController < Api::V1::Accounts::BaseControll
   rescue_from ::Kchat::Order::InsufficientStock,
               with: ->(e) { render_kchat_error('insufficient_stock', :unprocessable_entity, product_id: e.product_id) }
 
+  rescue_from ::Kchat::Entitlements::Expired, with: -> { render_kchat_error('subscription_expired', :forbidden) }
+
   private
+
+  def require_active_subscription!
+    ::Kchat::Entitlements.require_active!(Current.account)
+  end
 
   def render_kchat_error(code, status, extra = {})
     render json: { error: code }.merge(extra), status: status

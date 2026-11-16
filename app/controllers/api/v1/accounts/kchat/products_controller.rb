@@ -1,4 +1,5 @@
 class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::BaseController
+  before_action :require_active_subscription!, only: :create
   before_action :fetch_product, only: [:update, :destroy]
 
   def index

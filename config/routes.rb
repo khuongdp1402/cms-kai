@@ -61,6 +61,10 @@ Rails.application.routes.draw do
               end
             end
             resource :payment_settings, only: [:show, :update]
+            resources :reports, only: [] do
+              get :summary, on: :collection
+            end
+            resource :subscription, only: [:show]
           end
           namespace :actions do
             resource :contact_merge, only: [:create]
@@ -581,6 +585,19 @@ Rails.application.routes.draw do
   post '/api/v1/casso/webhook', to: 'api/v1/casso#webhook'
   get '/api/v1/casso/status', to: 'api/v1/casso#status'
   post '/api/v1/casso/simulate', to: 'api/v1/casso#simulate' if Rails.env.development?
+
+  # Platform console for super admins (not account scoped)
+  namespace :api, defaults: { format: 'json' } do
+    namespace :v1 do
+      namespace :console do
+        resource :overview, only: [:show], controller: 'overview'
+        resources :accounts, only: [:index, :update]
+        resources :payment_events, only: [:index] do
+          post :assign, on: :member
+        end
+      end
+    end
+  end
 
   scope '/api/v1/accounts/:account_id/brand_growth', controller: 'api/v1/accounts/brand_growth', as: 'account_brand_growth',
                                                      defaults: { format: 'json' } do

@@ -182,6 +182,7 @@
 - **Tiền tố chuyển khoản gói cước:** đổi từ `KCHAT` sang `KALO` (`KALO <account_id> PLAN`).
 - **Tên module nội bộ:** vẫn là `Kchat` (bảng `kchat_*`, namespace `Api::V1::Accounts::Kchat`); tên thương hiệu hiển thị là Kalo qua `INSTALLATION_NAME`.
 - **Giới hạn gói:** áp dụng bằng `account.limits` của Chatwoot nếu cơ chế đó có tác dụng thật; nếu không, bỏ dòng giới hạn khỏi landing.
+  - **Kết quả kiểm tra (Task 4, 2026-11-16): `account.limits` KHÔNG được áp dụng.** `Account#usage_limits` luôn trả `ChatwootApp.max_limit` (100000) và bỏ qua cột `limits`; thử tài khoản `starter` có `limits: {agents: 2}` vẫn thêm được nhân viên thứ 3 (HTTP 200). Vì vậy `Casso::WebhookHandler` không ghi `limits` theo gói, và landing phải bỏ dòng giới hạn số nhân viên/kênh (hoặc làm riêng một task ghi đè `usage_limits`).
 - **Dùng thử:** 14 ngày từ `account.created_at`. Hết hạn thì chặn tạo sản phẩm, đơn và gọi AI; vẫn xem và nhắn tin được.
 - **Thi công:** kế hoạch `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`, mỗi task một worktree `feat/kalo-<task>`.
 

@@ -2,6 +2,11 @@
 
 class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseController
   before_action :check_admin_authorization?, only: [:save_profile, :approve_job]
+  before_action :require_active_subscription!, only: [:chat_reply, :repurpose]
+
+  rescue_from Kchat::Entitlements::Expired do
+    render json: { error: 'subscription_expired' }, status: :forbidden
+  end
 
   rescue_from Ai::CustomLlmService::NotConfiguredError do
     render json: { error: 'ai_not_configured' }, status: :service_unavailable
@@ -35,6 +40,10 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
   end
 
   private
+
+  def require_active_subscription!
+    Kchat::Entitlements.require_active!(Current.account)
+  end
 
   def service
     @service ||= BrandGrowth::EngineService.new(Current.account)
