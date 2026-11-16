@@ -58,4 +58,38 @@ describe('KaloMessageFilters', () => {
       .trigger('click');
     expect(wrapper.text()).toContain('Zalo shop');
   });
+
+  it('stays open when the compose trigger is clicked and closes when a link is clicked', async () => {
+    const { router, store, i18n } = createKaloTestEnv({
+      inboxes: [{ id: 3, name: 'Zalo shop' }],
+    });
+    await router.push({ name: 'home', params: { accountId: 1 } });
+    const wrapper = mount(KaloMessageFilters, {
+      global: {
+        plugins: [router, store, i18n],
+        stubs: {
+          ComposeConversation: {
+            template:
+              '<div data-test-id="compose-root"><slot name="trigger" /><form data-test-id="compose-form" /></div>',
+          },
+          RouterLink: {
+            name: 'RouterLink',
+            props: ['to'],
+            template: '<a data-test-id="filter-link"><slot /></a>',
+          },
+        },
+      },
+    });
+    await wrapper
+      .find('[data-test-id="kalo-filters-trigger"]')
+      .trigger('click');
+    await wrapper
+      .find('[data-test-id="kalo-new-conversation"]')
+      .trigger('click');
+    expect(wrapper.find('[data-test-id="compose-form"]').exists()).toBe(true);
+    await wrapper.find('[data-test-id="compose-form"]').trigger('click');
+    expect(wrapper.find('[data-test-id="compose-root"]').exists()).toBe(true);
+    await wrapper.find('[data-test-id="filter-link"]').trigger('click');
+    expect(wrapper.find('[data-test-id="compose-root"]').exists()).toBe(false);
+  });
 });

@@ -79,7 +79,6 @@ const sections = computed(() =>
       v-if="inline || isOpen"
       class="flex flex-col gap-3 p-3 overflow-y-auto max-h-80 bg-n-surface-1 border border-n-weak rounded-xl"
       :class="inline ? '' : 'absolute z-50 left-full top-0 ml-2 w-64 shadow-lg'"
-      @click="isOpen = false"
     >
       <ComposeConversation align="start">
         <template #trigger>
@@ -102,6 +101,7 @@ const sections = computed(() =>
           :key="link.id"
           :to="link.to"
           class="block px-2 py-1.5 text-sm truncate rounded-lg text-n-slate-12 hover:bg-n-alpha-2"
+          @click="isOpen = false"
         >
           {{ link.label }}
         </router-link>
