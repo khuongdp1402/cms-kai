@@ -13,11 +13,13 @@ const ITEMS = [
 </script>
 
 <template>
-  <div class="flex w-full h-screen bg-console-bg text-console-ink">
+  <div
+    class="flex flex-col w-full h-screen md:flex-row bg-console-bg text-console-ink"
+  >
     <aside
-      class="flex flex-col w-56 gap-1 px-3.5 py-5 shrink-0 bg-console-sidebar text-console-text"
+      class="flex flex-row flex-wrap items-center w-full gap-1 px-3.5 py-3 md:flex-col md:items-stretch md:w-56 md:py-5 shrink-0 bg-console-sidebar text-console-text"
     >
-      <div class="flex items-center gap-2 px-2.5 pb-5">
+      <div class="flex items-center gap-2 px-2.5 mr-auto md:mr-0 md:pb-5">
         <b class="text-lg text-white">{{ t('KALO_CONSOLE.BRAND_NAME') }}</b>
         <span
           class="px-2 py-0.5 text-xs font-bold text-white rounded-md bg-console-soft"
@@ -29,23 +31,23 @@ const ITEMS = [
         v-for="item in ITEMS"
         :key="item.name"
         :to="{ name: item.name }"
-        class="flex items-center gap-2.5 px-3 py-2 font-medium rounded-xl hover:bg-console-accent/60"
+        class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium rounded-xl md:text-base hover:bg-console-accent/60"
         active-class="!bg-console-accent text-white"
       >
         <KaloIcon :name="item.icon" class="size-5" />
         {{ t(`KALO_CONSOLE.NAV.${item.label}`) }}
       </RouterLink>
-      <div class="flex-1" />
+      <div class="hidden flex-1 md:block" />
       <a
         data-testid="back-to-app"
         href="/app/"
-        class="flex items-center gap-2.5 px-3 py-2 font-medium rounded-xl hover:bg-console-accent/60"
+        class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium rounded-xl md:text-base hover:bg-console-accent/60"
       >
         {{ t('KALO_CONSOLE.NAV.BACK_TO_APP') }}
       </a>
       <button
         data-testid="console-logout"
-        class="flex items-center gap-2.5 px-3 py-2 font-medium text-left rounded-xl hover:bg-console-accent/60"
+        class="flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-left rounded-xl md:text-base hover:bg-console-accent/60"
         @click="Auth.logout()"
       >
         {{ t('KALO_CONSOLE.NAV.LOGOUT') }}

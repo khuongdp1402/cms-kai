@@ -77,7 +77,7 @@ onMounted(load);
 
 <template>
   <section class="flex flex-col gap-5 p-6">
-    <h1 class="text-xl font-extrabold">
+    <h1 class="text-xl font-extrabold text-console-ink">
       {{ t('KALO_CONSOLE.OVERVIEW.TITLE') }}
     </h1>
 
@@ -107,8 +107,8 @@ onMounted(load);
         </div>
       </div>
 
-      <div class="grid gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div class="bg-white border rounded-2xl border-console-line">
+      <div class="grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
+        <div class="min-w-0 bg-white border rounded-2xl border-console-line">
           <div class="flex items-center px-4 pt-4 pb-1">
             <b>{{ t('KALO_CONSOLE.OVERVIEW.LATEST') }}</b>
             <RouterLink
@@ -128,7 +128,7 @@ onMounted(load);
             <li
               v-for="payment in data.recent_payments"
               :key="payment.id"
-              class="flex items-center gap-3 px-4 py-3 border-t border-console-line"
+              class="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 border-t border-console-line"
             >
               <div class="flex-1 min-w-0">
                 <b class="block truncate">
