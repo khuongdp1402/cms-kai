@@ -40,6 +40,18 @@ RSpec.describe 'Console overview API', type: :request do
                                                                   'received_at')
   end
 
+  it 'counts only running, unlocked paid subscriptions in shops_by_plan' do
+    create(:account, custom_attributes: { 'subscription_plan' => 'starter', 'subscription_valid_until' => 3.days.from_now.iso8601 })
+    create(:account, custom_attributes: { 'subscription_plan' => 'starter', 'subscription_valid_until' => 2.days.ago.iso8601 })
+    create(:account, status: :suspended,
+                     custom_attributes: { 'subscription_plan' => 'growth', 'subscription_valid_until' => 30.days.from_now.iso8601 })
+
+    get url, headers: super_admin.create_new_auth_token, as: :json
+
+    expect(response.parsed_body['shops']).to eq(3)
+    expect(response.parsed_body['shops_by_plan']).to eq('starter' => 1, 'growth' => 0, 'enterprise' => 0)
+  end
+
   it 'starts the month at midnight Vietnam time' do
     travel_to(Time.utc(2026, 10, 31, 18, 0)) do # 01:00 on 1 Nov in Ho Chi Minh
       Kchat::PaymentEvent.create!(tid: 'in', amount: 1000, status: 'matched', received_at: Time.utc(2026, 10, 31, 17, 30))

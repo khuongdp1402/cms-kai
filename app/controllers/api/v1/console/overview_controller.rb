@@ -21,7 +21,8 @@ class Api::V1::Console::OverviewController < Api::V1::Console::BaseController
   end
 
   def shops_by_plan
-    counts = Account.group(Arel.sql(PLAN_SQL)).count
+    paying = Account.active.where("#{Kchat::AccountScopes::VALID_UNTIL} > ?", Time.current)
+    counts = paying.group(Arel.sql(PLAN_SQL)).count
     Casso::WebhookHandler::PLAN_PRICES.keys.sort_by { |plan| Casso::WebhookHandler::PLAN_PRICES[plan] }.index_with { |plan| counts.fetch(plan, 0) }
   end
 end

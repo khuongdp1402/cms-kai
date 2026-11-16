@@ -168,11 +168,7 @@ const dialogClass =
         </div>
       </div>
 
-      <div
-        v-if="createdOrder"
-        :class="overlayClass"
-        @click.self="closeDialogs"
-      >
+      <div v-if="createdOrder" :class="overlayClass" @click.self="closeDialogs">
         <div
           ref="dialogEl"
           role="dialog"
@@ -212,11 +208,7 @@ const dialogClass =
         </div>
       </div>
 
-      <div
-        v-if="qrOptions"
-        :class="overlayClass"
-        @click.self="closeDialogs"
-      >
+      <div v-if="qrOptions" :class="overlayClass" @click.self="closeDialogs">
         <div
           ref="dialogEl"
           role="dialog"
