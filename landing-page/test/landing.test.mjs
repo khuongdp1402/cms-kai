@@ -61,3 +61,9 @@ test('signup links point to /app/auth/signup without an ignored plan parameter',
   for (const l of links) assert.equal(l, '/app/auth/signup');
   assert.ok(!html.includes('TODO(task-13)'));
 });
+
+test('landing does not promise automatic reconciliation of shop orders', () => {
+  assert.ok(!html.includes('đơn tự cập nhật khi tiền về'));
+  assert.ok(!html.includes('Tiền về là đơn được cập nhật'));
+  assert.match(html, /Đã nhận tiền/);
+});
