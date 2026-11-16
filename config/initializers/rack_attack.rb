@@ -90,6 +90,12 @@ class Rack::Attack
     match[1].to_i.to_s if match && req.post?
   end
 
+  ### Casso payment webhook: cap requests per IP so token guessing / floods stay cheap ###
+  # Replay protection does not rely on this: it relies on the unique `tid` of each PaymentEvent.
+  throttle('casso_webhook/ip', limit: ENV.fetch('CASSO_WEBHOOK_LIMIT', '120').to_i, period: 1.minute) do |req|
+    req.ip if req.post? && req.canonical_path.casecmp?('/api/v1/casso/webhook')
+  end
+
   ###-----------------------------------------------###
   ###-----Authentication Related Throttling---------###
   ###-----------------------------------------------###

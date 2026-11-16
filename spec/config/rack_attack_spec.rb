@@ -66,4 +66,22 @@ RSpec.describe 'Rack::Attack throttles', type: :request do
       expect(hit('/api/v1/accounts/0007/brand_growth/repurpose')).to eq(429)
     end
   end
+
+  describe 'casso_webhook/ip' do
+    let(:casso_limit) { ENV.fetch('CASSO_WEBHOOK_LIMIT', '120').to_i }
+
+    it 'throttles webhook posts per IP after the limit, regardless of the token' do
+      casso_limit.times { expect(hit('/api/v1/casso/webhook')).not_to eq(429) }
+
+      expect(hit('/api/v1/casso/webhook')).to eq(429)
+      expect(hit('/api/v1/casso/webhook/')).to eq(429)
+      expect(hit('/api/v1/casso/webhook', ip: '203.0.113.10')).not_to eq(429)
+    end
+
+    it 'does not throttle the public status endpoint under this rule' do
+      (casso_limit + 1).times { get '/api/v1/casso/status', headers: { 'REMOTE_ADDR' => '203.0.113.11' } }
+
+      expect(response.status).not_to eq(429)
+    end
+  end
 end
