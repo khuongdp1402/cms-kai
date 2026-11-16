@@ -169,11 +169,11 @@
   - Nginx: `deploy/nginx/templates/kchat.conf.template`, tên miền qua `KCHAT_DOMAIN`; bỏ trang super-admin tĩnh không đăng nhập, bỏ proxy `/bridge/` công khai, bỏ wildcard subdomain theo tenant (Rails chưa hỗ trợ).
 - **Hệ quả:** `landing-page/tenant-admin` đang gọi đường dẫn cũ `/api/v1/brand_growth/*` nên sẽ hỏng cho tới khi giao diện được làm lại (ADR-017).
 
-## ADR-017 — Thương hiệu Kalo, gộp hộp chat và quản trị shop thành 1 app · `proposed` (2026-11-16)
+## ADR-017 — Thương hiệu Kalo, gộp hộp chat và quản trị shop thành 1 app · `accepted` (2026-11-17)
 
 - **Quyết định của chủ dự án:** 1 tên mẹ + tên phụ; khách hàng chính là shop online nhỏ; gộp hộp chat và Tenant Admin thành 1 app; tên quốc tế ngắn gọn gắn với "đôi cánh" và chữ K (Khương) → **Kalo** (K + *ala* = cánh + "alô"). Sản phẩm: **Kalo** (app cho shop), **Kalo POS**, **Kalo Live** (khung chat gắn website), **Kalo Console** (quản trị nội bộ).
 - **Đã duyệt (2026-11-16):** màu phương án A (cam san hô ấm); menu 6 mục (Tin nhắn, Đơn hàng, Khách hàng, Marketing, Báo cáo, Cài đặt); chữ trên giao diện ngắn, hướng người dùng cuối, không thuật ngữ kỹ thuật; thứ tự vẽ Figma: bảng thương hiệu → Kalo desktop → Kalo mobile → Console → landing.
-- **Chưa xong:** kiểm tra `kalo.vn`/`kalo.com.vn` ở nhà đăng ký và tra nhãn hiệu NOIP; duyệt logo, màu và giao diện trên Figma trước khi làm code.
+- **Đã làm:** thiết kế được duyệt và đã thi công trong code (Phase K). **Chưa xong (việc của chủ dự án, xem `reference/go-live-checklist.md`):** kiểm tra `kalo.vn`/`kalo.com.vn` ở nhà đăng ký (mới chỉ kiểm DNS sơ bộ) và tra nhãn hiệu "Kalo" trên NOIP. Tên miền `BRAND_URL` hiện vẫn `https://ktech.vn` cho tới khi có tên miền.
 
 ## ADR-018 — Quyết định kỹ thuật cho đợt Kalo launch · `accepted` (2026-11-16)
 
@@ -185,6 +185,20 @@
   - **Kết quả kiểm tra (Task 4, 2026-11-16): `account.limits` KHÔNG được áp dụng.** `Account#usage_limits` luôn trả `ChatwootApp.max_limit` (100000) và bỏ qua cột `limits`; thử tài khoản `starter` có `limits: {agents: 2}` vẫn thêm được nhân viên thứ 3 (HTTP 200). Vì vậy `Casso::WebhookHandler` không ghi `limits` theo gói, và landing phải bỏ dòng giới hạn số nhân viên/kênh (hoặc làm riêng một task ghi đè `usage_limits`).
 - **Dùng thử:** 14 ngày từ `account.created_at`. Hết hạn thì chặn tạo sản phẩm, đơn và gọi AI; vẫn xem và nhắn tin được.
 - **Thi công:** kế hoạch `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`, mỗi task một worktree `feat/kalo-<task>`.
+
+## ADR-019 — Quản lý giới hạn gói, hết hạn dùng thử và đối soát thanh toán · `accepted` (2026-11-17)
+
+- **Bối cảnh:** gói cước Kalo trả bằng chuyển khoản, đối soát tự động qua Casso. Cơ chế `account.limits` của Chatwoot không có tác dụng (ADR-018). Cần quy tắc rõ để tiền không cộng nhầm tenant và để landing không hứa điều sản phẩm không làm.
+- **Dùng thử và hết hạn:** 14 ngày tính từ `account.created_at` (không chỉnh được). Hết hạn (`Kchat::Entitlements`) thì chặn **tạo sản phẩm, tạo đơn và gọi AI** (403 `subscription_expired`); vẫn xem dữ liệu và nhắn tin. Trạng thái: `active` (còn hạn trả phí) → `trial` (còn trong 14 ngày đầu) → `expired`. Hạn gói trả phí lưu `custom_attributes.subscription_valid_until` (ISO 8601); giá trị hỏng được xem như "không có kỳ trả phí" thay vì lỗi 500.
+- **Định dạng nội dung chuyển khoản (Casso):** `KALO <account_id|tenant_slug> [PLAN|TOKEN|SEED] [order_id]`. Trang Gói cước hiển thị đúng memo này.
+  - Phân tích **fail-closed**: thiếu `CASSO_SECURE_TOKEN` thì từ chối mọi request; `tid` duy nhất (chỉ mục unique) chống trùng, ghi sự kiện và cộng tiền trong cùng transaction, khóa dòng account khi cộng; số tiền ≤ 0 hoặc `tid` rỗng bị loại.
+  - Mọi giao dịch đều lưu `Kchat::PaymentEvent`. Không khớp account hoặc `tenant_slug` **trùng** (nhiều account cùng slug, không phân biệt hoa thường) → `unmatched`, không ai được cộng tiền; Console gán tay.
+  - Từ khóa không chính xác (`TOKENS`, `SEEDS`, gõ sai) → `unmatched` hoặc `description_ambiguous` (Console trả 422 `description_ambiguous` khi gán), không tự rơi về PLAN. Riêng từ khóa gõ sai hẳn như `TOKN` vẫn có thể bị hiểu là PLAN (hoãn, xem backlog).
+  - Chuyển thiếu tiền → `underpaid`, không kích hoạt. Trả đủ → +30 ngày; trả gấp đôi vẫn +30 ngày.
+  - Payload Casso chấp nhận `data` là mảng, `data` là object (webhook v2) hoặc giao dịch ở cấp cao nhất; dạng khác trả 400 `invalid_payload` (log chỉ ghi hình dạng, không ghi nội dung). Throttle 120 request/phút/IP (`CASSO_WEBHOOK_LIMIT`), Nginx xóa header `Forwarded` để IP không bị giả.
+- **Giới hạn theo gói KHÔNG được áp dụng, vì vậy KHÔNG được quảng bá:** số nhân viên, số kênh, hạn mức tin nhắn AI, số tài liệu, rule… Landing và tài liệu chỉ liệt kê tính năng, không liệt kê giới hạn. Muốn áp dụng phải làm riêng việc ghi đè `Account#usage_limits` (backlog "Sau launch").
+- **AI:** `Ai::CustomLlmService` gọi AgentGW (OpenAI-compatible); không có khóa thì endpoint trả 503. Giới hạn 30 lần/phút/account đếm trong controller theo `Current.account.id`, cắt độ dài `message`/`topic`/`history` và tổng prompt ≤ 20.000 ký tự.
+- **Hệ quả / đánh đổi:** `ai_tokens_balance` được nạp bởi `TOKEN` nhưng chưa bị trừ khi dùng; shop hết hạn vẫn gọi được `send_qr`/`transition` (L-3, chấp nhận ở bản launch); hạn mức AI chưa theo user (L-7). Shop mới tự đăng ký (khi bật signup) có thể tạo nhiều account để lấy trial lặp lại (I-8): cân nhắc trước khi mở signup công khai.
 
 ## Câu hỏi mở (chờ chủ dự án)
 
