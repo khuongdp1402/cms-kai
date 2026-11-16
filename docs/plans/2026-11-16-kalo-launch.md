@@ -56,6 +56,11 @@ Tiền tố `/api/v1/accounts/:account_id/kchat`. Xác thực như API tài kho�
 
 **Gói cước:** `GET /subscription` → `{ plan, status, valid_until, days_left, bank:{bank,account_number,account_name}, memo, prices:{starter,growth,enterprise} }`. `status`: `trial | active | expired`. `memo` dạng `KALO <account_id> PLAN`.
 
+**Làm rõ sau Task 3 (đã thực thi, các task frontend dùng theo đây):**
+- Danh sách trả `{ "payload": [...], "meta": {...} }`: `GET /products` → `meta: {count}`; `GET /orders` → `meta: {count, current_page, per_page}` (25 đơn mỗi trang, mới nhất trước, `query` khớp số đơn, tên khách, tên dòng hàng).
+- `conversation_id` trong đơn hàng (nhận vào và trả ra) là `display_id` của hội thoại (số mà dashboard dùng), không phải khóa DB.
+- Người không đủ quyền nhận 401 (đúng cách Chatwoot đang làm), không phải 403. Lỗi kiểm tra dữ liệu khác: 422 `{error:'validation_failed', message}`.
+
 **Console** (tiền tố `/api/v1/console`, chỉ `SuperAdmin`, người khác nhận 403):
 - `GET /overview` → `{ shops, revenue_month, expiring_7d, unmatched_payments, recent_payments:[…], shops_by_plan:{starter,growth,enterprise} }`
 - `GET /accounts?query=&filter=all|trial|expiring|locked&page=` · `PATCH /accounts/:id` `{locked?, extend_days?}`
