@@ -1998,5 +1998,40 @@
       "SEARCH_ERROR": "Không tìm được shop. Thử lại.",
       "ASSIGN_AMBIGUOUS": "Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý."
     }
+  },
+  "KALO_CHAT": {
+    "CARD": {
+      "TITLE": "Đơn #{number}",
+      "LINE": "{quantity} × {price}",
+      "SHIPPING": "Phí giao",
+      "TOTAL": "Tổng",
+      "SEND_QR": "Gửi mã QR",
+      "SENDING": "Đang gửi…",
+      "UNAVAILABLE": "Không tải được đơn"
+    },
+    "ACTIONS": {
+      "CREATE_ORDER": "Tạo đơn",
+      "QR": "Mã QR",
+      "CLOSE": "Đóng"
+    },
+    "QR_PICKER": {
+      "TITLE": "Chọn đơn để gửi mã QR",
+      "EMPTY": "Khách chưa có đơn nào chờ thanh toán bằng mã QR."
+    },
+    "CREATED": {
+      "TITLE": "Đã tạo đơn #{number}",
+      "SEND_QR": "Gửi mã QR",
+      "LATER": "Để sau"
+    },
+    "AI": {
+      "LABEL": "Gợi ý trả lời"
+    },
+    "PANEL": {
+      "PURCHASE": "Mua hàng",
+      "ORDERS_COUNT": "Số đơn",
+      "PAID_TOTAL": "Đã thanh toán",
+      "RECENT": "Đơn gần đây",
+      "EMPTY": "Khách chưa có đơn nào."
+    }
   }
 }

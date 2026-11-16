@@ -1,13 +1,17 @@
 class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::BaseController
   PER_PAGE = 25
+  PAID_STATUSES = %w[paid shipping completed].freeze
 
   before_action :require_active_subscription!, only: :create
   before_action :fetch_order, only: [:show, :transition, :send_qr, :qr]
 
   def index
     authorize ::Kchat::Order
+    return render_not_found if params[:contact_id].present? && find_contact.nil?
+
     scope = filtered_orders
     @count = scope.count
+    @paid_total = scope.where(status: PAID_STATUSES).sum(:total)
     @page = [params[:page].to_i, 1].max
     @orders = scope.offset((@page - 1) * PER_PAGE).limit(PER_PAGE)
   end
@@ -68,6 +72,7 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
   def filtered_orders
     scope = ::Kchat::Order.where(account_id: Current.account.id).includes(:items, :contact, :conversation).order(number: :desc)
     scope = scope.where(status: params[:status]) if params[:status].present?
+    scope = scope.where(contact_id: params[:contact_id]) if params[:contact_id].present?
     params[:query].present? ? search(scope, params[:query].to_s.strip) : scope
   end
 

@@ -33,6 +33,47 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(response.parsed_body['payload'].pluck('number')).to eq([1001])
     end
 
+    it 'filters by contact_id of the own account and reports paid_total' do
+      contact = create(:contact, account: account)
+      make_order(extra: { contact: contact })
+      make_order(extra: { contact: contact, payment_method: 'cash' }, items: [{ name: 'A', unit_price: 5000, quantity: 2 }])
+      make_order
+      get base, params: { contact_id: contact.id }, headers: headers, as: :json
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body['payload'].pluck('number')).to contain_exactly(1001, 1002)
+      expect(response.parsed_body['meta']['count']).to eq(2)
+      expect(response.parsed_body['meta']['paid_total']).to eq(10_000)
+    end
+
+    it 'returns 404 for the contact of another account' do
+      foreign = create(:contact, account: other_account)
+      make_order(other_account, extra: { contact: foreign })
+      get base, params: { contact_id: foreign.id }, headers: headers, as: :json
+      expect(response).to have_http_status(:not_found)
+      expect(response.body).not_to include('1001')
+    end
+
+    it 'returns 404 for a non-numeric contact_id' do
+      make_order
+      get base, params: { contact_id: 'abc' }, headers: headers, as: :json
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'paid_total counts paid, shipping and completed but not pending or cancelled' do
+      paid = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'A', unit_price: 1000, quantity: 1 }])
+      shipping = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'B', unit_price: 2000, quantity: 1 }])
+      shipping.transition!('ship')
+      completed = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'C', unit_price: 4000, quantity: 1 }])
+      completed.transition!('ship')
+      completed.transition!('complete')
+      cancelled = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'D', unit_price: 8000, quantity: 1 }])
+      cancelled.transition!('cancel')
+      make_order(items: [{ name: 'E', unit_price: 16_000, quantity: 1 }])
+      get base, headers: headers, as: :json
+      expect(paid.reload.status).to eq('paid')
+      expect(response.parsed_body['meta']['paid_total']).to eq(7000)
+    end
+
     it 'renders the order JSON as per the contract' do
       contact = create(:contact, account: account, name: 'Lan', phone_number: '+84901234567')
       order = make_order(extra: { contact: contact, shipping_fee: 30_000 })

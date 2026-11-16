@@ -4,9 +4,12 @@ const SET_UI_FLAG = 'KCHAT_ORDERS_SET_UI_FLAG';
 const SET_ORDERS = 'KCHAT_ORDERS_SET';
 const ADD_ORDER = 'KCHAT_ORDERS_ADD';
 const UPSERT_ORDER = 'KCHAT_ORDERS_UPSERT';
+const SET_FETCHED_ORDER = 'KCHAT_ORDERS_SET_FETCHED';
 
 export const createState = () => ({
   records: [],
+  // Orders fetched one by one (chat cards); kept apart so the paginated list is untouched.
+  byId: {},
   meta: {},
   uiFlags: { isFetching: false, isCreating: false, isUpdating: false },
 });
@@ -14,7 +17,8 @@ export const createState = () => ({
 export const getters = {
   getOrders: $state => $state.records,
   getOrderById: $state => id =>
-    $state.records.find(record => record.id === Number(id)),
+    $state.records.find(record => record.id === Number(id)) ||
+    $state.byId[Number(id)],
   getMeta: $state => $state.meta,
   getUIFlags: $state => $state.uiFlags,
 };
@@ -53,6 +57,12 @@ export const actions = {
       return data;
     }),
 
+  fetchOne: async ({ commit }, id) => {
+    const { data } = await KchatOrdersAPI.show(id);
+    commit(SET_FETCHED_ORDER, data);
+    return data;
+  },
+
   transition: ({ commit }, { id, event }) =>
     withFlag({ commit }, 'isUpdating', async () => {
       const { data } = await KchatOrdersAPI.transition(id, event);
@@ -82,6 +92,10 @@ export const mutations = {
     $state.records = $state.records.map(record =>
       record.id === order.id ? order : record
     );
+    if ($state.byId[order.id]) $state.byId = { ...$state.byId, [order.id]: order };
+  },
+  [SET_FETCHED_ORDER]($state, order) {
+    $state.byId = { ...$state.byId, [order.id]: order };
   },
 };
 

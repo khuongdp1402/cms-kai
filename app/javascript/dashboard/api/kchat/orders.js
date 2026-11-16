@@ -6,8 +6,10 @@ class KchatOrdersAPI extends ApiClient {
     super('kchat/orders', { accountScoped: true });
   }
 
-  get({ status, query, page } = {}) {
-    return axios.get(this.url, { params: { status, query, page } });
+  get({ status, query, page, contactId } = {}) {
+    return axios.get(this.url, {
+      params: { status, query, page, contact_id: contactId },
+    });
   }
 
   transition(id, event) {

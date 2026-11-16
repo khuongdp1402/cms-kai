@@ -44,6 +44,7 @@ import VoiceCallBubble from './bubbles/VoiceCall.vue';
 import StickerBubble from './bubbles/StickerBubble.vue';
 
 import MessageError from './MessageError.vue';
+import KaloOrderCard from 'dashboard/components/widgets/conversation/KaloOrderCard.vue';
 import ContextMenu from 'dashboard/modules/conversations/components/MessageContextMenu.vue';
 import { useBranding } from 'shared/composables/useBranding';
 
@@ -367,6 +368,11 @@ const componentToRender = computed(() => {
   return TextBubble;
 });
 
+// Set by the send_qr endpoint on the outgoing QR message.
+const kchatOrderId = computed(
+  () => Number(props.contentAttributes?.kchatOrderId) || null
+);
+
 const shouldShowContextMenu = computed(() => {
   return !props.contentAttributes?.isUnsupported;
 });
@@ -594,7 +600,11 @@ provideMessageContext({
         }"
         @contextmenu="openContextMenu($event)"
       >
-        <Component :is="componentToRender" />
+        <Component :is="componentToRender" v-if="!kchatOrderId" />
+        <div v-else class="flex flex-col min-w-0 gap-2">
+          <Component :is="componentToRender" />
+          <KaloOrderCard :order-id="kchatOrderId" />
+        </div>
       </div>
       <MessageError
         v-if="contentAttributes.externalError"

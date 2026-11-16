@@ -8,6 +8,7 @@ vi.mock('../../../../api/kchat/orders', () => ({
     create: vi.fn(),
     transition: vi.fn(),
     sendQr: vi.fn(),
+    show: vi.fn(),
   },
 }));
 
@@ -122,5 +123,29 @@ describe('kchatOrders store', () => {
     expect(store.getters['kchatOrders/getMeta'].current_page).toBe(2);
     await store.dispatch('kchatOrders/fetch', { page: 1 });
     expect(store.getters['kchatOrders/getOrders'].map(o => o.id)).toEqual([3]);
+  });
+
+  it('fetchOne of an unknown order does not touch the paginated list', async () => {
+    OrdersAPI.show.mockResolvedValue({ data: order(99, 'paid') });
+    const store = makeStore();
+    store.commit('kchatOrders/KCHAT_ORDERS_SET', {
+      payload: [order(2, 'paid'), order(1, 'paid')],
+      meta: { count: 2 },
+    });
+    await store.dispatch('kchatOrders/fetchOne', 99);
+    expect(store.getters['kchatOrders/getOrders'].map(o => o.id)).toEqual([
+      2, 1,
+    ]);
+    expect(store.getters['kchatOrders/getOrderById'](99).number).toBe(1099);
+  });
+
+  it('transition keeps an order fetched by id up to date', async () => {
+    OrdersAPI.show.mockResolvedValue({ data: order(99, 'pending_payment') });
+    OrdersAPI.transition.mockResolvedValue({ data: order(99, 'paid') });
+    const store = makeStore();
+    await store.dispatch('kchatOrders/fetchOne', 99);
+    await store.dispatch('kchatOrders/transition', { id: 99, event: 'mark_paid' });
+    expect(store.getters['kchatOrders/getOrderById'](99).status).toBe('paid');
+    expect(store.getters['kchatOrders/getOrders']).toHaveLength(0);
   });
 });

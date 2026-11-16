@@ -3,6 +3,7 @@ json.payload do
 end
 json.meta do
   json.count @count
+  json.paid_total @paid_total
   json.current_page @page
   json.per_page Api::V1::Accounts::Kchat::OrdersController::PER_PAGE
 end
