@@ -54,3 +54,16 @@ test('plan cards contain no vague unverifiable promises', () => {
     for (const s of ['Đội ngũ lớn', 'Hỗ trợ riêng', 'đồng đội']) assert.ok(!card.includes(s), s);
   }
 });
+
+test('signup links point to /app/auth/signup without an ignored plan parameter', () => {
+  const links = [...html.matchAll(/data-app="(\/app\/auth\/signup[^"]*)"/g)].map(m => m[1]);
+  assert.ok(links.length >= 3);
+  for (const l of links) assert.equal(l, '/app/auth/signup');
+  assert.ok(!html.includes('TODO(task-13)'));
+});
+
+test('landing does not promise automatic reconciliation of shop orders', () => {
+  assert.ok(!html.includes('đơn tự cập nhật khi tiền về'));
+  assert.ok(!html.includes('Tiền về là đơn được cập nhật'));
+  assert.match(html, /Đã nhận tiền/);
+});

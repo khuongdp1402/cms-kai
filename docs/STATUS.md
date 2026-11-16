@@ -3,20 +3,56 @@
 > File sống, cập nhật sau mỗi phiên làm việc. Đọc file này **đầu tiên** trước khi bắt tay vào việc.
 > Trạng thái: `todo` · `in-progress` · `done` · `blocked` · `skipped`
 
-**Phase hiện tại (2026-11-16): K — Kalo launch** (xem `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`). Task 0 xong; đợt 1 và 2 đang gộp dần.
-**K / Task 2 (done, nhánh `feat/kalo-data`)**: mô hình dữ liệu thương mại `Kchat::{Product,Order,OrderItem,PaymentEvent}` (bảng `kchat_*`) và `Kchat::VietQr` cục bộ; 58 spec đạt.
-**K / Task 3 (done, nhánh `feat/kalo-orders-api`)**: API REST `/api/v1/accounts/:id/kchat/{products,orders,payment_settings}` (gồm `transition`, `send_qr`, `qr`); 38 request spec đạt, gồm spec 404 chéo account.
-**K / Task 7 (done, nhánh `feat/kalo-shell`)**: Task 7 (khung app Kalo: rail 6 mục, tab bar mobile, trang cài đặt tổng) xong trên `feat/kalo-shell`.
-**K / Task 10 (done, nhánh `feat/kalo-reports-ui`)**: trang Báo cáo, Marketing (tab Chiến dịch + Ý tưởng nội dung) và Gói cước (`kalo_billing`) ở frontend; test với API giả, chưa thử với backend thật.
-**Phase trước:** Hoàn tất toàn diện Nền tảng Multi-tenant SaaS KChat (Phase A, B, C, D) — Riêng huấn luyện AI chuyên sâu bổ sung sau
-**Việc vừa hoàn thành:** 
-1. **Super Admin Toàn Diện**: 10 phân hệ nghiệp vụ độc lập (Dashboard, Analytics tăng trưởng & phễu MRR/ARR, Quản lý Tenant với Modal Cấp mới & Drawer chi tiết, Quản lý Tiếp thị liên kết Affiliate với duyệt chi VietQR Casso tức thì 24/7, Gói cước Plans, Thanh toán Billing, AI Pool Gateway & Ping Latency, Giám sát Kênh Channels, Ads & Seeding Marketplace, Cài đặt Settings).
-2. **Tenant Admin Đa Kênh & POS**: Tích hợp Bán Hàng & Kho POS (KiotViet, Sapo, Nhanh.vn) + Vận chuyển GHTK/GHN trực tiếp trong khung chat; Trình tạo chiến dịch Zalo ZNS & SMS Brandname có khung xem trước điện thoại; Quản lý chiến dịch quảng cáo Click-to-Chat Meta & TikTok với ROAS/CPA; Ví hoa hồng Affiliate cá nhân và lệnh rút tiền.
-3. **Landing Page Marketing & Blog**: Trung tâm kiến thức & Blog SEO thực chiến (Zalo an toàn, Chốt đơn VietQR, Kịch bản AI); Giới thiệu chương trình Đối tác Affiliate 20% trọn đời; Tích hợp PWA.
-4. **PWA & Production Ready**: `manifest.json`, `sw.js` (caching & offline fallback); File cấu hình Nginx Production đa subdomain & SSL Wildcard (`deploy/nginx/kchat.conf`).
-**Cập nhật lần cuối:** 2026-11-16
+**Phase hiện tại (2026-11-17): K — Kalo launch.** Mã nguồn xong và đã gộp vào `feat/kalo-launch`; đang ở **cổng go-live**: chờ chủ dự án cung cấp tên miền, máy chủ, Casso, khóa AgentGW, SMTP (xem [reference/go-live-checklist.md](reference/go-live-checklist.md)). Agent không tự triển khai. Kế hoạch: `docs/plans/2026-11-16-kalo-launch.md`. Báo cáo QA: [reports/2026-11-kalo-launch-qa.md](reports/2026-11-kalo-launch-qa.md).
+**Cập nhật lần cuối:** 2026-11-17
 
+### Kalo thật sự có (có backend và spec đạt)
 
+- Hộp tin nhắn đa kênh và Zalo cá nhân (Chatwoot + bridge), khung app Kalo (rail 6 mục, tab bar mobile), tiếng Việt, thương hiệu Kalo (coral).
+- Đơn hàng + POS nội bộ: sản phẩm, đơn, tạo đơn/gửi mã VietQR (sinh cục bộ) trong chat, chuyển trạng thái, đánh dấu đã nhận tiền bằng tay. Backend `Kchat::{Product,Order,OrderItem,PaymentEvent}`.
+- Gói cước: dùng thử 14 ngày, hết hạn thì chặn tạo sản phẩm/đơn/AI; đối soát tự động tiền gói qua webhook Casso (`KALO <account_id|tenant_slug> [PLAN|TOKEN|SEED] [order_id]`), gán tay trong Console (ADR-019).
+- Báo cáo (`kchat/reports/summary`), Marketing (chiến dịch sẵn của Chatwoot + ý tưởng nội dung/AI), trang Gói cước.
+- Gợi ý trả lời AI qua `Ai::CustomLlmService` (AgentGW; không có khóa thì 503 và giao diện ẩn gợi ý).
+- Kalo Console cho SuperAdmin: tổng quan, shop, giao dịch Casso.
+- Landing có video; hạ tầng production (compose, Nginx, backup, hướng dẫn `reference/deploy.md`).
+
+**Bằng chứng kiểm thử (12A, chạy trên `1b184d5`, TRƯỚC khi gộp sec-fix `68170d1`; sẽ chạy lại cả bộ ở HEAD cuối):** rspec 6245 ví dụ, 74 lỗi **có sẵn từ upstream, không đụng tới** (loại `spec/enterprise`); vitest 426 file / 4095 test, 0 lỗi; rubocop sạch; `zeitwerk:check` ổn; landing test 7/7. **Rà soát bảo mật (12C):** Critical 0, High 0, Medium 4, Low 9, Info 8; Medium 4 và Low L-1, L-2, L-5, L-6, L-8 đã sửa có spec hồi quy (chỉ chạy 369 spec liên quan ở vòng cuối, chưa chạy cả bộ sau khi gộp; sửa qua review ban đầu + 2 vòng sửa, review lại vòng 2: approved, không còn mục mở; Low ghi nhận: bộ parse ISO của Ruby lỏng hơn SQL guard ở 6 trường hợp biên không làm shop trả phí bị coi là hết hạn, `AiThrottle` nhớ store production); còn lại ghi trong [reference/security-review-2026-11.md](reference/security-review-2026-11.md). **12B (khói + trình duyệt thật):** xem báo cáo QA.
+
+### Mockup cũ đã bỏ (không có backend)
+
+Các mục sau từng được ghi "hoàn thành" ở phiên bản trước nhưng chỉ là giao diện mẫu trong `landing-page/tenant-admin/` và `super-admin/` (LESSONS B12). Không phải tính năng của Kalo; không được quảng bá:
+- Tích hợp POS ngoài (KiotViet, Sapo, Nhanh.vn), vận chuyển GHN/GHTK.
+- Chiến dịch Zalo ZNS, SMS Brandname; quản lý quảng cáo Meta/TikTok (ROAS/CPA/Auto-Kill).
+- Ví affiliate, chi trả hoa hồng tự động, Marketplace seeding.
+- Pipeline video AI MMO, Brand OS (`#brand-strategy`, `#content-studio`, `#website-seo`), chỉ số MER/LTV:CAC là hằng số.
+- Super Admin 10 phân hệ tĩnh (thay bằng Kalo Console thật; thư mục `landing-page/tenant-admin/` và `super-admin/` đã xóa), PWA/`sw.js`, nhánh AI "Chrome CDP :9222" (đã bỏ ở ADR-016).
+
+### Phase K — bảng task
+
+| ID | Việc | Trạng thái | Ghi chú |
+|---|---|---|---|
+| K-T0 | Nhánh, wrapper test `script/ktech/{rspec,vitest}.sh`, ADR-018 | done | Xong trước các đợt, không qua review |
+| K-T1 | Thương hiệu và icon Kalo | done | Coral, 26 icon; vá 3 chỗ còn màu cobalt (`sdk.js`, `portal.rb`, `Avatar.vue`); 1 vòng sửa |
+| K-T2 | Mô hình dữ liệu thương mại + VietQR | done | `kchat_*`, 66 spec; 1 vòng sửa (quantity, status giả, ownership, ký tự QR) |
+| K-T3 | API sản phẩm/đơn/thanh toán | done | 127 spec; 1 vòng sửa (đơn 0đ, ảnh sản phẩm giới hạn, I18n, inbox) |
+| K-T4 | Báo cáo, gói cước, Casso, Console API | done | 282 spec; 2 vòng sửa (memo không khớp, ref tham lam, từ khóa không chính xác → unmatched). Giới hạn gói không áp dụng (ADR-018/019) |
+| K-T5 | Landing có video | done | 1 vòng sửa (bỏ lời hứa không kiểm chứng); task 13 bỏ `?plan=` và câu "Nhiều chi nhánh" |
+| K-T6 | Hạ tầng production | done (chưa chạy thật) | compose, Nginx, certbot, backup; 1 vòng sửa; healthcheck/certbot/build chưa kiểm runtime |
+| K-T7 | Khung app Kalo, 6 mục | done | 3 vòng sửa (khôi phục đăng xuất, bộ lọc inbox/label/team, popover); 189 vitest |
+| K-T8 | Đơn hàng và POS (UI) | done | 1 vòng sửa (phân trang "Xem thêm", race, form); tab đếm số chưa có |
+| K-T9 | Tạo đơn, QR, gợi ý AI trong chat | done | 1 vòng sửa (cache AI, a11y); backend thêm `contact_id` và `meta.paid_total` |
+| K-T10 | Báo cáo, Marketing, Gói cước (UI) | done | 2 vòng sửa (race, khóa kênh snake_case) |
+| K-T11 | Kalo Console (UI) | done | 2 vòng sửa (redirect, lỗi gán `description_ambiguous`) |
+| K-i18n | Sửa spec overlay i18n (468 ca hỏng) | done | `overrides.spec.js` bỏ qua khóa `KALO_*` không có khóa Anh (LESSONS B16) |
+| K-T12A | QA đầy đủ: rspec, vitest, lint, kiểm tĩnh | done | Số liệu ở trên; sửa KPI Console `shops_by_plan` đếm cả shop hết hạn/khóa |
+| K-T12C | Rà soát bảo mật (opus, chỉ đọc) | done | 0/0/4/9/8 |
+| K-sec | Vá bảo mật từ 12C | done | M-1..M-4, L-1, L-2, L-5, L-6, L-8; review ban đầu + 2 vòng sửa (bypass `1%2E5`, `Forwarded`, throttle trước auth), review vòng 2 approved |
+| K-T12B | Kiểm tra khói và trình duyệt thật | in-progress | Controller đang chạy; kết quả bổ sung vào báo cáo QA |
+| K-T13 | Tài liệu và go-live checklist | done (tài liệu) | Phần triển khai thật **blocked** chờ chủ dự án (go-live checklist) |
+
+Phần còn lại sau launch: xem mục "Sau launch" trong [ROADMAP.md](ROADMAP.md).
+
+**Phase trước (đã đổi hướng):** Phase B KTech branding (bên dưới) bị thay bằng Kalo (ADR-017); Phase A–D "Nền tảng Multi-tenant SaaS KChat" ghi trước đây là mockup (mục trên).
 
 ## Phase B — KTech branding
 
@@ -59,10 +95,15 @@ Việc ngoài kế hoạch mà chủ dự án yêu cầu thì ghi vào đây. N�
 | 2026-09-30 | Bổ sung xem Profile Zalo Cá nhân và chức năng Đăng xuất (Logout), kết nối lại QR | done | Hiển thị tab Cấu hình cho Zalo Personal, card hồ sơ (avatar, Zalo User ID, trạng thái), nút Đăng xuất Zalo có dialog xác nhận, banner trên tab Cài đặt |
 | 2026-10-02 | Kiểm tra và thống kê toàn bộ dự án | done | Phát hiện 1 sót "Chatwoot Widget" ở `landing-page/tenant-admin/index.html:1330`; ROADMAP chưa cập nhật ADR-008→012; nhánh `develop` không còn tồn tại local/remote |
 | 2026-10-22 | Kiểm tra và cập nhật toàn diện giao diện, bảng màu theo thiết kế & trend 2026–2027 (Glacier & Cobalt Studio) | done | Xóa toàn bộ tàn dư cam–nâu (`tailwind.config.js`, logo/icons, widget, portal, avatar), nâng cấp hệ màu Glacier & Cobalt Studio 2026–2027 (ADR-013), Tri-Typography (`Plus Jakarta Sans` + `Inter` + `JetBrains Mono`), Bento 2.0 & Dark/Light Mode đồng bộ cho cả 4 phân hệ |
-| 2026-10-28 | Mô hình hóa và tích hợp Hệ điều hành Phát triển Thương hiệu 5 Giai đoạn (Brand Growth OS) & Pipeline Video AI `mmo` vào chung `cms-kai` (Tenant Admin, Super Admin & Backend Core) | done | Thêm ADR-014; triển khai 3 phân hệ mới trên Tenant Admin (`#brand-strategy`, `#content-studio` kết nối `mmo` với cổng duyệt 2 bước, `#website-seo` CRO/CAPI/GEO), nâng cấp Full-Funnel Ads Guardrails (`#campaigns`) & Phễu 5 tầng (`#dashboard`); tích hợp quản trị cụm `mmo` & Brand OS vào Super Admin (`#aiPoolPage`, `#seedingPage`, `#plansPage`); thêm API `/api/v1/brand_growth/*` và spec |
-| 2026-10-28 | Thương mại hóa hệ thống & Chuẩn hóa hạ tầng AI (`AgentGW Cloud` + `Muse.ai / Gemini Chrome CDP :9222`, bỏ `9router`), gia cố Casso Idempotency, bảo mật White-Label và lưu trữ bền vững | done | Thêm ADR-015; nâng cấp `Ai::CustomLlmService` gọi trực tiếp `agentgw.cloud/v1` (`agentgw-gpt-5.5`, `agentgw-opus-4-8`) + giám sát Chrome CDP `:9222` (`gemini.google.com/app`, `muse.ai`); gia cố `Casso::WebhookHandler` (bỏ `Account.first`, chống trùng `tid`); tắt telemetry `ChatwootHub`, khóa CORS; lưu trữ bền vững tại `storage/kchat_commercial_state.json` |
+| 2026-10-28 | [Mockup, đã bỏ] Mô hình hóa và tích hợp Hệ điều hành Phát triển Thương hiệu 5 Giai đoạn (Brand Growth OS) & Pipeline Video AI `mmo` vào chung `cms-kai` (Tenant Admin, Super Admin & Backend Core) | done | Thêm ADR-014; triển khai 3 phân hệ mới trên Tenant Admin (`#brand-strategy`, `#content-studio` kết nối `mmo` với cổng duyệt 2 bước, `#website-seo` CRO/CAPI/GEO), nâng cấp Full-Funnel Ads Guardrails (`#campaigns`) & Phễu 5 tầng (`#dashboard`); tích hợp quản trị cụm `mmo` & Brand OS vào Super Admin (`#aiPoolPage`, `#seedingPage`, `#plansPage`); thêm API `/api/v1/brand_growth/*` và spec |
+| 2026-10-28 | [Phần lớn đã thay bởi ADR-016/019] Thương mại hóa hệ thống & Chuẩn hóa hạ tầng AI (`AgentGW Cloud` + `Muse.ai / Gemini Chrome CDP :9222`, bỏ `9router`), gia cố Casso Idempotency, bảo mật White-Label và lưu trữ bền vững | done | Thêm ADR-015; nâng cấp `Ai::CustomLlmService` gọi trực tiếp `agentgw.cloud/v1` (`agentgw-gpt-5.5`, `agentgw-opus-4-8`) + giám sát Chrome CDP `:9222` (`gemini.google.com/app`, `muse.ai`); gia cố `Casso::WebhookHandler` (bỏ `Account.first`, chống trùng `tid`); tắt telemetry `ChatwootHub`, khóa CORS; lưu trữ bền vững tại `storage/kchat_commercial_state.json` |
 
 ## Nhật ký
+
+> Các mục từ 2026-10-01 đến 2026-10-28 mô tả giao diện mẫu và cấu hình cũ (Super Admin/Tenant Admin tĩnh, Brand OS, CDP :9222, `storage/kchat_commercial_state.json`); nhiều phần đã bị xóa hoặc thay (ADR-016, ADR-017). Đọc như lịch sử, không như hiện trạng.
+
+- **2026-11-17:** Hoàn tất Kalo launch trên `feat/kalo-launch` (T0–T11, i18n-fix, 12A, 12C, vá bảo mật). 18 vòng sửa theo review. Tài liệu và go-live checklist (T13). 12B đang chạy.
+- **2026-11-16:** Quét dự án, ADR-016/017/018, kế hoạch Kalo launch, thiết kế được chủ dự án duyệt.
 
 - **2026-10-28 (buổi 3):** Hoàn tất kế hoạch kỹ thuật thương mại hóa & tích hợp nền tảng AI thực tế (**ADR-015**):
   - **Hạng mục 3 — Nền tảng AI Chatbot & Brand Growth (`AgentGW` + `Muse.ai / Gemini CDP :9222`, Không dùng `9router`)**: Nâng cấp [`Ai::CustomLlmService`](file:///Users/khuongdp/Projects/CMS/cms-kai/app/services/ai/custom_llm_service.rb) và [`config/llm.yml`](file:///Users/khuongdp/Projects/CMS/cms-kai/config/llm.yml) sử dụng thông tin xác thực từ `/Users/khuongdp/Projects/mmo/.env` (`https://agentgw.cloud/v1`, model `agentgw-gpt-5.5` cho Chatbot phản hồi nhanh và `agentgw-opus-4-8` cho kịch bản Brand Growth OS) kết hợp nền tảng chạy ngầm miễn phí ($0) qua Chrome CDP cổng `:9222` (`Google Gemini Web` & `Muse.ai`). Tích hợp bộ lọc `strip_think`, `extract_json` và kiểm duyệt tự động **Brand Brain Hard Bans** (`enforce_brand_guardrails`).

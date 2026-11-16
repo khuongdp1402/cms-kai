@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B16 (2026-11-17): Task agent chỉ chạy thư mục test của mình nên bỏ sót 468 ca hỏng ở spec overlay i18n.**
+  - Triệu chứng: sau khi gộp Task 8, `i18n/ktech/specs/overrides.spec.js` hỏng 468 ca (mọi khóa `KALO_*` không có khóa tiếng Anh tương ứng, mảng `WEEKDAYS` làm `text.match` lỗi); từng task đều báo "test xanh".
+  - Nguyên nhân: mỗi agent chỉ chạy spec trong thư mục mình sửa, không ai chạy cả bộ.
+  - Quy tắc: trước khi báo xong một nhánh/đợt phải chạy **cả bộ** rspec và vitest (`script/ktech/rspec.sh <track> spec`, `script/ktech/vitest.sh --poolOptions.threads.minThreads=1 --poolOptions.threads.maxThreads=3`, hai cờ thread bắt buộc với Docker 8 GB, nếu không bị SIGKILL do hết RAM). Với rspec, loại `spec/enterprise` (code enterprise đã bỏ nên 139 lỗi nạp file) và bọc timeout từng ca vì có spec treo sẵn từ upstream. So kết quả với bản base để phân biệt lỗi có sẵn.
 - **B12 (2026-11-16): Ghi "done" cho tính năng chỉ có giao diện mẫu.**
   - Triệu chứng: STATUS ghi POS, Ads, ZNS, Brand Growth "hoàn tất" nhưng backend không có tích hợp, số liệu là hằng số.
   - Quy tắc: chỉ ghi `done` khi có backend thật và spec chạy qua. Giao diện mẫu ghi rõ là `mockup`. Không trả số liệu giả qua API.
