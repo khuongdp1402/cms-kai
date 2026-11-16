@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe 'config.ssl_options' do
+RSpec.describe 'config.ssl_options' do # rubocop:disable RSpec/DescribeClass
   let(:app) { ->(_env) { [200, { 'Content-Type' => 'text/plain' }, ['ok']] } }
   let(:stack) { ActionDispatch::SSL.new(app, **Rails.application.config.ssl_options) }
 
-  def call(path, **opts)
-    stack.call(Rack::MockRequest.env_for("http://example.com#{path}", **opts))
+  def call(path, **)
+    stack.call(Rack::MockRequest.env_for("http://example.com#{path}", **))
   end
 
   it 'serves /health over plain http (container healthcheck)' do
