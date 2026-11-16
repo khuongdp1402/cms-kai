@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import { frontendURL } from '../helper/URLHelper';
 import dashboard from './dashboard/dashboard.routes';
+import { isConsoleRoute, consoleRedirect } from './dashboard/console/routes';
 import store from 'dashboard/store';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 import { isOnOnboardingView } from 'v3/helpers/RouteHelper';
@@ -21,6 +22,11 @@ export const validateAuthenticateRoutePermission = async (to, next) => {
   if (!isLoggedIn) {
     window.location.assign('/app/login');
     return '';
+  }
+
+  if (isConsoleRoute(to)) {
+    const redirect = consoleRedirect(user);
+    return redirect ? next(redirect) : next();
   }
 
   const { accounts = [], account_id: accountId } = user;
