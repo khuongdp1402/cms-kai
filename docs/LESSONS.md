@@ -12,6 +12,14 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B12 (2026-11-16): Ghi "done" cho tính năng chỉ có giao diện mẫu.**
+  - Triệu chứng: STATUS ghi POS, Ads, ZNS, Brand Growth "hoàn tất" nhưng backend không có tích hợp, số liệu là hằng số.
+  - Quy tắc: chỉ ghi `done` khi có backend thật và spec chạy qua. Giao diện mẫu ghi rõ là `mockup`. Không trả số liệu giả qua API.
+- **B11 (2026-11-16): Endpoint thanh toán và AI mở công khai.**
+  - Triệu chứng: `casso/simulate` cộng gói cước thật không cần đăng nhập; webhook bỏ qua kiểm tra token khi thiếu ENV; `brand_growth/*` không xác thực và nhận `tenant` từ tham số.
+  - Quy tắc: endpoint đổi dữ liệu tiền/gói phải có xác thực bắt buộc, thiếu cấu hình thì từ chối (không "tùy chọn"). Endpoint theo tenant đặt dưới `/api/v1/accounts/:account_id` kế thừa `Api::V1::Accounts::BaseController`. Endpoint thử nghiệm chỉ khai route trong development.
+  - Bổ sung: không gộp whitelist CORS với `/public/api/*` và `/packs/*`, vì widget nhúng trên website khách cần `*`.
+
 - **B1 (2026-09-28): `git status` trong repo DSF.**
   - Triệu chứng: `git status` thực chất có ghi `.git/index` (refresh stat).
   - Nguyên nhân: git tự cập nhật index khi chạy status.

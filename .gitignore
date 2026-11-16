@@ -117,3 +117,6 @@ zalo-personal-bridge/node_modules/
 zalo-personal-bridge/dist/
 zalo-oa-web-bridge/node_modules/
 
+
+# Superpowers SDD scratch
+.superpowers/

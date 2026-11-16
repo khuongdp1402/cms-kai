@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8">
+<title>Kalo · video thương hiệu</title>
+<style>
+@import url(../fonts/fonts.css);
+:root{--coral:#FF6B4A;--action:#C93F24;--soft:#FFE9E1;--ink:#1F1714;--muted:#6E625B;--bg:#FFF8F5;--line:#F0E4DD;--ok:#0E7C61;--okbg:#E3F4EE;--warn:#B45309;--warnbg:#FDF0DC}
+*{box-sizing:border-box;margin:0}
+html,body{width:1280px;height:720px;overflow:hidden;background:var(--bg);font-family:'Be Vietnam Pro',system-ui,sans-serif;color:var(--ink)}
+#stage{position:relative;width:1280px;height:720px;overflow:hidden;background:var(--bg)}
+.abs{position:absolute}
+.scene{position:absolute;inset:0;opacity:0;will-change:opacity}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5}
+.bub{position:absolute;display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border-radius:18px;box-shadow:0 10px 30px -12px rgba(80,40,20,.35);font-weight:600;font-size:19px;white-space:nowrap}
+.dot{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;color:#fff;font-weight:800;font-size:15px;flex:none}
+.dot svg{width:20px;height:20px}
+.cap{position:absolute;left:0;right:0;text-align:center;font-weight:800;letter-spacing:-.02em}
+.sub{position:absolute;left:0;right:0;text-align:center;color:var(--muted);font-weight:500}
+.win{position:absolute;background:#fff;border-radius:22px;box-shadow:0 30px 70px -30px rgba(80,40,20,.45);overflow:hidden}
+.chip{display:inline-block;padding:3px 10px;border-radius:99px;font-size:15px;font-weight:700}
+svg.i{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;--ia:#FFD7CA}
+.a{fill:var(--ia,#FFD7CA)} .w{fill:var(--ibg,#fff)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--action);color:#fff;border-radius:14px;padding:12px 18px;font-weight:700;font-size:18px}
+.btn svg.i{--ia:rgba(255,255,255,.3);--ibg:#C93F24}
+.msg{position:absolute;padding:11px 16px;border-radius:18px;font-size:19px;font-weight:500;max-width:420px;line-height:1.35}
+</style></head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-qr" viewBox="0 0 24 24"><rect class="a" x="3.2" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect class="a" x="13.6" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect class="a" x="3.2" y="13.6" width="7.2" height="7.2" rx="1.8"/><path d="M14 14h2.4M20.8 14v.01M14 17.4v3.4M17.4 17.4h3.4M20.8 20.8v.01M17.4 20.8v.01"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path class="a" d="M3.6 11.6 20.4 4.2c.6-.3 1.2.3.9.9l-7.4 16.2c-.3.6-1.1.5-1.3-.1l-2-6.1-6.1-2c-.6-.2-.7-1-.1-1.3z"/><path d="m20.8 4.4-9.9 9.6"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.5 4.4L19 7.4"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path class="a" d="m3.4 9.6 1.4-4.7a1 1 0 0 1 1-.7h12.4a1 1 0 0 1 1 .7l1.4 4.7z"/><path d="M3.4 9.6a2.75 2.75 0 0 0 5.5 0 3 3 0 0 0 6.2 0 2.75 2.75 0 0 0 5.5 0M5 12.2V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6.8M10 20v-4.4h4V20"/></symbol>
+<symbol id="c-tt" viewBox="0 0 16 16"><path d="M9.2 2.6v7.1a2.3 2.3 0 1 1-2.3-2.3M9.2 2.6c.2 1.5 1.2 2.5 2.8 2.7" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="c-ig" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.3" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="11" cy="5" r=".8" fill="#fff"/></symbol>
+<symbol id="c-live" viewBox="0 0 16 16"><path d="M3.2 4.2a1.5 1.5 0 0 1 1.5-1.5h6.6a1.5 1.5 0 0 1 1.5 1.5v4.6a1.5 1.5 0 0 1-1.5 1.5H7.6L5 12.7v-2.4h-.3a1.5 1.5 0 0 1-1.5-1.5z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="mark" viewBox="0 0 64 64">
+  <path fill="#FF6B4A" d="M14 6h36a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H27l-12 8.5V52h-1A10 10 0 0 1 4 42V16A10 10 0 0 1 14 6z"/>
+</symbol>
+</defs></svg>
+
+<div id="stage">
+  <div class="blob" id="b1" style="width:520px;height:520px;background:#FFD2C4;left:-120px;top:-160px"></div>
+  <div class="blob" id="b2" style="width:460px;height:460px;background:#FFE3B8;right:-140px;bottom:-180px"></div>
+
+  <!-- S1: chaos -->
+  <div class="scene" id="s1">
+    <div id="bubs"></div>
+    <div class="cap" id="s1cap" style="top:300px;font-size:64px">Tin nhắn nằm khắp nơi?</div>
+  </div>
+
+  <!-- S2: logo -->
+  <div class="scene" id="s2">
+    <svg class="abs" id="logo" width="640" height="200" viewBox="0 0 640 200" style="left:390px;top:215px;overflow:visible">
+      <g id="logoMark" transform-origin="100 100">
+        <path fill="#FF6B4A" d="M26 24h108a28 28 0 0 1 28 28v76a28 28 0 0 1-28 28H80l-36 25v-25h-18A28 28 0 0 1 0 128V52a28 28 0 0 1 28-28z" transform="translate(0 -6) scale(1)" id="bubblePath"/>
+        <g id="kGroup" fill="#fff" stroke="#fff">
+          <rect id="kStem" x="38" y="50" width="20" height="82" rx="10" stroke="none"/>
+          <path id="kWing" d="M58 96C70 66 91 46 122 38c-4.6 10-10 16.2-18.600 20.600 6.800.6 12.400-.4 18.200-2.600C113 79 89 90.600 58 100z" stroke="none"/>
+          <path id="kLeg" d="M64 100 112 140" stroke-width="20" stroke-linecap="round" fill="none"/>
+        </g>
+      </g>
+      <text id="logoWord" x="196" y="148" font-size="128" font-weight="800" letter-spacing="-5" fill="#1F1714" font-family="'Be Vietnam Pro'">kalo</text>
+    </svg>
+    <div class="cap" id="tag" style="top:470px;font-size:44px;color:var(--ink)">Mọi tin nhắn. <span style="color:var(--action)">Một chỗ.</span></div>
+  </div>
+
+  <!-- S3: app demo -->
+  <div class="scene" id="s3">
+    <div class="cap" id="s3cap" style="top:46px;font-size:46px">Trả lời, lên đơn, gửi mã QR <span style="color:var(--action)">ngay trong chat</span></div>
+    <div class="win" id="w3" style="left:150px;top:140px;width:980px;height:520px">
+      <div class="abs" style="left:0;top:0;bottom:0;width:300px;border-right:1px solid var(--line)">
+        <div class="abs" style="left:22px;top:20px;font-size:26px;font-weight:800">Tin nhắn</div>
+        <div id="convs"></div>
+      </div>
+      <div class="abs" style="left:300px;top:0;right:0;bottom:0;background:var(--bg)">
+        <div class="abs" style="left:0;right:0;top:0;height:64px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 22px">
+          <div class="dot" style="width:38px;height:38px;border-radius:99px;background:#C26B4F;font-size:14px">TH</div><b style="font-size:19px">Thu Hà</b><span style="color:var(--muted);font-size:15px">· Zalo · Khách quen</span>
+        </div>
+        <div class="msg" id="m1" style="left:22px;top:84px;background:#fff">Shop ơi nến đàn hương còn không ạ?</div>
+        <div class="msg" id="m2" style="right:22px;top:146px;background:#FFE3D9">Dạ còn chị ơi, cháy khoảng 40 giờ ạ</div>
+        <div class="msg" id="m3" style="left:22px;top:208px;background:#fff">Chị lấy 2 nến, ship về Q.3 nhé</div>
+        <div class="abs" id="card" style="right:22px;top:262px;width:330px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 14px 30px -18px rgba(80,40,20,.4)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><b style="font-size:19px">Đơn #1042</b><span class="chip" id="pay" style="background:var(--warnbg);color:var(--warn)">Chờ thanh toán</span></div>
+          <div style="color:var(--muted);font-size:16px;margin-bottom:4px">Nến gỗ đàn hương × 2</div>
+          <div style="display:flex;justify-content:space-between;font-size:20px;font-weight:800;margin-bottom:10px"><span>Tổng</span><span>403.000đ</span></div>
+          <div class="btn" id="qrbtn" style="width:100%;justify-content:center"><svg class="i"><use href="#i-qr"/></svg><span id="qrtxt">Gửi mã QR thanh toán</span></div>
+        </div>
+        <div class="abs" id="ring" style="right:187px;top:430px;width:60px;height:60px;border-radius:50%;border:4px solid #0E7C61;opacity:0;margin:-30px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S4: POS + report -->
+  <div class="scene" id="s4">
+    <div class="cap" id="s4cap" style="top:46px;font-size:46px"></div>
+    <div class="win" id="w4a" style="left:110px;top:150px;width:520px;height:500px;padding:22px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px"><svg class="i" style="color:#B45309"><use href="#i-store"/></svg><b style="font-size:22px">Đơn tại quầy</b></div>
+      <div id="items"></div>
+      <div class="abs" style="left:22px;right:22px;bottom:90px;display:flex;justify-content:space-between;font-size:28px;font-weight:800"><span>Tổng</span><span id="tot">0đ</span></div>
+      <div class="abs btn" id="payb" style="left:22px;right:22px;bottom:22px;justify-content:center;font-size:20px">Thanh toán bằng mã QR</div>
+    </div>
+    <div class="win" id="w4b" style="left:660px;top:150px;width:510px;height:500px;padding:22px">
+      <div style="color:var(--muted);font-weight:600;font-size:18px">Doanh thu hôm nay</div>
+      <div id="rev" style="font-size:52px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px">0đ</div>
+      <div id="up" style="color:var(--ok);font-weight:700;font-size:18px">↑ 18% so với hôm qua</div>
+      <div id="bars" style="position:absolute;left:22px;right:22px;bottom:22px;height:230px;display:flex;align-items:flex-end;gap:14px"></div>
+    </div>
+  </div>
+
+  <!-- S5: CTA -->
+  <div class="scene" id="s5">
+    <svg class="abs" width="520" height="160" viewBox="0 0 640 200" style="left:437px;top:170px;overflow:visible" id="logo2">
+      <use href="#logoMarkClone"/>
+    </svg>
+    <div class="cap" id="s5tag" style="top:370px;font-size:50px">Mọi tin nhắn. <span style="color:var(--action)">Một chỗ.</span></div>
+    <div class="abs" id="cta" style="left:0;right:0;top:480px;text-align:center"><span class="btn" style="font-size:26px;padding:18px 34px;border-radius:18px">Dùng thử miễn phí 14 ngày</span></div>
+    <div class="sub" id="s5sub" style="top:575px;font-size:22px">Không cần thẻ · Kết nối Zalo, Facebook, TikTok trong 2 phút</div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+const clamp=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const prog=(t,a,b)=>clamp((t-a)/(b-a));
+const easeOut=x=>1-Math.pow(1-x,3);
+const easeInOut=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const back=x=>{const c=1.70158,d=c+1;return 1+d*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const lerp=(a,b,x)=>a+(b-a)*x;
+const DUR=24;
+
+// ---------- S1 bubbles ----------
+const BUB=[
+ ['Z','#0068FF','Shop còn size M không?',90,120,0.0],
+ ['f','#1877F2','Cho mình xin giá nhé',760,90,0.15],
+ ['T','#111','Mình xem live hôm qua…',980,230,0.3],
+ ['I','#D62976','Ship về Đà Nẵng mấy ngày?',40,200,0.45],
+ ['L','#FF6B4A','Có xuất hóa đơn không?',840,430,0.6],
+ ['Z','#0068FF','Chốt cho mình 2 cái',200,520,0.75],
+ ['f','#1877F2','Sao chưa ai trả lời vậy?',620,560,0.9],
+ ['T','#111','Còn hàng không shop ơi',440,70,1.05],
+ ['Z','#0068FF','Gửi mình số tài khoản',1000,550,1.2],
+];
+const glyph=g=>g==='T'?'<svg><use href="#c-tt"/></svg>':g==='I'?'<svg><use href="#c-ig"/></svg>':g==='L'?'<svg><use href="#c-live"/></svg>':g;
+$('bubs').innerHTML=BUB.map((b,i)=>`<div class="bub" id="bb${i}"><span class="dot" style="background:${b[1]}">${glyph(b[0])}</span>${b[2]}</div>`).join('');
+
+// ---------- S3 convs ----------
+const CONV=[['TH','#C26B4F','Thu Hà','Chị lấy 2 nến, ship về Q.3'],['MK','#6E7F5A','Minh Khang','Còn màu xanh đậm không shop?'],['NA','#9A6B9E','Ngọc Anh','Set quà Tết giá sao ạ']];
+$('convs').innerHTML=CONV.map((c,i)=>`<div class="abs" style="left:0;right:0;top:${70+i*78}px;height:78px;padding:14px 20px;display:flex;gap:12px;align-items:center;${i==0?'background:#FFF8F5;border-left:4px solid #C93F24;':''}"><div class="dot" style="width:46px;height:46px;border-radius:99px;background:${c[1]};font-size:15px">${c[0]}</div><div style="min-width:0"><b style="font-size:18px">${c[2]}</b><div style="color:var(--muted);font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:190px">${c[3]}</div></div></div>`).join('');
+
+// ---------- S4 ----------
+const ITEMS=[['Nến gỗ đàn hương','2 × 189.000đ',378000,'linear-gradient(135deg,#F3DCC4,#C99A6B)'],['Cốc gốm men lam','1 × 145.000đ',145000,'linear-gradient(135deg,#DCE7F2,#7EA0C6)'],['Giỏ cói đựng quà','1 × 65.000đ',65000,'linear-gradient(135deg,#F1E6DA,#B8957A)']];
+$('items').innerHTML=ITEMS.map((it,i)=>`<div id="it${i}" style="display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)"><div style="width:52px;height:52px;border-radius:12px;background:${it[3]}"></div><div style="flex:1"><b style="font-size:20px">${it[0]}</b><div style="color:var(--muted);font-size:16px">${it[1]}</div></div><b style="font-size:20px">${it[2].toLocaleString('vi-VN')}đ</b></div>`).join('');
+const H=[52,61,44,70,83,58,92];const DAYS=['T2','T3','T4','T5','T6','T7','Nay'];
+$('bars').innerHTML=H.map((h,i)=>`<div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;color:var(--muted);font-weight:600;font-size:15px"><div id="bar${i}" style="width:100%;height:${h*2.1}px;border-radius:10px 10px 5px 5px;background:${i==6?'#FF6B4A':'#FFD2C4'};transform-origin:bottom"></div>${DAYS[i]}</div>`).join('');
+const money=n=>Math.round(n).toLocaleString('vi-VN')+'đ';
+
+// ---------- S5 logo clone ----------
+// copy the logo group into S5 using same markup
+$('logo2').innerHTML=$('logo').innerHTML;
+
+// ---------- timeline ----------
+const SC=[['s1',0,4.2],['s2',3.8,8.6],['s3',8.2,14.8],['s4',14.4,19.8],['s5',19.4,24]];
+function sceneAlpha(t,a,b){
+  const fi=prog(t,a,a+.5), fo=1-prog(t,b-.5,b);
+  return a===0?fo:(b>=DUR?fi:Math.min(fi,fo));
+}
+function set(el,o){Object.assign(el.style,o)}
+
+function render(t){
+  // scenes visibility
+  SC.forEach(([id,a,b])=>{ $(id).style.opacity=sceneAlpha(t,a,b); });
+  // drifting blobs
+  set($('b1'),{transform:`translate(${Math.sin(t*.6)*40}px,${Math.cos(t*.5)*30}px)`});
+  set($('b2'),{transform:`translate(${Math.cos(t*.5)*40}px,${Math.sin(t*.7)*30}px)`});
+
+  // S1
+  const cap1=prog(t,.3,.9);
+  set($('s1cap'),{opacity:cap1*(1-prog(t,3.2,3.7)),transform:`translateY(${(1-easeOut(cap1))*24}px)`});
+  BUB.forEach((b,i)=>{
+    const el=$('bb'+i), start=b[5];
+    const appear=back(prog(t,start,start+.45));
+    const jx=Math.sin(t*2+i*1.7)*10, jy=Math.cos(t*1.7+i*2.3)*8;
+    const suck=easeInOut(prog(t,3.1,3.9)); // pulled to center
+    const cx=640-110, cy=360-26;
+    const x=lerp(b[3]+jx,cx,suck), y=lerp(b[4]+jy,cy,suck);
+    set(el,{left:x+'px',top:y+'px',opacity:clamp(appear)*(1-suck*.9),transform:`scale(${appear*(1-suck*.55)}) rotate(${Math.sin(i+t*1.2)*3}deg)`});
+  });
+
+  // S2 logo
+  const bub=back(prog(t,4.0,4.7));
+  const stem=easeOut(prog(t,4.6,5.0)), leg=easeOut(prog(t,4.9,5.3)), wing=back(prog(t,5.2,5.8));
+  const shift=easeInOut(prog(t,5.8,6.6)); // mark slides left, word appears
+  const logoDx=lerp(220,0,shift);
+  set($('logo'),{transform:`translateX(${-(1-shift)*0 + 0}px)`});
+  $('logoMark').setAttribute('transform',`translate(${lerp(170,0,shift)} 0) scale(${bub})`);
+  $('logoMark').style.transformOrigin='100px 100px';
+  $('kStem').setAttribute('height',82*stem); $('kStem').setAttribute('y',50+82*(1-stem)/2*0);
+  $('kLeg').setAttribute('stroke-dasharray','70'); $('kLeg').setAttribute('stroke-dashoffset',70*(1-leg));
+  $('kWing').setAttribute('transform',`translate(${58} ${96}) scale(${wing}) translate(${-58} ${-96})`);
+  $('kWing').style.opacity=clamp(wing);
+  const word=easeOut(prog(t,6.0,6.9));
+  set($('logoWord'),{opacity:word,transform:`translateX(${(1-word)*-60}px)`});
+  const tag=easeOut(prog(t,6.9,7.6));
+  set($('tag'),{opacity:tag,transform:`translateY(${(1-tag)*20}px)`});
+
+  // S3
+  const w3=easeOut(prog(t,8.3,9.1));
+  set($('w3'),{opacity:w3,transform:`translateY(${(1-w3)*60}px) scale(${.96+.04*w3})`});
+  set($('s3cap'),{opacity:easeOut(prog(t,8.4,9.0))});
+  const pop=(id,a)=>{const p=back(prog(t,a,a+.4));set($(id),{opacity:clamp(p*2),transform:`scale(${.6+.4*p}) translateY(${(1-clamp(p))*16}px)`,transformOrigin:'left top'})};
+  pop('m1',9.5);pop('m2',10.4);pop('m3',11.3);
+  const cp=back(prog(t,12.0,12.5));
+  set($('card'),{opacity:clamp(cp*2),transform:`scale(${.7+.3*cp})`,transformOrigin:'right top'});
+  const click=prog(t,13.0,13.2)*(1-prog(t,13.2,13.4));
+  set($('qrbtn'),{transform:`scale(${1-.06*click})`});
+  const paid=t>=13.7;
+  $('pay').textContent=paid?'Đã nhận tiền':'Chờ thanh toán';
+  set($('pay'),{background:paid?'#E3F4EE':'#FDF0DC',color:paid?'#0E7C61':'#B45309'});
+  $('qrtxt').textContent=t>=13.2?'Đã gửi mã QR':'Gửi mã QR thanh toán';
+  const ring=prog(t,13.7,14.5);
+  set($('ring'),{opacity:ring>0&&ring<1?1-ring:0,transform:`scale(${1+ring*5})`});
+
+  // S4
+  const w4a=easeOut(prog(t,14.5,15.2)), w4b=easeOut(prog(t,15.6,16.3));
+  set($('w4a'),{opacity:w4a,transform:`translateY(${(1-w4a)*50}px)`});
+  set($('w4b'),{opacity:w4b,transform:`translateY(${(1-w4b)*50}px)`});
+  const capText=t<16.0?'Bán tại quầy, thu tiền bằng mã QR':'Và thấy doanh thu mỗi ngày';
+  $('s4cap').textContent=capText;
+  set($('s4cap'),{opacity:easeOut(prog(t,14.6,15.1))});
+  let tot=0;
+  ITEMS.forEach((it,i)=>{const p=back(prog(t,15.0+i*.35,15.4+i*.35));set($('it'+i),{opacity:clamp(p*2),transform:`translateX(${(1-clamp(p))*-30}px)`}); if(t>=15.0+i*.35+.2) tot+=it[2]});
+  $('tot').textContent=money(tot);
+  const pb=t>=17.0?1:0; set($('payb'),{transform:`scale(${1-.05*(prog(t,17.0,17.1)*(1-prog(t,17.1,17.3)))})`});
+  $('payb').textContent=t>=17.3?'Đã nhận tiền':'Thanh toán bằng mã QR';
+  set($('payb'),{background:t>=17.3?'#0E7C61':'#C93F24'});
+  H.forEach((h,i)=>{const p=easeOut(prog(t,16.5+i*.12,17.3+i*.12));$('bar'+i).style.transform=`scaleY(${p})`});
+  $('rev').textContent=money(6821000*easeOut(prog(t,16.6,18.4)));
+  set($('up'),{opacity:easeOut(prog(t,18.0,18.5))});
+
+  // S5
+  const l5=back(prog(t,19.6,20.3));
+  set($('logo2'),{opacity:clamp(l5*2),transform:`scale(${.8+.2*l5})`});
+  const t5=easeOut(prog(t,20.4,21.0)); set($('s5tag'),{opacity:t5,transform:`translateY(${(1-t5)*20}px)`});
+  const c5=back(prog(t,21.0,21.6)); set($('cta'),{opacity:clamp(c5*2),transform:`scale(${.85+.15*c5})`});
+  const pulse=t>22?1+.025*Math.sin((t-22)*5):1; $('cta').style.transform+=` scale(${pulse})`;
+  set($('s5sub'),{opacity:easeOut(prog(t,21.6,22.2))});
+}
+const q=new URLSearchParams(location.search);
+window.render=render;
+render(parseFloat(q.get('t')||'0'));
+</script>
+</body></html>

@@ -1,0 +1,982 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kalo · Bản thiết kế chờ duyệt</title>
+<style>@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/bvp-vietnamese-400.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/bvp-latin-ext-400.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/bvp-latin-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/bvp-vietnamese-500.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/bvp-latin-ext-500.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(fonts/bvp-latin-500.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/bvp-vietnamese-600.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/bvp-latin-ext-600.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(fonts/bvp-latin-600.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/bvp-vietnamese-700.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/bvp-latin-ext-700.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(fonts/bvp-latin-700.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/bvp-vietnamese-800.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/bvp-latin-ext-800.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(fonts/bvp-latin-800.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}</style>
+<style>
+:root{
+  --coral:#FF6B4A; --action:#C93F24; --action-soft:#FFE9E1; --action-ink:#A3361D;
+  --ink:#1F1714; --muted:#6E625B; --bg:#FFF8F5; --surface:#FFFFFF; --line:#F0E4DD; --line-2:#E6D6CD;
+  --ok:#0E7C61; --ok-soft:#E3F4EE; --warn:#B45309; --warn-soft:#FDF0DC;
+  --pos:#F59E0B; --live:#14B8A6; --console:#3B2F6B;
+  --r:14px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;color:var(--ink);background:#F6EEE9;font-size:14px;line-height:1.45}
+svg.i{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:none}
+svg.i.s{width:16px;height:16px}
+h1,h2,h3,h4,p{margin:0}
+button{font:inherit;cursor:pointer}
+
+/* ---------- Gallery chrome ---------- */
+.top{position:sticky;top:0;z-index:20;background:rgba(255,248,245,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 24px;display:flex;gap:20px;align-items:center;flex-wrap:wrap}
+.top nav{display:flex;gap:6px;flex-wrap:wrap}
+.top nav a{color:var(--muted);text-decoration:none;padding:6px 12px;border-radius:999px;font-weight:500}
+.top nav a:hover{background:var(--action-soft);color:var(--action-ink)}
+.top .meta{margin-left:auto;color:var(--muted);font-size:12px}
+.wrap{max-width:1360px;margin:0 auto;padding:40px 24px 120px}
+.sec{margin-bottom:72px;scroll-margin-top:80px}
+.sec>h2{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-bottom:6px}
+.sec>.lead{color:var(--muted);margin-bottom:24px}
+.label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:28px 0 10px}
+.frame{background:var(--surface);border-radius:18px;box-shadow:0 1px 0 var(--line),0 12px 40px -18px rgba(80,40,20,.25);overflow:hidden}
+.scroll{overflow-x:auto;padding-bottom:8px}
+
+/* ---------- Brand board ---------- */
+.brand-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:20px}
+.card{background:var(--surface);border-radius:18px;padding:28px;box-shadow:0 1px 0 var(--line)}
+.hero-logo{display:flex;align-items:center;justify-content:center;gap:28px;min-height:260px;background:var(--bg);border-radius:14px}
+.lockups{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.lockup{display:flex;align-items:center;gap:10px;padding:16px;border:1px solid var(--line);border-radius:12px}
+.lockup b{font-size:22px;font-weight:800;letter-spacing:-.03em}
+.lockup .tag{font-size:13px;font-weight:700;padding:3px 8px;border-radius:6px;color:#fff}
+.lockup small{display:block;color:var(--muted);font-size:12px}
+.swatches{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.sw{border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.sw div{height:64px}
+.sw p{padding:8px 10px;font-size:12px}
+.sw p b{display:block;font-size:13px}
+.icons-row{display:flex;gap:18px;align-items:end;flex-wrap:wrap}
+.appicon{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;box-shadow:0 8px 20px -8px rgba(201,63,36,.5)}
+.voice{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.voice div{border-radius:12px;padding:14px}
+.voice .do{background:var(--ok-soft)} .voice .dont{background:#FBEAEA}
+.voice ul{margin:6px 0 0;padding-left:18px}
+.voice li{margin:3px 0}
+
+/* ---------- App shell (desktop) ---------- */
+.app{width:1280px;height:800px;display:flex;background:var(--bg);font-size:13.5px}
+.rail{width:76px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:center;padding:14px 0;gap:4px}
+.rail .nav{width:60px;padding:8px 0 6px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);font-size:11px;font-weight:500}
+.rail .nav.on{background:var(--action-soft);color:var(--action-ink)}
+.rail .nav{position:relative}
+.rail .badge{position:absolute;top:4px;right:10px;background:var(--action);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:0 5px;line-height:16px}
+.rail .spacer{flex:1}
+.av{border-radius:999px;display:grid;place-items:center;font-weight:700;color:#fff;flex:none}
+.main{flex:1;display:flex;min-width:0}
+.col{background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;min-width:0}
+.pad{padding:16px}
+.search{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--muted)}
+.tabs{display:flex;gap:4px}
+.tab{padding:6px 12px;border-radius:999px;color:var(--muted);font-weight:500;white-space:nowrap}
+.tab.on{background:var(--ink);color:#fff}
+.tab .n{opacity:.7;margin-left:4px}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:10px;padding:9px 14px;font-weight:600;white-space:nowrap}
+.btn.primary{background:var(--action);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line-2)}
+.btn.soft{background:var(--action-soft);color:var(--action-ink)}
+.btn.lg{padding:13px 20px;font-size:15px;border-radius:12px}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;font-size:12px;font-weight:600}
+.chip.ok{background:var(--ok-soft);color:var(--ok)} .chip.warn{background:var(--warn-soft);color:var(--warn)}
+.chip.new{background:var(--action-soft);color:var(--action-ink)} .chip.gray{background:#F3ECE8;color:var(--muted)}
+.ch{width:16px;height:16px;border-radius:5px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:800;flex:none}
+.ch.zalo{background:#0068FF}.ch.fb{background:#1877F2}.ch.tt{background:#111}.ch.web{background:var(--coral)}.ch.ig{background:#D62976}
+
+/* conversation list */
+.conv{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);position:relative}
+.conv.on{background:var(--bg)}
+.conv.on:before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;border-radius:3px;background:var(--action)}
+.conv .who{display:flex;align-items:center;gap:6px;font-weight:600}
+.conv .t{margin-left:auto;color:var(--muted);font-size:12px;font-weight:400}
+.conv .msg{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv .unread{font-weight:600;color:var(--ink)}
+.conv .dot{width:8px;height:8px;border-radius:9px;background:var(--action);margin-top:6px}
+.avwrap{position:relative}
+.avwrap .ch{position:absolute;right:-3px;bottom:-3px;border:2px solid #fff;width:18px;height:18px}
+
+/* chat */
+.chat{flex:1;display:flex;flex-direction:column;min-width:0;background:var(--bg)}
+.chat-h{display:flex;align-items:center;gap:12px;padding:12px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.msgs{flex:1;padding:20px 28px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.b{max-width:62%;padding:10px 14px;border-radius:16px;background:var(--surface);box-shadow:0 1px 0 var(--line)}
+.b.me{align-self:flex-end;background:#FFE3D9;border-bottom-right-radius:4px}
+.b.them{border-bottom-left-radius:4px}
+.b .time{font-size:11px;color:var(--muted);margin-top:4px}
+.day{align-self:center;font-size:12px;color:var(--muted);background:#F3E9E3;padding:3px 10px;border-radius:999px}
+.order-card{align-self:flex-end;width:300px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px}
+.order-card .row{display:flex;justify-content:space-between;margin:4px 0}
+.prod-img{width:44px;height:44px;border-radius:10px;flex:none}
+.suggest{display:flex;gap:8px;padding:0 20px 10px;flex-wrap:wrap}
+.suggest .sg{background:var(--surface);border:1px dashed #F2B8A6;color:var(--action-ink);padding:7px 12px;border-radius:999px;font-weight:500;display:flex;gap:6px;align-items:center}
+.composer{margin:0 20px 16px;background:var(--surface);border:1px solid var(--line-2);border-radius:16px;padding:10px 12px}
+.composer .ph{color:var(--muted);padding:6px 4px 12px}
+.composer .tools{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.composer .tools .tl{padding:6px 10px;border-radius:8px;display:flex;align-items:center;gap:6px;font-weight:500}
+.composer .tools .tl:hover{background:var(--bg)}
+.side{width:300px;background:var(--surface);border-left:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:18px}
+.side h4{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.kv{display:flex;justify-content:space-between;padding:5px 0}
+.kv span:first-child{color:var(--muted)}
+.mini-order{border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+
+/* page header */
+.ph{}
+.page{flex:1;display:flex;flex-direction:column;min-width:0}
+.page-h{display:flex;align-items:center;gap:12px;padding:20px 28px 0}
+.page-h h1{font-size:22px;font-weight:800;letter-spacing:-.02em}
+.page-h .r{margin-left:auto;display:flex;gap:8px}
+.content{padding:20px 28px;display:flex;flex-direction:column;gap:16px;min-height:0}
+.panel{background:var(--surface);border-radius:var(--r);box-shadow:0 1px 0 var(--line);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;font-size:12px;color:var(--muted);font-weight:600;padding:12px 16px;border-bottom:1px solid var(--line)}
+td{padding:13px 16px;border-bottom:1px solid var(--line);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td .sub{color:var(--muted);font-size:12px}
+.num{font-variant-numeric:tabular-nums}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{padding:18px}
+.kpi p{color:var(--muted);font-weight:500}
+.kpi b{display:block;font-size:26px;font-weight:800;letter-spacing:-.02em;margin:6px 0 2px}
+.up{color:var(--ok);font-weight:600;font-size:12px}
+.down{color:var(--action);font-weight:600;font-size:12px}
+.bars{display:flex;align-items:end;gap:14px;height:180px;padding:10px 4px 0}
+.bars div{flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:6px;color:var(--muted);font-size:12px}
+.bars i{display:block;width:100%;border-radius:8px 8px 4px 4px;background:#FFD2C4}
+.bars .today i{background:var(--coral)}
+.rowflex{display:flex;align-items:center;gap:10px}
+.prog{height:8px;border-radius:9px;background:#F3ECE8;overflow:hidden}
+.prog i{display:block;height:100%;background:var(--coral);border-radius:9px}
+
+/* POS */
+.pos{width:1280px;height:800px;display:flex;background:var(--bg)}
+.pos .left{flex:1;display:flex;flex-direction:column;padding:20px 24px;gap:16px}
+.pgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px}
+.pcard .img{height:118px;border-radius:10px;margin-bottom:10px;display:grid;place-items:center;font-size:40px}
+.pcard b{display:block;margin-top:2px}
+.pcard .p{color:var(--action-ink);font-weight:700}
+.cart{width:380px;background:var(--surface);border-left:1px solid var(--line);display:flex;flex-direction:column}
+.cart .items{flex:1;padding:4px 20px}
+.citem{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.qty{display:flex;align-items:center;border:1px solid var(--line-2);border-radius:9px}
+.qty span{width:28px;text-align:center;font-weight:600}
+.qty button{border:0;background:none;width:26px;height:28px;color:var(--muted);font-size:16px}
+.total{padding:16px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.paym{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 4px}
+.paym div{border:1px solid var(--line-2);border-radius:10px;padding:9px;text-align:center;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:4px}
+.paym .on{border-color:var(--action);background:var(--action-soft);color:var(--action-ink)}
+
+/* Mobile */
+.phones{display:flex;gap:28px;flex-wrap:wrap}
+.phone{width:375px;height:790px;border-radius:44px;background:#1F1714;padding:10px;box-shadow:0 20px 50px -20px rgba(60,30,15,.45)}
+.screen{width:100%;height:100%;border-radius:36px;overflow:hidden;background:var(--bg);display:flex;flex-direction:column;position:relative}
+.status{display:flex;justify-content:space-between;padding:14px 26px 6px;font-weight:600;font-size:13px}
+.m-h{display:flex;align-items:center;gap:10px;padding:8px 18px 12px}
+.m-h h1{font-size:26px;font-weight:800;letter-spacing:-.02em}
+.m-body{flex:1;overflow:hidden}
+.tabbar{display:flex;justify-content:space-around;background:var(--surface);border-top:1px solid var(--line);padding:8px 6px 22px}
+.tabbar div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--muted);font-weight:500;position:relative;width:64px}
+.tabbar .on{color:var(--action-ink)}
+.tabbar .badge{position:absolute;top:-4px;right:12px;background:var(--action);color:#fff;font-size:10px;font-weight:700;border-radius:999px;padding:0 5px;line-height:16px}
+.fab{position:absolute;right:18px;bottom:96px;width:56px;height:56px;border-radius:18px;background:var(--action);color:#fff;display:grid;place-items:center;box-shadow:0 10px 24px -8px rgba(201,63,36,.7)}
+.field{background:var(--surface);border:1px solid var(--line-2);border-radius:12px;padding:11px 14px}
+.field small{display:block;color:var(--muted);font-size:12px}
+
+/* Console */
+.console{width:1280px;height:760px;display:flex;background:#F7F6FB}
+.console .sidebar{width:220px;background:#231C40;color:#D9D4EE;padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.console .sidebar a{display:flex;gap:10px;align-items:center;padding:9px 12px;border-radius:10px;color:inherit;text-decoration:none;font-weight:500}
+.console .sidebar a.on{background:#3B2F6B;color:#fff}
+.console .panel{border-color:#E9E6F2;box-shadow:none}
+.console td,.console th{border-color:#EEEBF5}
+
+
+.a{fill:var(--ia,#FFD7CA)}
+.w{fill:var(--ibg,#fff)}
+svg.i{--ia:#FFD7CA}
+.rail .nav.on svg.i{--ia:#FFB8A3}
+.btn.primary svg.i{--ia:rgba(255,255,255,.3);--ibg:#C93F24}
+.console .sidebar svg.i{--ia:rgba(255,255,255,.16);--ibg:#231C40}
+.console .sidebar a.on svg.i{--ia:rgba(255,255,255,.28);--ibg:#3B2F6B}
+.composer .tl svg.i,.btn.soft svg.i{--ia:#FFC9B8}
+.ch svg{width:74%;height:74%}
+.pcard .img svg.pi{width:68px;height:68px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.iconset{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+.iconset div{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 8px 12px;text-align:center;font-size:12px;color:var(--muted)}
+.iconset svg.i{width:34px;height:34px;color:var(--ink);display:block;margin:0 auto 8px}
+.iconset svg.i.sm{width:22px;height:22px;display:inline-block;margin:0 4px 0 0;vertical-align:middle}
+.videobox{background:#1F1714;border-radius:18px;padding:14px;box-shadow:0 20px 50px -24px rgba(60,30,15,.5)}
+.videobox video{width:100%;display:block;border-radius:10px;background:#000}
+.vgrid{display:grid;grid-template-columns:1.7fr 1fr;gap:20px}
+.story{display:flex;flex-direction:column;gap:10px}
+.story div{display:flex;gap:12px;align-items:flex-start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px}
+.story b{flex:none;width:26px;height:26px;border-radius:9px;background:var(--action-soft);color:var(--action-ink);display:grid;place-items:center;font-size:13px}
+.story small{display:block;color:var(--muted)}
+.l-video{padding:0 64px 64px}
+.l-video .videobox{max-width:960px;margin:0 auto}
+@media(max-width:1000px){.vgrid{grid-template-columns:1fr}}
+
+/* Landing */
+.landing{width:1280px;background:var(--bg)}
+.l-nav{display:flex;align-items:center;gap:28px;padding:22px 64px}
+.l-nav a{color:var(--muted);text-decoration:none;font-weight:500}
+.l-hero{display:grid;grid-template-columns:1.05fr 1fr;gap:40px;padding:40px 64px 72px;align-items:center}
+.l-hero h1{font-size:46px;line-height:1.08;font-weight:800;letter-spacing:-.035em}
+.l-hero h1 em{font-style:normal;color:var(--action)}
+.l-hero p{font-size:18px;color:var(--muted);margin:18px 0 28px;max-width:500px}
+.l-channels{display:flex;gap:8px;align-items:center;margin-top:26px;color:var(--muted)}
+.l-pricing{background:var(--surface);padding:64px;border-top:1px solid var(--line)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:28px}
+.plan{border:1px solid var(--line-2);border-radius:20px;padding:26px;display:flex;flex-direction:column;gap:12px}
+.plan.hl{border:2px solid var(--action);position:relative;background:#FFFBF9}
+.plan .pr{font-size:34px;font-weight:800;letter-spacing:-.02em}
+.plan .pr small{font-size:15px;color:var(--muted);font-weight:500}
+.plan ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:9px}
+.plan li{display:flex;gap:8px;align-items:center}
+.plan li svg{color:var(--ok)}
+.ribbon{position:absolute;top:-12px;left:26px;background:var(--action);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px}
+.note{background:#FFF3D6;border:1px solid #F5D98A;border-radius:12px;padding:12px 16px;color:#6B4E0A;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<!-- Icon sprite (stroke icons, 24px grid) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 64 64">
+      <path fill="#FF6B4A" d="M14 6h36a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H27l-12 8.5V52h-1A10 10 0 0 1 4 42V16A10 10 0 0 1 14 6z"/>
+      <rect x="18" y="15" width="7" height="29" rx="3.5" fill="#fff"/>
+      <path fill="#fff" d="M25 31.5C29 22 36.5 15 47.5 12.5c-1.6 3.6-3.6 5.8-6.6 7.3 2.4.2 4.4-.1 6.4-.9C42.6 26.3 34 30.5 25 34z"/>
+      <path stroke="#fff" stroke-width="7" stroke-linecap="round" d="M28 34.5 43 44"/>
+    </symbol>
+    <symbol id="mark-white" viewBox="0 0 64 64">
+      <rect x="18" y="15" width="7" height="29" rx="3.5" fill="#fff"/>
+      <path fill="#fff" d="M25 31.5C29 22 36.5 15 47.5 12.5c-1.6 3.6-3.6 5.8-6.6 7.3 2.4.2 4.4-.1 6.4-.9C42.6 26.3 34 30.5 25 34z"/>
+      <path stroke="#fff" stroke-width="7" stroke-linecap="round" d="M28 34.5 43 44"/>
+    </symbol>
+    <symbol id="i-msg" viewBox="0 0 24 24"><path class="a" d="M5.5 4h13A2.5 2.5 0 0 1 21 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V17A2.5 2.5 0 0 1 3 14.5v-8A2.5 2.5 0 0 1 5.5 4z"/><path d="M8 9h8M8 12.5h5"/></symbol>
+<symbol id="i-bag" viewBox="0 0 24 24"><path class="a" d="M4.8 8h14.4l1 11.2a1.5 1.5 0 0 1-1.5 1.6H5.3a1.5 1.5 0 0 1-1.5-1.6z"/><path d="M8.7 8V7a3.3 3.3 0 0 1 6.6 0v1"/><path d="M9.5 12.5a2.5 2.5 0 0 0 5 0"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><circle class="a" cx="9" cy="8" r="3.3"/><path d="M3.2 19.5a5.8 5.8 0 0 1 11.6 0"/><path d="M15.6 4.9a3.2 3.2 0 0 1 0 6.2M17.6 14.2a5.2 5.2 0 0 1 3.2 5.3"/></symbol>
+<symbol id="i-mega" viewBox="0 0 24 24"><path class="a" d="M4 10.3v3.4c0 .6.4 1 1 1h2.2l8 4V5.3l-8 4H5c-.6 0-1 .4-1 1z"/><path d="M18.6 9a4.2 4.2 0 0 1 0 6M7.2 14.8l1.3 4.7h2.6"/></symbol>
+<symbol id="i-chart" viewBox="0 0 24 24"><rect class="a" x="3.8" y="12" width="4.4" height="8" rx="1.2"/><rect class="a" x="9.8" y="7.5" width="4.4" height="12.5" rx="1.2"/><rect class="a" x="15.8" y="3.5" width="4.4" height="16.5" rx="1.2"/></symbol>
+<symbol id="i-set" viewBox="0 0 24 24"><path d="M4 7h8.5M17.5 7H20M4 12h2.5M11.5 12H20M4 17h8M17 17h3"/><circle class="a" cx="15" cy="7" r="2.4"/><circle class="a" cx="9" cy="12" r="2.4"/><circle class="a" cx="14.5" cy="17" r="2.4"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle class="a" cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.6 4.6M8.3 9.6a3 3 0 0 1 2.3-1.6"/></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+<symbol id="i-send" viewBox="0 0 24 24"><path class="a" d="M3.6 11.6 20.4 4.2c.6-.3 1.2.3.9.9l-7.4 16.2c-.3.6-1.1.5-1.3-.1l-2-6.1-6.1-2c-.6-.2-.7-1-.1-1.3z"/><path d="m20.8 4.4-9.9 9.6"/></symbol>
+<symbol id="i-qr" viewBox="0 0 24 24"><rect class="a" x="3.2" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect class="a" x="13.6" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect class="a" x="3.2" y="13.6" width="7.2" height="7.2" rx="1.8"/><path d="M14 14h2.4M20.8 14v.01M14 17.4v3.4M17.4 17.4h3.4M20.8 20.8v.01M17.4 20.8v.01"/></symbol>
+<symbol id="i-spark" viewBox="0 0 24 24"><path class="a" d="M10.8 3c.7 4.5 2.5 6.4 7 7.1-4.5.7-6.3 2.6-7 7.1-.7-4.5-2.5-6.4-7-7.1 4.5-.7 6.3-2.6 7-7.1z"/><path d="M18.4 15.6v4.2M16.3 17.7h4.2"/></symbol>
+<symbol id="i-truck" viewBox="0 0 24 24"><path class="a" d="M2.8 7.4a1 1 0 0 1 1-1h8.8a1 1 0 0 1 1 1v9H2.8z"/><path class="a" d="M13.6 9.8h3.9l3 3.1v3.5h-6.9z"/><circle class="w" cx="7" cy="17.4" r="2.1"/><circle class="w" cx="17" cy="17.4" r="2.1"/></symbol>
+<symbol id="i-img" viewBox="0 0 24 24"><rect class="a" x="3" y="4" width="18" height="16" rx="3.4"/><circle cx="8.8" cy="9.4" r="1.8"/><path d="m3.6 17 4.9-4.5 3.8 3.4 3-2.6 5.1 4.2"/></symbol>
+<symbol id="i-bell" viewBox="0 0 24 24"><path class="a" d="M6 16.3V11a6 6 0 0 1 12 0v5.3l1.6 2.1c.3.4 0 .9-.5.9H4.9c-.5 0-.8-.5-.5-.9z"/><path d="M10 21.2a2.2 2.2 0 0 0 4 0"/></symbol>
+<symbol id="i-more" viewBox="0 0 24 24"><circle cx="5.5" cy="12" r="1.5" fill="currentColor"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/><circle cx="18.5" cy="12" r="1.5" fill="currentColor"/></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.5 4.4L19 7.4"/></symbol>
+<symbol id="i-store" viewBox="0 0 24 24"><path class="a" d="m3.4 9.6 1.4-4.7a1 1 0 0 1 1-.7h12.4a1 1 0 0 1 1 .7l1.4 4.7z"/><path d="M3.4 9.6a2.75 2.75 0 0 0 5.5 0 3 3 0 0 0 6.2 0 2.75 2.75 0 0 0 5.5 0M5 12.2V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6.8M10 20v-4.4h4V20"/></symbol>
+<symbol id="i-cash" viewBox="0 0 24 24"><rect class="a" x="2.6" y="6" width="18.8" height="12" rx="2.8"/><circle class="w" cx="12" cy="12" r="2.8"/><path d="M6.2 12h.01M17.8 12h.01"/></symbol>
+<symbol id="i-card" viewBox="0 0 24 24"><rect class="a" x="2.6" y="5" width="18.8" height="14" rx="3"/><path d="M2.6 10h18.8M6.4 15h3.6"/></symbol>
+<symbol id="i-back" viewBox="0 0 24 24"><path d="m14.5 5.5-6.5 6.5 6.5 6.5"/></symbol>
+<symbol id="i-tag" viewBox="0 0 24 24"><path class="a" d="M3.5 5.5a2 2 0 0 1 2-2h6l9 9a2 2 0 0 1 0 2.8l-5.9 5.9a2 2 0 0 1-2.8 0l-8.3-8.3z"/><circle class="w" cx="8" cy="8" r="1.4"/></symbol>
+<symbol id="i-home" viewBox="0 0 24 24"><path class="a" d="M3.6 11.2 11.2 4.4a1.2 1.2 0 0 1 1.6 0l7.6 6.8c.4.4.6.8.6 1.3V19a1.2 1.2 0 0 1-1.2 1.2H15v-5.4H9v5.4H4.2A1.2 1.2 0 0 1 3 19v-6.5c0-.5.2-.9.6-1.3z"/></symbol>
+<symbol id="i-wallet" viewBox="0 0 24 24"><rect class="a" x="3" y="6" width="18" height="14" rx="3.2"/><path d="M6.5 6V5.4A2.4 2.4 0 0 1 8.9 3H16.5M16.2 12H21v4.2h-4.8a2.1 2.1 0 0 1 0-4.2z"/><circle cx="17" cy="14.1" r=".6" fill="currentColor"/></symbol>
+<symbol id="i-plug" viewBox="0 0 24 24"><path d="M10 14.2a4 4 0 0 0 5.6 0l3.1-3.1a4 4 0 0 0-5.6-5.7l-1 1M14 9.8a4 4 0 0 0-5.6 0l-3.1 3.1a4 4 0 0 0 5.6 5.7l1-1"/><circle class="a" cx="12" cy="12" r="1.6"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4.5 12h15M13.5 6l6 6-6 6"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path class="a" d="M13.2 2.6 4.6 13.4c-.3.4 0 .9.5.9H11l-.9 6.9c-.1.7.7 1 1.1.5l8.2-10.6c.3-.4 0-.9-.5-.9H13l.7-6.8c.1-.7-.8-1-1.2-.5z"/></symbol>
+<symbol id="p-candle" viewBox="0 0 24 24"><path d="M12 2.8c1.8 2.1 2.2 3.5 0 5.3-2.2-1.8-1.8-3.2 0-5.3z" fill="rgba(255,255,255,.55)"/><rect x="6.8" y="10.2" width="10.4" height="10.4" rx="2.8" fill="rgba(255,255,255,.35)"/><path d="M12 8.2v2M6.8 14h10.4"/></symbol>
+<symbol id="p-cup" viewBox="0 0 24 24"><path d="M5.2 9.5h11.4v5a5.7 5.7 0 0 1-11.4 0z" fill="rgba(255,255,255,.35)"/><path d="M16.6 10.8h1.2a2.6 2.6 0 0 1 0 5.2h-1.4M8.6 4v2.6M12.4 4v2.6"/></symbol>
+<symbol id="p-plate" viewBox="0 0 24 24"><ellipse cx="12" cy="13" rx="9.3" ry="5.4" fill="rgba(255,255,255,.35)"/><ellipse cx="12" cy="13" rx="5.2" ry="2.6"/></symbol>
+<symbol id="p-gift" viewBox="0 0 24 24"><rect x="4" y="10.2" width="16" height="10" rx="2.2" fill="rgba(255,255,255,.35)"/><rect x="3" y="6.8" width="18" height="3.6" rx="1.6" fill="rgba(255,255,255,.55)"/><path d="M12 6.8v13.4M12 6.8C9.2 6.8 7.6 3.4 10 3.4S12 6.8 12 6.8zm0 0c2.8 0 4.4-3.4 2-3.4S12 6.8 12 6.8z"/></symbol>
+<symbol id="p-leaf" viewBox="0 0 24 24"><path d="M4.8 19.2C4.8 11 10 5 19.2 4.8c0 9.2-6 14.4-14.4 14.4z" fill="rgba(255,255,255,.35)"/><path d="M4.8 19.2 14 10"/></symbol>
+<symbol id="p-teapot" viewBox="0 0 24 24"><path d="M6 11.4a6 6 0 0 1 12 0v2.6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5z" fill="rgba(255,255,255,.35)"/><path d="M18 11l3.4-2.4M6 11.2H4.6a2 2 0 0 0 0 4H6.6M12 3.8v1.6M8.4 6.4h7.2"/></symbol>
+<symbol id="p-basket" viewBox="0 0 24 24"><path d="M3.4 10h17.2l-1.9 10H5.3z" fill="rgba(255,255,255,.35)"/><path d="M7.6 10a4.4 4.4 0 0 1 8.8 0M9 13.4v4M12 13.4v4M15 13.4v4"/></symbol>
+<symbol id="c-tt" viewBox="0 0 16 16"><path d="M9.2 2.6v7.1a2.3 2.3 0 1 1-2.3-2.3M9.2 2.6c.2 1.5 1.2 2.5 2.8 2.7" fill="none" stroke="#fff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+<symbol id="c-ig" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="10" rx="3" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="8" cy="8" r="2.3" fill="none" stroke="#fff" stroke-width="1.5"/><circle cx="11" cy="5" r=".8" fill="#fff"/></symbol>
+<symbol id="c-live" viewBox="0 0 16 16"><path d="M3.2 4.2a1.5 1.5 0 0 1 1.5-1.5h6.6a1.5 1.5 0 0 1 1.5 1.5v4.6a1.5 1.5 0 0 1-1.5 1.5H7.6L5 12.7v-2.4h-.3a1.5 1.5 0 0 1-1.5-1.5z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round"/></symbol>
+<symbol id="c-pos" viewBox="0 0 16 16"><path d="M2.8 6.6 3.6 3h8.8l.8 3.6zM3.6 8v4.6h8.8V8M6.6 12.6V10h2.8v2.6" fill="none" stroke="#fff" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  </defs>
+</svg>
+
+<header class="top">
+  <svg width="30" height="30"><use href="#mark"/></svg>
+  <b style="font-size:16px">Kalo · Bản thiết kế chờ duyệt</b>
+  <nav>
+    <a href="#brand">Thương hiệu</a>
+    <a href="#app">Kalo (máy tính)</a>
+    <a href="#pos">Kalo POS</a>
+    <a href="#mobile">Kalo (điện thoại)</a>
+    <a href="#console">Kalo Console</a>
+    <a href="#landing">Trang giới thiệu</a>
+    <a href="#icons">Bộ icon</a>
+    <a href="#video">Video</a>
+  </nav>
+  <span class="meta">Bản 2 · 16/11/2026 · đã duyệt giao diện</span>
+</header>
+
+<main class="wrap">
+
+<!-- ===================== 1. BRAND ===================== -->
+<section class="sec" id="brand">
+  <h2>1. Thương hiệu</h2>
+  <p class="lead">Kalo = K (Khương) + <i>ala</i> (đôi cánh) + "alô". Chữ K có nét trên là đôi cánh, đặt trong bong bóng chat.</p>
+
+  <div class="brand-grid">
+    <div class="card">
+      <div class="hero-logo">
+        <svg width="150" height="150"><use href="#mark"/></svg>
+        <span style="font-size:96px;font-weight:800;letter-spacing:-.04em">kalo</span>
+      </div>
+      <p class="label">Bộ sản phẩm</p>
+      <div class="lockups">
+        <div class="lockup"><svg width="36" height="36"><use href="#mark"/></svg><div><b>kalo</b><small>App cho shop: tin nhắn, đơn, khách, marketing</small></div></div>
+        <div class="lockup"><svg width="36" height="36"><use href="#mark"/></svg><b>kalo</b><span class="tag" style="background:#B45309">POS</span><small style="margin-left:4px">Bán tại quầy</small></div>
+        <div class="lockup"><svg width="36" height="36"><use href="#mark"/></svg><b>kalo</b><span class="tag" style="background:#0F766E">Live</span><small style="margin-left:4px">Khung chat trên website</small></div>
+        <div class="lockup"><svg width="36" height="36"><use href="#mark"/></svg><b>kalo</b><span class="tag" style="background:var(--console)">Console</span><small style="margin-left:4px">Quản trị nội bộ</small></div>
+      </div>
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:6px">
+      <p class="label" style="margin-top:0">Icon ứng dụng</p>
+      <div class="icons-row">
+        <div class="appicon" style="background:linear-gradient(145deg,#FF8A6B,#E8502F)"><svg width="74" height="74"><use href="#mark-white"/></svg></div>
+        <div class="appicon" style="background:#1F1714;box-shadow:none"><svg width="74" height="74"><use href="#mark"/></svg></div>
+        <div class="appicon" style="width:56px;height:56px;border-radius:14px;background:linear-gradient(145deg,#FF8A6B,#E8502F)"><svg width="42" height="42"><use href="#mark-white"/></svg></div>
+        <svg width="24" height="24"><use href="#mark"/></svg>
+        <svg width="16" height="16"><use href="#mark"/></svg>
+      </div>
+
+      <p class="label">Màu</p>
+      <div class="swatches">
+        <div class="sw"><div style="background:var(--coral)"></div><p><b>Cam san hô</b>#FF6B4A · logo</p></div>
+        <div class="sw"><div style="background:var(--action)"></div><p><b>Nút chính</b>#C93F24 · chữ trắng 5.0</p></div>
+        <div class="sw"><div style="background:var(--ink)"></div><p><b>Chữ</b>#1F1714</p></div>
+        <div class="sw"><div style="background:var(--bg)"></div><p><b>Nền</b>#FFF8F5</p></div>
+        <div class="sw"><div style="background:var(--action-soft)"></div><p><b>Nền nhấn</b>#FFE9E1</p></div>
+        <div class="sw"><div style="background:var(--muted)"></div><p><b>Chữ phụ</b>#6E625B · 5.9</p></div>
+        <div class="sw"><div style="background:var(--ok)"></div><p><b>Thành công</b>#0E7C61</p></div>
+        <div class="sw"><div style="background:var(--warn)"></div><p><b>Chú ý</b>#B45309</p></div>
+      </div>
+
+      <p class="label">Chữ</p>
+      <p style="font-size:28px;font-weight:800;letter-spacing:-.02em">Be Vietnam Pro</p>
+      <p style="color:var(--muted)">Đọc rõ tiếng Việt có dấu · 400 · 500 · 600 · 800</p>
+    </div>
+  </div>
+
+  <p class="label">Cách viết trên giao diện</p>
+  <div class="voice">
+    <div class="do"><b>Nên</b><ul><li>"Kết nối Zalo"</li><li>"Tạo đơn" · "Gửi mã QR"</li><li>"Chưa có tin nhắn. Kết nối kênh đầu tiên để bắt đầu."</li><li>"Doanh thu hôm nay"</li></ul></div>
+    <div class="dont"><b>Không nên</b><ul><li>"Cấu hình Webhook Zalo Personal Bridge"</li><li>"Khởi tạo Omnichannel Order Pipeline"</li><li>"Chưa có conversation trong inbox (Chatwoot)"</li><li>"MER blended ROAS"</li></ul></div>
+  </div>
+</section>
+
+<!-- ===================== 2. KALO DESKTOP ===================== -->
+<section class="sec" id="app">
+  <h2>2. Kalo trên máy tính</h2>
+  <p class="lead">Một app, 6 mục. Tin nhắn là màn hình mở đầu tiên.</p>
+
+  <p class="label">2.1 Tin nhắn</p>
+  <div class="scroll"><div class="frame app">
+    <aside class="rail">
+      <svg width="38" height="38" style="margin-bottom:12px"><use href="#mark"/></svg>
+      <div class="nav on"><span class="badge">12</span><svg class="i"><use href="#i-msg"/></svg>Tin nhắn</div>
+      <div class="nav"><svg class="i"><use href="#i-bag"/></svg>Đơn hàng</div>
+      <div class="nav"><svg class="i"><use href="#i-users"/></svg>Khách</div>
+      <div class="nav"><svg class="i"><use href="#i-mega"/></svg>Marketing</div>
+      <div class="nav"><svg class="i"><use href="#i-chart"/></svg>Báo cáo</div>
+      <div class="spacer"></div>
+      <div class="nav"><svg class="i"><use href="#i-set"/></svg>Cài đặt</div>
+      <div class="av" style="width:34px;height:34px;background:#8B5E4A;margin-top:8px">L</div>
+    </aside>
+    <div class="main">
+      <div class="col" style="width:340px">
+        <div class="pad" style="display:flex;flex-direction:column;gap:12px">
+          <div style="display:flex;align-items:center"><h3 style="font-size:20px;font-weight:800">Tin nhắn</h3><button class="btn ghost" style="margin-left:auto;padding:6px 10px"><svg class="i s"><use href="#i-plus"/></svg>Kênh</button></div>
+          <div class="search"><svg class="i s"><use href="#i-search"/></svg>Tìm khách, số điện thoại</div>
+          <div class="tabs"><span class="tab on">Của tôi<span class="n">8</span></span><span class="tab">Chưa ai nhận<span class="n">4</span></span><span class="tab">Tất cả</span></div>
+        </div>
+        <div style="overflow:hidden">
+          <div class="conv on"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#C26B4F">TH</div><span class="ch zalo">Z</span></div><div style="flex:1;min-width:0"><div class="who">Thu Hà<span class="t">2 phút</span></div><div class="msg unread">Chị lấy 2 nến đàn hương nhé, ship về Q.3</div></div></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#6E7F5A">MK</div><span class="ch fb">f</span></div><div style="flex:1;min-width:0"><div class="who">Minh Khang<span class="t">8 phút</span></div><div class="msg unread">Cốc men lam còn màu xanh đậm không shop?</div></div><span class="dot"></span></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#9A6B9E">NA</div><span class="ch tt"><svg><use href="#c-tt"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Ngọc Anh<span class="t">15 phút</span></div><div class="msg unread">Mình xem live hôm qua, set quà Tết giá sao ạ</div></div><span class="dot"></span></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#4F7C8A">Q</div><span class="ch web"><svg><use href="#c-live"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Khách website<span class="t">32 phút</span></div><div class="msg">Shop có xuất hóa đơn công ty không?</div></div></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#B08A3E">PL</div><span class="ch ig"><svg><use href="#c-ig"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Phương Linh<span class="t">1 giờ</span></div><div class="msg">Dạ em cảm ơn shop ạ 🥰</div></div></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#7A6A60">DT</div><span class="ch zalo">Z</span></div><div style="flex:1;min-width:0"><div class="who">Đức Tài<span class="t">Hôm qua</span></div><div class="msg">Đã nhận hàng, đóng gói đẹp lắm</div></div></div>
+          <div class="conv"><div class="avwrap"><div class="av" style="width:40px;height:40px;background:#A0573F">HV</div><span class="ch fb">f</span></div><div style="flex:1;min-width:0"><div class="who">Hải Vân<span class="t">Hôm qua</span></div><div class="msg">Bạn gửi mình số tài khoản nhé</div></div></div>
+        </div>
+      </div>
+
+      <div class="chat">
+        <div class="chat-h">
+          <div class="av" style="width:38px;height:38px;background:#C26B4F">TH</div>
+          <div><b>Thu Hà</b><div style="color:var(--muted);font-size:12px;display:flex;gap:6px;align-items:center"><span class="ch zalo" style="width:14px;height:14px;font-size:9px">Z</span>Zalo · Khách quen</div></div>
+          <div style="margin-left:auto;display:flex;gap:8px"><button class="btn ghost">Giao cho…</button><button class="btn soft"><svg class="i s"><use href="#i-check"/></svg>Xong</button></div>
+        </div>
+        <div class="msgs">
+          <span class="day">Hôm nay</span>
+          <div class="b them">Shop ơi nến gỗ đàn hương còn không ạ?<div class="time">14:02</div></div>
+          <div class="b me">Dạ còn chị ơi, mùi ấm và dịu, cháy khoảng 40 giờ ạ 🕯️<div class="time">14:03 · Lan</div></div>
+          <div class="b them">Chị lấy 2 nến đàn hương nhé, ship về Q.3<div class="time">14:05</div></div>
+          <div class="order-card">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><b>Đơn #1042</b><span class="chip warn">Chờ thanh toán</span></div>
+            <div style="display:flex;gap:10px;align-items:center"><div class="prod-img" style="background:linear-gradient(135deg,#E8C9A8,#C99A6B);display:grid;place-items:center"><svg class="pi" style="width:26px;height:26px;fill:none;stroke:#7A4A32;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round"><use href="#p-candle"/></svg></div><div style="flex:1">Nến gỗ đàn hương<div style="color:var(--muted);font-size:12px">2 × 189.000đ</div></div></div>
+            <div class="row" style="margin-top:10px"><span style="color:var(--muted)">Phí ship</span><span>25.000đ</span></div>
+            <div class="row"><b>Tổng</b><b>403.000đ</b></div>
+            <button class="btn primary" style="width:100%;justify-content:center;margin-top:8px"><svg class="i s"><use href="#i-qr"/></svg>Gửi mã QR thanh toán</button>
+          </div>
+        </div>
+        <div class="suggest">
+          <span class="sg"><svg class="i s"><use href="#i-spark"/></svg>Dạ em lên đơn rồi ạ, chị quét mã QR giúp em nhé</span>
+          <span class="sg"><svg class="i s"><use href="#i-spark"/></svg>Chị cho em xin địa chỉ chi tiết ạ</span>
+        </div>
+        <div class="composer">
+          <div class="ph">Nhập tin nhắn…</div>
+          <div class="tools">
+            <span class="tl"><svg class="i s"><use href="#i-img"/></svg></span>
+            <span class="tl"><svg class="i s"><use href="#i-bag"/></svg>Tạo đơn</span>
+            <span class="tl"><svg class="i s"><use href="#i-qr"/></svg>Mã QR</span>
+            <span class="tl"><svg class="i s"><use href="#i-tag"/></svg>Mẫu câu</span>
+            <button class="btn primary" style="margin-left:auto"><svg class="i s"><use href="#i-send"/></svg>Gửi</button>
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div style="text-align:center">
+          <div class="av" style="width:64px;height:64px;background:#C26B4F;margin:0 auto 8px;font-size:20px">TH</div>
+          <b style="font-size:16px">Thu Hà</b>
+          <div style="color:var(--muted)">0903 ••• 218</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-top:8px"><span class="chip new">Khách quen</span><span class="chip gray">Quận 3</span></div>
+        </div>
+        <div><h4>Mua hàng</h4>
+          <div class="kv"><span>Đã mua</span><b>5 đơn</b></div>
+          <div class="kv"><span>Tổng chi</span><b>2.140.000đ</b></div>
+          <div class="kv"><span>Lần cuối</span><b>12/10</b></div>
+        </div>
+        <div><h4>Đơn gần đây</h4>
+          <div class="mini-order"><div><b>#1042</b><div style="color:var(--muted);font-size:12px">403.000đ</div></div><span class="chip warn">Chờ thanh toán</span></div>
+          <div class="mini-order"><div><b>#0987</b><div style="color:var(--muted);font-size:12px">520.000đ</div></div><span class="chip ok">Đã giao</span></div>
+        </div>
+        <div><h4>Ghi chú</h4><p style="color:var(--muted)">Thích mùi gỗ, hay mua làm quà.</p></div>
+      </aside>
+    </div>
+  </div></div>
+
+  <p class="label">2.2 Đơn hàng</p>
+  <div class="scroll"><div class="frame app">
+    <aside class="rail">
+      <svg width="38" height="38" style="margin-bottom:12px"><use href="#mark"/></svg>
+      <div class="nav"><span class="badge">12</span><svg class="i"><use href="#i-msg"/></svg>Tin nhắn</div>
+      <div class="nav on"><svg class="i"><use href="#i-bag"/></svg>Đơn hàng</div>
+      <div class="nav"><svg class="i"><use href="#i-users"/></svg>Khách</div>
+      <div class="nav"><svg class="i"><use href="#i-mega"/></svg>Marketing</div>
+      <div class="nav"><svg class="i"><use href="#i-chart"/></svg>Báo cáo</div>
+      <div class="spacer"></div>
+      <div class="nav"><svg class="i"><use href="#i-set"/></svg>Cài đặt</div>
+      <div class="av" style="width:34px;height:34px;background:#8B5E4A;margin-top:8px">L</div>
+    </aside>
+    <div class="page">
+      <div class="page-h"><h1>Đơn hàng</h1><div class="r"><button class="btn ghost"><svg class="i s"><use href="#i-store"/></svg>Mở POS</button><button class="btn primary"><svg class="i s"><use href="#i-plus"/></svg>Tạo đơn</button></div></div>
+      <div class="content">
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="tabs"><span class="tab on">Tất cả<span class="n">48</span></span><span class="tab">Chờ thanh toán<span class="n">6</span></span><span class="tab">Cần giao<span class="n">9</span></span><span class="tab">Đang giao<span class="n">14</span></span><span class="tab">Hoàn tất</span></div>
+          <div class="search" style="margin-left:auto;width:280px"><svg class="i s"><use href="#i-search"/></svg>Mã đơn, tên khách</div>
+        </div>
+        <div class="panel">
+          <table>
+            <thead><tr><th>Đơn</th><th>Khách</th><th>Sản phẩm</th><th>Tổng</th><th>Thanh toán</th><th>Giao hàng</th><th></th></tr></thead>
+            <tbody>
+              <tr><td><b>#1042</b><div class="sub">14:05 hôm nay</div></td><td><div class="rowflex"><span class="ch zalo">Z</span>Thu Hà</div></td><td>Nến gỗ đàn hương ×2</td><td class="num"><b>403.000đ</b></td><td><span class="chip warn">Chờ thanh toán</span></td><td><span class="chip gray">Chưa giao</span></td><td><button class="btn soft" style="padding:6px 10px">Gửi QR</button></td></tr>
+              <tr><td><b>#1041</b><div class="sub">13:40 hôm nay</div></td><td><div class="rowflex"><span class="ch fb">f</span>Quốc Bảo</div></td><td>Set quà Tết Mây</td><td class="num"><b>499.000đ</b></td><td><span class="chip ok">Đã nhận tiền</span></td><td><span class="chip gray">Chưa giao</span></td><td><button class="btn soft" style="padding:6px 10px"><svg class="i s"><use href="#i-truck"/></svg>Giao hàng</button></td></tr>
+              <tr><td><b>#1040</b><div class="sub">11:12 hôm nay</div></td><td><div class="rowflex"><span class="ch" style="background:#B45309"><svg><use href="#c-pos"/></svg></span>Tại quầy</div></td><td>Cốc gốm men lam ×3</td><td class="num"><b>435.000đ</b></td><td><span class="chip ok">Tiền mặt</span></td><td><span class="chip ok">Đã nhận</span></td><td></td></tr>
+              <tr><td><b>#1039</b><div class="sub">Hôm qua</div></td><td><div class="rowflex"><span class="ch tt"><svg><use href="#c-tt"/></svg></span>Ngọc Anh</div></td><td>Đĩa gốm hoa cúc, Nến quế</td><td class="num"><b>309.000đ</b></td><td><span class="chip ok">Đã nhận tiền</span></td><td><span class="chip new">Đang giao · GHN</span></td><td></td></tr>
+              <tr><td><b>#1038</b><div class="sub">Hôm qua</div></td><td><div class="rowflex"><span class="ch zalo">Z</span>Đức Tài</div></td><td>Nến gỗ đàn hương</td><td class="num"><b>214.000đ</b></td><td><span class="chip ok">Đã nhận tiền</span></td><td><span class="chip ok">Đã giao</span></td><td></td></tr>
+              <tr><td><b>#1037</b><div class="sub">Hôm qua</div></td><td><div class="rowflex"><span class="ch web"><svg><use href="#c-live"/></svg></span>Công ty An Phát</div></td><td>Set quà Tết Mây ×10</td><td class="num"><b>4.990.000đ</b></td><td><span class="chip ok">Đã nhận tiền</span></td><td><span class="chip new">Đang giao · GHTK</span></td><td></td></tr>
+              <tr><td><b>#1036</b><div class="sub">13/11</div></td><td><div class="rowflex"><span class="ch ig"><svg><use href="#c-ig"/></svg></span>Phương Linh</div></td><td>Cốc gốm men lam</td><td class="num"><b>170.000đ</b></td><td><span class="chip ok">Đã nhận tiền</span></td><td><span class="chip ok">Đã giao</span></td><td></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <p class="label">2.3 Báo cáo (mở bằng mục "Báo cáo")</p>
+  <div class="scroll"><div class="frame app">
+    <aside class="rail">
+      <svg width="38" height="38" style="margin-bottom:12px"><use href="#mark"/></svg>
+      <div class="nav"><span class="badge">12</span><svg class="i"><use href="#i-msg"/></svg>Tin nhắn</div>
+      <div class="nav"><svg class="i"><use href="#i-bag"/></svg>Đơn hàng</div>
+      <div class="nav"><svg class="i"><use href="#i-users"/></svg>Khách</div>
+      <div class="nav"><svg class="i"><use href="#i-mega"/></svg>Marketing</div>
+      <div class="nav on"><svg class="i"><use href="#i-chart"/></svg>Báo cáo</div>
+      <div class="spacer"></div>
+      <div class="nav"><svg class="i"><use href="#i-set"/></svg>Cài đặt</div>
+      <div class="av" style="width:34px;height:34px;background:#8B5E4A;margin-top:8px">L</div>
+    </aside>
+    <div class="page">
+      <div class="page-h"><h1>Báo cáo</h1><div class="r"><div class="tabs"><span class="tab on">Hôm nay</span><span class="tab">7 ngày</span><span class="tab">Tháng này</span></div></div></div>
+      <div class="content">
+        <div class="kpis">
+          <div class="panel kpi"><p>Doanh thu</p><b class="num">6.821.000đ</b><span class="up">↑ 18% so với hôm qua</span></div>
+          <div class="panel kpi"><p>Đơn mới</p><b class="num">14</b><span class="up">↑ 3 đơn</span></div>
+          <div class="panel kpi"><p>Tin nhắn chờ trả lời</p><b class="num">4</b><span class="down">Lâu nhất 12 phút</span></div>
+          <div class="panel kpi"><p>Khách mới</p><b class="num">9</b><span class="up">↑ 2 khách</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px">
+          <div class="panel" style="padding:18px">
+            <div style="display:flex;align-items:center"><b style="font-size:15px">Doanh thu 7 ngày</b><span style="margin-left:auto;color:var(--muted)">Tổng 31,4 triệu</span></div>
+            <div class="bars">
+              <div><i style="height:52%"></i>T2</div><div><i style="height:61%"></i>T3</div><div><i style="height:44%"></i>T4</div><div><i style="height:70%"></i>T5</div><div><i style="height:83%"></i>T6</div><div><i style="height:58%"></i>T7</div><div class="today"><i style="height:92%"></i><b style="color:var(--ink)">Hôm nay</b></div>
+            </div>
+          </div>
+          <div class="panel" style="padding:18px;display:flex;flex-direction:column;gap:12px">
+            <b style="font-size:15px">Đơn đến từ đâu</b>
+            <div><div class="rowflex" style="margin-bottom:5px"><span class="ch zalo">Z</span>Zalo<span style="margin-left:auto" class="num">42%</span></div><div class="prog"><i style="width:42%"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px"><span class="ch fb">f</span>Facebook<span style="margin-left:auto" class="num">27%</span></div><div class="prog"><i style="width:27%"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px"><span class="ch tt"><svg><use href="#c-tt"/></svg></span>TikTok<span style="margin-left:auto" class="num">16%</span></div><div class="prog"><i style="width:16%"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px"><span class="ch" style="background:#B45309"><svg><use href="#c-pos"/></svg></span>Tại quầy<span style="margin-left:auto" class="num">10%</span></div><div class="prog"><i style="width:10%"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px"><span class="ch web"><svg><use href="#c-live"/></svg></span>Website<span style="margin-left:auto" class="num">5%</span></div><div class="prog"><i style="width:5%"></i></div></div>
+          </div>
+        </div>
+        <div class="panel">
+          <table>
+            <thead><tr><th>Bán chạy</th><th>Đã bán</th><th>Doanh thu</th><th>Còn trong kho</th></tr></thead>
+            <tbody>
+              <tr><td><div class="rowflex"><div class="prod-img" style="width:32px;height:32px;background:linear-gradient(135deg,#E8C9A8,#C99A6B)"></div>Nến gỗ đàn hương</div></td><td class="num">21</td><td class="num"><b>3.969.000đ</b></td><td><span class="chip warn">Còn 6 · sắp hết</span></td></tr>
+              <tr><td><div class="rowflex"><div class="prod-img" style="width:32px;height:32px;background:linear-gradient(135deg,#B9CFE4,#5F86B0)"></div>Cốc gốm men lam</div></td><td class="num">14</td><td class="num"><b>2.030.000đ</b></td><td class="num">38</td></tr>
+              <tr><td><div class="rowflex"><div class="prod-img" style="width:32px;height:32px;background:linear-gradient(135deg,#F2C7B8,#D9785A)"></div>Set quà Tết Mây</div></td><td class="num">4</td><td class="num"><b>1.996.000đ</b></td><td class="num">22</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== 3. POS ===================== -->
+<section class="sec" id="pos">
+  <h2>3. Kalo POS</h2>
+  <p class="lead">Bán tại quầy, mở từ "Đơn hàng → Mở POS". Chạm sản phẩm, chọn cách trả, xong.</p>
+  <div class="scroll"><div class="frame pos">
+    <div class="left">
+      <div style="display:flex;align-items:center;gap:12px">
+        <svg width="32" height="32"><use href="#mark"/></svg><b style="font-size:18px">kalo</b><span class="lockup" style="padding:0;border:0"><span class="tag" style="background:#B45309">POS</span></span>
+        <div class="search" style="flex:1;margin-left:16px"><svg class="i s"><use href="#i-search"/></svg>Tìm sản phẩm hoặc quét mã vạch</div>
+        <button class="btn ghost">Thoát POS</button>
+      </div>
+      <div class="tabs"><span class="tab on">Tất cả</span><span class="tab">Nến thơm</span><span class="tab">Gốm</span><span class="tab">Quà tặng</span></div>
+      <div class="pgrid">
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#F3DCC4,#C99A6B)"><svg class="pi"><use href="#p-candle"/></svg></div>Nến gỗ đàn hương<div class="p">189.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#F6E2CF,#D9A066)"><svg class="pi"><use href="#p-candle"/></svg></div>Nến quế cam<div class="p">169.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#DCE7F2,#7EA0C6)"><svg class="pi"><use href="#p-cup"/></svg></div>Cốc gốm men lam<div class="p">145.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#F7EED5,#D8BE77)"><svg class="pi"><use href="#p-plate"/></svg></div>Đĩa gốm hoa cúc<div class="p">120.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#FBE0D6,#E58C6E)"><svg class="pi"><use href="#p-gift"/></svg></div>Set quà Tết Mây<div class="p">499.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#E5EEDF,#93AE80)"><svg class="pi"><use href="#p-leaf"/></svg></div>Tinh dầu sả chanh<div class="p">95.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#EDE3F1,#A88BB8)"><svg class="pi"><use href="#p-teapot"/></svg></div>Ấm gốm mini<div class="p">260.000đ</div></div>
+        <div class="pcard"><div class="img" style="background:linear-gradient(135deg,#F1E6DA,#B8957A)"><svg class="pi"><use href="#p-basket"/></svg></div>Giỏ cói đựng quà<div class="p">65.000đ</div></div>
+      </div>
+    </div>
+    <div class="cart">
+      <div style="padding:20px 20px 8px;display:flex;align-items:center"><b style="font-size:17px">Đơn tại quầy</b><span class="chip gray" style="margin-left:auto">Khách lẻ ▾</span></div>
+      <div class="items">
+        <div class="citem"><div class="prod-img" style="background:linear-gradient(135deg,#F3DCC4,#C99A6B)"></div><div style="flex:1">Nến gỗ đàn hương<div style="color:var(--muted);font-size:12px">189.000đ</div></div><div class="qty"><button>−</button><span>2</span><button>+</button></div></div>
+        <div class="citem"><div class="prod-img" style="background:linear-gradient(135deg,#DCE7F2,#7EA0C6)"></div><div style="flex:1">Cốc gốm men lam<div style="color:var(--muted);font-size:12px">145.000đ</div></div><div class="qty"><button>−</button><span>1</span><button>+</button></div></div>
+        <div class="citem"><div class="prod-img" style="background:linear-gradient(135deg,#F1E6DA,#B8957A)"></div><div style="flex:1">Giỏ cói đựng quà<div style="color:var(--muted);font-size:12px">65.000đ</div></div><div class="qty"><button>−</button><span>1</span><button>+</button></div></div>
+      </div>
+      <div class="total">
+        <div class="kv"><span>Tạm tính</span><span class="num">588.000đ</span></div>
+        <div class="kv"><span>Giảm giá</span><span style="color:var(--action-ink);font-weight:600">+ Thêm</span></div>
+        <div class="kv" style="font-size:20px"><b>Tổng</b><b class="num">588.000đ</b></div>
+        <div class="paym">
+          <div class="on"><svg class="i"><use href="#i-qr"/></svg>Mã QR</div>
+          <div><svg class="i"><use href="#i-cash"/></svg>Tiền mặt</div>
+          <div><svg class="i"><use href="#i-card"/></svg>Thẻ</div>
+        </div>
+        <button class="btn primary lg" style="justify-content:center">Thanh toán 588.000đ</button>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== 4. MOBILE ===================== -->
+<section class="sec" id="mobile">
+  <h2>4. Kalo trên điện thoại</h2>
+  <p class="lead">Thanh dưới cùng 4 mục chính và nút "Thêm". Nút cam nổi để tạo đơn nhanh.</p>
+  <div class="phones">
+
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+      <div class="m-h"><h1>Tin nhắn</h1><span style="margin-left:auto;color:var(--muted)"><svg class="i"><use href="#i-search"/></svg></span></div>
+      <div style="padding:0 18px 10px"><div class="tabs"><span class="tab on">Của tôi<span class="n">8</span></span><span class="tab">Chưa ai nhận<span class="n">4</span></span><span class="tab">Tất cả</span></div></div>
+      <div class="m-body" style="background:var(--surface)">
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#C26B4F">TH</div><span class="ch zalo">Z</span></div><div style="flex:1;min-width:0"><div class="who">Thu Hà<span class="t">2 phút</span></div><div class="msg unread">Chị lấy 2 nến đàn hương nhé</div></div><span class="dot"></span></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#6E7F5A">MK</div><span class="ch fb">f</span></div><div style="flex:1;min-width:0"><div class="who">Minh Khang<span class="t">8 phút</span></div><div class="msg unread">Cốc men lam còn màu xanh đậm…</div></div><span class="dot"></span></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#9A6B9E">NA</div><span class="ch tt"><svg><use href="#c-tt"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Ngọc Anh<span class="t">15 phút</span></div><div class="msg unread">Set quà Tết giá sao ạ</div></div><span class="dot"></span></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#4F7C8A">Q</div><span class="ch web"><svg><use href="#c-live"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Khách website<span class="t">32 phút</span></div><div class="msg">Shop có xuất hóa đơn công ty…</div></div></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#B08A3E">PL</div><span class="ch ig"><svg><use href="#c-ig"/></svg></span></div><div style="flex:1;min-width:0"><div class="who">Phương Linh<span class="t">1 giờ</span></div><div class="msg">Dạ em cảm ơn shop ạ 🥰</div></div></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#7A6A60">DT</div><span class="ch zalo">Z</span></div><div style="flex:1;min-width:0"><div class="who">Đức Tài<span class="t">Hôm qua</span></div><div class="msg">Đã nhận hàng, đóng gói đẹp lắm</div></div></div>
+        <div class="conv"><div class="avwrap"><div class="av" style="width:46px;height:46px;background:#A0573F">HV</div><span class="ch fb">f</span></div><div style="flex:1;min-width:0"><div class="who">Hải Vân<span class="t">Hôm qua</span></div><div class="msg">Bạn gửi mình số tài khoản nhé</div></div></div>
+      </div>
+      <div class="fab"><svg class="i" style="width:26px;height:26px"><use href="#i-plus"/></svg></div>
+      <div class="tabbar">
+        <div class="on"><span class="badge">12</span><svg class="i"><use href="#i-msg"/></svg>Tin nhắn</div>
+        <div><svg class="i"><use href="#i-bag"/></svg>Đơn hàng</div>
+        <div><svg class="i"><use href="#i-users"/></svg>Khách</div>
+        <div><svg class="i"><use href="#i-chart"/></svg>Báo cáo</div>
+        <div><svg class="i"><use href="#i-more"/></svg>Thêm</div>
+      </div>
+    </div></div>
+
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+      <div class="m-h" style="background:var(--surface);border-bottom:1px solid var(--line);padding-bottom:10px">
+        <svg class="i"><use href="#i-back"/></svg>
+        <div class="av" style="width:34px;height:34px;background:#C26B4F;font-size:12px">TH</div>
+        <div><b>Thu Hà</b><div style="font-size:12px;color:var(--muted)">Zalo · Khách quen</div></div>
+        <svg class="i" style="margin-left:auto;color:var(--muted)"><use href="#i-more"/></svg>
+      </div>
+      <div class="m-body msgs" style="padding:14px 14px">
+        <span class="day">Hôm nay</span>
+        <div class="b them" style="max-width:80%">Shop ơi nến gỗ đàn hương còn không ạ?<div class="time">14:02</div></div>
+        <div class="b me" style="max-width:80%">Dạ còn chị ơi, cháy khoảng 40 giờ ạ 🕯️<div class="time">14:03</div></div>
+        <div class="b them" style="max-width:80%">Chị lấy 2 nến nhé, ship về Q.3<div class="time">14:05</div></div>
+        <div class="order-card" style="width:250px">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><b>Đơn #1042</b><span class="chip warn">Chờ thanh toán</span></div>
+          <div class="row"><span>Nến gỗ đàn hương ×2</span></div>
+          <div class="row"><b>Tổng</b><b>403.000đ</b></div>
+          <button class="btn primary" style="width:100%;justify-content:center;margin-top:6px"><svg class="i s"><use href="#i-qr"/></svg>Gửi mã QR</button>
+        </div>
+      </div>
+      <div class="suggest" style="padding:0 14px 8px;flex-wrap:nowrap;overflow:hidden">
+        <span class="sg" style="white-space:nowrap"><svg class="i s"><use href="#i-spark"/></svg>Chị quét mã QR giúp em nhé</span>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;padding:8px 12px 26px;background:var(--surface);border-top:1px solid var(--line)">
+        <span style="color:var(--muted)"><svg class="i"><use href="#i-plus"/></svg></span>
+        <div class="search" style="flex:1;padding:10px 14px">Nhập tin nhắn…</div>
+        <div style="width:42px;height:42px;border-radius:14px;background:var(--action);color:#fff;display:grid;place-items:center"><svg class="i"><use href="#i-send"/></svg></div>
+      </div>
+    </div></div>
+
+    <div class="phone"><div class="screen">
+      <div class="status"><span>9:41</span><span>●●● 100%</span></div>
+      <div class="m-h"><svg class="i"><use href="#i-back"/></svg><h1 style="font-size:22px">Tạo đơn</h1></div>
+      <div class="m-body" style="padding:4px 18px;display:flex;flex-direction:column;gap:12px">
+        <div class="field"><small>Khách</small><div class="rowflex"><span class="ch zalo">Z</span><b>Thu Hà</b><span style="color:var(--muted);margin-left:auto">0903 ••• 218</span></div></div>
+        <div class="panel" style="padding:4px 14px">
+          <div class="citem"><div class="prod-img" style="background:linear-gradient(135deg,#F3DCC4,#C99A6B)"></div><div style="flex:1">Nến gỗ đàn hương<div style="color:var(--muted);font-size:12px">189.000đ</div></div><div class="qty"><button>−</button><span>2</span><button>+</button></div></div>
+          <div style="padding:12px 0;color:var(--action-ink);font-weight:600;display:flex;gap:6px;align-items:center"><svg class="i s"><use href="#i-plus"/></svg>Thêm sản phẩm</div>
+        </div>
+        <div class="field"><small>Giao tới</small>45 Trần Quốc Thảo, Quận 3, TP.HCM</div>
+        <div class="field" style="display:flex;align-items:center"><div><small>Giao bằng</small>GHN · 1–2 ngày</div><b style="margin-left:auto">25.000đ</b></div>
+        <div style="display:flex;gap:8px">
+          <div class="field" style="flex:1;border-color:var(--action);background:var(--action-soft);color:var(--action-ink);font-weight:600;text-align:center">Chuyển khoản QR</div>
+          <div class="field" style="flex:1;text-align:center;font-weight:600">Thu hộ (COD)</div>
+        </div>
+      </div>
+      <div style="padding:14px 18px 30px;background:var(--surface);border-top:1px solid var(--line)">
+        <div class="kv" style="font-size:17px;margin-bottom:10px"><b>Tổng</b><b>403.000đ</b></div>
+        <button class="btn primary lg" style="width:100%;justify-content:center">Tạo đơn và gửi cho khách</button>
+      </div>
+    </div></div>
+
+  </div>
+</section>
+
+<!-- ===================== 5. CONSOLE ===================== -->
+<section class="sec" id="console">
+  <h2>5. Kalo Console</h2>
+  <p class="lead">Chỉ đội KTech dùng. Màu tím than để phân biệt rõ với app của shop.</p>
+
+  <p class="label">5.1 Tổng quan</p>
+  <div class="scroll"><div class="frame console">
+    <aside class="sidebar">
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 18px"><svg width="30" height="30"><use href="#mark"/></svg><b style="color:#fff;font-size:17px">kalo</b><span class="tag" style="background:#5B4BA0;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px">Console</span></div>
+      <a class="on"><svg class="i s"><use href="#i-home"/></svg>Tổng quan</a>
+      <a><svg class="i s"><use href="#i-store"/></svg>Shop</a>
+      <a><svg class="i s"><use href="#i-wallet"/></svg>Thanh toán</a>
+      <a><svg class="i s"><use href="#i-tag"/></svg>Gói cước</a>
+      <a><svg class="i s"><use href="#i-plug"/></svg>Kênh kết nối</a>
+      <a><svg class="i s"><use href="#i-spark"/></svg>AI</a>
+      <a><svg class="i s"><use href="#i-users"/></svg>Đối tác giới thiệu</a>
+      <div style="flex:1"></div>
+      <a><svg class="i s"><use href="#i-set"/></svg>Cài đặt</a>
+    </aside>
+    <div class="page">
+      <div class="page-h"><h1>Tổng quan</h1><div class="r"><div class="tabs"><span class="tab on" style="background:#231C40">Tháng 11</span><span class="tab">Năm 2026</span></div></div></div>
+      <div class="content">
+        <div class="kpis">
+          <div class="panel kpi"><p>Shop đang dùng</p><b class="num">128</b><span class="up">↑ 14 shop mới</span></div>
+          <div class="panel kpi"><p>Doanh thu tháng</p><b class="num">74,2 tr</b><span class="up">↑ 11%</span></div>
+          <div class="panel kpi"><p>Sắp hết hạn (7 ngày)</p><b class="num">9</b><span class="down">Cần nhắc gia hạn</span></div>
+          <div class="panel kpi"><p>Chuyển khoản cần kiểm tra</p><b class="num">2</b><span class="down">Chuyển thiếu tiền</span></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px">
+          <div class="panel">
+            <div style="padding:16px 16px 4px;display:flex"><b style="font-size:15px">Thanh toán mới nhất</b><span style="margin-left:auto;color:#3B2F6B;font-weight:600">Xem tất cả</span></div>
+            <table>
+              <tbody>
+                <tr><td><b>Nhà Mây</b><div class="sub">Gói Tăng trưởng · 14:10</div></td><td class="num"><b>699.000đ</b></td><td><span class="chip ok">Đã kích hoạt</span></td></tr>
+                <tr><td><b>Linh Boutique</b><div class="sub">Gói Cơ bản · 13:52</div></td><td class="num"><b>200.000đ</b></td><td><span class="chip warn">Chuyển thiếu</span></td></tr>
+                <tr><td><b>Bếp Nhà Sen</b><div class="sub">Mua thêm AI · 11:20</div></td><td class="num"><b>100.000đ</b></td><td><span class="chip ok">Đã cộng</span></td></tr>
+                <tr><td><b>Không rõ shop</b><div class="sub">Nội dung: "chuyen tien"</div></td><td class="num"><b>299.000đ</b></td><td><span class="chip warn">Cần ghép shop</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="panel" style="padding:18px;display:flex;flex-direction:column;gap:14px">
+            <b style="font-size:15px">Shop theo gói</b>
+            <div><div class="rowflex" style="margin-bottom:5px">Cơ bản<span style="margin-left:auto" class="num">71</span></div><div class="prog"><i style="width:55%;background:#8E7FD0"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px">Tăng trưởng<span style="margin-left:auto" class="num">46</span></div><div class="prog"><i style="width:36%;background:#5B4BA0"></i></div></div>
+            <div><div class="rowflex" style="margin-bottom:5px">Doanh nghiệp<span style="margin-left:auto" class="num">11</span></div><div class="prog"><i style="width:9%;background:#231C40"></i></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <p class="label">5.2 Danh sách shop</p>
+  <div class="scroll"><div class="frame console">
+    <aside class="sidebar">
+      <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 18px"><svg width="30" height="30"><use href="#mark"/></svg><b style="color:#fff;font-size:17px">kalo</b><span class="tag" style="background:#5B4BA0;color:#fff;font-size:11px;font-weight:700;padding:2px 7px;border-radius:6px">Console</span></div>
+      <a><svg class="i s"><use href="#i-home"/></svg>Tổng quan</a>
+      <a class="on"><svg class="i s"><use href="#i-store"/></svg>Shop</a>
+      <a><svg class="i s"><use href="#i-wallet"/></svg>Thanh toán</a>
+      <a><svg class="i s"><use href="#i-tag"/></svg>Gói cước</a>
+      <a><svg class="i s"><use href="#i-plug"/></svg>Kênh kết nối</a>
+      <a><svg class="i s"><use href="#i-spark"/></svg>AI</a>
+      <a><svg class="i s"><use href="#i-users"/></svg>Đối tác giới thiệu</a>
+      <div style="flex:1"></div>
+      <a><svg class="i s"><use href="#i-set"/></svg>Cài đặt</a>
+    </aside>
+    <div class="page">
+      <div class="page-h"><h1>Shop</h1><div class="r"><div class="search" style="width:260px"><svg class="i s"><use href="#i-search"/></svg>Tên shop, email, mã</div><button class="btn primary" style="background:#3B2F6B"><svg class="i s"><use href="#i-plus"/></svg>Thêm shop</button></div></div>
+      <div class="content">
+        <div class="tabs"><span class="tab on" style="background:#231C40">Tất cả<span class="n">128</span></span><span class="tab">Dùng thử<span class="n">17</span></span><span class="tab">Sắp hết hạn<span class="n">9</span></span><span class="tab">Đã khóa<span class="n">3</span></span></div>
+        <div class="panel">
+          <table>
+            <thead><tr><th>Shop</th><th>Gói</th><th>Hết hạn</th><th>Kênh</th><th>Tin nhắn / tháng</th><th>Trạng thái</th></tr></thead>
+            <tbody>
+              <tr><td><b>Nhà Mây</b><div class="sub">Mã 1042 · lan@nhamay.vn</div></td><td>Tăng trưởng</td><td>16/12/2026</td><td><div class="rowflex"><span class="ch zalo">Z</span><span class="ch fb">f</span><span class="ch tt"><svg><use href="#c-tt"/></svg></span></div></td><td class="num">3.412</td><td><span class="chip ok">Đang dùng</span></td></tr>
+              <tr><td><b>Linh Boutique</b><div class="sub">Mã 1038 · linh@gmail.com</div></td><td>Cơ bản</td><td>19/11/2026</td><td><div class="rowflex"><span class="ch fb">f</span><span class="ch ig"><svg><use href="#c-ig"/></svg></span></div></td><td class="num">980</td><td><span class="chip warn">Còn 3 ngày</span></td></tr>
+              <tr><td><b>Bếp Nhà Sen</b><div class="sub">Mã 1021 · sen.kitchen@gmail.com</div></td><td>Tăng trưởng</td><td>02/01/2027</td><td><div class="rowflex"><span class="ch zalo">Z</span><span class="ch web"><svg><use href="#c-live"/></svg></span></div></td><td class="num">5.106</td><td><span class="chip ok">Đang dùng</span></td></tr>
+              <tr><td><b>Gạo Ngon Miền Tây</b><div class="sub">Mã 1017 · gaongon@gmail.com</div></td><td>Doanh nghiệp</td><td>30/03/2027</td><td><div class="rowflex"><span class="ch zalo">Z</span><span class="ch fb">f</span><span class="ch tt"><svg><use href="#c-tt"/></svg></span><span class="ch web"><svg><use href="#c-live"/></svg></span></div></td><td class="num">12.840</td><td><span class="chip ok">Đang dùng</span></td></tr>
+              <tr><td><b>Tiệm Hoa Cỏ</b><div class="sub">Mã 1049 · hoaco@gmail.com</div></td><td>Dùng thử</td><td>23/11/2026</td><td><div class="rowflex"><span class="ch zalo">Z</span></div></td><td class="num">210</td><td><span class="chip new">Dùng thử</span></td></tr>
+              <tr><td><b>Shop Đồ Cũ Sài Gòn</b><div class="sub">Mã 0996 · docu@gmail.com</div></td><td>Cơ bản</td><td>01/11/2026</td><td><div class="rowflex"><span class="ch fb">f</span></div></td><td class="num">0</td><td><span class="chip gray">Đã khóa</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+<!-- ===================== 6. LANDING ===================== -->
+<section class="sec" id="landing">
+  <h2>6. Trang giới thiệu</h2>
+  <p class="lead">Phần đầu trang và bảng giá. Tên miền chưa chốt nên chưa ghi.</p>
+  <div class="scroll"><div class="frame landing">
+    <div class="l-nav">
+      <svg width="34" height="34"><use href="#mark"/></svg><b style="font-size:22px;margin-left:-18px;letter-spacing:-.03em">kalo</b>
+      <a href="#">Tính năng</a><a href="#">Bảng giá</a><a href="#">Kinh nghiệm bán hàng</a>
+      <span style="margin-left:auto;display:flex;gap:10px"><button class="btn ghost">Đăng nhập</button><button class="btn primary">Dùng thử miễn phí</button></span>
+    </div>
+    <div class="l-hero">
+      <div>
+        <span class="chip new" style="margin-bottom:16px">Miễn phí 14 ngày · không cần thẻ</span>
+        <h1>Mọi tin nhắn khách hàng.<br><em>Một chỗ.</em> Chốt đơn nhanh hơn.</h1>
+        <p>Zalo, Facebook, TikTok và website về chung một hộp. Trả lời, lên đơn, gửi mã QR thanh toán ngay trong khung chat.</p>
+        <div style="display:flex;gap:10px"><button class="btn primary lg">Dùng thử miễn phí<svg class="i s"><use href="#i-arrow"/></svg></button><button class="btn ghost lg">Xem cách hoạt động</button></div>
+        <div class="l-channels"><span class="ch zalo" style="width:24px;height:24px;font-size:13px">Z</span><span class="ch fb" style="width:24px;height:24px;font-size:13px">f</span><span class="ch tt" style="width:24px;height:24px;font-size:13px"><svg><use href="#c-tt"/></svg></span><span class="ch ig" style="width:24px;height:24px;font-size:13px"><svg><use href="#c-ig"/></svg></span><span class="ch web" style="width:24px;height:24px;font-size:13px"><svg><use href="#c-live"/></svg></span><span style="margin-left:6px">Kết nối trong 2 phút</span></div>
+      </div>
+      <div style="position:relative;height:420px">
+        <div class="frame" style="position:absolute;inset:0 0 40px 30px;background:var(--bg);padding:18px;display:flex;flex-direction:column;gap:10px">
+          <div class="conv" style="background:var(--surface);border-radius:12px;border:0"><div class="avwrap"><div class="av" style="width:38px;height:38px;background:#C26B4F">TH</div><span class="ch zalo">Z</span></div><div style="flex:1"><div class="who">Thu Hà<span class="t">2 phút</span></div><div class="msg unread">Chị lấy 2 nến đàn hương nhé</div></div></div>
+          <div class="conv" style="background:var(--surface);border-radius:12px;border:0"><div class="avwrap"><div class="av" style="width:38px;height:38px;background:#6E7F5A">MK</div><span class="ch fb">f</span></div><div style="flex:1"><div class="who">Minh Khang<span class="t">8 phút</span></div><div class="msg unread">Còn màu xanh đậm không shop?</div></div></div>
+          <div class="conv" style="background:var(--surface);border-radius:12px;border:0"><div class="avwrap"><div class="av" style="width:38px;height:38px;background:#9A6B9E">NA</div><span class="ch tt"><svg><use href="#c-tt"/></svg></span></div><div style="flex:1"><div class="who">Ngọc Anh<span class="t">15 phút</span></div><div class="msg unread">Set quà Tết giá sao ạ</div></div></div>
+        </div>
+        <div class="order-card" style="position:absolute;left:0;bottom:0;box-shadow:0 18px 40px -16px rgba(80,40,20,.35)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><b>Đơn #1042</b><span class="chip ok">Đã nhận tiền</span></div>
+          <div class="row"><span>Nến gỗ đàn hương ×2</span></div>
+          <div class="row"><b>Tổng</b><b>403.000đ</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="l-video"><div class="videobox"><video controls preload="metadata" poster="video/kalo-brand-poster.jpg"><source src="video/kalo-brand-24s.mp4" type="video/mp4"></video></div></div>
+    <div class="l-pricing">
+      <h2 style="font-size:34px;font-weight:800;letter-spacing:-.02em;text-align:center">Giá đơn giản, trả theo tháng</h2>
+      <p style="text-align:center;color:var(--muted);margin-top:8px">Thanh toán bằng chuyển khoản QR. Kích hoạt ngay khi nhận tiền.</p>
+      <div class="plans">
+        <div class="plan"><b style="font-size:18px">Cơ bản</b><span style="color:var(--muted)">Shop mới bắt đầu</span><div class="pr">299.000đ<small>/tháng</small></div>
+          <ul><li><svg class="i s"><use href="#i-check"/></svg>3 kênh chat</li><li><svg class="i s"><use href="#i-check"/></svg>2 nhân viên</li><li><svg class="i s"><use href="#i-check"/></svg>Tạo đơn, gửi QR trong chat</li><li><svg class="i s"><use href="#i-check"/></svg>Khung chat cho website</li></ul>
+          <button class="btn ghost lg" style="justify-content:center;margin-top:auto">Bắt đầu</button></div>
+        <div class="plan hl"><span class="ribbon">Được chọn nhiều nhất</span><b style="font-size:18px">Tăng trưởng</b><span style="color:var(--muted)">Shop đang bán đều</span><div class="pr">699.000đ<small>/tháng</small></div>
+          <ul><li><svg class="i s"><use href="#i-check"/></svg>Không giới hạn kênh</li><li><svg class="i s"><use href="#i-check"/></svg>5 nhân viên</li><li><svg class="i s"><use href="#i-check"/></svg>Gợi ý trả lời bằng AI</li><li><svg class="i s"><use href="#i-check"/></svg>Bán tại quầy (POS)</li><li><svg class="i s"><use href="#i-check"/></svg>Gửi tin hàng loạt</li></ul>
+          <button class="btn primary lg" style="justify-content:center;margin-top:auto">Dùng thử miễn phí</button></div>
+        <div class="plan"><b style="font-size:18px">Doanh nghiệp</b><span style="color:var(--muted)">Nhiều chi nhánh, đội lớn</span><div class="pr">1.990.000đ<small>/tháng</small></div>
+          <ul><li><svg class="i s"><use href="#i-check"/></svg>Không giới hạn nhân viên</li><li><svg class="i s"><use href="#i-check"/></svg>Nhiều cửa hàng</li><li><svg class="i s"><use href="#i-check"/></svg>Báo cáo theo chi nhánh</li><li><svg class="i s"><use href="#i-check"/></svg>Hỗ trợ riêng</li></ul>
+          <button class="btn ghost lg" style="justify-content:center;margin-top:auto">Liên hệ</button></div>
+      </div>
+    </div>
+  </div></div>
+</section>
+
+
+<!-- ===================== 7. ICONS ===================== -->
+<section class="sec" id="icons">
+  <h2>7. Bộ icon</h2>
+  <p class="lead">Vẽ riêng cho Kalo: nét bo tròn 2px kèm một mảng màu cam nhạt để nhận ra chức năng ngay. Mỗi icon gắn đúng với nút dùng nó.</p>
+  <div class="iconset"><div><svg class="i"><use href="#i-msg"/></svg>Tin nhắn</div><div><svg class="i"><use href="#i-bag"/></svg>Đơn hàng</div><div><svg class="i"><use href="#i-users"/></svg>Khách</div><div><svg class="i"><use href="#i-mega"/></svg>Marketing</div><div><svg class="i"><use href="#i-chart"/></svg>Báo cáo</div><div><svg class="i"><use href="#i-set"/></svg>Cài đặt</div><div><svg class="i"><use href="#i-search"/></svg>Tìm kiếm</div><div><svg class="i"><use href="#i-plus"/></svg>Thêm</div><div><svg class="i"><use href="#i-send"/></svg>Gửi</div><div><svg class="i"><use href="#i-qr"/></svg>Mã QR</div><div><svg class="i"><use href="#i-spark"/></svg>Gợi ý AI</div><div><svg class="i"><use href="#i-truck"/></svg>Giao hàng</div><div><svg class="i"><use href="#i-img"/></svg>Hình ảnh</div><div><svg class="i"><use href="#i-bell"/></svg>Thông báo</div><div><svg class="i"><use href="#i-more"/></svg>Thêm nữa</div><div><svg class="i"><use href="#i-check"/></svg>Xong</div><div><svg class="i"><use href="#i-store"/></svg>Cửa hàng · POS</div><div><svg class="i"><use href="#i-cash"/></svg>Tiền mặt</div><div><svg class="i"><use href="#i-card"/></svg>Thẻ</div><div><svg class="i"><use href="#i-back"/></svg>Quay lại</div><div><svg class="i"><use href="#i-tag"/></svg>Mẫu câu · nhãn</div><div><svg class="i"><use href="#i-home"/></svg>Tổng quan</div><div><svg class="i"><use href="#i-wallet"/></svg>Thanh toán</div><div><svg class="i"><use href="#i-plug"/></svg>Kênh kết nối</div><div><svg class="i"><use href="#i-arrow"/></svg>Tiếp tục</div><div><svg class="i"><use href="#i-zap"/></svg>Nhanh</div></div>
+  <p class="label">Biểu tượng kênh bán hàng</p>
+  <div class="iconset"><div><span class="ch zalo" style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px">Z</span>Zalo</div><div><span class="ch fb" style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px">f</span>Facebook</div><div><span class="ch tt" style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px"><svg><use href="#c-tt"/></svg></span>TikTok</div><div><span class="ch ig" style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px"><svg><use href="#c-ig"/></svg></span>Instagram</div><div><span class="ch web" style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px"><svg><use href="#c-live"/></svg></span>Kalo Live</div><div><span class="ch " style="width:34px;height:34px;border-radius:10px;margin:0 auto 8px;font-size:16px;background:#B45309"><svg><use href="#c-pos"/></svg></span>POS</div></div>
+  <p class="label">Hình sản phẩm mẫu (dùng khi shop chưa có ảnh)</p>
+  <div class="iconset"><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#F3DCC4,#C99A6B)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-candle"/></svg></span>Nến</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#DCE7F2,#7EA0C6)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-cup"/></svg></span>Cốc</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#F7EED5,#D8BE77)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-plate"/></svg></span>Đĩa</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#FBE0D6,#E58C6E)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-gift"/></svg></span>Quà</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#E5EEDF,#93AE80)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-leaf"/></svg></span>Tinh dầu</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#EDE3F1,#A88BB8)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-teapot"/></svg></span>Ấm</div><div><span style="display:grid;place-items:center;width:56px;height:56px;border-radius:14px;margin:0 auto 8px;background:linear-gradient(135deg,#F1E6DA,#B8957A)"><svg class="pi" style="width:36px;height:36px;fill:none;stroke:#7A4A32;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round"><use href="#p-basket"/></svg></span>Giỏ</div></div>
+  <p class="label">Icon trong nút và thanh menu</p>
+  <div class="card" style="display:flex;gap:14px;flex-wrap:wrap;align-items:center">
+    <button class="btn primary"><svg class="i s"><use href="#i-qr"/></svg>Gửi mã QR</button>
+    <button class="btn primary"><svg class="i s"><use href="#i-send"/></svg>Gửi</button>
+    <button class="btn soft"><svg class="i s"><use href="#i-truck"/></svg>Giao hàng</button>
+    <button class="btn ghost"><svg class="i s"><use href="#i-store"/></svg>Mở POS</button>
+    <button class="btn primary"><svg class="i s"><use href="#i-plus"/></svg>Tạo đơn</button>
+    <span class="chip ok"><svg class="i s" style="width:14px;height:14px"><use href="#i-check"/></svg>Đã nhận tiền</span>
+    <span class="chip new"><svg class="i s" style="width:14px;height:14px"><use href="#i-spark"/></svg>Gợi ý AI</span>
+  </div>
+  <p style="margin-top:14px;color:var(--muted)">Tệp icon dùng chung: <code>brand/kalo-icons.svg</code></p>
+</section>
+
+<!-- ===================== 8. VIDEO ===================== -->
+<section class="sec" id="video">
+  <h2>8. Video giới thiệu thương hiệu</h2>
+  <p class="lead">24 giây, tỷ lệ 16:9, có nhạc nền. Dùng cho trang giới thiệu, Facebook, Zalo, TikTok.</p>
+  <div class="vgrid">
+    <div class="videobox"><video controls preload="metadata" poster="video/kalo-brand-poster.jpg"><source src="video/kalo-brand-24s.mp4" type="video/mp4"></video></div>
+    <div class="story">
+      <div><b>1</b><span>0–4 giây<small>Tin nhắn nằm khắp nơi: Zalo, Facebook, TikTok, Instagram, website.</small></span></div>
+      <div><b>2</b><span>4–8 giây<small>Gom về một chỗ. Logo Kalo hiện ra: chữ K có đôi cánh. "Mọi tin nhắn. Một chỗ."</small></span></div>
+      <div><b>3</b><span>8–14 giây<small>Trả lời khách, lên đơn, gửi mã QR ngay trong chat. Khách chuyển khoản, đơn tự chuyển "Đã nhận tiền".</small></span></div>
+      <div><b>4</b><span>14–19 giây<small>Bán tại quầy bằng Kalo POS và xem doanh thu mỗi ngày.</small></span></div>
+      <div><b>5</b><span>19–24 giây<small>"Dùng thử miễn phí 14 ngày".</small></span></div>
+      <div style="background:var(--warn-soft);border-color:#F5D98A"><span><b style="display:inline-grid;width:auto;padding:0 8px;background:transparent">Lưu ý</b><small style="color:#6B4E0A">Nhạc nền là âm hòa nhạc đơn giản tạo tự động, dùng tạm. Chưa có lời đọc. Chưa ghi tên miền vì chưa chọn.</small></span></div>
+    </div>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
