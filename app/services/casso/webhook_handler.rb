@@ -135,7 +135,7 @@ class Casso::WebhookHandler
 
   def process_single_transaction(transaction)
     log_data = {
-      tid: (transaction['tid'] || transaction['id']).to_s.strip,
+      tid: (transaction['tid'].presence || transaction['id'].presence).to_s.strip,
       amount: parse_amount(transaction['amount']),
       description: transaction['description'].to_s,
       received_at: parse_received_at(transaction['when']).iso8601

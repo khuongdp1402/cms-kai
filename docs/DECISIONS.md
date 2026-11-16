@@ -173,12 +173,12 @@
 
 - **Quyết định của chủ dự án:** 1 tên mẹ + tên phụ; khách hàng chính là shop online nhỏ; gộp hộp chat và Tenant Admin thành 1 app; tên quốc tế ngắn gọn gắn với "đôi cánh" và chữ K (Khương) → **Kalo** (K + *ala* = cánh + "alô"). Sản phẩm: **Kalo** (app cho shop), **Kalo POS**, **Kalo Live** (khung chat gắn website), **Kalo Console** (quản trị nội bộ).
 - **Đã duyệt (2026-11-16):** màu phương án A (cam san hô ấm); menu 6 mục (Tin nhắn, Đơn hàng, Khách hàng, Marketing, Báo cáo, Cài đặt); chữ trên giao diện ngắn, hướng người dùng cuối, không thuật ngữ kỹ thuật; thứ tự vẽ Figma: bảng thương hiệu → Kalo desktop → Kalo mobile → Console → landing.
-- **Đã làm:** thiết kế được duyệt và đã thi công trong code (Phase K). **Chưa xong (việc của chủ dự án, xem `reference/go-live-checklist.md`):** kiểm tra `kalo.vn`/`kalo.com.vn` ở nhà đăng ký (mới chỉ kiểm DNS sơ bộ) và tra nhãn hiệu "Kalo" trên NOIP. Tên miền `BRAND_URL` hiện vẫn `https://ktech.vn` cho tới khi có tên miền.
+- **Đã làm:** thiết kế được duyệt và đã thi công trong code (Phase K). **Chưa xong (việc của chủ dự án, xem `reference/go-live-checklist.md`):** kiểm tra `kalo.vn`/`kalo.com.vn` ở nhà đăng ký (mới chỉ kiểm DNS sơ bộ) và tra nhãn hiệu "Kalo" trên NOIP. `BRAND_URL`, `WIDGET_BRAND_URL`, `TERMS_URL`, `PRIVACY_URL` để trống trong seed; OPS đặt sau khi có tên miền (checklist mục 8, 8b).
 
 ## ADR-018 — Quyết định kỹ thuật cho đợt Kalo launch · `accepted` (2026-11-16)
 
 - **Thanh toán đơn của shop:** mã VietQR tạo cục bộ bằng gem `rqrcode`, không gọi dịch vụ ngoài. Shop bấm "Đã nhận tiền" bằng tay; tự đối soát qua Casso cho từng shop để sau.
-- **Vận chuyển:** bản này chỉ nhập hãng và mã vận đơn; chưa nối GHN/GHTK. POS ngoài (KiotViet, Sapo), Ads API, đăng bài tự động, video MMO: chưa làm.
+- **Vận chuyển:** chưa nối GHN/GHTK. Cột `shipping_carrier` và `tracking_code` có trong mô hình dữ liệu nhưng chưa có API hay giao diện nào ghi chúng (đính chính 2026-11-17: trước đây ghi nhầm là shop nhập được hãng và mã vận đơn). POS ngoài (KiotViet, Sapo), Ads API, đăng bài tự động, video MMO: chưa làm.
 - **Tiền tố chuyển khoản gói cước:** đổi từ `KCHAT` sang `KALO` (`KALO <account_id> PLAN`).
 - **Tên module nội bộ:** vẫn là `Kchat` (bảng `kchat_*`, namespace `Api::V1::Accounts::Kchat`); tên thương hiệu hiển thị là Kalo qua `INSTALLATION_NAME`.
 - **Giới hạn gói:** áp dụng bằng `account.limits` của Chatwoot nếu cơ chế đó có tác dụng thật; nếu không, bỏ dòng giới hạn khỏi landing.

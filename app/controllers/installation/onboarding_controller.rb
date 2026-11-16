@@ -38,6 +38,9 @@ class Installation::OnboardingController < ApplicationController
   end
 
   def ensure_installation_onboarding
+    # The Redis flag is not cleared when the first SuperAdmin is created out of band, so an existing SuperAdmin closes this endpoint.
+    return head :not_found if SuperAdmin.exists?
+
     redirect_to '/' unless ::Redis::Alfred.get(::Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING)
   end
 end

@@ -71,6 +71,8 @@ Kiểm: `bash deploy/compose_check.sh` in `OK: compose config valid`; thiếu bi
 | Thêm webhook trong Casso: URL `https://app.<tên miền>/api/v1/casso/webhook`, header `Secure-Token: <giá trị CASSO_SECURE_TOKEN>` | CDA/OPS | Gửi thử từ Casso, Rails trả 200. Nếu nút "thử" của Casso gửi payload khác dạng thật thì Rails có thể trả **400 `invalid_payload`**: không phải lỗi cấu hình; xem `kc logs rails \| grep -i casso` (log chỉ ghi hình dạng `data=<Class> keys=<n>`, không ghi nội dung) và dùng giao dịch thật nhỏ để kiểm |
 | **Thử chuyển khoản thật số tiền nhỏ** trước khi mở bán | CDA | Đăng nhập một shop thử, vào trang **Gói cước**, chép đúng nội dung chuyển khoản hiển thị (dạng `KALO <mã shop> PLAN`), chuyển tiền đúng giá gói. Hạn dùng tăng 30 ngày; trong Console → Giao dịch thấy sự kiện `matched`. Chuyển thử sai nội dung thì phải thấy `unmatched` và gán tay được ở Console |
 
+**Chặn launch cần kiểm trên staging (M-2):** webhook chỉ chấp nhận header cũ `Secure-Token`. Vào dashboard Casso, xem tài khoản đang dùng webhook phiên bản nào và chế độ xác thực nào. Nếu Casso chỉ cho chữ ký HMAC (webhook v2), Rails sẽ trả **401** cho mọi lần gọi cho tới khi viết bộ kiểm chữ ký (chưa làm, xem ROADMAP). Triệu chứng: Casso báo webhook lỗi 401, Console không có giao dịch mới, tiền về nhưng gói không kích hoạt. Xem log: `kc logs rails | grep -i casso` (và dòng 401 ở `kc logs nginx`). Chỉ mở bán khi giao dịch thật nhỏ đã được kích hoạt.
+
 Lưu ý: mỗi giao dịch có mã `tid` duy nhất; Casso gọi lại cùng `tid` không cộng 2 lần. Token lộ nghĩa là có người cộng tiền giả được: giữ bí mật, đổi định kỳ (đổi ở cả `.env.production` và Casso rồi `kc up -d`).
 
 ## 6. Khóa AI (AgentGW)
@@ -109,9 +111,28 @@ kc exec rails bundle exec rails runner '
 
 Ai làm: OPS. Cách kiểm: lệnh in 4 dòng đúng giá trị; tiêu đề tab đăng nhập là "Kalo"; email đặt lại mật khẩu ghi "Kalo". `kc restart rails sidekiq` nếu giao diện còn chữ cũ. Màu widget/portal cũ đã lưu (`#1e5eff`) trong DB cũ không tự đổi; shop mới dùng màu coral.
 
+### 8b. Điều khoản và chính sách riêng tư (bắt buộc trước khi mở đăng ký)
+
+`TERMS_URL`, `PRIVACY_URL` (và `BRAND_URL`, `WIDGET_BRAND_URL` ở trên) trong `config/installation_config.yml` nay để **trống** (trước đây trỏ tên miền cũ `ktech.vn`). Khi một trong hai URL pháp lý trống, trang đăng ký **ẩn** dòng "Tạo tài khoản nghĩa là bạn đồng ý…". **Repo này chưa có trang điều khoản dịch vụ hay chính sách riêng tư nào**: chủ dự án phải cung cấp nội dung pháp lý và đăng lên tên miền landing (ví dụ `https://<tên miền>/terms`, `https://<tên miền>/privacy`) TRƯỚC khi mở đăng ký (mục 10). DB đã có thì giá trị cũ vẫn còn, phải đặt tay:
+
+```bash
+kc exec rails bundle exec rails runner '
+  domain = "<tên miền>"
+  { "TERMS_URL" => "https://#{domain}/terms", "PRIVACY_URL" => "https://#{domain}/privacy" }.each do |name, value|
+    c = InstallationConfig.find_or_initialize_by(name: name)
+    c.value = value
+    c.save!
+  end
+  GlobalConfig.clear_cache
+  puts InstallationConfig.where(name: %w[TERMS_URL PRIVACY_URL]).map { |c| [c.name, c.value].join("=") }
+'
+```
+
+Ai làm: CDA (nội dung pháp lý, đăng trang), OPS (chạy lệnh). Cách kiểm: mở các URL trả 200; trang `https://app.<tên miền>/app/auth/signup` hiện dòng đồng ý với hai liên kết đúng; `ktech.vn` không còn xuất hiện trong trang.
+
 ## 9. SuperAdmin đầu tiên
 
-OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo một `User` có `type: "SuperAdmin"`; mật khẩu đọc từ biến môi trường `ADMIN_PASSWORD`, không gõ trong dòng lệnh). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu. Đoạn lệnh chưa chạy thử trên instance thật: kiểm trên staging. Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
+OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo một `User` có `type: "SuperAdmin"`; mật khẩu đọc từ biến môi trường `ADMIN_PASSWORD`, không gõ trong dòng lệnh). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu. **Thứ tự bắt buộc:** tạo SuperAdmin ngay sau lần boot đầu, TRƯỚC khi mở site ra internet, vì sau seed trang `/installation/onboarding` công khai cho tới khi có SuperAdmin (đoạn lệnh đã xoá cờ Redis; code cũng trả 404 khi đã có SuperAdmin). Kiểm: `curl -s -o /dev/null -w '%{http_code}\n' https://app.<tên miền>/installation/onboarding` phải in `404`. Đoạn lệnh chưa chạy thử trên instance thật: kiểm trên staging. Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
 
 ## 10. Mở đăng ký tài khoản
 
@@ -178,9 +199,12 @@ Theo `deploy.md` mục 9: luôn `script/ops/pg_backup.sh` trước khi cập nh�
 
 - **Giới hạn theo gói** (số nhân viên, kênh, tin nhắn AI…): chưa áp dụng và không được quảng bá; ba gói khác nhau chủ yếu về giá. Kalo không từ chối vì vượt "giới hạn gói".
 - **Tự đối soát tiền đơn hàng của shop:** shop bấm "Đã nhận tiền" bằng tay. Chỉ tiền gói cước Kalo mới tự khớp qua Casso.
-- **Vận chuyển GHN/GHTK:** chỉ nhập hãng và mã vận đơn.
+- **Vận chuyển GHN/GHTK và nhập hãng/mã vận đơn:** cột `shipping_carrier` và `tracking_code` có trong mô hình dữ liệu nhưng **chưa có API hay giao diện nào ghi chúng**; shop chưa nhập được hãng hay mã vận đơn trong Kalo. Không hứa tính năng này; shop ghi mã vận đơn ngoài Kalo (ghi chú, tin nhắn cho khách).
 - **Tích hợp POS ngoài** (KiotViet, Sapo, Nhanh.vn), **quản lý quảng cáo** (Meta/TikTok/Shopee), **đăng bài tự động**, **SMS Brandname, ZNS**, **video MMO**, **chi trả affiliate tự động**.
 - Hết hạn dùng thử vẫn gọi được gửi QR/đổi trạng thái đơn đã có (chỉ chặn tạo sản phẩm, đơn, AI); đơn của mọi inbox hiển thị cho mọi nhân viên trong shop.
+- **Chuyển khoản dư tiền gói cước (M-3):** khách chuyển dư (ví dụ trả 3 tháng một lần) chỉ được cộng 30 ngày và có thể âm thầm nâng gói theo số tiền; hệ thống không có tín hiệu hoàn tiền. Vận hành: đối chiếu thủ công trong Console → Giao dịch, theo dõi các giao dịch có số tiền lớn hơn giá gói, rồi hoàn tiền hoặc cộng ngày bằng tay.
+- **Đơn tạo từ POS (M-5):** đơn POS (đã trả, nguồn `pos`) nằm mãi ở tab "Cần giao" vì không có bước hoàn tất. Vận hành: bỏ qua tab này với đơn POS, hoặc bấm chuyển trạng thái thủ công nếu cần dọn.
+- **Đơn COD đang `shipping` (M-6):** không hủy/trả hàng được và tồn kho không được hoàn lại. Vận hành: điều chỉnh tồn kho bằng tay ở trang sản phẩm khi hàng bị trả; không hứa "hoàn hàng tự động".
 - Bản đầu có thể còn lỗi giao diện chưa phát hiện (kiểm trình duyệt thật xem báo cáo QA); chưa có SLA.
 
 Danh sách đầy đủ việc hoãn: mục "Sau launch" của [ROADMAP.md](../ROADMAP.md).

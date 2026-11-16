@@ -29,5 +29,8 @@ for name, s in services.items():
             assert not (src == f"{os.environ['PWD_DIR']}/{d}" or src.startswith(f"{os.environ['PWD_DIR']}/{d}/")), f"{name}: source code mounted ({src})"
     assert "healthcheck" in s, f"{name}: no healthcheck"
     assert s.get("restart") == "unless-stopped", f"{name}: restart policy"
+# FORCE_SSL=true redirects plain http with 301; the rails healthcheck hits 127.0.0.1:3000 directly, so it must say it is https.
+rails_hc = " ".join(services["rails"]["healthcheck"]["test"])
+assert "X-Forwarded-Proto" in rails_hc, "rails healthcheck must send X-Forwarded-Proto: https (FORCE_SSL redirect)"
 PY
 echo "OK: compose config valid"

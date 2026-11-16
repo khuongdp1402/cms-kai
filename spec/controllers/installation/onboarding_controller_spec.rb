@@ -61,4 +61,30 @@ RSpec.describe 'Installation::Onboarding API', type: :request do
       end
     end
   end
+
+  describe 'when a SuperAdmin already exists and the redis flag is still set' do
+    before do
+      super_admin
+      Redis::Alfred.set(Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING, true)
+    end
+
+    after { Redis::Alfred.delete(Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING) }
+
+    it 'GET returns 404' do
+      get '/installation/onboarding'
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'POST returns 404 and creates no user' do
+      expect do
+        post '/installation/onboarding', params: { user: { name: 'Evil', company: 'Evil', email: 'evil@example.com', password: 'Password1!' } }
+      end.not_to change(User, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it 'dashboard root does not redirect to the onboarding page' do
+      get '/app/login'
+      expect(response).not_to redirect_to('/installation/onboarding')
+    end
+  end
 end

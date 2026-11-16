@@ -94,10 +94,13 @@ kc exec -e ADMIN_PASSWORD rails bundle exec rails runner '
                password_confirmation: ENV.fetch("ADMIN_PASSWORD"), type: "SuperAdmin")
   u.skip_confirmation!
   u.save!
+  Redis::Alfred.delete(Redis::Alfred::CHATWOOT_INSTALLATION_ONBOARDING)
   puts "#{u.class} #{u.email} created"
 '
 unset ADMIN_PASSWORD
 ```
+
+**Làm bước này ngay sau lần boot đầu, trước khi mở site ra internet (DNS/firewall).** `db/seeds.rb` bật cờ onboarding trong Redis, nên cho tới khi có SuperAdmin thì `/installation/onboarding` công khai và ai cũng tạo được SuperAdmin. Đoạn lệnh trên xoá cờ; ngoài ra code đã trả 404 cho endpoint này khi đã tồn tại SuperAdmin. Kiểm: `curl -s -o /dev/null -w '%{http_code}\n' https://app.<tên miền>/installation/onboarding` phải in `404` (nếu in `200` hoặc `302` thì chưa có SuperAdmin hoặc chưa deploy bản vá, dừng lại).
 
 Mật khẩu phải đủ mạnh theo quy tắc của Devise/Chatwoot (có chữ hoa, chữ thường, số, ký tự đặc biệt), nếu không `save!` báo lỗi. Đăng nhập tại `https://app.<tên miền>/super_admin`. Đổi mật khẩu ngay sau lần đầu. **Đoạn lệnh này chưa được chạy thử trên một instance thật** (xem mục 10).
 

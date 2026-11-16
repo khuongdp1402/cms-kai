@@ -59,6 +59,20 @@ RSpec.describe Casso::WebhookHandler do
     expect(Kchat::PaymentEvent.count).to eq(0)
   end
 
+  it 'falls back to the Casso id when tid is an empty string' do
+    result = described_class.new('data' => [{ 'tid' => '', 'id' => 123, 'description' => 'KALO HANA 1',
+                                              'amount' => 699_000 }]).process[:results].first
+
+    expect(result[:status]).to eq('matched_and_activated')
+    expect(Kchat::PaymentEvent.pluck(:tid)).to eq(['123'])
+  end
+
+  it 'records invalid_transaction when tid and id are both blank' do
+    result = described_class.new('data' => [{ 'tid' => '', 'id' => '', 'description' => 'KALO HANA 1', 'amount' => 699_000 }]).process[:results].first
+
+    expect(result[:status]).to eq('invalid_transaction')
+  end
+
   it 'no longer keeps processed tids on the account' do
     run(description: 'KALO HANA TOKEN 1', amount: 1000, tid: 'FT5')
 

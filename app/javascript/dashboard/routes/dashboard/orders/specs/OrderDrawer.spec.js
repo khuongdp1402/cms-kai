@@ -67,6 +67,18 @@ describe('OrderDrawer', () => {
     expect(wrapper.find('img[data-test="drawer-qr"]').exists()).toBe(false);
   });
 
+  it('shows the not-payable message when the server refuses the QR of a non-pending order', async () => {
+    const body = new Blob([JSON.stringify({ error: 'order_not_payable' })]);
+    // jsdom's Blob has no text(); the real browser Blob does.
+    body.text = async () => JSON.stringify({ error: 'order_not_payable' });
+    OrdersAPI.qr.mockRejectedValue({ response: { data: body } });
+    const wrapper = mountDrawer(makeOrder());
+    await flushPromises();
+    expect(wrapper.find('[data-test="drawer-qr-error"]').text()).toBe(
+      'Đơn này không còn chờ thanh toán'
+    );
+  });
+
   it('shows the invalid-amount message', async () => {
     OrdersAPI.qr.mockRejectedValue({
       response: { data: { error: 'invalid_amount' } },

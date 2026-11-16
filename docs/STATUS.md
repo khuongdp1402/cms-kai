@@ -21,7 +21,7 @@
 ### Mockup cũ đã bỏ (không có backend)
 
 Các mục sau từng được ghi "hoàn thành" ở phiên bản trước nhưng chỉ là giao diện mẫu trong `landing-page/tenant-admin/` và `super-admin/` (LESSONS B12). Không phải tính năng của Kalo; không được quảng bá:
-- Tích hợp POS ngoài (KiotViet, Sapo, Nhanh.vn), vận chuyển GHN/GHTK.
+- Tích hợp POS ngoài (KiotViet, Sapo, Nhanh.vn), vận chuyển GHN/GHTK (cột hãng/mã vận đơn có trong dữ liệu nhưng chưa có API/giao diện ghi).
 - Chiến dịch Zalo ZNS, SMS Brandname; quản lý quảng cáo Meta/TikTok (ROAS/CPA/Auto-Kill).
 - Ví affiliate, chi trả hoa hồng tự động, Marketplace seeding.
 - Pipeline video AI MMO, Brand OS (`#brand-strategy`, `#content-studio`, `#website-seo`), chỉ số MER/LTV:CAC là hằng số.

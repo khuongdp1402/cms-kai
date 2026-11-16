@@ -14,6 +14,7 @@ import { isValidPassword } from 'shared/helpers/Validators';
 import GoogleOAuthButton from '../../../../../components/GoogleOauth/Button.vue';
 import { register } from '../../../../../api/auth';
 import * as CompanyEmailValidator from 'company-email-validator';
+import { buildTermsHtml } from '../../helpers/termsHtml';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -53,12 +54,11 @@ const v$ = useVuelidate(rules, { credentials });
 const globalConfig = computed(() => store.getters['globalConfig/get']);
 
 const termsLink = computed(() =>
-  t('REGISTER.TERMS_ACCEPT')
-    .replace('https://www.chatwoot.com/terms', globalConfig.value.termsURL)
-    .replace(
-      'https://www.chatwoot.com/privacy-policy',
-      globalConfig.value.privacyURL
-    )
+  buildTermsHtml(
+    t('REGISTER.TERMS_ACCEPT'),
+    globalConfig.value.termsURL,
+    globalConfig.value.privacyURL
+  )
 );
 
 const allowedLoginMethods = computed(
@@ -185,6 +185,7 @@ const onCaptchaError = () => {
       {{ $t('REGISTER.OAUTH.GOOGLE_SIGNUP') }}
     </GoogleOAuthButton>
     <p
+      v-if="termsLink"
       class="text-sm mt-5 mb-0 text-n-slate-11 [&>a]:text-n-blue-10 [&>a]:font-medium [&>a]:hover:text-n-blue-11"
       v-html="termsLink"
     />

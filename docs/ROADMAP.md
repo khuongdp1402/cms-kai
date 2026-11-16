@@ -16,7 +16,11 @@ Kế hoạch chi tiết: [plans/2026-11-16-kalo-launch.md](plans/2026-11-16-kalo
 | Hạng mục | Nguồn / lý do |
 |---|---|
 | Tự đối soát tiền đơn hàng của shop qua Casso riêng từng shop | ADR-018; hiện shop bấm "Đã nhận tiền" tay (I-6) |
-| Nối GHN/GHTK (hiện chỉ nhập hãng + mã vận đơn) | ADR-018 |
+| Nối GHN/GHTK; thêm API/giao diện ghi `shipping_carrier`/`tracking_code` (cột đã có, chưa ai ghi) | ADR-018, M-4 |
+| M-3: chuyển khoản dư tiền gói cước chỉ cộng 30 ngày, có thể nâng gói âm thầm, không có tín hiệu hoàn tiền (hiện đối chiếu tay ở Console) | Rà soát cuối nhánh |
+| M-5: đơn POS (đã trả, nguồn `pos`) nằm mãi ở tab "Cần giao" | Rà soát cuối nhánh |
+| M-6: đơn COD ở `shipping` không hủy/trả được, tồn kho không hoàn lại | Rà soát cuối nhánh |
+| M-2: bộ kiểm chữ ký HMAC v2 cho webhook Casso nếu Casso bỏ header `Secure-Token` | Rà soát cuối nhánh |
 | **Áp dụng giới hạn theo gói** (ghi đè `Account#usage_limits`; Chatwoot bỏ qua `account.limits`) | ADR-018/019; chưa có thì không được quảng bá giới hạn |
 | Chặn từ khóa làm slug tenant (`plan`, `token`, `seed`, slug kết thúc `-plan`/`_token`); từ khóa gõ sai `TOKN` rơi về PLAN | Task 4 follow-up |
 | Cho phép ghi đè `order_type` khi gán tay sự kiện `description_ambiguous` ở Console | Task 4 follow-up |
