@@ -1,0 +1,16 @@
+{
+  "name": "KChat — Nền tảng CSKH Đa Kênh & AI Chatbot",
+  "short_name": "KChat",
+  "description": "Quản lý tập trung tin nhắn Zalo cá nhân, Facebook Fanpage, TikTok Shop và Live Chat trên 1 giao diện",
+  "start_url": "/tenant-admin/",
+  "display": "standalone",
+  "background_color": "#F6FAFF",
+  "theme_color": "#1E5EFF",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ]
+}

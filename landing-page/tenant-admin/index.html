@@ -1,0 +1,2465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KChat — Quản Trị Cửa Hàng (Tenant Admin)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('kchat_tenant_admin_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+</head>
+<body>
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="tenant-brand">
+        <div class="brand-avatar" id="tenantBrandLogo">HN</div>
+        <div class="brand-details">
+          <span class="brand-name" id="tenantBrandName">Hana Beauty Shop</span>
+          <span class="brand-domain">hana.kchat.vn</span>
+        </div>
+      </div>
+      <div class="tenant-plan-tag">
+        <span class="badge-plan">Gói Growth</span>
+        <span class="days-left">Còn 18 ngày</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-title">Tổng quan</span>
+        <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="" target="_blank" class="nav-item cskh-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Vào Hộp Thư Chat</span>
+          <span class="nav-badge hot">Live</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Phát Triển Thương Hiệu (Brand OS)</span>
+        <a href="#brand-strategy" class="nav-item" data-tab="brand-strategy">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <span>Định Vị & Lộ Trình 90 Ngày</span>
+          <span class="nav-badge ai">90d</span>
+        </a>
+        <a href="#content-studio" class="nav-item" data-tab="content-studio">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+          <span>Xưởng Nội Dung & Video MMO</span>
+          <span class="nav-badge hot">1→10</span>
+        </a>
+        <a href="#website-seo" class="nav-item" data-tab="website-seo">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Website, CRO & SEO/GEO</span>
+          <span class="nav-badge seeding">CRO</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Kênh & Khách Hàng</span>
+        <a href="#channels" class="nav-item" data-tab="channels">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span>Kết Nối Đa Kênh</span>
+          <span class="nav-badge">5 kênh</span>
+        </a>
+        <a href="#team" class="nav-item" data-tab="team">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Nhân Viên & Phân Quyền</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Tự Động Hóa & Tăng Trưởng</span>
+        <a href="#ai-bot" class="nav-item" data-tab="ai-bot">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2"/><circle cx="12" cy="16" r="2"/><path d="M12 18v2"/><path d="M8 22h8"/><path d="M7 6a7 7 0 0 0 10 0"/></svg>
+          <span>Trợ Lý AI & Dữ Liệu Bot</span>
+          <span class="nav-badge ai">AI Gen</span>
+        </a>
+        <a href="#campaigns" class="nav-item" data-tab="campaigns">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+          <span>Chiến Dịch & Phễu Ads</span>
+          <span class="nav-badge ai">ROAS</span>
+        </a>
+        <a href="#seeding" class="nav-item" data-tab="seeding">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span>Dịch Vụ Seeding & Ads</span>
+          <span class="nav-badge seeding">Mới</span>
+        </a>
+        <a href="#pos" class="nav-item" data-tab="pos">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          <span>Bán Hàng & Kho POS</span>
+          <span class="nav-badge pos">KiotViet</span>
+        </a>
+        <a href="#affiliate" class="nav-item" data-tab="affiliate">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          <span>Tiếp Thị Liên Kết (Affiliate)</span>
+          <span class="nav-badge hot">25%</span>
+        </a>
+      </div>
+
+      <div class="nav-group">
+        <span class="nav-group-title">Cấu Hình & Tài Khoản</span>
+        <a href="#branding" class="nav-item" data-tab="branding">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"/></svg>
+          <span>Tùy Biến Thương Hiệu</span>
+        </a>
+        <a href="#billing" class="nav-item" data-tab="billing">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span>Gói Cước & Mua Gói Lẻ</span>
+        </a>
+        <a href="#settings" class="nav-item" data-tab="settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.73 12.73 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span>Cài Đặt Hệ Thống</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">HN</div>
+        <div class="user-info">
+          <span class="user-name">Hana Nguyễn</span>
+          <span class="user-role">Chủ cửa hàng (Admin)</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-content">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Cửa Hàng</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-item active" id="currentBreadcrumb">Dashboard</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Quick Token / Seeding Balance Pill -->
+        <div class="balance-pill">
+          <div class="pill-item">
+            <span class="pill-label">AI Token:</span>
+            <span class="pill-val">284,500</span>
+          </div>
+          <div class="pill-divider"></div>
+          <div class="pill-item">
+            <span class="pill-label">Seeding Credits:</span>
+            <span class="pill-val credit">1.500.000 đ</span>
+          </div>
+        </div>
+
+        <button class="btn btn-sm btn-outline" id="btnOpenOnboarding" style="border-color: #93C5FD; background: var(--cool-blue-subtle); color: var(--primary); font-weight: 700;">
+          🚀 Hướng Dẫn Khởi Tạo (4 Bước)
+        </button>
+
+        <a href="#billing" class="btn btn-sm btn-outline" data-tab="billing">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Nạp Tiền / Gia Hạn
+        </a>
+
+        <button class="btn btn-sm btn-outline theme-toggle-btn" id="themeToggleBtn" title="Chuyển chế độ Sáng / Tối" onclick="(function(){var cur=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',cur);localStorage.setItem('kchat_tenant_admin_theme',cur);})()">
+          <svg class="sun-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+
+        <a href="" target="_blank" class="btn btn-sm btn-primary">
+          <svg width="14" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Vào Trực Chat
+        </a>
+      </div>
+    </header>
+
+    <!-- ==================== TAB 1: DASHBOARD ==================== -->
+    <div class="tab-pane active" id="pane-dashboard">
+      <!-- Welcome Onboarding Card -->
+      <div class="welcome-wizard-card" style="background: linear-gradient(135deg, #D7EFFF 0%, #FFFFFF 100%); border: 1px solid #BFDBFE; border-radius: var(--radius-lg); padding: 18px 24px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 20px; box-shadow: var(--shadow-sm);">
+        <div style="display: flex; align-items: center; gap: 16px;">
+          <div style="width: 44px; height: 44px; border-radius: 12px; background: #2563EB; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">🚀</div>
+          <div>
+            <h3 style="font-size: 15px; font-weight: 700; color: var(--text);">Thiết lập cửa hàng KChat trong 3 phút</h3>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">Cấu hình thương hiệu, kết nối Fanpage/Zalo/TikTok và nạp dữ liệu AI Chatbot để bắt đầu đón khách hàng tự động.</p>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm" id="btnStartWizardBanner" style="white-space: nowrap;">Bắt đầu thiết lập ngay →</button>
+      </div>
+
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Tổng quan hoạt động hôm nay</h1>
+          <p class="page-subtitle">Cập nhật lúc: <strong id="liveTime">Vừa xong</strong> • Kênh trực tuyến: <strong>4/5 kênh</strong></p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnRefreshData">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Làm mới
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Hội thoại hôm nay</span>
+            <div class="kpi-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">482</div>
+          <div class="kpi-trend up">
+            <span>+24% so với hôm qua</span>
+          </div>
+          <div class="kpi-subtext">328 khách mới • 154 khách cũ</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">AI Tự động xử lý</span>
+            <div class="kpi-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2"/><circle cx="12" cy="16" r="2"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">76.4%</div>
+          <div class="kpi-trend up">
+            <span>368 / 482 hội thoại</span>
+          </div>
+          <div class="kpi-subtext">Tiết kiệm ~6.5 giờ trực của nhân viên</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tốc độ phản hồi (FRT)</span>
+            <div class="kpi-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">4.2<span class="kpi-unit">giây</span></div>
+          <div class="kpi-trend up">
+            <span>Nhanh hơn 88% đối thủ</span>
+          </div>
+          <div class="kpi-subtext">AI trả lời < 2s • Nhân sự < 25s</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Đơn hàng chốt từ Chat</span>
+            <div class="kpi-icon purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">92 <span class="kpi-unit">đơn</span></div>
+          <div class="kpi-trend up">
+            <span>38.200.000 đ doanh thu</span>
+          </div>
+          <div class="kpi-subtext">Tỷ lệ chốt đơn đạt 19.1%</div>
+        </div>
+      </div>
+
+      <!-- Brand Growth Command Center: Unit Economics & 5-Tier Full-Funnel Attribution -->
+      <div class="card" style="margin-bottom: 24px; border: 1px solid var(--border-strong);">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 class="card-title">📊 Bánh Đà Tăng Trưởng Thương Hiệu & Phễu Chuyển Đổi 5 Tầng (Full-Funnel Attribution)</h3>
+            <p class="card-subtitle">Theo dõi liên thông từ Định vị → Nội dung Video MMO → Website SEO/CRO → Quảng cáo → Chốt đơn POS & Khách mua lại</p>
+          </div>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            <a href="#brand-strategy" class="btn btn-xs btn-outline" data-tab="brand-strategy">🎯 Lộ trình 90 ngày (<span id="dashRoadmapPct">68%</span>)</a>
+            <a href="#content-studio" class="btn btn-xs btn-outline" data-tab="content-studio">🎬 Xưởng Video MMO (1→10)</a>
+            <a href="#website-seo" class="btn btn-xs btn-outline" data-tab="website-seo">🌐 Web CRO & CAPI (9.3/10)</a>
+          </div>
+        </div>
+        <div class="card-body">
+          <!-- Unit Economics Strip -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 18px;">
+            <div style="padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;">MER (Blended ROAS Toàn Kênh)</div>
+              <div style="font-size: 20px; font-weight: 800; color: var(--primary); font-family: 'JetBrains Mono', monospace; margin-top: 4px;">5.4x <span style="font-size: 11px; color: #10B981; font-weight: 600;">(Chuẩn ≥ 4.0x)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tổng doanh thu / Tổng chi phí MKT</div>
+            </div>
+            <div style="padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;">Tỷ Lệ Vàng LTV : CAC</div>
+              <div style="font-size: 20px; font-weight: 800; color: #059669; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">4.2 : 1 <span style="font-size: 11px; color: #10B981; font-weight: 600;">(Vượt chuẩn 3:1)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">LTV: 285.600đ • CAC: 68.000đ</div>
+            </div>
+            <div style="padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;">Tỷ Lệ Khách Mua Lại & UGC</div>
+              <div style="font-size: 20px; font-weight: 800; color: #0891B2; font-family: 'JetBrains Mono', monospace; margin-top: 4px;">34.8% <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">(18.5% gửi Video UGC)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Nuôi dưỡng tự động qua Zalo ZNS</div>
+            </div>
+            <div style="padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 10px;">
+              <div style="font-size: 11px; color: var(--text-dim); font-weight: 600; text-transform: uppercase;">Cân Bằng Nội Dung 40-30-20-10</div>
+              <div style="font-size: 20px; font-weight: 800; color: var(--text); font-family: 'JetBrains Mono', monospace; margin-top: 4px;">96/100 <span style="font-size: 11px; color: #10B981; font-weight: 600;">✓ Chuẩn Phễu</span></div>
+              <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Không bị phạt giảm tương tác bán hàng</div>
+            </div>
+          </div>
+
+          <!-- 5-Stage Visual Funnel -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px;">
+            <div style="padding: 12px; border-radius: 10px; background: linear-gradient(135deg, rgba(30,94,255,0.08), rgba(8,145,178,0.04)); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: var(--primary);">1. TIẾP CẬN ĐA KÊNH (TOF)</div>
+              <div style="font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 4px 0;">420.000</div>
+              <div style="font-size: 11px; color: var(--text-muted);">TikTok, Reels, Shorts, Ads (Hook 3s: 36.4%)</div>
+            </div>
+            <div style="padding: 12px; border-radius: 10px; background: linear-gradient(135deg, rgba(30,94,255,0.08), rgba(8,145,178,0.04)); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: var(--primary);">2. WEBSITE & SEO/GEO (MOF)</div>
+              <div style="font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 4px 0;">38.500 <span style="font-size: 11px; color: #0891B2;">(9.2%)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted);">Landing Page CRO (5s Score: 94/100)</div>
+            </div>
+            <div style="padding: 12px; border-radius: 10px; background: linear-gradient(135deg, rgba(30,94,255,0.08), rgba(8,145,178,0.04)); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: var(--primary);">3. HỘI THOẠI & LEAD</div>
+              <div style="font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 4px 0;">4.820 <span style="font-size: 11px; color: #0891B2;">(12.5%)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted);">Hộp thư KChat, Zalo OA, Web Widget</div>
+            </div>
+            <div style="padding: 12px; border-radius: 10px; background: linear-gradient(135deg, rgba(5,150,105,0.10), rgba(16,185,129,0.04)); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: #059669;">4. ĐƠN HÀNG POS / CASSO (BOF)</div>
+              <div style="font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 4px 0;">940 đơn <span style="font-size: 11px; color: #059669;">(19.5%)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted);">Đồng bộ ngược Purchase CAPI về Ads</div>
+            </div>
+            <div style="padding: 12px; border-radius: 10px; background: linear-gradient(135deg, rgba(8,145,178,0.10), rgba(30,94,255,0.04)); border: 1px solid var(--border);">
+              <div style="font-size: 11px; font-weight: 700; color: #0891B2;">5. MUA LẠI & VIDEO UGC</div>
+              <div style="font-size: 18px; font-weight: 800; font-family: 'JetBrains Mono', monospace; margin: 4px 0;">327 khách <span style="font-size: 11px; color: #059669;">(34.8%)</span></div>
+              <div style="font-size: 11px; color: var(--text-muted);">ZNS chăm sóc sau 7 ngày + Affiliate</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Cards Row -->
+      <div class="quick-banner">
+        <div class="banner-content">
+          <div class="banner-badge">Chiến dịch gợi ý</div>
+          <h3>Tăng gấp đôi doanh số cuối tuần với AI & Seeding Kích Hoạt</h3>
+          <p>Tự động gửi kịch bản ưu đãi ZNS qua Zalo cho 1.250 khách hàng cũ + Đặt seeding mồi 50 bình luận hỏi mua hàng để tạo hiệu ứng đám đông.</p>
+        </div>
+        <div class="banner-actions">
+          <a href="#campaigns" class="btn btn-primary" data-tab="campaigns">Tạo Chiến Dịch Ngay</a>
+          <a href="#seeding" class="btn btn-outline" data-tab="seeding">Xem Bảng Giá Seeding</a>
+        </div>
+      </div>
+
+      <!-- Two Column Layout: Channels Status & Agents Performance -->
+      <div class="dashboard-grid">
+        <!-- Card 1: Channel Breakdown -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Hội thoại theo kênh tiếp nhận</h3>
+              <p class="card-subtitle">Phân bổ nguồn lead và trạng thái kết nối</p>
+            </div>
+            <a href="#channels" class="link-more" data-tab="channels">Quản lý kênh &rarr;</a>
+          </div>
+          <div class="card-body">
+            <div class="channel-row">
+              <div class="channel-info">
+                <div class="channel-icon-badge fb">FB</div>
+                <div>
+                  <div class="channel-name">Fanpage Mỹ Phẩm Hana Chính Hãng</div>
+                  <div class="channel-status online">Đang đồng bộ • Webhook 200 OK</div>
+                </div>
+              </div>
+              <div class="channel-stats">
+                <span class="count">214 chat</span>
+                <span class="percent">44.4%</span>
+              </div>
+            </div>
+
+            <div class="channel-row">
+              <div class="channel-info">
+                <div class="channel-icon-badge zalo">ZALO</div>
+                <div>
+                  <div class="channel-name">Zalo OA - Hana Beauty Store</div>
+                  <div class="channel-status online">Đang đồng bộ • ZNS sẵn sàng</div>
+                </div>
+              </div>
+              <div class="channel-stats">
+                <span class="count">142 chat</span>
+                <span class="percent">29.5%</span>
+              </div>
+            </div>
+
+            <div class="channel-row">
+              <div class="channel-info">
+                <div class="channel-icon-badge tiktok">TIKTOK</div>
+                <div>
+                  <div class="channel-name">TikTok Shop @hana.beauty</div>
+                  <div class="channel-status online">Đang đồng bộ tin nhắn Shop</div>
+                </div>
+              </div>
+              <div class="channel-stats">
+                <span class="count">78 chat</span>
+                <span class="percent">16.2%</span>
+              </div>
+            </div>
+
+            <div class="channel-row">
+              <div class="channel-info">
+                <div class="channel-icon-badge web">WEB</div>
+                <div>
+                  <div class="channel-name">Livechat Widget Website</div>
+                  <div class="channel-status online">hana-beauty.vn</div>
+                </div>
+              </div>
+              <div class="channel-stats">
+                <span class="count">48 chat</span>
+                <span class="percent">9.9%</span>
+              </div>
+            </div>
+
+            <div class="channel-row warning">
+              <div class="channel-info">
+                <div class="channel-icon-badge shopee">SHOPEE</div>
+                <div>
+                  <div class="channel-name">Shopee Mall Hana Cosmetics</div>
+                  <div class="channel-status warning">Cần cấp lại Token ủy quyền (Hết hạn sau 24h)</div>
+                </div>
+              </div>
+              <div class="channel-stats">
+                <button class="btn btn-xs btn-outline">Cấp lại</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2: Team Performance -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Hiệu suất nhân viên trực ca</h3>
+              <p class="card-subtitle">3/3 nhân viên đang Online • Đánh giá 4.9/5★</p>
+            </div>
+            <a href="#team" class="link-more" data-tab="team">Xem chi tiết &rarr;</a>
+          </div>
+          <div class="card-body">
+            <div class="agent-item">
+              <div class="agent-avatar online">ML</div>
+              <div class="agent-meta">
+                <div class="agent-name">Mai Linh (Trưởng ca)</div>
+                <div class="agent-time">Phản hồi tb: <strong>18s</strong> • CSAT: <strong>98%</strong></div>
+              </div>
+              <div class="agent-badge">
+                <span class="done">52 đã xử lý</span>
+              </div>
+            </div>
+
+            <div class="agent-item">
+              <div class="agent-avatar online">TH</div>
+              <div class="agent-meta">
+                <div class="agent-name">Thu Hà (Tư vấn viên)</div>
+                <div class="agent-time">Phản hồi tb: <strong>26s</strong> • CSAT: <strong>96%</strong></div>
+              </div>
+              <div class="agent-badge">
+                <span class="done">41 đã xử lý</span>
+              </div>
+            </div>
+
+            <div class="agent-item">
+              <div class="agent-avatar online">QD</div>
+              <div class="agent-meta">
+                <div class="agent-name">Quốc Dũng (Chốt đơn)</div>
+                <div class="agent-time">Phản hồi tb: <strong>32s</strong> • CSAT: <strong>94%</strong></div>
+              </div>
+              <div class="agent-badge">
+                <span class="done">38 đã xử lý</span>
+              </div>
+            </div>
+
+            <div class="agent-item ai-bot-item">
+              <div class="agent-avatar ai">AI</div>
+              <div class="agent-meta">
+                <div class="agent-name">KChat AI Bot (Trợ lý tự động)</div>
+                <div class="agent-time">Phản hồi tb: <strong>1.8s</strong> • Tỷ lệ giải quyết: <strong>89%</strong></div>
+              </div>
+              <div class="agent-badge">
+                <span class="ai-badge">368 tự động</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 2: CHANNELS ==================== -->
+    <div class="tab-pane" id="pane-channels">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản lý kênh kết nối (Omnichannel)</h1>
+          <p class="page-subtitle">Kết nối và đồng bộ tin nhắn từ Facebook, Zalo, TikTok, Shopee về 1 giao diện</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" id="btnAddChannel">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Thêm kết nối kênh mới
+          </button>
+        </div>
+      </div>
+
+      <div class="channel-cards-grid">
+        <!-- Facebook -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo fb">FB</div>
+            <div>
+              <h4>Facebook Messenger & Page</h4>
+              <span class="tag-status connected">Đã kết nối (1 Page)</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Đồng bộ tin nhắn fanpage, bình luận bài viết, tự động ẩn số điện thoại chống cướp khách.</p>
+          <div class="channel-box-footer">
+            <span>Fanpage: Hana Beauty Shop</span>
+            <button class="btn btn-sm btn-outline">Cấu hình</button>
+          </div>
+        </div>
+
+        <!-- Zalo OA -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo zalo">ZNS</div>
+            <div>
+              <h4>Zalo Official Account (OA)</h4>
+              <span class="tag-status connected">Đã kết nối</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Gửi thông báo ZNS xác nhận đơn, nhắc giỏ hàng, CSKH 1-1 chính ngạch chuẩn bảo mật.</p>
+          <div class="channel-box-footer">
+            <span>OA ID: 298471928471</span>
+            <button class="btn btn-sm btn-outline">Cấu hình</button>
+          </div>
+        </div>
+
+        <!-- TikTok Shop -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo tiktok">TT</div>
+            <div>
+              <h4>TikTok Shop Seller Chat</h4>
+              <span class="tag-status connected">Đang hoạt động</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Kéo tin nhắn từ khách mua hàng trên TikTok Shop về KChat để nhân viên tư vấn tức thì.</p>
+          <div class="channel-box-footer">
+            <span>Shop: Hana Beauty Store</span>
+            <button class="btn btn-sm btn-outline">Cấu hình</button>
+          </div>
+        </div>
+
+        <!-- Shopee Chat -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo shopee">SP</div>
+            <div>
+              <h4>Shopee Open API Chat</h4>
+              <span class="tag-status warning">Hết hạn Token</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Tự động trả lời tin nhắn Shopee, đồng bộ đơn hàng để nhân viên tư vấn đúng đơn.</p>
+          <div class="channel-box-footer">
+            <span>Token hết hạn trong 12h</span>
+            <button class="btn btn-sm btn-primary">Xác thực lại</button>
+          </div>
+        </div>
+
+        <!-- Webchat Widget -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo web">LIVE</div>
+            <div>
+              <h4>Website Live Chat Widget</h4>
+              <span class="tag-status connected">Đã nhúng mã</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Bong bóng chat nhúng vào website thương mại điện tử, tùy chỉnh màu sắc theo thương hiệu.</p>
+          <div class="channel-box-footer">
+            <span>Domain: hana-beauty.vn</span>
+            <button class="btn btn-sm btn-outline">Lấy mã nhúng</button>
+          </div>
+        </div>
+
+        <!-- Telegram / WhatsApp -->
+        <div class="channel-box">
+          <div class="channel-box-header">
+            <div class="channel-box-logo tele">TG</div>
+            <div>
+              <h4>Telegram Bot Support</h4>
+              <span class="tag-status idle">Chưa kết nối</span>
+            </div>
+          </div>
+          <p class="channel-box-desc">Kênh thông báo đơn hàng và hỗ trợ khách hàng VIP qua ứng dụng Telegram bảo mật.</p>
+          <div class="channel-box-footer">
+            <span>Hỗ trợ Bot Token</span>
+            <button class="btn btn-sm btn-outline">+ Kết nối</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 3: AI BOT ==================== -->
+    <div class="tab-pane" id="pane-ai-bot">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Trợ lý AI & Dữ liệu riêng của Shop</h1>
+          <p class="page-subtitle">Huấn luyện AI với kiến thức sản phẩm, bảng giá và kịch bản tư vấn chốt đơn riêng</p>
+        </div>
+        <div class="page-actions">
+          <span class="ai-status-pill"><span class="pulse-dot"></span> AI đang hoạt động</span>
+          <button class="btn btn-primary btn-sm" id="btnSaveAiSettings">Lưu cấu hình AI</button>
+        </div>
+      </div>
+
+      <div class="ai-grid">
+        <!-- Left: AI Configuration -->
+        <div class="ai-config-col">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Cài đặt Mô hình & Phong cách</h3>
+            </div>
+            <div class="card-body">
+              <div class="form-group">
+                <label class="form-label">Mô hình &amp; Nền tảng AI vận hành (Không dùng 9router):</label>
+                <select class="form-control" id="aiModelSelect">
+                  <option value="agentgw" selected>AgentGW Cloud (agentgw-gpt-5.5 / opus-4-8 — Phản hồi trực tiếp qua API Key MMO - Đề xuất)</option>
+                  <option value="muse_cdp">Muse.ai &amp; Google Gemini Web (Chạy ngầm Miễn phí $0 qua Chrome CDP :9222)</option>
+                  <option value="gemini_api">Google Gemini 2.5 Flash (Nền tảng dự phòng tốc độ cao)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Phong cách trò chuyện (Persona):</label>
+                <div class="radio-cards">
+                  <label class="radio-card selected">
+                    <input type="radio" name="aiPersona" value="friendly" checked>
+                    <span class="radio-title">Thân thiện, niềm nở</span>
+                    <span class="radio-desc">Dạ em chào chị ạ ❤️ Em hỗ trợ gì cho chị yêu nè!</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="aiPersona" value="pro">
+                    <span class="radio-title">Chuyên nghiệp, tinh tế</span>
+                    <span class="radio-desc">Kính chào Quý khách! Hana Beauty hân hạnh được tư vấn.</span>
+                  </label>
+                  <label class="radio-card">
+                    <input type="radio" name="aiPersona" value="sale">
+                    <span class="radio-title">Tập trung chốt Sales chớp nhoáng</span>
+                    <span class="radio-desc">Chị để lại SĐT + Địa chỉ em gửi tặng ngay mã giảm 30% hôm nay ạ!</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Chỉ dẫn đặc biệt (System Prompt):</label>
+                <textarea class="form-control" rows="5" id="aiSystemPrompt">Bạn là trợ lý ảo chuyên nghiệp của Hana Beauty Shop. Nhiệm vụ: tư vấn mỹ phẩm trị mụn, dưỡng trắng da theo tình trạng da của khách hàng. Hãy luôn hỏi khách về loại da (dầu/khô/nhạy cảm) trước khi gợi ý combo. Khi khách hỏi giá, báo giá chính xác theo tài liệu đính kèm và mời khách để lại SĐT để nhận quà tặng kèm.</textarea>
+              </div>
+
+              <div class="toggle-row">
+                <div>
+                  <strong>Tự động chuyển cho nhân viên thật</strong>
+                  <p class="text-sub">Khi khách hàng phàn nàn, nhắc đến "gặp nhân viên" hoặc chửi bậy</p>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right: Knowledge Base Files -->
+        <div class="ai-knowledge-col">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Tài liệu kiến thức nạp cho Bot (RAG)</h3>
+              <button class="btn btn-xs btn-outline" id="btnUploadDoc">+ Tải lên file</button>
+            </div>
+            <div class="card-body">
+              <div class="drop-zone" id="dropZone">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p>Kéo thả bảng giá, tài liệu sản phẩm (.PDF, .DOCX, .TXT, .CSV)</p>
+                <span>Hệ thống tự động học và trích xuất dữ liệu sau 30 giây</span>
+              </div>
+
+              <div class="knowledge-file-list">
+                <div class="file-item">
+                  <div class="file-icon pdf">PDF</div>
+                  <div class="file-info">
+                    <span class="file-name">Bang_Gia_My_Pham_Hana_2026.pdf</span>
+                    <span class="file-size">1.8 MB • Đã học 142 sản phẩm</span>
+                  </div>
+                  <span class="badge-success">Đã đồng bộ</span>
+                </div>
+
+                <div class="file-item">
+                  <div class="file-icon doc">DOC</div>
+                  <div class="file-info">
+                    <span class="file-name">Kich_Ban_Tu_Van_Mun_Va_Nam.docx</span>
+                    <span class="file-size">450 KB • 48 kịch bản xử lý từ chối</span>
+                  </div>
+                  <span class="badge-success">Đã đồng bộ</span>
+                </div>
+
+                <div class="file-item">
+                  <div class="file-icon link">URL</div>
+                  <div class="file-info">
+                    <span class="file-name">https://hana-beauty.vn/chinh-sach-doi-tra</span>
+                    <span class="file-size">Website link • Quét tự động</span>
+                  </div>
+                  <span class="badge-success">Đã đồng bộ</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Test AI Chat Simulator -->
+          <div class="card test-ai-card">
+            <div class="card-header">
+              <h3 class="card-title">Thử nghiệm phản hồi thực tế của AI</h3>
+            </div>
+            <div class="card-body">
+              <div class="chat-sim-messages" id="simMessages">
+                <div class="msg user">Shop ơi da mình bị mụn viêm dùng combo nào đỡ nhanh vậy?</div>
+                <div class="msg bot">Dạ em chào chị ạ ❤️ Đối với tình trạng mụn viêm, Hana khuyên chị nên dùng ngay Combo Phục Hồi & Trị Mụn Cấp Tốc (gồm Sữa rửa mặt Tràm Trà + Serum B5 Rau Má). Combo này giúp giảm đỏ sưng sau 48h đó chị. Chị cho em hỏi da chị thuộc da dầu hay da hỗn hợp để em hướng dẫn dùng hiệu quả nhất nha!</div>
+              </div>
+              <div class="chat-sim-input">
+                <input type="text" placeholder="Nhập câu hỏi thử nghiệm cho bot..." id="simInput">
+                <button class="btn btn-sm btn-primary" id="btnSimSend">Gửi</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 4: SEEDING & ADS ==================== -->
+    <div class="tab-pane" id="pane-seeding">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dịch Vụ Seeding & Kích Hoạt Tương Tác</h1>
+          <p class="page-subtitle">Tạo hiệu ứng đám đông, bình luận mồi chốt đơn, seeding livestream và tăng uy tín gian hàng</p>
+        </div>
+        <div class="page-actions">
+          <div class="credit-display">
+            <span>Số dư ví Seeding:</span>
+            <strong>1.500.000 đ</strong>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnDepositSeeding">+ Nạp thêm tiền Seeding</button>
+        </div>
+      </div>
+
+      <div class="seeding-packages-grid">
+        <!-- Package 1 -->
+        <div class="seed-card featured">
+          <div class="seed-badge">Gói Chốt Đơn Đề Xuất</div>
+          <h3 class="seed-name">Seeding Bình Luận Mồi Facebook</h3>
+          <div class="seed-price">199.000 đ <span>/ 100 comment</span></div>
+          <ul class="seed-features">
+            <li>✓ Nick thật có tương tác, avatar người Việt 100%</li>
+            <li>✓ Comment theo kịch bản: "Inbox mình giá", "Ship cho mình 2 lọ về Hà Nội"</li>
+            <li>✓ Giãn cách thời gian tự nhiên, không bị quét vi phạm</li>
+            <li>✓ Kích thích 300% tỷ lệ khách thật lao vào comment theo</li>
+          </ul>
+          <button class="btn btn-primary btn-block btn-order-seed" data-pkg="fb-seed">Đặt Gói Này</button>
+        </div>
+
+        <!-- Package 2 -->
+        <div class="seed-card">
+          <h3 class="seed-name">Seeding Livestream Mắt Xem & Comment</h3>
+          <div class="seed-price">350.000 đ <span>/ phiên live 90 phút</span></div>
+          <ul class="seed-features">
+            <li>✓ Duy trì 200 - 500 mắt xem ổn định suốt phiên</li>
+            <li>✓ Bắn comment mồi: "Đã chốt đơn", "Tặng quà em với shop"</li>
+            <li>✓ Đẩy live lên tab xu hướng TikTok / Facebook</li>
+            <li>✓ Giúp chủ shop tự tin chém gió, khách thật vào đông</li>
+          </ul>
+          <button class="btn btn-outline btn-block btn-order-seed" data-pkg="live-seed">Đặt Gói Này</button>
+        </div>
+
+        <!-- Package 3 -->
+        <div class="seed-card">
+          <h3 class="seed-name">Seeding Đánh Giá 5 Sao Shopee / TikTok</h3>
+          <div class="seed-price">490.000 đ <span>/ 20 lượt review</span></div>
+          <ul class="seed-features">
+            <li>✓ Kèm ảnh chụp thật + Video unbox sản phẩm lung linh</li>
+            <li>✓ Đánh giá dài có tâm, chứa từ khóa SEO gian hàng</li>
+            <li>✓ Đẩy điểm uy tín Shop Mall / Shop Yêu Thích</li>
+            <li>✓ Bảo hành không tụt đánh giá trong 6 tháng</li>
+          </ul>
+          <button class="btn btn-outline btn-block btn-order-seed" data-pkg="review-seed">Đặt Gói Này</button>
+        </div>
+      </div>
+
+      <!-- Seeding History Table -->
+      <div class="card seeding-table-card">
+        <div class="card-header">
+          <h3 class="card-title">Lịch sử các chiến dịch Seeding đã chạy</h3>
+        </div>
+        <div class="card-body no-padding">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Chiến dịch</th>
+                <th>Kênh</th>
+                <th>Số lượng</th>
+                <th>Chi phí</th>
+                <th>Tiến độ</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Seeding bài viết Khuyến mãi 8/3</strong></td>
+                <td><span class="channel-pill fb">Facebook</span></td>
+                <td>100 comment mồi</td>
+                <td>199.000 đ</td>
+                <td>100 / 100 (100%)</td>
+                <td><span class="badge-success">Hoàn thành</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mắt xem Livestream Tối Thứ 6</strong></td>
+                <td><span class="channel-pill tiktok">TikTok</span></td>
+                <td>300 mắt xem / 90p</td>
+                <td>350.000 đ</td>
+                <td>90 / 90 phút</td>
+                <td><span class="badge-success">Hoàn thành</span></td>
+              </tr>
+              <tr>
+                <td><strong>Review 5 sao Kem Chống Nắng</strong></td>
+                <td><span class="channel-pill shopee">Shopee</span></td>
+                <td>20 đánh giá + ảnh</td>
+                <td>490.000 đ</td>
+                <td>14 / 20 (70%)</td>
+                <td><span class="badge-running">Đang chạy</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 5: BRANDING (WHITE-LABEL) ==================== -->
+    <div class="tab-pane" id="pane-branding">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Tùy Biến Thương Hiệu (White-Label)</h1>
+          <p class="page-subtitle">Cá nhân hóa giao diện, logo, màu sắc và tên miền riêng cho hệ thống CSKH của bạn</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" id="btnSaveBranding">Lưu thay đổi thương hiệu</button>
+        </div>
+      </div>
+
+      <div class="branding-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Logo & Nhận Diện Cửa Hàng</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Tên cửa hàng / Doanh nghiệp:</label>
+              <input type="text" class="form-control" value="Hana Beauty Shop" id="inputBrandName">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Logo hiển thị (Hình vuông hoặc chữ nhật, PNG trong suốt):</label>
+              <div class="logo-uploader">
+                <div class="current-logo-preview" id="logoPreview">HN</div>
+                <div>
+                  <button class="btn btn-sm btn-outline">Tải ảnh logo mới</button>
+                  <p class="text-sub">Khuyến nghị kích thước 512x512px, dung lượng < 2MB</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Màu sắc chủ đạo (Theme Primary Color):</label>
+              <div class="color-picker-row">
+                <label class="color-preset active" data-color="#2563EB" data-bg="#D7EFFF" style="background: #2563EB;">
+                  <span class="color-check">✓</span>
+                </label>
+                <label class="color-preset" data-color="#0284C7" data-bg="#E0F2FE" style="background: #0284C7;"></label>
+                <label class="color-preset" data-color="#10B981" data-bg="#ECFDF5" style="background: #10B981;"></label>
+                <label class="color-preset" data-color="#7C3AED" data-bg="#F3E8FF" style="background: #7C3AED;"></label>
+                <label class="color-preset" data-color="#DB2777" data-bg="#FCE7F3" style="background: #DB2777;"></label>
+                <div class="custom-color-wrap">
+                  <input type="color" value="#2563EB" id="customColorInput">
+                  <span>Tự chọn mã màu</span>
+                </div>
+              </div>
+              <p class="text-sub mt-2">Màu nền Cool Blue <strong>#D7EFFF</strong> độc quyền mang lại cảm giác dễ chịu, tăng 25% thời gian tập trung làm việc của nhân viên.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Cài Đặt Tên Miền Riêng (Custom Domain)</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Tên miền hệ thống chat của riêng bạn:</label>
+              <div class="input-with-btn">
+                <input type="text" class="form-control" value="cskh.hana-beauty.vn" id="inputCustomDomain">
+                <button class="btn btn-outline btn-sm">Kiểm tra DNS</button>
+              </div>
+            </div>
+
+            <div class="dns-guide">
+              <span class="dns-guide-title">Hướng dẫn trỏ bản ghi DNS:</span>
+              <table class="dns-table">
+                <thead>
+                  <tr><th>Loại</th><th>Tên (Host)</th><th>Giá trị đích</th><th>Trạng thái</th></tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>CNAME</code></td>
+                    <td><code>cskh</code></td>
+                    <td><code>custom.kchat.vn</code></td>
+                    <td><span class="badge-success">Đã xác thực</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>SSL</code></td>
+                    <td>HTTPS Tự Động</td>
+                    <td>Let's Encrypt Wildcard</td>
+                    <td><span class="badge-success">Hoạt động</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="toggle-row mt-4">
+              <div>
+                <strong>Ẩn nhãn "Powered by KChat"</strong>
+                <p class="text-sub">Toàn bộ nhân viên và khách hàng chỉ nhìn thấy thương hiệu Hana Beauty</p>
+              </div>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 6: BILLING & ADD-ONS ==================== -->
+    <div class="tab-pane" id="pane-billing">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Gói Dịch Vụ & Mua Gói Lẻ (Add-ons)</h1>
+          <p class="page-subtitle">Quản lý thời hạn thuê bao, nâng cấp gói và nạp thêm tài nguyên linh hoạt theo ngày</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" id="btnRenewCurrentPlan">Gia Hạn Gói Ngay</button>
+        </div>
+      </div>
+
+      <!-- Current Subscription Banner -->
+      <div class="current-plan-card">
+        <div class="plan-main-info">
+          <div class="plan-title-row">
+            <span class="plan-tag">GÓI ĐANG DÙNG</span>
+            <h2>KChat Growth (Doanh Nghiệp Vừa & Nhỏ)</h2>
+          </div>
+          <p class="plan-desc">Bao gồm: 5 Kênh kết nối • 3 Nhân viên trực chat • 500.000 Token AI/tháng • Tự động hóa ZNS</p>
+          <div class="plan-dates">
+            <span>Ngày đăng ký: <strong>12/09/2026</strong></span>
+            <span>Hết hạn ngày: <strong class="text-primary">12/10/2026 (Còn 18 ngày)</strong></span>
+          </div>
+        </div>
+        <div class="plan-renew-box">
+          <div class="plan-cost">299.000 đ <span>/ tháng</span></div>
+          <button class="btn btn-primary btn-block">Gia Hạn Thêm 1 Năm (Giảm 20%)</button>
+          <button class="btn btn-outline btn-block mt-2">Nâng Cấp Lên Enterprise</button>
+        </div>
+      </div>
+
+      <!-- Add-ons Section -->
+      <h3 class="section-title mt-4">Mua Thêm Gói Lẻ (Add-ons tiện ích không giới hạn)</h3>
+      <div class="addons-grid">
+        <div class="addon-card">
+          <div class="addon-icon">👤</div>
+          <h4>Thêm Nhân Viên Trực Chat</h4>
+          <p>Tăng thêm 1 tài khoản nhân viên tư vấn đồng thời</p>
+          <div class="addon-price">50.000 đ <span>/ agent / tháng</span></div>
+          <button class="btn btn-sm btn-outline btn-buy-addon" data-addon="agent">+ Mua Thêm</button>
+        </div>
+
+        <div class="addon-card">
+          <div class="addon-icon">🧠</div>
+          <h4>Gói 1.000.000 AI Token</h4>
+          <p>Dùng cho AI tự động trả lời ~3.500 hội thoại dài</p>
+          <div class="addon-price">100.000 đ <span>/ triệu token</span></div>
+          <button class="btn btn-sm btn-outline btn-buy-addon" data-addon="ai-token">+ Mua Thêm</button>
+        </div>
+
+        <div class="addon-card">
+          <div class="addon-icon">💬</div>
+          <h4>Gói 5.000 Tin Nhắn ZNS / SMS</h4>
+          <p>Gửi xác nhận đơn hàng và nhắc giỏ hàng bỏ quên</p>
+          <div class="addon-price">350.000 đ <span>/ 5.000 tin</span></div>
+          <button class="btn btn-sm btn-outline btn-buy-addon" data-addon="sms">+ Mua Thêm</button>
+        </div>
+
+        <div class="addon-card">
+          <div class="addon-icon">🚀</div>
+          <h4>1.000.000 Seeding Credits</h4>
+          <p>Dùng đặt comment mồi, review 5 sao, mắt live</p>
+          <div class="addon-price">900.000 đ <span>(Chiết khấu 10%)</span></div>
+          <button class="btn btn-sm btn-outline btn-buy-addon" data-addon="seed-credit">+ Nạp Ngay</button>
+        </div>
+      </div>
+
+      <!-- Transaction History -->
+      <div class="card mt-4">
+        <div class="card-header">
+          <h3 class="card-title">Lịch Sử Giao Dịch & Hóa Đơn Điện Tử</h3>
+        </div>
+        <div class="card-body no-padding">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mã đơn</th>
+                <th>Dịch vụ</th>
+                <th>Số tiền</th>
+                <th>Hình thức</th>
+                <th>Thời gian</th>
+                <th>Hóa đơn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>#INV-2026-9812</code></td>
+                <td>Gia hạn Gói Growth (1 tháng)</td>
+                <td><strong>299.000 đ</strong></td>
+                <td>VietQR (MB Bank)</td>
+                <td>12/09/2026 14:20</td>
+                <td><a href="#" class="link-invoice">Tải PDF</a></td>
+              </tr>
+              <tr>
+                <td><code>#INV-2026-9504</code></td>
+                <td>Nạp 1.500.000 đ Seeding Credits</td>
+                <td><strong>1.500.000 đ</strong></td>
+                <td>Chuyển khoản 247</td>
+                <td>05/09/2026 09:15</td>
+                <td><a href="#" class="link-invoice">Tải PDF</a></td>
+              </tr>
+              <tr>
+                <td><code>#INV-2026-8911</code></td>
+                <td>Mua thêm 1.000.000 AI Token</td>
+                <td><strong>100.000 đ</strong></td>
+                <td>Ví MoMo</td>
+                <td>20/08/2026 19:42</td>
+                <td><a href="#" class="link-invoice">Tải PDF</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 7: TEAM ==================== -->
+    <div class="tab-pane" id="pane-team">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Đội Ngũ Nhân Viên & Phân Quyền</h1>
+          <p class="page-subtitle">Quản lý nhân viên trực ca, chia luồng phân công hội thoại tự động</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm">+ Thêm Nhân Viên Mới</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body no-padding">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Nhân viên</th>
+                <th>Email</th>
+                <th>Vai trò</th>
+                <th>Hội thoại đang phụ trách</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mai Linh</strong></td>
+                <td>mailinh@hana-beauty.vn</td>
+                <td><span class="badge-role admin">Trưởng ca / Lead</span></td>
+                <td>8 đang chat</td>
+                <td><span class="badge-success">Đang trực tuyến</span></td>
+                <td><button class="btn btn-xs btn-outline">Sửa quyền</button></td>
+              </tr>
+              <tr>
+                <td><strong>Thu Hà</strong></td>
+                <td>thuha@hana-beauty.vn</td>
+                <td><span class="badge-role agent">Tư vấn viên</span></td>
+                <td>6 đang chat</td>
+                <td><span class="badge-success">Đang trực tuyến</span></td>
+                <td><button class="btn btn-xs btn-outline">Sửa quyền</button></td>
+              </tr>
+              <tr>
+                <td><strong>Quốc Dũng</strong></td>
+                <td>quocdung@hana-beauty.vn</td>
+                <td><span class="badge-role agent">Tư vấn viên</span></td>
+                <td>5 đang chat</td>
+                <td><span class="badge-success">Đang trực tuyến</span></td>
+                <td><button class="btn btn-xs btn-outline">Sửa quyền</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 8: CAMPAIGNS ==================== -->
+    <div class="tab-pane" id="pane-campaigns">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Chiến Dịch Tin Nhắn (SMS / Zalo ZNS)</h1>
+          <p class="page-subtitle">Gửi tin nhắn hàng loạt nhắc giỏ hàng, thông báo mã giảm giá theo tệp khách hàng</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm">+ Tạo Chiến Dịch Mới</button>
+        </div>
+      </div>
+
+      <div class="campaign-summary-grid">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Tổng tin đã gửi tháng này</span></div>
+          <div class="kpi-value">8.420 <span class="kpi-unit">tin</span></div>
+          <div class="kpi-subtext">6.200 Zalo ZNS • 2.220 SMS Brandname</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Tỷ lệ mở đọc tin</span></div>
+          <div class="kpi-value">91.4%</div>
+          <div class="kpi-subtext">Cao hơn 4.5 lần so với Email marketing</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Doanh thu thu về</span></div>
+          <div class="kpi-value">46.500.000 đ</div>
+          <div class="kpi-subtext">ROI đạt 8.2x chi phí chiến dịch</div>
+        </div>
+      </div>
+
+      <!-- Campaign Builder & Mobile Preview -->
+      <div class="campaign-builder-layout">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Tạo Chiến Dịch Gửi Tin Mới</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Kênh gửi tin nhắn:</label>
+              <div style="display: flex; gap: 12px;">
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                  <input type="radio" name="campChannel" value="zns" checked> Zalo ZNS (120 đ/tin - Đề xuất)
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer;">
+                  <input type="radio" name="campChannel" value="sms"> SMS Brandname (180 đ/tin)
+                </label>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Chọn mẫu tin nhắn đã được kiểm duyệt:</label>
+              <select class="form-control" id="campTemplateSelect">
+                <option value="order_success">Mẫu 1: Xác nhận đơn hàng thành công & Mã vận đơn</option>
+                <option value="birthday_gift">Mẫu 2: Chúc mừng sinh nhật & Tặng Voucher giảm 20%</option>
+                <option value="cart_recovery">Mẫu 3: Nhắc giỏ hàng bỏ quên & Freeship hôm nay</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Tệp khách hàng nhận tin:</label>
+              <select class="form-control" id="campAudienceSelect">
+                <option value="vip">Khách hàng thân thiết VIP (180 khách)</option>
+                <option value="inactive">Khách chưa mua hàng trong 30 ngày (450 khách)</option>
+                <option value="all">Toàn bộ danh bạ khách hàng (1.240 khách)</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Nội dung cá nhân hóa:</label>
+              <textarea class="form-control" rows="3" id="campContentPreview" readonly>Chào {{customer_name}}, Hana Beauty gửi tặng bạn mã giảm 20% toàn bộ sản phẩm trị mụn. Mã: HANA20, áp dụng đến hết tuần này!</textarea>
+            </div>
+
+            <div style="background: var(--bg-surface); padding: 12px 16px; border-radius: 8px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;">
+              <span>Dự toán chi phí chiến dịch:</span>
+              <strong style="color: var(--primary); font-size: 16px;" id="campCostEst">21.600 đ</strong>
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btnSendCampaign">🚀 Kích Hoạt & Bắn Chiến Dịch Ngay</button>
+          </div>
+        </div>
+
+        <!-- Right Mobile Preview -->
+        <div class="mobile-preview-frame">
+          <div class="mobile-notch"></div>
+          <div class="mobile-screen">
+            <div style="font-size: 11px; text-align: center; color: var(--text-dim); margin-bottom: 8px;">Xem trước trên Zalo / SMS</div>
+            <div class="zns-msg-bubble">
+              <div class="zns-bubble-header">
+                <div class="zns-brand-logo">HN</div>
+                <div>
+                  <strong style="font-size: 12px; color: var(--text);">Hana Beauty Shop (OA)</strong>
+                  <div style="font-size: 10px; color: var(--text-dim);">Tài khoản doanh nghiệp xác thực ✓</div>
+                </div>
+              </div>
+              <p id="phonePreviewText" style="font-size: 12px; color: var(--text-secondary); line-height: 1.4;">
+                Chào <strong>Nguyễn Thu Hà</strong>, Hana Beauty gửi tặng bạn mã giảm 20% toàn bộ sản phẩm trị mụn. Mã: <strong>HANA20</strong>, áp dụng đến hết tuần này!
+              </p>
+              <div style="margin-top: 10px; padding-top: 8px; border-top: 1px dashed #E2E8F0; text-align: center;">
+                <span style="display: block; background: #2563EB; color: #fff; padding: 6px; border-radius: 6px; font-weight: 700; font-size: 11px;">Mua Ngay Nhận Ưu Đãi</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Full-Funnel Ads & Creative Testing Lab (Giai đoạn 4: TOF / MOF / BOF + Automated Guardrails) -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 class="card-title">🎯 Phòng Lab Quảng Cáo Đa Tầng (TOF/MOF/BOF) & Ma Trận Thử Nghiệm Creative</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Kết hợp Social Ads (Push tạo nhu cầu) + Google Search Ads (Pull hứng nhu cầu) • Đo lường Hook 3s, CPA thực tế & ROAS từ đơn POS/Casso</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+            <label style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text); background: var(--bg-surface); padding: 6px 12px; border-radius: 8px; border: 1px solid var(--border);">
+              <input type="checkbox" id="toggleAutoKillGuardrail" checked>
+              <span>🛡️ Auto-Kill Bảo Vệ Ngân Sách (&gt; 2x CPA mà 0 đơn)</span>
+            </label>
+            <button class="btn btn-sm btn-outline">+ Kết Nối Tài Khoản Ads Mới</button>
+          </div>
+        </div>
+        <div class="card-body no-padding">
+          <table class="data-table" id="fullFunnelAdsTable">
+            <thead>
+              <tr>
+                <th>Tầng Phễu &amp; Góc Creative (Angle)</th>
+                <th>Kênh Ads</th>
+                <th>Ngân sách / ngày</th>
+                <th>3s Hook / CTR</th>
+                <th>Kết quả (Chat/Đơn)</th>
+                <th>CPA / Chat</th>
+                <th>Doanh thu POS</th>
+                <th>ROAS</th>
+                <th>Trạng thái &amp; Kiểm soát</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-campaign-id="CAMP-FB-01">
+                <td>
+                  <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(30,94,255,0.12); color: var(--primary);">TOF • NHẬN DIỆN</span>
+                  <div style="margin-top: 4px;"><strong>[FB Reels] Kem Chống Nắng Nâng Tone 50ml</strong></div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Angle: So sánh cam thường • Hook #2</div>
+                </td>
+                <td><span class="channel-pill fb">Facebook Ads</span></td>
+                <td class="ad-budget-cell"><strong>300.000 đ</strong></td>
+                <td><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #059669;">38.4%</span> / 2.4%</td>
+                <td><strong>618 chats</strong> (118 đơn)</td>
+                <td>6.790 đ</td>
+                <td>26.040.000 đ</td>
+                <td><strong style="color: var(--green-light);">6.2x</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span class="badge-running">Winning Ad</span>
+                    <button class="btn btn-xs btn-primary btn-ad-guardrail" data-action="scale_budget" data-camp="CAMP-FB-01" data-budget="300000" data-roas="6.2">⚡ Scale +20%</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-campaign-id="CAMP-TT-02">
+                <td>
+                  <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(30,94,255,0.12); color: var(--primary);">TOF • SPARK ADS UGC</span>
+                  <div style="margin-top: 4px;"><strong>[TikTok Ads] Video Bác Sĩ Hướng Dẫn Trị Mụn</strong></div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Angle: Chuyên gia phân tích • Video MMO #1</div>
+                </td>
+                <td><span class="channel-pill tiktok">TikTok Ads</span></td>
+                <td class="ad-budget-cell"><strong>500.000 đ</strong></td>
+                <td><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #059669;">42.1%</span> / 2.9%</td>
+                <td><strong>892 chats</strong> (164 đơn)</td>
+                <td>6.500 đ</td>
+                <td>33.640.000 đ</td>
+                <td><strong style="color: var(--green-light);">5.8x</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <span class="badge-running">Winning Ad</span>
+                    <button class="btn btn-xs btn-primary btn-ad-guardrail" data-action="scale_budget" data-camp="CAMP-TT-02" data-budget="500000" data-roas="5.8">⚡ Scale +20%</button>
+                  </div>
+                </td>
+              </tr>
+              <tr data-campaign-id="CAMP-FB-03">
+                <td>
+                  <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(8,145,178,0.14); color: #0891B2;">MOF • RETARGETING</span>
+                  <div style="margin-top: 4px;"><strong>[Retargeting] Khách xem video 50% &amp; vào Web 30 ngày</strong></div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Angle: Bằng chứng xã hội + Cam kết hoàn tiền 7 ngày</div>
+                </td>
+                <td><span class="channel-pill fb">Facebook Ads</span></td>
+                <td class="ad-budget-cell"><strong>150.000 đ</strong></td>
+                <td><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700;">31.2%</span> / 3.1%</td>
+                <td><strong>412 chats</strong> (58 đơn)</td>
+                <td>5.820 đ</td>
+                <td>11.040.000 đ</td>
+                <td><strong style="color: var(--green-light);">4.6x</strong></td>
+                <td><span class="badge-running">Đang chạy</span></td>
+              </tr>
+              <tr data-campaign-id="CAMP-GG-04">
+                <td>
+                  <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(5,150,105,0.14); color: #059669;">BOF • DEMAND CAPTURE</span>
+                  <div style="margin-top: 4px;"><strong>[Google Search] Từ khóa Thương hiệu &amp; Mua hàng chủ động</strong></div>
+                  <div style="font-size: 11px; color: var(--text-muted);">Keywords: "hana beauty chính hãng", "serum phục hồi b5 hana"</div>
+                </td>
+                <td><span class="channel-pill web" style="background: #DBEAFE; color: #1E40AF;">Google Ads</span></td>
+                <td class="ad-budget-cell"><strong>200.000 đ</strong></td>
+                <td>CTR: <span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #059669;">11.8%</span></td>
+                <td><strong>184 đơn Web</strong></td>
+                <td>4.100 đ</td>
+                <td>16.800.000 đ</td>
+                <td><strong style="color: var(--green-light);">8.4x</strong></td>
+                <td><span class="badge-running">Bảo vệ Brand</span></td>
+              </tr>
+              <tr data-campaign-id="CAMP-TT-05">
+                <td>
+                  <span style="font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.12); color: #DC2626;">TOF • THỬ NGHIỆM HOOK MỚI</span>
+                  <div style="margin-top: 4px;"><strong>[TikTok Test] Góc Hài Hước Công Sở #4</strong></div>
+                  <div style="font-size: 11px; color: #DC2626;">⚠️ Cảnh báo: Hook 3s thấp (14.2%), CPA vượt 2.4x ngưỡng</div>
+                </td>
+                <td><span class="channel-pill tiktok">TikTok Ads</span></td>
+                <td class="ad-budget-cell"><strong>200.000 đ</strong></td>
+                <td><span style="font-family: 'JetBrains Mono', monospace; font-weight: 700; color: #DC2626;">14.2%</span> / 0.6%</td>
+                <td><strong>8 chats</strong> (0 đơn)</td>
+                <td style="color: #DC2626; font-weight: 700;">24.500 đ</td>
+                <td>0 đ</td>
+                <td><strong style="color: #DC2626;">0.0x</strong></td>
+                <td>
+                  <div style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                    <button class="btn btn-xs btn-outline btn-ad-guardrail" style="border-color: #DC2626; color: #DC2626;" data-action="auto_kill" data-camp="CAMP-TT-05">🛑 Cắt Lỗ Ngay</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: POS & E-COMMERCE (Phase D-03) ==================== -->
+    <div class="tab-pane" id="pane-pos">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Kết Nối Bán Hàng & Phần Mềm Quản Lý Kho (POS)</h1>
+          <p class="page-subtitle">Đồng bộ tồn kho tức thì, tra cứu giá và đẩy mã vận đơn giao hàng ngay trong khung chat</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnSyncPos">Đồng Bộ Tồn Kho Ngay</button>
+          <button class="btn btn-primary btn-sm">+ Thêm Cổng POS Mới</button>
+        </div>
+      </div>
+
+      <!-- POS Providers Grid -->
+      <div class="pos-grid">
+        <div class="pos-card active">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge kiot">KV</div>
+              <div>
+                <h4 class="pos-card-title">KiotViet POS</h4>
+                <span class="pos-card-sub">Chi nhánh: Quận 1, TP.HCM</span>
+              </div>
+            </div>
+            <span class="badge-success">Đang kết nối</span>
+          </div>
+          <div class="pos-stats">
+            <span>Sản phẩm đồng bộ: <strong>142 mã</strong></span>
+            <span>Trạng thái: <strong>200 OK</strong></span>
+          </div>
+          <button class="btn btn-xs btn-outline">Cấu hình kết nối</button>
+        </div>
+
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge sapo">SP</div>
+              <div>
+                <h4 class="pos-card-title">Sapo Omnichannel</h4>
+                <span class="pos-card-sub">Chưa liên kết</span>
+              </div>
+            </div>
+            <span class="badge-tag">Chưa kết nối</span>
+          </div>
+          <div class="pos-stats">
+            <span>Sản phẩm: <strong>--</strong></span>
+            <span>Trạng thái: <strong>Sẵn sàng</strong></span>
+          </div>
+          <button class="btn btn-xs btn-primary">Kết nối ngay</button>
+        </div>
+
+        <div class="pos-card">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge nhanh">NH</div>
+              <div>
+                <h4 class="pos-card-title">Nhanh.vn POS</h4>
+                <span class="pos-card-sub">Chưa liên kết</span>
+              </div>
+            </div>
+            <span class="badge-tag">Chưa kết nối</span>
+          </div>
+          <div class="pos-stats">
+            <span>Sản phẩm: <strong>--</strong></span>
+            <span>Trạng thái: <strong>Sẵn sàng</strong></span>
+          </div>
+          <button class="btn btn-xs btn-primary">Kết nối ngay</button>
+        </div>
+      </div>
+
+      <!-- Shipping Carriers Grid -->
+      <h3 style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 14px;">Đơn Vị Vận Chuyển Liên Kết</h3>
+      <div class="carrier-grid">
+        <div class="carrier-card">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge ghtk">GHTK</div>
+              <div>
+                <h4 class="pos-card-title">Giao Hàng Tiết Kiệm</h4>
+                <span class="pos-card-sub">Token API Active</span>
+              </div>
+            </div>
+            <span class="badge-success">Sẵn sàng tạo đơn</span>
+          </div>
+          <div class="pos-stats">
+            <span>Đơn đã đẩy tháng này: <strong>218 đơn</strong></span>
+            <span>Phí nội thành: <strong>22.000 đ</strong></span>
+          </div>
+        </div>
+
+        <div class="carrier-card">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge ghn">GHN</div>
+              <div>
+                <h4 class="pos-card-title">Giao Hàng Nhanh</h4>
+                <span class="pos-card-sub">Token API Active</span>
+              </div>
+            </div>
+            <span class="badge-success">Sẵn sàng tạo đơn</span>
+          </div>
+          <div class="pos-stats">
+            <span>Đơn đã đẩy tháng này: <strong>94 đơn</strong></span>
+            <span>Phí nội thành: <strong>25.000 đ</strong></span>
+          </div>
+        </div>
+
+        <div class="carrier-card">
+          <div class="pos-card-header">
+            <div class="pos-brand-info">
+              <div class="pos-logo-badge vtp">VTP</div>
+              <div>
+                <h4 class="pos-card-title">Viettel Post</h4>
+                <span class="pos-card-sub">Tuyến liên tỉnh</span>
+              </div>
+            </div>
+            <span class="badge-tag">Chưa kích hoạt</span>
+          </div>
+          <div class="pos-stats">
+            <span>Đơn đã đẩy: <strong>0</strong></span>
+            <span>Phí nội thành: <strong>24.000 đ</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Order Creation Form (Tạo đơn hàng ngay khi chat) -->
+      <div class="order-mockup-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+          <div>
+            <h3 style="font-size: 16px; font-weight: 700; color: var(--text);">Trình Tạo Đơn Hàng & Đẩy Vận Chuyển Trực Tiếp</h3>
+            <p style="font-size: 12px; color: var(--text-dim);">Cho phép Agent vừa chat vừa lên đơn và in mã vận đơn trong 15 giây</p>
+          </div>
+          <span style="font-size: 12px; font-weight: 700; color: var(--green-light); background: #ECFDF5; padding: 4px 10px; border-radius: 9999px;">Tích hợp KChat Live Box</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+          <div>
+            <label class="form-label">Thông tin khách hàng:</label>
+            <input type="text" class="form-control" id="orderCustName" value="Nguyễn Thu Hà - 0988123456" style="margin-bottom: 8px;">
+            <input type="text" class="form-control" id="orderCustAddress" value="Tòa nhà Landmark 81, 720A Điện Biên Phủ, P.22, Bình Thạnh, TP.HCM">
+          </div>
+          <div>
+            <label class="form-label">Sản phẩm đặt mua (Tra cứu kho KiotViet):</label>
+            <select class="form-control" id="orderProductSelect" style="margin-bottom: 8px;">
+              <option value="299000">Serum Trắng Da Mờ Thâm Hana 50ml (Tồn kho: 45 lọ) - 299.000 đ</option>
+              <option value="180000">Sữa Rửa Mặt Tạo Bọt Dịu Nhẹ 150ml (Tồn kho: 120 tuýp) - 180.000 đ</option>
+              <option value="350000">Kem Chống Nắng Phổ Rộng SPF50+ 50ml (Tồn kho: 78 hộp) - 350.000 đ</option>
+            </select>
+            <div style="display: flex; gap: 10px;">
+              <select class="form-control" id="orderCarrierSelect">
+                <option value="22000">GHTK - Giao Tiết Kiệm (22.000 đ)</option>
+                <option value="25000">GHN - Giao Hàng Nhanh (25.000 đ)</option>
+              </select>
+              <input type="number" class="form-control" value="1" style="width: 70px;" title="Số lượng">
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border);">
+          <div style="font-size: 14px; color: var(--text);">
+            Tổng thanh toán (gồm ship): <strong style="font-size: 18px; color: var(--primary);" id="orderTotalText">321.000 đ</strong>
+          </div>
+          <button class="btn btn-primary" id="btnCreateOrderGHTK">
+            ⚡️ Tạo Đơn & Đẩy Mã Vận Đơn Sang GHTK
+          </button>
+        </div>
+
+        <div id="orderSuccessResult" style="display: none; margin-top: 16px; padding: 14px; background: #ECFDF5; border: 1px solid #A7F3D0; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div>
+              <strong style="color: #059669; font-size: 14px;">✓ Tạo Đơn Thành Công & Đã Đẩy Sang GHTK!</strong>
+              <div style="font-size: 12px; color: #065F46; margin-top: 4px;">Mã vận đơn: <strong style="font-family: monospace; font-size: 14px;">GHTK-HN-8921820</strong> • Trạng thái: <strong>Chờ shipper lấy hàng</strong></div>
+            </div>
+            <button class="btn btn-sm btn-outline" style="border-color: #059669; color: #059669;">In Phiếu Giao</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB: AFFILIATE (Phase C-05) ==================== -->
+    <div class="tab-pane" id="pane-affiliate">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Chương Trình Đại Lý & Tiếp Thị Liên Kết (Affiliate)</h1>
+          <p class="page-subtitle">Nhận hoa hồng trọn đời 25% giá trị mỗi tháng khi giới thiệu các chủ shop khác sử dụng KChat</p>
+        </div>
+      </div>
+
+      <!-- Affiliate Link Card -->
+      <div class="affiliate-link-card">
+        <h3 style="font-size: 16px; font-weight: 700; color: var(--text);">Link Giới Thiệu Của Cửa Hàng Bạn</h3>
+        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Chia sẻ link này cho bạn bè hoặc đăng lên mạng xã hội. Khi có người đăng ký và thanh toán qua Casso VietQR, bạn nhận ngay 25% hoa hồng vào ví.</p>
+        
+        <div class="affiliate-share-box">
+          <input type="text" class="affiliate-share-input" id="affiliateLinkInput" value="https://kchat.vn/?ref=hana88" readonly>
+          <button class="btn btn-primary" id="btnCopyAffiliateLink">Sao chép link</button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Số lượt nhấp link</span></div>
+          <div class="kpi-value">48 <span class="kpi-unit">lượt</span></div>
+          <div class="kpi-subtext">Từ Facebook, Zalo cá nhân</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Shop đã đăng ký gói</span></div>
+          <div class="kpi-value">3 <span class="kpi-unit">shop</span></div>
+          <div class="kpi-subtext">2 Gói Growth, 1 Gói Starter</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Hoa hồng khả dụng</span></div>
+          <div class="kpi-value" style="color: var(--green-light);">374.000 <span class="kpi-unit">đ</span></div>
+          <div class="kpi-subtext">Sẵn sàng rút về tài khoản ngân hàng</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Tổng hoa hồng đã rút</span></div>
+          <div class="kpi-value">1.200.000 <span class="kpi-unit">đ</span></div>
+          <div class="kpi-subtext">Đã chuyển khoản qua VietQR</div>
+        </div>
+      </div>
+
+      <!-- Payout Request Form -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-header">
+          <h3 class="card-title">Yêu Cầu Rút Tiền Hoa Hồng (Tự Động Chi Trả Qua VietQR)</h3>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px;">
+            <div>
+              <label class="form-label">Ngân hàng nhận:</label>
+              <select class="form-control">
+                <option selected>MB Bank (Ngân hàng Quân Đội)</option>
+                <option>Vietcombank</option>
+                <option>Techcombank</option>
+                <option>ACB</option>
+              </select>
+            </div>
+            <div>
+              <label class="form-label">Số tài khoản:</label>
+              <input type="text" class="form-control" value="0987654321">
+            </div>
+            <div>
+              <label class="form-label">Số tiền muốn rút (Tối thiểu 200.000 đ):</label>
+              <input type="text" class="form-control" id="payoutAmountInput" value="374.000 đ">
+            </div>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnRequestPayout">Tạo Yêu Cầu Rút Tiền Ngay</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 9: SETTINGS ==================== -->
+    <div class="tab-pane" id="pane-settings">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Cài Đặt Hệ Thống</h1>
+          <p class="page-subtitle">Thông tin doanh nghiệp, múi giờ và cấu hình bảo mật</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="form-group">
+            <label class="form-label">Tên pháp nhân công ty:</label>
+            <input type="text" class="form-control" value="Công ty TNHH Mỹ Phẩm Quốc Tế Hana">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mã số thuế / Hotline:</label>
+            <input type="text" class="form-control" value="0318928374 - Hotline: 1900 6868">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Múi giờ hoạt động:</label>
+            <input type="text" class="form-control" value="Asia/Ho_Chi_Minh (GMT+7)" disabled>
+          </div>
+          <button class="btn btn-primary btn-sm">Cập nhật thông tin</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 10: BRAND STRATEGY & 90-DAY ROADMAP (Giai đoạn 1) ==================== -->
+    <div class="tab-pane" id="pane-brand-strategy">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🎯 Định Vị Thương Hiệu (Brand Brain) &amp; Lộ Trình 90 Ngày</h1>
+          <p class="page-subtitle">Giai đoạn 1: Xây dựng nền tảng định vị 3C/JTBD, phân tích đối thủ và kiểm soát lộ trình phát triển thương hiệu từ con số 0</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnScanCompetitors">🔍 Quét Ads Library Đối Thủ</button>
+          <button class="btn btn-primary btn-sm" id="btnSyncBrandBrain">🧠 Đồng Bộ Brand Brain Sang Toàn Bộ AI</button>
+        </div>
+      </div>
+
+      <!-- 90-Day Execution Roadmap Interactive Tracker -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 class="card-title">🚀 Lộ Trình Thực Chiến 90 Ngày Phát Triển Thương Hiệu Online</h3>
+            <p class="card-subtitle">Đánh dấu các hạng mục đã hoàn thành để hệ thống cập nhật tiến độ và mở khóa khuyến nghị tự động</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <span style="font-size: 12px; color: var(--text-dim); font-weight: 600;">Tiến độ tổng thể:</span>
+            <span id="roadmapProgressBadge" style="font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 800; color: var(--primary); background: var(--cool-blue-subtle); padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-strong);">68% Hoàn thành</span>
+          </div>
+        </div>
+        <div class="card-body">
+          <div style="width: 100%; height: 10px; background: var(--bg-surface); border-radius: 99px; overflow: hidden; margin-bottom: 20px; border: 1px solid var(--border);">
+            <div id="roadmapProgressBar" style="width: 68%; height: 100%; background: linear-gradient(90deg, #1E5EFF, #0891B2); transition: width 0.3s ease;"></div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+            <!-- Phase 1 -->
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: #059669; background: rgba(5,150,105,0.12); padding: 3px 8px; border-radius: 6px;">TUẦN 1 – 3 • XÂY MÓNG</span>
+                <span style="font-size: 11px; font-weight: 700; color: #059669;">3/3</span>
+              </div>
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Chặng 1: Định Vị &amp; Hạ Tầng</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Chốt Brand Book, USP &amp; Giọng văn chuẩn</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Dựng Landing Page CRO + Gắn GA4, Meta CAPI</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Tối ưu Bio/Avatar đồng bộ trên 5 kênh MXH</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Phase 2 -->
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: var(--primary); background: rgba(30,94,255,0.12); padding: 3px 8px; border-radius: 6px;">TUẦN 4 – 6 • TRACTION</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--primary);">Đang chạy</span>
+              </div>
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Chặng 2: Nội Dung &amp; Test Ads</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Sản xuất 20 Video ngắn MMO &amp; 10 bài SEO trụ cột</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Test 4 Angles quảng cáo tìm Winning Creative</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check"> <span>Booking 10 Micro-KOCs lấy nguồn video UGC</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Phase 3 -->
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: #0891B2; background: rgba(8,145,178,0.12); padding: 3px 8px; border-radius: 6px;">TUẦN 7 – 9 • TỐI ƯU CRO</span>
+                <span style="font-size: 11px; font-weight: 700; color: #0891B2;">Đang chạy</span>
+              </div>
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Chặng 3: Chuyển Đổi &amp; Phễu</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Bật chiến dịch MOF/BOF Retargeting đa kênh</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Kích hoạt Zalo ZNS thu hồi giỏ hàng bỏ quên</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check"> <span>Tối ưu Heatmap Landing Page nâng CR% lên 5.5%</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Phase 4 -->
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg-surface);">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <span style="font-size: 11px; font-weight: 800; color: var(--text-secondary); background: var(--border); padding: 3px 8px; border-radius: 6px;">TUẦN 10 – 12 • SCALE</span>
+                <span style="font-size: 11px; font-weight: 700; color: var(--text-secondary);">Sắp tới</span>
+              </div>
+              <h4 style="font-size: 14px; font-weight: 700; margin-bottom: 10px;">Chặng 4: Mở Rộng &amp; Bánh Đà</h4>
+              <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check" checked> <span>Mở mạng lưới Affiliate/KOC hoa hồng 20% VietQR</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check"> <span>Scale +20% ngân sách các nhóm Winning Ads</span>
+                </label>
+                <label style="display: flex; gap: 8px; align-items: flex-start; cursor: pointer;">
+                  <input type="checkbox" class="roadmap-check"> <span>Tự động hóa xin Video UGC sau 7 ngày giao hàng</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Columns: Brand Positioning Brain + Competitor Intelligence Radar -->
+      <div class="branding-grid">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🧠 Bộ Não Định Vị Thương Hiệu (Single Source of Truth)</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Tuyên bố Định vị 1 câu (Positioning Formula):</label>
+              <textarea class="form-control" rows="2" id="brandPositioningInput">Hana Beauty giúp phụ nữ văn phòng 22–35 tuổi phục hồi hàng rào bảo vệ da hư tổn trong 14 ngày thông qua phác đồ Dược mỹ phẩm B5 tối giản 3 bước mà không lo kích ứng hay bong tróc.</textarea>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Điểm Khác Biệt Độc Nhất (Core USP &amp; Cam Kết):</label>
+              <input type="text" class="form-control" id="brandUspInput" value="Công nghệ B5 Nano-Liposome thấm nhanh gấp 3 lần • Hoàn tiền 100% trong 7 ngày nếu kích ứng">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Hình mẫu Thương hiệu (Archetype):</label>
+                <select class="form-control" id="brandArchetypeSelect">
+                  <option value="caregiver_sage" selected>The Caregiver + The Sage (Tận tâm &amp; Khoa học)</option>
+                  <option value="expert">The Expert (Chuyên gia đầu ngành)</option>
+                  <option value="creator">The Creator (Sáng tạo &amp; Truyền cảm hứng)</option>
+                  <option value="rebel">The Rebel / Outlaw (Phá cách &amp; Cá tính)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chân dung Khách hàng (JTBD):</label>
+                <input type="text" class="form-control" value="Da nhạy cảm sau trị mụn, sợ quy trình 7-10 bước phức tạp">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">🚫 Từ Vựng Cấm Dùng (Hard Bans — Tự động chặn trong AI Copy/Video/Bot):</label>
+              <input type="text" class="form-control" id="brandHardBansInput" value="kem trộn, trắng cấp tốc 1 đêm, cam kết khỏi vĩnh viễn 100%, tốt nhất thế giới">
+              <p class="text-sub mt-2">Mọi kịch bản Video MMO, bài SEO và tin nhắn AI Chatbot sẽ tự động loại bỏ các cụm từ này để bảo vệ uy tín thương hiệu và tránh vi phạm chính sách Ads.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📡 Radar Phân Tích Đối Thủ &amp; Khoảng Trống Thị Trường (3C)</h3>
+          </div>
+          <div class="card-body no-padding">
+            <table class="data-table" id="competitorRadarTable">
+              <thead>
+                <tr>
+                  <th>Đối thủ</th>
+                  <th>Phân khúc giá</th>
+                  <th>Kênh mạnh nhất</th>
+                  <th>Ads đang chạy</th>
+                  <th>Khoảng trống để khai thác (Gap)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>SkinLab VN</strong></td>
+                  <td>450k – 680k</td>
+                  <td><span class="channel-pill tiktok">TikTok Shop</span></td>
+                  <td><strong>42 mẫu</strong> (Video KOC)</td>
+                  <td>Chưa có tư vấn cá nhân hóa 1:1 sau mua → Ta thắng bằng Zalo ZNS &amp; AI Bot chăm sóc.</td>
+                </tr>
+                <tr>
+                  <td><strong>DermaPure</strong></td>
+                  <td>550k – 900k</td>
+                  <td><span class="channel-pill fb">Facebook Ads</span></td>
+                  <td><strong>28 mẫu</strong> (Ảnh tĩnh)</td>
+                  <td>Quy trình 6 bước quá phức tạp, giá cao → Đánh mạnh thông điệp "Phác đồ tối giản 3 bước".</td>
+                </tr>
+                <tr>
+                  <td><strong>GlowUp Clinic</strong></td>
+                  <td>320k – 490k</td>
+                  <td><span class="channel-pill shopee">Shopee Mall</span></td>
+                  <td><strong>19 mẫu</strong> (Livestream)</td>
+                  <td>Thiếu nội dung khoa học giải thích cơ chế → Chiếm lĩnh SEO/GEO &amp; Video Bác sĩ phân tích.</td>
+                </tr>
+              </tbody>
+            </table>
+            <div style="padding: 14px 16px; background: var(--bg-surface); border-top: 1px solid var(--border); font-size: 12px; color: var(--text-secondary);">
+              💡 <strong>Góc chiến dịch đề xuất từ AI (Campaign Angle):</strong> Tập trung vào góc <em>"Tại sao bôi 7 bước vẫn lên mụn ẩn? Chuyển sang phác đồ phục hồi tối giản 3 bước chuẩn khoa học"</em>.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 11: CONTENT STUDIO & VIDEO AI MMO (Giai đoạn 3) ==================== -->
+    <div class="tab-pane" id="pane-content-studio">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🎬 Xưởng Nội Dung Đa Kênh &amp; Omni-Viral Video AI (MMO)</h1>
+          <p class="page-subtitle">Giai đoạn 3: Nhân bản 1 chủ đề gốc ra 10 định dạng bản địa hóa, kết nối trực tiếp engine Video 9:16 với cổng kiểm soát duyệt 2 bước</p>
+        </div>
+        <div class="page-actions">
+          <span style="font-size: 12px; font-weight: 700; color: #059669; background: rgba(5,150,105,0.12); padding: 6px 12px; border-radius: 8px;">🟢 Chrome CDP (Muse.ai :9222) Online</span>
+        </div>
+      </div>
+
+      <!-- Content Pillars 40-30-20-10 Balance Bar -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-body">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px;">
+            <div>
+              <strong style="font-size: 14px; color: var(--text);">⚖️ Thống Kê Tỷ Lệ 4 Trụ Cột Nội Dung (Chuẩn 40 – 30 – 20 – 10)</strong>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Giữ cân bằng giữa giá trị hữu ích và bài bán hàng để thuật toán TikTok/Facebook luôn ưu tiên phân phối tự nhiên</p>
+            </div>
+            <span class="badge-success">✓ Đạt chuẩn sức khỏe kênh (96/100)</span>
+          </div>
+          <div style="display: flex; height: 14px; border-radius: 99px; overflow: hidden; margin-bottom: 12px;">
+            <div style="width: 40%; background: #1E5EFF;" title="40% Giáo dục & Giá trị"></div>
+            <div style="width: 30%; background: #0891B2;" title="30% Giải trí & Bắt trend"></div>
+            <div style="width: 20%; background: #059669;" title="20% Câu chuyện thương hiệu & UGC"></div>
+            <div style="width: 10%; background: #F59E0B;" title="10% Chuyển đổi / Bán hàng"></div>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; font-size: 12px;">
+            <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#1E5EFF;margin-right:6px;"></span><strong>40% Giáo dục (Educate):</strong> 16 bài/tháng</div>
+            <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#0891B2;margin-right:6px;"></span><strong>30% Giải trí/Trend (Entertain):</strong> 12 bài/tháng</div>
+            <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#059669;margin-right:6px;"></span><strong>20% Niềm tin &amp; UGC (Trust):</strong> 8 bài/tháng</div>
+            <div><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#F59E0B;margin-right:6px;"></span><strong>10% Bán hàng (Convert):</strong> 4 bài/tháng</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-to-10 Repurposing Engine & Video AI Generator -->
+      <div class="campaign-builder-layout" style="margin-bottom: 24px;">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">⚡ Cỗ Máy Nhân Bản 1-Ra-10 &amp; Khởi Tạo Job Video Ngắn (9:16)</h3>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Chủ đề gốc hoặc Bài viết gốc (Anchor Asset):</label>
+              <input type="text" class="form-control" id="mmoTopicInput" value="Sai lầm khiến da mỏng yếu sau khi nặn mụn và phác đồ phục hồi B5 trong 14 ngày">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+              <div class="form-group">
+                <label class="form-label">Thị trường &amp; Ngôn ngữ bản địa (MMO Region):</label>
+                <select class="form-control" id="mmoRegionSelect">
+                  <option value="VN" selected>🇻🇳 Việt Nam (Tiếng Việt - Edge TTS / Giọng tự nhiên)</option>
+                  <option value="US">🇺🇸 Hoa Kỳ (English US - Viral Hook)</option>
+                  <option value="JP">🇯🇵 Nhật Bản (Japanese JP - Voicevox)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Chế độ Render Video (Omni-Viral Studio):</label>
+                <select class="form-control" id="mmoVideoModeSelect">
+                  <option value="mode_3" selected>Mode 3: Muse.ai / Cinematic AI Clip 9:16 ($0 qua Chrome CDP)</option>
+                  <option value="mode_1">Mode 1: Ảnh tĩnh + Chuyển động Parallax 2.5D / Ken Burns</option>
+                  <option value="mode_2">Mode 2: Mascot Dex Đổi Biểu Cảm &amp; Nhép Miệng ($0)</option>
+                </select>
+              </div>
+            </div>
+
+            <div style="padding: 12px 14px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 16px; font-size: 12px;">
+              🛡️ <strong>Cơ chế Kiểm Soát (Human-in-the-Loop):</strong> Mọi lệnh gọi API tốn phí hoặc đăng bài tự động đều bị khóa cho đến khi bạn bấm <strong>"Duyệt Kịch Bản (Bước 1)"</strong> và <strong>"Duyệt Đăng (Bước 2)"</strong> ở bảng dưới.
+            </div>
+
+            <button class="btn btn-primary btn-block" id="btnRunRepurpose">🎬 Bóc Tách 1-Ra-10 &amp; Tạo Job Video (Đưa Vào Hàng Đợi Duyệt)</button>
+          </div>
+        </div>
+
+        <!-- Output Preview of 1-to-10 Repurposing -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">📦 Kết Quả Bóc Tách Đa Nền Tảng (Preview Kịch Bản)</h3>
+          </div>
+          <div class="card-body" id="repurposePreviewBox" style="font-size: 12px; display: flex; flex-direction: column; gap: 10px;">
+            <div style="padding: 10px 12px; border-radius: 8px; background: var(--bg-surface); border-left: 3px solid #1E5EFF;">
+              <strong>🎥 3 Kịch bản Short Video (TikTok / Reels / Shorts):</strong>
+              <ul style="margin: 6px 0 0 16px; color: var(--text-secondary); line-height: 1.5;">
+                <li><strong>Video 1 (Pain-Agitate-Solve):</strong> Hook 3s: <em>"Dừng ngay việc đắp mặt nạ mỗi tối nếu da đang mỏng đỏ sau nặn mụn!"</em></li>
+                <li><strong>Video 2 (Chuyên gia phân tích):</strong> So sánh cơ chế thấm Nano-B5 vs kem dưỡng thông thường.</li>
+                <li><strong>Video 3 (Social Proof):</strong> Nhật ký 14 ngày phục hồi da cam thường + Cam kết hoàn tiền 7 ngày.</li>
+              </ul>
+            </div>
+            <div style="padding: 10px 12px; border-radius: 8px; background: var(--bg-surface); border-left: 3px solid #0891B2;">
+              <strong>🖼️ 1 Bộ Ảnh Trượt Carousel (Instagram / Facebook - 7 trang):</strong>
+              <div style="color: var(--text-secondary); margin-top: 4px;">Infographic lưu trữ cao: <em>"Sơ đồ 3 bước phục hồi hàng rào bảo vệ da tại nhà"</em>.</div>
+            </div>
+            <div style="padding: 10px 12px; border-radius: 8px; background: var(--bg-surface); border-left: 3px solid #059669;">
+              <strong>💬 2 Bài Thảo Luận Cộng Đồng + 1 Bài Chuẩn SEO/GEO:</strong>
+              <div style="color: var(--text-secondary); margin-top: 4px;">Bài đăng Facebook Group, Threads thảo luận tự nhiên &amp; Bài Blog kèm Schema <code>FAQPage</code>.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Human-in-the-Loop Approval Gate & Auto-Publish Queue -->
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 class="card-title">✅ Hàng Đợi Kiểm Soát Duyệt 2 Bước (Human-in-the-Loop) &amp; Lịch Đăng Đa Kênh</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Bước 1: Duyệt kịch bản trước khi Render • Bước 2: Xem trước video &amp; Duyệt đăng kèm kích hoạt Seeding mồi 30 phút đầu</p>
+          </div>
+        </div>
+        <div class="card-body no-padding">
+          <table class="data-table" id="mmoApprovalTable">
+            <thead>
+              <tr>
+                <th>Mã Job</th>
+                <th>Chủ đề &amp; Định dạng</th>
+                <th>Trụ cột</th>
+                <th>Chế độ Render</th>
+                <th>Trạng thái Kiểm soát</th>
+                <th>Hành động Duyệt (Control Gate)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr data-job-id="MMO-VN-1028-512">
+                <td><code>MMO-VN-1028-512</code></td>
+                <td>
+                  <strong>3 Sai lầm khi dùng B5 phục hồi da mỏng đỏ</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">3 Video 9:16 + 1 Carousel IG + 2 Post Group</div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #1E5EFF;">40% Giáo dục</span></td>
+                <td>Mode 3: Muse.ai CDP</td>
+                <td class="job-status-cell"><span style="font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(245,158,11,0.15); color: #D97706;">⏳ Bước 1: Chờ duyệt Kịch bản (Khóa API)</span></td>
+                <td class="job-action-cell">
+                  <button class="btn btn-xs btn-primary btn-approve-mmo" data-job="MMO-VN-1028-512" data-stage="approve_script">✓ Duyệt Kịch Bản &amp; Render</button>
+                </td>
+              </tr>
+              <tr data-job-id="MMO-VN-1028-409">
+                <td><code>MMO-VN-1028-409</code></td>
+                <td>
+                  <strong>So sánh dưới kính hiển vi: Kem chống nắng vật lý vs lai</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Video 45s đã ghép TTS + Phụ đề Karaoke (.ass)</div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #0891B2;">30% Giải trí/Khoa học</span></td>
+                <td>Mode 1: Parallax 2.5D</td>
+                <td class="job-status-cell"><span style="font-size: 11px; font-weight: 700; padding: 4px 8px; border-radius: 6px; background: rgba(30,94,255,0.12); color: var(--primary);">🎬 Bước 2: Đã Render • Chờ duyệt Đăng</span></td>
+                <td class="job-action-cell">
+                  <button class="btn btn-xs btn-primary btn-approve-mmo" style="background: #059669; border-color: #059669;" data-job="MMO-VN-1028-409" data-stage="approve_publish">🚀 Duyệt Đăng 4 Kênh + Auto-Seeding</button>
+                </td>
+              </tr>
+              <tr data-job-id="MMO-VN-1028-301">
+                <td><code>MMO-VN-1028-301</code></td>
+                <td>
+                  <strong>Hành trình 14 ngày của khách hàng Thu Hà (Cam thường)</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);">Đã đăng TikTok, FB Reels, IG, Shorts • Đã chạy 50 cmt mồi</div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #059669;">20% Niềm tin/UGC</span></td>
+                <td>Mode 3: Muse.ai CDP</td>
+                <td class="job-status-cell"><span class="badge-success">✓ Đã xuất bản &amp; Seeding (Hook: 41.2%)</span></td>
+                <td class="job-action-cell">
+                  <a href="#campaigns" class="btn btn-xs btn-outline" data-tab="campaigns">Đẩy sang chạy Ads →</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== TAB 12: WEBSITE, CRO & SEO/GEO HUB (Giai đoạn 2) ==================== -->
+    <div class="tab-pane" id="pane-website-seo">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">🌐 Trung Tâm Chuyển Đổi Website, CRO &amp; SEO/GEO</h1>
+          <p class="page-subtitle">Giai đoạn 2: Tối ưu trang đích chuẩn chuyển đổi 6 bước, xây dựng cụm chủ đề SEO/AI Search và giám sát Server-Side Tracking CAPI</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnTestCapiEvent">🔄 Test Bắn Sự Kiện Purchase CAPI</button>
+          <button class="btn btn-primary btn-sm" id="btnRunCroAudit">⚡ Chạy Kiểm Toán 5-Second Test &amp; CRO</button>
+        </div>
+      </div>
+
+      <!-- Website & Tracking Health KPIs -->
+      <div class="kpi-grid" style="margin-bottom: 24px;">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Điểm 5-Second Test &amp; CRO</span></div>
+          <div class="kpi-value" id="croScoreVal">94<span class="kpi-unit">/100</span></div>
+          <div class="kpi-trend up"><span>Đạt chuẩn 6/6 Section chuyển đổi</span></div>
+          <div class="kpi-subtext">Tỷ lệ chuyển đổi Web (CR): 4.8%</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Core Web Vitals (Mobile)</span></div>
+          <div class="kpi-value">1.8<span class="kpi-unit">s LCP</span></div>
+          <div class="kpi-trend up"><span>INP: 92ms • CLS: 0.03 (Tốt)</span></div>
+          <div class="kpi-subtext">Tối ưu cho 78% traffic từ TikTok/FB</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Điểm Khớp Dữ Liệu CAPI</span></div>
+          <div class="kpi-value">9.3<span class="kpi-unit">/10</span></div>
+          <div class="kpi-trend up"><span>Meta CAPI + TikTok Events API</span></div>
+          <div class="kpi-subtext">Chống thất thoát dữ liệu iOS / AdBlock</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">SEO &amp; AI Search (GEO)</span></div>
+          <div class="kpi-value">18.400<span class="kpi-unit">visit/tháng</span></div>
+          <div class="kpi-trend up"><span>+34% trích dẫn trên ChatGPT/AI Overview</span></div>
+          <div class="kpi-subtext">24 bài chuẩn Schema JSON-LD</div>
+        </div>
+      </div>
+
+      <div class="branding-grid" style="margin-bottom: 24px;">
+        <!-- 6-Section Landing Page Anatomy Checklist -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🏗️ Cấu Trúc Trang Đích Chuẩn Chuyển Đổi 6 Bước (Landing Page Anatomy)</h3>
+          </div>
+          <div class="card-body" style="display: flex; flex-direction: column; gap: 10px; font-size: 13px;">
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>1. Hero Section (Vượt bài test 5 giây):</strong> Headline lợi ích cốt lõi + Video thực tế + CTA rõ ràng</div>
+              <span class="badge-success">✓ Đạt 98%</span>
+            </div>
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>2. Problem &amp; Agitation:</strong> Đồng cảm đúng nỗi đau khách hàng bằng ngôn ngữ đời thực</div>
+              <span class="badge-success">✓ Đạt 95%</span>
+            </div>
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>3. Solution &amp; Mechanism:</strong> Giải thích cơ chế khoa học Nano-B5 (không chỉ liệt kê tính năng)</div>
+              <span class="badge-success">✓ Đạt 92%</span>
+            </div>
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>4. Social Proof (Bằng chứng xã hội):</strong> 120+ feedback ảnh/video cam thường &amp; kiểm định</div>
+              <span class="badge-success">✓ Đạt 96%</span>
+            </div>
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>5. Offer &amp; Risk Reversal:</strong> Bảng giá combo + Cam kết hoàn tiền 100% trong 7 ngày</div>
+              <span class="badge-success">✓ Đạt 94%</span>
+            </div>
+            <div style="padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; display: flex; justify-content: space-between; align-items: center;">
+              <div><strong>6. FAQ + KChat Live Box + VietQR Casso:</strong> Giải đáp thắc mắc &amp; thanh toán tự động 3 giây</div>
+              <span class="badge-success">✓ Đang bật</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- First-Party Data & Server-Side CAPI Status -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">🔌 Hạ Tầng Đo Lường &amp; Đồng Bộ Chuyển Đổi Ngược (Server-Side CAPI)</h3>
+          </div>
+          <div class="card-body" style="display: flex; flex-direction: column; gap: 12px; font-size: 13px;">
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Meta Pixel + Conversions API (CAPI)</strong>
+                <span class="badge-success">EMQ: 9.4 / 10</span>
+              </div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Tự động bắn sự kiện <code>Lead</code> khi khách nhắn vào KChat và bắn <code>Purchase</code> kèm giá trị đơn hàng khi chốt đơn POS/Casso.</p>
+            </div>
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="display: flex; justify-content: space-between;">
+                <strong>TikTok Pixel + Events API (Server-to-Server)</strong>
+                <span class="badge-success">EMQ: 9.1 / 10</span>
+              </div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Đồng bộ tệp khách đã xem video &gt;50% và khách mua hàng để nuôi thuật toán TikTok Smart+.</p>
+            </div>
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="display: flex; justify-content: space-between;">
+                <strong>Google Analytics 4 (GA4) + Enhanced Conversions</strong>
+                <span class="badge-success">Hoạt động 24/7</span>
+              </div>
+              <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Theo dõi UTM đa điểm chạm (Multi-touch Attribution) từ bài đăng MXH đến giỏ hàng Website.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEO Topic Cluster & GEO (AI Search Optimization) Table -->
+      <div class="card">
+        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <h3 class="card-title">🔍 Cụm Chủ Đề SEO &amp; Tối Ưu Hóa Công Cụ Tìm Kiếm AI (SEO + GEO)</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Phân bổ từ khóa theo Search Intent, gắn Schema JSON-LD tự động để thương hiệu được trích dẫn trên Google AI Overviews, ChatGPT &amp; Perplexity</p>
+          </div>
+          <button class="btn btn-sm btn-primary" id="btnAddSeoArticle">+ Sinh Bài Chuẩn SEO/GEO Mới</button>
+        </div>
+        <div class="card-body no-padding">
+          <table class="data-table" id="seoClusterTable">
+            <thead>
+              <tr>
+                <th>Bài viết / Trang đích (URL)</th>
+                <th>Ý định tìm kiếm (Search Intent)</th>
+                <th>Schema JSON-LD</th>
+                <th>Thứ hạng Google</th>
+                <th>Trích dẫn AI (GEO)</th>
+                <th>Chuyển đổi Lead/Đơn</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <strong>Phác đồ phục hồi da nhiễm Corticoid &amp; mỏng đỏ tại nhà</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);"><code>/blog/phac-do-phuc-hoi-da-mong-do-b5</code></div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #1E5EFF;">Informational (Tìm giải pháp)</span></td>
+                <td><code>Article</code>, <code>FAQPage</code></td>
+                <td><strong style="color: #059669;">Top 2</strong></td>
+                <td><span class="badge-success">Được ChatGPT &amp; AI Overview trích dẫn</span></td>
+                <td><strong>142 chats</strong> / tháng</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>So sánh Serum B5 Nano-Liposome và B5 thông thường: Loại nào thấm nhanh?</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);"><code>/blog/so-sanh-serum-b5-nano-liposome</code></div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #0891B2;">Commercial (So sánh lựa chọn)</span></td>
+                <td><code>Article</code>, <code>Product</code></td>
+                <td><strong style="color: #059669;">Top 1</strong></td>
+                <td><span class="badge-success">Được Perplexity &amp; Gemini đề xuất</span></td>
+                <td><strong>98 đơn</strong> / tháng</td>
+              </tr>
+              <tr>
+                <td>
+                  <strong>Combo Phục Hồi Hàng Rào Bảo Vệ Da Hana B5 (Trang Sản Phẩm CRO)</strong>
+                  <div style="font-size: 11px; color: var(--text-muted);"><code>/products/combo-phuc-hoi-hana-b5</code></div>
+                </td>
+                <td><span style="font-size: 11px; font-weight: 700; color: #059669;">Transactional (Mua hàng)</span></td>
+                <td><code>Product</code>, <code>Offer</code>, <code>AggregateRating</code></td>
+                <td><strong style="color: #059669;">Top 1 Brand</strong></td>
+                <td><span class="badge-success">Hiển thị Rich Snippet 4.9★ (1.240 đánh giá)</span></td>
+                <td><strong>310 đơn</strong> / tháng</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== CASSO VIETQR PAYMENT MODAL ==================== -->
+    <div class="casso-modal-backdrop" id="cassoModalBackdrop">
+      <div class="casso-modal" id="cassoModal">
+        <!-- Modal Header -->
+        <div class="casso-modal-header">
+          <div class="casso-brand">
+            <div class="casso-logo-badge">CASSO</div>
+            <div>
+              <h3 class="casso-title">Thanh toán tự động qua VietQR (Casso)</h3>
+              <p class="casso-sub">Chuyển khoản Napas 24/7 từ mọi App ngân hàng • Kích hoạt tự động sau 1-3 giây</p>
+            </div>
+          </div>
+          <button class="casso-close-btn" id="btnCassoClose" aria-label="Đóng">&times;</button>
+        </div>
+
+        <!-- Modal Body: Pending State -->
+        <div class="casso-modal-body" id="cassoModalPending">
+          <!-- Left: QR Code Card -->
+          <div class="casso-qr-col">
+            <div class="qr-frame">
+              <img src="https://img.vietqr.io/image/mbbank-0987654321-compact2.png?amount=299000&addInfo=KCHAT%20HANA%209812&accountName=CONG%20TY%20CONG%20NGHE%20KTECH" alt="VietQR Casso" id="cassoQrImg" class="casso-qr-img">
+              <div class="qr-pulse-scan"></div>
+            </div>
+            <div class="casso-status-pulse">
+              <span class="pulse-indicator"></span>
+              <span id="cassoStatusText">Đang chờ hệ thống ngân hàng xác nhận...</span>
+            </div>
+            <div class="casso-timer">
+              Thời gian giữ đơn: <strong id="cassoCountdown">14:59</strong>
+            </div>
+          </div>
+
+          <!-- Right: Transfer Details & Copy -->
+          <div class="casso-info-col">
+            <div class="casso-summary-box">
+              <div class="summary-line">
+                <span>Dịch vụ đăng ký:</span>
+                <strong id="cassoItemName">Gói KChat Growth (1 Tháng)</strong>
+              </div>
+              <div class="summary-line total">
+                <span>Tổng số tiền cần chuyển:</span>
+                <strong class="casso-amount-highlight" id="cassoAmountText">299.000 đ</strong>
+              </div>
+            </div>
+
+            <div class="casso-fields-list">
+              <div class="casso-field-group">
+                <label>Ngân hàng nhận:</label>
+                <div class="casso-field-val">
+                  <span>MB Bank (Ngân hàng Quân Đội)</span>
+                  <span class="badge-napas">Napas 24/7</span>
+                </div>
+              </div>
+
+              <div class="casso-field-group">
+                <label>Chủ tài khoản:</label>
+                <div class="casso-field-val">
+                  <span>CONG TY TNHH CONG NGHE KTECH</span>
+                </div>
+              </div>
+
+              <div class="casso-field-group">
+                <label>Số tài khoản:</label>
+                <div class="casso-copy-box">
+                  <span class="copy-val" id="cassoAccNo">0987654321</span>
+                  <button class="btn-copy" data-copy="0987654321">Sao chép</button>
+                </div>
+              </div>
+
+              <div class="casso-field-group highlight-group">
+                <label>Nội dung chuyển khoản (BẮT BUỘC CHÍNH XÁC):</label>
+                <div class="casso-copy-box highlight">
+                  <span class="copy-val font-mono" id="cassoTransferCode">KCHAT HANA 9812</span>
+                  <button class="btn-copy" data-copy="KCHAT HANA 9812">Sao chép</button>
+                </div>
+                <small class="note-warn">⚠️ Hệ thống Casso tự động quét khớp đúng nội dung này để kích hoạt tức thì</small>
+              </div>
+            </div>
+
+            <!-- Dev Simulation Webhook Button -->
+            <div class="casso-dev-box">
+              <div class="dev-badge">⚡️ Kiểm Thử Luồng Tự Động</div>
+              <p>Mô phỏng Casso bắn webhook về server Rails để kích hoạt tức thì không cần đợi chuyển khoản thật:</p>
+              <button class="btn btn-sm btn-casso-sim" id="btnSimulateCassoWebhook">
+                ⚡️ Giả lập Casso Bắn Webhook Thành Công
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Body: Success State -->
+        <div class="casso-modal-success" id="cassoModalSuccess" style="display:none;">
+          <div class="success-icon-wrap">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+          </div>
+          <h3>Thanh Toán Thành Công Qua Casso!</h3>
+          <p class="success-sub">Hệ thống đã nhận được <strong id="successAmount">299.000 đ</strong> từ giao dịch chuyển khoản ngân hàng của bạn.</p>
+          <div class="success-details">
+            <div class="success-row"><span>Mã giao dịch Casso:</span><strong id="successTid">CASSO-20261001-9812</strong></div>
+            <div class="success-row"><span>Dịch vụ kích hoạt:</span><strong id="successService">Gia hạn Gói Growth (+30 ngày)</strong></div>
+            <div class="success-row"><span>Cổng thanh toán:</span><span>VietQR Napas 24/7 (Casso Webhook)</span></div>
+            <div class="success-row"><span>Trạng thái tài khoản:</span><span class="badge-success">Đã kích hoạt tự động</span></div>
+          </div>
+          <button class="btn btn-primary btn-block mt-4" id="btnCassoDone">Hoàn tất & Quay lại Quản trị</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== ONBOARDING WIZARD MODAL (Phase A-06 & B-01) ==================== -->
+    <div class="onboarding-modal-backdrop" id="onboardingModalBackdrop">
+      <div class="onboarding-modal" id="onboardingModal">
+        <!-- Header -->
+        <div class="onboarding-header">
+          <div>
+            <h3 class="onboarding-title">🚀 Hướng Dẫn Khởi Tạo Cửa Hàng (4 Bước)</h3>
+            <p class="onboarding-subtitle">Thiết lập thương hiệu, kết nối kênh bán hàng và kích hoạt AI tư vấn tự động</p>
+          </div>
+          <button class="onboarding-close-btn" id="btnCloseOnboarding" aria-label="Đóng">&times;</button>
+        </div>
+
+        <!-- Progress Steps Bar -->
+        <div class="wizard-steps-bar">
+          <div class="wizard-step-node active" id="stepNode-1">
+            <span class="step-num">1</span>
+            <span>Thương Hiệu</span>
+          </div>
+          <div class="step-line" id="stepLine-1"></div>
+          <div class="wizard-step-node" id="stepNode-2">
+            <span class="step-num">2</span>
+            <span>Kết Nối Kênh</span>
+          </div>
+          <div class="step-line" id="stepLine-2"></div>
+          <div class="wizard-step-node" id="stepNode-3">
+            <span class="step-num">3</span>
+            <span>Huấn Luyện AI</span>
+          </div>
+          <div class="step-line" id="stepLine-3"></div>
+          <div class="wizard-step-node" id="stepNode-4">
+            <span class="step-num">4</span>
+            <span>Hoàn Tất</span>
+          </div>
+        </div>
+
+        <!-- Wizard Body -->
+        <div class="onboarding-body">
+          <!-- Step 1: Branding -->
+          <div class="wizard-step-pane active" id="wizardPane-1">
+            <h4 style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Bước 1: Thiết Lập Nhận Diện Thương Hiệu</h4>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 20px;">Tên shop và màu sắc sẽ hiển thị trên Widget chat của khách hàng.</p>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px;">Tên Cửa Hàng / Doanh Nghiệp:</label>
+              <input type="text" class="form-control" id="wizardInputShopName" value="Hana Beauty Shop" placeholder="Nhập tên shop của bạn...">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 18px;">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px;">Màu Sắc Nhận Diện Thương Hiệu (Cool Blue Mặc Định):</label>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <div class="color-preset active" data-color="#D7EFFF" style="background: #D7EFFF; border: 2px solid #2563EB; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer;"><span style="color: #2563EB; font-weight: bold;">✓</span></div>
+                <div class="color-preset" data-color="#3B82F6" style="background: #3B82F6; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"></div>
+                <div class="color-preset" data-color="#10B981" style="background: #10B981; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"></div>
+                <div class="color-preset" data-color="#8B5CF6" style="background: #8B5CF6; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"></div>
+                <div class="color-preset" data-color="#F59E0B" style="background: #F59E0B; width: 36px; height: 36px; border-radius: 50%; cursor: pointer;"></div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px;">Tên miền phụ hệ thống:</label>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <input type="text" class="form-control" id="wizardSubdomain" value="hana" style="width: 160px; font-weight: 700;">
+                <span style="font-size: 14px; font-weight: 600; color: var(--text-dim);">.kchat.vn</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 2: Channels -->
+          <div class="wizard-step-pane" id="wizardPane-2">
+            <h4 style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Bước 2: Chọn Kênh Giao Tiếp Đầu Tiên</h4>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">Bạn có thể kết nối thêm các kênh khác bất cứ lúc nào trong mục Cài đặt.</p>
+
+            <div class="channel-select-grid">
+              <div class="channel-select-card selected" data-channel="web">
+                <div class="channel-select-icon web">W</div>
+                <div class="channel-select-info">
+                  <h4>Website Live Chat Widget</h4>
+                  <p>Nhúng vào website chỉ với 1 đoạn mã HTML</p>
+                </div>
+              </div>
+              <div class="channel-select-card" data-channel="fb">
+                <div class="channel-select-icon fb">F</div>
+                <div class="channel-select-info">
+                  <h4>Facebook Fanpage</h4>
+                  <p>Đồng bộ tin nhắn & bình luận bài viết Fanpage</p>
+                </div>
+              </div>
+              <div class="channel-select-card" data-channel="zalo">
+                <div class="channel-select-icon zalo">Z</div>
+                <div class="channel-select-info">
+                  <h4>Tài Khoản Zalo Cá Nhân</h4>
+                  <p>Quét mã QR, tự động online trên server 24/7</p>
+                </div>
+              </div>
+              <div class="channel-select-card" data-channel="tiktok">
+                <div class="channel-select-icon tiktok">T</div>
+                <div class="channel-select-info">
+                  <h4>TikTok Shop Message</h4>
+                  <p>Quản lý tin nhắn khách mua sắm trên TikTok</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Step 3: AI Knowledge -->
+          <div class="wizard-step-pane" id="wizardPane-3">
+            <h4 style="font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 4px;">Bước 3: Nạp Dữ Liệu & Huấn Luyện AI Chatbot</h4>
+            <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">AI sẽ đọc hiểu dữ liệu sản phẩm của bạn và tự động trả lời khách hàng chuẩn xác 24/7.</p>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px;">Tên Trợ Lý AI của Shop:</label>
+              <input type="text" class="form-control" id="wizardBotName" value="Hana AI Assistant">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label style="font-size: 13px; font-weight: 600; color: var(--text); display: block; margin-bottom: 6px;">Giọng Điệu Tư Vấn:</label>
+              <div class="persona-grid">
+                <div class="persona-card selected" data-persona="friendly">
+                  <div class="persona-emoji">🌸</div>
+                  <div class="persona-title">Thân Thiện & Năng Nổ</div>
+                  <div class="persona-desc">Dạ em chào anh/chị, em hỗ trợ tư vấn ngay ạ!</div>
+                </div>
+                <div class="persona-card" data-persona="professional">
+                  <div class="persona-emoji">👔</div>
+                  <div class="persona-title">Chuyên Nghiệp</div>
+                  <div class="persona-desc">Kính chào Quý khách, xin vui lòng cho biết yêu cầu...</div>
+                </div>
+                <div class="persona-card" data-persona="concise">
+                  <div class="persona-emoji">⚡️</div>
+                  <div class="persona-title">Ngắn Gọn & Chốt Đơn</div>
+                  <div class="persona-desc">Giá 299k freeship hôm nay, bạn lấy màu nào ạ?</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="border: 2px dashed var(--border-strong); border-radius: 8px; padding: 20px; text-align: center; background: var(--bg-surface);">
+              <span style="font-size: 24px;">📄</span>
+              <div style="font-size: 13px; font-weight: 600; color: var(--text); margin: 6px 0 2px;">Tải lên Bảng giá / Tài liệu sản phẩm (.pdf, .xlsx, .docx)</div>
+              <div style="font-size: 11px; color: var(--text-dim);">Đã nạp sẵn tài liệu mẫu: <code>Bang_Gia_My_Pham_2026.pdf</code> (Đã Vector hóa)</div>
+            </div>
+          </div>
+
+          <!-- Step 4: Ready -->
+          <div class="wizard-step-pane" id="wizardPane-4">
+            <div style="text-align: center; padding: 10px 0 20px;">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: #ECFDF5; color: #10B981; font-size: 32px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 12px;">✓</div>
+              <h4 style="font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px;">Cửa Hàng Của Bạn Đã Sẵn Sàng!</h4>
+              <p style="font-size: 13px; color: var(--text-muted); max-width: 480px; margin: 0 auto;">Thương hiệu, kênh kết nối và AI Chatbot đã được cấu hình thành công.</p>
+            </div>
+
+            <!-- Mini Live Test Chat Simulator -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-top: 10px;">
+              <span style="font-size: 12px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Thử nghiệm trả lời tự động của AI:</span>
+              <div style="margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="align-self: flex-end; background: var(--primary); color: #fff; padding: 8px 14px; border-radius: 12px 12px 2px 12px; font-size: 13px;">
+                  Shop có giao hàng hỏa tốc trong 2 giờ tại TP.HCM không?
+                </div>
+                <div style="align-self: flex-start; background: #fff; border: 1px solid var(--border); color: var(--text); padding: 10px 14px; border-radius: 12px 12px 12px 2px; font-size: 13px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+                  🌸 Dạ chào bạn! Hana Beauty có hỗ trợ giao hỏa tốc 2H qua Ahamove/GrabExpress tại nội thành TP.HCM với đơn hàng trước 17h ạ. Đơn từ 500k bên em đang freeship hỏa tốc luôn nhé! Bạn cần gửi tới địa chỉ nào để em check phí ngay cho bạn ạ?
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="onboarding-footer">
+          <button class="btn btn-outline btn-sm" id="btnWizardPrev" style="visibility: hidden;">← Quay lại</button>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-primary btn-sm" id="btnWizardNext">Tiếp tục →</button>
+            <button class="btn btn-primary btn-sm" id="btnWizardFinish" style="display: none; background: #10B981; border-color: #10B981;">Bắt đầu sử dụng ngay 🚀</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

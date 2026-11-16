@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KChat — Nền tảng Quản lý Giao tiếp Khách hàng Đa kênh</title>
+  <meta name="description" content="Quản lý mọi tin nhắn Zalo, Facebook, TikTok, Website trên 1 màn hình. AI Chatbot thông minh. Giá chỉ từ 99.000đ/tháng. Dùng thử miễn phí 14 ngày.">
+  <meta name="keywords" content="quản lý chat đa kênh, live chat, chatbot AI, omnichannel, bán hàng online, Zalo OA, Facebook Messenger">
+  <meta property="og:title" content="KChat — Quản lý mọi tin nhắn trên 1 màn hình">
+  <meta property="og:description" content="Nền tảng giao tiếp khách hàng đa kênh với AI Chatbot. Giá chỉ từ 99.000đ/tháng.">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1E5EFF">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-container">
+      <a href="#" class="logo">
+        <span class="logo-icon">K</span>
+        <span class="logo-text">KChat</span>
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#features">Tính năng</a></li>
+        <li><a href="#channels">Kênh kết nối</a></li>
+        <li><a href="#ai">AI Chatbot</a></li>
+        <li><a href="#pricing">Bảng giá</a></li>
+        <li><a href="#affiliate">Kiếm tiền (Affiliate)</a></li>
+        <li><a href="#blog">Kiến thức</a></li>
+        <li><a href="#contact">Liên hệ</a></li>
+      </ul>
+      <div class="nav-actions">
+        <a href="tenant-admin/" class="btn btn-outline btn-sm">Đăng nhập</a>
+        <button class="btn btn-primary btn-sm btn-plan-checkout" data-plan="growth" data-name="Gói Growth (Dùng thử 14 ngày)" data-amount="0">Dùng thử miễn phí</button>
+      </div>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">🚀 Dùng thử miễn phí 14 ngày — Không cần thẻ tín dụng</div>
+        <h1 class="hero-title">
+          Quản lý <span class="gradient-text">mọi tin nhắn</span><br>trên 1 màn hình
+        </h1>
+        <p class="hero-subtitle">
+          Kết nối không giới hạn với Zalo, Facebook, TikTok, Website, Instagram, Email và nhiều kênh khác. 
+          Trợ lý AI riêng cho từng doanh nghiệp. Giá chỉ từ <strong>99.000đ/tháng</strong>.
+        </p>
+        <div class="hero-cta">
+          <button class="btn btn-primary btn-lg btn-plan-checkout" data-plan="growth" data-name="Gói Growth (Dùng thử 14 ngày)" data-amount="0">
+            <span>Bắt đầu miễn phí</span>
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14m-7-7 7 7-7 7"/></svg>
+          </button>
+          <a href="#features" class="btn btn-ghost btn-lg">
+            <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            <span>Xem demo</span>
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <span class="stat-number" data-target="2500">0</span><span class="stat-suffix">+</span>
+            <span class="stat-label">Doanh nghiệp</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-number" data-target="15">0</span><span class="stat-suffix">+</span>
+            <span class="stat-label">Kênh kết nối</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat">
+            <span class="stat-number" data-target="99">0</span><span class="stat-suffix">.9%</span>
+            <span class="stat-label">Uptime</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="dashboard-preview">
+          <div class="preview-sidebar">
+            <div class="preview-logo">K</div>
+            <div class="preview-nav-item active"></div>
+            <div class="preview-nav-item"></div>
+            <div class="preview-nav-item"></div>
+            <div class="preview-nav-item"></div>
+          </div>
+          <div class="preview-list">
+            <div class="preview-search"></div>
+            <div class="preview-conversation active">
+              <div class="conv-avatar zalo">Z</div>
+              <div class="conv-info">
+                <span class="conv-name">Nguyễn Văn A</span>
+                <span class="conv-msg">Báo giá giúp em sản phẩm...</span>
+              </div>
+              <span class="conv-badge">3</span>
+            </div>
+            <div class="preview-conversation">
+              <div class="conv-avatar fb">f</div>
+              <div class="conv-info">
+                <span class="conv-name">Trần Thị B</span>
+                <span class="conv-msg">Shop còn size L không ạ?</span>
+              </div>
+            </div>
+            <div class="preview-conversation">
+              <div class="conv-avatar tiktok">♪</div>
+              <div class="conv-info">
+                <span class="conv-name">Lê Minh C</span>
+                <span class="conv-msg">Muốn mua sản phẩm trong...</span>
+              </div>
+            </div>
+            <div class="preview-conversation">
+              <div class="conv-avatar web">@</div>
+              <div class="conv-info">
+                <span class="conv-name">Phạm D</span>
+                <span class="conv-msg">Chính sách đổi trả thế nào?</span>
+              </div>
+            </div>
+          </div>
+          <div class="preview-chat">
+            <div class="chat-header">
+              <div class="conv-avatar zalo small">Z</div>
+              <div>
+                <div class="chat-name">Nguyễn Văn A</div>
+                <div class="chat-channel">Zalo • Đang hoạt động</div>
+              </div>
+            </div>
+            <div class="chat-messages">
+              <div class="msg msg-in">Báo giá giúp em sản phẩm X size M ạ</div>
+              <div class="msg msg-out">Chào bạn! Sản phẩm X size M giá 450.000đ, đang giảm còn 359.000đ ạ 🎉</div>
+              <div class="msg msg-in">Ship về HCM bao nhiêu vậy shop?</div>
+              <div class="msg msg-ai">
+                <span class="ai-badge">✨ AI gợi ý</span>
+                Ship HCM phí 25.000đ, đơn trên 500k được freeship ạ. Bạn mua thêm 1 sản phẩm nữa là đủ freeship luôn nhé!
+              </div>
+            </div>
+            <div class="chat-input">
+              <span>Soạn tin nhắn...</span>
+              <div class="chat-input-actions">
+                <span title="Đính kèm tệp"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></span>
+                <span title="Biểu cảm"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span>
+                <span class="send-btn" title="Gửi"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Floating badges -->
+        <div class="floating-badge badge-zalo">
+          <span>💬</span> Zalo
+        </div>
+        <div class="floating-badge badge-fb">
+          <span>📘</span> Facebook
+        </div>
+        <div class="floating-badge badge-tiktok">
+          <span>🎵</span> TikTok
+        </div>
+        <div class="floating-badge badge-ai">
+          <span>🤖</span> AI Copilot
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TRUSTED BY ========== -->
+  <section class="trusted">
+    <div class="container">
+      <p class="trusted-label">Được tin dùng bởi các doanh nghiệp hàng đầu</p>
+      <div class="trusted-logos">
+        <div class="trust-logo">🏪 ShopHoa24h</div>
+        <div class="trust-logo">🏠 BĐS Sunrise</div>
+        <div class="trust-logo">💄 Spa Luxe</div>
+        <div class="trust-logo">📚 EduTech</div>
+        <div class="trust-logo">🛒 VNShop</div>
+        <div class="trust-logo">🔧 TechCare</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PAIN POINTS ========== -->
+  <section class="pain-points">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Vấn đề thực tế</span>
+        <h2 class="section-title">Bạn có đang gặp những vấn đề này?</h2>
+      </div>
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="pain-icon">😫</div>
+          <h3>Sót tin nhắn, mất khách</h3>
+          <p>Mở đồng thời Zalo, Facebook, TikTok... Tin nhắn từ nhiều nguồn dễ bị bỏ sót, khách chờ lâu chuyển sang đối thủ.</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🔓</div>
+          <h3>Nhân viên nghỉ, mất data</h3>
+          <p>Giao tài khoản Zalo/Facebook cho nhân viên trực chat. Khi nghỉ việc, họ mang theo toàn bộ danh bạ và lịch sử khách hàng.</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">🐌</div>
+          <h3>Phản hồi chậm, giờ cao điểm</h3>
+          <p>Không có chatbot hỗ trợ, ngoài giờ làm việc không ai trả lời. Khách hàng nóng nảy, đánh giá 1 sao.</p>
+        </div>
+        <div class="pain-card">
+          <div class="pain-icon">📊</div>
+          <h3>Không đo lường được hiệu suất</h3>
+          <p>Không biết nhân viên nào chat tốt, ai chat kém. Không có dữ liệu để cải thiện dịch vụ chăm sóc khách hàng.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURES ========== -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Giải pháp toàn diện</span>
+        <h2 class="section-title">Mọi thứ bạn cần trong <span class="gradient-text">1 nền tảng</span></h2>
+        <p class="section-desc">Từ quản lý hội thoại, CRM, AI Chatbot đến chiến dịch marketing — tất cả trong một.</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card featured">
+          <div class="feature-icon">💬</div>
+          <h3>Hộp thư hợp nhất</h3>
+          <p>Tất cả tin nhắn từ mọi kênh đổ về 1 màn hình. Phân chia tự động cho nhân viên đang online.</p>
+          <ul class="feature-list">
+            <li>Phân loại: Của tôi / Chưa phân chia / Tất cả</li>
+            <li>Trạng thái: Mở → Chờ → Snoozed → Đã xử lý</li>
+            <li>Ghi chú nội bộ (khách không nhìn thấy)</li>
+          </ul>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤖</div>
+          <h3>AI Chatbot thông minh</h3>
+          <p>Trợ lý AI riêng biệt cho từng doanh nghiệp, huấn luyện bằng dữ liệu bảng giá, sản phẩm của bạn.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>CRM & Danh bạ</h3>
+          <p>Quản lý thông tin khách hàng tập trung. Gộp liên hệ đa kênh, import/export CSV, lịch sử toàn diện.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3>Tự động hóa</h3>
+          <p>Cài đặt quy tắc tự động: gắn nhãn, chuyển nhân viên, gửi tin nhắn dựa trên điều kiện.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Báo cáo chi tiết</h3>
+          <p>Thời gian phản hồi, hiệu suất nhân viên, đánh giá CSAT, phân tích theo nhãn và kênh.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📢</div>
+          <h3>Chiến dịch Marketing</h3>
+          <p>Gửi SMS/ZNS hàng loạt, popup live chat chủ động, tích hợp quảng cáo Facebook & TikTok Ads.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🏷️</div>
+          <h3>Nhãn & Phân loại</h3>
+          <p>Tạo nhãn tùy biến không giới hạn (VIP, Đã cọc, Chờ giao hàng...). Lọc và báo cáo theo nhãn.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎨</div>
+          <h3>White-label</h3>
+          <p>Đổi logo, màu sắc, tên miền riêng. Agency dùng thương hiệu của mình để bán cho khách hàng.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CHANNELS ========== -->
+  <section class="channels" id="channels">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Đa kênh kết nối</span>
+        <h2 class="section-title">Kết nối <span class="gradient-text">mọi nơi</span> khách hàng nhắn tin</h2>
+        <p class="section-desc">Hỗ trợ hơn 15 kênh giao tiếp phổ biến nhất tại Việt Nam và quốc tế.</p>
+      </div>
+      <div class="channels-grid">
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #0068FF">Z</div>
+          <span>Zalo OA</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #0084FF">f</div>
+          <span>Facebook</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #E1306C">📷</div>
+          <span>Instagram</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #000">♪</div>
+          <span>TikTok</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #25D366">📱</div>
+          <span>WhatsApp</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #0088cc">✈️</div>
+          <span>Telegram</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: linear-gradient(135deg, #3B82F6, #1E5EFF)">🌐</div>
+          <span>Website</span>
+          <span class="channel-status">Live Chat</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #4A90D9">✉️</div>
+          <span>Email</span>
+          <span class="channel-status">Forwarding</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #06B6D4">💬</div>
+          <span>SMS</span>
+          <span class="channel-status">Brandname</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #00B900">📞</div>
+          <span>LINE</span>
+          <span class="channel-status official">Chính thức</span>
+        </div>
+        <div class="channel-card highlight">
+          <div class="channel-icon" style="background: linear-gradient(135deg, #0068FF, #00A2FF)">💎</div>
+          <span>Tin nhắn cá nhân</span>
+          <span class="channel-status premium">Nâng cao</span>
+        </div>
+        <div class="channel-card">
+          <div class="channel-icon" style="background: #6366F1">{}</div>
+          <span>API</span>
+          <span class="channel-status">Custom</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AI SECTION ========== -->
+  <section class="ai-section" id="ai">
+    <div class="container">
+      <div class="ai-layout">
+        <div class="ai-content">
+          <span class="section-tag">AI thế hệ mới</span>
+          <h2 class="section-title">Trợ lý AI <span class="gradient-text">riêng biệt</span> cho doanh nghiệp bạn</h2>
+          <p class="section-desc">Không phải chatbot kịch bản cứng nhắc. KChat AI học từ chính dữ liệu sản phẩm, bảng giá, chính sách của bạn để trả lời khách hàng chính xác 24/7.</p>
+          <div class="ai-features">
+            <div class="ai-feature">
+              <div class="ai-feature-icon">📚</div>
+              <div>
+                <h4>Knowledge Base riêng</h4>
+                <p>Upload PDF bảng giá, file sản phẩm, FAQ → AI tự học và trả lời dựa trên dữ liệu riêng của bạn.</p>
+              </div>
+            </div>
+            <div class="ai-feature">
+              <div class="ai-feature-icon">✨</div>
+              <div>
+                <h4>AI Copilot cho nhân viên</h4>
+                <p>Gợi ý câu trả lời realtime khi nhân viên đang chat. Duyệt → sửa → gửi trong 3 giây.</p>
+              </div>
+            </div>
+            <div class="ai-feature">
+              <div class="ai-feature-icon">🌙</div>
+              <div>
+                <h4>Tự động trả lời ngoài giờ</h4>
+                <p>AI trả lời khách hàng 24/7 khi không có nhân viên online. Tự chuyển cho nhân viên nếu cần.</p>
+              </div>
+            </div>
+            <div class="ai-feature">
+              <div class="ai-feature-icon">📈</div>
+              <div>
+                <h4>Phân tích cảm xúc</h4>
+                <p>AI phát hiện khách hàng đang tức giận hoặc không hài lòng → cảnh báo quản lý ngay lập tức.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ai-visual">
+          <div class="ai-chat-demo">
+            <div class="ai-demo-header">
+              <span class="ai-dot green"></span>
+              <span>KChat AI đang hoạt động</span>
+            </div>
+            <div class="ai-demo-messages">
+              <div class="ai-msg customer">
+                <span class="ai-msg-label">Khách hàng</span>
+                Sản phẩm Serum Vitamin C có phù hợp cho da nhạy cảm không ạ?
+              </div>
+              <div class="ai-msg bot">
+                <span class="ai-msg-label">🤖 AI trả lời (từ Knowledge Base của bạn)</span>
+                Chào bạn! Serum Vitamin C của shop phù hợp cho <strong>mọi loại da</strong>, kể cả da nhạy cảm ạ. Sản phẩm có nồng độ 15% L-Ascorbic Acid kết hợp Hyaluronic Acid, đã được kiểm nghiệm da liễu.
+                <br><br>
+                💰 Giá: <strong>289.000đ</strong> (giảm còn 229.000đ trong tháng này)
+                <br>🚚 Freeship đơn từ 300.000đ
+                <br><br>
+                Bạn muốn đặt hàng luôn không ạ? 😊
+              </div>
+              <div class="ai-accuracy">
+                <span>🎯 Độ chính xác: 96%</span>
+                <span>📖 Nguồn: product-catalog.pdf</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PRICING ========== -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Bảng giá minh bạch</span>
+        <h2 class="section-title">Giá <span class="gradient-text">rẻ hơn 30-50%</span> so với đối thủ</h2>
+        <p class="section-desc">Không phí ẩn. Không ràng buộc hợp đồng dài hạn. Hủy bất cứ lúc nào.</p>
+      </div>
+      <div class="pricing-toggle">
+        <span class="toggle-label active" id="monthlyLabel">Tháng</span>
+        <button class="toggle-switch" id="pricingToggle" aria-label="Chuyển đổi giữa tháng và năm">
+          <span class="toggle-dot"></span>
+        </button>
+        <span class="toggle-label" id="yearlyLabel">Năm <span class="save-badge">-20%</span></span>
+      </div>
+      <div class="pricing-grid">
+        <!-- Starter -->
+        <div class="price-card">
+          <div class="price-header">
+            <h3>Starter</h3>
+            <p class="price-desc">Seller cá nhân, hộ kinh doanh</p>
+          </div>
+          <div class="price-amount">
+            <span class="price-currency">đ</span>
+            <span class="price-value monthly-price">99.000</span>
+            <span class="price-value yearly-price" style="display:none">79.000</span>
+            <span class="price-period">/tháng</span>
+          </div>
+          <ul class="price-features">
+            <li class="included">2 nhân viên trực chat</li>
+            <li class="included">2 kênh kết nối</li>
+            <li class="included">1 tài khoản tin nhắn nâng cao</li>
+            <li class="included">500 AI messages/tháng</li>
+            <li class="included">Nhãn & câu trả lời mẫu</li>
+            <li class="included">Báo cáo cơ bản</li>
+            <li class="excluded">Automation Rules</li>
+            <li class="excluded">Custom Domain</li>
+          </ul>
+          <button class="btn btn-outline btn-block btn-plan-checkout" data-plan="starter" data-name="Gói Starter" data-amount="99000">Đăng ký Starter (99k)</button>
+        </div>
+        <!-- Growth — POPULAR -->
+        <div class="price-card popular">
+          <div class="popular-badge">Phổ biến nhất</div>
+          <div class="price-header">
+            <h3>Growth</h3>
+            <p class="price-desc">Shop & Team 3-15 nhân viên</p>
+          </div>
+          <div class="price-amount">
+            <span class="price-currency">đ</span>
+            <span class="price-value monthly-price">299.000</span>
+            <span class="price-value yearly-price" style="display:none">239.000</span>
+            <span class="price-period">/tháng</span>
+          </div>
+          <ul class="price-features">
+            <li class="included">5 nhân viên trực chat</li>
+            <li class="included">5 kênh kết nối</li>
+            <li class="included">3 tài khoản tin nhắn nâng cao</li>
+            <li class="included">3.000 AI messages/tháng</li>
+            <li class="included">AI Knowledge Base (5 tài liệu)</li>
+            <li class="included">10 Automation Rules</li>
+            <li class="included">Báo cáo nâng cao + CSAT</li>
+            <li class="included">Facebook Ads Integration</li>
+            <li class="included">Chiến dịch SMS/ZNS</li>
+            <li class="excluded">Custom Domain</li>
+          </ul>
+          <button class="btn btn-primary btn-block btn-plan-checkout" data-plan="growth" data-name="Gói Growth" data-amount="299000">Bắt đầu miễn phí</button>
+        </div>
+        <!-- Enterprise -->
+        <div class="price-card">
+          <div class="price-header">
+            <h3>Enterprise</h3>
+            <p class="price-desc">Doanh nghiệp 15-50+ NV</p>
+          </div>
+          <div class="price-amount">
+            <span class="price-currency">đ</span>
+            <span class="price-value monthly-price">799.000</span>
+            <span class="price-value yearly-price" style="display:none">639.000</span>
+            <span class="price-period">/tháng</span>
+          </div>
+          <ul class="price-features">
+            <li class="included">15 nhân viên (mua thêm được)</li>
+            <li class="included">15 kênh kết nối</li>
+            <li class="included">10 tài khoản tin nhắn nâng cao</li>
+            <li class="included">15.000 AI messages/tháng</li>
+            <li class="included">AI Knowledge Base (50 tài liệu)</li>
+            <li class="included">Automation không giới hạn</li>
+            <li class="included">Custom Domain + Branding</li>
+            <li class="included">Toàn bộ Ads Integration</li>
+            <li class="included">Hotline hỗ trợ + SLA 4h</li>
+            <li class="included">API đầy đủ</li>
+          </ul>
+          <button class="btn btn-outline btn-block btn-plan-checkout" data-plan="enterprise" data-name="Gói Enterprise" data-amount="799000">Đăng ký Enterprise (799k)</button>
+        </div>
+      </div>
+      <!-- Add-ons -->
+      <div class="addons">
+        <h3 class="addons-title">Mua thêm linh hoạt</h3>
+        <div class="addons-grid">
+          <div class="addon-item">
+            <span class="addon-icon">👤</span>
+            <span class="addon-name">Thêm nhân viên</span>
+            <span class="addon-price">+39.000đ/NV/tháng</span>
+          </div>
+          <div class="addon-item">
+            <span class="addon-icon">📱</span>
+            <span class="addon-name">Thêm kênh kết nối</span>
+            <span class="addon-price">+49.000đ/kênh/tháng</span>
+          </div>
+          <div class="addon-item">
+            <span class="addon-icon">💬</span>
+            <span class="addon-name">Tài khoản tin nhắn nâng cao</span>
+            <span class="addon-price">+79.000đ/TK/tháng</span>
+          </div>
+          <div class="addon-item">
+            <span class="addon-icon">🤖</span>
+            <span class="addon-name">1.000 AI Messages</span>
+            <span class="addon-price">+49.000đ</span>
+          </div>
+          <div class="addon-item">
+            <span class="addon-icon">💾</span>
+            <span class="addon-name">Dung lượng lưu trữ 5GB</span>
+            <span class="addon-price">+29.000đ/tháng</span>
+          </div>
+          <div class="addon-item">
+            <span class="addon-icon">🌐</span>
+            <span class="addon-name">Custom Domain</span>
+            <span class="addon-price">+99.000đ/tháng</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== COMPARISON ========== -->
+  <section class="comparison">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">So sánh khách quan</span>
+        <h2 class="section-title">Tại sao chọn KChat?</h2>
+      </div>
+      <div class="comparison-table-wrapper">
+        <table class="comparison-table">
+          <thead>
+            <tr>
+              <th>Tính năng</th>
+              <th class="highlight-col">KChat</th>
+              <th>Pancake</th>
+              <th>Fchat</th>
+              <th>Subiz</th>
+              <th>Haravan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Giá khởi điểm</td>
+              <td class="highlight-col"><strong>99.000đ</strong></td>
+              <td>~200.000đ+</td>
+              <td>~120.000đ+</td>
+              <td>~330.000đ+</td>
+              <td>~400.000đ+</td>
+            </tr>
+            <tr>
+              <td>AI Chatbot riêng/tenant</td>
+              <td class="highlight-col">✅ Dữ liệu riêng</td>
+              <td>Bot kịch bản</td>
+              <td>Bot kịch bản</td>
+              <td>✅ Gói cao cấp</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Tin nhắn đa kênh nâng cao</td>
+              <td class="highlight-col">✅ Server 24/7</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>Extension</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>White-label</td>
+              <td class="highlight-col">✅ Full</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>Ads Integration</td>
+              <td class="highlight-col">✅ FB + TikTok</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>FB cơ bản</td>
+            </tr>
+            <tr>
+              <td>Self-host / On-premise</td>
+              <td class="highlight-col">✅</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>❌</td>
+              <td>❌</td>
+            </tr>
+            <tr>
+              <td>API mở cho developer</td>
+              <td class="highlight-col">✅ Full REST + WS</td>
+              <td>Hạn chế</td>
+              <td>Hạn chế</td>
+              <td>✅</td>
+              <td>Hạn chế</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AFFILIATE PARTNER PROGRAM ========== -->
+  <section class="affiliate-section" id="affiliate" style="padding: 80px 0; background: var(--bg-surface);">
+    <div class="container">
+      <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 48px;">
+        <span class="badge" style="background: var(--cool-blue); color: var(--primary); font-weight: 700;">Hợp Tác Kinh Doanh 2026</span>
+        <h2 class="section-title" style="margin-top: 12px; font-size: 32px; font-weight: 800;">Kiếm Thu Nhập Thụ Động Cùng KChat Affiliate</h2>
+        <p class="section-subtitle" style="color: var(--text-muted); font-size: 16px;">Nhận ngay <strong>20% hoa hồng trọn đời</strong> cho mỗi shop đăng ký và gia hạn qua link của bạn. Thanh toán tức thì qua VietQR Napas 24/7.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <div style="background: #fff; padding: 28px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 36px; margin-bottom: 12px;">💸</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Hoa Hồng Trọn Đời 20%</h3>
+          <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">Không chỉ nhận lần đầu! Bạn hưởng 20% định kỳ hàng tháng/hàng năm mỗi khi khách hàng nạp tiền qua Napas VietQR.</p>
+        </div>
+
+        <div style="background: #fff; padding: 28px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 36px; margin-bottom: 12px;">⚡️</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Rút Tiền Tức Thì Napas 24/7</h3>
+          <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">Không giữ tiền hay chờ đợi cuối tháng! Yêu cầu rút tiền được xử lý tự động qua cổng Casso về tài khoản ngân hàng trong 3 giây.</p>
+        </div>
+
+        <div style="background: #fff; padding: 28px; border-radius: 16px; border: 1px solid var(--border); box-shadow: var(--shadow-sm);">
+          <div style="font-size: 36px; margin-bottom: 12px;">🍪</div>
+          <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 8px;">Cookie Lưu 60 Ngày</h3>
+          <p style="font-size: 14px; color: var(--text-muted); line-height: 1.6;">Khách bấm vào link của bạn hôm nay nhưng 2 tháng sau mới kích hoạt thì hoa hồng vẫn tự động tính về tài khoản của bạn.</p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 36px;">
+        <a href="tenant-admin/#affiliate" class="btn btn-primary btn-lg" style="text-decoration: none;">Đăng Ký Nhận Link Ref & Bắt Đầu Kiếm Tiền &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BLOG & KNOWLEDGE HUB ========== -->
+  <section class="blog-section" id="blog" style="padding: 80px 0;">
+    <div class="container">
+      <div class="section-header" style="text-align: center; max-width: 700px; margin: 0 auto 48px;">
+        <span class="badge" style="background: var(--cool-blue); color: var(--primary); font-weight: 700;">Trung Tâm Kiến Thức</span>
+        <h2 class="section-title" style="margin-top: 12px; font-size: 32px; font-weight: 800;">Kinh Nghiệm Bán Hàng & CSKH Đa Kênh</h2>
+        <p class="section-subtitle" style="color: var(--text-muted); font-size: 16px;">Chiến lược thực chiến giúp hơn 2.500+ shop online đột phá doanh số và tối ưu vận hành tự động.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+        <!-- Article 1 -->
+        <article style="background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: var(--transition);">
+          <div style="height: 180px; background: linear-gradient(135deg, #D7EFFF 0%, #93C5FD 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+            📱
+          </div>
+          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--primary); text-transform: uppercase;">Zalo Marketing</span>
+            <h3 style="font-size: 17px; font-weight: 700; margin: 8px 0 10px; line-height: 1.4; color: var(--text);">
+              Bí Quyết Nuôi 10+ Nick Zalo Bán Hàng An Toàn Không Lo Checkpoint
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+              Hướng dẫn cơ chế Bridge độc quyền và phân luồng IP dân cư giúp gửi tin nhắn kết bạn và chăm sóc khách cũ an toàn 100%.
+            </p>
+            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 12px;">
+              <span>5 phút đọc</span>
+              <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;">Đọc bài viết &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Article 2 -->
+        <article style="background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: var(--transition);">
+          <div style="height: 180px; background: linear-gradient(135deg, #ECFDF5 0%, #A7F3D0 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+            ⚡️
+          </div>
+          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--green-light); text-transform: uppercase;">Thanh Toán Tự Động</span>
+            <h3 style="font-size: 17px; font-weight: 700; margin: 8px 0 10px; line-height: 1.4; color: var(--text);">
+              Tối Ưu Chốt Đơn Tức Thì Với VietQR Casso: Tăng 35% Chuyển Đổi
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6;">
+              Tại sao khách hàng thích quét mã VietQR Napas 24/7 hơn chuyển khoản gõ tay số tài khoản? Giải pháp đối soát khớp lệnh 1.8s.
+            </p>
+            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 12px;">
+              <span>4 phút đọc</span>
+              <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;">Đọc bài viết &rarr;</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Article 3 -->
+        <article style="background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; transition: var(--transition);">
+          <div style="height: 180px; background: linear-gradient(135deg, #F3E8FF 0%, #DDD6FE 100%); display: flex; align-items: center; justify-content: center; font-size: 48px;">
+            🤖
+          </div>
+          <div style="padding: 24px; flex: 1; display: flex; flex-direction: column;">
+            <span style="font-size: 11px; font-weight: 700; color: var(--purple); text-transform: uppercase;">AI Bán Hàng</span>
+            <h3 style="font-size: 17px; font-weight: 700; margin: 8px 0 10px; line-height: 1.4; color: var(--text);">
+              Xây Dựng Kịch Bản AI Trả Lời Tin Nhắn Tự Nhiên Như Nhân Viên Thật
+            </h3>
+            <p style="font-size: 13px; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+              Phương pháp nạp dữ liệu sản phẩm, chính sách đổi trả và xưng hô thân mật phù hợp với tâm lý mua hàng trực tuyến tại Việt Nam.
+            </p>
+            <div style="margin-top: auto; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-dim); border-top: 1px solid var(--border); padding-top: 12px;">
+              <span>6 phút đọc</span>
+              <a href="#" style="color: var(--primary); font-weight: 600; text-decoration: none;">Đọc bài viết &rarr;</a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="cta-section">
+    <div class="container">
+      <div class="cta-card">
+        <h2>Sẵn sàng tăng trưởng doanh số?</h2>
+        <p>Dùng thử miễn phí 14 ngày. Không cần thẻ tín dụng. Setup trong 2 phút.</p>
+        <div class="cta-actions">
+          <a href="#" class="btn btn-primary btn-lg">Đăng ký dùng thử miễn phí</a>
+          <a href="#" class="btn btn-ghost btn-lg">Đặt lịch demo riêng</a>
+        </div>
+        <p class="cta-note">Hoặc gọi ngay <strong>1900 xxxx</strong> để được tư vấn</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <span class="logo-icon">K</span>
+            <span class="logo-text">KChat</span>
+          </a>
+          <p>Nền tảng quản lý giao tiếp khách hàng đa kênh hàng đầu Việt Nam.</p>
+          <div class="footer-social">
+            <a href="#" aria-label="Facebook">📘</a>
+            <a href="#" aria-label="YouTube">▶️</a>
+            <a href="#" aria-label="Zalo">💬</a>
+          </div>
+        </div>
+        <div class="footer-links">
+          <h4>Sản phẩm</h4>
+          <a href="#features">Tính năng</a>
+          <a href="#pricing">Bảng giá</a>
+          <a href="#channels">Kênh kết nối</a>
+          <a href="#ai">AI Chatbot</a>
+          <a href="#">API Documentation</a>
+        </div>
+        <div class="footer-links">
+          <h4>Hỗ trợ</h4>
+          <a href="#">Trung tâm trợ giúp</a>
+          <a href="#">Hướng dẫn sử dụng</a>
+          <a href="#">Blog</a>
+          <a href="#">Trạng thái hệ thống</a>
+        </div>
+        <div class="footer-links">
+          <h4>Pháp lý</h4>
+          <a href="#">Điều khoản sử dụng</a>
+          <a href="#">Chính sách bảo mật</a>
+          <a href="#">Chính sách hoàn tiền</a>
+        </div>
+        <div class="footer-links">
+          <h4>Liên hệ</h4>
+          <p>📧 support@kchat.vn</p>
+          <p>📞 1900 xxxx</p>
+          <p>📍 TP. Hồ Chí Minh, Việt Nam</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 KChat. Sản phẩm của KTech. Bảo lưu mọi quyền.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== LANDING CASSO VIETQR CHECKOUT MODAL ==================== -->
+  <div class="casso-modal-backdrop" id="landingCassoModalBackdrop" style="display:none;">
+    <div class="casso-modal" id="landingCassoModal">
+      <!-- Modal Header -->
+      <div class="casso-modal-header">
+        <div class="casso-brand">
+          <div class="casso-logo-badge">CASSO</div>
+          <div>
+            <h3 class="casso-title" id="landingModalTitle">Đăng Ký Tài Khoản & Kích Hoạt Qua VietQR</h3>
+            <p class="casso-sub">Thanh toán tự động Napas 24/7 qua cổng Casso • Kích hoạt ngay sau 1-3 giây</p>
+          </div>
+        </div>
+        <button class="casso-close-btn" id="btnLandingCassoClose" aria-label="Đóng">&times;</button>
+      </div>
+
+      <!-- Modal Body: Registration Form & QR Code -->
+      <div class="casso-modal-body" id="landingCassoModalPending">
+        <!-- Left: VietQR Card -->
+        <div class="casso-qr-col">
+          <div class="qr-frame">
+            <img src="https://img.vietqr.io/image/mbbank-0987654321-compact2.png?amount=299000&addInfo=KCHAT%20DEMO%201234&accountName=CONG%20TY%20CONG%20NGHE%20KTECH" alt="VietQR Casso" id="landingCassoQrImg" class="casso-qr-img">
+            <div class="qr-pulse-scan"></div>
+          </div>
+          <div class="casso-status-pulse">
+            <span class="pulse-indicator"></span>
+            <span id="landingCassoStatusText">Đang chờ hệ thống ngân hàng xác nhận...</span>
+          </div>
+          <div class="casso-timer">
+            Thời gian giữ đơn: <strong id="landingCassoCountdown">14:59</strong>
+          </div>
+        </div>
+
+        <!-- Right: Registration Form & Transfer Details -->
+        <div class="casso-info-col">
+          <div class="casso-summary-box">
+            <div class="summary-line">
+              <span>Gói đăng ký:</span>
+              <strong id="landingSelectedPlanName">Gói KChat Growth (1 Tháng)</strong>
+            </div>
+            <div class="summary-line total">
+              <span>Số tiền thanh toán:</span>
+              <strong class="casso-amount-highlight" id="landingAmountText">299.000 đ</strong>
+            </div>
+          </div>
+
+          <!-- Shop info inputs -->
+          <div style="margin-bottom: 14px; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-dim); display: block; margin-bottom: 4px;">TÊN SHOP / DOANH NGHIỆP:</label>
+              <input type="text" id="landingShopName" class="form-control" value="Miu Fashion" placeholder="VD: Miu Fashion" style="font-size: 12px; padding: 6px 10px; width: 100%;">
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-dim); display: block; margin-bottom: 4px;">SỐ ĐIỆN THOẠI:</label>
+              <input type="text" id="landingPhone" class="form-control" value="0912345678" placeholder="09xxx..." style="font-size: 12px; padding: 6px 10px; width: 100%;">
+            </div>
+          </div>
+
+          <div class="casso-fields-list">
+            <div class="casso-field-group">
+              <label>Ngân hàng nhận:</label>
+              <div class="casso-field-val">
+                <span>MB Bank (Ngân hàng Quân Đội)</span>
+                <span class="badge-napas">Napas 24/7</span>
+              </div>
+            </div>
+
+            <div class="casso-field-group">
+              <label>Số tài khoản:</label>
+              <div class="casso-copy-box">
+                <span class="copy-val font-mono">0987654321</span>
+                <button class="btn-copy" data-copy="0987654321">Sao chép</button>
+              </div>
+            </div>
+
+            <div class="casso-field-group highlight-group">
+              <label>Nội dung chuyển khoản (BẮT BUỘC CHÍNH XÁC):</label>
+              <div class="casso-copy-box highlight">
+                <span class="copy-val font-mono" id="landingTransferCode">KCHAT MIU 7731</span>
+                <button class="btn-copy" id="btnCopyTransferCode" data-copy="KCHAT MIU 7731">Sao chép</button>
+              </div>
+              <small class="note-warn">⚠️ Hệ thống Casso tự động kiểm tra nội dung này để tạo tenant tức thì</small>
+            </div>
+          </div>
+
+          <!-- Dev Simulation Button -->
+          <div class="casso-dev-box">
+            <div class="dev-badge">⚡️ Kiểm Thử Luồng Tự Động (Casso Webhook)</div>
+            <p>Mô phỏng Casso bắn webhook về server để kích hoạt tài khoản ngay:</p>
+            <button class="btn btn-sm btn-casso-sim" id="btnSimulateLandingCasso">
+              ⚡️ Giả lập Casso Bắn Webhook Kích Hoạt
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Body: Success State -->
+      <div class="casso-modal-success" id="landingCassoModalSuccess" style="display:none;">
+        <div class="success-icon-wrap">
+          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M8 12l2.5 2.5L16 9"/></svg>
+        </div>
+        <h3>Đăng Ký & Kích Hoạt Thành Công!</h3>
+        <p class="success-sub">Cửa hàng <strong id="landingSuccessShopName">Miu Fashion</strong> đã được tạo trên hệ thống KChat.</p>
+        <div class="success-details">
+          <div class="success-row"><span>Mã đơn Casso:</span><strong id="landingSuccessOrderId">KCHAT-MIU-7731</strong></div>
+          <div class="success-row"><span>Gói cước kích hoạt:</span><strong id="landingSuccessPlan">Gói Growth (+30 ngày)</strong></div>
+          <div class="success-row"><span>Địa chỉ quản trị:</span><strong style="color:#2563EB;">miu.kchat.vn</strong></div>
+          <div class="success-row"><span>Trạng thái:</span><span class="badge-success">Đã kích hoạt tự động</span></div>
+        </div>
+        <a href="tenant-admin/" class="btn btn-primary btn-block mt-4" style="text-align: center; text-decoration: none; padding: 12px; font-weight: 700;">
+          Truy Cập Ngay Vào Quản Trị Cửa Hàng (Tenant Admin) →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

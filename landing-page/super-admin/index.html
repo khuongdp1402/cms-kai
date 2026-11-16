@@ -1,0 +1,2454 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KChat — Super Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    (function() {
+      var saved = localStorage.getItem('kchat_super_admin_theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+    })();
+  </script>
+</head>
+<body>
+  <!-- ========== SIDEBAR ========== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">
+        <span class="logo-icon">K</span>
+        <span class="logo-text">KChat</span>
+      </div>
+      <span class="sidebar-badge">Super Admin</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-group">
+        <span class="nav-group-title">Tổng quan</span>
+        <a href="#" class="nav-item active" data-page="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-page="analytics">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20v-6"/></svg>
+          <span>Phân tích</span>
+        </a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-title">Quản lý</span>
+        <a href="#" class="nav-item" data-page="tenants">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          <span>Quản lý Tenant</span>
+          <span class="nav-badge">248</span>
+        </a>
+        <a href="#" class="nav-item" data-page="affiliates">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <span>Tiếp thị (Affiliate)</span>
+          <span class="nav-badge success">24 CTV</span>
+        </a>
+        <a href="#" class="nav-item" data-page="plans">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Gói cước</span>
+        </a>
+        <a href="#" class="nav-item" data-page="billing">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          <span>Thanh toán</span>
+          <span class="nav-badge success">12 mới</span>
+        </a>
+      </div>
+      <div class="nav-group">
+        <span class="nav-group-title">Hệ thống</span>
+        <a href="#" class="nav-item" data-page="ai-pool">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2"/><circle cx="12" cy="16" r="2"/><path d="M12 18v2"/><path d="M8 22h8"/><path d="M7 6a7 7 0 0 0 10 0"/></svg>
+          <span>AI Pool</span>
+        </a>
+        <a href="#" class="nav-item" data-page="channels">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <span>Kênh tích hợp</span>
+        </a>
+        <a href="#" class="nav-item" data-page="seeding">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span>Ads & Seeding</span>
+        </a>
+        <a href="#" class="nav-item" data-page="settings">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.73 12.73 1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+          <span>Cài đặt</span>
+        </a>
+      </div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="user-avatar">KD</div>
+        <div class="user-info">
+          <span class="user-name">Khuong DP</span>
+          <span class="user-role">Platform Owner</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-content">
+    <!-- Top Bar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
+        <div class="breadcrumb">
+          <span class="breadcrumb-item">Super Admin</span>
+          <span class="breadcrumb-sep">/</span>
+          <span class="breadcrumb-item active">Dashboard</span>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box">
+          <svg class="search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" placeholder="Tìm kiếm tenant, giao dịch..." id="globalSearch">
+        </div>
+        <button class="topbar-btn" title="Thông báo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          <span class="notification-dot"></span>
+        </button>
+        <button class="topbar-btn theme-toggle-btn" id="themeToggleBtn" title="Chuyển chế độ Sáng / Tối">
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+        <a href="../tenant-admin/" class="btn btn-sm" style="border-radius: 8px; font-size: 12px; text-decoration: none; color: var(--primary-dark); background: var(--cool-blue); border: 1px solid var(--border-hover); padding: 7px 12px; font-weight: 600;">Xem Demo Tenant Admin &rarr;</a>
+        <div class="topbar-divider"></div>
+        <div class="topbar-user">
+          <div class="user-avatar small">KD</div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== DASHBOARD PAGE ========== -->
+    <div class="page-content" id="dashboardPage">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard</h1>
+          <p class="page-subtitle">Tổng quan hoạt động nền tảng KChat</p>
+        </div>
+        <div class="page-actions">
+          <select class="select-input" id="dateRange">
+            <option value="7d">7 ngày qua</option>
+            <option value="30d" selected>30 ngày qua</option>
+            <option value="90d">90 ngày qua</option>
+            <option value="1y">1 năm</option>
+          </select>
+          <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tạo Tenant mới
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tổng Tenant</span>
+            <div class="kpi-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">248</div>
+          <div class="kpi-trend up">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span>+18.2% so với tháng trước</span>
+          </div>
+          <div class="kpi-sparkline" data-values="30,32,28,35,38,42,45,48,52,55,60,68"></div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">MRR (Doanh thu định kỳ)</span>
+            <div class="kpi-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">48.750.000<span class="kpi-unit">đ</span></div>
+          <div class="kpi-trend up">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span>+24.5% so với tháng trước</span>
+          </div>
+          <div class="kpi-sparkline" data-values="20,22,25,28,30,32,35,38,40,44,46,49"></div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tin nhắn hôm nay</span>
+            <div class="kpi-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">12.847</div>
+          <div class="kpi-trend up">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+            <span>+8.3% so với hôm qua</span>
+          </div>
+          <div class="kpi-sparkline" data-values="80,95,88,102,98,110,105,118,112,120,125,128"></div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Churn Rate</span>
+            <div class="kpi-icon red">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">2.1<span class="kpi-unit">%</span></div>
+          <div class="kpi-trend down">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+            <span>-0.5% so với tháng trước ✓</span>
+          </div>
+          <div class="kpi-sparkline" data-values="5,4.8,4.5,4.2,3.8,3.5,3.2,3,2.8,2.5,2.3,2.1"></div>
+        </div>
+      </div>
+
+      <!-- Charts Row -->
+      <div class="charts-row">
+        <div class="chart-card large">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Doanh thu theo tháng</h3>
+              <p class="chart-subtitle">MRR + Usage-based + One-time</p>
+            </div>
+            <div class="chart-legend">
+              <span class="legend-item"><span class="legend-dot blue"></span>Thuê bao SaaS</span>
+              <span class="legend-item"><span class="legend-dot cyan"></span>Usage (SMS/AI)</span>
+              <span class="legend-item"><span class="legend-dot green"></span>Hoa hồng</span>
+            </div>
+          </div>
+          <div class="chart-body">
+            <div class="bar-chart" id="revenueChart">
+              <div class="chart-y-axis">
+                <span>50tr</span><span>40tr</span><span>30tr</span><span>20tr</span><span>10tr</span><span>0</span>
+              </div>
+              <div class="chart-bars">
+                <div class="bar-group" data-label="T4">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:42%"></div>
+                    <div class="bar cyan" style="height:12%"></div>
+                    <div class="bar green" style="height:5%"></div>
+                  </div>
+                </div>
+                <div class="bar-group" data-label="T5">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:48%"></div>
+                    <div class="bar cyan" style="height:15%"></div>
+                    <div class="bar green" style="height:6%"></div>
+                  </div>
+                </div>
+                <div class="bar-group" data-label="T6">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:52%"></div>
+                    <div class="bar cyan" style="height:18%"></div>
+                    <div class="bar green" style="height:7%"></div>
+                  </div>
+                </div>
+                <div class="bar-group" data-label="T7">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:55%"></div>
+                    <div class="bar cyan" style="height:20%"></div>
+                    <div class="bar green" style="height:8%"></div>
+                  </div>
+                </div>
+                <div class="bar-group" data-label="T8">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:60%"></div>
+                    <div class="bar cyan" style="height:22%"></div>
+                    <div class="bar green" style="height:9%"></div>
+                  </div>
+                </div>
+                <div class="bar-group" data-label="T9">
+                  <div class="bar-stack">
+                    <div class="bar blue" style="height:65%"></div>
+                    <div class="bar cyan" style="height:24%"></div>
+                    <div class="bar green" style="height:10%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Phân bổ gói cước</h3>
+              <p class="chart-subtitle">248 tenant hoạt động</p>
+            </div>
+          </div>
+          <div class="chart-body">
+            <div class="donut-chart">
+              <svg viewBox="0 0 200 200" class="donut-svg">
+                <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(59,130,246,0.08)" stroke-width="24"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#3B82F6" stroke-width="24" stroke-dasharray="241.6 502.4" stroke-dashoffset="-125" class="donut-segment"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#06B6D4" stroke-width="24" stroke-dasharray="150.8 502.4" stroke-dashoffset="116.6" class="donut-segment"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#10B981" stroke-width="24" stroke-dasharray="80.4 502.4" stroke-dashoffset="267.4" class="donut-segment"/>
+                <circle cx="100" cy="100" r="80" fill="none" stroke="#8B5CF6" stroke-width="24" stroke-dasharray="30 502.4" stroke-dashoffset="347.8" class="donut-segment"/>
+              </svg>
+              <div class="donut-center">
+                <span class="donut-total">248</span>
+                <span class="donut-label">Tenants</span>
+              </div>
+            </div>
+            <div class="donut-legend">
+              <div class="donut-legend-item">
+                <span class="legend-dot blue"></span>
+                <span class="legend-name">Starter</span>
+                <span class="legend-value">120 (48%)</span>
+              </div>
+              <div class="donut-legend-item">
+                <span class="legend-dot cyan"></span>
+                <span class="legend-name">Growth</span>
+                <span class="legend-value">75 (30%)</span>
+              </div>
+              <div class="donut-legend-item">
+                <span class="legend-dot green"></span>
+                <span class="legend-name">Enterprise</span>
+                <span class="legend-value">40 (16%)</span>
+              </div>
+              <div class="donut-legend-item">
+                <span class="legend-dot purple"></span>
+                <span class="legend-name">White-Label</span>
+                <span class="legend-value">13 (5%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Tenants Table -->
+      <div class="table-card">
+        <div class="table-header">
+          <div>
+            <h3 class="chart-title">Tenant gần đây</h3>
+            <p class="chart-subtitle">Quản lý tất cả tenant trên nền tảng</p>
+          </div>
+          <div class="table-actions">
+            <div class="table-search">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input type="text" placeholder="Tìm tenant..." id="tenantSearch">
+            </div>
+            <select class="select-input small">
+              <option>Tất cả gói</option>
+              <option>Starter</option>
+              <option>Growth</option>
+              <option>Enterprise</option>
+              <option>White-Label</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tenant</th>
+                <th>Gói cước</th>
+                <th>Agents</th>
+                <th>Tin nhắn/tháng</th>
+                <th>AI Usage</th>
+                <th>Trạng thái</th>
+                <th>Hết hạn</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8)">SH</div>
+                    <div>
+                      <div class="tenant-name">Shop Hoa 24h</div>
+                      <div class="tenant-domain">shophoa24h.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge growth">Growth</span></td>
+                <td>5 / 5</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width:78%"></div>
+                  </div>
+                  <span class="usage-text">2,340 / 3,000</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:45%"></div>
+                  </div>
+                  <span class="usage-text">1,350 / 3,000</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td>15/12/2026</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #10B981, #059669)">BS</div>
+                    <div>
+                      <div class="tenant-name">BĐS Sunrise</div>
+                      <div class="tenant-domain">sunrise.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge enterprise">Enterprise</span></td>
+                <td>12 / 15</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width:62%"></div>
+                  </div>
+                  <span class="usage-text">9,300 / 15,000</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:88%"></div>
+                  </div>
+                  <span class="usage-text">13,200 / 15,000</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td>22/01/2027</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706)">SL</div>
+                    <div>
+                      <div class="tenant-name">Spa Luxe Beauty</div>
+                      <div class="tenant-domain">spaluxe.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge starter">Starter</span></td>
+                <td>2 / 2</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill warning" style="width:92%"></div>
+                  </div>
+                  <span class="usage-text">460 / 500</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:35%"></div>
+                  </div>
+                  <span class="usage-text">175 / 500</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td>03/11/2026</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #EF4444, #B91C1C)">ET</div>
+                    <div>
+                      <div class="tenant-name">EduTech Academy</div>
+                      <div class="tenant-domain">edutech.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge growth">Growth</span></td>
+                <td>4 / 5</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width:55%"></div>
+                  </div>
+                  <span class="usage-text">1,650 / 3,000</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:60%"></div>
+                  </div>
+                  <span class="usage-text">1,800 / 3,000</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td>28/12/2026</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9)">MA</div>
+                    <div>
+                      <div class="tenant-name">Marketing Agency Pro</div>
+                      <div class="tenant-domain">mapro.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge whitelabel">White-Label</span></td>
+                <td>∞</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width:40%"></div>
+                  </div>
+                  <span class="usage-text">18,200 / ∞</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:52%"></div>
+                  </div>
+                  <span class="usage-text">7,800 / 15,000</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td>01/03/2027</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #6B7280, #4B5563)">VN</div>
+                    <div>
+                      <div class="tenant-name">VN Fashion Store</div>
+                      <div class="tenant-domain">vnfashion.kchat.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge starter">Starter</span></td>
+                <td>1 / 2</td>
+                <td>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width:28%"></div>
+                  </div>
+                  <span class="usage-text">140 / 500</span>
+                </td>
+                <td>
+                  <div class="usage-bar cyan">
+                    <div class="usage-fill" style="width:15%"></div>
+                  </div>
+                  <span class="usage-text">75 / 500</span>
+                </td>
+                <td><span class="status-badge trial">Dùng thử</span></td>
+                <td>08/10/2026</td>
+                <td>
+                  <button class="action-btn" title="Thao tác">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="table-footer">
+          <span class="table-info">Hiển thị 1-6 / 248 tenant</span>
+          <div class="pagination">
+            <button class="page-btn disabled">←</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span class="page-ellipsis">...</span>
+            <button class="page-btn">42</button>
+            <button class="page-btn">→</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="activity-row">
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Hoạt động gần đây</h3>
+              <p class="chart-subtitle">Sự kiện hệ thống real-time</p>
+            </div>
+          </div>
+          <div class="activity-list">
+            <div class="activity-item">
+              <div class="activity-dot green"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>Shop Hoa 24h</strong> đã nâng cấp từ Starter → Growth</span>
+                <span class="activity-time">5 phút trước</span>
+              </div>
+              <span class="activity-amount up">+200.000đ/tháng</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot blue"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>VN Fashion Store</strong> đã đăng ký dùng thử</span>
+                <span class="activity-time">12 phút trước</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot cyan"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>BĐS Sunrise</strong> đã thanh toán thành công hóa đơn #INV-2026-1258</span>
+                <span class="activity-time">28 phút trước</span>
+              </div>
+              <span class="activity-amount up">+799.000đ</span>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot orange"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>Spa Luxe Beauty</strong> sắp hết quota tin nhắn (92%)</span>
+                <span class="activity-time">1 giờ trước</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot purple"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>Marketing Agency Pro</strong> đã tạo thêm 2 sub-tenant</span>
+                <span class="activity-time">2 giờ trước</span>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot red"></div>
+              <div class="activity-content">
+                <span class="activity-text"><strong>Tech Store VN</strong> thanh toán thất bại — thẻ hết hạn</span>
+                <span class="activity-time">3 giờ trước</span>
+              </div>
+              <span class="activity-badge warning">Cần xử lý</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">AI Token Usage</h3>
+              <p class="chart-subtitle">Sử dụng AI tháng này</p>
+            </div>
+          </div>
+          <div class="ai-usage-stats">
+            <div class="ai-stat">
+              <div class="ai-stat-header">
+                <span class="ai-model-name">OpenAI GPT-4o</span>
+                <span class="ai-stat-value">62%</span>
+              </div>
+              <div class="ai-progress-bar">
+                <div class="ai-progress-fill blue" style="width:62%"></div>
+              </div>
+              <div class="ai-stat-detail">
+                <span>186.000 / 300.000 tokens</span>
+                <span>~$2.40 chi phí</span>
+              </div>
+            </div>
+            <div class="ai-stat">
+              <div class="ai-stat-header">
+                <span class="ai-model-name">Google Gemini</span>
+                <span class="ai-stat-value">38%</span>
+              </div>
+              <div class="ai-progress-bar">
+                <div class="ai-progress-fill cyan" style="width:38%"></div>
+              </div>
+              <div class="ai-stat-detail">
+                <span>76.000 / 200.000 tokens</span>
+                <span>~$0.80 chi phí</span>
+              </div>
+            </div>
+            <div class="ai-stat">
+              <div class="ai-stat-header">
+                <span class="ai-model-name">Anthropic Claude</span>
+                <span class="ai-stat-value">25%</span>
+              </div>
+              <div class="ai-progress-bar">
+                <div class="ai-progress-fill purple" style="width:25%"></div>
+              </div>
+              <div class="ai-stat-detail">
+                <span>25.000 / 100.000 tokens</span>
+                <span>~$0.50 chi phí</span>
+              </div>
+            </div>
+            <div class="ai-usage-summary">
+              <div class="ai-summary-item">
+                <span class="ai-summary-label">Tổng chi phí AI</span>
+                <span class="ai-summary-value">$3.70</span>
+              </div>
+              <div class="ai-summary-item">
+                <span class="ai-summary-label">Doanh thu AI từ tenant</span>
+                <span class="ai-summary-value success">$8.90</span>
+              </div>
+              <div class="ai-summary-item">
+                <span class="ai-summary-label">Biên lợi nhuận AI</span>
+                <span class="ai-summary-value highlight">58.4%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== ANALYTICS PAGE ========== -->
+    <div class="page-content" id="analyticsPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Báo Cáo Tăng Trưởng & Phân Tích Toàn Sàn (Analytics)</h1>
+          <p class="page-subtitle">Theo dõi các chỉ số tài chính MRR, ARPU, tỷ lệ duy trì (Retention) và lưu lượng kênh</p>
+        </div>
+        <div class="page-actions">
+          <select class="select-input" id="analyticsRange">
+            <option value="30d" selected>30 ngày qua</option>
+            <option value="90d">Quý này (Q3 2026)</option>
+            <option value="1y">Cả năm 2026</option>
+          </select>
+          <button class="btn btn-outline btn-sm" id="btnExportAnalytics">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất Báo Cáo
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Grid -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">MRR (Doanh thu tháng)</span>
+            <div class="kpi-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">142.8<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>+28.4% so với tháng trước</span></div>
+          <div class="kpi-subtext">Tốc độ tăng trưởng SaaS hàng đầu</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">ARR Run-Rate</span>
+            <div class="kpi-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">1.71<span class="kpi-unit">tỷ đ</span></div>
+          <div class="kpi-trend up"><span>Dự phóng định giá 2026</span></div>
+          <div class="kpi-subtext">Quy mô doanh thu thường niên</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">ARPU (Doanh thu TB / Shop)</span>
+            <div class="kpi-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">575.000<span class="kpi-unit">đ</span></div>
+          <div class="kpi-trend up"><span>Tăng +15% nhờ Add-ons & AI</span></div>
+          <div class="kpi-subtext">Giá trị vòng đời LTV: 5.8 triệu đ</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Churn Rate (Tỷ lệ hủy)</span>
+            <div class="kpi-icon purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">1.2%</div>
+          <div class="kpi-trend up"><span>Thấp hơn trung bình ngành (4-7%)</span></div>
+          <div class="kpi-subtext">Khách hàng gắn bó cao nhờ data CSKH</div>
+        </div>
+      </div>
+
+      <!-- Growth Chart & Channel Breakdown -->
+      <div class="card-grid-2" style="margin-top: 24px;">
+        <!-- Monthly Revenue Chart -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Cơ Cấu Doanh Thu Theo Từng Nhóm Dịch Vụ</h3>
+            <span class="badge-tag cyan">Năm 2026</span>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; gap: 14px; font-size: 11px; margin-bottom: 16px; font-weight: 600; flex-wrap: wrap;">
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #2563EB; border-radius: 2px;"></span> Gói Thuê Bao SaaS: 68%</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #059669; border-radius: 2px;"></span> Phí Seeding & Ads (15%): 19%</span>
+              <span style="display: flex; align-items: center; gap: 6px;"><span style="width: 10px; height: 10px; background: #7C3AED; border-radius: 2px;"></span> AI Tokens & Add-ons: 13%</span>
+            </div>
+            <!-- Visual CSS bar stack comparison -->
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                  <span>Tháng 10 (Hiện tại)</span>
+                  <span>142.800.000 đ</span>
+                </div>
+                <div style="height: 22px; width: 100%; display: flex; border-radius: 6px; overflow: hidden;">
+                  <div style="width: 68%; background: #2563EB;" title="Gói SaaS: 97.1M đ"></div>
+                  <div style="width: 19%; background: #059669;" title="Seeding: 27.1M đ"></div>
+                  <div style="width: 13%; background: #7C3AED;" title="AI Tokens: 18.6M đ"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                  <span>Tháng 09</span>
+                  <span>106.400.000 đ</span>
+                </div>
+                <div style="height: 22px; width: 100%; display: flex; border-radius: 6px; overflow: hidden;">
+                  <div style="width: 70%; background: #2563EB;" title="Gói SaaS: 74.5M đ"></div>
+                  <div style="width: 17%; background: #059669;" title="Seeding: 18.1M đ"></div>
+                  <div style="width: 13%; background: #7C3AED;" title="AI Tokens: 13.8M đ"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                  <span>Tháng 08</span>
+                  <span>78.200.000 đ</span>
+                </div>
+                <div style="height: 22px; width: 100%; display: flex; border-radius: 6px; overflow: hidden;">
+                  <div style="width: 74%; background: #2563EB;" title="Gói SaaS: 57.9M đ"></div>
+                  <div style="width: 14%; background: #059669;" title="Seeding: 10.9M đ"></div>
+                  <div style="width: 12%; background: #7C3AED;" title="AI Tokens: 9.4M đ"></div>
+                </div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; font-weight: 600; margin-bottom: 6px;">
+                  <span>Tháng 07</span>
+                  <span>52.000.000 đ</span>
+                </div>
+                <div style="height: 22px; width: 100%; display: flex; border-radius: 6px; overflow: hidden;">
+                  <div style="width: 78%; background: #2563EB;"></div>
+                  <div style="width: 12%; background: #059669;"></div>
+                  <div style="width: 10%; background: #7C3AED;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Channel Volume Distribution -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Lưu Lượng Tin Nhắn Theo Kênh (1.84M Tin Nhắn)</h3>
+            <span class="badge-tag green">Real-time Stream</span>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 16px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                  <span style="display: flex; align-items: center; gap: 8px;">
+                    <span class="channel-dot zalo" style="width: 20px; height: 20px; font-size: 10px;">Z</span>
+                    Zalo Personal Bridge (182 accounts)
+                  </span>
+                  <span>993.600 tin (54.0%)</span>
+                </div>
+                <div class="usage-bar" style="height: 10px;"><div class="usage-fill" style="width: 54%; background: #0068FF;"></div></div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                  <span style="display: flex; align-items: center; gap: 8px;">
+                    <span class="channel-dot fb" style="width: 20px; height: 20px; font-size: 10px;">F</span>
+                    Facebook Messenger & Instagram DM
+                  </span>
+                  <span>515.200 tin (28.0%)</span>
+                </div>
+                <div class="usage-bar" style="height: 10px;"><div class="usage-fill" style="width: 28%; background: #1877F2;"></div></div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                  <span style="display: flex; align-items: center; gap: 8px;">
+                    <span class="channel-dot tiktok" style="width: 20px; height: 20px; font-size: 10px;">T</span>
+                    TikTok Shop Direct Messages
+                  </span>
+                  <span>220.800 tin (12.0%)</span>
+                </div>
+                <div class="usage-bar" style="height: 10px;"><div class="usage-fill" style="width: 12%; background: #010101;"></div></div>
+              </div>
+
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; margin-bottom: 6px;">
+                  <span style="display: flex; align-items: center; gap: 8px;">
+                    <span class="channel-dot web" style="width: 20px; height: 20px; font-size: 10px;">W</span>
+                    Live Chat Widget & Landing Page
+                  </span>
+                  <span>110.400 tin (6.0%)</span>
+                </div>
+                <div class="usage-bar" style="height: 10px;"><div class="usage-fill" style="width: 6%; background: #10B981;"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Funnel Card -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-header">
+          <h3 class="card-title">Phễu Chuyển Đổi Khách Hàng (Acquisition & Retention Funnel)</h3>
+          <span style="font-size: 12px; color: var(--text-dim);">Từ tiếp cận đến gia hạn thuê bao thường kỳ</span>
+        </div>
+        <div class="card-body">
+          <div class="funnel-container">
+            <div class="funnel-step">
+              <span class="funnel-step-label">1. Truy Cập Landing</span>
+              <div class="funnel-step-val">12.450</div>
+              <div class="funnel-step-rate">Organic & Ads</div>
+            </div>
+            <div class="funnel-step">
+              <span class="funnel-step-label">2. Đăng Ký Dùng Thử</span>
+              <div class="funnel-step-val">1.280</div>
+              <div class="funnel-step-rate">CR: 10.3% &uarr;</div>
+            </div>
+            <div class="funnel-step">
+              <span class="funnel-step-label">3. Trả Phí Qua VietQR</span>
+              <div class="funnel-step-val">248</div>
+              <div class="funnel-step-rate">CR: 19.4% &uarr;</div>
+            </div>
+            <div class="funnel-step">
+              <span class="funnel-step-label">4. Tái Ký & Mua Gói Lẻ</span>
+              <div class="funnel-step-val">220</div>
+              <div class="funnel-step-rate">Retention: 88.7% &uarr;</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== BILLING & CASSO PAGE ========== -->
+    <div class="page-content" id="billingPage" style="display: none;">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản Lý Thanh Toán & Cổng Casso (VietQR)</h1>
+          <p class="page-subtitle">Tự động hóa đối soát chuyển khoản ngân hàng Napas 24/7 qua Open Banking Casso</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnTestSuperAdminCasso">
+            ⚡️ Bắn Webhook Test Casso
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            + Kết nối Ngân hàng mới
+          </button>
+        </div>
+      </div>
+
+      <!-- Casso KPI Cards -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Doanh thu Casso Tháng Này</span>
+            <div class="kpi-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">142.8<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up">
+            <span>+34.2% so với tháng trước</span>
+          </div>
+          <div class="kpi-subtext">384 giao dịch tự động qua VietQR</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tỷ lệ khớp lệnh tự động</span>
+            <div class="kpi-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">99.2%</div>
+          <div class="kpi-trend up">
+            <span>Chỉ 3 đơn sai cú pháp cần duyệt tay</span>
+          </div>
+          <div class="kpi-subtext">Quét mã VietQR chuẩn 100% nội dung</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tốc độ kích hoạt trung bình</span>
+            <div class="kpi-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">1.8<span class="kpi-unit">giây</span></div>
+          <div class="kpi-trend up">
+            <span>Thời gian thực qua Webhook</span>
+          </div>
+          <div class="kpi-subtext">Tenant dùng được ngay không cần chờ</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tài khoản Ngân hàng</span>
+            <div class="kpi-icon purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M3 10h18M5 10v11M19 10v11M9 10v11M15 10v11M12 3l9 7H3l9-7z"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">2 / 2</div>
+          <div class="kpi-trend up">
+            <span>MB Bank & Vietcombank Active</span>
+          </div>
+          <div class="kpi-subtext">Webhook kết nối 200 OK</div>
+        </div>
+      </div>
+
+      <!-- Casso Gateway Config & Credentials -->
+      <div class="card" style="margin-bottom: 24px;">
+        <div class="card-header">
+          <h3 class="card-title">Cấu hình Cổng Casso Open Banking API</h3>
+          <span class="badge-success" style="padding: 4px 10px; border-radius: 9999px;">Webhook Đang Hoạt Động</span>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Casso API Key:</label>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                <input type="password" value="AK_CS_live_9a8f2e718293bca440912" class="form-control" style="font-family: monospace; font-size: 12px;" readonly>
+                <button class="btn btn-sm btn-outline">Đổi</button>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Webhook Endpoint URL:</label>
+              <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
+                <input type="text" value="/api/v1/casso/webhook" class="form-control" style="font-family: monospace; font-size: 12px;" readonly>
+                <button class="btn btn-sm btn-outline">Sao chép</button>
+              </div>
+            </div>
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-dim); text-transform: uppercase;">Cú pháp đối soát tự động:</label>
+              <div style="margin-top: 4px; padding: 8px 12px; background: var(--cool-blue); border-radius: 8px; font-family: monospace; font-size: 12px; font-weight: 700; color: var(--primary-dark);">
+                KCHAT &lt;TENANT_SLUG&gt; &lt;MA_DON&gt;
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Casso Webhook Log Stream -->
+      <div class="card table-card">
+        <div class="table-header">
+          <div>
+            <h3 class="card-title">Lịch Sử Biến Động Số Dư & Webhook Casso Thời Gian Thực</h3>
+            <p class="card-subtitle">Mọi giao dịch ngân hàng Napas 24/7 được Casso bắn về và kích hoạt tự động</p>
+          </div>
+          <div class="table-actions">
+            <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: var(--green-light); font-weight: 600;">
+              <span style="width: 8px; height: 8px; background: #10B981; border-radius: 50%; display: inline-block;"></span>
+              Đang lắng nghe Webhook...
+            </span>
+          </div>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="cassoSuperAdminTable">
+            <thead>
+              <tr>
+                <th>Mã GD Casso (TID)</th>
+                <th>Tenant</th>
+                <th>Số tiền</th>
+                <th>Nội dung chuyển khoản</th>
+                <th>Ngân hàng nhận</th>
+                <th>Dịch vụ kích hoạt</th>
+                <th>Thời gian</th>
+                <th>Trạng thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>FT2627491024</code></td>
+                <td><strong>Hana Beauty Shop</strong></td>
+                <td><strong style="color: var(--green-light);">+299.000 đ</strong></td>
+                <td><code>KCHAT HANA 9812</code></td>
+                <td>MB Bank (0987654321)</td>
+                <td>Gia hạn Gói Growth (+30 ngày)</td>
+                <td>12/09/2026 14:20:18</td>
+                <td><span class="status-badge active">Khớp tự động (1.4s)</span></td>
+              </tr>
+              <tr>
+                <td><code>FT2627489912</code></td>
+                <td><strong>BĐS Sunrise</strong></td>
+                <td><strong style="color: var(--green-light);">+799.000 đ</strong></td>
+                <td><code>KCHAT SUNRISE 8421</code></td>
+                <td>MB Bank (0987654321)</td>
+                <td>Gói Enterprise (+30 ngày)</td>
+                <td>12/09/2026 13:45:02</td>
+                <td><span class="status-badge active">Khớp tự động (1.8s)</span></td>
+              </tr>
+              <tr>
+                <td><code>FT2627476510</code></td>
+                <td><strong>Thời Trang Miu</strong></td>
+                <td><strong style="color: var(--green-light);">+1.500.000 đ</strong></td>
+                <td><code>KCHAT MIU 7731</code></td>
+                <td>Vietcombank (1029384756)</td>
+                <td>Nạp Seeding Credits (1.5M đ)</td>
+                <td>12/09/2026 11:15:33</td>
+                <td><span class="status-badge active">Khớp tự động (1.2s)</span></td>
+              </tr>
+              <tr>
+                <td><code>FT2627462100</code></td>
+                <td><strong>Nội Thất Xanh</strong></td>
+                <td><strong style="color: var(--green-light);">+100.000 đ</strong></td>
+                <td><code>KCHAT NOITHAT 6512</code></td>
+                <td>MB Bank (0987654321)</td>
+                <td>Mua thêm 1.000.000 AI Token</td>
+                <td>11/09/2026 19:12:44</td>
+                <td><span class="status-badge active">Khớp tự động (2.1s)</span></td>
+              </tr>
+              <tr>
+                <td><code>FT2627451299</code></td>
+                <td><strong>Gia Dụng Smart</strong></td>
+                <td><strong style="color: var(--green-light);">+99.000 đ</strong></td>
+                <td><code>KCHAT SMART 5401</code></td>
+                <td>MB Bank (0987654321)</td>
+                <td>Gói Starter (+30 ngày)</td>
+                <td>11/09/2026 16:04:12</td>
+                <td><span class="status-badge active">Khớp tự động (1.5s)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== TENANTS PAGE ========== -->
+    <div class="page-content" id="tenantsPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản Lý Danh Sách Tenants & Khách Hàng</h1>
+          <p class="page-subtitle">Tổng số 248 doanh nghiệp và cửa hàng đang hoạt động trên nền tảng</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Xuất Excel
+          </button>
+          <button class="btn btn-primary btn-sm" id="btnCreateTenantModal">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            + Cấp Tenant Mới
+          </button>
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filter-bar">
+        <div class="filter-group">
+          <button class="filter-pill active" data-tenant-filter="all">Tất cả (248)</button>
+          <button class="filter-pill" data-tenant-filter="active">Đang hoạt động (215)</button>
+          <button class="filter-pill" data-tenant-filter="trial">Dùng thử (24)</button>
+          <button class="filter-pill" data-tenant-filter="suspended">Tạm khóa (9)</button>
+        </div>
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input type="text" id="tenantPageSearch" placeholder="Tìm theo tên shop, email, domain...">
+        </div>
+      </div>
+
+      <!-- Tenants Table -->
+      <div class="card table-card">
+        <div class="table-wrapper">
+          <table class="data-table" id="allTenantsTable">
+            <thead>
+              <tr>
+                <th>Tenant / Cửa hàng</th>
+                <th>Gói Cước</th>
+                <th>Kênh Kết Nối</th>
+                <th>Nhân viên</th>
+                <th>AI Tokens</th>
+                <th>Trạng thái</th>
+                <th>Hạn Dùng</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #10B981, #059669);">HN</div>
+                    <div>
+                      <div class="tenant-name">Hana Beauty Shop</div>
+                      <div class="tenant-domain">hana.kchat.vn · contact@hana.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge growth">Growth (299k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot zalo" title="Zalo Personal">Z</span>
+                    <span class="channel-dot fb" title="Facebook">F</span>
+                    <span class="channel-dot web" title="Web Chat">W</span>
+                  </div>
+                </td>
+                <td>5 / 5</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill" style="width: 48%"></div></div>
+                  <span class="usage-text">145k / 300k</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td><span style="font-weight: 600;">12/10/2026</span> <span style="font-size: 11px; color: var(--text-dim);">(18 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline" title="Đăng nhập vào Tenant này">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="Hana Beauty Shop" title="Gia hạn nhanh qua Casso">+30d</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #3B82F6, #1D4ED8);">SR</div>
+                    <div>
+                      <div class="tenant-name">BĐS Sunrise</div>
+                      <div class="tenant-domain">sunrise.kchat.vn · admin@sunrise.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge enterprise">Enterprise (799k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot zalo" title="Zalo Personal">Z</span>
+                    <span class="channel-dot fb" title="Facebook">F</span>
+                    <span class="channel-dot tiktok" title="TikTok">T</span>
+                    <span class="channel-dot web" title="Web Chat">W</span>
+                  </div>
+                </td>
+                <td>12 / 15</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill" style="width: 65%"></div></div>
+                  <span class="usage-text">975k / 1.5M</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td><span style="font-weight: 600;">28/10/2026</span> <span style="font-size: 11px; color: var(--text-dim);">(34 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="BĐS Sunrise">+30d</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #EC4899, #BE185D);">MF</div>
+                    <div>
+                      <div class="tenant-name">Thời Trang Miu</div>
+                      <div class="tenant-domain">miu.kchat.vn · shopmiu@gmail.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge starter">Starter (99k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot fb" title="Facebook">F</span>
+                    <span class="channel-dot tiktok" title="TikTok">T</span>
+                  </div>
+                </td>
+                <td>2 / 2</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill" style="width: 82%"></div></div>
+                  <span class="usage-text">41k / 50k</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td><span style="font-weight: 600;">05/10/2026</span> <span style="font-size: 11px; color: var(--orange);">(4 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="Thời Trang Miu">+30d</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #06B6D4, #0891B2);">NT</div>
+                    <div>
+                      <div class="tenant-name">Nội Thất Xanh</div>
+                      <div class="tenant-domain">noithat.kchat.vn · sales@noithatxanh.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge growth">Growth (299k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot zalo" title="Zalo">Z</span>
+                    <span class="channel-dot web" title="Web Chat">W</span>
+                  </div>
+                </td>
+                <td>4 / 5</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill" style="width: 32%"></div></div>
+                  <span class="usage-text">96k / 300k</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td><span style="font-weight: 600;">19/10/2026</span> <span style="font-size: 11px; color: var(--text-dim);">(25 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="Nội Thất Xanh">+30d</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #8B5CF6, #6D28D9);">SL</div>
+                    <div>
+                      <div class="tenant-name">Spa Luxe Beauty</div>
+                      <div class="tenant-domain">luxe.kchat.vn · support@luxespa.vn</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge growth">Growth (299k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot zalo" title="Zalo">Z</span>
+                    <span class="channel-dot fb" title="Facebook">F</span>
+                  </div>
+                </td>
+                <td>5 / 5</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill warning" style="width: 94%"></div></div>
+                  <span class="usage-text">282k / 300k</span>
+                </td>
+                <td><span class="status-badge active">Hoạt động</span></td>
+                <td><span style="font-weight: 600; color: var(--red);">02/10/2026</span> <span style="font-size: 11px; color: var(--red);">(1 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="Spa Luxe Beauty">+30d</button>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="tenant-cell">
+                    <div class="tenant-avatar" style="background: linear-gradient(135deg, #F59E0B, #D97706);">GD</div>
+                    <div>
+                      <div class="tenant-name">Gia Dụng Smart</div>
+                      <div class="tenant-domain">smart.kchat.vn · contact@smartgiadung.com</div>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="plan-badge starter">Starter (99k)</span></td>
+                <td>
+                  <div class="channel-icons">
+                    <span class="channel-dot web" title="Web">W</span>
+                  </div>
+                </td>
+                <td>1 / 2</td>
+                <td>
+                  <div class="usage-bar"><div class="usage-fill" style="width: 15%"></div></div>
+                  <span class="usage-text">7.5k / 50k</span>
+                </td>
+                <td><span class="status-badge trial">Dùng thử</span></td>
+                <td><span style="font-weight: 600;">08/10/2026</span> <span style="font-size: 11px; color: var(--text-dim);">(7 ngày)</span></td>
+                <td>
+                  <div style="display: flex; gap: 6px;">
+                    <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline">Truy cập</a>
+                    <button class="btn btn-sm btn-outline btn-quick-renew" data-tenant="Gia Dụng Smart">+30d</button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== AFFILIATES MANAGEMENT PAGE ========== -->
+    <div class="page-content" id="affiliatesPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản Lý Đối Tác Tiếp Thị Liên Kết (Affiliate & Referral)</h1>
+          <p class="page-subtitle">Theo dõi doanh thu CTV, đối soát hoa hồng và chi trả tự động 24/7 qua Casso VietQR</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnConfigAffiliatePolicy">
+            ⚙️ Cấu Hình Chính Sách Hoa Hồng
+          </button>
+        </div>
+      </div>
+
+      <!-- Affiliate KPIs -->
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Doanh Thu Từ Affiliate</span>
+            <div class="kpi-icon blue">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">38.4<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>Chiếm 26.8% tổng doanh thu mới</span></div>
+          <div class="kpi-subtext">64 shop đăng ký qua link ref</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Hoa Hồng Chờ Chi Trả</span>
+            <div class="kpi-icon green">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value" id="superAdminAffiliatePayable">7.68<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>20% hoa hồng trọn đời</span></div>
+          <div class="kpi-subtext">3 yêu cầu rút tiền đang chờ duyệt</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Đối Tác CTV & Agency</span>
+            <div class="kpi-icon cyan">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">24</div>
+          <div class="kpi-trend up"><span>+6 CTV mới tuần này</span></div>
+          <div class="kpi-subtext">5 đối tác hạng Kim Cương</div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tỷ Lệ Chuyển Đổi Click</span>
+            <div class="kpi-icon purple">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+          </div>
+          <div class="kpi-value">14.2%</div>
+          <div class="kpi-trend up"><span>451 lượt click / 64 shop</span></div>
+          <div class="kpi-subtext">Cookie lưu 60 ngày an toàn</div>
+        </div>
+      </div>
+
+      <!-- Pending Payout Requests Table -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header">
+          <div>
+            <h3 class="card-title">Yêu Cầu Rút Hoa Hồng Chờ Chi Trả (Napas 24/7 VietQR)</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Duyệt chi tức thì trực tiếp qua tài khoản ngân hàng Casso không mất phí chuyển</p>
+          </div>
+          <button class="btn btn-primary btn-sm" id="btnApproveAllPayouts">
+            ⚡️ Duyệt Tất Cả (7.68M đ)
+          </button>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table" id="affiliatePayoutTable">
+            <thead>
+              <tr>
+                <th>Mã Yêu Cầu</th>
+                <th>Đối Tác Tiếp Thị</th>
+                <th>Số Tiền Rút</th>
+                <th>Ngân Hàng & STK Thụ Hưởng</th>
+                <th>Thời Gian Yêu Cầu</th>
+                <th>Trạng Thái</th>
+                <th>Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>#WD-2026-901</code></td>
+                <td>
+                  <strong>Hana Beauty Affiliate</strong>
+                  <div style="font-size: 11px; color: var(--text-dim);">Ref: hana88 · hanabeauty@gmail.com</div>
+                </td>
+                <td><strong style="color: var(--primary); font-size: 14px;">1.500.000 đ</strong></td>
+                <td>
+                  <div style="font-weight: 600;">MB Bank — 0987654321</div>
+                  <div style="font-size: 11px; color: var(--text-dim);">Chủ TK: NGUYEN THI HANA</div>
+                </td>
+                <td>Hôm nay, 10:20</td>
+                <td><span class="status-badge trial payout-status">Chờ Duyệt Chi</span></td>
+                <td>
+                  <button class="btn btn-sm btn-primary btn-payout-approve" data-partner="Hana Beauty Affiliate" data-amount="1.500.000 đ">
+                    ⚡️ Chi Qua VietQR
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>#WD-2026-898</code></td>
+                <td>
+                  <strong>Agency Marketing Pro</strong>
+                  <div style="font-size: 11px; color: var(--text-dim);">Ref: agency_mkt · contact@agencymkt.vn</div>
+                </td>
+                <td><strong style="color: var(--primary); font-size: 14px;">4.800.000 đ</strong></td>
+                <td>
+                  <div style="font-weight: 600;">Vietcombank — 1012398471</div>
+                  <div style="font-size: 11px; color: var(--text-dim);">Chủ TK: CONG TY TNHH MKT PRO</div>
+                </td>
+                <td>Hôm qua, 16:45</td>
+                <td><span class="status-badge trial payout-status">Chờ Duyệt Chi</span></td>
+                <td>
+                  <button class="btn btn-sm btn-primary btn-payout-approve" data-partner="Agency Marketing Pro" data-amount="4.800.000 đ">
+                    ⚡️ Chi Qua VietQR
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td><code>#WD-2026-892</code></td>
+                <td>
+                  <strong>KOC Minh Hoàng</strong>
+                  <div style="font-size: 11px; color: var(--text-dim);">Ref: hoangkoc · minhhoang.tiktok@gmail.com</div>
+                </td>
+                <td><strong style="color: var(--primary); font-size: 14px;">1.380.000 đ</strong></td>
+                <td>
+                  <div style="font-weight: 600;">Techcombank — 19034871928019</div>
+                  <div style="font-size: 11px; color: var(--text-dim);">Chủ TK: LE MINH HOANG</div>
+                </td>
+                <td>29/09/2026, 09:12</td>
+                <td><span class="status-badge trial payout-status">Chờ Duyệt Chi</span></td>
+                <td>
+                  <button class="btn btn-sm btn-primary btn-payout-approve" data-partner="KOC Minh Hoàng" data-amount="1.380.000 đ">
+                    ⚡️ Chi Qua VietQR
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Affiliate Partner Directory -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header">
+          <h3 class="card-title">Danh Sách Đối Tác Tiếp Thị Hàng Đầu</h3>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Đối Tác</th>
+                <th>Mã Ref & Link</th>
+                <th>Số Lượt Click</th>
+                <th>Shop Giới Thiệu</th>
+                <th>Tổng Doanh Số</th>
+                <th>Hoa Hồng Đã Nhận</th>
+                <th>Cấp Bậc</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Agency Marketing Pro</strong></td>
+                <td><code>kchat.vn/?ref=agency_mkt</code></td>
+                <td>1.240</td>
+                <td><strong style="color: var(--primary);">28 shops</strong></td>
+                <td>24.500.000 đ</td>
+                <td><strong style="color: var(--green-light);">4.900.000 đ</strong></td>
+                <td><span class="affiliate-tier-badge diamond">💎 Kim Cương (25%)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Hana Beauty Shop</strong></td>
+                <td><code>kchat.vn/?ref=hana88</code></td>
+                <td>480</td>
+                <td><strong style="color: var(--primary);">14 shops</strong></td>
+                <td>11.200.000 đ</td>
+                <td><strong style="color: var(--green-light);">2.240.000 đ</strong></td>
+                <td><span class="affiliate-tier-badge gold">🥇 Vàng (20%)</span></td>
+              </tr>
+              <tr>
+                <td><strong>KOC Minh Hoàng</strong></td>
+                <td><code>kchat.vn/?ref=hoangkoc</code></td>
+                <td>320</td>
+                <td><strong style="color: var(--primary);">9 shops</strong></td>
+                <td>6.900.000 đ</td>
+                <td><strong style="color: var(--green-light);">1.380.000 đ</strong></td>
+                <td><span class="affiliate-tier-badge silver">🥈 Bạc (20%)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Thầy Giáo Ads Facebook</strong></td>
+                <td><code>kchat.vn/?ref=thaygiao_ads</code></td>
+                <td>290</td>
+                <td><strong style="color: var(--primary);">8 shops</strong></td>
+                <td>5.800.000 đ</td>
+                <td><strong style="color: var(--green-light);">1.160.000 đ</strong></td>
+                <td><span class="affiliate-tier-badge silver">🥈 Bạc (20%)</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== PLANS CONFIG PAGE ========== -->
+    <div class="page-content" id="plansPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Cấu Hình Gói Cước & Quota Nền Tảng (Plan Engine)</h1>
+          <p class="page-subtitle">Thiết lập giá cước, hạn mức tài nguyên và phân quyền tính năng từng gói SaaS</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" id="btnSavePlanSettings">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+            Lưu Thay Đổi Bảng Giá
+          </button>
+        </div>
+      </div>
+
+      <div class="card-grid-3">
+        <!-- Starter Plan Config -->
+        <div class="plan-config-card">
+          <h3 class="plan-config-title">Gói Starter</h3>
+          <p style="font-size: 12px; color: var(--text-dim);">Dành cho Seller cá nhân, hộ kinh doanh nhỏ</p>
+          <div class="plan-config-price">
+            <input type="number" class="form-control" value="99000" style="width: 140px; font-size: 20px; font-weight: 800; color: var(--primary);">
+            <span class="plan-config-period">đ / tháng</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Số nhân viên tối đa:</span>
+            <input type="number" class="form-control" value="2" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>Số kênh kết nối:</span>
+            <input type="number" class="form-control" value="2" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>AI Messages / tháng:</span>
+            <input type="number" class="form-control" value="500" style="width: 80px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>Automation Rules:</span>
+            <span style="color: var(--text-dim);">Không hỗ trợ</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Custom Domain riêng:</span>
+            <span style="color: var(--text-dim);">Không</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Thanh toán Casso VietQR:</span>
+            <span style="color: var(--green-light); font-weight: 700;">✓ Có</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Brand Growth OS &amp; Video MMO:</span>
+            <span style="color: var(--text-dim);">5 Video / tháng</span>
+          </div>
+        </div>
+
+        <!-- Growth Plan Config -->
+        <div class="plan-config-card popular">
+          <span class="plan-config-tag">Bán Chạy Nhất</span>
+          <h3 class="plan-config-title">Gói Growth</h3>
+          <p style="font-size: 12px; color: var(--text-dim);">Dành cho Shop & Doanh nghiệp vừa 3-15 NV</p>
+          <div class="plan-config-price">
+            <input type="number" class="form-control" value="299000" style="width: 140px; font-size: 20px; font-weight: 800; color: var(--primary);">
+            <span class="plan-config-period">đ / tháng</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Số nhân viên tối đa:</span>
+            <input type="number" class="form-control" value="5" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>Số kênh kết nối:</span>
+            <input type="number" class="form-control" value="5" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>AI Messages / tháng:</span>
+            <input type="number" class="form-control" value="3000" style="width: 80px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>AI Knowledge Base:</span>
+            <span style="color: var(--primary); font-weight: 700;">5 tài liệu</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Automation Rules:</span>
+            <input type="number" class="form-control" value="10" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>Facebook Ads Integration:</span>
+            <span style="color: var(--green-light); font-weight: 700;">✓ Có</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Brand Growth OS &amp; Video MMO:</span>
+            <span style="color: var(--primary); font-weight: 700;">30 Video + 15 Bài SEO/GEO</span>
+          </div>
+        </div>
+
+        <!-- Enterprise Plan Config -->
+        <div class="plan-config-card">
+          <h3 class="plan-config-title">Gói Enterprise</h3>
+          <p style="font-size: 12px; color: var(--text-dim);">Doanh nghiệp lớn, thương hiệu chuỗi & Agency</p>
+          <div class="plan-config-price">
+            <input type="number" class="form-control" value="799000" style="width: 140px; font-size: 20px; font-weight: 800; color: var(--primary);">
+            <span class="plan-config-period">đ / tháng</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Số nhân viên tối đa:</span>
+            <input type="number" class="form-control" value="15" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>Số kênh kết nối:</span>
+            <input type="number" class="form-control" value="15" style="width: 70px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>AI Messages / tháng:</span>
+            <input type="number" class="form-control" value="15000" style="width: 80px; text-align: right;">
+          </div>
+          <div class="plan-config-item">
+            <span>AI Knowledge Base:</span>
+            <span style="color: var(--primary); font-weight: 700;">50 tài liệu</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Custom Domain + White-label:</span>
+            <span style="color: var(--green-light); font-weight: 700;">✓ Toàn quyền</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Hotline & SLA 4h:</span>
+            <span style="color: var(--green-light); font-weight: 700;">✓ Có</span>
+          </div>
+          <div class="plan-config-item">
+            <span>Brand Growth OS &amp; Video MMO:</span>
+            <span style="color: var(--green-light); font-weight: 700;">✓ Không giới hạn (VN/US/JP)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Add-on Packs Pricing -->
+      <div class="card" style="margin-top: 24px;">
+        <div class="card-header">
+          <h3 class="card-title">Bảng Giá Gói Lẻ & Mua Thêm Tài Nguyên (Add-ons)</h3>
+        </div>
+        <div class="card-body">
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text);">Thêm 1 Nhân Viên Chat</span>
+              <div style="font-size: 18px; font-weight: 800; color: var(--primary); margin: 6px 0;">39.000 đ<span style="font-size: 12px; color: var(--text-dim);">/tháng</span></div>
+              <p style="font-size: 11px; color: var(--text-muted);">Không giới hạn số lượng agent thêm</p>
+            </div>
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text);">Gói 1.000.000 AI Token</span>
+              <div style="font-size: 18px; font-weight: 800; color: var(--primary); margin: 6px 0;">100.000 đ</div>
+              <p style="font-size: 11px; color: var(--text-muted);">Tương đương ~2.500 tin AI phản hồi</p>
+            </div>
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text);">Thêm 1 Kênh Kết Nối</span>
+              <div style="font-size: 18px; font-weight: 800; color: var(--primary); margin: 6px 0;">49.000 đ<span style="font-size: 12px; color: var(--text-dim);">/tháng</span></div>
+              <p style="font-size: 11px; color: var(--text-muted);">Kênh Zalo, Fanpage hoặc TikTok</p>
+            </div>
+            <div style="padding: 16px; border: 1px solid var(--border); border-radius: 8px;">
+              <span style="font-size: 13px; font-weight: 600; color: var(--text);">Phí Dịch Vụ Seeding</span>
+              <div style="font-size: 18px; font-weight: 800; color: var(--green-light); margin: 6px 0;">15%<span style="font-size: 12px; color: var(--text-dim);"> / giao dịch</span></div>
+              <p style="font-size: 11px; color: var(--text-muted);">Chiết khấu hoa hồng trung gian</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== AI POOL PAGE ========== -->
+    <div class="page-content" id="aiPoolPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản Lý AI Gateway & Model Pool</h1>
+          <p class="page-subtitle">Giám sát tải token, chi phí nhà cung cấp LLM và điều hướng model thông minh</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm">Kiểm Tra Latency</button>
+          <button class="btn btn-primary btn-sm">+ Cấu hình API Key</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Tổng Tokens Tiêu Thụ</span>
+            <div class="kpi-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a4 4 0 0 1 4 4c0 1.95-1.4 3.58-3.25 3.93L12 10v2"/><circle cx="12" cy="16" r="2"/></svg></div>
+          </div>
+          <div class="kpi-value">48.5<span class="kpi-unit">M Tokens</span></div>
+          <div class="kpi-trend up"><span>+18.4% tuần này</span></div>
+          <div class="kpi-subtext">Khoảng 122.400 tin nhắn sinh tự động</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Chi Phí LLM Gốc</span>
+            <div class="kpi-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          </div>
+          <div class="kpi-value">6.72<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>Chi phí OpenAI + Anthropic + Google</span></div>
+          <div class="kpi-subtext">~0.138 đ / 1.000 token trung bình</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Doanh Thu Thu Phí AI</span>
+            <div class="kpi-icon cyan"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+          </div>
+          <div class="kpi-value">16.20<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>Biên lợi nhuận gộp 58.4%</span></div>
+          <div class="kpi-subtext">Lãi thuần AI: +9.48 triệu đ</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header">
+            <span class="kpi-label">Thời Gian Phản Hồi TB</span>
+            <div class="kpi-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          </div>
+          <div class="kpi-value">420<span class="kpi-unit">ms</span></div>
+          <div class="kpi-trend up"><span>Rất nhanh, không giật lag</span></div>
+          <div class="kpi-subtext">Streaming token qua SSE realtime</div>
+        </div>
+      </div>
+
+      <!-- Models List -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header">
+          <h3 class="card-title">Danh Sách Model Đang Kích Hoạt Trong Pool</h3>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Nhà Cung Cấp</th>
+                <th>Mục Đích Sử Dụng</th>
+                <th>Tỷ Lệ Tải</th>
+                <th>Latency TB</th>
+                <th>Chi Phí / 1M Token</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>agentgw-gpt-5.5</strong></td>
+                <td>AgentGW Cloud (<code>agentgw.cloud/v1</code>)</td>
+                <td>Trợ lý AI Chatbot Đa kênh &amp; Chốt đơn thời gian thực</td>
+                <td><strong>54%</strong></td>
+                <td>~1.2s</td>
+                <td>Gói Pool AgentGW</td>
+                <td><span class="badge-tag green">Đang phục vụ (Live Key)</span></td>
+              </tr>
+              <tr>
+                <td><strong>agentgw-opus-4-8</strong></td>
+                <td>AgentGW Cloud (<code>agentgw.cloud/v1</code>)</td>
+                <td>Brand Growth OS, Bóc tách 1-ra-10 &amp; Kịch bản Video MMO</td>
+                <td><strong>28%</strong></td>
+                <td>~3.5s</td>
+                <td>Gói Pool AgentGW</td>
+                <td><span class="badge-tag green">Đang phục vụ (Live Key)</span></td>
+              </tr>
+              <tr>
+                <td><strong>Muse.ai &amp; Gemini Web CDP</strong></td>
+                <td>Chrome CDP Local (<code>127.0.0.1:9222</code>)</td>
+                <td>Chạy ngầm Miễn phí ($0): Sinh kịch bản, Ảnh 9:16 &amp; Video Clip</td>
+                <td><strong>18%</strong></td>
+                <td>Chạy ngầm</td>
+                <td><strong style="color: var(--green-light);">$0.00 (Free CDP)</strong></td>
+                <td><span class="badge-tag green">CDP :9222 Online</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Omni-Viral Video Engine (mmo) & Chrome CDP Cluster -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 class="card-title">🎬 Hạ Tầng Omni-Viral Video Engine (MMO) &amp; Muse.ai Chrome CDP Cluster</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Giám sát cụm tạo Video dọc 9:16 (VN/US/JP), TTS/Whisper Karaoke và tỷ lệ tiết kiệm phí API nhờ cổng duyệt Human-in-the-Loop</p>
+          </div>
+          <span class="badge-tag green">Tiết kiệm $1,420 phí API lãng phí tháng này</span>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Worker / Engine Mode</th>
+                <th>Cơ Chế Kết Xuất (Pipeline)</th>
+                <th>Thị Trường Hỗ Trợ</th>
+                <th>Jobs Đã Render (30d)</th>
+                <th>Đang Chờ Duyệt (Gate 1)</th>
+                <th>Chi Phí Gốc / Scene</th>
+                <th>Trạng Thái Node</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Mode 3: Muse.ai Full / Clip 9:16</strong></td>
+                <td>Chrome CDP (<code>:9222</code> / <code>:9333</code>) + FFmpeg libass</td>
+                <td>🇻🇳 VN • 🇺🇸 US • 🇯🇵 JP</td>
+                <td><strong>2.840 videos</strong></td>
+                <td>18 jobs (Khóa API)</td>
+                <td><strong style="color: var(--green-light);">$0.00 (CDP)</strong></td>
+                <td><span class="badge-tag green">4/4 CDP Nodes Online</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mode 1: Ken Burns &amp; Parallax 2.5D</strong></td>
+                <td>Depth Map 2.5D + Edge TTS / Voicevox + Whisper</td>
+                <td>🇻🇳 VN • 🇺🇸 US • 🇯🇵 JP</td>
+                <td><strong>1.620 videos</strong></td>
+                <td>9 jobs (Khóa API)</td>
+                <td>$0.012 / ảnh</td>
+                <td><span class="badge-tag green">GPU Worker Sẵn Sàng</span></td>
+              </tr>
+              <tr>
+                <td><strong>Mode 2: Mascot Dex Lip-Sync</strong></td>
+                <td>Mascot Expressions + Auto Lip-sync + Dynamic BG</td>
+                <td>🇻🇳 VN • 🇺🇸 US</td>
+                <td><strong>950 videos</strong></td>
+                <td>4 jobs (Khóa API)</td>
+                <td><strong style="color: var(--green-light);">$0.00 (Local)</strong></td>
+                <td><span class="badge-tag green">Hoạt động 100%</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== CHANNELS HEALTH PAGE ========== -->
+    <div class="page-content" id="channelsPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Giám Sát Kết Nối Đa Kênh Toàn Hệ Thống</h1>
+          <p class="page-subtitle">Kiểm tra trạng thái các cầu nối tin nhắn (Bridge), Webhook và API bên thứ ba</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm" id="btnRestartBridge">Khởi Động Lại Bridge Zalo</button>
+        </div>
+      </div>
+
+      <div class="card-grid-2">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Zalo Personal Bridge Service</h3>
+            <span class="badge-tag green">182 Accounts Online</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              Dịch vụ cầu nối độc quyền cho phép chạy ngầm tài khoản cá nhân 24/7 trên máy chủ độc lập.
+            </p>
+            <div style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+              <div><strong>Port Container:</strong> <code>zalo-personal-bridge:4000</code></div>
+              <div><strong>Rate-limiting:</strong> 15 tin / phút (Chống khóa an toàn)</div>
+              <div><strong>Uptime 30 ngày:</strong> <span style="color: var(--green-light); font-weight: 700;">99.85%</span></div>
+              <div><strong>Bộ nhớ tiêu thụ:</strong> 340 MB / 2 GB</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Meta Graph API (Facebook / Instagram)</h3>
+            <span class="badge-tag green">Webhook OK (200)</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              Kết nối chính thức qua Meta App v20.0 dành cho Fanpage Facebook và Instagram DM.
+            </p>
+            <div style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+              <div><strong>Meta App ID:</strong> <code>182903847192837</code></div>
+              <div><strong>Tổng Fanpage:</strong> 328 Pages</div>
+              <div><strong>Tốc độ Webhook:</strong> 120ms</div>
+              <div><strong>Trạng thái cấp quyền:</strong> Đầy đủ quyền pages_messaging</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">TikTok Shop & Messaging Gateway</h3>
+            <span class="badge-tag green">Đang Hoạt Động</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              Tích hợp TikTok Open Platform API đồng bộ tin nhắn khách hàng từ TikTok Shop.
+            </p>
+            <div style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+              <div><strong>TikTok App:</strong> KChat Connector</div>
+              <div><strong>Tổng Cửa Hàng:</strong> 64 Shop</div>
+              <div><strong>Webhook Latency:</strong> 180ms</div>
+              <div><strong>Auto Token Refresh:</strong> Tự động qua OAuth 2.0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Cổng Tin Nhắn SMS Brandname & ZNS</h3>
+            <span class="badge-tag cyan">Số dư: 18.520.000 đ</span>
+          </div>
+          <div class="card-body">
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              Cổng gửi tin nhắn thông báo đơn hàng và chăm sóc khách hàng hàng loạt.
+            </p>
+            <div style="margin-top: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; font-size: 12px;">
+              <div><strong>Nhà cung cấp:</strong> VHT / eSMS / ZMP</div>
+              <div><strong>Tỷ lệ gửi thành công:</strong> 99.4%</div>
+              <div><strong>Brandname mặc định:</strong> KTECH_CSKH</div>
+              <div><strong>Giá vốn tin nhắn:</strong> 180 đ/SMS, 120 đ/ZNS</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SEEDING MARKETPLACE PAGE ========== -->
+    <div class="page-content" id="seedingPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Quản Trị Chợ Dịch Vụ Seeding & Tương Tác</h1>
+          <p class="page-subtitle">Theo dõi đơn đặt seeding tương tác từ các shop và hoa hồng đối tác Agency</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline btn-sm">+ Thêm Gói Dịch Vụ</button>
+          <button class="btn btn-primary btn-sm">+ Mời Agency Đối Tác</button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Doanh Số Seeding Tháng Này</span><div class="kpi-icon blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div></div>
+          <div class="kpi-value">45.6<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>+42% so với tháng trước</span></div>
+          <div class="kpi-subtext">218 đơn hàng hoàn thành</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Hoa Hồng KChat Giữ Lại (15%)</span><div class="kpi-icon green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div></div>
+          <div class="kpi-value">6.84<span class="kpi-unit">triệu đ</span></div>
+          <div class="kpi-trend up"><span>Lợi nhuận sàn thuần túy</span></div>
+          <div class="kpi-subtext">Không tốn chi phí vận hành</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-header"><span class="kpi-label">Agency Đối Tác</span><div class="kpi-icon cyan"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div></div>
+          <div class="kpi-value">8</div>
+          <div class="kpi-trend up"><span>Cam kết tài khoản thật 100%</span></div>
+          <div class="kpi-subtext">SLA hoàn thành trong 2-6 giờ</div>
+        </div>
+      </div>
+
+      <!-- Orders Table -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header">
+          <h3 class="card-title">Đơn Đặt Seeding Gần Đây Của Các Shop</h3>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Mã Đơn</th>
+                <th>Tenant</th>
+                <th>Dịch Vụ</th>
+                <th>Số Lượng</th>
+                <th>Giá Trị</th>
+                <th>Hoa Hồng Sàn (15%)</th>
+                <th>Thời Gian</th>
+                <th>Trạng Thái</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>#SD-2026-881</code></td>
+                <td><strong>Hana Beauty Shop</strong></td>
+                <td>Seeding Livestream TikTok Chốt Đơn</td>
+                <td>100 cmt + 50 share</td>
+                <td>500.000 đ</td>
+                <td><strong style="color: var(--green-light);">+75.000 đ</strong></td>
+                <td>Hôm nay, 14:10</td>
+                <td><span class="badge-tag green">Đang chạy (80%)</span></td>
+              </tr>
+              <tr>
+                <td><code>#SD-2026-879</code></td>
+                <td><strong>Thời Trang Miu</strong></td>
+                <td>Review 5 sao Shopee có hình ảnh</td>
+                <td>20 đánh giá</td>
+                <td>600.000 đ</td>
+                <td><strong style="color: var(--green-light);">+90.000 đ</strong></td>
+                <td>Hôm qua, 18:30</td>
+                <td><span class="badge-tag cyan">Hoàn thành</span></td>
+              </tr>
+              <tr>
+                <td><code>#SD-2026-875</code></td>
+                <td><strong>Nội Thất Xanh</strong></td>
+                <td>Chăm sóc tương tác bài viết Facebook</td>
+                <td>50 comment hỏi giá</td>
+                <td>350.000 đ</td>
+                <td><strong style="color: var(--green-light);">+52.500 đ</strong></td>
+                <td>Hôm qua, 09:15</td>
+                <td><span class="badge-tag cyan">Hoàn thành</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Platform-Wide Brand Growth OS & Ads Guardrail Monitor -->
+      <div class="card table-card" style="margin-top: 24px;">
+        <div class="table-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+          <div>
+            <h3 class="card-title">📊 Giám Sát Hiệu Suất Phát Triển Thương Hiệu (Brand Growth OS) &amp; Kiểm Soát Ads Toàn Sàn</h3>
+            <p style="font-size: 12px; color: var(--text-dim); margin-top: 2px;">Theo dõi tiến độ Lộ trình 90 ngày, Ma trận nội dung 1-to-10, Server-side CAPI và chỉ số MER / LTV:CAC của các Tenant</p>
+          </div>
+          <span class="badge-tag cyan">186 / 248 Tenants đang vận hành Brand OS</span>
+        </div>
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Tenant (Thương hiệu)</th>
+                <th>Tiến Độ 90 Ngày</th>
+                <th>Sản Lượng Content / MMO</th>
+                <th>Điểm Web CRO &amp; CAPI</th>
+                <th>MER (Blended ROAS)</th>
+                <th>Tỷ Lệ LTV : CAC</th>
+                <th>Bảo Vệ Ngân Sách (Guardrails)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Hana Beauty Shop</strong></td>
+                <td><strong>68%</strong> (Chặng 3: CRO)</td>
+                <td>42 Video 9:16 • 24 bài SEO/GEO</td>
+                <td>94/100 • EMQ 9.3</td>
+                <td><strong style="color: var(--green-light);">5.4x</strong></td>
+                <td><strong style="color: var(--green-light);">4.2 : 1</strong></td>
+                <td><span class="badge-tag green">Auto-Kill &amp; Scale Bật</span></td>
+              </tr>
+              <tr>
+                <td><strong>Thời Trang Miu</strong></td>
+                <td><strong>82%</strong> (Chặng 4: Scale)</td>
+                <td>64 Video 9:16 • 18 bài SEO/GEO</td>
+                <td>91/100 • EMQ 9.0</td>
+                <td><strong style="color: var(--green-light);">6.1x</strong></td>
+                <td><strong style="color: var(--green-light);">4.6 : 1</strong></td>
+                <td><span class="badge-tag green">Đã chặn 3 nhóm CPA cao</span></td>
+              </tr>
+              <tr>
+                <td><strong>Nội Thất Xanh</strong></td>
+                <td><strong>45%</strong> (Chặng 2: Traction)</td>
+                <td>19 Video 9:16 • 12 bài SEO/GEO</td>
+                <td>89/100 • EMQ 8.8</td>
+                <td><strong style="color: var(--primary);">4.3x</strong></td>
+                <td><strong style="color: var(--primary);">3.5 : 1</strong></td>
+                <td><span class="badge-tag cyan">Đang theo dõi 4 Angles</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== SETTINGS PAGE ========== -->
+    <div class="page-content" id="settingsPage" style="display: none;">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Cài Đặt Hệ Thống & Cấu Hình Nền Tảng</h1>
+          <p class="page-subtitle">Thiết lập tham số toàn cục, bảo mật, email SMTP và cổng thanh toán Casso</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" id="btnSaveSystemSettings">Lưu Cấu Hình</button>
+        </div>
+      </div>
+
+      <div class="card-grid-2">
+        <div class="card">
+          <div class="card-header"><h3 class="card-title">Cấu Hình Thương Hiệu Nền Tảng</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Tên Nền Tảng (Brand Name):</label>
+              <input type="text" class="form-control" value="KTech Chat (KChat)">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Domain Super Admin:</label>
+              <input type="text" class="form-control" value="admin.kchat.vn" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">CNAME Hỗ Trợ Tenant Custom Domain:</label>
+              <input type="text" class="form-control" value="cname.kchat.vn" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email Quản Trị Hệ Thống:</label>
+              <input type="email" class="form-control" value="owner@ktech.vn">
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3 class="card-title">Bảo Mật & Khóa Casso Webhook</h3></div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Casso Secure Token (X-Casso-Token):</label>
+              <input type="password" class="form-control" value="CASSO_SECURE_TOKEN_2026_XYZ99182" readonly>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chế độ kiểm tra Webhook:</label>
+              <select class="form-select">
+                <option value="strict" selected>Bắt buộc kiểm tra Token & Idempotency</option>
+                <option value="dev">Môi trường Dev / Testing nội bộ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Thời gian sống của mã thanh toán VietQR:</label>
+              <input type="text" class="form-control" value="15 phút">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Tự động khóa tài khoản sau khi hết hạn:</label>
+              <select class="form-select">
+                <option value="3" selected>Sau 3 ngày ân hạn (Grace period)</option>
+                <option value="0">Khóa ngay khi hết hạn</option>
+                <option value="7">Sau 7 ngày</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== MODALS ========== -->
+
+    <!-- Modal: Create New Tenant -->
+    <div class="modal-backdrop" id="createTenantModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Cấp Mới Doanh Nghiệp / Tenant
+          </h3>
+          <button class="modal-close" data-close-modal>&times;</button>
+        </div>
+        <form id="createTenantForm">
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Tên Shop / Doanh Nghiệp *</label>
+              <input type="text" class="form-control" id="newTenantName" placeholder="Ví dụ: Nha Khoa Nụ Cười Việt" required>
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Subdomain KChat *</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <input type="text" class="form-control" id="newTenantSlug" placeholder="nhakhoaviet" required style="font-family: monospace;">
+                <span style="font-weight: 600; color: var(--text-dim); font-size: 13px;">.kchat.vn</span>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label">Gói Cước *</label>
+                <select class="form-select" id="newTenantPlan">
+                  <option value="Growth (299k)" selected>Growth (299.000 đ/tháng)</option>
+                  <option value="Starter (99k)">Starter (99.000 đ/tháng)</option>
+                  <option value="Enterprise (799k)">Enterprise (799.000 đ/tháng)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Thời Hạn *</label>
+                <select class="form-select" id="newTenantDuration">
+                  <option value="30">1 tháng (30 ngày)</option>
+                  <option value="90">3 tháng (90 ngày)</option>
+                  <option value="365" selected>1 năm (Tặng 2 tháng)</option>
+                </select>
+              </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label">Email Quản Trị *</label>
+                <input type="email" class="form-control" id="newTenantEmail" placeholder="admin@nhakhoaviet.vn" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mật Khẩu Ban Đầu *</label>
+                <input type="text" class="form-control" id="newTenantPassword" value="KChat@2026" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kênh Kích Hoạt Sẵn</label>
+              <div style="display: flex; gap: 16px; margin-top: 6px; font-size: 13px;">
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="channelZalo" checked> Zalo Cá Nhân
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="channelFb" checked> Facebook Fanpage
+                </label>
+                <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                  <input type="checkbox" id="channelWeb" checked> Web Live Chat
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Hủy Bỏ</button>
+            <button type="submit" class="btn btn-primary">Khởi Tạo & Kích Hoạt Ngay</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Tenant Detail & Control -->
+    <div class="modal-backdrop" id="tenantDetailModal">
+      <div class="modal-dialog lg">
+        <div class="modal-header">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div class="tenant-avatar" id="modalTenantAvatar" style="width: 40px; height: 40px; font-size: 14px; background: #2563EB;">HN</div>
+            <div>
+              <h3 class="modal-title" id="modalTenantName" style="margin: 0; font-size: 16px;">Hana Beauty Shop</h3>
+              <span style="font-size: 12px; color: var(--text-dim);" id="modalTenantDomain">hana.kchat.vn · contact@hana.vn</span>
+            </div>
+          </div>
+          <button class="modal-close" data-close-modal>&times;</button>
+        </div>
+        <div class="modal-body">
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px;">
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Gói Cước</div>
+              <div style="font-size: 15px; font-weight: 700; color: var(--primary); margin-top: 4px;" id="modalTenantPlan">Growth (299k)</div>
+            </div>
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Hạn Sử Dụng</div>
+              <div style="font-size: 15px; font-weight: 700; color: var(--green-light); margin-top: 4px;" id="modalTenantExpiry">12/10/2026 (18 ngày)</div>
+            </div>
+            <div style="padding: 12px; background: var(--bg-surface); border-radius: 8px; border: 1px solid var(--border);">
+              <div style="font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Trạng Thái</div>
+              <div style="margin-top: 4px;"><span class="status-badge active" id="modalTenantStatus">Đang Hoạt Động</span></div>
+            </div>
+          </div>
+
+          <div style="margin-bottom: 20px;">
+            <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text);">Hạn Mức Tài Nguyên</h4>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>AI Token Đã Dùng:</span>
+                  <strong id="modalTenantTokens">145.000 / 300.000 Tokens (48%)</strong>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" id="modalTenantTokenBar" style="width: 48%;"></div></div>
+              </div>
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+                  <span>Nhân Viên Hoạt Động:</span>
+                  <strong id="modalTenantSeats">5 / 5 Tài khoản</strong>
+                </div>
+                <div class="usage-bar"><div class="usage-fill" style="width: 100%;"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="font-size: 13px; font-weight: 700; margin-bottom: 10px; color: var(--text);">Thao Tác Quản Trị Super Admin</h4>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+              <button class="btn btn-sm btn-primary" id="btnModalRenew30">+ Gia Hạn +30 Ngày Qua Casso</button>
+              <button class="btn btn-sm btn-outline" id="btnModalToggleLock">Khóa Tạm Thời</button>
+              <button class="btn btn-sm btn-outline" id="btnModalResetPass">Reset Mật Khẩu</button>
+              <a href="../tenant-admin/" target="_blank" class="btn btn-sm btn-outline" style="text-decoration: none;">Đăng Nhập Thẳng (Impersonate) &rarr;</a>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" data-close-modal>Đóng</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: AI Pool API Key Config -->
+    <div class="modal-backdrop" id="aiKeyModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">⚙️ Cấu Hình API Key AI Pool</h3>
+          <button class="modal-close" data-close-modal>&times;</button>
+        </div>
+        <form id="aiKeyForm">
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">OpenAI API Key (GPT-4o-mini)</label>
+              <input type="password" class="form-control" value="sk-proj-910283401928471029348123" style="font-family: monospace;">
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Anthropic API Key (Claude 3.5 Sonnet)</label>
+              <input type="password" class="form-control" value="sk-ant-api03-882910394810293847" style="font-family: monospace;">
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Google Gemini API Key (Gemini 1.5 Flash)</label>
+              <input type="password" class="form-control" value="AIzaSyA889210384719283746152" style="font-family: monospace;">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Chế độ Fallback Router</label>
+              <select class="form-select">
+                <option selected>Tự động chuyển model dự phòng khi lỗi / chạm rate limit</option>
+                <option>Cố định model chỉ định</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu Cấu Hình Key</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Affiliate Policy Config -->
+    <div class="modal-backdrop" id="affiliatePolicyModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">⚙️ Cấu Hình Chính Sách Tiếp Thị (Affiliate)</h3>
+          <button class="modal-close" data-close-modal>&times;</button>
+        </div>
+        <form id="affiliatePolicyForm">
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Tỷ Lệ Hoa Hồng Mặc Định (% trọn đời)</label>
+              <input type="number" class="form-control" value="20" min="5" max="50">
+              <p style="font-size: 11px; color: var(--text-dim); margin-top: 4px;">CTV nhận % mỗi khi tenant gia hạn qua Casso Napas 24/7</p>
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Thời Hạn Lưu Cookie (Ngày)</label>
+              <input type="number" class="form-control" value="60">
+            </div>
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Ngưỡng Rút Tối Thiểu (đ)</label>
+              <input type="text" class="form-control" value="200.000 đ">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phương Thức Thanh Toán Tự Động</label>
+              <select class="form-select">
+                <option selected>VietQR Napas 24/7 tức thì qua Cổng Casso</option>
+                <option>Chuyển khoản thủ công</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Hủy</button>
+            <button type="submit" class="btn btn-primary">Lưu Chính Sách</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Modal: Seeding Package -->
+    <div class="modal-backdrop" id="seedingServiceModal">
+      <div class="modal-dialog">
+        <div class="modal-header">
+          <h3 class="modal-title">+ Thêm Gói Dịch Vụ Seeding & Tương Tác</h3>
+          <button class="modal-close" data-close-modal>&times;</button>
+        </div>
+        <form id="seedingServiceForm">
+          <div class="modal-body">
+            <div class="form-group" style="margin-bottom: 14px;">
+              <label class="form-label">Tên Gói Dịch Vụ *</label>
+              <input type="text" class="form-control" placeholder="Ví dụ: Tăng mắt xem Livestream TikTok 1000 view" required>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px;">
+              <div class="form-group">
+                <label class="form-label">Đơn Giá Shop Phải Trả *</label>
+                <input type="number" class="form-control" placeholder="500000" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Hoa Hồng KChat Thu (15%)</label>
+                <input type="text" class="form-control" value="75.000 đ" readonly>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Agency Phụ Trách Thực Hiện</label>
+              <select class="form-select">
+                <option selected>Agency Marketing Pro (SLA 2 giờ)</option>
+                <option>KOC Seeding Network</option>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-outline" data-close-modal>Hủy</button>
+            <button type="submit" class="btn btn-primary">Thêm Gói Lên Sàn</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Floating Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
