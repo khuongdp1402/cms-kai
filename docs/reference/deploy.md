@@ -23,16 +23,25 @@ Chờ DNS lan truyền (`dig +short app.<tên miền>`) trước khi xin chứng
 
 ## 3. Chứng chỉ Let's Encrypt
 
-Một chứng chỉ cho cả ba tên, lưu ở `/etc/letsencrypt/live/<tên miền>/` (đường dẫn Nginx đang dùng).
+Một chứng chỉ cho cả ba tên, lưu ở `/etc/letsencrypt/live/<tên miền>/` (đường dẫn Nginx đang dùng). Quy trình để gia hạn không phụ thuộc cổng 80 bị Nginx giữ:
 
-```bash
-sudo mkdir -p /var/www/certbot
-sudo certbot certonly --standalone \
-  -d <tên miền> -d www.<tên miền> -d app.<tên miền> \
-  --agree-tos -m <email quản trị>
-```
-
-`--standalone` cần cổng 80 trống, nên chạy **trước** khi bật stack. Gia hạn: `sudo certbot renew --webroot -w /var/www/certbot --deploy-hook "docker compose -f /opt/kalo/docker-compose.production.yaml exec nginx nginx -s reload"` (đặt trong cron hằng tuần; lần đầu chạy thử `certbot renew --dry-run` sau khi stack đã bật).
+1. Cấp lần đầu bằng `--standalone` **trước khi bật Nginx** (cổng 80 phải trống; các service khác khởi động trước, mục 5):
+   ```bash
+   sudo mkdir -p /var/www/certbot
+   sudo certbot certonly --standalone \
+     -d <tên miền> -d www.<tên miền> -d app.<tên miền> \
+     --cert-name <tên miền> --agree-tos -m <email quản trị>
+   ```
+2. Bật Nginx, rồi chạy **một lần** lệnh sau để cấu hình gia hạn chuyển sang webroot:
+   ```bash
+   sudo certbot certonly --webroot -w /var/www/certbot \
+     -d <tên miền> -d www.<tên miền> -d app.<tên miền> --cert-name <tên miền>
+   ```
+3. Cron hoặc systemd timer chạy hằng ngày:
+   ```bash
+   certbot renew --deploy-hook "docker compose -f /opt/kalo/docker-compose.production.yaml exec nginx nginx -s reload"
+   ```
+   Kiểm tra bằng `certbot renew --dry-run`.
 
 ## 4. Lấy mã nguồn và điền cấu hình
 
@@ -132,7 +141,17 @@ Quay lui:
 
 Cập nhật template Nginx: sửa `deploy/nginx/templates/kalo.conf.template`, chạy `bash deploy/nginx/test.sh`, rồi `kc up -d --force-recreate nginx`.
 
-## 10. Bảng kiểm trước go-live
+## 10. Chưa kiểm thử runtime
+
+Các mục sau mới chỉ được kiểm tra tĩnh (`docker compose config`, `nginx -t`, script backup trên Postgres cục bộ), **chưa chạy thật**. Phải kiểm chứng trên staging trước go-live:
+
+- Healthcheck của Rails, Sidekiq và Zalo bridge, cùng `docker/entrypoints/rails-prod.sh`.
+- Đoạn lệnh tạo SuperAdmin (mục 6).
+- Cấp và gia hạn chứng chỉ certbot (mục 3), gồm bước chuyển sang webroot và deploy-hook.
+- Chạy đầy đủ `docker compose up -d` với image build thật.
+- Job CI build image (`kalo_docker_build.yml`).
+
+## 11. Bảng kiểm trước go-live
 
 - [ ] DNS A cho `<tên miền>`, `www`, `app` đã trỏ đúng; chứng chỉ cấp xong, `certbot renew --dry-run` thành công.
 - [ ] `.env.production` đủ giá trị, quyền `600`, không còn `CHANGE_ME`, không nằm trong git.
