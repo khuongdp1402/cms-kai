@@ -26,7 +26,7 @@
 ## Build / Test / Lint
 
 - Dev stack: Docker compose (`docs/reference/dev-setup.md`). Do not run bare `bundle exec rspec` / `pnpm test` on the host.
-- Backend tests: `script/ktech/rspec.sh <track> <spec paths…>` (own test DB per track; `KALO_SKIP_SCHEMA=1` skips schema reload). Exclude `spec/enterprise` for a whole run (enterprise code is absent: 139 load errors) and add a per-example timeout, one upstream spec hangs.
+- Backend tests: `script/ktech/rspec.sh <track> <spec paths…>` (own test DB per track; `KALO_SKIP_SCHEMA=1` skips schema reload). Exclude `spec/enterprise` for a whole run (enterprise code is absent: 139 load errors) and, for a whole run, add a per-example timeout (one upstream spec, `widgets_controller_spec`, hangs): put a temporary, uncommitted support file with `RSpec.configure { |c| c.around { |ex| Timeout.timeout(150) { ex.run } } }` and pass `-r ./that_file.rb`.
 - Frontend tests: `script/ktech/vitest.sh [paths…]`. For the WHOLE suite on 8 GB Docker add `--poolOptions.threads.minThreads=1 --poolOptions.threads.maxThreads=3` or the run is SIGKILLed.
 - **Before declaring a branch done run the WHOLE rspec and vitest suites**, not just your own directories (LESSONS B16), and compare failures with the base commit: 74 rspec failures are known upstream (mostly missing Vite test build).
 - Lint specific files: `npx eslint <files> --ext .js,.vue` in the rails container (LESSONS B13; `pnpm eslint` lints everything with `--fix`); `bundle exec rubocop <files>`.

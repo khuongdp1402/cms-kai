@@ -131,7 +131,7 @@ Agent (Nhân viên trực chat)
 
 ## 3. Các Module Chức Năng
 
-### Module 1: Super Admin Dashboard
+### Module 1: Super Admin Dashboard *(kế hoạch; hiện chỉ có Kalo Console: tổng quan, shop, giao dịch Casso)*
 
 | Chức năng | Mô tả |
 |---|---|
@@ -143,7 +143,7 @@ Agent (Nhân viên trực chat)
 | **Quản lý Ads & Seeding** | Duyệt/reject chiến dịch seeding, quản lý đối tác API bên thứ ba, cấu hình markup % |
 | **Cấu hình hệ thống** | SMTP, domain, SSL, Feature flags, rate limiting, bảo trì hệ thống |
 
-### Module 2: Tenant Admin — Tùy biến thương hiệu (White-label)
+### Module 2: Tenant Admin — Tùy biến thương hiệu (White-label) *(kế hoạch, chưa có)*
 
 | Chức năng | Mô tả |
 |---|---|
@@ -154,7 +154,7 @@ Agent (Nhân viên trực chat)
 | **Phân quyền nội dung** | Tenant Admin ẩn/hiện các module tùy gói (VD: Gói Starter không thấy mục Báo cáo nâng cao, Automation) |
 | **Widget Chat Branding** | Thay đổi tiêu đề, lời chào, avatar, màu nền widget chat nhúng trên website |
 
-### Module 3: AI Chatbot thông minh theo từng Tenant
+### Module 3: AI Chatbot thông minh theo từng Tenant *(kế hoạch; hiện chỉ có gợi ý trả lời cho nhân viên)*
 
 > [!IMPORTANT]
 > Đây là tính năng tạo **khác biệt giá trị cốt lõi** so với đối thủ (Pancake, Fchat không có; Subiz/Haravan có nhưng rất cơ bản).
@@ -174,7 +174,7 @@ Agent (Nhân viên trực chat)
 - Gói Enterprise: 15.000 AI messages/tháng
 - Mua thêm: 49.000đ / 1.000 AI messages
 
-### Module 4: Thanh toán trực tuyến & Quản lý gói
+### Module 4: Thanh toán trực tuyến & Quản lý gói *(kế hoạch; hiện chỉ có chuyển khoản VietQR qua Casso, chưa có VNPay/MoMo/ZaloPay/Stripe, tự gia hạn, add-on)*
 
 | Chức năng | Mô tả |
 |---|---|
@@ -264,7 +264,7 @@ Agent (Nhân viên trực chat)
 | **Hỗ trợ** | Cộng đồng + Email | Email + Chat ưu tiên | Hotline + SLA 4h | Dedicated Account Manager |
 | **Dùng thử** | **14 ngày miễn phí** | **14 ngày miễn phí** | **Demo riêng** | **POC 30 ngày** |
 
-### 4.2. Add-on (Mua thêm lẻ)
+### 4.2. Add-on (Mua thêm lẻ) *(kế hoạch, chưa có)*
 
 | Add-on | Giá/đơn vị/tháng |
 |---|---|
@@ -287,7 +287,7 @@ Agent (Nhân viên trực chat)
 | **Seeding Commission** | Hoa hồng từ đối tác Seeding Agency | ~10-20% giá trị đơn |
 | **Ads Management Fee** | Phí quản lý % trên chi tiêu quảng cáo của tenant | ~3-5% chi tiêu |
 
-### 4.4. Bán trọn gói On-premise (One-time License)
+### 4.4. Bán trọn gói On-premise (One-time License) *(kế hoạch, chưa có)*
 
 | Gói | Giá trọn gói | Bao gồm |
 |---|---|---|
