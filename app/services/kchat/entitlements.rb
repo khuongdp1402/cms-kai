@@ -27,6 +27,10 @@ module Kchat::Entitlements
   def paid_until(account)
     value = account.custom_attributes&.dig('subscription_valid_until')
     Time.zone.parse(value) if value.present?
+  rescue ArgumentError
+    # A hand-edited, unparseable value means no paid period; it must not break every page that lists accounts.
+    Rails.logger.warn "[Entitlements] account=#{account.id} has an unparseable subscription_valid_until"
+    nil
   end
 
   # End of the current entitlement: the paid period when active, otherwise the trial end.
