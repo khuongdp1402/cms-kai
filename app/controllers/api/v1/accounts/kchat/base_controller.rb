@@ -1,4 +1,10 @@
 class Api::V1::Accounts::Kchat::BaseController < Api::V1::Accounts::BaseController
+  rescue_from ActiveRecord::RecordInvalid, with: ->(e) { render_invalid(e.record) }
+  rescue_from ActiveModel::ValidationError, with: ->(e) { render_invalid(e.model) }
+  rescue_from ::Kchat::Order::InvalidTransition, with: -> { render_kchat_error('invalid_transition', :unprocessable_entity) }
+  rescue_from ::Kchat::Order::InsufficientStock,
+              with: ->(e) { render_kchat_error('insufficient_stock', :unprocessable_entity, product_id: e.product_id) }
+
   private
 
   def render_kchat_error(code, status, extra = {})

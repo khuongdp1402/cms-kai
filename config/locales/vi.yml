@@ -614,3 +614,6 @@ vi:
       no_subscriptions_to_test: 'Select at least one subscription to test.'
       no_subscriptions_to_delete: 'Select at least one subscription to delete.'
       subscriptions_deleted: "Deleted %{count} subscription(s). The user's device(s) will re-register on next app launch."
+  kchat:
+    orders:
+      qr_message: 'Quý khách vui lòng quét mã QR để thanh toán đơn #%{number}, số tiền %{amount}. Nội dung chuyển khoản: %{memo}'

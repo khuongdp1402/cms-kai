@@ -58,6 +58,27 @@ RSpec.describe 'Kchat products API', type: :request do
     end
   end
 
+  describe 'image validation' do
+    it 'rejects a non image file' do
+      post base, params: { name: 'Tệp', price: 1, image: fixture_file_upload(Rails.root.join('spec/assets/sample.pdf'), 'application/pdf') },
+                 headers: agent.create_new_auth_token
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('validation_failed')
+      expect(Kchat::Product.where(name: 'Tệp')).to be_empty
+    end
+
+    it 'rejects an image over 5 MB' do
+      big = Tempfile.new(['big', '.png'], binmode: true)
+      big.write("\x89PNG\r\n\x1A\n".b + ('0' * (5.megabytes + 1)))
+      big.rewind
+      post base, params: { name: 'Lớn', price: 1, image: Rack::Test::UploadedFile.new(big.path, 'image/png') }, headers: agent.create_new_auth_token
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(Kchat::Product.where(name: 'Lớn')).to be_empty
+    ensure
+      big&.close!
+    end
+  end
+
   describe 'PATCH update' do
     it 'updates a product' do
       patch "#{base}/#{product.id}", params: { price: 99_000, stock: 3 }, headers: agent.create_new_auth_token, as: :json

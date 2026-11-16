@@ -113,13 +113,40 @@ RSpec.describe 'Kchat orders API', type: :request do
     end
 
     it 'contact or conversation of another account returns 404' do
+      foreign_conversation = make_conversation(other_account)
       foreign_contact = create(:contact, account: other_account)
-      post base, params: attrs.merge(contact_id: foreign_contact.id, items: [free_item]), headers: headers, as: :json
+      post base, params: attrs.merge(conversation_id: foreign_conversation.display_id, items: [free_item]), headers: headers, as: :json
       expect(response).to have_http_status(:not_found)
-      post base, params: attrs.merge(conversation_id: make_conversation(other_account).id, items: [free_item]), headers: headers, as: :json
+      post base, params: attrs.merge(contact_id: foreign_contact.id, items: [free_item]), headers: headers, as: :json
       expect(response).to have_http_status(:not_found)
       post base, params: attrs.merge(contact_id: 9_999_999, items: [free_item]), headers: headers, as: :json
       expect(response).to have_http_status(:not_found)
+      expect(Kchat::Order.count).to eq(0)
+    end
+
+    it 'resolves conversation_id within the current account when the display_id also exists in another account' do
+      foreign_conversation = make_conversation(other_account)
+      own_conversation = make_conversation
+      expect(own_conversation.display_id).to eq(foreign_conversation.display_id)
+      post base, params: attrs.merge(conversation_id: foreign_conversation.display_id, items: [free_item]), headers: headers, as: :json
+      expect(response).to have_http_status(:created)
+      expect(Kchat::Order.find(response.parsed_body['id']).conversation_id).to eq(own_conversation.id)
+    end
+
+    it 'create refuses a conversation whose contact differs from the given contact' do
+      conversation = make_conversation
+      other_contact = create(:contact, account: account)
+      post base, params: attrs.merge(contact_id: other_contact.id, conversation_id: conversation.display_id, items: [free_item]),
+                 headers: headers, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('conversation_contact_mismatch')
+      expect(Kchat::Order.count).to eq(0)
+    end
+
+    it 'create refuses a conversation of an inbox the agent is not a member of' do
+      conversation = create(:conversation, account: account)
+      post base, params: attrs.merge(conversation_id: conversation.display_id, items: [free_item]), headers: headers, as: :json
+      expect(response).to have_http_status(:unauthorized)
       expect(Kchat::Order.count).to eq(0)
     end
 
@@ -167,6 +194,15 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(order.reload.status).to eq('pending_payment')
     end
 
+    it 'maps a validation failure during transition to an error code' do
+      order = make_order
+      order.update_columns(shipping_fee: -1) # rubocop:disable Rails/SkipsModelValidations
+      post "#{base}/#{order.id}/transition", params: { event: 'mark_paid' }, headers: headers, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('validation_failed')
+      expect(order.reload.status).to eq('pending_payment')
+    end
+
     it 'agent of account A gets 404 for order of account B' do
       foreign = make_order(other_account)
       post "#{base}/#{foreign.id}/transition", params: { event: 'mark_paid' }, headers: headers, as: :json
@@ -206,6 +242,39 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
       expect(response.parsed_body['error']).to eq('payment_settings_missing')
       expect(conversation.messages.count).to eq(0)
+    end
+
+    it 'send_qr and qr return invalid_amount for a zero total order' do
+      zero = make_order(items: [{ name: 'Tặng', unit_price: 0, quantity: 1 }])
+      post "#{base}/#{zero.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('invalid_amount')
+      get "#{base}/#{zero.id}/qr", headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('invalid_amount')
+    end
+
+    it 'send_qr rejects an order that is not pending_payment' do
+      order.transition!(:mark_paid)
+      post "#{base}/#{order.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('order_not_payable')
+      expect(conversation.messages.count).to eq(0)
+    end
+
+    it 'send_qr rejects a conversation of a different contact than the order contact' do
+      contact_order = make_order(extra: { contact: create(:contact, account: account) })
+      post "#{base}/#{contact_order.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('conversation_contact_mismatch')
+      expect(conversation.messages.count).to eq(0)
+    end
+
+    it 'send_qr text is rendered from the vi locale with amount and memo' do
+      account.update!(locale: 'vi')
+      post "#{base}/#{order.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json
+      expect(conversation.messages.reload.last.content)
+        .to eq("Quý khách vui lòng quét mã QR để thanh toán đơn ##{order.number}, số tiền 403.000đ. Nội dung chuyển khoản: DH#{order.number}")
     end
 
     it 'send_qr rejects non transfer_qr orders' do

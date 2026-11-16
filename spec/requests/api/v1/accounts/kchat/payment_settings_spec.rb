@@ -30,4 +30,21 @@ RSpec.describe 'Kchat payment settings API', type: :request do
     expect(response).to have_http_status(:unauthorized)
     expect(account.reload.custom_attributes['payment']['account_number']).to eq('0123456789')
   end
+
+  {
+    bank_bin: %w[12345 12345a 1234567],
+    account_number: ['12345', '12a456789', '1' * 20],
+    account_name: ['', 'A' * 61],
+    bank_name: ['', 'B' * 61]
+  }.each do |field, bad_values|
+    bad_values.each do |value|
+      it "rejects #{field} #{value.inspect}" do
+        patch url, params: settings.merge(field => value), headers: admin.create_new_auth_token, as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.parsed_body).to include('error' => 'validation_failed')
+        expect(response.parsed_body['message']).to be_present
+        expect(account.reload.custom_attributes&.dig('payment')).to be_nil
+      end
+    end
+  end
 end

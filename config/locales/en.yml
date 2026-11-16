@@ -653,3 +653,6 @@ en:
       no_subscriptions_to_test: 'Select at least one subscription to test.'
       no_subscriptions_to_delete: 'Select at least one subscription to delete.'
       subscriptions_deleted: "Deleted %{count} subscription(s). The user's device(s) will re-register on next app launch."
+  kchat:
+    orders:
+      qr_message: 'Please scan the QR code to pay order #%{number}, amount %{amount}. Transfer memo: %{memo}'

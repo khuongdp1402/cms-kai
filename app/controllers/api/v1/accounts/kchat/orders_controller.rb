@@ -1,6 +1,5 @@
 class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::BaseController
   PER_PAGE = 25
-  QR_TEXT = 'Quý khách vui lòng quét mã QR để thanh toán đơn #%<number>s, số tiền %<amount>s. Nội dung chuyển khoản: %<memo>s'.freeze
 
   before_action :fetch_order, only: [:show, :transition, :send_qr, :qr]
 
@@ -20,24 +19,21 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
     authorize ::Kchat::Order
     contact = find_contact
     conversation = find_conversation(params[:conversation_id])
-    return render_not_found if (params[:contact_id].present? && contact.nil?) || (params[:conversation_id].present? && conversation.nil?)
+    return render_not_found unless linked_records_found?(contact, conversation)
+
+    authorize conversation.inbox, :show? if conversation
+    return render_contact_mismatch if conversation && contact && conversation.contact_id != contact.id
 
     @order = ::Kchat::Order.create_with_items!(account: Current.account, attributes: order_attributes(contact, conversation), items: item_params)
     render :show, status: :created
   rescue ActiveRecord::RecordNotFound
     render_not_found
-  rescue ::Kchat::Order::InsufficientStock => e
-    render_kchat_error('insufficient_stock', :unprocessable_entity, product_id: e.product_id)
-  rescue ActiveRecord::RecordInvalid => e
-    render_invalid(e.record)
   end
 
   def transition
     authorize @order
     @order.transition!(params[:event].to_s)
     render :show
-  rescue ::Kchat::Order::InvalidTransition
-    render_kchat_error('invalid_transition', :unprocessable_entity)
   end
 
   def send_qr
@@ -47,8 +43,10 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
     authorize conversation.inbox, :show?
     return unless qr_allowed?
+    return render_kchat_error('order_not_payable', :unprocessable_entity) unless @order.pending_payment?
+    return render_contact_mismatch if @order.contact_id && conversation.contact_id != @order.contact_id
 
-    @message = Messages::MessageBuilder.new(Current.user, conversation, qr_message_params).perform
+    @message = build_qr_message(conversation)
     render 'api/v1/accounts/conversations/messages/create', status: :created
   end
 
@@ -79,6 +77,10 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
     scope.where(id: by_text.select(:id))
   end
 
+  def linked_records_found?(contact, conversation)
+    (params[:contact_id].blank? || contact) && (params[:conversation_id].blank? || conversation)
+  end
+
   def find_contact
     Current.account.contacts.find_by(id: params[:contact_id]) if params[:contact_id].present?
   end
@@ -103,6 +105,7 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
   def qr_error_code
     return 'invalid_payment_method' unless @order.payment_method_transfer_qr?
+    return 'invalid_amount' unless @order.total.positive?
 
     'payment_settings_missing' unless ::Kchat::PaymentSettings.complete?(Current.account)
   end
@@ -117,12 +120,22 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
     ::Kchat::VietQr.png(payload)
   end
 
-  def qr_message_params
+  def build_qr_message(conversation)
+    file = Tempfile.new(['qr', '.png'], binmode: true)
+    file.write(qr_png)
+    file.rewind
+    upload = ActionDispatch::Http::UploadedFile.new(tempfile: file, filename: "#{memo}.png", type: 'image/png')
+    Messages::MessageBuilder.new(Current.user, conversation, qr_message_params(upload)).perform
+  ensure
+    file&.close!
+  end
+
+  def qr_message_params(upload)
     {
       message_type: 'outgoing',
-      content: format(QR_TEXT, number: @order.number, amount: formatted_amount, memo: memo),
+      content: I18n.t('kchat.orders.qr_message', number: @order.number, amount: formatted_amount, memo: memo),
       content_attributes: { kchat_order_id: @order.id },
-      attachments: [qr_upload]
+      attachments: [upload]
     }
   end
 
@@ -130,10 +143,7 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
     "#{ActiveSupport::NumberHelper.number_to_delimited(@order.total, delimiter: '.')}đ"
   end
 
-  def qr_upload
-    file = Tempfile.new(['qr', '.png'], binmode: true)
-    file.write(qr_png)
-    file.rewind
-    ActionDispatch::Http::UploadedFile.new(tempfile: file, filename: "#{memo}.png", type: 'image/png')
+  def render_contact_mismatch
+    render_kchat_error('conversation_contact_mismatch', :unprocessable_entity)
   end
 end
