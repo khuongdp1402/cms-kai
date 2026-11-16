@@ -36,6 +36,8 @@ cp .env.production.example .env.production
 chmod 600 .env.production
 ```
 
+Các lệnh `kc …` dưới đây dùng alias (chạy trong `/opt/kalo`): `alias kc='docker compose -f docker-compose.production.yaml --env-file .env.production'`.
+
 Điền **mọi** biến, không còn `CHANGE_ME` (`grep -n CHANGE_ME .env.production` phải rỗng). Dùng chuỗi chữ-số cho mật khẩu vì được nhúng vào URL.
 
 | Biến | Giá trị / cách tạo | Ai |
@@ -43,7 +45,7 @@ chmod 600 .env.production
 | `KALO_DOMAIN` | Tên miền gốc, ví dụ `kalo.vn` | CDA |
 | `FRONTEND_URL`, `CORS_ALLOWED_ORIGINS` | `https://app.<tên miền>` | OPS |
 | `INSTALLATION_NAME` | `Kalo` (và sửa dòng đã có trong DB, mục 8) | OPS |
-| `ENABLE_ACCOUNT_SIGNUP` | `false` lúc đầu; bật ở mục 10 | CDA |
+| `ENABLE_ACCOUNT_SIGNUP` | Để `false`. **Đặt `true` ở đây KHÔNG mở đăng ký**: Rails đọc `InstallationConfig` trong DB trước, `installation_config.yml` đã nạp dòng `false` khi seed. Chỉ lệnh ở mục 10 (hoặc Super Admin → Settings) mới bật được | CDA |
 | `ENABLE_PUSH_RELAY_SERVER` | giữ `false` (riêng tư: tránh đẩy nội dung tin khách qua hạ tầng Chatwoot) | OPS |
 | `SECRET_KEY_BASE` | `openssl rand -hex 64` | OPS |
 | `POSTGRES_DATABASE`, `POSTGRES_USERNAME` | giữ giá trị mẫu hoặc đặt tên khác | OPS |
@@ -66,7 +68,7 @@ Kiểm: `bash deploy/compose_check.sh` in `OK: compose config valid`; thiếu bi
 |---|---|---|
 | Mở (hoặc chọn) tài khoản ngân hàng **riêng** nhận tiền gói cước | CDA | Có số tài khoản, tên chủ tài khoản đúng như ghi vào `.env.production` |
 | Tạo tài khoản Casso, liên kết tài khoản ngân hàng đó | CDA | Casso hiện được giao dịch của tài khoản |
-| Thêm webhook trong Casso: URL `https://app.<tên miền>/api/v1/casso/webhook`, header `Secure-Token: <giá trị CASSO_SECURE_TOKEN>` | CDA/OPS | Gửi thử từ Casso, Rails trả 200; xem log `kc logs rails` |
+| Thêm webhook trong Casso: URL `https://app.<tên miền>/api/v1/casso/webhook`, header `Secure-Token: <giá trị CASSO_SECURE_TOKEN>` | CDA/OPS | Gửi thử từ Casso, Rails trả 200. Nếu nút "thử" của Casso gửi payload khác dạng thật thì Rails có thể trả **400 `invalid_payload`**: không phải lỗi cấu hình; xem `kc logs rails \| grep -i casso` (log chỉ ghi hình dạng `data=<Class> keys=<n>`, không ghi nội dung) và dùng giao dịch thật nhỏ để kiểm |
 | **Thử chuyển khoản thật số tiền nhỏ** trước khi mở bán | CDA | Đăng nhập một shop thử, vào trang **Gói cước**, chép đúng nội dung chuyển khoản hiển thị (dạng `KALO <mã shop> PLAN`), chuyển tiền đúng giá gói. Hạn dùng tăng 30 ngày; trong Console → Giao dịch thấy sự kiện `matched`. Chuyển thử sai nội dung thì phải thấy `unmatched` và gán tay được ở Console |
 
 Lưu ý: mỗi giao dịch có mã `tid` duy nhất; Casso gọi lại cùng `tid` không cộng 2 lần. Token lộ nghĩa là có người cộng tiền giả được: giữ bí mật, đổi định kỳ (đổi ở cả `.env.production` và Casso rồi `kc up -d`).
@@ -109,11 +111,11 @@ Ai làm: OPS. Cách kiểm: lệnh in 4 dòng đúng giá trị; tiêu đề tab
 
 ## 9. SuperAdmin đầu tiên
 
-OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo `User` và `SuperAdmin`). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu, xóa lịch sử shell chứa mật khẩu (`history -c`). Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
+OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo một `User` có `type: "SuperAdmin"`; mật khẩu đọc từ biến môi trường `ADMIN_PASSWORD`, không gõ trong dòng lệnh). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu. Đoạn lệnh chưa chạy thử trên instance thật: kiểm trên staging. Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
 
 ## 10. Mở đăng ký tài khoản
 
-`ENABLE_ACCOUNT_SIGNUP` mặc định `false`; landing trỏ tới `/app/auth/signup` nên **chỉ bật khi đã qua staging và thử với shop thí điểm**. Bật bằng Super Admin → Settings, hoặc:
+`ENABLE_ACCOUNT_SIGNUP` mặc định `false`. **Thứ tự ưu tiên:** `GlobalConfig` đọc dòng `InstallationConfig` trong DB trước; `installation_config.yml` đã nạp `false` khi seed nên biến `ENABLE_ACCOUNT_SIGNUP=true` trong `.env.production` **không** mở đăng ký. Chỉ lệnh dưới đây (hoặc Super Admin → Settings) mới có tác dụng; dòng tạo mới có `locked=true` nên có thể không hiện là chỉnh sửa được trong Super Admin, dùng lệnh runner; landing trỏ tới `/app/auth/signup` nên **chỉ bật khi đã qua staging và thử với shop thí điểm**. Bật bằng Super Admin → Settings, hoặc:
 
 ```bash
 kc exec rails bundle exec rails runner '
@@ -121,6 +123,11 @@ kc exec rails bundle exec rails runner '
 ```
 
 Ai: CDA quyết định, OPS chạy. Cách kiểm: `https://app.<tên miền>/app/auth/signup` hiện form (khi `false` thì không). **Cân nhắc trước khi mở công khai:** một người có thể tạo nhiều account để lấy dùng thử 14 ngày liên tục (chưa có chống lạm dụng, review bảo mật I-8).
+
+## 10b. Quyết định giá và tài khoản cũ (CDA)
+
+- **Quyết định giá:** ba gói (299.000đ / 699.000đ / 1.990.000đ) hiện **chỉ khác giá, chưa khác tính năng hay giới hạn** (landing liệt kê giống nhau). Chủ dự án chọn trước khi bán: (a) bán đồng giá một gói, (b) bật giới hạn thật (cần phát triển, xem backlog), hoặc (c) giữ nguyên như hiện tại và chấp nhận điều đó. Không đổi giá khi chưa có quyết định.
+- **Tài khoản cũ hơn 14 ngày không có kỳ trả phí là `expired` ngay lúc go-live** (chặn tạo sản phẩm, đơn, AI). Tài khoản thí điểm/thử cần Console → "Gia hạn" hoặc một khoản thanh toán thật.
 
 ## 11. Cài thật và kiểm trên staging
 
@@ -130,7 +137,7 @@ Mục "Chưa kiểm thử runtime" của `deploy.md` (mục 10) **bắt buộc k
 - [ ] Healthcheck của Rails, Sidekiq, Zalo bridge hoạt động, gồm `docker/entrypoints/rails-prod.sh` (vòng chờ `pg_isready` không có giới hạn: nếu sai host DB thì treo thay vì crash; kiểm log khi khởi động).
 - [ ] Certbot: cấp lần đầu `--standalone` trước khi bật Nginx, chuyển sang `--webroot`, `certbot renew --dry-run` thành công, deploy-hook reload được Nginx.
 - [ ] Job CI `kalo_docker_build.yml` build image thành công (workflow này **chỉ build, không đẩy image lên registry**: quyết định cách đưa image lên server, `docker load` hoặc registry riêng).
-- [ ] Đoạn lệnh tạo SuperAdmin (mục 9) chạy được.
+- [ ] Đoạn lệnh tạo SuperAdmin (mục 9) chạy được (chưa từng chạy trên instance thật).
 - [ ] `curl -I https://<tên miền>` ra landing có video; `https://app.<tên miền>` ra màn hình đăng nhập; `wss://app.<tên miền>/cable` kết nối được.
 - [ ] Đăng nhập, tạo sản phẩm, tạo đơn, gửi mã QR trong chat, trang Báo cáo và Gói cước chạy trên dữ liệu thật.
 - [ ] Kết nối Zalo cá nhân thử: quét QR, nhận và gửi một tin.
@@ -158,7 +165,7 @@ Mục "Chưa kiểm thử runtime" của `deploy.md` (mục 10) **bắt buộc k
 | Việc | Ai | Cách kiểm |
 |---|---|---|
 | Uptime check ngoài (UptimeRobot hoặc tương đương) vào `https://app.<tên miền>/api` và `https://<tên miền>`; báo qua email/Zalo cho CDA | OPS | Tắt thử Rails 1-2 phút thì có cảnh báo |
-| Theo dõi webhook Casso: Console → Giao dịch không có nhiều `unmatched`/`invalid` bất thường; Casso không báo webhook lỗi | CDA/OPS | Mỗi tuần xem 1 lần |
+| Theo dõi webhook Casso: Console → Giao dịch: theo dõi các sự kiện `unmatched`, `underpaid`, `description_ambiguous` (gán tay hoặc liên hệ khách); sự kiện `invalid` **không được lưu** nên không thấy ở Console (backlog ROADMAP), chỉ thấy qua log `invalid_payload` và báo lỗi của Casso; Casso không báo webhook lỗi | CDA/OPS | Mỗi tuần xem 1 lần |
 | Xoay log (`logrotate` cho `/var/log/kalo-backup.log` và log Docker `max-size`) | OPS | `docker inspect` thấy giới hạn log; log không phình |
 | Cảnh báo đĩa (>80%) và RAM; cảnh báo cron backup lỗi (mã thoát khác 0) | OPS | Ngưỡng thử gửi được cảnh báo |
 | Gia hạn chứng chỉ chạy tự động | OPS | `certbot renew --dry-run` định kỳ |
