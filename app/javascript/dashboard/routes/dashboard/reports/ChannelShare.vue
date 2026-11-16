@@ -7,10 +7,11 @@ defineProps({
 
 const { t, te } = useI18n();
 
-// "Channel::WebWidget" -> "webwidget"; plain keys such as "zalo" pass through.
+// Backend values are snake_case (web_widget, facebook_page) or an order source (chat, pos, manual).
 const channelName = channel => {
   const key = String(channel)
     .replace(/^Channel::/, '')
+    .replace(/([a-z])([A-Z])/g, '$1_$2')
     .toLowerCase();
   return te(`KALO_REPORTS.CHANNELS.${key}`)
     ? t(`KALO_REPORTS.CHANNELS.${key}`)
@@ -25,7 +26,11 @@ const channelName = channel => {
     <h2 class="text-base font-bold text-n-slate-12">
       {{ t('KALO_REPORTS.CHANNELS.TITLE') }}
     </h2>
-    <div v-for="item in channels" :key="item.channel" data-test="channel">
+    <div
+      v-for="(item, index) in channels"
+      :key="`${index}-${item.channel}`"
+      data-test="channel"
+    >
       <div
         class="flex items-center justify-between mb-1 text-sm text-n-slate-12"
       >

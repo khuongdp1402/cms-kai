@@ -17,12 +17,36 @@ describe('ChannelShare', () => {
     expect(wrapper.text()).not.toContain('Mystery');
   });
 
-  it('maps inbox channel types to readable labels', () => {
+  // Real strings from Kchat::Reports#channels: channel_type.demodulize.underscore
+  // for every app/models/channel/*.rb model, or the order source.
+  it.each([
+    ['web_widget', 'Website'],
+    ['facebook_page', 'Facebook'],
+    ['twilio_sms', 'SMS'],
+    ['twitter_profile', 'Twitter'],
+    ['zalo_personal', 'Zalo'],
+    ['whatsapp', 'WhatsApp'],
+    ['sms', 'SMS'],
+    ['email', 'Email'],
+    ['instagram', 'Instagram'],
+    ['telegram', 'Telegram'],
+    ['line', 'Line'],
+    ['tiktok', 'TikTok'],
+    ['api', 'Khác'],
+    ['chat', 'Tin nhắn'],
+    ['pos', 'Tại quầy'],
+    ['manual', 'Tạo tay'],
+  ])('shows %s as %s', (channel, label) => {
+    const wrapper = render([{ channel, orders: 1, share_pct: 100 }]);
+    expect(wrapper.text()).toContain(label);
+    expect(wrapper.text()).not.toContain(channel);
+  });
+
+  it('keeps two values with the same label as separate rows', () => {
     const wrapper = render([
-      { channel: 'Channel::Whatsapp', orders: 2, share_pct: 50 },
-      { channel: 'Channel::WebWidget', orders: 2, share_pct: 50 },
+      { channel: 'sms', orders: 1, share_pct: 50 },
+      { channel: 'twilio_sms', orders: 1, share_pct: 50 },
     ]);
-    expect(wrapper.text()).toContain('WhatsApp');
-    expect(wrapper.text()).toContain('Website');
+    expect(wrapper.findAll('[data-test="channel"]')).toHaveLength(2);
   });
 });
