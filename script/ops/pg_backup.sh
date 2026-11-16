@@ -3,6 +3,8 @@
 # Env: PG_CONTAINER (default kalo-postgres-1), POSTGRES_USERNAME, POSTGRES_DATABASE, BACKUP_DIR (default /var/backups/kalo).
 # Cron example: 15 2 * * * cd /opt/kalo && set -a && . ./.env.production && set +a && script/ops/pg_backup.sh
 set -euo pipefail
+# Dumps hold every tenant's data: owner-only files (0600) in owner-only directories (0700).
+umask 077
 
 PG_CONTAINER="${PG_CONTAINER:-kalo-postgres-1}"
 : "${POSTGRES_USERNAME:?POSTGRES_USERNAME is required}"
@@ -12,6 +14,7 @@ KEEP_DAYS=14
 
 DAY_DIR="$BACKUP_DIR/$(date +%Y-%m-%d)"
 mkdir -p "$DAY_DIR"
+chmod 700 "$BACKUP_DIR" "$DAY_DIR"
 FILE="$DAY_DIR/${POSTGRES_DATABASE}_$(date +%H%M%S).dump"
 
 if ! docker exec "$PG_CONTAINER" pg_dump -Fc -U "$POSTGRES_USERNAME" "$POSTGRES_DATABASE" > "$FILE.partial"; then
@@ -20,6 +23,7 @@ if ! docker exec "$PG_CONTAINER" pg_dump -Fc -U "$POSTGRES_USERNAME" "$POSTGRES_
   exit 1
 fi
 [ -s "$FILE.partial" ] || { rm -f "$FILE.partial"; echo "pg_backup: empty dump" >&2; exit 1; }
+chmod 600 "$FILE.partial"
 mv "$FILE.partial" "$FILE"
 
 # Retention: keep the newest $KEEP_DAYS dated directories.
