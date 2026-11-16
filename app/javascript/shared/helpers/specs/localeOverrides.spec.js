@@ -63,4 +63,15 @@ describe('applyKaloFallback', () => {
     expect(result.en.LOGIN).toBe('Login');
     expect(result.fr.LOGIN).toBe('Connexion');
   });
+
+  it('fills missing sub-keys inside a partially translated KALO_ namespace', () => {
+    const result = applyKaloFallback(
+      { de: { KALO_NAV: { ORDERS: 'Bestellungen' } } },
+      { KALO_NAV: { ORDERS: 'Đơn hàng', REPORTS: 'Báo cáo' } }
+    );
+    expect(result.de.KALO_NAV).toEqual({
+      ORDERS: 'Bestellungen',
+      REPORTS: 'Báo cáo',
+    });
+  });
 });

@@ -24,19 +24,29 @@ export const applyLocaleOverrides = (messages, overrides) =>
     { ...messages }
   );
 
-// Kalo strings are written in Vietnamese only. Every other locale gets them as
-// a fallback (top-level KALO_* namespaces it does not define yet), so a user or
+// Adds the keys of `source` that `target` does not have, at any depth. Existing values always win.
+const fillMissing = (target, source) =>
+  Object.entries(source).reduce(
+    (merged, [key, value]) => {
+      if (!(key in merged)) return { ...merged, [key]: value };
+      return isObject(merged[key]) && isObject(value)
+        ? { ...merged, [key]: fillMissing(merged[key], value) }
+        : merged;
+    },
+    { ...target }
+  );
+
+// Kalo strings are written in Vietnamese only. Every other locale gets them as a
+// fallback (any KALO_* key or sub-key it does not define yet), so a user or
 // installation that is not on `vi` never sees raw KALO_* keys.
 export const applyKaloFallback = (messages, source) => {
-  const kaloKeys = Object.keys(source).filter(key => key.startsWith('KALO_'));
+  const kalo = Object.fromEntries(
+    Object.entries(source).filter(([key]) => key.startsWith('KALO_'))
+  );
   return Object.fromEntries(
     Object.entries(messages).map(([locale, localeMessages]) => [
       locale,
-      kaloKeys.reduce(
-        (merged, key) =>
-          key in merged ? merged : { ...merged, [key]: source[key] },
-        localeMessages
-      ),
+      fillMissing(localeMessages, kalo),
     ])
   );
 };
