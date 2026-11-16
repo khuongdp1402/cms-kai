@@ -1899,7 +1899,8 @@
       "SHIPPING": "Phí giao",
       "TOTAL": "Tổng",
       "SEND_QR": "Gửi mã QR",
-      "SENDING": "Đang gửi…"
+      "SENDING": "Đang gửi…",
+      "UNAVAILABLE": "Không tải được đơn"
     },
     "ACTIONS": {
       "CREATE_ORDER": "Tạo đơn",

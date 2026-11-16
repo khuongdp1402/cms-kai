@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
@@ -13,6 +13,7 @@ const props = defineProps({
   contactId: { type: Number, default: null },
   // Conversation display_id, as used by the dashboard routes.
   conversationId: { type: Number, required: true },
+  isReplyRestricted: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
@@ -22,6 +23,9 @@ const showForm = ref(false);
 const createdOrder = ref(null);
 const qrOptions = ref(null);
 const isSending = ref(false);
+const isPicking = ref(false);
+const dialogEl = ref(null);
+let opener = null;
 
 const sendQr = async orderId => {
   if (isSending.value) return false;
@@ -41,16 +45,51 @@ const sendQr = async orderId => {
   }
 };
 
+const focusDialog = async () => {
+  await nextTick();
+  dialogEl.value?.focus();
+};
+
+const openForm = () => {
+  if (!props.contactId) return;
+  opener = document.activeElement;
+  showForm.value = true;
+  focusDialog();
+};
+
+const closeDialogs = () => {
+  const wasOpen = showForm.value || createdOrder.value || qrOptions.value;
+  showForm.value = false;
+  createdOrder.value = null;
+  qrOptions.value = null;
+  if (wasOpen) opener?.focus?.();
+};
+
+const onKeydown = event => {
+  if (event.key === 'Escape') closeDialogs();
+};
+onMounted(() => document.addEventListener('keydown', onKeydown));
+onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
+
 const onCreated = order => {
   showForm.value = false;
-  if (order.payment_method === 'transfer_qr') createdOrder.value = order;
+  if (order.payment_method === 'transfer_qr') {
+    createdOrder.value = order;
+    focusDialog();
+  } else {
+    opener?.focus?.();
+  }
 };
 
 const sendCreatedQr = async () => {
-  if (await sendQr(createdOrder.value.id)) createdOrder.value = null;
+  if (await sendQr(createdOrder.value.id)) closeDialogs();
 };
 
 const pickQr = async () => {
+  // Without a contact the filter is dropped and every pending order of the shop would be listed.
+  if (!props.contactId || isPicking.value) return;
+  opener = document.activeElement;
+  isPicking.value = true;
   try {
     const { data } = await OrdersAPI.get({
       status: 'pending_payment',
@@ -63,15 +102,20 @@ const pickQr = async () => {
       await sendQr(payable[0].id);
     } else {
       qrOptions.value = payable;
+      focusDialog();
     }
   } catch (error) {
     useAlert(t(kchatErrorKey(error)));
+  } finally {
+    isPicking.value = false;
   }
 };
 
 const chooseQr = async order => {
-  if (await sendQr(order.id)) qrOptions.value = null;
+  if (await sendQr(order.id)) closeDialogs();
 };
+
+defineExpose({ openForm, pickQr });
 
 const buttonClass =
   'inline-flex items-center gap-1.5 px-2 py-1 text-sm font-medium rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12';
@@ -82,12 +126,15 @@ const dialogClass =
 </script>
 
 <template>
-  <div class="flex items-center gap-1 px-4 pb-1">
+  <div
+    v-if="contactId && !isReplyRestricted"
+    class="flex items-center gap-1 px-4 pb-1"
+  >
     <button
       type="button"
       data-test="create-order"
       :class="buttonClass"
-      @click="showForm = true"
+      @click="openForm"
     >
       <KaloIcon name="bag" class="size-4" />
       {{ t('KALO_CHAT.ACTIONS.CREATE_ORDER') }}
@@ -103,13 +150,20 @@ const dialogClass =
     </button>
 
     <Teleport to="body">
-      <div v-if="showForm" :class="overlayClass" @click.self="showForm = false">
-        <div role="dialog" aria-modal="true" :class="dialogClass">
+      <div v-if="showForm" :class="overlayClass" @click.self="closeDialogs">
+        <div
+          ref="dialogEl"
+          role="dialog"
+          aria-modal="true"
+          tabindex="-1"
+          :aria-label="t('KALO_ORDERS.FORM.TITLE')"
+          :class="dialogClass"
+        >
           <OrderForm
             :contact-id="contactId"
             :conversation-id="conversationId"
             @created="onCreated"
-            @cancel="showForm = false"
+            @cancel="closeDialogs"
           />
         </div>
       </div>
@@ -117,15 +171,21 @@ const dialogClass =
       <div
         v-if="createdOrder"
         :class="overlayClass"
-        @click.self="createdOrder = null"
+        @click.self="closeDialogs"
       >
         <div
+          ref="dialogEl"
           role="dialog"
           aria-modal="true"
+          tabindex="-1"
+          aria-labelledby="kalo-created-title"
           data-test="created-dialog"
           :class="dialogClass"
         >
-          <h2 class="text-lg font-extrabold text-n-slate-12">
+          <h2
+            id="kalo-created-title"
+            class="text-lg font-extrabold text-n-slate-12"
+          >
             {{ t('KALO_CHAT.CREATED.TITLE', { number: createdOrder.number }) }}
           </h2>
           <p class="text-sm text-n-slate-11">
@@ -144,7 +204,7 @@ const dialogClass =
             <button
               type="button"
               class="px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2"
-              @click="createdOrder = null"
+              @click="closeDialogs"
             >
               {{ t('KALO_CHAT.CREATED.LATER') }}
             </button>
@@ -155,15 +215,18 @@ const dialogClass =
       <div
         v-if="qrOptions"
         :class="overlayClass"
-        @click.self="qrOptions = null"
+        @click.self="closeDialogs"
       >
         <div
+          ref="dialogEl"
           role="dialog"
           aria-modal="true"
+          tabindex="-1"
+          aria-labelledby="kalo-qr-title"
           data-test="qr-picker"
           :class="dialogClass"
         >
-          <h2 class="text-lg font-extrabold text-n-slate-12">
+          <h2 id="kalo-qr-title" class="text-lg font-extrabold text-n-slate-12">
             {{ t('KALO_CHAT.QR_PICKER.TITLE') }}
           </h2>
           <p
@@ -190,7 +253,7 @@ const dialogClass =
           <button
             type="button"
             class="self-end text-sm font-medium text-n-slate-11 hover:text-n-slate-12"
-            @click="qrOptions = null"
+            @click="closeDialogs"
           >
             {{ t('KALO_CHAT.ACTIONS.CLOSE') }}
           </button>

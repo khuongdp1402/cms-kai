@@ -1260,6 +1260,9 @@ export default {
   <KaloAiSuggestions
     :messages="currentChat.messages"
     :is-private="isOnPrivateNote"
+    :is-reply-restricted="isReplyRestricted"
+    :conversation-id="currentChat.id"
+    :contact-id="currentChat.meta?.sender?.id"
     @select="message = $event"
   />
   <div ref="replyEditor" class="reply-box" :class="replyBoxClass">
@@ -1404,6 +1407,7 @@ export default {
       v-if="!isOnPrivateNote && !copilot.isActive.value"
       :contact-id="currentChat.meta?.sender?.id"
       :conversation-id="currentChat.id"
+      :is-reply-restricted="isReplyRestricted"
     />
 
     <Transition

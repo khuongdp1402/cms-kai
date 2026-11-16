@@ -14,6 +14,7 @@ const { t } = useI18n();
 
 const orders = ref([]);
 const meta = ref({});
+const failed = ref(false);
 let requestId = 0;
 
 const recent = computed(() => orders.value.slice(0, RECENT_LIMIT));
@@ -23,6 +24,7 @@ const load = async contactId => {
   const mine = requestId;
   orders.value = [];
   meta.value = {};
+  failed.value = false;
   if (!contactId) return;
   try {
     const { data } = await OrdersAPI.get({ contactId });
@@ -30,7 +32,8 @@ const load = async contactId => {
     orders.value = data.payload;
     meta.value = data.meta;
   } catch {
-    // The blocks simply stay empty when orders cannot be loaded (e.g. expired plan).
+    // Hide the blocks instead of showing a misleading "0 orders / 0đ".
+    if (mine === requestId) failed.value = true;
   }
 };
 
@@ -38,7 +41,7 @@ watch(() => props.contactId, load, { immediate: true });
 </script>
 
 <template>
-  <div class="flex flex-col gap-3 px-2 py-3 text-n-slate-12">
+  <div v-if="!failed" class="flex flex-col gap-3 px-2 py-3 text-n-slate-12">
     <section>
       <h3 class="mb-2 text-sm font-semibold">
         {{ t('KALO_CHAT.PANEL.PURCHASE') }}

@@ -83,4 +83,14 @@ describe('KaloContactOrders', () => {
     expect(wrapper.text()).toContain('#2222');
     expect(wrapper.text()).not.toContain('#1111');
   });
+
+  it('hides the whole block when orders cannot be loaded (403)', async () => {
+    OrdersAPI.get.mockRejectedValue(
+      Object.assign(new Error('403'), { response: { status: 403 } })
+    );
+    const wrapper = mountIt();
+    await flushPromises();
+    expect(wrapper.find('[data-test="purchase-summary"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="recent-empty"]').exists()).toBe(false);
+  });
 });

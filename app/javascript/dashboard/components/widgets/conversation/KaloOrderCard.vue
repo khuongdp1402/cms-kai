@@ -19,6 +19,7 @@ const { t } = useI18n();
 const store = useStore();
 
 const isSending = ref(false);
+const loadFailed = ref(false);
 const order = computed(() =>
   store.getters['kchatOrders/getOrderById'](props.orderId)
 );
@@ -58,14 +59,27 @@ const sendQr = async () => {
   }
 };
 
-onMounted(() => {
-  if (!order.value) store.dispatch('kchatOrders/fetchOne', props.orderId);
+onMounted(async () => {
+  if (order.value) return;
+  try {
+    await store.dispatch('kchatOrders/fetchOne', props.orderId);
+  } catch {
+    // Deleted, foreign or expired order: show a quiet note instead of an error.
+    loadFailed.value = true;
+  }
 });
 </script>
 
 <template>
+  <p
+    v-if="!order && loadFailed"
+    data-test="order-card-unavailable"
+    class="text-xs text-n-slate-11"
+  >
+    {{ t('KALO_CHAT.CARD.UNAVAILABLE') }}
+  </p>
   <div
-    v-if="order"
+    v-else-if="order"
     data-test="order-card"
     class="flex flex-col w-full max-w-sm gap-2 p-3 border rounded-xl border-n-weak bg-n-solid-1 text-n-slate-12"
   >

@@ -3,10 +3,19 @@ import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import {
+  cacheKey,
+  cacheReply,
+  cacheSilent,
+  getCachedSuggestion,
+} from './kaloSuggestionCache';
 
 const props = defineProps({
   messages: { type: Array, default: () => [] },
   isPrivate: { type: Boolean, default: false },
+  isReplyRestricted: { type: Boolean, default: false },
+  conversationId: { type: Number, required: true },
+  contactId: { type: Number, default: null },
 });
 const emit = defineEmits(['select']);
 
@@ -41,6 +50,10 @@ const toHistory = () =>
       content: m.content,
     }));
 
+const canSuggest = computed(
+  () => !props.isPrivate && !props.isReplyRestricted && !!props.contactId
+);
+
 let requestedFor = null;
 
 const load = async message => {
@@ -49,22 +62,30 @@ const load = async message => {
   suggestions.value = [];
   requestedFor = message?.id ?? null;
   if (!message) return;
+  const key = cacheKey(props.conversationId, message.id);
+  const cached = getCachedSuggestion(key);
+  if (cached) {
+    if (cached.reply) suggestions.value = [cached.reply];
+    return;
+  }
   try {
     const { data } = await brandGrowthAPI.chatReply({
       message: message.content,
       history: toHistory(),
     });
+    if (data.reply) cacheReply(key, data.reply);
     if (mine === requestId && data.reply) suggestions.value = [data.reply];
   } catch {
     // 503 ai_not_configured and 403 subscription_expired: stay silent, the strip just stays hidden.
+    cacheSilent(key);
   }
 };
 
 // Re-request only when a different incoming message arrives (never for private notes).
 watch(
-  [() => triggerMessage.value?.id, () => props.isPrivate],
+  [() => triggerMessage.value?.id, () => canSuggest.value],
   () => {
-    if (props.isPrivate) return;
+    if (!canSuggest.value) return;
     const message = triggerMessage.value;
     if ((message?.id ?? null) !== requestedFor) load(message);
   },
@@ -72,7 +93,7 @@ watch(
 );
 
 const isVisible = computed(
-  () => !props.isPrivate && triggerMessage.value && suggestions.value.length
+  () => canSuggest.value && triggerMessage.value && suggestions.value.length
 );
 </script>
 

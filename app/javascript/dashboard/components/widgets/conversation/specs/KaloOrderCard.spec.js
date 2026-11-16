@@ -114,4 +114,15 @@ describe('KaloOrderCard', () => {
     );
     expect(cod.find('[data-test="send-qr"]').exists()).toBe(false);
   });
+
+  it('stays quiet when the order cannot be loaded', async () => {
+    const fetchOne = vi.fn(() => Promise.reject(new Error('404')));
+    const wrapper = mountCard(buildStore({ fetchOne }), { orderId: 9 });
+    await flushPromises();
+    expect(wrapper.find('[data-test="send-qr"]').exists()).toBe(false);
+    expect(wrapper.find('[data-test="order-card-unavailable"]').text()).toBe(
+      viMessages.KALO_CHAT.CARD.UNAVAILABLE
+    );
+    expect(alertMock).not.toHaveBeenCalled();
+  });
 });

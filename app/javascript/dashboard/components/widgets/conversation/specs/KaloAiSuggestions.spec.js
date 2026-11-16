@@ -3,6 +3,7 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloAiSuggestions from '../KaloAiSuggestions.vue';
+import { clearSuggestionCache } from '../kaloSuggestionCache';
 
 const alertMock = vi.hoisted(() => vi.fn());
 vi.mock('dashboard/composables', () => ({ useAlert: alertMock }));
@@ -26,7 +27,7 @@ const outgoing = (content, extra) => msg(1, content, extra);
 
 const mountIt = (messages, props = {}) =>
   mount(KaloAiSuggestions, {
-    props: { messages, ...props },
+    props: { messages, conversationId: 12, contactId: 5, ...props },
     global: {
       plugins: [
         createI18n({
@@ -41,6 +42,7 @@ const mountIt = (messages, props = {}) =>
 describe('KaloAiSuggestions', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearSuggestionCache();
     brandGrowthAPI.chatReply.mockResolvedValue({
       data: { reply: 'Dạ em lên đơn rồi ạ', guardrail_triggered: false },
     });
@@ -144,5 +146,53 @@ describe('KaloAiSuggestions', () => {
     expect(wrapper.find('[data-test="ai-suggestions"]').exists()).toBe(true);
     await wrapper.setProps({ messages: [first, outgoing('Dạ')] });
     expect(wrapper.find('[data-test="ai-suggestions"]').exists()).toBe(false);
+  });
+
+  it('does not call the API again when remounted with the same last incoming message', async () => {
+    const messages = [incoming('Alo')];
+    const first = mountIt(messages);
+    await flushPromises();
+    first.unmount();
+    const second = mountIt(messages);
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(1);
+    expect(second.text()).toContain('Dạ em lên đơn rồi ạ');
+  });
+
+  it('calls again for a new incoming message and keys the cache per conversation', async () => {
+    const messages = [incoming('Alo')];
+    mountIt(messages);
+    await flushPromises();
+    mountIt([...messages, outgoing('Dạ'), incoming('Còn không?')]);
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(2);
+    mountIt(messages, { conversationId: 13 });
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(3);
+  });
+
+  it('remembers a 503 for a minute so a disabled AI is not retried on every switch', async () => {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    brandGrowthAPI.chatReply.mockRejectedValue({
+      response: { status: 503, data: { error: 'ai_not_configured' } },
+    });
+    const messages = [incoming('Alo')];
+    mountIt(messages);
+    await flushPromises();
+    mountIt(messages);
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(1);
+    vi.setSystemTime(Date.now() + 61000);
+    mountIt(messages);
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(2);
+    vi.useRealTimers();
+  });
+
+  it('does not call when the channel is restricted or the conversation has no contact', async () => {
+    mountIt([incoming('Alo')], { isReplyRestricted: true });
+    mountIt([incoming('Alo')], { contactId: null });
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).not.toHaveBeenCalled();
   });
 });

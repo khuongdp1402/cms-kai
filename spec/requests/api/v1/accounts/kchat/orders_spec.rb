@@ -53,6 +53,12 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(response.body).not_to include('1001')
     end
 
+    it 'returns 404 for a non-numeric contact_id' do
+      make_order
+      get base, params: { contact_id: 'abc' }, headers: headers, as: :json
+      expect(response).to have_http_status(:not_found)
+    end
+
     it 'paid_total counts paid, shipping and completed but not pending or cancelled' do
       paid = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'A', unit_price: 1000, quantity: 1 }])
       shipping = make_order(extra: { payment_method: 'cash' }, items: [{ name: 'B', unit_price: 2000, quantity: 1 }])

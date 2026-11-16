@@ -16,14 +16,15 @@ const OrderFormStub = {
   template: '<div data-test="order-form" />',
 };
 
-const mountIt = ({ sendQr = vi.fn() } = {}) => {
+const mountIt = ({ sendQr = vi.fn(), props = {} } = {}) => {
   const store = createStore({
     modules: {
       kchatOrders: { namespaced: true, actions: { sendQr } },
     },
   });
   const wrapper = mount(KaloComposerActions, {
-    props: { contactId: 7, conversationId: 12 },
+    props: { contactId: 7, conversationId: 12, ...props },
+    attachTo: document.body,
     global: {
       plugins: [
         store,
@@ -121,5 +122,135 @@ describe('KaloComposerActions', () => {
     await wrapper.find('[data-test="pick-qr"]').trigger('click');
     await flushPromises();
     expect(wrapper.find('[data-test="qr-empty"]').exists()).toBe(true);
+  });
+
+  it('renders nothing without a contact or on a restricted channel', () => {
+    const noContact = mountIt({ props: { contactId: null } }).wrapper;
+    expect(noContact.find('[data-test="create-order"]').exists()).toBe(false);
+    expect(noContact.find('[data-test="pick-qr"]').exists()).toBe(false);
+    const restricted = mountIt({ props: { isReplyRestricted: true } }).wrapper;
+    expect(restricted.find('[data-test="create-order"]').exists()).toBe(false);
+    expect(restricted.find('[data-test="pick-qr"]').exists()).toBe(false);
+  });
+
+  it('never queries orders or opens the form without a contact id', async () => {
+    const { wrapper } = mountIt();
+    await wrapper.setProps({ contactId: undefined });
+    await wrapper.vm.pickQr();
+    wrapper.vm.openForm();
+    await flushPromises();
+    expect(OrdersAPI.get).not.toHaveBeenCalled();
+    expect(wrapper.find('[data-test="order-form"]').exists()).toBe(false);
+  });
+
+  it('ignores a second click on Mã QR while the lookup is in flight', async () => {
+    let resolve;
+    OrdersAPI.get.mockReturnValue(
+      new Promise(r => {
+        resolve = r;
+      })
+    );
+    const { wrapper } = mountIt();
+    await wrapper.find('[data-test="pick-qr"]').trigger('click');
+    await wrapper.find('[data-test="pick-qr"]').trigger('click');
+    expect(OrdersAPI.get).toHaveBeenCalledTimes(1);
+    resolve({
+      data: {
+        payload: [makeOrder({ id: 2 }), makeOrder({ id: 3, number: 1043 })],
+        meta: {},
+      },
+    });
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="qr-picker"]')).toHaveLength(1);
+  });
+
+  it.each([
+    'order_not_payable',
+    'conversation_contact_mismatch',
+    'payment_settings_missing',
+  ])('maps the %s error of send_qr to a friendly alert', async code => {
+    OrdersAPI.get.mockResolvedValue({
+      data: { payload: [makeOrder({ id: 3 })], meta: {} },
+    });
+    const sendQr = vi.fn(() =>
+      Promise.reject(
+        Object.assign(new Error('422'), { response: { data: { error: code } } })
+      )
+    );
+    const { wrapper } = mountIt({ sendQr });
+    await wrapper.find('[data-test="pick-qr"]').trigger('click');
+    await flushPromises();
+    expect(alertMock).toHaveBeenCalledWith(
+      viMessages.KALO_ORDERS.ERRORS[code.toUpperCase()]
+    );
+  });
+
+  describe('dialog accessibility', () => {
+    const escape = () =>
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+    it('form dialog: focus moves in, Escape closes and focus returns to the trigger', async () => {
+      const { wrapper } = mountIt();
+      const trigger = wrapper.find('[data-test="create-order"]').element;
+      trigger.focus();
+      await wrapper.find('[data-test="create-order"]').trigger('click');
+      await flushPromises();
+      const dialog = wrapper.find('[role="dialog"]');
+      expect(dialog.attributes('aria-modal')).toBe('true');
+      expect(dialog.attributes('aria-label')).toBe(
+        viMessages.KALO_ORDERS.FORM.TITLE
+      );
+      expect(dialog.element.contains(document.activeElement)).toBe(true);
+      escape();
+      await flushPromises();
+      expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('OrderForm cancel closes the dialog', async () => {
+      const { wrapper } = mountIt();
+      await wrapper.find('[data-test="create-order"]').trigger('click');
+      wrapper.findComponent(OrderFormStub).vm.$emit('cancel');
+      await flushPromises();
+      expect(wrapper.find('[role="dialog"]').exists()).toBe(false);
+    });
+
+    it('picker dialog is labelled, closes on Escape and restores focus', async () => {
+      OrdersAPI.get.mockResolvedValue({
+        data: {
+          payload: [makeOrder({ id: 2 }), makeOrder({ id: 3, number: 1043 })],
+          meta: {},
+        },
+      });
+      const { wrapper } = mountIt();
+      const trigger = wrapper.find('[data-test="pick-qr"]').element;
+      trigger.focus();
+      await wrapper.find('[data-test="pick-qr"]').trigger('click');
+      await flushPromises();
+      const dialog = wrapper.find('[data-test="qr-picker"]');
+      const title = dialog.find(`#${dialog.attributes('aria-labelledby')}`);
+      expect(title.text()).toBe(viMessages.KALO_CHAT.QR_PICKER.TITLE);
+      expect(dialog.element.contains(document.activeElement)).toBe(true);
+      escape();
+      await flushPromises();
+      expect(wrapper.find('[data-test="qr-picker"]').exists()).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
+
+    it('created dialog closes on Escape and restores focus to the Tạo đơn button', async () => {
+      const { wrapper } = mountIt();
+      const trigger = wrapper.find('[data-test="create-order"]').element;
+      trigger.focus();
+      await wrapper.find('[data-test="create-order"]').trigger('click');
+      wrapper.findComponent(OrderFormStub).vm.$emit('created', makeOrder());
+      await flushPromises();
+      const dialog = wrapper.find('[data-test="created-dialog"]');
+      expect(dialog.attributes('aria-labelledby')).toBeTruthy();
+      expect(dialog.element.contains(document.activeElement)).toBe(true);
+      escape();
+      await flushPromises();
+      expect(wrapper.find('[data-test="created-dialog"]').exists()).toBe(false);
+      expect(document.activeElement).toBe(trigger);
+    });
   });
 });
