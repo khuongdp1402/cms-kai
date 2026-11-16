@@ -42,4 +42,20 @@ describe('Kalo console routes', () => {
     await validateAuthenticateRoutePermission(to, next);
     expect(next).toHaveBeenCalledWith();
   });
+
+  it('redirects /app/console to the overview', () => {
+    const parent = router.getRoutes().find(r => r.path === '/app/console');
+    expect(parent.redirect).toEqual({ name: 'kalo_console_overview' });
+  });
+
+  it.each(CONSOLE_ROUTES)(
+    'redirects %s when the user is not loaded yet',
+    async name => {
+      store.getters.getCurrentUser = {};
+      const to = router.resolve({ name });
+      const next = vi.fn();
+      await validateAuthenticateRoutePermission(to, next);
+      expect(next).toHaveBeenCalledWith('/app/');
+    }
+  );
 });

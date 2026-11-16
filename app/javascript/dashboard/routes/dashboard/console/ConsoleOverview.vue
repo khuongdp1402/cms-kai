@@ -21,6 +21,13 @@ const STATUS = {
   unmatched: { tone: 'warn', label: 'UNMATCHED' },
 };
 
+const statusOf = status => ({
+  tone: STATUS[status]?.tone ?? 'gray',
+  text: STATUS[status]
+    ? t(`KALO_CONSOLE.PAYMENTS.STATUS.${STATUS[status].label}`)
+    : status,
+});
+
 // Tailwind-only bar widths in twelfths (no inline styles).
 const WIDTHS = [
   'w-0',
@@ -81,7 +88,11 @@ onMounted(load);
       </button>
     </div>
 
-    <template v-else-if="data">
+    <p v-else-if="!data" class="text-sm text-console-muted">
+      {{ t('KALO_CONSOLE.COMMON.LOADING') }}
+    </p>
+
+    <template v-else>
       <div class="grid grid-cols-2 gap-4 lg:grid-cols-5">
         <div
           v-for="kpi in kpis"
@@ -131,12 +142,8 @@ onMounted(load);
                 </span>
               </div>
               <b>{{ formatMoney(payment.amount) }}</b>
-              <ConsoleChip :tone="STATUS[payment.status].tone">
-                {{
-                  t(
-                    `KALO_CONSOLE.PAYMENTS.STATUS.${STATUS[payment.status].label}`
-                  )
-                }}
+              <ConsoleChip :tone="statusOf(payment.status).tone">
+                {{ statusOf(payment.status).text }}
               </ConsoleChip>
             </li>
           </ul>

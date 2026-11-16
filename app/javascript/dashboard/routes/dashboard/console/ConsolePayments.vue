@@ -16,6 +16,13 @@ const STATUS = {
   unmatched: { tone: 'warn', label: 'UNMATCHED' },
 };
 
+const statusOf = status => ({
+  tone: STATUS[status]?.tone ?? 'gray',
+  text: STATUS[status]
+    ? t(`KALO_CONSOLE.PAYMENTS.STATUS.${STATUS[status].label}`)
+    : status,
+});
+
 const events = ref([]);
 const meta = ref({ count: 0, current_page: 1, per_page: 25 });
 const failed = ref(false);
@@ -24,6 +31,7 @@ const assigning = ref(null);
 const search = ref('');
 const options = ref([]);
 const selected = ref(null);
+const searched = ref(false);
 const busy = ref(false);
 
 const load = async (page = 1) => {
@@ -42,11 +50,20 @@ const openAssign = event => {
   search.value = '';
   options.value = [];
   selected.value = null;
+  searched.value = false;
 };
 
 const searchAccounts = async () => {
-  const { data } = await consoleAPI.accounts({ query: search.value, page: 1 });
-  options.value = data.payload;
+  try {
+    const { data } = await consoleAPI.accounts({
+      query: search.value,
+      page: 1,
+    });
+    options.value = data.payload;
+    searched.value = true;
+  } catch {
+    useAlert(t('KALO_CONSOLE.PAYMENTS.SEARCH_ERROR'));
+  }
 };
 
 const assign = async event => {
@@ -61,8 +78,14 @@ const assign = async event => {
     events.value.splice(index, 1, data);
     assigning.value = null;
     useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_DONE'));
-  } catch {
-    useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_ERROR'));
+  } catch (error) {
+    if ([404, 422].includes(error.response?.status)) {
+      assigning.value = null;
+      useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_GONE'));
+      await load(meta.value.current_page);
+    } else {
+      useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_ERROR'));
+    }
   } finally {
     busy.value = false;
   }
@@ -130,12 +153,8 @@ onMounted(() => load(1));
               </td>
               <td class="px-4 py-3">{{ formatTime(event.received_at) }}</td>
               <td class="px-4 py-3">
-                <ConsoleChip :tone="STATUS[event.status].tone">
-                  {{
-                    t(
-                      `KALO_CONSOLE.PAYMENTS.STATUS.${STATUS[event.status].label}`
-                    )
-                  }}
+                <ConsoleChip :tone="statusOf(event.status).tone">
+                  {{ statusOf(event.status).text }}
                 </ConsoleChip>
                 <p
                   v-if="event.status === 'underpaid'"
@@ -176,6 +195,12 @@ onMounted(() => load(1));
                     {{ t('KALO_CONSOLE.COMMON.SEARCH') }}
                   </button>
                 </form>
+                <p
+                  v-if="searched && !options.length"
+                  class="mt-2 text-sm text-console-muted"
+                >
+                  {{ t('KALO_CONSOLE.PAYMENTS.ASSIGN_EMPTY') }}
+                </p>
                 <ul class="flex flex-wrap gap-2 mt-2">
                   <li v-for="account in options" :key="account.id">
                     <button

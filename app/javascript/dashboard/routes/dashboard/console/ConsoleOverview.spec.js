@@ -49,7 +49,9 @@ const mountPage = () =>
   });
 
 describe('ConsoleOverview', () => {
-  beforeEach(() => consoleAPI.overview.mockResolvedValue({ data: overview }));
+  beforeEach(() => {
+    consoleAPI.overview.mockResolvedValue({ data: overview });
+  });
 
   it('shows five KPI numbers from /overview', async () => {
     const wrapper = mountPage();
@@ -82,5 +84,29 @@ describe('ConsoleOverview', () => {
     expect(plans).toHaveLength(3);
     expect(plans[0]).toContain('71');
     expect(plans[2]).toContain('11');
+  });
+
+  it('shows a loading state until data arrives', async () => {
+    consoleAPI.overview.mockReturnValue(new Promise(() => {}));
+    const wrapper = mountPage();
+    await flushPromises();
+    expect(wrapper.text()).toContain('Đang tải');
+    expect(wrapper.findAll('[data-testid="kpi"]')).toHaveLength(0);
+  });
+
+  it('does not throw on an unknown payment status', async () => {
+    consoleAPI.overview.mockResolvedValue({
+      data: {
+        ...overview,
+        recent_payments: [
+          { ...overview.recent_payments[0], status: 'refunded' },
+        ],
+      },
+    });
+    const wrapper = mountPage();
+    await flushPromises();
+    const chip = wrapper.find('[data-testid="status-chip"]');
+    expect(chip.text()).toBe('refunded');
+    expect(chip.classes()).toContain('bg-n-slate-3');
   });
 });

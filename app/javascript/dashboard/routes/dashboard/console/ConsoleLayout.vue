@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
+import Auth from 'dashboard/api/auth';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 
 const { t } = useI18n();
@@ -34,6 +35,21 @@ const ITEMS = [
         <KaloIcon :name="item.icon" class="size-5" />
         {{ t(`KALO_CONSOLE.NAV.${item.label}`) }}
       </RouterLink>
+      <div class="flex-1" />
+      <a
+        data-testid="back-to-app"
+        href="/app/"
+        class="flex items-center gap-2.5 px-3 py-2 font-medium rounded-xl hover:bg-console-accent/60"
+      >
+        {{ t('KALO_CONSOLE.NAV.BACK_TO_APP') }}
+      </a>
+      <button
+        data-testid="console-logout"
+        class="flex items-center gap-2.5 px-3 py-2 font-medium text-left rounded-xl hover:bg-console-accent/60"
+        @click="Auth.logout()"
+      >
+        {{ t('KALO_CONSOLE.NAV.LOGOUT') }}
+      </button>
     </aside>
     <main class="flex-1 min-w-0 overflow-auto">
       <RouterView />

@@ -10,6 +10,7 @@ export const routes = [
   {
     path: frontendURL('console'),
     component: ConsoleLayout,
+    redirect: { name: 'kalo_console_overview' },
     meta,
     children: [
       {

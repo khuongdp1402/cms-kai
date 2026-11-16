@@ -1,6 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
+import { useAlert } from 'dashboard/composables';
 import consoleAPI from 'dashboard/api/kchat/console';
 import ConsoleShops from './ConsoleShops.vue';
 
@@ -148,4 +149,18 @@ describe('ConsoleShops', () => {
       extend_days: 30,
     });
   });
+
+  it.each([404, 422])(
+    'on %s PATCH shows a message and reloads',
+    async status => {
+      consoleAPI.updateAccount.mockRejectedValue({ response: { status } });
+      const wrapper = mountPage();
+      await flushPromises();
+      await byText(wrapper, 'button', 'Khóa shop').trigger('click');
+      await wrapper.find('[data-testid="confirm-lock"]').trigger('click');
+      await flushPromises();
+      expect(useAlert).toHaveBeenCalledWith('Không cập nhật được. Thử lại.');
+      expect(consoleAPI.accounts).toHaveBeenCalledTimes(2);
+    }
+  );
 });

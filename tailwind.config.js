@@ -41,11 +41,7 @@ const tailwindConfig = {
       fontFamily: {
         sans: ['"Be Vietnam Pro"', ...defaultSansFonts],
         inter: ['Inter', ...defaultSansFonts],
-        interDisplay: [
-          '"Plus Jakarta Sans"',
-          'InterDisplay',
-          ...defaultSansFonts,
-        ],
+        interDisplay: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
         display: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
         mono: ['"JetBrains Mono"', ...defaultTheme.fontFamily.mono],
       },

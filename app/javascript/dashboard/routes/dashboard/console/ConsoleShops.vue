@@ -84,8 +84,10 @@ const patch = async (shop, payload, doneKey) => {
     const index = shops.value.findIndex(s => s.id === shop.id);
     shops.value.splice(index, 1, data);
     useAlert(t(doneKey));
-  } catch {
+  } catch (error) {
     useAlert(t('KALO_CONSOLE.SHOPS.UPDATE_ERROR'));
+    if ([404, 422].includes(error.response?.status))
+      await load(meta.value.current_page);
   } finally {
     busy.value = null;
     confirming.value = null;
