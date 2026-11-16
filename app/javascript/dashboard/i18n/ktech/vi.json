@@ -1650,5 +1650,124 @@
       "FOLDERS": "Thư mục đã lưu",
       "NEW_CONVERSATION": "Tạo cuộc trò chuyện"
     }
+  },
+  "KALO_ORDERS": {
+    "TITLE": "Đơn hàng",
+    "OPEN_POS": "Mở POS",
+    "CREATE": "Tạo đơn",
+    "SEARCH": "Mã đơn, tên khách",
+    "LOADING": "Đang tải…",
+    "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
+    "TABS": {
+      "ALL": "Tất cả",
+      "PENDING_PAYMENT": "Chờ thanh toán",
+      "PAID": "Cần giao",
+      "SHIPPING": "Đang giao",
+      "COMPLETED": "Hoàn tất"
+    },
+    "COLUMNS": {
+      "ORDER": "Đơn",
+      "CUSTOMER": "Khách",
+      "PRODUCTS": "Sản phẩm",
+      "TOTAL": "Tổng",
+      "PAYMENT": "Thanh toán",
+      "DELIVERY": "Giao hàng"
+    },
+    "PAYMENT_CHIP": {
+      "PENDING_PAYMENT": "Chờ thanh toán",
+      "PAID": "Đã nhận tiền",
+      "CASH": "Tiền mặt",
+      "CARD": "Thẻ",
+      "COD": "Thu khi giao",
+      "CANCELLED": "Đã hủy"
+    },
+    "DELIVERY_CHIP": {
+      "NOT_SHIPPED": "Chưa giao",
+      "SHIPPING": "Đang giao",
+      "COMPLETED": "Đã giao",
+      "CANCELLED": "Đã hủy"
+    },
+    "SOURCE": {
+      "CHAT": "Tin nhắn",
+      "POS": "Tại quầy",
+      "MANUAL": "Tạo tay"
+    },
+    "WALK_IN": "Khách lẻ",
+    "ACTIONS": {
+      "SEND_QR": "Gửi QR",
+      "MARK_PAID": "Đã nhận tiền",
+      "SHIP": "Giao hàng",
+      "COMPLETE": "Hoàn tất",
+      "CANCEL": "Hủy đơn",
+      "CLOSE": "Đóng"
+    },
+    "QR_SENT": "Đã gửi mã QR cho khách",
+    "DRAWER": {
+      "ITEMS": "Sản phẩm",
+      "SUBTOTAL": "Tạm tính",
+      "SHIPPING_FEE": "Phí giao",
+      "TOTAL": "Tổng",
+      "ADDRESS": "Địa chỉ giao",
+      "CONTACT": "Khách",
+      "METHOD": "Cách trả"
+    },
+    "FORM": {
+      "TITLE": "Tạo đơn",
+      "PRODUCT": "Sản phẩm",
+      "CUSTOM_ITEM": "Hàng khác",
+      "NAME": "Tên hàng",
+      "PRICE": "Giá",
+      "QUANTITY": "Số lượng",
+      "ADD_ITEM": "Thêm hàng",
+      "REMOVE_ITEM": "Xóa",
+      "PAYMENT_METHOD": "Cách trả",
+      "METHOD_QR": "Mã QR",
+      "METHOD_COD": "Thu khi giao",
+      "ADDRESS": "Địa chỉ giao",
+      "SHIPPING_FEE": "Phí giao",
+      "TOTAL": "Tổng",
+      "SUBMIT": "Tạo đơn"
+    },
+    "ERRORS": {
+      "INSUFFICIENT_STOCK": "Không đủ hàng",
+      "INVALID_TRANSITION": "Đơn này không chuyển bước được nữa",
+      "PAYMENT_SETTINGS_MISSING": "Chưa cài đặt tài khoản nhận tiền",
+      "INVALID_AMOUNT": "Đơn 0đ không có mã QR",
+      "ORDER_NOT_PAYABLE": "Đơn này không còn chờ thanh toán",
+      "CONVERSATION_CONTACT_MISMATCH": "Cuộc trò chuyện này không thuộc khách của đơn",
+      "SUBSCRIPTION_EXPIRED": "Gói dùng thử đã hết hạn",
+      "VALIDATION_FAILED": "Thông tin chưa đúng, hãy kiểm tra lại",
+      "UNKNOWN": "Có lỗi xảy ra, thử lại sau"
+    }
+  },
+  "KALO_POS": {
+    "TITLE": "Bán tại quầy",
+    "EXIT": "Thoát POS",
+    "SEARCH": "Tìm sản phẩm",
+    "EMPTY": "Chưa có sản phẩm nào để bán.",
+    "ADD_PRODUCT": "Thêm sản phẩm",
+    "PRODUCT_FORM": {
+      "NAME": "Tên sản phẩm",
+      "PRICE": "Giá",
+      "STOCK": "Số lượng trong kho",
+      "SUBMIT": "Lưu sản phẩm"
+    },
+    "CART": {
+      "TITLE": "Đơn tại quầy",
+      "EMPTY": "Chạm sản phẩm để thêm vào đơn.",
+      "INCREASE": "Tăng",
+      "DECREASE": "Giảm",
+      "TOTAL": "Tổng",
+      "METHOD_QR": "Mã QR",
+      "METHOD_CASH": "Tiền mặt",
+      "METHOD_CARD": "Thẻ",
+      "PAY": "Thanh toán {amount}",
+      "PAID": "Đã nhận tiền",
+      "NEW_ORDER": "Đơn mới",
+      "SCAN_TO_PAY": "Khách quét mã để trả {amount}",
+      "CONFIRM_PAID": "Đã nhận tiền",
+      "QR_LOADING": "Đang tạo mã QR…",
+      "QR_ALT": "Mã QR thanh toán"
+    }
   }
 }
