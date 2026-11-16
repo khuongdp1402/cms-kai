@@ -3,6 +3,9 @@
 > **Phiên bản:** 1.0 — 2026-10-01
 > **Mục tiêu:** Xây dựng nền tảng SaaS đa kênh giao tiếp khách hàng phục vụ cá nhân kinh doanh (Seller) và doanh nghiệp, với kiến trúc Multi-tenant, White-label, AI Chatbot, Ads Campaign tích hợp và thanh toán trực tuyến.
 
+> [!IMPORTANT]
+> **Cập nhật 2026-11-17 (Kalo launch, ADR-017/018/019).** Tài liệu này là kế hoạch kinh doanh ban đầu (tên làm việc KChat, nay là **Kalo**). Phần lớn tính năng và mọi con số bên dưới là **kế hoạch / mục tiêu**, chưa phải sản phẩm đang bán. Bản Kalo launch thật sự có: hộp tin nhắn đa kênh (Chatwoot), Zalo cá nhân, Đơn hàng + POS nội bộ, mã VietQR cho đơn, gợi ý trả lời AI (cần khóa AgentGW), Báo cáo, Marketing (chiến dịch có sẵn của Chatwoot + ý tưởng nội dung), gói cước trả bằng chuyển khoản Casso (dùng thử 14 ngày), Console cho chủ nền tảng. **Chưa có:** tích hợp POS ngoài (KiotViet, Sapo, Nhanh.vn), vận chuyển GHN/GHTK, SMS Brandname, ZNS, quản lý Ads, tự thanh toán affiliate, pipeline video MMO, **giới hạn theo gói** (cơ chế `limits` của Chatwoot không có tác dụng; ADR-018/019). Bảng giá thực tế trên landing: 299.000đ / 699.000đ / 1.990.000đ mỗi tháng (khác bảng 4.1 bên dưới). Chi tiết trạng thái: [STATUS.md](STATUS.md).
+
 ---
 
 ## Mục lục
@@ -182,12 +185,14 @@ Agent (Nhân viên trực chat)
 | **Nâng/hạ gói** | Cho phép nâng cấp giữa kỳ (tính phần chênh lệch pro-rata) hoặc hạ gói khi hết kỳ |
 | **Hóa đơn & Lịch sử** | Xuất hóa đơn PDF, lịch sử giao dịch, xem trạng thái từng kỳ thanh toán |
 
-### Module 5: Chiến dịch Quảng cáo & Seeding (Ads + Seeding Engine)
+### Module 5: Chiến dịch Quảng cáo & Seeding (Ads + Seeding Engine) — *kế hoạch, chưa có backend*
 
 > [!NOTE]
 > Module này tạo nguồn doanh thu bổ sung rất lớn (Usage-based revenue) ngoài phí thuê bao.
 
 #### 5.1. Chiến dịch nội bộ (Built-in Campaigns)
+
+> *Kế hoạch.* Hiện chỉ có chiến dịch sẵn của Chatwoot (Website Ongoing, SMS qua Twilio nếu tự cấu hình). SMS Brandname và ZNS **chưa có**.
 
 | Loại | Mô tả |
 |---|---|
@@ -195,7 +200,9 @@ Agent (Nhân viên trực chat)
 | **Website Ongoing** | Popup live chat chủ động trên website theo điều kiện (thời gian trên trang, URL cụ thể) |
 | **ZNS (Zalo Notification)** | Gửi thông báo ZNS chính thức qua Zalo OA (khi kênh Zalo OA được kích hoạt) |
 
-#### 5.2. Tích hợp Ads Platform (Affiliate & API)
+#### 5.2. Tích hợp Ads Platform (Affiliate & API) — *kế hoạch, chưa có*
+
+> Chưa có tích hợp Meta/TikTok/Shopee/Zalo Ads nào trong sản phẩm.
 
 | Nền tảng | Cách tích hợp | Mô hình thu tiền |
 |---|---|---|
@@ -204,7 +211,7 @@ Agent (Nhân viên trực chat)
 | **Shopee Ads** | Tích hợp Shopee OpenAPI — Quản lý Shopee Ads (keyword, discovery ads) trong dashboard KChat | Phí cố định/tháng |
 | **Zalo Ads** | Tích hợp ZMP API — Chạy quảng cáo ZNS, Zalo Ads trực tiếp | Markup 5-10% trên giá ZNS gốc |
 
-#### 5.3. Seeding & Social Engagement
+#### 5.3. Seeding & Social Engagement — *kế hoạch, chưa có*
 
 > [!WARNING]
 > Seeding là dịch vụ nhạy cảm. KChat chỉ đóng vai trò **trung gian kết nối** với các đối tác cung cấp dịch vụ seeding tự nhiên, và **không trực tiếp cung cấp bot/tài khoản ảo**. Giao diện gọi là *"Tăng tương tác tự nhiên"* hoặc *"Hỗ trợ nội dung"*.
@@ -224,13 +231,15 @@ Agent (Nhân viên trực chat)
 | **Trang đăng ký** | Nhập email + số điện thoại → chọn gói → thanh toán → hệ thống tự tạo tài khoản & hướng dẫn kết nối kênh |
 | **Onboarding Wizard** | Hướng dẫn 4 bước sau đăng ký: (1) Đặt tên shop → (2) Kết nối kênh đầu tiên → (3) Mời nhân viên → (4) Gửi tin nhắn thử |
 | **Blog/SEO** | Bài viết hướng dẫn, case study thành công, tips bán hàng → thu hút traffic organic từ Google |
-| **Affiliate & Referral** | Người giới thiệu nhận 20-30% hoa hồng tháng đầu tiên khi khách đăng ký gói trả phí qua link affiliate |
+| **Affiliate & Referral** | *(Kế hoạch, chưa có; không có chi trả tự động.)* Người giới thiệu nhận 20-30% hoa hồng tháng đầu tiên khi khách đăng ký gói trả phí qua link affiliate |
 
 ---
 
 ## 4. Bảng Giá & Mô Hình Kiếm Tiền
 
-### 4.1. Gói thuê bao chính (SaaS Subscription)
+### 4.1. Gói thuê bao chính (SaaS Subscription) — *mục tiêu ban đầu, không phải bảng giá đang bán*
+
+> Giá và giới hạn trong bảng là **mục tiêu**. Bản launch bán 3 gói 299.000đ / 699.000đ / 1.990.000đ và **chưa áp dụng giới hạn theo gói** (số agent, kênh, AI msg, tài liệu, rule…); các dòng giới hạn, Campaign SMS/ZNS, Ads Integration, Seeding, Custom Domain, Knowledge Base chỉ là kế hoạch.
 
 > [!TIP]
 > Chiến lược: Giá rẻ hơn 30-50% so với đối thủ trực tiếp, nhưng bù lại bằng doanh thu Add-on và Usage-based.
@@ -266,7 +275,9 @@ Agent (Nhân viên trực chat)
 | Dung lượng lưu trữ (5GB) | +29.000đ |
 | Custom Domain (tên miền riêng) | +99.000đ |
 
-### 4.3. Doanh thu Usage-based (Phí theo lượng dùng)
+### 4.3. Doanh thu Usage-based (Phí theo lượng dùng) — *kế hoạch, chưa có*
+
+> Biên lợi nhuận là mục tiêu ước tính. Hiện chưa bán SMS Brandname, ZNS, Ads fee; `ai_tokens_balance` được nạp qua Casso nhưng chưa bị trừ khi dùng AI.
 
 | Nguồn thu | Cơ chế | Biên lợi nhuận ước tính |
 |---|---|---|
@@ -289,7 +300,9 @@ Agent (Nhân viên trực chat)
 
 ## 5. So Sánh Đối Thủ & Chiến Lược Giá
 
-### 5.1. Bảng so sánh giá với đối thủ
+### 5.1. Bảng so sánh giá với đối thủ — *cột KChat là mục tiêu, một số dòng chưa có thật*
+
+> Các dòng Ads Integration, Seeding Marketplace, Custom Domain, thanh toán VNPay/MoMo/Stripe, huấn luyện AI riêng chưa có trong sản phẩm. Chưa dùng bảng này để quảng bá.
 
 | Tính năng | **KChat (Starter)** | **Pancake** | **Fchat** | **Subiz** | **Haravan OmniChat** | **Sapo OmniAI** |
 |---|---|---|---|---|---|---|
@@ -328,6 +341,8 @@ Agent (Nhân viên trực chat)
 
 ### Phase B — White-label & AI Chatbot (6-8 tuần)
 
+> *Kế hoạch.* Thực tế đã có: gợi ý trả lời AI cho nhân viên (AgentGW). Chưa có Knowledge Base, AI auto-reply, tóm tắt/sentiment theo gói, feature gating theo gói (B-07), custom domain cho tenant.
+
 | ID | Module | Kết quả |
 |---|---|---|
 | B-01 | **Tenant Branding Engine** | Upload logo, chọn bảng màu, custom email template, widget branding, custom login page |
@@ -338,7 +353,7 @@ Agent (Nhân viên trực chat)
 | B-06 | **AI Summarizer + Sentiment** | Tóm tắt hội thoại dài, phân tích cảm xúc khách hàng |
 | B-07 | **Feature Gating per Plan** | Ẩn/hiện module trên giao diện theo gói cước (Starter không thấy Automation, Enterprise thấy hết) |
 
-### Phase C — Ads, Seeding & Marketplace (6-8 tuần)
+### Phase C — Ads, Seeding & Marketplace (6-8 tuần) — *chưa làm*
 
 | ID | Module | Kết quả |
 |---|---|---|
@@ -349,7 +364,7 @@ Agent (Nhân viên trực chat)
 | C-05 | **Affiliate & Referral Program** | Hệ thống link giới thiệu, tính hoa hồng tự động, dashboard affiliate cho đối tác |
 | C-06 | **ZNS & OA Campaign** | Tích hợp Zalo OA chính thức qua ZMP API, gửi ZNS có phí |
 
-### Phase D — Tối ưu & Scale (Liên tục)
+### Phase D — Tối ưu & Scale (Liên tục) — *chưa làm; D-03 (KiotViet, Sapo, Nhanh.vn) là kế hoạch, chưa có tích hợp*
 
 | ID | Module | Kết quả |
 |---|---|---|
