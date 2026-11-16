@@ -16,7 +16,7 @@
 - Kalo Console cho SuperAdmin: tổng quan, shop, giao dịch Casso.
 - Landing có video; hạ tầng production (compose, Nginx, backup, hướng dẫn `reference/deploy.md`).
 
-**Bằng chứng kiểm thử (12A, nhánh tích hợp):** rspec 6245 ví dụ, 74 lỗi **có sẵn từ upstream, không đụng tới** (loại `spec/enterprise`); vitest 426 file / 4095 test, 0 lỗi; rubocop sạch; `zeitwerk:check` ổn; landing test 7/7. **Rà soát bảo mật (12C):** Critical 0, High 0, Medium 4, Low 9, Info 8; Medium 4 và Low L-1, L-2, L-5, L-6, L-8 đã sửa có spec hồi quy (373 spec ở vòng cuối); còn lại ghi trong [reference/security-review-2026-11.md](reference/security-review-2026-11.md). **12B (khói + trình duyệt thật):** xem báo cáo QA.
+**Bằng chứng kiểm thử (12A, nhánh tích hợp):** rspec 6245 ví dụ, 74 lỗi **có sẵn từ upstream, không đụng tới** (loại `spec/enterprise`); vitest 426 file / 4095 test, 0 lỗi; rubocop sạch; `zeitwerk:check` ổn; landing test 7/7. **Rà soát bảo mật (12C):** Critical 0, High 0, Medium 4, Low 9, Info 8; Medium 4 và Low L-1, L-2, L-5, L-6, L-8 đã sửa có spec hồi quy (369 spec ở vòng cuối); còn lại ghi trong [reference/security-review-2026-11.md](reference/security-review-2026-11.md). **12B (khói + trình duyệt thật):** xem báo cáo QA.
 
 ### Mockup cũ đã bỏ (không có backend)
 
