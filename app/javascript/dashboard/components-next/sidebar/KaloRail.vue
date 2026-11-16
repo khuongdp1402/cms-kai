@@ -13,9 +13,10 @@ const emit = defineEmits([
   'showCreateAccountModal',
 ]);
 
-useSidebarKeyboardShortcuts(show =>
-  emit(show ? 'openKeyShortcutModal' : 'closeKeyShortcutModal')
-);
+useSidebarKeyboardShortcuts(show => {
+  if (show) emit('openKeyShortcutModal');
+  else emit('closeKeyShortcutModal');
+});
 
 const { t } = useI18n();
 const { items } = useKaloNav();
@@ -61,7 +62,6 @@ const { items } = useKaloNav();
     </template>
     <KaloRailFooter
       @open-key-shortcut-modal="emit('openKeyShortcutModal')"
-      @close-key-shortcut-modal="emit('closeKeyShortcutModal')"
       @show-create-account-modal="emit('showCreateAccountModal')"
     />
   </nav>

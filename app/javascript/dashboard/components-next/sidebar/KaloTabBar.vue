@@ -17,9 +17,10 @@ const emit = defineEmits([
   'showCreateAccountModal',
 ]);
 
-useSidebarKeyboardShortcuts(show =>
-  emit(show ? 'openKeyShortcutModal' : 'closeKeyShortcutModal')
-);
+useSidebarKeyboardShortcuts(show => {
+  if (show) emit('openKeyShortcutModal');
+  else emit('closeKeyShortcutModal');
+});
 
 const PRIMARY_KEYS = ['messages', 'orders', 'customers', 'reports'];
 

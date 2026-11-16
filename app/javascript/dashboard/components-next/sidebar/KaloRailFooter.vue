@@ -8,11 +8,7 @@ import SidebarNotificationBell from './SidebarNotificationBell.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import SidebarProfileMenu from './SidebarProfileMenu.vue';
 
-const emit = defineEmits([
-  'openKeyShortcutModal',
-  'closeKeyShortcutModal',
-  'showCreateAccountModal',
-]);
+const emit = defineEmits(['openKeyShortcutModal', 'showCreateAccountModal']);
 
 const { t } = useI18n();
 const router = useRouter();
