@@ -70,6 +70,12 @@ class Rack::Attack
 
   throttle('req/ip', limit: ENV.fetch('RACK_ATTACK_LIMIT', '3000').to_i, period: 1.minute, &:ip)
 
+  ### Paid AI calls (KChat brand growth): cap per account ###
+  throttle('brand_growth_ai/account', limit: ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i, period: 1.minute) do |req|
+    match = req.path_without_extensions.match(%r{\A/api/v1/accounts/(\d+)/brand_growth/(chat_reply|repurpose)\z})
+    match[1] if match && req.post?
+  end
+
   ###-----------------------------------------------###
   ###-----Authentication Related Throttling---------###
   ###-----------------------------------------------###

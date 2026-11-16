@@ -567,7 +567,21 @@ Rails.application.routes.draw do
     end
   end
 
-  if ChatwootApp.enterprise?
+  post '/api/v1/casso/webhook', to: 'api/v1/casso#webhook'
+  get '/api/v1/casso/status', to: 'api/v1/casso#status'
+  post '/api/v1/casso/simulate', to: 'api/v1/casso#simulate' if Rails.env.development?
+
+  scope '/api/v1/accounts/:account_id/brand_growth', controller: 'api/v1/accounts/brand_growth', as: 'account_brand_growth',
+                                                     defaults: { format: 'json' } do
+    get :overview
+    get :ai_health
+    post :chat_reply
+    post :save_profile
+    post :repurpose
+    post :approve_job
+  end
+
+  if ChatwootApp.enterprise? && File.exist?(Rails.root.join('enterprise/app/controllers/enterprise/api/v1/accounts_controller.rb'))
     namespace :enterprise, defaults: { format: 'json' } do
       namespace :api do
         namespace :v1 do
@@ -780,4 +794,3 @@ Rails.application.routes.draw do
   # Routes for testing
   mount ActionCable.server => '/cable'
 end
-

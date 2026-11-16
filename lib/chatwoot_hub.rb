@@ -82,7 +82,13 @@ class ChatwootHub
     model.last&.id || 0
   end
 
+  def self.telemetry_disabled?
+    ENV.fetch('DISABLE_TELEMETRY', 'true') == 'true' && ENV['ENABLE_CHATWOOT_HUB_TELEMETRY'] != 'true'
+  end
+
   def self.sync_with_hub
+    return { 'version' => Chatwoot.config[:version], 'status' => 'telemetry_disabled_white_label' } if telemetry_disabled?
+
     begin
       info = instance_config
       info = info.merge(instance_metrics) unless ENV['DISABLE_TELEMETRY']
@@ -97,6 +103,8 @@ class ChatwootHub
   end
 
   def self.register_instance(company_name, owner_name, owner_email)
+    return if telemetry_disabled?
+
     info = { company_name: company_name, owner_name: owner_name, owner_email: owner_email, subscribed_to_mailers: true }
     RestClient.post(registration_url, info.merge(instance_config).to_json, { content_type: :json, accept: :json })
   rescue *ExceptionList::REST_CLIENT_EXCEPTIONS => e
@@ -119,7 +127,7 @@ class ChatwootHub
   end
 
   def self.emit_event(event_name, event_data)
-    return if ENV['DISABLE_TELEMETRY']
+    return if telemetry_disabled?
 
     info = { event_name: event_name, event_data: event_data }
     RestClient.post(events_url, info.merge(instance_config).to_json, { content_type: :json, accept: :json })

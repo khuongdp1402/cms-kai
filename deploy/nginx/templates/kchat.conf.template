@@ -1,0 +1,89 @@
+# Rendered by the official nginx image (envsubst on /etc/nginx/templates/*.template).
+# Required env: KCHAT_DOMAIN (e.g. example.vn). Only variables present in the env are substituted,
+# so nginx runtime variables such as $host stay untouched.
+#
+#   ${KCHAT_DOMAIN}, www.${KCHAT_DOMAIN}  -> marketing site (static) + Casso webhook
+#   app.${KCHAT_DOMAIN}                   -> Rails (dashboard, API, ActionCable, widget)
+#
+# Certificates: one Let's Encrypt cert covering the three names, stored under /etc/letsencrypt/live/${KCHAT_DOMAIN}/.
+
+upstream rails_puma {
+    server rails:3000 fail_timeout=0;
+    keepalive 32;
+}
+
+map $http_upgrade $connection_upgrade {
+    default upgrade;
+    ''      close;
+}
+
+ssl_protocols TLSv1.2 TLSv1.3;
+ssl_prefer_server_ciphers off;
+ssl_session_cache shared:SSL:10m;
+ssl_session_timeout 1d;
+
+gzip on;
+gzip_vary on;
+gzip_proxied any;
+gzip_types text/plain text/css application/json application/javascript image/svg+xml;
+
+server {
+    listen 80;
+    server_name ${KCHAT_DOMAIN} www.${KCHAT_DOMAIN} app.${KCHAT_DOMAIN};
+
+    location /.well-known/acme-challenge/ { root /var/www/certbot; }
+    location / { return 301 https://$host$request_uri; }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name ${KCHAT_DOMAIN} www.${KCHAT_DOMAIN};
+
+    ssl_certificate     /etc/letsencrypt/live/${KCHAT_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${KCHAT_DOMAIN}/privkey.pem;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    location ~* (sw\.js|manifest\.json)$ { add_header Cache-Control "no-store"; }
+    location ~* \.(css|js|webp|png|jpg|svg|woff2)$ { expires 30d; access_log off; }
+
+    # Only the bank webhook and public bank info are reachable from the marketing domain.
+    location ~ ^/api/v1/casso/(webhook|status)$ {
+        proxy_pass http://rails_puma;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+    }
+
+    location / { try_files $uri $uri/ /index.html; }
+}
+
+server {
+    listen 443 ssl;
+    http2 on;
+    server_name app.${KCHAT_DOMAIN};
+
+    ssl_certificate     /etc/letsencrypt/live/${KCHAT_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${KCHAT_DOMAIN}/privkey.pem;
+
+    add_header Strict-Transport-Security "max-age=31536000" always;
+    client_max_body_size 40m;
+
+    location / {
+        proxy_pass http://rails_puma;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto https;
+        proxy_read_timeout 300s;
+    }
+}

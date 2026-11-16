@@ -4,12 +4,19 @@
 # font cors issue with CDN
 # Ref: https://stackoverflow.com/questions/56960709/rails-font-cors-policy
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
+  # Widget assets and public APIs are embedded on customers' websites, so they must stay open to any origin.
   allow do
     origins '*'
     resource '/packs/*', headers: :any, methods: [:get, :options]
     resource '/audio/*', headers: :any, methods: [:get, :options]
-    # Make the public endpoints accessible to the frontend
     resource '/public/api/*', headers: :any, methods: :any
+  end
+
+  # Authenticated APIs: only origins listed in CORS_ALLOWED_ORIGINS (comma separated) may call them cross-origin.
+  allow do
+    allowed_origins = ENV.fetch('CORS_ALLOWED_ORIGINS', '').split(',').map(&:strip).reject(&:empty?)
+    allowed_origins = ['*'] if allowed_origins.empty? && Rails.env.development?
+    origins(*allowed_origins)
 
     if ActiveModel::Type::Boolean.new.cast(ENV.fetch('CW_API_ONLY_SERVER', false)) || Rails.env.development?
       resource '*', headers: :any, methods: :any, expose: %w[access-token client uid expiry]

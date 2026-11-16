@@ -1,4 +1,6 @@
 providers:
+  agentgw:
+    display_name: 'AgentGW Cloud (Claude Opus 4.8 / GPT-5.5)'
   openai:
     display_name: 'OpenAI'
   anthropic:
@@ -7,6 +9,18 @@ providers:
     display_name: 'Gemini'
 
 models:
+  agentgw-opus-4-8:
+    provider: agentgw
+    display_name: 'AgentGW Claude Opus 4.8 (Brand Growth & Script)'
+    credit_multiplier: 2
+  agentgw-gpt-5.5:
+    provider: agentgw
+    display_name: 'AgentGW GPT-5.5 (Omnichannel Fast Chatbot)'
+    credit_multiplier: 1
+  agentgw-haiku-4-5:
+    provider: agentgw
+    display_name: 'AgentGW Claude Haiku 4.5'
+    credit_multiplier: 1
   gpt-4.1:
     provider: openai
     display_name: 'GPT-4.1'
