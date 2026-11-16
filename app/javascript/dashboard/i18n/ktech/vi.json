@@ -1586,5 +1586,56 @@
     "MULTIPLE": "{user} và {count} người khác đang soạn tin",
     "ONE": "{user} đang soạn tin",
     "TWO": "{user} và {secondUser} đang soạn tin"
+  },
+  "KALO_NAV": {
+    "MESSAGES": "Tin nhắn",
+    "ORDERS": "Đơn hàng",
+    "CUSTOMERS": "Khách",
+    "MARKETING": "Marketing",
+    "REPORTS": "Báo cáo",
+    "SETTINGS": "Cài đặt",
+    "MORE": "Thêm",
+    "MAIN_NAV": "Điều hướng chính",
+    "CLOSE": "Đóng",
+    "PAGES": {
+      "ORDERS": "Đơn hàng",
+      "POS": "Bán tại quầy",
+      "MARKETING": "Marketing",
+      "REPORTS": "Báo cáo"
+    },
+    "HUB": {
+      "TITLE": "Cài đặt",
+      "GROUPS": {
+        "SELLING": "Bán hàng và chăm khách",
+        "REPORTS": "Báo cáo cũ",
+        "CHANNELS": "Kênh và hộp thư",
+        "TEAM": "Đội ngũ",
+        "AUTOMATION": "Tự động hóa",
+        "ACCOUNT": "Tài khoản"
+      },
+      "LINKS": {
+        "CAMPAIGNS": "Chiến dịch",
+        "HELP_CENTER": "Trung tâm trợ giúp",
+        "REPORT_OVERVIEW": "Tổng quan",
+        "REPORT_CONVERSATIONS": "Hội thoại",
+        "REPORT_AGENTS": "Nhân viên",
+        "REPORT_LABELS": "Nhãn",
+        "REPORT_INBOXES": "Hộp thư",
+        "REPORT_TEAMS": "Nhóm",
+        "REPORT_CSAT": "Đánh giá khách hàng",
+        "INBOXES": "Hộp thư và kênh",
+        "INTEGRATIONS": "Tích hợp",
+        "LABELS": "Nhãn",
+        "TEAMS": "Nhóm",
+        "AGENTS": "Nhân viên",
+        "CANNED": "Mẫu câu",
+        "AUTOMATION": "Tự động trả lời",
+        "MACROS": "Thao tác nhanh",
+        "ATTRIBUTES": "Thông tin khách",
+        "PROFILE": "Hồ sơ của tôi",
+        "ACCOUNT": "Thông tin cửa hàng",
+        "BILLING": "Thanh toán"
+      }
+    }
   }
 }

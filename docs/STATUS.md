@@ -3,7 +3,7 @@
 > File sống, cập nhật sau mỗi phiên làm việc. Đọc file này **đầu tiên** trước khi bắt tay vào việc.
 > Trạng thái: `todo` · `in-progress` · `done` · `blocked` · `skipped`
 
-**Phase hiện tại (2026-11-16): K — Kalo launch** (xem `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`). Task 0 xong; đang chạy đợt 1.
+**Phase hiện tại (2026-11-16): K — Kalo launch** (xem `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`). Task 0 xong; đang chạy đợt 1. Task 7 (khung app Kalo: rail 6 mục, tab bar mobile, trang cài đặt tổng) xong trên `feat/kalo-shell`.
 **Phase trước:** Hoàn tất toàn diện Nền tảng Multi-tenant SaaS KChat (Phase A, B, C, D) — Riêng huấn luyện AI chuyên sâu bổ sung sau
 **Việc vừa hoàn thành:** 
 1. **Super Admin Toàn Diện**: 10 phân hệ nghiệp vụ độc lập (Dashboard, Analytics tăng trưởng & phễu MRR/ARR, Quản lý Tenant với Modal Cấp mới & Drawer chi tiết, Quản lý Tiếp thị liên kết Affiliate với duyệt chi VietQR Casso tức thì 24/7, Gói cước Plans, Thanh toán Billing, AI Pool Gateway & Ping Latency, Giám sát Kênh Channels, Ads & Seeding Marketplace, Cài đặt Settings).

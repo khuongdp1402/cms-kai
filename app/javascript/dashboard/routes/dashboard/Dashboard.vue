@@ -1,7 +1,8 @@
 <script>
 import { defineAsyncComponent, ref, computed } from 'vue';
 
-import NextSidebar from 'next/sidebar/Sidebar.vue';
+import KaloRail from 'next/sidebar/KaloRail.vue';
+import KaloTabBar from 'next/sidebar/KaloTabBar.vue';
 import WootKeyShortcutModal from 'dashboard/components/widgets/modal/WootKeyShortcutModal.vue';
 import AddAccountModal from 'dashboard/components/app/AddAccountModal.vue';
 import UpgradePage from 'dashboard/routes/dashboard/upgrade/UpgradePage.vue';
@@ -23,12 +24,12 @@ const FloatingCallWidget = defineAsyncComponent(
 import CopilotLauncher from 'dashboard/components-next/copilot/CopilotLauncher.vue';
 import CopilotContainer from 'dashboard/components/copilot/CopilotContainer.vue';
 
-import MobileSidebarLauncher from 'dashboard/components-next/sidebar/MobileSidebarLauncher.vue';
 import { useCallsStore } from 'dashboard/stores/calls';
 
 export default {
   components: {
-    NextSidebar,
+    KaloRail,
+    KaloTabBar,
     CommandBar,
     WootKeyShortcutModal,
     AddAccountModal,
@@ -36,7 +37,6 @@ export default {
     CopilotLauncher,
     CopilotContainer,
     FloatingCallWidget,
-    MobileSidebarLauncher,
   },
   setup() {
     const upgradePageRef = ref(null);
@@ -60,7 +60,6 @@ export default {
       showAccountModal: false,
       showCreateAccountModal: false,
       showShortcutModal: false,
-      isMobileSidebarOpen: false,
     };
   },
   computed: {
@@ -103,12 +102,6 @@ export default {
     },
   },
   methods: {
-    toggleMobileSidebar() {
-      this.isMobileSidebarOpen = !this.isMobileSidebarOpen;
-    },
-    closeMobileSidebar() {
-      this.isMobileSidebarOpen = false;
-    },
     openCreateAccountModal() {
       this.showAccountModal = false;
       this.showCreateAccountModal = true;
@@ -130,15 +123,11 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-grow overflow-hidden text-n-slate-12">
-    <NextSidebar
-      :is-mobile-sidebar-open="isMobileSidebarOpen"
-      @toggle-account-modal="toggleAccountModal"
-      @open-key-shortcut-modal="toggleKeyShortcutModal"
-      @close-key-shortcut-modal="closeKeyShortcutModal"
-      @show-create-account-modal="openCreateAccountModal"
-      @close-mobile-sidebar="closeMobileSidebar"
-    />
+  <div
+    class="flex flex-grow overflow-hidden text-n-slate-12"
+    :class="{ 'flex-col': isSmallScreen }"
+  >
+    <KaloRail v-if="!isSmallScreen" />
 
     <main
       class="flex flex-1 h-full w-full min-h-0 px-0 overflow-hidden bg-n-surface-1"
@@ -147,20 +136,11 @@ export default {
         v-show="showUpgradePage"
         ref="upgradePageRef"
         :bypass-upgrade-page="bypassUpgradePage"
-      >
-        <MobileSidebarLauncher
-          :is-mobile-sidebar-open="isMobileSidebarOpen"
-          @toggle="toggleMobileSidebar"
-        />
-      </UpgradePage>
+      />
       <template v-if="!showUpgradePage">
         <router-view />
         <CommandBar />
         <CopilotLauncher />
-        <MobileSidebarLauncher
-          :is-mobile-sidebar-open="isMobileSidebarOpen"
-          @toggle="toggleMobileSidebar"
-        />
         <CopilotContainer />
         <FloatingCallWidget v-if="hasActiveCall || hasIncomingCall" />
       </template>
@@ -174,5 +154,6 @@ export default {
         @clickaway="closeKeyShortcutModal"
       />
     </main>
+    <KaloTabBar v-if="isSmallScreen" />
   </div>
 </template>
