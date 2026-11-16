@@ -111,7 +111,7 @@ Ai làm: OPS. Cách kiểm: lệnh in 4 dòng đúng giá trị; tiêu đề tab
 
 ## 9. SuperAdmin đầu tiên
 
-OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo một `User` có `type: "SuperAdmin"`; mật khẩu đọc từ biến môi trường `ADMIN_PASSWORD`, không gõ trong dòng lệnh). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu. Đoạn lệnh chưa chạy thử trên instance thật: kiểm trên staging. Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
+OPS chạy đoạn lệnh ở `deploy.md` mục 6 (tạo một `User` có `type: "SuperAdmin"`; mật khẩu đọc từ biến môi trường `ADMIN_PASSWORD`, không gõ trong dòng lệnh). Mật khẩu mạnh, đổi ngay sau lần đăng nhập đầu. **Thứ tự bắt buộc:** tạo SuperAdmin ngay sau lần boot đầu, TRƯỚC khi mở site ra internet, vì sau seed trang `/installation/onboarding` công khai cho tới khi có SuperAdmin (đoạn lệnh đã xoá cờ Redis; code cũng trả 404 khi đã có SuperAdmin). Kiểm: `curl -s -o /dev/null -w '%{http_code}\n' https://app.<tên miền>/installation/onboarding` phải in `404`. Đoạn lệnh chưa chạy thử trên instance thật: kiểm trên staging. Cách kiểm: đăng nhập `https://app.<tên miền>/super_admin` và vào được Kalo Console (`/app/console`, chỉ hiện với SuperAdmin).
 
 ## 10. Mở đăng ký tài khoản
 
