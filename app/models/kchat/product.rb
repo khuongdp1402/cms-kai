@@ -23,6 +23,7 @@
 #
 class Kchat::Product < ApplicationRecord
   belongs_to :account
+  has_one_attached :image
   has_many :order_items, class_name: 'Kchat::OrderItem', dependent: :nullify
 
   validates :name, presence: true

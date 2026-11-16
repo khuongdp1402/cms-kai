@@ -1,0 +1,33 @@
+require 'rails_helper'
+
+RSpec.describe 'Kchat payment settings API', type: :request do
+  let(:account) { create(:account) }
+  let(:agent) { create(:user, account: account, role: :agent) }
+  let(:admin) { create(:user, account: account, role: :administrator) }
+  let(:url) { "/api/v1/accounts/#{account.id}/kchat/payment_settings" }
+  let(:settings) { { bank_bin: '970436', bank_name: 'Vietcombank', account_number: '0123456789', account_name: 'NGUYEN VAN A' } }
+
+  it 'returns empty fields when nothing is saved' do
+    get url, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body).to eq('bank_bin' => nil, 'bank_name' => nil, 'account_number' => nil, 'account_name' => nil)
+  end
+
+  it 'administrator can update and read back, keeping other custom attributes' do
+    account.update!(custom_attributes: { 'onboarding_step' => 'x' })
+    patch url, params: settings.merge(id: 5, evil: 'y'), headers: admin.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body).to eq(settings.stringify_keys)
+    expect(account.reload.custom_attributes).to eq('onboarding_step' => 'x', 'payment' => settings.stringify_keys)
+  end
+
+  it 'agent can read but not update' do
+    account.update!(custom_attributes: { 'payment' => settings.stringify_keys })
+    get url, headers: agent.create_new_auth_token, as: :json
+    expect(response.parsed_body['account_number']).to eq('0123456789')
+
+    patch url, params: { account_number: '1' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:unauthorized)
+    expect(account.reload.custom_attributes['payment']['account_number']).to eq('0123456789')
+  end
+end
