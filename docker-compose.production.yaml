@@ -12,6 +12,8 @@ x-rails-env: &rails_env
   FRONTEND_URL: ${FRONTEND_URL:?}
   FORCE_SSL: 'true'
   ENABLE_ACCOUNT_SIGNUP: ${ENABLE_ACCOUNT_SIGNUP:-false}
+  # Privacy: with the relay on, mobile push content (customer message previews) is sent through Chatwoot's hub. Off by default.
+  ENABLE_PUSH_RELAY_SERVER: ${ENABLE_PUSH_RELAY_SERVER:-false}
   POSTGRES_HOST: postgres
   POSTGRES_PORT: 5432
   POSTGRES_DATABASE: ${POSTGRES_DATABASE:?}
