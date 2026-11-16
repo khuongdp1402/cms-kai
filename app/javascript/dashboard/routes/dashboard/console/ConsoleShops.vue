@@ -126,7 +126,7 @@ onMounted(() => load(1));
 <template>
   <section class="flex flex-col gap-4 p-6">
     <div class="flex flex-wrap items-center gap-3">
-      <h1 class="text-xl font-extrabold">
+      <h1 class="text-xl font-extrabold text-console-ink">
         {{ t('KALO_CONSOLE.SHOPS.TITLE') }}
       </h1>
       <form
@@ -138,7 +138,7 @@ onMounted(() => load(1));
           v-model="query"
           data-testid="search"
           type="search"
-          class="w-64 px-3 py-2 text-sm bg-white border rounded-xl border-console-line"
+          class="w-64 px-3 py-2 text-sm !bg-white !text-console-ink placeholder:!text-console-muted border rounded-xl !border-console-muted"
           :placeholder="t('KALO_CONSOLE.SHOPS.SEARCH_PLACEHOLDER')"
         />
         <button
@@ -252,7 +252,7 @@ onMounted(() => load(1));
                   :min="MIN_DAYS"
                   :max="MAX_DAYS"
                   :aria-label="t('KALO_CONSOLE.SHOPS.EXTEND_DAYS')"
-                  class="w-16 px-2 py-1 border rounded-lg border-console-line"
+                  class="w-16 px-2 py-1 border rounded-lg !bg-white !text-console-ink !border-console-muted"
                 />
                 <button
                   class="px-3 py-1 font-semibold border rounded-lg border-console-line text-console-accent disabled:opacity-40"

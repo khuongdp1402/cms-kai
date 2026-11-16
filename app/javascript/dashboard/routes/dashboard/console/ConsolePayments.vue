@@ -99,7 +99,7 @@ onMounted(() => load(1));
 
 <template>
   <section class="flex flex-col gap-4 p-6">
-    <h1 class="text-xl font-extrabold">
+    <h1 class="text-xl font-extrabold text-console-ink">
       {{ t('KALO_CONSOLE.PAYMENTS.TITLE') }}
     </h1>
 
@@ -188,7 +188,7 @@ onMounted(() => load(1));
                     v-model="search"
                     data-testid="account-search"
                     type="search"
-                    class="w-64 px-3 py-2 bg-white border rounded-xl border-console-line"
+                    class="w-64 px-3 py-2 !bg-white !text-console-ink placeholder:!text-console-muted border rounded-xl !border-console-muted"
                     :placeholder="t('KALO_CONSOLE.PAYMENTS.ASSIGN_SEARCH')"
                   />
                   <button
@@ -204,7 +204,7 @@ onMounted(() => load(1));
                 >
                   {{ t('KALO_CONSOLE.PAYMENTS.ASSIGN_EMPTY') }}
                 </p>
-                <ul class="flex flex-wrap gap-2 mt-2">
+                <ul class="flex flex-wrap gap-2 mt-2 list-none">
                   <li v-for="account in options" :key="account.id">
                     <button
                       data-testid="account-option"

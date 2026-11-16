@@ -276,29 +276,41 @@ const handleSubmit = async () => {
           </div>
           <OnboardingFormRow
             :title="t('ONBOARDING_NEXT.FIELDS.WEBSITE')"
+            required
             icon="i-lucide-globe"
           >
-            <div class="flex items-center justify-end gap-2">
-              <InlineInput
-                ref="websiteInput"
-                v-model="website"
-                :readonly="!isEditingWebsite"
-                :placeholder="t('ONBOARDING_NEXT.PLACEHOLDERS.ENTER_WEBSITE')"
-                :custom-input-class="[
-                  'w-auto text-end px-1 py-0.5 -my-0.5 mx-0 placeholder:text-n-slate-9 rounded',
-                  { 'animate-shake': showErrorOnFields && v$.website.$error },
-                ]"
-                @enter-press="handleWebsiteEnter"
-                @blur="isEditingWebsite = false"
-              />
-              <NextButton
-                type="button"
-                icon="i-lucide-pencil"
-                slate
-                xs
-                ghost
-                @click="enableWebsiteEditing"
-              />
+            <div>
+              <div class="flex items-center justify-end gap-2">
+                <InlineInput
+                  ref="websiteInput"
+                  v-model="website"
+                  :readonly="!isEditingWebsite"
+                  :placeholder="t('ONBOARDING_NEXT.PLACEHOLDERS.ENTER_WEBSITE')"
+                  :custom-input-class="[
+                    'w-auto text-end px-1 py-0.5 -my-0.5 mx-0 placeholder:text-n-slate-9 rounded',
+                    { 'animate-shake': showErrorOnFields && v$.website.$error },
+                  ]"
+                  @enter-press="handleWebsiteEnter"
+                  @blur="isEditingWebsite = false"
+                />
+                <NextButton
+                  type="button"
+                  icon="i-lucide-pencil"
+                  slate
+                  xs
+                  ghost
+                  @click="enableWebsiteEditing"
+                />
+              </div>
+              <p
+                v-if="v$.website.$error"
+                id="onboarding-website-error"
+                role="alert"
+                data-test="website-required"
+                class="mt-1 text-xs text-end text-n-ruby-11"
+              >
+                {{ t('KALO_ONBOARDING.WEBSITE_REQUIRED') }}
+              </p>
             </div>
           </OnboardingFormRow>
           <OnboardingFormRow

@@ -1,24 +1,27 @@
 # frozen_string_literal: true
 
 # Dashboard summary for one account. Revenue is the total of orders paid/shipping/completed, bucketed by paid_at
-# in the account's reporting timezone. Each section is a single aggregated query.
+# in the account's reporting timezone (default: Vietnam, see DEFAULT_TIMEZONE). Each section is a single aggregated query.
 class Kchat::Reports
   RANGES = %w[today 7d month].freeze
   PAID_STATUSES = %w[paid shipping completed].freeze
   TOP_PRODUCTS_LIMIT = 5
+  # Kalo shops are Vietnamese: accounts without a (valid) reporting_timezone report in Vietnam time, not UTC.
+  # Override with the KCHAT_DEFAULT_TIMEZONE env var.
+  DEFAULT_TIMEZONE = (ActiveSupport::TimeZone[ENV.fetch('KCHAT_DEFAULT_TIMEZONE', '')] || ActiveSupport::TimeZone['Asia/Ho_Chi_Minh']).name.freeze
 
   def initialize(account, range)
     raise ArgumentError, "unknown range #{range}" unless RANGES.include?(range)
 
     @account = account
     @range = range
-    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone['UTC']
+    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone[DEFAULT_TIMEZONE]
   end
 
   def summary
     totals = paid_orders.pick(Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'), Arel.sql('COUNT(*)'))
     {
-      range: @range, revenue: totals[0].to_i, orders_count: totals[1].to_i,
+      range: @range, today: today.iso8601, revenue: totals[0].to_i, orders_count: totals[1].to_i,
       new_contacts: Contact.where(account_id: @account.id, created_at: window).count,
       waiting_messages: Conversation.where(account_id: @account.id, status: :open).where.not(waiting_since: nil).count,
       channels: channels, daily: daily, top_products: top_products

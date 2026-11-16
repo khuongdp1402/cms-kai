@@ -120,9 +120,9 @@ defineExpose({ openForm, pickQr });
 const buttonClass =
   'inline-flex items-center gap-1.5 px-2 py-1 text-sm font-medium rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12';
 const overlayClass =
-  'fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40';
+  'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm';
 const dialogClass =
-  'flex flex-col w-full max-w-md gap-4 p-6 overflow-auto rounded-xl bg-n-solid-1 max-h-[90vh]';
+  'flex flex-col w-full max-w-md gap-4 p-6 overflow-y-auto rounded-2xl border border-n-strong shadow-2xl bg-n-solid-2 max-h-[90vh]';
 </script>
 
 <template>
@@ -228,7 +228,7 @@ const dialogClass =
           >
             {{ t('KALO_CHAT.QR_PICKER.EMPTY') }}
           </p>
-          <ul v-else class="flex flex-col gap-2">
+          <ul v-else class="flex flex-col gap-2 list-none">
             <li v-for="order in qrOptions" :key="order.id">
               <button
                 type="button"

@@ -5,16 +5,11 @@ import { formatMoney } from './formatMoney';
 
 const props = defineProps({
   daily: { type: Array, required: true },
+  // Today in the account timezone (from the API). Only the bar with this date is highlighted.
+  today: { type: String, default: '' },
 });
 
 const { t, tm } = useI18n();
-
-const pad = n => String(n).padStart(2, '0');
-
-const todayIso = computed(() => {
-  const now = new Date();
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-});
 
 const total = computed(() =>
   props.daily.reduce((sum, day) => sum + day.revenue, 0)
@@ -32,7 +27,7 @@ const bars = computed(() => {
     return {
       ...day,
       label,
-      isToday: day.date === todayIso.value,
+      isToday: day.date === props.today,
       height: max > 0 ? Math.max((day.revenue / max) * 100, 2) : 2,
     };
   });
@@ -62,7 +57,7 @@ const bars = computed(() => {
       >
         <i
           class="block w-full rounded-t-lg rounded-b"
-          :class="bar.isToday ? 'bg-n-brand' : 'bg-n-ruby-5'"
+          :class="bar.isToday ? 'bg-n-brand' : 'bg-n-brand/40'"
           :style="{ height: `${bar.height}%` }"
         />
         {{ bar.label }}

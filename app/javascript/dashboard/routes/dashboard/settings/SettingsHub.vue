@@ -79,7 +79,7 @@ const groups = computed(() => [
         <h2 class="mb-2 text-sm font-semibold text-n-slate-10">
           {{ t(`KALO_NAV.HUB.GROUPS.${group.key}`) }}
         </h2>
-        <ul class="flex flex-col">
+        <ul class="flex flex-col list-none">
           <li v-for="item in group.links" :key="item.labelKey">
             <router-link
               :to="item.to"

@@ -57,6 +57,20 @@ const pairs = [
   ['kalo ok #0E7C61 / white', hex('#0E7C61'), WHITE],
   ['kalo warn #B45309 / white', hex('#B45309'), WHITE],
 ];
+// Console palette (tailwind.config.js colors.console)
+[
+  ['console ink #1F1A33 / bg #F7F6FB', '#1F1A33', '#F7F6FB'],
+  ['console ink #1F1A33 / white', '#1F1A33', '#FFFFFF'],
+  [
+    'console muted #6B6485 / white (placeholder, input border)',
+    '#6B6485',
+    '#FFFFFF',
+  ],
+  ['console muted #6B6485 / bg #F7F6FB', '#6B6485', '#F7F6FB'],
+  ['console text #D9D4EE / sidebar #231C40', '#D9D4EE', '#231C40'],
+  ['console white / accent #3B2F6B', '#FFFFFF', '#3B2F6B'],
+  ['console accent #3B2F6B / white', '#3B2F6B', '#FFFFFF'],
+].forEach(([name, fg, bg]) => pairs.push([name, hex(fg), hex(bg)]));
 const AVATAR_PAIRS = [
   ['#7F2A16', '#FFE9E1'],
   ['#0E4F63', '#A5F3FC'],

@@ -202,7 +202,7 @@ Các mục sau mới chỉ được kiểm tra tĩnh (`docker compose config`, `
 - [ ] `bash deploy/compose_check.sh` và `bash deploy/nginx/test.sh` đều OK.
 - [ ] `kc ps` mọi service `healthy`; `nmap`/`ss` từ ngoài chỉ thấy 80 và 443.
 - [ ] `curl https://<tên miền>` ra landing; `https://app.<tên miền>` ra màn hình đăng nhập; `wss://app.<tên miền>/cable` kết nối được.
-- [ ] SuperAdmin đã tạo, mật khẩu mặc định/tạm đã đổi; `ENABLE_ACCOUNT_SIGNUP` đúng ý định.
+- [ ] SuperAdmin đã tạo, mật khẩu mặc định/tạm đã đổi; `ENABLE_ACCOUNT_SIGNUP` đúng ý định; `DEFAULT_LOCALE=vi` (trang đăng nhập và Console lấy ngôn ngữ từ biến này).
 - [ ] Webhook Casso gửi thử trả 200; chuyển khoản thử khớp đơn.
 - [ ] Gửi mail thử (đặt lại mật khẩu) đến hộp thư thật.
 - [ ] Kết nối Zalo thử: quét QR, nhận và gửi một tin.

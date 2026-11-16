@@ -4,6 +4,9 @@
 // scss-lint:disable PropertySortOrder
 @layer base {
   :root {
+    // Kalo duotone icons (public/kalo-icons.svg): accent fill and inner fill, overridable by any parent.
+    --ia: #FFD7CA;
+    --ibg: #FFFFFF;
     --blue-1: 255 248 245; // #FFF8F5
     --blue-2: 255 241 236; // #FFF1EC
     --blue-3: 255 233 225; // #FFE9E1 — action soft
@@ -59,6 +62,8 @@
   }
 
   .dark {
+    --ia: rgb(255 107 74 / 0.38);
+    --ibg: #2A1F1A;
     --blue-1: 23 17 15;
     --blue-2: 38 26 21;
     --blue-3: 58 31 23;

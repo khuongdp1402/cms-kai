@@ -19,8 +19,9 @@ const mountComposable = ({
   account = {},
   enabledLanguages = ENABLED_LANGUAGES,
   presets = {},
+  selectedLocale,
 } = {}) => {
-  window.chatwootConfig = { enabledLanguages };
+  window.chatwootConfig = { enabledLanguages, selectedLocale };
 
   const store = createStore({
     modules: {
@@ -124,6 +125,19 @@ describe('useAccountEnrichment', () => {
         enabledLanguages: [{ iso_639_1_code: 'es', name: 'Spanish' }],
       });
       expect(other.locale.value).toBe('de');
+    });
+
+    it('keeps a Vietnamese account locale instead of the browser language (Kalo)', () => {
+      const { fields } = mountComposable({ account: { locale: 'vi' } });
+      expect(fields.locale.value).toBe('vi');
+    });
+
+    it('uses the page locale when the account has not loaded yet and it is Vietnamese', () => {
+      const { fields } = mountComposable({
+        account: { locale: '' },
+        selectedLocale: 'vi',
+      });
+      expect(fields.locale.value).toBe('vi');
     });
   });
 
