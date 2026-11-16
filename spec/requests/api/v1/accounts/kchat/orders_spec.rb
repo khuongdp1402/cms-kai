@@ -303,6 +303,19 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(conversation.messages.count).to eq(0)
     end
 
+    it 'qr refuses a payable image for orders that are no longer pending_payment' do
+      order.transition!(:mark_paid)
+      get "#{base}/#{order.id}/qr", headers: headers
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('order_not_payable')
+    end
+
+    it 'qr still returns a png for a pending transfer_qr order' do
+      get "#{base}/#{order.id}/qr", headers: headers
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq('image/png')
+    end
+
     it 'send_qr rejects a conversation of a different contact than the order contact' do
       contact_order = make_order(extra: { contact: create(:contact, account: account) })
       post "#{base}/#{contact_order.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json

@@ -48,7 +48,6 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
     authorize conversation.inbox, :show?
     return unless qr_allowed?
-    return render_kchat_error('order_not_payable', :unprocessable_entity) unless @order.pending_payment?
     return render_contact_mismatch if @order.contact_id && conversation.contact_id != @order.contact_id
 
     @message = build_qr_message(conversation)
@@ -111,6 +110,7 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
   def qr_error_code
     return 'invalid_payment_method' unless @order.payment_method_transfer_qr?
+    return 'order_not_payable' unless @order.pending_payment?
     return 'invalid_amount' unless @order.total.positive?
 
     'payment_settings_missing' unless ::Kchat::PaymentSettings.complete?(Current.account)
