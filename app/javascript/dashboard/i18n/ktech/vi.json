@@ -1891,5 +1891,112 @@
       "RETRY": "Thử lại",
       "CANCEL_ORDER": "Hủy đơn"
     }
+  },
+  "KALO_CONSOLE": {
+    "BRAND_NAME": "kalo",
+    "BRAND": "Console",
+    "NAV": {
+      "OVERVIEW": "Tổng quan",
+      "SHOPS": "Shop",
+      "PAYMENTS": "Thanh toán",
+      "BACK_TO_APP": "Về ứng dụng",
+      "LOGOUT": "Đăng xuất"
+    },
+    "COMMON": {
+      "PREV": "Trước",
+      "NEXT": "Sau",
+      "PAGE": "Trang {page} / {pages}",
+      "LOADING": "Đang tải…",
+      "ERROR": "Không tải được. Thử lại.",
+      "RETRY": "Tải lại",
+      "CANCEL": "Hủy",
+      "SEARCH": "Tìm"
+    },
+    "PLANS": {
+      "STARTER": "Cơ bản",
+      "GROWTH": "Tăng trưởng",
+      "ENTERPRISE": "Doanh nghiệp",
+      "NONE": "Dùng thử"
+    },
+    "OVERVIEW": {
+      "TITLE": "Tổng quan",
+      "KPI": {
+        "SHOPS": "Tổng số shop",
+        "REVENUE": "Doanh thu tháng",
+        "EXPIRING": "Sắp hết hạn (7 ngày)",
+        "UNMATCHED": "Chuyển khoản cần ghép",
+        "PAID": "Shop đang trả phí"
+      },
+      "LATEST": "Thanh toán mới nhất",
+      "VIEW_ALL": "Xem tất cả",
+      "EMPTY_PAYMENTS": "Chưa có thanh toán nào.",
+      "BY_PLAN": "Shop theo gói",
+      "UNKNOWN_SHOP": "Không rõ shop"
+    },
+    "SHOPS": {
+      "TITLE": "Shop",
+      "SEARCH_PLACEHOLDER": "Tên shop hoặc mã",
+      "TABS": {
+        "ALL": "Tất cả",
+        "TRIAL": "Dùng thử",
+        "EXPIRING": "Sắp hết hạn",
+        "LOCKED": "Đã khóa"
+      },
+      "COLUMNS": {
+        "SHOP": "Shop",
+        "PLAN": "Gói",
+        "VALID_UNTIL": "Hết hạn",
+        "STATUS": "Trạng thái",
+        "ACTIONS": "Thao tác"
+      },
+      "CODE": "Mã {id}",
+      "STATUS": {
+        "ACTIVE": "Đang dùng",
+        "TRIAL": "Dùng thử",
+        "EXPIRED": "Hết hạn",
+        "LOCKED": "Đã khóa",
+        "DAYS_LEFT": "Còn {days} ngày"
+      },
+      "EXTEND": "Gia hạn",
+      "EXTEND_DAYS": "Số ngày",
+      "EXTEND_DONE": "Đã gia hạn",
+      "LOCK": "Khóa shop",
+      "UNLOCK": "Mở khóa",
+      "CONFIRM_LOCK": "Khóa {name}? Shop sẽ không đăng nhập được.",
+      "CONFIRM_UNLOCK": "Mở khóa {name}?",
+      "CONFIRM": "Đồng ý",
+      "LOCK_DONE": "Đã khóa shop",
+      "UNLOCK_DONE": "Đã mở khóa shop",
+      "EMPTY": "Không có shop nào.",
+      "UPDATE_ERROR": "Không cập nhật được. Thử lại."
+    },
+    "PAYMENTS": {
+      "TITLE": "Thanh toán",
+      "COLUMNS": {
+        "SHOP": "Shop",
+        "AMOUNT": "Số tiền",
+        "TIME": "Thời gian",
+        "STATUS": "Trạng thái",
+        "ACTIONS": "Thao tác"
+      },
+      "STATUS": {
+        "MATCHED": "Đã kích hoạt",
+        "APPLIED": "Đã kích hoạt",
+        "UNDERPAID": "Chuyển thiếu",
+        "UNMATCHED": "Cần ghép shop"
+      },
+      "UNDERPAID_NOTE": "Shop chuyển thiếu tiền nên gói chưa được kích hoạt.",
+      "ASSIGN": "Ghép shop",
+      "ASSIGN_SUBMIT": "Ghép",
+      "ASSIGN_SEARCH": "Tên shop hoặc mã",
+      "ASSIGN_EMPTY": "Không tìm thấy shop.",
+      "ASSIGN_DONE": "Đã ghép shop",
+      "ASSIGN_ERROR": "Không ghép được. Thử lại.",
+      "EMPTY": "Chưa có thanh toán nào.",
+      "UNKNOWN_SHOP": "Không rõ shop",
+      "ASSIGN_GONE": "Giao dịch này đã được xử lý hoặc không còn tồn tại",
+      "SEARCH_ERROR": "Không tìm được shop. Thử lại.",
+      "ASSIGN_AMBIGUOUS": "Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý."
+    }
   }
 }
