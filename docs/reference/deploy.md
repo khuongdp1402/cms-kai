@@ -85,16 +85,21 @@ Landing page được Nginx phục vụ từ thư mục `landing-page/` (mount c
 
 ## 6. Tạo SuperAdmin
 
+`SuperAdmin` là lớp con của `User` (kế thừa bảng đơn, cột `type = 'SuperAdmin'`), nên tạo một `User` với `type: "SuperAdmin"` (giống `db/seeds.rb`). Mật khẩu đọc từ biến môi trường, không gõ trong dòng lệnh:
+
 ```bash
-kc exec rails bundle exec rails runner '
-  u = User.new(name: "Admin", email: "admin@<tên miền>", password: "<mật khẩu mạnh>", password_confirmation: "<mật khẩu mạnh>")
+read -rs ADMIN_PASSWORD && export ADMIN_PASSWORD     # nhập mật khẩu mạnh, không hiện ra màn hình
+kc exec -e ADMIN_PASSWORD rails bundle exec rails runner '
+  u = User.new(name: "Admin", email: "admin@<tên miền>", password: ENV.fetch("ADMIN_PASSWORD"),
+               password_confirmation: ENV.fetch("ADMIN_PASSWORD"), type: "SuperAdmin")
   u.skip_confirmation!
   u.save!
-  SuperAdmin.create!(email: u.email, password: "<mật khẩu mạnh>")
+  puts "#{u.class} #{u.email} created"
 '
+unset ADMIN_PASSWORD
 ```
 
-Đăng nhập super admin ở `https://app.<tên miền>/super_admin`. Đổi mật khẩu ngay sau lần đầu và xóa lịch sử shell chứa mật khẩu.
+Mật khẩu phải đủ mạnh theo quy tắc của Devise/Chatwoot (có chữ hoa, chữ thường, số, ký tự đặc biệt), nếu không `save!` báo lỗi. Đăng nhập tại `https://app.<tên miền>/super_admin`. Đổi mật khẩu ngay sau lần đầu. **Đoạn lệnh này chưa được chạy thử trên một instance thật** (xem mục 10).
 
 ## 7. Backup theo cron
 
@@ -185,7 +190,7 @@ Cập nhật template Nginx: sửa `deploy/nginx/templates/kalo.conf.template`, 
 Các mục sau mới chỉ được kiểm tra tĩnh (`docker compose config`, `nginx -t`, script backup trên Postgres cục bộ), **chưa chạy thật**. Phải kiểm chứng trên staging trước go-live:
 
 - Healthcheck của Rails, Sidekiq và Zalo bridge, cùng `docker/entrypoints/rails-prod.sh`.
-- Đoạn lệnh tạo SuperAdmin (mục 6).
+- Đoạn lệnh tạo SuperAdmin (mục 6): viết theo `db/seeds.rb`, chưa chạy thử trên instance thật.
 - Cấp và gia hạn chứng chỉ certbot (mục 3), gồm bước chuyển sang webroot và deploy-hook.
 - Chạy đầy đủ `docker compose up -d` với image build thật.
 - Job CI build image (`kalo_docker_build.yml`).
