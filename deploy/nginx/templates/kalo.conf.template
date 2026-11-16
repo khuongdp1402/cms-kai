@@ -1,11 +1,11 @@
 # Rendered by the official nginx image (envsubst on /etc/nginx/templates/*.template).
-# Required env: KCHAT_DOMAIN (e.g. example.vn). Only variables present in the env are substituted,
+# Required env: KALO_DOMAIN (e.g. example.vn). Only variables present in the env are substituted,
 # so nginx runtime variables such as $host stay untouched.
 #
-#   ${KCHAT_DOMAIN}, www.${KCHAT_DOMAIN}  -> marketing site (static) + Casso webhook
-#   app.${KCHAT_DOMAIN}                   -> Rails (dashboard, API, ActionCable, widget)
+#   ${KALO_DOMAIN}, www.${KALO_DOMAIN}  -> Kalo landing page (static) + Casso webhook
+#   app.${KALO_DOMAIN}                   -> Rails (dashboard, API, ActionCable, widget)
 #
-# Certificates: one Let's Encrypt cert covering the three names, stored under /etc/letsencrypt/live/${KCHAT_DOMAIN}/.
+# Certificates: one Let's Encrypt cert covering the three names, stored under /etc/letsencrypt/live/${KALO_DOMAIN}/.
 
 upstream rails_puma {
     server rails:3000 fail_timeout=0;
@@ -29,8 +29,9 @@ gzip_types text/plain text/css application/json application/javascript image/svg
 
 server {
     listen 80;
-    server_name ${KCHAT_DOMAIN} www.${KCHAT_DOMAIN} app.${KCHAT_DOMAIN};
+    server_name ${KALO_DOMAIN} www.${KALO_DOMAIN} app.${KALO_DOMAIN};
 
+    location = /healthz { access_log off; return 200 'ok'; }
     location /.well-known/acme-challenge/ { root /var/www/certbot; }
     location / { return 301 https://$host$request_uri; }
 }
@@ -38,10 +39,10 @@ server {
 server {
     listen 443 ssl;
     http2 on;
-    server_name ${KCHAT_DOMAIN} www.${KCHAT_DOMAIN};
+    server_name ${KALO_DOMAIN} www.${KALO_DOMAIN};
 
-    ssl_certificate     /etc/letsencrypt/live/${KCHAT_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${KCHAT_DOMAIN}/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/${KALO_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${KALO_DOMAIN}/privkey.pem;
 
     add_header Strict-Transport-Security "max-age=31536000" always;
     add_header X-Content-Type-Options "nosniff" always;
@@ -53,7 +54,7 @@ server {
     location ~* (sw\.js|manifest\.json)$ { add_header Cache-Control "no-store"; }
     location ~* \.(css|js|webp|png|jpg|svg|woff2)$ { expires 30d; access_log off; }
 
-    # Only the bank webhook and public bank info are reachable from the marketing domain.
+    # Only the bank webhook and public bank info are reachable from the apex domain.
     location ~ ^/api/v1/casso/(webhook|status)$ {
         proxy_pass http://rails_puma;
         proxy_set_header Host $host;
@@ -67,10 +68,10 @@ server {
 server {
     listen 443 ssl;
     http2 on;
-    server_name app.${KCHAT_DOMAIN};
+    server_name app.${KALO_DOMAIN};
 
-    ssl_certificate     /etc/letsencrypt/live/${KCHAT_DOMAIN}/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/${KCHAT_DOMAIN}/privkey.pem;
+    ssl_certificate     /etc/letsencrypt/live/${KALO_DOMAIN}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${KALO_DOMAIN}/privkey.pem;
 
     add_header Strict-Transport-Security "max-age=31536000" always;
     client_max_body_size 40m;
