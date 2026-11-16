@@ -19,7 +19,10 @@ class Kchat::PaymentSettings
     settings = new(self.for(account).merge(attributes.to_h.stringify_keys.slice(*FIELDS)))
     raise ActiveModel::ValidationError, settings unless settings.valid?
 
-    account.update!(custom_attributes: (account.custom_attributes || {}).merge(KEY => settings.to_h))
+    # Lock and re-read so a credit the Casso webhook committed after this account was loaded is merged, not overwritten.
+    account.with_lock do
+      account.update!(custom_attributes: (account.custom_attributes || {}).merge(KEY => settings.to_h))
+    end
     settings.to_h
   end
 
