@@ -6,10 +6,15 @@ import { routes as contactRoutes } from './contacts/routes';
 import { routes as companyRoutes } from './companies/routes';
 import { routes as notificationRoutes } from './notifications/routes';
 import { routes as inboxRoutes } from './inbox/routes';
+import { routes as orderRoutes } from './orders/routes';
+import { routes as posRoutes } from './pos/routes';
+import { routes as marketingRoutes } from './marketing/routes';
+import { routes as reportRoutes } from './reports/routes';
 import { frontendURL } from '../../helper/URLHelper';
 import helpcenterRoutes from './helpcenter/helpcenter.routes';
 import campaignsRoutes from './campaigns/campaigns.routes';
 import { routes as captainRoutes } from './captain/captain.routes';
+import SettingsHub from './settings/SettingsHub.vue';
 import AppContainer from './Dashboard.vue';
 import Suspended from './suspended/Index.vue';
 import NoAccounts from './noAccounts/Index.vue';
@@ -23,6 +28,16 @@ export default {
       component: AppContainer,
       children: [
         ...captainRoutes,
+        ...orderRoutes,
+        ...posRoutes,
+        ...marketingRoutes,
+        ...reportRoutes,
+        {
+          path: frontendURL('accounts/:accountId/settings/hub'),
+          name: 'kalo_settings_hub',
+          meta: { permissions: ['administrator', 'agent', 'custom_role'] },
+          component: SettingsHub,
+        },
         ...inboxRoutes,
         ...conversation.routes,
         ...settings.routes,

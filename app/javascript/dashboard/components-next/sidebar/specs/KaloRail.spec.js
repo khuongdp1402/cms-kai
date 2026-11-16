@@ -1,0 +1,162 @@
+import { ref } from 'vue';
+import { mount, flushPromises } from '@vue/test-utils';
+import { provideDropdownContext } from 'next/dropdown-menu/base/provider';
+import Auth from 'dashboard/api/auth';
+import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
+import KaloRail from '../KaloRail.vue';
+import { createKaloTestEnv } from './kaloTestHelpers';
+
+vi.mock('dashboard/api/auth', () => ({ default: { logout: vi.fn() } }));
+vi.mock('dashboard/composables/useKeyboardEvents', () => ({
+  useKeyboardEvents: vi.fn(),
+}));
+
+const wrappers = [];
+afterEach(() => wrappers.forEach(w => w.unmount()));
+
+const mountRail = async ({ route = 'home', ...envOptions } = {}) => {
+  const { router, store, i18n } = createKaloTestEnv(envOptions);
+  await router.push({ name: route, params: { accountId: 1 } });
+  const wrapper = mount(KaloRail, {
+    global: {
+      plugins: [router, store, i18n],
+      stubs: {
+        SidebarProfileMenuStatus: true,
+        ComposeConversation: true,
+        // DropdownContainer never re-renders open under jsdom here; render it open.
+        DropdownContainer: {
+          setup() {
+            provideDropdownContext({
+              isOpen: ref(true),
+              toggle: () => {},
+              closeMenu: () => {},
+            });
+          },
+          template:
+            '<div><slot name="trigger" :toggle="() => {}" :is-open="true" /><slot /></div>',
+        },
+      },
+    },
+  });
+  wrappers.push(wrapper);
+  return wrapper;
+};
+
+describe('KaloRail', () => {
+  it('renders exactly six items in order Tin nhắn, Đơn hàng, Khách, Marketing, Báo cáo, Cài đặt', async () => {
+    const wrapper = await mountRail();
+    const labels = wrapper
+      .findAll('[data-test-id^="kalo-nav-"]')
+      .map(item => item.text().replace(/\d+$/, '').trim());
+    expect(labels).toEqual([
+      'Tin nhắn',
+      'Đơn hàng',
+      'Khách',
+      'Marketing',
+      'Báo cáo',
+      'Cài đặt',
+    ]);
+  });
+
+  it('marks the item matching the current route as active', async () => {
+    const wrapper = await mountRail({ route: 'contacts_dashboard_index' });
+    await flushPromises();
+    const active = wrapper.findAll('[aria-current="page"]');
+    expect(active).toHaveLength(1);
+    expect(active[0].attributes('data-test-id')).toBe('kalo-nav-customers');
+  });
+
+  it('shows unread count on Tin nhắn from the store getter and hides it at 0', async () => {
+    const withUnread = await mountRail({ unread: 12 });
+    expect(withUnread.find('[data-test-id="kalo-badge"]').text()).toBe('12');
+    const without = await mountRail({ unread: 0 });
+    expect(without.find('[data-test-id="kalo-badge"]').exists()).toBe(false);
+  });
+
+  it('POS is not a nav item', async () => {
+    const wrapper = await mountRail();
+    expect(wrapper.find('[data-test-id="kalo-nav-pos"]').exists()).toBe(false);
+    expect(wrapper.text()).not.toContain('Bán tại quầy');
+  });
+
+  it('marks Marketing active on a campaigns route', async () => {
+    const wrapper = await mountRail({ route: 'campaigns_livechat_index' });
+    await flushPromises();
+    const active = wrapper.findAll('[aria-current="page"]');
+    expect(active).toHaveLength(1);
+    expect(active[0].attributes('data-test-id')).toBe('kalo-nav-marketing');
+  });
+
+  it('shows bell with unread badge', async () => {
+    const wrapper = await mountRail({ notificationUnread: 5 });
+    expect(wrapper.find('[data-test-id="kalo-rail-footer"]').text()).toContain(
+      '5'
+    );
+  });
+
+  it('opens profile menu which contains a logout action', async () => {
+    const wrapper = await mountRail();
+    const trigger = wrapper.find(
+      '[data-test-id="kalo-rail-footer"] button[title="Lan"]'
+    );
+    expect(trigger.exists()).toBe(true);
+    expect(wrapper.text()).toContain('Đăng xuất');
+    const logout = wrapper
+      .findAll('button')
+      .find(el => el.text() === 'Đăng xuất');
+    await logout.trigger('click');
+    expect(Auth.logout).toHaveBeenCalled();
+  });
+
+  it('keeps the create-account entry for a single account when the flag is on', async () => {
+    const off = await mountRail();
+    expect(off.findComponent({ name: 'SidebarAccountSwitcher' }).exists()).toBe(
+      false
+    );
+    const on = await mountRail({ createNewAccount: true });
+    expect(on.findComponent({ name: 'SidebarAccountSwitcher' }).exists()).toBe(
+      true
+    );
+  });
+
+  it('registers the keyboard shortcuts and maps Alt+V to an existing contacts route', async () => {
+    const wrapper = await mountRail();
+    const events = useKeyboardEvents.mock.calls.at(-1)[0];
+    expect(Object.keys(events)).toEqual(
+      expect.arrayContaining(['$mod+Slash', '$mod+Escape', 'Alt+KeyV'])
+    );
+    events['$mod+Slash'].action();
+    expect(wrapper.emitted('openKeyShortcutModal')).toHaveLength(1);
+    events['$mod+Escape'].action();
+    expect(wrapper.emitted('closeKeyShortcutModal')).toHaveLength(1);
+    await events['Alt+KeyV'].action();
+    await flushPromises();
+    expect(wrapper.vm.$router.currentRoute.value.name).toBe(
+      'contacts_dashboard_index'
+    );
+  });
+
+  it('has a filters trigger beside Tin nhắn', async () => {
+    const wrapper = await mountRail();
+    expect(wrapper.find('[data-test-id="kalo-filters-trigger"]').exists()).toBe(
+      true
+    );
+  });
+
+  it('hides account switcher for a single account and shows it for several', async () => {
+    const single = await mountRail();
+    expect(single.find('[title="Shop"]').exists()).toBe(false);
+    const many = await mountRail({
+      accounts: [
+        { id: 1, name: 'Shop', role: 'administrator' },
+        { id: 2, name: 'Shop 2', role: 'agent' },
+      ],
+    });
+    expect(
+      many.findComponent({ name: 'SidebarAccountSwitcher' }).exists()
+    ).toBe(true);
+    expect(
+      single.findComponent({ name: 'SidebarAccountSwitcher' }).exists()
+    ).toBe(false);
+  });
+});
