@@ -187,4 +187,38 @@ describe('ConsolePayments', () => {
     await flushPromises();
     expect(wrapper.find('[data-testid="status-chip"]').text()).toBe('refunded');
   });
+
+  it('422 description_ambiguous shows its own message and keeps the picker open', async () => {
+    consoleAPI.paymentEvents.mockResolvedValue(list([event()]));
+    consoleAPI.assignPaymentEvent.mockRejectedValue({
+      response: { status: 422, data: { error: 'description_ambiguous' } },
+    });
+    const wrapper = mountPage();
+    await flushPromises();
+    await openPicker(wrapper);
+    await wrapper.find('[data-testid="assign"]').trigger('click');
+    await flushPromises();
+    expect(consoleAPI.paymentEvents).toHaveBeenCalledTimes(1);
+    expect(useAlert).toHaveBeenCalledWith(
+      'Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý.'
+    );
+    const button = wrapper.find('[data-testid="assign"]');
+    expect(button.exists()).toBe(true);
+    expect(button.attributes('disabled')).toBeUndefined();
+  });
+
+  it('an unknown 422 code gets the generic message with the picker open', async () => {
+    consoleAPI.paymentEvents.mockResolvedValue(list([event()]));
+    consoleAPI.assignPaymentEvent.mockRejectedValue({
+      response: { status: 422, data: { error: 'something_else' } },
+    });
+    const wrapper = mountPage();
+    await flushPromises();
+    await openPicker(wrapper);
+    await wrapper.find('[data-testid="assign"]').trigger('click');
+    await flushPromises();
+    expect(consoleAPI.paymentEvents).toHaveBeenCalledTimes(1);
+    expect(useAlert).toHaveBeenCalledWith('Không ghép được. Thử lại.');
+    expect(wrapper.find('[data-testid="assign"]').exists()).toBe(true);
+  });
 });

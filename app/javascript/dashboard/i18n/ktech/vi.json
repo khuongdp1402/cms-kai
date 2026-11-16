@@ -1754,7 +1754,8 @@
       "EMPTY": "Chưa có thanh toán nào.",
       "UNKNOWN_SHOP": "Không rõ shop",
       "ASSIGN_GONE": "Giao dịch này đã được xử lý hoặc không còn tồn tại",
-      "SEARCH_ERROR": "Không tìm được shop. Thử lại."
+      "SEARCH_ERROR": "Không tìm được shop. Thử lại.",
+      "ASSIGN_AMBIGUOUS": "Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý."
     }
   }
 }

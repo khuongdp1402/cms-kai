@@ -79,10 +79,13 @@ const assign = async event => {
     assigning.value = null;
     useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_DONE'));
   } catch (error) {
-    if ([404, 422].includes(error.response?.status)) {
+    const { status, data } = error.response ?? {};
+    if (status === 404 || data?.error === 'event_not_assignable') {
       assigning.value = null;
       useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_GONE'));
       await load(meta.value.current_page);
+    } else if (data?.error === 'description_ambiguous') {
+      useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_AMBIGUOUS'));
     } else {
       useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_ERROR'));
     }
