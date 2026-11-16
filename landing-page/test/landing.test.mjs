@@ -46,3 +46,11 @@ test('script.js computes the app url from the hostname', async () => {
   assert.equal(appUrl('www.example.vn'), 'https://app.example.vn');
   assert.equal(appUrl('example.vn'), 'https://app.example.vn');
 });
+
+test('plan cards contain no vague unverifiable promises', () => {
+  const plans = [...html.matchAll(/<div class="plan[\s\S]*?<\/ul>/g)].map(m => m[0]);
+  assert.equal(plans.length, 3);
+  for (const card of plans) {
+    for (const s of ['Đội ngũ lớn', 'Hỗ trợ riêng', 'đồng đội']) assert.ok(!card.includes(s), s);
+  }
+});
