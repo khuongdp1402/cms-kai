@@ -191,4 +191,75 @@ RSpec.describe Casso::WebhookHandler do
     expect(results.pluck(:status)).to eq(%w[invalid_transaction invalid_transaction invalid_transaction matched_and_activated])
     expect(account_hana.reload.custom_attributes['ai_tokens_balance']).to eq(1000)
   end
+
+  describe 'payload shapes' do
+    let(:tx) { { 'tid' => 'S1', 'description' => 'KALO HANA TOKEN 1', 'amount' => 1000 } }
+
+    it 'accepts `data` as an array of transactions' do
+      handler = described_class.new('data' => [tx, tx.merge('tid' => 'S2')])
+
+      expect(handler).to be_valid_payload
+      expect(handler.process[:results].pluck(:status)).to eq(%w[matched_and_activated matched_and_activated])
+    end
+
+    it 'accepts `data` as a single transaction object (Casso webhook v2)' do
+      handler = described_class.new('data' => tx)
+
+      expect(handler).to be_valid_payload
+      expect(handler.process[:results].pluck(:status)).to eq(%w[matched_and_activated])
+      expect(account_hana.reload.custom_attributes['ai_tokens_balance']).to eq(1000)
+    end
+
+    it 'accepts a top-level transaction with `tid` and `amount` and no `data`' do
+      handler = described_class.new(tx)
+
+      expect(handler).to be_valid_payload
+      expect(handler.process[:results].pluck(:status)).to eq(%w[matched_and_activated])
+    end
+
+    it 'accepts a top-level transaction identified by `id`' do
+      handler = described_class.new('id' => 77, 'description' => 'KALO HANA TOKEN 1', 'amount' => 500)
+
+      expect(handler).to be_valid_payload
+      expect(handler.process[:results].first[:tid]).to eq('77')
+    end
+
+    it 'accepts an empty `data` array as a valid payload with nothing to process' do
+      handler = described_class.new('data' => [])
+
+      expect(handler).to be_valid_payload
+      expect(handler.process[:processed_count]).to eq(0)
+    end
+
+    [
+      ['no data and no transaction fields', {}],
+      ['null data', { 'data' => nil }],
+      ['string data', { 'data' => 'oops' }],
+      ['number data', { 'data' => 5 }],
+      ['top-level object without amount', { 'tid' => 'X1' }],
+      ['top-level object without tid or id', { 'amount' => 1000 }]
+    ].each do |label, payload|
+      it "marks #{label} as an invalid payload" do
+        expect(described_class.new(payload)).not_to be_valid_payload
+      end
+    end
+  end
+
+  describe 'tenant_slug collisions' do
+    it 'treats a transaction as unmatched when two accounts share the slug (case-insensitive)' do
+      twin = create(:account, name: 'twin', custom_attributes: { 'tenant_slug' => 'HANA' })
+
+      result = run(description: 'KALO HANA TOKEN 1', amount: 5000)
+
+      expect(result[:status]).to eq('unmatched_account_recorded')
+      expect(result).not_to have_key(:account_id)
+      expect(account_hana.reload.custom_attributes['ai_tokens_balance']).to be_nil
+      expect(twin.reload.custom_attributes['ai_tokens_balance']).to be_nil
+      expect(Kchat::PaymentEvent.last.account_id).to be_nil
+    end
+
+    it 'still matches a unique slug regardless of case' do
+      expect(run(description: 'KALO Hana TOKEN 1', amount: 5000)[:account_id]).to eq(account_hana.id)
+    end
+  end
 end
