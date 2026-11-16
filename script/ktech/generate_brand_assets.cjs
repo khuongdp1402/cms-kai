@@ -1,6 +1,6 @@
-// Regenerates KTech logos and icons. Dependencies are installed in tmp/ so the
-// project gets no new packages:
-//   npm i --no-save --prefix tmp/ktech-brand opentype.js@1 sharp@0.33 @fontsource/inter@5 playwright@1
+// Regenerates Kalo logos and icons from docs/design/kalo/brand/kalo-mark.svg. Dependencies are installed in
+// tmp/ so the project gets no new packages:
+//   npm i --no-save --prefix tmp/ktech-brand opentype.js@1 sharp@0.33 @fontsource/be-vietnam-pro@5
 //   node script/ktech/generate_brand_assets.cjs
 const fs = require('fs');
 const path = require('path');
@@ -12,48 +12,43 @@ const opentype = req('opentype.js');
 const sharp = req('sharp');
 
 const font = opentype.loadSync(
-  req.resolve('@fontsource/inter/files/inter-latin-700-normal.woff')
+  req.resolve('@fontsource/be-vietnam-pro/files/be-vietnam-pro-latin-800-normal.woff')
 );
 const pub = p => path.join(root, 'public', p);
 
-const MARK = `
-  <defs><linearGradient id="kt-mark" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#60A5FA"/><stop offset=".5" stop-color="#1E5EFF"/><stop offset="1" stop-color="#103599"/>
-  </linearGradient></defs>
-  <rect x="2" y="2" width="44" height="40" rx="12" fill="url(#kt-mark)"/>
-  <path d="M10 41 L6 47 L19 41Z" fill="#103599"/>
-  <path d="M17 12v20M17 22l12-10M20 20l10 12" stroke="#fff" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+// Inner shapes of the approved mark (viewBox 0 0 64 64); the bubble colour is injected.
+const markSvg = fs.readFileSync(
+  path.join(root, 'docs/design/kalo/brand/kalo-mark.svg'),
+  'utf8'
+);
+const inner = markSvg.slice(markSvg.indexOf('>') + 1, markSvg.lastIndexOf('</svg>'));
+const mark = bubble => inner.replace('fill="#FF6B4A"', `fill="${bubble}"`);
 
-const FONT_SIZE = 30;
-const word = (text, x, fill) =>
-  `<path d="${font.getPath(text, x, 35, FONT_SIZE).toPathData(2)}" fill="${fill}"/>`;
+// Wordmark "kalo" as outlines (an <img> logo cannot load fonts): 40px, weight 800, letter-spacing -1.
+const WORD_X = 74;
+const FONT_SIZE = 40;
+const SPACING = -1;
+const wordmark = fill => {
+  let x = WORD_X;
+  let d = '';
+  font.forEachGlyph('kalo', 0, 0, FONT_SIZE, {}, (glyph, gx, gy, size) => {
+    d += glyph.getPath(x, 46, size).toPathData(2);
+    x += (glyph.advanceWidth * size) / font.unitsPerEm + SPACING;
+  });
+  return `<path d="${d}" fill="${fill}"/>`;
+};
 
-const kWidth = font.getAdvanceWidth('K', FONT_SIZE);
-const width = Math.ceil(58 + font.getAdvanceWidth('KTech', FONT_SIZE) + 4);
-
-const logo = ({ k, from, to }) => `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="48" viewBox="0 0 ${width} 48">
-  ${MARK}
-  <defs><linearGradient id="kt-word" x1="0" y1="0" x2="1" y2="0">
-    <stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/>
-  </linearGradient></defs>
-  ${word('K', 58, k)}
-  ${word('Tech', 58 + kWidth, 'url(#kt-word)')}
+const logo = ink => `<svg xmlns="http://www.w3.org/2000/svg" width="208" height="64" viewBox="0 0 208 64">${mark('#FF6B4A')}
+  ${wordmark(ink)}
 </svg>
 `;
+const thumb = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">${mark('#FF6B4A')}</svg>\n`;
+const badge = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">${mark('#FF6B4A')}
+  <circle cx="52" cy="12" r="10" fill="#C93F24" stroke="#fff" stroke-width="3"/></svg>`;
 
-fs.writeFileSync(
-  pub('brand-assets/logo.svg'),
-  logo({ k: '#09111E', from: '#1E5EFF', to: '#0891B2' })
-);
-fs.writeFileSync(
-  pub('brand-assets/logo_dark.svg'),
-  logo({ k: '#F8FAFC', from: '#D7EFFF', to: '#38BDF8' })
-);
-const thumb = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">${MARK}</svg>\n`;
+fs.writeFileSync(pub('brand-assets/logo.svg'), logo('#1F1714'));
+fs.writeFileSync(pub('brand-assets/logo_dark.svg'), logo('#FFF8F5'));
 fs.writeFileSync(pub('brand-assets/logo_thumbnail.svg'), thumb);
-
-const badge = `<svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">${MARK}
-  <circle cx="39" cy="9" r="8" fill="#DC2626" stroke="#fff" stroke-width="2.5"/></svg>`;
 
 const icons = {
   'favicon-16x16.png': 16,
@@ -91,7 +86,7 @@ const badges = {
 };
 
 const render = (svg, size, name) =>
-  sharp(Buffer.from(svg), { density: Math.ceil(72 * (size / 48) * 2) })
+  sharp(Buffer.from(svg), { density: Math.ceil(72 * (size / 64) * 2) })
     .resize(size, size)
     .png()
     .toFile(pub(name));

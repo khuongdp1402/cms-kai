@@ -1,142 +1,264 @@
-// KChat "Glacier & Cobalt Studio" (2026-2027) Theme.
-// Overrides the design system variables from _next-colors.scss.
-// Brand Tint: #D7EFFF (RGB: 215 239 255) | Primary Action: #1E5EFF (RGB: 30 94 255) | AI Accent: #0891B2
+// Kalo "Coral" theme (ADR-016/018). Overrides the design system variables from _next-colors.scss.
+// Logo: #FF6B4A | Primary action: #C93F24 (white text 4.98:1) | Background: #FFF8F5 | Ink: #1F1714 | Muted: #6E625B
+// The --blue-* variables are kept because upstream components read them; they now hold the coral scale.
 // scss-lint:disable PropertySortOrder
 @layer base {
   :root {
-    --blue-1: 246 250 255; // #F6FAFF — Ice Alabaster
-    --blue-2: 235 245 255; // #EBF5FF
-    --blue-3: 215 239 255; // #D7EFFF — GLACIER COOL BLUE
-    --blue-4: 195 228 255; // #C3E4FF
-    --blue-5: 165 210 255; // #A5D2FF
-    --blue-6: 147 197 253; // #93C5FD
-    --blue-7: 96 165 250;  // #60A5FA
-    --blue-8: 59 130 246;  // #3B82F6
-    --blue-9: 30 94 255;   // #1E5EFF — Electric Cobalt Primary
-    --blue-10: 23 73 204;  // #1749CC
-    --blue-11: 16 53 153;  // #103599
-    --blue-12: 9 17 30;    // #09111E — Deep Obsidian Slate
+    --blue-1: 255 248 245; // #FFF8F5
+    --blue-2: 255 241 236; // #FFF1EC
+    --blue-3: 255 233 225; // #FFE9E1 — action soft
+    --blue-4: 255 215 202; // #FFD7CA
+    --blue-5: 255 198 181; // #FFC6B5
+    --blue-6: 255 176 154; // #FFB09A
+    --blue-7: 255 148 120; // #FF9478
+    --blue-8: 255 107 74;  // #FF6B4A — coral (logo)
+    --blue-9: 201 63 36;   // #C93F24 — primary action
+    --blue-10: 176 55 32;  // #B03720
+    --blue-11: 163 54 29;  // #A3361D — action ink
+    --blue-12: 58 19 10;   // #3A130A
 
-    --slate-1: 250 252 255;
-    --slate-2: 246 250 255;
-    --slate-3: 237 244 252;
-    --slate-4: 224 235 248;
-    --slate-5: 210 224 242;
-    --slate-6: 194 211 234;
-    --slate-7: 152 174 204;
-    --slate-8: 110 133 166;
-    --slate-9: 75 96 127;
-    --slate-10: 61 80 109;
-    --slate-11: 41 57 82;
-    --slate-12: 9 17 30;
+    --slate-1: 255 252 250;
+    --slate-2: 255 248 245;
+    --slate-3: 247 239 235;
+    --slate-4: 240 228 221; // #F0E4DD — line
+    --slate-5: 230 214 205; // #E6D6CD — line 2
+    --slate-6: 217 198 187;
+    --slate-7: 184 165 155;
+    --slate-8: 150 131 120;
+    --slate-9: 122 107 99;
+    --slate-10: 110 98 91;  // #6E625B — muted
+    --slate-11: 74 63 57;
+    --slate-12: 31 23 20;   // #1F1714 — ink
 
-    --gray-1: 250 252 255;
-    --gray-2: 246 250 255;
-    --gray-3: 237 244 252;
-    --gray-4: 224 235 248;
-    --gray-5: 210 224 242;
-    --gray-6: 194 211 234;
-    --gray-7: 152 174 204;
-    --gray-8: 110 133 166;
-    --gray-9: 75 96 127;
-    --gray-10: 61 80 109;
-    --gray-11: 41 57 82;
-    --gray-12: 9 17 30;
+    --gray-1: 255 252 250;
+    --gray-2: 255 248 245;
+    --gray-3: 247 239 235;
+    --gray-4: 240 228 221;
+    --gray-5: 230 214 205;
+    --gray-6: 217 198 187;
+    --gray-7: 184 165 155;
+    --gray-8: 150 131 120;
+    --gray-9: 122 107 99;
+    --gray-10: 110 98 91;
+    --gray-11: 74 63 57;
+    --gray-12: 31 23 20;
 
-    --background-color: 246 250 255; // #F6FAFF Tactile Daylight Ice Alabaster
+    --background-color: 255 248 245; // #FFF8F5
     --surface-1: 255 255 255;
-    --surface-2: 237 245 255;
-    --text-blue: 16 53 153;
-    --border-container: 222 235 250; // #DEEBFA
-    --border-strong: 194 216 245;
-    --border-weak: 233 242 252;
-    --border-blue-strong: 30 94 255;
-    --solid-blue: 215 239 255; // #D7EFFF Glacier Cool Blue bubbles
-    --solid-blue-2: 235 245 255;
-    --label-background: 235 245 255;
-    --border-blue: 30, 94, 255, 0.38;
-    --solid-iris: 215 239 255; // Bot/AI bubble harmonised with Glacier Cool Blue
+    --surface-2: 255 244 239;
+    --text-blue: 163 54 29;
+    --border-container: 240 228 221; // #F0E4DD
+    --border-strong: 230 214 205;
+    --border-weak: 246 237 232;
+    --border-blue-strong: 201 63 36;
+    --solid-blue: 255 233 225; // #FFE9E1 bubbles
+    --solid-blue-2: 255 241 236;
+    --label-background: 255 241 236;
+    --border-blue: 201, 63, 36, 0.38;
+    --solid-iris: 255 233 225; // Bot/AI bubble harmonised with action soft
   }
 
   .dark {
-    --blue-1: 8 14 30;
-    --blue-2: 15 29 58;
-    --blue-3: 22 43 82;
-    --blue-4: 26 54 110;
-    --blue-5: 23 73 204;
-    --blue-6: 30 94 255;
-    --blue-7: 59 130 246;
-    --blue-8: 96 165 250;
-    --blue-9: 30 94 255;
-    --blue-10: 96 165 250;
-    --blue-11: 195 228 255;
-    --blue-12: 215 239 255; // #D7EFFF
+    --blue-1: 23 17 15;
+    --blue-2: 38 26 21;
+    --blue-3: 58 31 23;
+    --blue-4: 80 38 26;
+    --blue-5: 110 48 31;
+    --blue-6: 163 54 29;
+    --blue-7: 201 63 36;
+    --blue-8: 255 107 74;
+    --blue-9: 201 63 36;
+    --blue-10: 255 148 120;
+    --blue-11: 255 176 154;
+    --blue-12: 255 233 225;
 
-    --slate-1: 8 14 30;
-    --slate-2: 12 21 42;
-    --slate-3: 17 30 58;
-    --slate-4: 24 41 76;
-    --slate-5: 33 54 96;
-    --slate-6: 46 72 122;
-    --slate-7: 70 100 156;
-    --slate-8: 100 132 190;
-    --slate-9: 148 166 196;
-    --slate-10: 204 216 235;
-    --slate-11: 228 236 247;
-    --slate-12: 248 251 255;
+    --slate-1: 23 17 15;
+    --slate-2: 31 23 20;
+    --slate-3: 42 32 28;
+    --slate-4: 54 42 37;
+    --slate-5: 67 52 46;
+    --slate-6: 85 67 59;
+    --slate-7: 115 90 78;
+    --slate-8: 154 123 107;
+    --slate-9: 184 165 155;
+    --slate-10: 217 198 187;
+    --slate-11: 232 220 213;
+    --slate-12: 251 245 242;
 
-    --gray-1: 8 14 30;
-    --gray-2: 12 21 42;
-    --gray-3: 17 30 58;
-    --gray-4: 24 41 76;
-    --gray-5: 33 54 96;
-    --gray-6: 46 72 122;
-    --gray-7: 70 100 156;
-    --gray-8: 100 132 190;
-    --gray-9: 148 166 196;
-    --gray-10: 204 216 235;
-    --gray-11: 228 236 247;
-    --gray-12: 248 251 255;
+    --gray-1: 23 17 15;
+    --gray-2: 31 23 20;
+    --gray-3: 42 32 28;
+    --gray-4: 54 42 37;
+    --gray-5: 67 52 46;
+    --gray-6: 85 67 59;
+    --gray-7: 115 90 78;
+    --gray-8: 154 123 107;
+    --gray-9: 184 165 155;
+    --gray-10: 217 198 187;
+    --gray-11: 232 220 213;
+    --gray-12: 251 245 242;
 
-    --background-color: 8 14 30;
-    --surface-1: 12 21 42;
-    --surface-2: 17 30 58;
-    --text-blue: 215 239 255;
-    --border-strong: 33 54 96;
-    --border-weak: 24 41 76;
-    --border-blue-strong: 96 165 250;
-    --solid-blue: 22 43 82;
-    --solid-blue-2: 15 29 58;
-    --label-background: 24 41 76;
-    --border-blue: 30, 94, 255, 0.5;
-    --solid-iris: 33 54 96;
-    --surface-active: 46 72 122;
-    --solid-1: 12 21 42;
-    --solid-2: 17 30 58;
-    --solid-3: 24 41 76;
-    --solid-active: 46 72 122;
-    --card-color: 12 21 42;
-    --button-color: 23 73 204;
+    --background-color: 23 17 15;
+    --surface-1: 31 23 20;
+    --surface-2: 42 32 28;
+    --text-blue: 255 233 225;
+    --border-strong: 67 52 46;
+    --border-weak: 54 42 37;
+    --border-blue-strong: 255 148 120;
+    --solid-blue: 58 31 23;
+    --solid-blue-2: 38 26 21;
+    --label-background: 54 42 37;
+    --border-blue: 255, 107, 74, 0.5;
+    --solid-iris: 67 52 46;
+    --surface-active: 85 67 59;
+    --solid-1: 31 23 20;
+    --solid-2: 42 32 28;
+    --solid-3: 54 42 37;
+    --solid-active: 85 67 59;
+    --card-color: 31 23 20;
+    --button-color: 201 63 36;
   }
 
-  // Sidebar styling with 2026-2027 Abyssal Midnight Navy & Cobalt Specular Gradient
+  // Sidebar: warm dark ink gradient with coral accents
   .ktech-sidebar {
     background-image: linear-gradient(
       180deg,
-      #103599 0%,
-      #0D266B 48%,
-      #080E1E 100%
+      #3A1A12 0%,
+      #2A1A15 48%,
+      #1F1714 100%
     );
-    box-shadow: inset -1px 0 0 rgba(215, 239, 255, 0.14);
-    --background-color: 8 14 30;
-    --slate-10: 195 228 255;
-    --slate-11: 215 239 255; // #D7EFFF
+    box-shadow: inset -1px 0 0 rgba(255, 233, 225, 0.14);
+    --background-color: 31 23 20;
+    --slate-10: 255 233 225;
+    --slate-11: 255 248 245; // #FFF8F5
     --slate-12: 255 255 255;
-    --blue-9: 215 239 255;
-    --blue-11: 195 228 255;
-    --border-weak: 26 54 110;
-    --button-color: 23 73 204;
-    --alpha-1: 215, 239, 255, 0.08;
-    --alpha-2: 215, 239, 255, 0.15;
+    --blue-9: 255 248 245;
+    --blue-11: 255 215 202;
+    --border-weak: 80 38 26;
+    --button-color: 201 63 36;
+    --alpha-1: 255, 233, 225, 0.08;
+    --alpha-2: 255, 233, 225, 0.15;
   }
+}
+
+// Be Vietnam Pro, self-hosted (no Google Fonts)
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-vietnamese-400.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-ext-400.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-400.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-vietnamese-500.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-ext-500.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-500.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-vietnamese-600.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-ext-600.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-600.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-vietnamese-700.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-ext-700.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-700.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-vietnamese-800.woff2) format('woff2');
+  unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-ext-800.woff2) format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Be Vietnam Pro';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url(/fonts/be-vietnam-pro/bvp-latin-800.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }

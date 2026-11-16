@@ -13,18 +13,18 @@ const {
 
 export const colors = {
   woot: {
-    25: '#F6FAFF',
-    50: '#EBF5FF',
-    75: '#D7EFFF', // Glacier Cool Blue (#D7EFFF)
-    100: '#C3E4FF',
-    200: '#93C5FD',
-    300: '#60A5FA',
-    400: '#3B82F6',
-    500: '#1E5EFF', // Electric Cobalt (2026-2027)
-    600: '#1749CC',
-    700: '#103599',
-    800: '#0D266B',
-    900: '#09111E',
+    25: '#FFF8F5',
+    50: '#FFF1EC',
+    75: '#FFE9E1',
+    100: '#FFD7CA',
+    200: '#FFB9A3',
+    300: '#FF9478',
+    400: '#FF6B4A',
+    500: '#C93F24', // Kalo primary action
+    600: '#A3361D',
+    700: '#7F2A16',
+    800: '#5C1F10',
+    900: '#3A130A',
   },
   green: {
     50: greenDark.green12,
