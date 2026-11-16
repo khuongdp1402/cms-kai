@@ -19,7 +19,8 @@ RSpec.describe 'Kchat reports API', type: :request do
 
     expect(response).to have_http_status(:ok)
     body = response.parsed_body
-    expect(body.keys).to contain_exactly('range', 'today', 'revenue', 'orders_count', 'new_contacts', 'waiting_messages', 'channels', 'daily', 'top_products')
+    expect(body.keys).to contain_exactly('range', 'today', 'revenue', 'orders_count', 'new_contacts', 'waiting_messages', 'channels', 'daily',
+                                         'top_products')
     expect(body).to include('range' => '7d', 'revenue' => 10_000, 'orders_count' => 1)
     expect(body['daily'].size).to eq(7)
     expect(body['today']).to eq(body['daily'].last['date'])
