@@ -13,12 +13,24 @@
 #                   RAILS_ENV=development, so a development server answers 200 - set SIMULATE_EXPECT=200 there).
 # Server prerequisites: ENABLE_ACCOUNT_SIGNUP true (InstallationConfig, not only the env var), CASSO_* set,
 # AGENTGW_API_KEY unset (the AI step expects 503 ai_not_configured).
-# (no `set -u`: macOS bash 3.2 treats empty arrays as unbound)
+#
+# SAFETY: this script creates accounts, confirms users through rails runner and posts a Casso credit, and it
+# LEAVES its test accounts, orders and payment events in the database. Run it only against a throwaway dev
+# database. It refuses any BASE_URL that is not localhost / 127.0.0.1 / 0.0.0.0 unless I_KNOW=1 is set.
+# (no `set -u`: macOS bash 3.2 treats empty arrays as unbound; pipefail is fine)
+set -o pipefail
 
 BASE_URL="${BASE_URL:?set BASE_URL}"
+# Exact host match (a plain `http://localhost*` prefix would also accept http://localhost.evil.com).
+LOCAL_URL_RE='^http://(localhost|127\.0\.0\.1|0\.0\.0\.0)(:[0-9]+)?(/.*)?$'
+if ! [[ "$BASE_URL" =~ $LOCAL_URL_RE ]]; then
+  [ "${I_KNOW:-}" = 1 ] || { echo "refusing non-local BASE_URL; set I_KNOW=1 to override" >&2; exit 2; }
+fi
 CASSO_TOKEN="${CASSO_TOKEN:-${SECURE_TOKEN:?set CASSO_TOKEN}}"
 SUPERADMIN_EMAIL="${SUPERADMIN_EMAIL:?set SUPERADMIN_EMAIL}"
 SUPERADMIN_PASSWORD="${SUPERADMIN_PASSWORD:?set SUPERADMIN_PASSWORD}"
+# Values interpolated into the Ruby runner and python snippets must be harmless.
+case "$SUPERADMIN_EMAIL" in *[!A-Za-z0-9._+@-]*) echo "unsafe SUPERADMIN_EMAIL" >&2; exit 2 ;; esac
 RAILS_RUNNER="${RAILS_RUNNER:-docker exec -i kalo-smoke-rails bundle exec rails runner}"
 SIMULATE_EXPECT="${SIMULATE_EXPECT:-404}"
 
@@ -29,6 +41,9 @@ RUN_ID="$(date +%s)$RANDOM"
 
 ok()   { STEP=$((STEP+1)); PASS=$((PASS+1)); printf '%2d OK   %s\n' "$STEP" "$1"; }
 fail() { STEP=$((STEP+1)); printf '%2d FAIL %s\n' "$STEP" "$1"; shift; [ $# -gt 0 ] && printf '        %s\n' "$@"; printf '\n%d passed, 1 failed (stopped at step %d)\n' "$PASS" "$STEP"; exit 1; }
+
+# need_id <name> <value>: server-derived ids go into Ruby and python snippets, so they must be plain integers.
+need_id() { case "$2" in ''|*[!0-9]*) fail "$1 is a plain integer id" "got: $(printf '%s' "$2" | head -c 80)" ;; esac; }
 
 # json <file> <python expression over d>  -> prints the value ("" on error)
 json() { python3 -c 'import json,sys
@@ -81,7 +96,7 @@ signin() { # signin <email> <password> -> sets AUTH, CODE, BODY
 signin "$EMAIL" "$PASSWORD"
 expect "sign in account 1 (devise token headers)" 200 "len(d['data']['accounts'])>=1"
 [ -n "$(header access-token)" ] && ok "access-token header present" || fail "access-token header present"
-ACC="$(json "$BODY" "d['data']['accounts'][0]['id']")"
+ACC="$(json "$BODY" "d['data']['accounts'][0]['id']")"; need_id ACC "$ACC"
 USER_AUTH=("${AUTH[@]}")
 K="/api/v1/accounts/$ACC/kchat"
 
@@ -100,10 +115,10 @@ req POST "$K/products" '{"name":"Ao thun smoke","price":150000,"sku":"SMK-1","st
 [ "$CODE" = 200 ] || [ "$CODE" = 201 ] || fail "POST product" "got $CODE: $(head -c 300 "$BODY")"
 [ "$(json "$BODY" "d['price']==150000 and d['stock']==50")" = True ] && ok "POST product ($CODE)" || fail "POST product values" "$(head -c 300 "$BODY")"
 PID="$(json "$BODY" "d['id']")"
-[ -n "$PID" ] || fail "product id returned"
+need_id PID "$PID"
 req POST "$K/orders" "{\"source\":\"manual\",\"payment_method\":\"transfer_qr\",\"shipping_fee\":20000,\"items\":[{\"product_id\":$PID,\"quantity\":2},{\"name\":\"Phi goi qua\",\"unit_price\":5000,\"quantity\":1}]}"
 [ "$CODE" = 200 ] || [ "$CODE" = 201 ] || fail "POST order (transfer_qr)" "got $CODE: $(head -c 400 "$BODY")"
-ORDER_ID="$(json "$BODY" "d['id']")"; TOTAL="$(json "$BODY" "d['total']")"
+ORDER_ID="$(json "$BODY" "d['id']")"; TOTAL="$(json "$BODY" "d['total']")"; need_id ORDER_ID "$ORDER_ID"; need_id TOTAL "$TOTAL"
 [ "$(json "$BODY" "d['status']=='pending_payment' and d['total']==325000 and d['number']>=1001")" = True ] \
   && ok "POST order: pending_payment, total 325000 (2x150000 + 5000 + 20000 ship), number>=1001" \
   || fail "POST order values" "body: $(head -c 500 "$BODY")"
@@ -123,7 +138,8 @@ ci = ContactInbox.create!(contact: contact, inbox: inbox, source_id: SecureRando
 conv = Conversation.create!(account: a, inbox: inbox, contact: contact, contact_inbox: ci)
 puts \"CONV=#{conv.display_id}\"
 " 2>/dev/null | grep '^CONV=' | cut -d= -f2)"
-[ -n "$CONV" ] && ok "create widget inbox + conversation via rails runner (display_id $CONV)" || fail "create conversation via rails runner"
+need_id CONV "$CONV"
+ok "create widget inbox + conversation via rails runner (display_id $CONV)" || fail "create conversation via rails runner"
 req POST "$K/orders/$ORDER_ID/send_qr" "{\"conversation_id\":$CONV}"
 expect "POST send_qr into conversation $CONV" 201 "d.get('id') is not None"
 ATTACH="$($RAILS_RUNNER "m = Account.find($ACC).conversations.find_by!(display_id: $CONV).messages.where(message_type: :outgoing).last; puts \"ATT=#{m.attachments.count}\"" 2>/dev/null | grep '^ATT=' | cut -d= -f2)"
@@ -177,7 +193,7 @@ expect "AI repurpose -> 503 ai_not_configured" 503 "d['error']=='ai_not_configur
 # 12. tenant isolation and auth
 signin "$EMAIL2" "$PASSWORD"
 expect "sign in account 2" 200
-ACC2="$(json "$BODY" "d['data']['accounts'][0]['id']")"
+ACC2="$(json "$BODY" "d['data']['accounts'][0]['id']")"; need_id ACC2 "$ACC2"
 [ "$ACC2" != "$ACC" ] && ok "account 2 has its own id ($ACC2)" || fail "account 2 has its own id"
 req GET "/api/v1/accounts/$ACC/kchat/orders/$ORDER_ID"
 [ "$CODE" = 401 ] || [ "$CODE" = 404 ] && ok "account 2 token on account 1 order path -> $CODE (denied)" || fail "cross-tenant via account-1 path" "got $CODE"
