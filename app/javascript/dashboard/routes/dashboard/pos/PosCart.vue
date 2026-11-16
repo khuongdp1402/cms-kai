@@ -1,12 +1,12 @@
 <script setup>
-import { computed, onBeforeUnmount, ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import OrdersAPI from 'dashboard/api/kchat/orders';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloProductThumb from 'dashboard/components-next/icon/KaloProductThumb.vue';
+import { useOrderQr } from '../orders/useOrderQr';
 
 const { t } = useI18n();
 const store = useStore();
@@ -20,7 +20,7 @@ const METHODS = [
 const lines = ref([]);
 const method = ref('transfer_qr');
 const pendingOrder = ref(null);
-const qrUrl = ref('');
+const qr = useOrderQr();
 const isPaid = ref(false);
 const errorMessage = ref('');
 const isBusy = ref(false);
@@ -42,23 +42,13 @@ const change = (line, delta) => {
   }
 };
 
-const releaseQr = () => {
-  if (qrUrl.value) URL.revokeObjectURL(qrUrl.value);
-  qrUrl.value = '';
-};
-
 const reset = () => {
-  releaseQr();
+  qr.release();
   lines.value = [];
   pendingOrder.value = null;
   isPaid.value = false;
   errorMessage.value = '';
   method.value = 'transfer_qr';
-};
-
-const loadQr = async order => {
-  const { data } = await OrdersAPI.qr(order.id);
-  qrUrl.value = URL.createObjectURL(data);
 };
 
 const pay = async () => {
@@ -76,10 +66,26 @@ const pay = async () => {
     });
     if (method.value === 'transfer_qr') {
       pendingOrder.value = order;
-      await loadQr(order);
+      await qr.load(order.id);
     } else {
       isPaid.value = true;
     }
+  } catch (error) {
+    errorMessage.value = t(kchatErrorKey(error));
+  } finally {
+    isBusy.value = false;
+  }
+};
+
+const cancelOrder = async () => {
+  isBusy.value = true;
+  errorMessage.value = '';
+  try {
+    await store.dispatch('kchatOrders/transition', {
+      id: pendingOrder.value.id,
+      event: 'cancel',
+    });
+    reset();
   } catch (error) {
     errorMessage.value = t(kchatErrorKey(error));
   } finally {
@@ -95,7 +101,7 @@ const confirmPaid = async () => {
       id: pendingOrder.value.id,
       event: 'mark_paid',
     });
-    releaseQr();
+    qr.release();
     isPaid.value = true;
   } catch (error) {
     errorMessage.value = t(kchatErrorKey(error));
@@ -103,8 +109,6 @@ const confirmPaid = async () => {
     isBusy.value = false;
   }
 };
-
-onBeforeUnmount(releaseQr);
 
 defineExpose({ add });
 </script>
@@ -147,22 +151,45 @@ defineExpose({ add });
         }}
       </p>
       <img
-        v-if="qrUrl"
-        :src="qrUrl"
+        v-if="qr.url.value"
+        :src="qr.url.value"
         :alt="t('KALO_POS.CART.QR_ALT')"
         data-test="qr-image"
         class="object-contain w-60 h-60"
       />
-      <p v-else-if="!errorMessage" class="text-sm text-n-slate-11">
+      <p
+        v-else-if="!qr.error.value && !errorMessage"
+        class="text-sm text-n-slate-11"
+      >
         {{ t('KALO_POS.CART.QR_LOADING') }}
       </p>
       <p
-        v-if="errorMessage"
+        v-if="qr.error.value || errorMessage"
         role="alert"
         class="text-sm font-medium text-n-ruby-11"
       >
-        {{ errorMessage }}
+        {{ qr.error.value || errorMessage }}
       </p>
+      <div v-if="qr.error.value" class="flex w-full gap-2">
+        <button
+          type="button"
+          data-test="qr-retry"
+          :disabled="qr.isLoading.value"
+          class="flex-1 px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
+          @click="qr.load(pendingOrder.id)"
+        >
+          {{ t('KALO_POS.CART.RETRY') }}
+        </button>
+        <button
+          type="button"
+          data-test="cancel-order"
+          :disabled="isBusy"
+          class="flex-1 px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
+          @click="cancelOrder"
+        >
+          {{ t('KALO_POS.CART.CANCEL_ORDER') }}
+        </button>
+      </div>
       <button
         type="button"
         data-test="confirm-paid"

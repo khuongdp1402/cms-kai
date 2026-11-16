@@ -37,4 +37,28 @@ describe('kchatProducts store', () => {
       { id: 5, name: 'Cốc lam' },
     ]);
   });
+
+  it('commits only the latest fetch when an older one resolves last', async () => {
+    let resolveOld;
+    ProductsAPI.get
+      .mockReturnValueOnce(
+        new Promise(r => {
+          resolveOld = r;
+        })
+      )
+      .mockResolvedValueOnce({
+        data: { payload: [{ id: 2, name: 'Cốc' }], meta: { count: 1 } },
+      });
+    const store = makeStore();
+    const first = store.dispatch('kchatProducts/fetch', { query: 'n' });
+    await store.dispatch('kchatProducts/fetch', { query: 'c' });
+    resolveOld({
+      data: { payload: [{ id: 1, name: 'Nến' }], meta: { count: 1 } },
+    });
+    await first;
+    expect(store.getters['kchatProducts/getProducts'].map(p => p.id)).toEqual([
+      2,
+    ]);
+    expect(store.getters['kchatProducts/getUIFlags'].isFetching).toBe(false);
+  });
 });

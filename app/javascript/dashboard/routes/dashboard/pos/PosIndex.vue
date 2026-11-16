@@ -23,8 +23,14 @@ const isFetching = computed(
 const isEmpty = computed(
   () => !isFetching.value && !products.value.length && !search.value
 );
+const isWholeNumber = value =>
+  value !== '' && Number.isInteger(Number(value)) && Number(value) >= 0;
+// An empty stock means the shop does not track stock for this product.
 const canSave = computed(
-  () => form.value.name.trim() && Number(form.value.price) > 0
+  () =>
+    form.value.name.trim() &&
+    isWholeNumber(form.value.price) &&
+    (form.value.stock === '' || isWholeNumber(form.value.stock))
 );
 
 const load = () =>
@@ -72,6 +78,7 @@ const inputClass =
         <input
           v-model="search"
           type="search"
+          :aria-label="t('KALO_POS.SEARCH')"
           :placeholder="t('KALO_POS.SEARCH')"
           class="flex-1"
           :class="[inputClass]"
@@ -108,14 +115,17 @@ const inputClass =
             v-model="form.name"
             type="text"
             data-test="product-name"
+            :aria-label="t('KALO_POS.PRODUCT_FORM.NAME')"
             :placeholder="t('KALO_POS.PRODUCT_FORM.NAME')"
             :class="inputClass"
           />
           <input
             v-model="form.price"
             type="number"
-            min="1"
+            min="0"
+            step="1"
             data-test="product-price"
+            :aria-label="t('KALO_POS.PRODUCT_FORM.PRICE')"
             :placeholder="t('KALO_POS.PRODUCT_FORM.PRICE')"
             :class="inputClass"
           />
@@ -123,6 +133,9 @@ const inputClass =
             v-model="form.stock"
             type="number"
             min="0"
+            step="1"
+            data-test="product-stock"
+            :aria-label="t('KALO_POS.PRODUCT_FORM.STOCK')"
             :placeholder="t('KALO_POS.PRODUCT_FORM.STOCK')"
             :class="inputClass"
           />

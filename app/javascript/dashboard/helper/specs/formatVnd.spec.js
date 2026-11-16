@@ -14,4 +14,9 @@ describe('formatVnd', () => {
   it('treats missing values as zero', () => {
     expect(formatVnd(null)).toBe('0đ');
   });
+
+  it('keeps the sign of negative amounts and treats NaN as zero', () => {
+    expect(formatVnd(-5000)).toBe('-5.000đ');
+    expect(formatVnd(NaN)).toBe('0đ');
+  });
 });

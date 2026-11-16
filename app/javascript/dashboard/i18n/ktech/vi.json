@@ -1656,7 +1656,6 @@
     "OPEN_POS": "Mở POS",
     "CREATE": "Tạo đơn",
     "SEARCH": "Mã đơn, tên khách",
-    "LOADING": "Đang tải…",
     "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
     "TABS": {
       "ALL": "Tất cả",
@@ -1699,7 +1698,8 @@
       "SHIP": "Giao hàng",
       "COMPLETE": "Hoàn tất",
       "CANCEL": "Hủy đơn",
-      "CLOSE": "Đóng"
+      "CLOSE": "Đóng",
+      "KEEP": "Giữ đơn"
     },
     "QR_SENT": "Đã gửi mã QR cho khách",
     "DRAWER": {
@@ -1709,7 +1709,10 @@
       "TOTAL": "Tổng",
       "ADDRESS": "Địa chỉ giao",
       "CONTACT": "Khách",
-      "METHOD": "Cách trả"
+      "LABEL": "Chi tiết đơn",
+      "CONFIRM_CANCEL": "Hủy đơn này? Hàng sẽ được trả lại kho.",
+      "QR_ALT": "Mã QR thanh toán",
+      "QR_LOADING": "Đang tạo mã QR…"
     },
     "FORM": {
       "TITLE": "Tạo đơn",
@@ -1738,7 +1741,9 @@
       "SUBSCRIPTION_EXPIRED": "Gói dùng thử đã hết hạn",
       "VALIDATION_FAILED": "Thông tin chưa đúng, hãy kiểm tra lại",
       "UNKNOWN": "Có lỗi xảy ra, thử lại sau"
-    }
+    },
+    "NONE": "Không có đơn nào",
+    "LOAD_MORE": "Xem thêm"
   },
   "KALO_POS": {
     "TITLE": "Bán tại quầy",
@@ -1767,7 +1772,9 @@
       "SCAN_TO_PAY": "Khách quét mã để trả {amount}",
       "CONFIRM_PAID": "Đã nhận tiền",
       "QR_LOADING": "Đang tạo mã QR…",
-      "QR_ALT": "Mã QR thanh toán"
+      "QR_ALT": "Mã QR thanh toán",
+      "RETRY": "Thử lại",
+      "CANCEL_ORDER": "Hủy đơn"
     }
   }
 }

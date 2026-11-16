@@ -81,4 +81,46 @@ describe('kchatOrders store', () => {
     await expect(store.dispatch('kchatOrders/create', {})).rejects.toBe(error);
     expect(store.getters['kchatOrders/getUIFlags'].isCreating).toBe(false);
   });
+
+  it('commits only the latest fetch when an older one resolves last', async () => {
+    let resolveOld;
+    OrdersAPI.get
+      .mockReturnValueOnce(
+        new Promise(r => {
+          resolveOld = r;
+        })
+      )
+      .mockResolvedValueOnce({
+        data: { payload: [order(2, 'paid')], meta: { count: 1 } },
+      });
+    const store = makeStore();
+    const first = store.dispatch('kchatOrders/fetch', { query: 'a' });
+    await store.dispatch('kchatOrders/fetch', { query: 'ab' });
+    resolveOld({ data: { payload: [order(1, 'paid')], meta: { count: 1 } } });
+    await first;
+    expect(store.getters['kchatOrders/getOrders'].map(o => o.id)).toEqual([2]);
+    expect(store.getters['kchatOrders/getUIFlags'].isFetching).toBe(false);
+  });
+
+  it('appends when page > 1 and replaces on page 1', async () => {
+    OrdersAPI.get
+      .mockResolvedValueOnce({
+        data: { payload: [order(1, 'paid')], meta: { current_page: 1 } },
+      })
+      .mockResolvedValueOnce({
+        data: { payload: [order(2, 'paid')], meta: { current_page: 2 } },
+      })
+      .mockResolvedValueOnce({
+        data: { payload: [order(3, 'paid')], meta: { current_page: 1 } },
+      });
+    const store = makeStore();
+    await store.dispatch('kchatOrders/fetch', { page: 1 });
+    await store.dispatch('kchatOrders/fetch', { page: 2 });
+    expect(store.getters['kchatOrders/getOrders'].map(o => o.id)).toEqual([
+      1, 2,
+    ]);
+    expect(store.getters['kchatOrders/getMeta'].current_page).toBe(2);
+    await store.dispatch('kchatOrders/fetch', { page: 1 });
+    expect(store.getters['kchatOrders/getOrders'].map(o => o.id)).toEqual([3]);
+  });
 });

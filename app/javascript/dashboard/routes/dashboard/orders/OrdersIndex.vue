@@ -31,15 +31,32 @@ const openOrder = computed(() =>
     ? store.getters['kchatOrders/getOrderById'](openOrderId.value)
     : null
 );
+const meta = computed(() => store.getters['kchatOrders/getMeta']);
+const busyIds = ref([]);
 const isEmpty = computed(
-  () => !uiFlags.value.isFetching && !orders.value.length && !query.value
+  () =>
+    !uiFlags.value.isFetching &&
+    !orders.value.length &&
+    !query.value &&
+    status.value === undefined
 );
+const hasMore = computed(
+  () => meta.value.current_page * meta.value.per_page < meta.value.count
+);
+const isBusy = id => busyIds.value.includes(id);
 
 const load = () =>
   store.dispatch('kchatOrders/fetch', {
     status: status.value,
     query: query.value || undefined,
     page: 1,
+  });
+
+const loadMore = () =>
+  store.dispatch('kchatOrders/fetch', {
+    status: status.value,
+    query: query.value || undefined,
+    page: meta.value.current_page + 1,
   });
 
 const chooseTab = tab => {
@@ -75,8 +92,10 @@ const run = async work => {
   }
 };
 
-const runAction = (order, action) =>
-  run(async () => {
+const runAction = async (order, action) => {
+  if (isBusy(order.id)) return;
+  busyIds.value.push(order.id);
+  await run(async () => {
     if (action.sendQr) {
       await store.dispatch('kchatOrders/sendQr', {
         id: order.id,
@@ -90,6 +109,8 @@ const runAction = (order, action) =>
       });
     }
   });
+  busyIds.value = busyIds.value.filter(id => id !== order.id);
+};
 
 const onCreated = () => {
   showForm.value = false;
@@ -162,6 +183,7 @@ onMounted(load);
         <input
           v-model="query"
           type="search"
+          :aria-label="t('KALO_ORDERS.SEARCH')"
           :placeholder="t('KALO_ORDERS.SEARCH')"
           class="w-full px-3 py-2 text-sm border rounded-lg sm:w-72 ltr:sm:ml-auto rtl:sm:mr-auto border-n-weak bg-n-solid-1 text-n-slate-12"
           @input="onSearch"
@@ -242,7 +264,8 @@ onMounted(load);
                   v-if="rowAction(order)"
                   type="button"
                   data-test="row-action"
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-semibold rounded-[10px] bg-woot-50 text-woot-600 hover:bg-woot-75"
+                  :disabled="isBusy(order.id)"
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-semibold rounded-[10px] bg-woot-50 text-woot-600 hover:bg-woot-75 disabled:opacity-50"
                   @click.stop="runAction(order, rowAction(order))"
                 >
                   <KaloIcon
@@ -257,6 +280,23 @@ onMounted(load);
           </tbody>
         </table>
       </div>
+      <p
+        v-if="!orders.length && !uiFlags.isFetching"
+        data-test="orders-none"
+        class="py-10 text-sm text-center text-n-slate-11"
+      >
+        {{ t('KALO_ORDERS.NONE') }}
+      </p>
+      <button
+        v-if="hasMore"
+        type="button"
+        data-test="load-more"
+        :disabled="uiFlags.isFetching"
+        class="self-center px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
+        @click="loadMore"
+      >
+        {{ t('KALO_ORDERS.LOAD_MORE') }}
+      </button>
     </template>
 
     <div
@@ -271,6 +311,7 @@ onMounted(load);
     <OrderDrawer
       v-if="openOrder"
       :order="openOrder"
+      :busy="isBusy(openOrder.id)"
       @close="openOrderId = null"
       @action="runAction(openOrder, $event)"
     />

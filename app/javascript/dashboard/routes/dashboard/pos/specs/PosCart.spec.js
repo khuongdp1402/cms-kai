@@ -108,4 +108,80 @@ describe('PosCart', () => {
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:qr');
     expect(wrapper.find('[data-test="paid-state"]').exists()).toBe(true);
   });
+
+  it('double-tap on pay creates one order', async () => {
+    let finish;
+    const create = vi.fn(
+      () =>
+        new Promise(resolve => {
+          finish = resolve;
+        })
+    );
+    const wrapper = mountCart({ create });
+    wrapper.vm.add(candle);
+    await wrapper.vm.$nextTick();
+    await wrapper.find('[data-test="method-cash"]').trigger('click');
+    await wrapper.find('[data-test="pay"]').trigger('click');
+    await wrapper.find('[data-test="pay"]').trigger('click');
+    expect(create).toHaveBeenCalledTimes(1);
+    finish(makeOrder({ status: 'paid' }));
+    await flushPromises();
+  });
+
+  it('keeps the cart and shows the message when create fails', async () => {
+    const create = vi.fn().mockRejectedValue({
+      response: { data: { error: 'insufficient_stock' } },
+    });
+    const wrapper = mountCart({ create });
+    wrapper.vm.add(candle);
+    await wrapper.vm.$nextTick();
+    await wrapper.find('[data-test="pay"]').trigger('click');
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="cart-line"]')).toHaveLength(1);
+    expect(wrapper.find('[role="alert"]').text()).toBe('Không đủ hàng');
+  });
+
+  it('offers retry and cancel when the QR cannot be loaded, and cancel releases the order', async () => {
+    const order = makeOrder({ id: 9 });
+    const create = vi.fn().mockResolvedValue(order);
+    const transition = vi
+      .fn()
+      .mockResolvedValue({ ...order, status: 'cancelled' });
+    OrdersAPI.qr
+      .mockRejectedValueOnce({
+        response: { data: { error: 'payment_settings_missing' } },
+      })
+      .mockResolvedValueOnce({ data: new Blob(['png']) });
+    const wrapper = mountCart({ create, transition });
+    wrapper.vm.add(candle);
+    await wrapper.vm.$nextTick();
+    await wrapper.find('[data-test="pay"]').trigger('click');
+    await flushPromises();
+    expect(wrapper.find('[role="alert"]').text()).toBe(
+      'Chưa cài đặt tài khoản nhận tiền'
+    );
+    await wrapper.find('[data-test="qr-retry"]').trigger('click');
+    await flushPromises();
+    expect(wrapper.find('img[data-test="qr-image"]').exists()).toBe(true);
+  });
+
+  it('cancel after a QR failure transitions cancel and clears the cart', async () => {
+    const order = makeOrder({ id: 9 });
+    const create = vi.fn().mockResolvedValue(order);
+    const transition = vi
+      .fn()
+      .mockResolvedValue({ ...order, status: 'cancelled' });
+    OrdersAPI.qr.mockRejectedValue({
+      response: { data: { error: 'payment_settings_missing' } },
+    });
+    const wrapper = mountCart({ create, transition });
+    wrapper.vm.add(candle);
+    await wrapper.vm.$nextTick();
+    await wrapper.find('[data-test="pay"]').trigger('click');
+    await flushPromises();
+    await wrapper.find('[data-test="cancel-order"]').trigger('click');
+    await flushPromises();
+    expect(transition.mock.calls[0][1]).toEqual({ id: 9, event: 'cancel' });
+    expect(wrapper.findAll('[data-test="cart-line"]')).toHaveLength(0);
+  });
 });

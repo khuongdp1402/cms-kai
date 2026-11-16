@@ -28,12 +28,23 @@ const withFlag = async ({ commit }, flag, run) => {
   }
 };
 
+// Only the latest fetch may commit: searches and tab changes overlap.
+let latestFetch = 0;
+
 export const actions = {
-  fetch: ({ commit }, { status, query, page } = {}) =>
-    withFlag({ commit }, 'isFetching', async () => {
+  fetch: async ({ commit }, { status, query, page } = {}) => {
+    latestFetch += 1;
+    const requestId = latestFetch;
+    commit(SET_UI_FLAG, { isFetching: true });
+    try {
       const { data } = await KchatOrdersAPI.get({ status, query, page });
-      commit(SET_ORDERS, data);
-    }),
+      if (requestId === latestFetch) {
+        commit(SET_ORDERS, { ...data, append: page > 1 });
+      }
+    } finally {
+      if (requestId === latestFetch) commit(SET_UI_FLAG, { isFetching: false });
+    }
+  },
 
   create: ({ commit }, payload) =>
     withFlag({ commit }, 'isCreating', async () => {
@@ -60,8 +71,8 @@ export const mutations = {
   [SET_UI_FLAG]($state, flags) {
     $state.uiFlags = { ...$state.uiFlags, ...flags };
   },
-  [SET_ORDERS]($state, { payload, meta }) {
-    $state.records = payload;
+  [SET_ORDERS]($state, { payload, meta, append }) {
+    $state.records = append ? [...$state.records, ...payload] : payload;
     $state.meta = meta;
   },
   [ADD_ORDER]($state, order) {

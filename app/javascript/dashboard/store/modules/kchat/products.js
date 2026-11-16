@@ -25,12 +25,21 @@ const withFlag = async ({ commit }, flag, run) => {
   }
 };
 
+// Only the latest fetch may commit: the POS search is debounced but overlaps.
+let latestFetch = 0;
+
 export const actions = {
-  fetch: ({ commit }, { query, active } = {}) =>
-    withFlag({ commit }, 'isFetching', async () => {
+  fetch: async ({ commit }, { query, active } = {}) => {
+    latestFetch += 1;
+    const requestId = latestFetch;
+    commit(SET_UI_FLAG, { isFetching: true });
+    try {
       const { data } = await KchatProductsAPI.get({ query, active });
-      commit(SET_PRODUCTS, data);
-    }),
+      if (requestId === latestFetch) commit(SET_PRODUCTS, data);
+    } finally {
+      if (requestId === latestFetch) commit(SET_UI_FLAG, { isFetching: false });
+    }
+  },
 
   create: ({ commit }, payload) =>
     withFlag({ commit }, 'isCreating', async () => {
