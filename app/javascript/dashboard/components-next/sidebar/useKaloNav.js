@@ -35,7 +35,8 @@ export const KALO_NAV_ITEMS = [
     icon: 'mega',
     labelKey: 'KALO_NAV.MARKETING',
     route: 'kalo_marketing',
-    isActive: name => name === 'kalo_marketing',
+    isActive: name =>
+      name === 'kalo_marketing' || name.startsWith('campaigns_'),
   },
   {
     key: 'reports',
@@ -70,6 +71,8 @@ export function useKaloNav() {
       FEATURE_FLAGS.CONVERSATION_UNREAD_COUNTS
     )
   );
+
+  store.dispatch('notifications/unReadCount');
 
   watch(
     [accountId, unreadEnabled],

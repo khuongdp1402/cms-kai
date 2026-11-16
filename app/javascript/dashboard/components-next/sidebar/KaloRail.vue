@@ -2,7 +2,10 @@
 import { useI18n } from 'vue-i18n';
 import Logo from 'next/icon/Logo.vue';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloRailFooter from './KaloRailFooter.vue';
 import { useKaloNav } from './useKaloNav';
+
+defineEmits(['openKeyShortcutModal', 'showCreateAccountModal']);
 
 const { t } = useI18n();
 const { items } = useKaloNav();
@@ -38,5 +41,9 @@ const { items } = useKaloNav();
         </span>
       </router-link>
     </template>
+    <KaloRailFooter
+      @open-key-shortcut-modal="$emit('openKeyShortcutModal')"
+      @show-create-account-modal="$emit('showCreateAccountModal')"
+    />
   </nav>
 </template>

@@ -127,7 +127,11 @@ export default {
     class="flex flex-grow overflow-hidden text-n-slate-12"
     :class="{ 'flex-col': isSmallScreen }"
   >
-    <KaloRail v-if="!isSmallScreen" />
+    <KaloRail
+      v-if="!isSmallScreen"
+      @open-key-shortcut-modal="toggleKeyShortcutModal"
+      @show-create-account-modal="openCreateAccountModal"
+    />
 
     <main
       class="flex flex-1 h-full w-full min-h-0 px-0 overflow-hidden bg-n-surface-1"
@@ -154,6 +158,9 @@ export default {
         @clickaway="closeKeyShortcutModal"
       />
     </main>
-    <KaloTabBar v-if="isSmallScreen" />
+    <KaloTabBar
+      v-if="isSmallScreen"
+      @show-create-account-modal="openCreateAccountModal"
+    />
   </div>
 </template>

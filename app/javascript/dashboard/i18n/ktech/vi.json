@@ -1636,6 +1636,11 @@
         "ACCOUNT": "Thông tin cửa hàng",
         "BILLING": "Thanh toán"
       }
-    }
+    },
+    "NOTIFICATIONS": "Thông báo",
+    "SEARCH": "Tìm kiếm",
+    "PROFILE": "Hồ sơ",
+    "LOGOUT": "Đăng xuất",
+    "SWITCH_ACCOUNT": "Đổi tài khoản"
   }
 }

@@ -12,9 +12,17 @@ const names = [
   'kalo_reports',
   'kalo_settings_hub',
   'labels_list',
+  'search',
+  'notifications_index',
+  'profile_settings_index',
+  'campaigns_livechat_index',
 ];
 
-export const createKaloTestEnv = ({ unread = 0 } = {}) => {
+export const createKaloTestEnv = ({
+  unread = 0,
+  accounts = [{ id: 1, name: 'Shop', role: 'administrator' }],
+  notificationUnread = 0,
+} = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: names.map(name => ({
@@ -27,12 +35,27 @@ export const createKaloTestEnv = ({ unread = 0 } = {}) => {
   const store = createStore({
     getters: {
       'globalConfig/get': () => ({}),
+      'globalConfig/isACustomBrandedInstance': () => false,
+      getUserAccounts: () => accounts,
+      getCurrentUser: () => ({
+        available_name: 'Lan',
+        email: 'lan@example.com',
+        accounts,
+      }),
+      getCurrentUserAvailability: () => 'online',
+      getCurrentAccountId: () => 1,
+      getCurrentUserAutoOffline: () => false,
+      'notifications/getMeta': () => ({ unreadCount: notificationUnread }),
       'accounts/getAccount': () => () => ({}),
       'globalConfig/isOnChatwootCloud': () => false,
       'accounts/isFeatureEnabledonAccount': () => () => true,
       'conversationUnreadCounts/getAllUnreadCount': () => unread,
     },
     modules: {
+      notifications: {
+        namespaced: true,
+        actions: { unReadCount: vi.fn() },
+      },
       conversationUnreadCounts: {
         namespaced: true,
         actions: { get, clear: vi.fn() },

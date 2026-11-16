@@ -2,14 +2,27 @@
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
+import { useMapGetter } from 'dashboard/composables/store';
+import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import { useKaloNav } from './useKaloNav';
+
+defineEmits(['showCreateAccountModal']);
 
 const PRIMARY_KEYS = ['messages', 'orders', 'customers', 'reports'];
 
 const { t } = useI18n();
 const route = useRoute();
 const { items } = useKaloNav();
+
+const userAccounts = useMapGetter('getUserAccounts');
+const hasManyAccounts = computed(() => userAccounts.value.length > 1);
+const accountLinks = [
+  { key: 'notifications', icon: 'bell', name: 'notifications_index' },
+  { key: 'search', icon: 'search', name: 'search' },
+  { key: 'profile', icon: 'users', name: 'profile_settings_index' },
+];
 
 const isSheetOpen = ref(false);
 const primaryItems = computed(() =>
@@ -49,6 +62,36 @@ watch(
         <KaloIcon :name="item.icon" class="size-6" />
         {{ t(item.labelKey) }}
       </router-link>
+      <router-link
+        v-for="link in accountLinks"
+        :key="link.key"
+        :to="{ name: link.name }"
+        :data-test-id="`kalo-sheet-${link.key}`"
+        class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl text-n-slate-12"
+      >
+        <KaloIcon :name="link.icon" class="size-6" />
+        {{ t(`KALO_NAV.${link.key.toUpperCase()}`) }}
+      </router-link>
+      <div
+        v-if="hasManyAccounts"
+        data-test-id="kalo-sheet-switch-account"
+        class="flex items-center gap-3 px-3 py-1 text-sm font-medium text-n-slate-12"
+      >
+        <SidebarAccountSwitcher
+          is-collapsed
+          @show-create-account-modal="$emit('showCreateAccountModal')"
+        />
+        {{ t('KALO_NAV.SWITCH_ACCOUNT') }}
+      </div>
+      <button
+        type="button"
+        data-test-id="kalo-sheet-logout"
+        class="flex items-center gap-3 px-3 py-3 text-sm font-medium text-left rounded-xl text-n-slate-12"
+        @click="Auth.logout()"
+      >
+        <KaloIcon name="back" class="size-6" />
+        {{ t('KALO_NAV.LOGOUT') }}
+      </button>
     </div>
     <router-link
       v-for="item in primaryItems"
