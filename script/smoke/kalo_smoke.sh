@@ -136,6 +136,9 @@ req POST "$K/orders/$ORDER_ID/transition" '{"event":"mark_paid"}'
 [ "$CODE" = 422 ] && ok "second mark_paid is rejected (422 invalid_transition)" || fail "second mark_paid rejected" "got $CODE"
 req GET "$K/reports/summary?range=today"
 expect "reports summary range=today revenue == order total ($TOTAL)" 200 "d['revenue']==$TOTAL and d['orders_count']>=1"
+# new accounts have no reporting_timezone: buckets use Vietnam time (UTC+7), not UTC
+[ "$(json "$BODY" "d['daily'][-1]['date']==__import__('datetime').datetime.now(__import__('datetime').timezone(__import__('datetime').timedelta(hours=7))).date().isoformat()")" = True ] \
+  && ok "reports daily bucket is today in Vietnam time" || fail "reports daily bucket is today in Vietnam time" "daily=$(json "$BODY" "d['daily']")"
 
 # 10. Casso webhook
 CW='/api/v1/casso/webhook'
