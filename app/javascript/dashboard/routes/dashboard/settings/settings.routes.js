@@ -12,6 +12,7 @@ import attributes from './attributes/attributes.routes';
 import automation from './automation/automation.routes';
 import auditlogs from './auditlogs/audit.routes';
 import billing from './billing/billing.routes';
+import BillingPage from './billing/BillingPage.vue';
 import canned from './canned/canned.routes';
 import inbox from './inbox/inbox.routes';
 import integrations from './integrations/integrations.routes';
@@ -55,6 +56,12 @@ export default {
     ...automation.routes,
     ...auditlogs.routes,
     ...billing.routes,
+    {
+      path: frontendURL('accounts/:accountId/settings/billing-kalo'),
+      name: 'kalo_billing',
+      meta: { permissions: ['administrator'] },
+      component: BillingPage,
+    },
     ...canned.routes,
     ...inbox.routes,
     ...integrations.routes,

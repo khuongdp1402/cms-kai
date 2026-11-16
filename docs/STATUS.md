@@ -7,6 +7,7 @@
 **K / Task 2 (done, nhánh `feat/kalo-data`)**: mô hình dữ liệu thương mại `Kchat::{Product,Order,OrderItem,PaymentEvent}` (bảng `kchat_*`) và `Kchat::VietQr` cục bộ; 58 spec đạt.
 **K / Task 3 (done, nhánh `feat/kalo-orders-api`)**: API REST `/api/v1/accounts/:id/kchat/{products,orders,payment_settings}` (gồm `transition`, `send_qr`, `qr`); 38 request spec đạt, gồm spec 404 chéo account.
 **K / Task 7 (done, nhánh `feat/kalo-shell`)**: Task 7 (khung app Kalo: rail 6 mục, tab bar mobile, trang cài đặt tổng) xong trên `feat/kalo-shell`.
+**K / Task 10 (done, nhánh `feat/kalo-reports-ui`)**: trang Báo cáo, Marketing (tab Chiến dịch + Ý tưởng nội dung) và Gói cước (`kalo_billing`) ở frontend; test với API giả, chưa thử với backend thật.
 **Phase trước:** Hoàn tất toàn diện Nền tảng Multi-tenant SaaS KChat (Phase A, B, C, D) — Riêng huấn luyện AI chuyên sâu bổ sung sau
 **Việc vừa hoàn thành:** 
 1. **Super Admin Toàn Diện**: 10 phân hệ nghiệp vụ độc lập (Dashboard, Analytics tăng trưởng & phễu MRR/ARR, Quản lý Tenant với Modal Cấp mới & Drawer chi tiết, Quản lý Tiếp thị liên kết Affiliate với duyệt chi VietQR Casso tức thì 24/7, Gói cước Plans, Thanh toán Billing, AI Pool Gateway & Ping Latency, Giám sát Kênh Channels, Ads & Seeding Marketplace, Cài đặt Settings).
