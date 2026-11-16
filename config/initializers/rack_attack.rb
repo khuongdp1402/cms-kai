@@ -37,6 +37,19 @@ class Rack::Attack
       normalized_path = path[/^[^.]+/]
       normalized_path == '/' ? normalized_path : normalized_path.sub(%r{/+\z}, '')
     end
+
+    # Path as the Rails router will see it: percent-decoded, duplicate slashes squeezed, no trailing slash or format suffix.
+    # Used by throttles whose key is derived from the path so that /accounts/7 and /accounts/0007 cannot get separate buckets.
+    def canonical_path
+      decoded = begin
+        Rack::Utils.unescape_path(path)
+      rescue ArgumentError
+        path
+      end
+      decoded = decoded.scrub('').squeeze('/')
+      stripped = decoded[/^[^.]+/].to_s.sub(%r{/+\z}, '')
+      stripped.empty? ? '/' : stripped
+    end
   end
 
   ### Safelist IPs from Environment Variable ###
@@ -72,8 +85,9 @@ class Rack::Attack
 
   ### Paid AI calls (KChat brand growth): cap per account ###
   throttle('brand_growth_ai/account', limit: ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i, period: 1.minute) do |req|
-    match = req.path_without_extensions.match(%r{\A/api/v1/accounts/(\d+)/brand_growth/(chat_reply|repurpose)\z})
-    match[1] if match && req.post?
+    match = req.canonical_path.match(%r{\A/api/v1/accounts/([^/]+)/brand_growth/(?:chat_reply|repurpose)\z}i)
+    # Account.find casts "0007", "+7" or "7abc" to 7, so key on the integer the controller will resolve, not the raw segment.
+    match[1].to_i.to_s if match && req.post?
   end
 
   ###-----------------------------------------------###
