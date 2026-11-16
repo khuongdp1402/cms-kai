@@ -5,11 +5,13 @@ Nhánh tích hợp `feat/kalo-launch`. Nguồn: sổ theo dõi SDD (`.superpower
 ## 1. Quy trình và số lượng
 
 - 14 task kế hoạch (T0–T13) + `i18n-fix` + `sec-fix`; chạy theo đợt song song, mỗi task một worktree `feat/kalo-<task>`, gộp `--no-ff`.
-- Mỗi task T1–T11 có reviewer độc lập (T3, T4 và rà soát bảo mật dùng model mạnh); tổng cộng **18 vòng sửa** theo review (T1: 1, T2: 1, T3: 1, T4: 2, T5: 1, T6: 1, T7: 3, T8: 1, T9: 1, T10: 2, T11: 2, sec-fix: 2). Mọi task kết thúc ở trạng thái "review clean" trước khi gộp.
+- Mỗi task T1–T11 có reviewer độc lập (T3, T4 và rà soát bảo mật dùng model mạnh); tổng cộng **18 vòng sửa** theo review (T1: 1, T2: 1, T3: 1, T4: 2, T5: 1, T6: 1, T7: 3, T8: 1, T9: 1, T10: 2, T11: 2, sec-fix: review ban đầu + 2 vòng sửa, review lại vòng 2 approved). Mọi task kết thúc ở trạng thái "review clean" trước khi gộp.
 - Phát hiện lớn do review: memo thanh toán gói không khớp với webhook (T4, Critical, đã sửa), mất tính năng cũ khi thay thanh bên (T7: tạo account, phím tắt, mở danh sách theo inbox/nhãn/nhóm; đã khôi phục), ghép slug tham lam có thể cộng tiền nhầm tenant (T4, đã sửa).
 - `account.limits` của Chatwoot không có tác dụng → không áp dụng giới hạn gói, landing và tài liệu không quảng bá (ADR-018/019).
 
-## 2. Kết quả kiểm thử (12A, trên nhánh tích hợp)
+## 2. Kết quả kiểm thử (12A)
+
+> **Lưu ý:** 12A chạy trên `1b184d5`, **trước khi gộp sec-fix (`68170d1`)**; sau đó chỉ chạy 369 spec liên quan. Cả bộ rspec/vitest sẽ chạy lại ở HEAD cuối và số liệu dưới đây được cập nhật (controller).
 
 | Bộ | Kết quả |
 |---|---|
@@ -19,7 +21,7 @@ Nhánh tích hợp `feat/kalo-launch`. Nguồn: sổ theo dõi SDD (`.superpower
 | eslint/prettier | chỉ có lỗi prettier ở 9 file; đã `prettier --write` các file do Kalo tạo (commit `7ad9725`); còn 3 file upstream sẵn lỗi prettier ở base |
 | Kiểm tĩnh | 238 khóa `KALO_` dùng trong code đều có trong `vi.json`, 0 khóa thừa; 9 route `kalo_*` và mọi `router.push` tồn tại; `rails routes -g kchat`/`console` đúng hợp đồng; `zeitwerk:check` ổn; `db:migrate:status` không còn down |
 | Landing (`node --test landing-page/test/landing.test.mjs`) | 7/7 đạt sau task 13 |
-| Sec-fix (vòng cuối) | 369 spec đạt (Casso, kchat, request v1, model, config, AI); rubocop sạch |
+| Sec-fix (vòng cuối, sau 12A) | 369 spec liên quan đạt (Casso, kchat, request v1, model, config, AI); rubocop sạch; review vòng 2: approved. Low ghi nhận: parse ISO của Ruby lỏng hơn SQL guard ở 6 trường hợp biên (không làm shop trả phí bị coi là hết hạn), `AiThrottle` nhớ store production |
 
 Lỗi nhìn thấy trong QA và đã sửa: `overrides.spec.js` hỏng 468 ca khi gộp (LESSONS B16, `i18n-fix`, commit `04fdf8a`); KPI Console "Shop đang trả phí" đếm cả shop hết hạn/bị khóa (`shops_by_plan`, commit `1b184d5`, sửa test-first).
 
@@ -64,4 +66,4 @@ Toàn bộ test frontend dùng jsdom và API giả; chưa chạy với backend t
 
 ## 7. Kết luận
 
-Mã nguồn đạt các cổng tự động (không lỗi do Kalo gây ra trong rspec/vitest/rubocop, rà soát bảo mật đã xử lý mọi Medium). Chưa đủ điều kiện mở bán cho tới khi: 12B không còn mục hỏng, chủ dự án cung cấp tên miền, máy chủ, Casso, SMTP (AI tùy chọn), kiểm staging mục "Chưa kiểm thử runtime", thử một giao dịch Casso thật nhỏ. Xem [go-live-checklist.md](../reference/go-live-checklist.md).
+Tại thời điểm 12A (trước sec-fix) không có lỗi do Kalo gây ra trong rspec/vitest/rubocop; rà soát bảo mật đã xử lý mọi Medium, các bản sửa được kiểm bằng 369 spec liên quan (review vòng 2: approved) nhưng cả bộ chưa chạy lại sau khi gộp. Chưa đủ điều kiện mở bán cho tới khi: 12B không còn mục hỏng, chủ dự án cung cấp tên miền, máy chủ, Casso, SMTP (AI tùy chọn), kiểm staging mục "Chưa kiểm thử runtime", thử một giao dịch Casso thật nhỏ. Xem [go-live-checklist.md](../reference/go-live-checklist.md).
