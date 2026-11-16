@@ -12,6 +12,8 @@ x-rails-env: &rails_env
   FRONTEND_URL: ${FRONTEND_URL:?}
   FORCE_SSL: 'true'
   ENABLE_ACCOUNT_SIGNUP: ${ENABLE_ACCOUNT_SIGNUP:-false}
+  # Language of the login page, the Console and new accounts (Kalo is Vietnamese-first).
+  DEFAULT_LOCALE: ${DEFAULT_LOCALE:-vi}
   # Privacy: with the relay on, mobile push content (customer message previews) is sent through Chatwoot's hub. Off by default.
   ENABLE_PUSH_RELAY_SERVER: ${ENABLE_PUSH_RELAY_SERVER:-false}
   POSTGRES_HOST: postgres

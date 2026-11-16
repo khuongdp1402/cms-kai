@@ -23,3 +23,20 @@ export const applyLocaleOverrides = (messages, overrides) =>
         : result,
     { ...messages }
   );
+
+// Kalo strings are written in Vietnamese only. Every other locale gets them as
+// a fallback (top-level KALO_* namespaces it does not define yet), so a user or
+// installation that is not on `vi` never sees raw KALO_* keys.
+export const applyKaloFallback = (messages, source) => {
+  const kaloKeys = Object.keys(source).filter(key => key.startsWith('KALO_'));
+  return Object.fromEntries(
+    Object.entries(messages).map(([locale, localeMessages]) => [
+      locale,
+      kaloKeys.reduce(
+        (merged, key) =>
+          key in merged ? merged : { ...merged, [key]: source[key] },
+        localeMessages
+      ),
+    ])
+  );
+};

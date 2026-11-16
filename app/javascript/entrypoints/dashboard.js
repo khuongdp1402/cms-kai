@@ -15,7 +15,10 @@ import {
   brandMessages,
   installationBrandName,
 } from 'shared/helpers/brandMessages';
-import { applyLocaleOverrides } from 'shared/helpers/localeOverrides';
+import {
+  applyLocaleOverrides,
+  applyKaloFallback,
+} from 'shared/helpers/localeOverrides';
 import ktechLocaleOverrides from 'dashboard/i18n/ktech';
 import createAxios from 'dashboard/helper/APIHelper';
 
@@ -43,7 +46,10 @@ const i18n = createI18n({
   legacy: false, // https://github.com/intlify/vue-i18n/issues/1902
   locale: 'en',
   messages: brandMessages(
-    applyLocaleOverrides(i18nMessages, ktechLocaleOverrides),
+    applyKaloFallback(
+      applyLocaleOverrides(i18nMessages, ktechLocaleOverrides),
+      ktechLocaleOverrides.vi
+    ),
     installationBrandName()
   ),
 });
