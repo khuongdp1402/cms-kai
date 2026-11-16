@@ -51,6 +51,17 @@ Rails.application.routes.draw do
         end
 
         scope module: :accounts do
+          namespace :kchat do
+            resources :products, only: [:index, :create, :update, :destroy]
+            resources :orders, only: [:index, :show, :create] do
+              member do
+                post :transition
+                post :send_qr
+                get :qr
+              end
+            end
+            resource :payment_settings, only: [:show, :update]
+          end
           namespace :actions do
             resource :contact_merge, only: [:create]
           end
