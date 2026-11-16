@@ -163,6 +163,7 @@ Mục "Chưa kiểm thử runtime" của `deploy.md` (mục 10) **bắt buộc k
 - [ ] Đăng nhập, tạo sản phẩm, tạo đơn, gửi mã QR trong chat, trang Báo cáo và Gói cước chạy trên dữ liệu thật.
 - [ ] Kết nối Zalo cá nhân thử: quét QR, nhận và gửi một tin.
 - [ ] Gửi mail thử (mục 7); thử Casso (mục 5).
+- [ ] Chạy `script/smoke/kalo_smoke.sh` với `BASE_URL` của staging và `I_KNOW=1` **trên DB thử**. Cần: `RAILS_RUNNER` (lệnh `rails runner` trỏ cùng DB với server, dùng để xác nhận email và tạo inbox/hội thoại), `CASSO_TOKEN` (= `CASSO_SECURE_TOKEN` của server), `SUPERADMIN_EMAIL`/`SUPERADMIN_PASSWORD`; server phải bật đăng ký (InstallationConfig) và không đặt `AGENTGW_API_KEY`; đặt `SIMULATE_EXPECT=404` (mặc định). **Cảnh báo:** script tạo tài khoản, đơn và giao dịch Casso và để lại trong DB, không chạy trên DB thật.
 - [ ] Kết quả kiểm khói và trình duyệt thật (12B) trong [báo cáo QA](../reports/2026-11-kalo-launch-qa.md) không còn mục hỏng.
 
 ## 12. Sao lưu và khôi phục

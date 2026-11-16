@@ -72,6 +72,10 @@
   - Triệu chứng: `pnpm eslint a.vue b.js` báo "No files matching the pattern", hoặc đáng ngại hơn là chạy `--fix` trên cả `app/**`.
   - Nguyên nhân: script `eslint` trong package.json đã gắn sẵn glob `app/**/*.{js,vue} --fix`, tham số thêm vào bị ghép thành một pattern.
   - Quy tắc: lint file cụ thể bằng `npx eslint <files> --ext .js,.vue` (trong container rails); chỉ dùng `pnpm eslint` khi muốn lint cả dự án.
+- **B17 (2026-11-17): `DEFAULT_LOCALE=vi` trong `.env.example` làm 6 spec upstream hỏng.**
+  - Triệu chứng: gate cuối có 80 lỗi thay vì 74; 6 ca so khớp thông báo tiếng Anh nhận về tiếng Việt (dyte, widget conversations, v2 accounts, omniauth, session x2).
+  - Nguyên nhân: `rspec.sh` copy `.env.example` thành `.env`, mà commit smoke đặt `DEFAULT_LOCALE=vi`; 12A chạy trước commit đó nên không thấy.
+  - Quy tắc: `script/ktech/rspec.sh` ép `-e DEFAULT_LOCALE=en`. Đổi mặc định cấu hình thì chạy lại cả bộ rspec.
 - **B4 (2026-09-28): Tưởng tính năng có route là tính năng chạy được.**
   - Triệu chứng: routes và frontend có Captain, SLA, Custom Roles… nhưng không có controller.
   - Nguyên nhân: thư mục `enterprise/` đã bị bỏ khỏi repo.
