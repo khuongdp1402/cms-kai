@@ -37,6 +37,8 @@ import inboxAssignableAgents from './modules/inboxAssignableAgents';
 import inboxes from './modules/inboxes';
 import inboxMembers from './modules/inboxMembers';
 import integrations from './modules/integrations';
+import kchatOrders from './modules/kchat/orders';
+import kchatProducts from './modules/kchat/products';
 import labels from './modules/labels';
 import macros from './modules/macros';
 import notifications from './modules/notifications';
@@ -104,6 +106,8 @@ export default createStore({
     inboxes,
     inboxMembers,
     integrations,
+    kchatOrders,
+    kchatProducts,
     labels,
     macros,
     notifications,
