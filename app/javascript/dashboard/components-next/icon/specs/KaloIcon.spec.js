@@ -22,6 +22,21 @@ describe('KaloIcon', () => {
     );
   });
 
+  it('puts the duotone fill inline on every accent element (a sprite <style> does not reach <use> instances)', () => {
+    const sprite = readFileSync('public/kalo-icons.svg', 'utf8');
+    const accents = [...sprite.matchAll(/<[a-z]+ [^>]*class="(a|w)"[^>]*>/g)];
+    expect(accents.length).toBeGreaterThan(0);
+    accents.forEach(([tag, cls]) => {
+      const variable = cls === 'a' ? '--ia' : '--ibg';
+      expect(tag).toMatch(
+        new RegExp(`style="fill:var\\(${variable},#[0-9A-Fa-f]{3,6}\\)"`)
+      );
+    });
+    expect(readFileSync('docs/design/kalo/brand/kalo-icons.svg', 'utf8')).toBe(
+      sprite
+    );
+  });
+
   it('throws a clear error for an unknown name', () => {
     expect(() => mount(KaloIcon, { props: { name: 'nope' } })).toThrow(
       'Unknown KaloIcon name: nope'
