@@ -2,6 +2,10 @@
 
 > **Cập nhật 2026-09-29 (ADR-007):** dự án đổi hướng sang **giữ giao diện Chatwoot và đổi thương hiệu thành KTech**. Việc đang làm là task B-01 bên dưới. Các phase 2–8 (viết CMS riêng) tạm dừng. Các task backend và vận hành ở Phase 0, Phase 1, P4-08/09 (CRM) và Phase 9 vẫn còn hiệu lực.
 
+## Phase K — Kalo launch (đang làm, 2026-11-16)
+
+Kế hoạch chi tiết: [plans/2026-11-16-kalo-launch.md](plans/2026-11-16-kalo-launch.md). Đổi thương hiệu sang Kalo, thêm Đơn hàng, POS, Báo cáo, Console, landing có video, hạ tầng triển khai. Thay thế hướng Phase B (KTech/cobalt).
+
 ## Phase B — KTech branding trên giao diện Chatwoot
 
 | ID | Việc | Kết quả |

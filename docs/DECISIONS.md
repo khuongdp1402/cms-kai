@@ -175,6 +175,16 @@
 - **Đã duyệt (2026-11-16):** màu phương án A (cam san hô ấm); menu 6 mục (Tin nhắn, Đơn hàng, Khách hàng, Marketing, Báo cáo, Cài đặt); chữ trên giao diện ngắn, hướng người dùng cuối, không thuật ngữ kỹ thuật; thứ tự vẽ Figma: bảng thương hiệu → Kalo desktop → Kalo mobile → Console → landing.
 - **Chưa xong:** kiểm tra `kalo.vn`/`kalo.com.vn` ở nhà đăng ký và tra nhãn hiệu NOIP; duyệt logo, màu và giao diện trên Figma trước khi làm code.
 
+## ADR-018 — Quyết định kỹ thuật cho đợt Kalo launch · `accepted` (2026-11-16)
+
+- **Thanh toán đơn của shop:** mã VietQR tạo cục bộ bằng gem `rqrcode`, không gọi dịch vụ ngoài. Shop bấm "Đã nhận tiền" bằng tay; tự đối soát qua Casso cho từng shop để sau.
+- **Vận chuyển:** bản này chỉ nhập hãng và mã vận đơn; chưa nối GHN/GHTK. POS ngoài (KiotViet, Sapo), Ads API, đăng bài tự động, video MMO: chưa làm.
+- **Tiền tố chuyển khoản gói cước:** đổi từ `KCHAT` sang `KALO` (`KALO <account_id> PLAN`).
+- **Tên module nội bộ:** vẫn là `Kchat` (bảng `kchat_*`, namespace `Api::V1::Accounts::Kchat`); tên thương hiệu hiển thị là Kalo qua `INSTALLATION_NAME`.
+- **Giới hạn gói:** áp dụng bằng `account.limits` của Chatwoot nếu cơ chế đó có tác dụng thật; nếu không, bỏ dòng giới hạn khỏi landing.
+- **Dùng thử:** 14 ngày từ `account.created_at`. Hết hạn thì chặn tạo sản phẩm, đơn và gọi AI; vẫn xem và nhắn tin được.
+- **Thi công:** kế hoạch `docs/plans/2026-11-16-kalo-launch.md`, nhánh `feat/kalo-launch`, mỗi task một worktree `feat/kalo-<task>`.
+
 ## Câu hỏi mở (chờ chủ dự án)
 
 - **Q1:** Nhóm tính năng enterprise (Captain AI, SLA, Custom Roles, Audit Logs, Companies, SAML, Calls) cần cái nào? Cái nào cần thì phải tự viết backend, không được copy code enterprise của Chatwoot.

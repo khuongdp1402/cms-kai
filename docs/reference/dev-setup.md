@@ -84,3 +84,12 @@ docker compose exec vite pnpm vitest run app/javascript/dashboard/i18n/ktech
 ```
 
 Test `ktech/specs/overrides.spec.js` fail nếu key không có trong bản tiếng Anh, chuỗi rỗng, hoặc placeholder bị đổi. Không dịch `SNOOZE_PARSER.*` (từ khoá bộ phân tích câu lệnh hẹn giờ).
+
+
+## Chạy test bằng wrapper (đợt Kalo launch)
+
+Cần `docker compose up -d postgres redis` ở thư mục gốc repo. Wrapper dùng chung Postgres/Redis của project compose `cms-kai`, nên chạy được trong cả worktree.
+
+- `script/ktech/rspec.sh <track> <đường dẫn spec…>`: mỗi `<track>` có DB test riêng `chatwoot_test_<track>`, mặc định nạp lại schema mỗi lần (`KALO_SKIP_SCHEMA=1` để bỏ qua).
+- `script/ktech/vitest.sh [đường dẫn spec…]`: chạy vitest trong container.
+- Worktree không có `.env` (bị gitignore): wrapper tự sao chép từ `.env.example`.
