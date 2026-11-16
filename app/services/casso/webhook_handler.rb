@@ -58,12 +58,8 @@ class Casso::WebhookHandler
   def self.parse_valid_until(value)
     return if value.blank?
 
-    parsed = begin
-      Time.zone.parse(value)
-    rescue StandardError
-      nil
-    end
-    Rails.logger.warn '[Casso] ignoring unparseable stored subscription_valid_until' if parsed.nil?
+    parsed = Kchat::Entitlements.parse_valid_until(value)
+    Rails.logger.warn '[Casso] ignoring invalid stored subscription_valid_until' if parsed.nil?
     parsed
   end
 

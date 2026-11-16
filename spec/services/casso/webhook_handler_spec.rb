@@ -264,7 +264,8 @@ RSpec.describe Casso::WebhookHandler do
   end
 
   describe 'a corrupt stored subscription_valid_until' do
-    [['unparseable string', 'garbage'], ['number', 20_261_231], ['array', ['x']]].each do |label, bad|
+    [['unparseable string', 'garbage'], ['number', 20_261_231], ['array', ['x']],
+     ['partial day number', '5'], ['date only', '2026-12-01']].each do |label, bad|
       it "still credits a plan payment starting from now when the stored value is a #{label}" do
         account_hana.update!(custom_attributes: account_hana.custom_attributes.merge('subscription_valid_until' => bad))
         allow(Rails.logger).to receive(:warn)
@@ -277,6 +278,15 @@ RSpec.describe Casso::WebhookHandler do
         expect(Time.zone.parse(attrs['subscription_valid_until'])).to be_within(1.minute).of(30.days.from_now)
         expect(Rails.logger).to have_received(:warn).with(satisfy { |m| m.include?('[Casso]') && m.exclude?('garbage') })
       end
+    end
+
+    it 'extends from a valid stored ISO timestamp with an offset' do
+      until_time = 10.days.from_now.in_time_zone('Asia/Ho_Chi_Minh')
+      account_hana.update!(custom_attributes: account_hana.custom_attributes.merge('subscription_valid_until' => until_time.iso8601))
+
+      run(description: 'KALO HANA 1', amount: 299_000)
+
+      expect(Time.zone.parse(account_hana.reload.custom_attributes['subscription_valid_until'])).to be_within(1.minute).of(40.days.from_now)
     end
   end
 end

@@ -11,12 +11,9 @@ RSpec.describe 'Brand growth AI rate limit', type: :request do
   let(:other_agent) { create(:user, account: other_account, role: :agent) }
   let(:limit) { ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i }
 
+  # Kchat::AiThrottle.store is a fresh MemoryStore for every example (spec/support/ai_throttle.rb).
   around do |example|
-    previous_store = Rack::Attack.cache.store
-    Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
     travel_to(Time.utc(2026, 1, 1, 12, 0, 10)) { example.run }
-  ensure
-    Rack::Attack.cache.store = previous_store
   end
 
   def call(path, user: agent, action: 'chat_reply')
@@ -53,6 +50,48 @@ RSpec.describe 'Brand growth AI rate limit', type: :request do
 
         expect(call(path_for(account))).to eq(429)
       end
+    end
+  end
+
+  it 'really increments a shared counter: the call after the limit is the first 429' do
+    statuses = Array.new(limit + 1) { call(path_for(account)) }
+
+    expect(statuses.first(limit)).not_to include(429)
+    expect(statuses.last).to eq(429)
+    expect(Kchat::AiThrottle.store).to be_a(ActiveSupport::Cache::MemoryStore)
+  end
+
+  context 'with Rack::Attack enabled and an attacker hammering the victim path' do
+    let(:attacker) { create(:user, account: other_account, role: :agent) }
+
+    around do |example|
+      previous = Rack::Attack.enabled
+      previous_store = Rack::Attack.cache.store
+      Rack::Attack.cache.store = ActiveSupport::Cache::MemoryStore.new
+      Rack::Attack.enabled = true
+      example.run
+    ensure
+      Rack::Attack.enabled = previous
+      Rack::Attack.cache.store = previous_store
+    end
+
+    def hammer(path, headers: {})
+      post "#{path}/chat_reply", params: { message: 'hi' }, headers: { 'REMOTE_ADDR' => '203.0.113.50' }.merge(headers), as: :json
+      response.status
+    end
+
+    it 'does not let an unauthenticated caller consume the victim counter' do
+      statuses = Array.new(limit + 5) { hammer(path_for(account)) }
+
+      expect(statuses.uniq).to eq([401])
+      expect(call(path_for(account))).not_to eq(429)
+    end
+
+    it 'does not let another tenant consume the victim counter' do
+      statuses = Array.new(limit + 5) { hammer(path_for(account), headers: attacker.create_new_auth_token) }
+
+      expect(statuses.uniq).to all(satisfy { |s| [401, 403, 404].include?(s) })
+      expect(call(path_for(account))).not_to eq(429)
     end
   end
 

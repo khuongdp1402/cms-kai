@@ -28,49 +28,6 @@ RSpec.describe 'Rack::Attack throttles', type: :request do
     response.status
   end
 
-  describe 'brand_growth_ai/account' do
-    it 'throttles after the limit for a plain account id' do
-      limit.times { expect(hit('/api/v1/accounts/7/brand_growth/chat_reply')).not_to eq(429) }
-
-      expect(hit('/api/v1/accounts/7/brand_growth/chat_reply')).to eq(429)
-    end
-
-    [
-      '/api/v1/accounts/0007/brand_growth/chat_reply',
-      '/api/v1/accounts/0000007/brand_growth/chat_reply',
-      '/api/v1/accounts/7/brand_growth/chat_reply/',
-      '/api/v1/accounts/7/brand_growth/chat_reply.json',
-      '/api/v1/accounts/7/brand_growth//chat_reply',
-      '//api/v1/accounts/7/brand_growth/chat_reply',
-      '/api/v1/accounts//7/brand_growth/chat_reply',
-      '/API/V1/Accounts/7/Brand_Growth/Chat_Reply',
-      '/api/v1/accounts/%37/brand_growth/chat_reply',
-      '/api/v1/accounts/+7/brand_growth/chat_reply',
-      '/api/v1/accounts/7%2E5/brand_growth/chat_reply',
-      '/api/v1/accounts/7.5/brand_growth/chat_reply',
-      '/api/v1/accounts/7%2Fx/brand_growth/chat_reply',
-      '/api/v1/accounts/7%2fx/brand_growth/repurpose.json'
-    ].each do |variant|
-      it "counts #{variant} in the same bucket as account 7" do
-        limit.times { hit('/api/v1/accounts/7/brand_growth/chat_reply') }
-
-        expect(hit(variant)).to eq(429)
-      end
-    end
-
-    it 'keeps separate buckets for different accounts' do
-      limit.times { hit('/api/v1/accounts/7/brand_growth/chat_reply') }
-
-      expect(hit('/api/v1/accounts/8/brand_growth/chat_reply')).not_to eq(429)
-    end
-
-    it 'shares the bucket between chat_reply and repurpose' do
-      limit.times { hit('/api/v1/accounts/7/brand_growth/chat_reply') }
-
-      expect(hit('/api/v1/accounts/0007/brand_growth/repurpose')).to eq(429)
-    end
-  end
-
   describe 'casso_webhook/ip' do
     let(:casso_limit) { ENV.fetch('CASSO_WEBHOOK_LIMIT', '120').to_i }
 

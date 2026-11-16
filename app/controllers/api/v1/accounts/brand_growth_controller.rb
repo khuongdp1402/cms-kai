@@ -58,10 +58,10 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
   private
 
   # Authoritative cap on paid AI calls, keyed on the authorized account id (not on the request path, which has many spellings).
-  # Shares the Rack::Attack cache store so the counter is the same across processes.
+  # There is deliberately no pre-auth rack-attack throttle on this path: it would let anyone burn a victim's quota.
   def throttle_ai_calls!
     limit = ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i
-    return if Rack::Attack.cache.count("brand_growth_ai/controller:#{Current.account.id}", 1.minute) <= limit
+    return if Kchat::AiThrottle.count("brand_growth_ai/controller:#{Current.account.id}", 1.minute) <= limit
 
     render json: { error: 'rate_limited' }, status: :too_many_requests
   end

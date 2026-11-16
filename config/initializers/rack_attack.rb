@@ -38,23 +38,11 @@ class Rack::Attack
       normalized_path == '/' ? normalized_path : normalized_path.sub(%r{/+\z}, '')
     end
 
-    # Path with duplicate slashes squeezed, no trailing slash and no trailing format suffix. Deliberately NOT percent-decoded
-    # and NOT cut at the first dot: Journey matches segments on the raw path and only unescapes the params afterwards, so
-    # "/accounts/1%2E5/..." reaches the controller as account_id "1.5". Throttles keyed on the raw path are an outer layer only;
-    # the authoritative AI limit lives in Api::V1::Accounts::BrandGrowthController.
+    # Path with duplicate slashes squeezed, no trailing slash and no trailing format suffix (not percent-decoded: Journey
+    # matches segments on the raw path).
     def canonical_path
       squeezed = path.scrub('').squeeze('/').sub(%r{\.[^/]*\z}, '').sub(%r{/+\z}, '')
       squeezed.empty? ? '/' : squeezed
-    end
-
-    # Account id the way Account.find resolves the raw segment (percent-decoded, then integer-cast).
-    def self.account_key(segment)
-      decoded = begin
-        Rack::Utils.unescape_path(segment)
-      rescue ArgumentError
-        segment
-      end
-      decoded.to_i.to_s
     end
   end
 
@@ -89,12 +77,8 @@ class Rack::Attack
 
   throttle('req/ip', limit: ENV.fetch('RACK_ATTACK_LIMIT', '3000').to_i, period: 1.minute, &:ip)
 
-  ### Paid AI calls (KChat brand growth): cap per account ###
-  throttle('brand_growth_ai/account', limit: ENV.fetch('BRAND_GROWTH_AI_LIMIT', '30').to_i, period: 1.minute) do |req|
-    match = req.canonical_path.match(%r{\A/api/v1/accounts/([^/]+)/brand_growth/(?:chat_reply|repurpose)\z}i)
-    # Outer layer only. The controller enforces the same limit on the authorized account id (see BrandGrowthController).
-    Rack::Attack::Request.account_key(match[1]) if match && req.post?
-  end
+  # NOTE: the paid AI endpoints (brand_growth chat_reply/repurpose) are limited per account in the controller, after
+  # authentication (Kchat::AiThrottle). A throttle here would run before auth and let anyone exhaust a victim account's quota.
 
   ### Casso payment webhook: cap requests per IP so token guessing / floods stay cheap ###
   # Replay protection does not rely on this: it relies on the unique `tid` of each PaymentEvent.
