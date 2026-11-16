@@ -39,7 +39,7 @@ const tailwindConfig = {
   theme: {
     extend: {
       fontFamily: {
-        sans: defaultSansFonts,
+        sans: ['"Be Vietnam Pro"', ...defaultSansFonts],
         inter: ['Inter', ...defaultSansFonts],
         interDisplay: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
         display: ['"Plus Jakarta Sans"', 'InterDisplay', ...defaultSansFonts],
@@ -207,11 +207,11 @@ const tailwindConfig = {
     backgroundImage: {
       ...defaultTheme.backgroundImage,
       'ktech-ombre':
-        'linear-gradient(135deg, #60A5FA 0%, #1E5EFF 55%, #103599 100%)',
+        'linear-gradient(135deg, #FF6B4A 0%, #C93F24 55%, #7F2A16 100%)',
       'ktech-ombre-strong':
-        'linear-gradient(135deg, #2563EB 0%, #1E5EFF 50%, #1749CC 100%)',
+        'linear-gradient(135deg, #FF6B4A 0%, #C93F24 50%, #A3361D 100%)',
       'ktech-ombre-soft':
-        'linear-gradient(160deg, #F6FAFF 0%, #EBF5FF 48%, #D7EFFF 100%)',
+        'linear-gradient(160deg, #FFF8F5 0%, #FFF1EC 48%, #FFE9E1 100%)',
     },
     fontSize: {
       ...defaultTheme.fontSize,

@@ -30,7 +30,8 @@ const ratio = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 const WHITE = [255, 255, 255];
-const SIDEBAR_TOP = [16, 53, 153]; // #103599 Glacier & Cobalt Studio sidebar top
+const SIDEBAR_TOP = [58, 26, 18]; // #3A1A12 Kalo sidebar top
+const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
 
 const light = block(':root');
 const dark = block('.dark');
@@ -47,9 +48,25 @@ const pairs = [
   ['light slate-12 / bot bubble', light['slate-12'], light['solid-iris']],
   ['dark slate-12 / bot bubble', dark['slate-12'], dark['solid-iris']],
   ['sidebar slate-11 / button', sidebar['slate-11'], sidebar['button-color']],
-  ['sidebar slate-11 / top #103599', sidebar['slate-11'], SIDEBAR_TOP],
-  ['sidebar slate-12 / top #103599', sidebar['slate-12'], SIDEBAR_TOP],
+  ['sidebar slate-11 / top #3A1A12', sidebar['slate-11'], SIDEBAR_TOP],
+  ['sidebar slate-12 / top #3A1A12', sidebar['slate-12'], SIDEBAR_TOP],
+  ['kalo white / action #C93F24', WHITE, hex('#C93F24')],
+  ['kalo action #C93F24 / #FFF6F2', hex('#C93F24'), hex('#FFF6F2')],
+  ['kalo ink #1F1714 / #FFF8F5', hex('#1F1714'), hex('#FFF8F5')],
+  ['kalo muted #6E625B / white', hex('#6E625B'), WHITE],
+  ['kalo ok #0E7C61 / white', hex('#0E7C61'), WHITE],
+  ['kalo warn #B45309 / white', hex('#B45309'), WHITE],
 ];
+const AVATAR_PAIRS = [
+  ['#7F2A16', '#FFE9E1'], ['#0E4F63', '#A5F3FC'], ['#3A2F29', '#E6D6CD'],
+  ['#064E3B', '#A7F3D0'], ['#5C3A0B', '#FDE68A'], ['#4C0519', '#FBCFE8'],
+  ['#FFE9E1', '#A3361D'], ['#CFFAFE', '#0E7490'], ['#F0E4DD', '#4A3F39'],
+  ['#D1FAE5', '#065F46'], ['#FDF0DC', '#8A4204'], ['#FCE7F3', '#9D174D'],
+  ['#FFF1EC', '#A3361D'],
+];
+AVATAR_PAIRS.forEach(([bg, text]) =>
+  pairs.push([`avatar ${text} / ${bg}`, hex(text), hex(bg)])
+);
 let failed = false;
 pairs.forEach(([name, fg, bg]) => {
   const r = ratio(fg, bg);

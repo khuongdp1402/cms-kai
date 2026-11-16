@@ -30,6 +30,10 @@ describe.each(Object.keys(overrides))('KTech %s overrides', locale => {
     expect(text.trim()).not.toBe('');
   });
 
+  it.each(entries)('%s has no visible KTech or Chatwoot name', (_key, text) => {
+    expect(text).not.toMatch(/KTech|Chatwoot/i);
+  });
+
   it.each(entries)('%s keeps the English placeholders', (key, text) => {
     expect(tokens(text)).toEqual(tokens(english[key]));
   });

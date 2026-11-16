@@ -7,6 +7,12 @@ RSpec.describe Portal do
     it { is_expected.to validate_presence_of(:name) }
   end
 
+  describe 'default color' do
+    it 'uses the Kalo action color' do
+      expect(described_class::DEFAULT_COLOR).to eq('#C93F24')
+    end
+  end
+
   describe 'associations' do
     it { is_expected.to belong_to(:account) }
     it { is_expected.to have_many(:categories) }

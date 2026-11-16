@@ -57,22 +57,22 @@ const fileInput = ref(null);
 
 const AVATAR_COLORS = {
   dark: [
-    ['#103599', '#D7EFFF'],
+    ['#7F2A16', '#FFE9E1'],
     ['#0E4F63', '#A5F3FC'],
-    ['#1E293B', '#CBD5E1'],
+    ['#3A2F29', '#E6D6CD'],
     ['#064E3B', '#A7F3D0'],
-    ['#1E1B4B', '#C7D2FE'],
+    ['#5C3A0B', '#FDE68A'],
     ['#4C0519', '#FBCFE8'],
   ],
   light: [
-    ['#D7EFFF', '#103599'],
+    ['#FFE9E1', '#A3361D'],
     ['#CFFAFE', '#0E7490'],
-    ['#E2E8F0', '#334155'],
+    ['#F0E4DD', '#4A3F39'],
     ['#D1FAE5', '#065F46'],
-    ['#E0E7FF', '#3730A3'],
+    ['#FDF0DC', '#8A4204'],
     ['#FCE7F3', '#9D174D'],
   ],
-  default: { bg: '#EBF5FF', text: '#103599' },
+  default: { bg: '#FFF1EC', text: '#A3361D' },
 };
 
 const STATUS_CLASSES = computed(() => ({

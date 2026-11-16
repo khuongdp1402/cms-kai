@@ -1,0 +1,6 @@
+// Symbol ids of public/kalo-icons.svg without the "i-" prefix.
+export const KALO_ICON_NAMES = [
+  'msg', 'bag', 'users', 'mega', 'chart', 'set', 'search', 'plus', 'send',
+  'qr', 'spark', 'truck', 'img', 'bell', 'more', 'check', 'store', 'cash',
+  'card', 'back', 'tag', 'home', 'wallet', 'plug', 'arrow', 'zap',
+];
