@@ -9,13 +9,6 @@ const props = defineProps({
 
 const { t, tm } = useI18n();
 
-const pad = n => String(n).padStart(2, '0');
-
-const todayIso = computed(() => {
-  const now = new Date();
-  return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
-});
-
 const total = computed(() =>
   props.daily.reduce((sum, day) => sum + day.revenue, 0)
 );
@@ -24,7 +17,8 @@ const bars = computed(() => {
   const max = Math.max(...props.daily.map(day => day.revenue), 0);
   const weekdays = tm('KALO_REPORTS.WEEKDAYS');
   const useWeekdays = props.daily.length <= 7;
-  return props.daily.map(day => {
+  // The server returns days up to today in the account timezone, so the last bar is today.
+  return props.daily.map((day, index) => {
     const [year, month, date] = day.date.split('-').map(Number);
     const label = useWeekdays
       ? weekdays[new Date(year, month - 1, date).getDay()]
@@ -32,7 +26,7 @@ const bars = computed(() => {
     return {
       ...day,
       label,
-      isToday: day.date === todayIso.value,
+      isToday: index === props.daily.length - 1,
       height: max > 0 ? Math.max((day.revenue / max) * 100, 2) : 2,
     };
   });
@@ -62,7 +56,7 @@ const bars = computed(() => {
       >
         <i
           class="block w-full rounded-t-lg rounded-b"
-          :class="bar.isToday ? 'bg-n-brand' : 'bg-n-ruby-5'"
+          :class="bar.isToday ? 'bg-n-brand' : 'bg-n-brand/40'"
           :style="{ height: `${bar.height}%` }"
         />
         {{ bar.label }}

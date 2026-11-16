@@ -13,6 +13,15 @@ describe('KaloIcon', () => {
     expect(wrapper.find('use').attributes('href')).toBe('/kalo-icons.svg#i-qr');
   });
 
+  it('sets the stroke defaults on the host svg because the sprite root style does not reach the symbols', () => {
+    const classes = mount(KaloIcon, { props: { name: 'plus' } })
+      .find('svg')
+      .classes();
+    expect(classes).toEqual(
+      expect.arrayContaining(['fill-none', 'stroke-current', 'stroke-2'])
+    );
+  });
+
   it('throws a clear error for an unknown name', () => {
     expect(() => mount(KaloIcon, { props: { name: 'nope' } })).toThrow(
       'Unknown KaloIcon name: nope'
