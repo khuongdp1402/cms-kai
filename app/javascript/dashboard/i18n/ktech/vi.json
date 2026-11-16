@@ -1596,7 +1596,6 @@
     "SETTINGS": "Cài đặt",
     "MORE": "Thêm",
     "MAIN_NAV": "Điều hướng chính",
-    "CLOSE": "Đóng",
     "PAGES": {
       "ORDERS": "Đơn hàng",
       "POS": "Bán tại quầy",
@@ -1641,6 +1640,15 @@
     "SEARCH": "Tìm kiếm",
     "PROFILE": "Hồ sơ",
     "LOGOUT": "Đăng xuất",
-    "SWITCH_ACCOUNT": "Đổi tài khoản"
+    "SWITCH_ACCOUNT": "Đổi tài khoản",
+    "NEW_ACCOUNT": "Tạo cửa hàng mới",
+    "FILTERS": {
+      "OPEN": "Lọc tin nhắn",
+      "INBOXES": "Hộp thư",
+      "LABELS": "Nhãn",
+      "TEAMS": "Nhóm",
+      "FOLDERS": "Thư mục đã lưu",
+      "NEW_CONVERSATION": "Tạo cuộc trò chuyện"
+    }
   }
 }

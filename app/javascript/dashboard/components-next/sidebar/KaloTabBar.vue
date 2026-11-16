@@ -1,14 +1,25 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { onKeyStroke } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 import { useMapGetter } from 'dashboard/composables/store';
 import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
+import KaloMessageFilters from './KaloMessageFilters.vue';
+import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import { useKaloNav } from './useKaloNav';
 
-defineEmits(['showCreateAccountModal']);
+const emit = defineEmits([
+  'openKeyShortcutModal',
+  'closeKeyShortcutModal',
+  'showCreateAccountModal',
+]);
+
+useSidebarKeyboardShortcuts(show =>
+  emit(show ? 'openKeyShortcutModal' : 'closeKeyShortcutModal')
+);
 
 const PRIMARY_KEYS = ['messages', 'orders', 'customers', 'reports'];
 
@@ -17,7 +28,12 @@ const route = useRoute();
 const { items } = useKaloNav();
 
 const userAccounts = useMapGetter('getUserAccounts');
+const globalConfig = useMapGetter('globalConfig/get');
 const hasManyAccounts = computed(() => userAccounts.value.length > 1);
+const showAccountMenu = computed(
+  () =>
+    hasManyAccounts.value || !!globalConfig.value.createNewAccountFromDashboard
+);
 const accountLinks = [
   { key: 'notifications', icon: 'bell', name: 'notifications_index' },
   { key: 'search', icon: 'search', name: 'search' },
@@ -32,6 +48,10 @@ const sheetItems = computed(() =>
   items.value.filter(item => !PRIMARY_KEYS.includes(item.key))
 );
 const isMoreActive = computed(() => sheetItems.value.some(i => i.active));
+
+onKeyStroke('Escape', () => {
+  isSheetOpen.value = false;
+});
 
 watch(
   () => route.fullPath,
@@ -48,8 +68,17 @@ watch(
   >
     <div
       v-if="isSheetOpen"
+      data-test-id="kalo-sheet-backdrop"
+      class="fixed inset-0 z-40"
+      @click="isSheetOpen = false"
+    />
+    <div
+      v-if="isSheetOpen"
       data-test-id="kalo-more-sheet"
-      class="absolute bottom-full inset-x-0 flex flex-col p-2 bg-n-surface-1 border-t border-n-weak shadow-lg"
+      role="dialog"
+      aria-modal="true"
+      :aria-label="t('KALO_NAV.MORE')"
+      class="z-50 absolute bottom-full inset-x-0 flex flex-col p-2 bg-n-surface-1 border-t border-n-weak shadow-lg"
     >
       <router-link
         v-for="item in sheetItems"
@@ -72,8 +101,9 @@ watch(
         <KaloIcon :name="link.icon" class="size-6" />
         {{ t(`KALO_NAV.${link.key.toUpperCase()}`) }}
       </router-link>
+      <KaloMessageFilters inline />
       <div
-        v-if="hasManyAccounts"
+        v-if="showAccountMenu"
         data-test-id="kalo-sheet-switch-account"
         class="flex items-center gap-3 px-3 py-1 text-sm font-medium text-n-slate-12"
       >
@@ -81,7 +111,11 @@ watch(
           is-collapsed
           @show-create-account-modal="$emit('showCreateAccountModal')"
         />
-        {{ t('KALO_NAV.SWITCH_ACCOUNT') }}
+        {{
+          t(
+            hasManyAccounts ? 'KALO_NAV.SWITCH_ACCOUNT' : 'KALO_NAV.NEW_ACCOUNT'
+          )
+        }}
       </div>
       <button
         type="button"
@@ -89,7 +123,7 @@ watch(
         class="flex items-center gap-3 px-3 py-3 text-sm font-medium text-left rounded-xl text-n-slate-12"
         @click="Auth.logout()"
       >
-        <KaloIcon name="back" class="size-6" />
+        <KaloIcon name="arrow" class="size-6" />
         {{ t('KALO_NAV.LOGOUT') }}
       </button>
     </div>

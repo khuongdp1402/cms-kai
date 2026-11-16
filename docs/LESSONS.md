@@ -55,7 +55,7 @@
 - **B10 (2026-09-29): `git checkout -- <file>` để gỡ một dòng test làm mất thay đổi chưa commit.**
   - Triệu chứng: mất 3 biến vừa thêm vào `_ktech-theme.scss`.
   - Quy tắc: không bao giờ dùng `git checkout --`/`git restore` để hoàn tác một phần file đang có thay đổi chưa commit. Muốn test tạm thì sửa một file khác, hoặc gỡ đúng dòng đã thêm (`sed -i '$ d'`) sau khi kiểm tra nội dung.
-- **B11 (2026-11-16): `pnpm eslint <files>` không lint đúng file chỉ định.**
+- **B13 (2026-11-16): `pnpm eslint <files>` không lint đúng file chỉ định.**
   - Triệu chứng: `pnpm eslint a.vue b.js` báo "No files matching the pattern", hoặc đáng ngại hơn là chạy `--fix` trên cả `app/**`.
   - Nguyên nhân: script `eslint` trong package.json đã gắn sẵn glob `app/**/*.{js,vue} --fix`, tham số thêm vào bị ghép thành một pattern.
   - Quy tắc: lint file cụ thể bằng `npx eslint <files> --ext .js,.vue` (trong container rails); chỉ dùng `pnpm eslint` khi muốn lint cả dự án.

@@ -4,11 +4,11 @@ import { useI18n } from 'vue-i18n';
 import { useAccount } from 'dashboard/composables/useAccount';
 
 const { t } = useI18n();
-const { accountId, accountScopedRoute } = useAccount();
+const { accountScopedRoute } = useAccount();
 
-const link = (labelKey, routeName) => ({
+const link = (labelKey, routeName, params) => ({
   labelKey: `KALO_NAV.HUB.LINKS.${labelKey}`,
-  to: accountScopedRoute(routeName),
+  to: accountScopedRoute(routeName, params),
 });
 
 const groups = computed(() => [
@@ -16,10 +16,9 @@ const groups = computed(() => [
     key: 'SELLING',
     links: [
       link('CAMPAIGNS', 'campaigns_livechat_index'),
-      {
-        labelKey: 'KALO_NAV.HUB.LINKS.HELP_CENTER',
-        to: `/app/accounts/${accountId.value}/portals`,
-      },
+      link('HELP_CENTER', 'portals_index', {
+        navigationPath: 'portals_articles_index',
+      }),
     ],
   },
   {

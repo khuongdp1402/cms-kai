@@ -2,10 +2,20 @@
 import { useI18n } from 'vue-i18n';
 import Logo from 'next/icon/Logo.vue';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloMessageFilters from './KaloMessageFilters.vue';
+import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import KaloRailFooter from './KaloRailFooter.vue';
 import { useKaloNav } from './useKaloNav';
 
-defineEmits(['openKeyShortcutModal', 'showCreateAccountModal']);
+const emit = defineEmits([
+  'openKeyShortcutModal',
+  'closeKeyShortcutModal',
+  'showCreateAccountModal',
+]);
+
+useSidebarKeyboardShortcuts(show =>
+  emit(show ? 'openKeyShortcutModal' : 'closeKeyShortcutModal')
+);
 
 const { t } = useI18n();
 const { items } = useKaloNav();
@@ -19,31 +29,40 @@ const { items } = useKaloNav();
     <Logo class="size-9 mb-3" />
     <template v-for="item in items" :key="item.key">
       <div v-if="item.key === 'settings'" class="flex-1" />
-      <router-link
-        :to="item.to"
-        :data-test-id="`kalo-nav-${item.key}`"
-        :aria-current="item.active ? 'page' : undefined"
-        class="relative flex flex-col items-center w-[60px] gap-0.5 pt-2 pb-1.5 text-xs font-medium rounded-xl"
-        :class="
-          item.active
-            ? 'bg-n-blue-3 text-n-blue-11'
-            : 'text-n-slate-10 hover:bg-n-alpha-2'
-        "
-      >
-        <KaloIcon :name="item.icon" class="size-6" />
-        {{ t(item.labelKey) }}
-        <span
-          v-if="item.badge > 0"
-          data-test-id="kalo-badge"
-          class="absolute top-1 right-2.5 px-1.5 text-[10px] font-bold leading-4 text-white rounded-full bg-n-blue-9"
+      <div class="relative">
+        <router-link
+          :to="item.to"
+          :data-test-id="`kalo-nav-${item.key}`"
+          :aria-current="item.active ? 'page' : undefined"
+          class="relative flex flex-col items-center w-[60px] gap-0.5 pt-2 pb-1.5 text-xs font-medium rounded-xl"
+          :class="
+            item.active
+              ? 'bg-n-blue-3 text-n-blue-11'
+              : 'text-n-slate-10 hover:bg-n-alpha-2'
+          "
         >
-          {{ item.badge > 99 ? '99+' : item.badge }}
-        </span>
-      </router-link>
+          <KaloIcon :name="item.icon" class="size-6" />
+          {{ t(item.labelKey) }}
+          <span
+            v-if="item.badge > 0"
+            data-test-id="kalo-badge"
+            class="absolute top-1 right-2.5 px-1.5 text-[10px] font-bold leading-4 text-white rounded-full bg-n-blue-9"
+          >
+            {{ item.badge > 99 ? '99+' : item.badge }}
+          </span>
+        </router-link>
+        <div
+          v-if="item.key === 'messages'"
+          class="absolute top-1/2 -translate-y-1/2 -right-2"
+        >
+          <KaloMessageFilters />
+        </div>
+      </div>
     </template>
     <KaloRailFooter
-      @open-key-shortcut-modal="$emit('openKeyShortcutModal')"
-      @show-create-account-modal="$emit('showCreateAccountModal')"
+      @open-key-shortcut-modal="emit('openKeyShortcutModal')"
+      @close-key-shortcut-modal="emit('closeKeyShortcutModal')"
+      @show-create-account-modal="emit('showCreateAccountModal')"
     />
   </nav>
 </template>

@@ -1,8 +1,15 @@
 import { ref } from 'vue';
 import { mount, flushPromises } from '@vue/test-utils';
 import { provideDropdownContext } from 'next/dropdown-menu/base/provider';
+import Auth from 'dashboard/api/auth';
+import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
 import KaloRail from '../KaloRail.vue';
 import { createKaloTestEnv } from './kaloTestHelpers';
+
+vi.mock('dashboard/api/auth', () => ({ default: { logout: vi.fn() } }));
+vi.mock('dashboard/composables/useKeyboardEvents', () => ({
+  useKeyboardEvents: vi.fn(),
+}));
 
 const wrappers = [];
 afterEach(() => wrappers.forEach(w => w.unmount()));
@@ -15,6 +22,7 @@ const mountRail = async ({ route = 'home', ...envOptions } = {}) => {
       plugins: [router, store, i18n],
       stubs: {
         SidebarProfileMenuStatus: true,
+        ComposeConversation: true,
         // DropdownContainer never re-renders open under jsdom here; render it open.
         DropdownContainer: {
           setup() {
@@ -93,6 +101,46 @@ describe('KaloRail', () => {
     );
     expect(trigger.exists()).toBe(true);
     expect(wrapper.text()).toContain('Đăng xuất');
+    const logout = wrapper
+      .findAll('button')
+      .find(el => el.text() === 'Đăng xuất');
+    await logout.trigger('click');
+    expect(Auth.logout).toHaveBeenCalled();
+  });
+
+  it('keeps the create-account entry for a single account when the flag is on', async () => {
+    const off = await mountRail();
+    expect(off.findComponent({ name: 'SidebarAccountSwitcher' }).exists()).toBe(
+      false
+    );
+    const on = await mountRail({ createNewAccount: true });
+    expect(on.findComponent({ name: 'SidebarAccountSwitcher' }).exists()).toBe(
+      true
+    );
+  });
+
+  it('registers the keyboard shortcuts and maps Alt+V to an existing contacts route', async () => {
+    const wrapper = await mountRail();
+    const events = useKeyboardEvents.mock.calls.at(-1)[0];
+    expect(Object.keys(events)).toEqual(
+      expect.arrayContaining(['$mod+Slash', '$mod+Escape', 'Alt+KeyV'])
+    );
+    events['$mod+Slash'].action();
+    expect(wrapper.emitted('openKeyShortcutModal')).toHaveLength(1);
+    events['$mod+Escape'].action();
+    expect(wrapper.emitted('closeKeyShortcutModal')).toHaveLength(1);
+    await events['Alt+KeyV'].action();
+    await flushPromises();
+    expect(wrapper.vm.$router.currentRoute.value.name).toBe(
+      'contacts_dashboard_index'
+    );
+  });
+
+  it('has a filters trigger beside Tin nhắn', async () => {
+    const wrapper = await mountRail();
+    expect(wrapper.find('[data-test-id="kalo-filters-trigger"]').exists()).toBe(
+      true
+    );
   });
 
   it('hides account switcher for a single account and shows it for several', async () => {

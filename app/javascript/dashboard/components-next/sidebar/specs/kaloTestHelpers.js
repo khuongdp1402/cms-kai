@@ -16,25 +16,49 @@ const names = [
   'notifications_index',
   'profile_settings_index',
   'campaigns_livechat_index',
+  'inbox_dashboard',
+  'label_conversations',
+  'team_conversations',
+  'folder_conversations',
+  'portals_index',
 ];
+
+const extraParams = {
+  inbox_dashboard: '/:inbox_id',
+  label_conversations: '/:label',
+  team_conversations: '/:teamId',
+  folder_conversations: '/:id',
+  portals_index: '/:navigationPath',
+};
 
 export const createKaloTestEnv = ({
   unread = 0,
   accounts = [{ id: 1, name: 'Shop', role: 'administrator' }],
   notificationUnread = 0,
+  createNewAccount = false,
+  inboxes = [],
+  labels = [],
+  teams = [],
+  folders = [],
 } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: names.map(name => ({
       name,
-      path: `/app/accounts/:accountId/${name}`,
+      path: `/app/accounts/:accountId/${name}${extraParams[name] || ''}`,
       component: { template: '<div />' },
     })),
   });
   const get = vi.fn();
   const store = createStore({
     getters: {
-      'globalConfig/get': () => ({}),
+      'globalConfig/get': () => ({
+        createNewAccountFromDashboard: createNewAccount,
+      }),
+      'inboxes/getInboxes': () => inboxes,
+      'labels/getLabelsOnSidebar': () => labels,
+      'teams/getMyTeams': () => teams,
+      'customViews/getConversationCustomViews': () => folders,
       'globalConfig/isACustomBrandedInstance': () => false,
       getUserAccounts: () => accounts,
       getCurrentUser: () => ({

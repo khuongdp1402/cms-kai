@@ -1,8 +1,12 @@
 import { mount } from '@vue/test-utils';
 import Auth from 'dashboard/api/auth';
+import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
 import KaloTabBar from '../KaloTabBar.vue';
 import { createKaloTestEnv } from './kaloTestHelpers';
 
+vi.mock('dashboard/composables/useKeyboardEvents', () => ({
+  useKeyboardEvents: vi.fn(),
+}));
 vi.mock('dashboard/api/auth', () => ({ default: { logout: vi.fn() } }));
 
 describe('KaloTabBar', () => {
@@ -10,7 +14,10 @@ describe('KaloTabBar', () => {
     const { router, store, i18n } = createKaloTestEnv({ unread: 3 });
     await router.push({ name: 'home', params: { accountId: 1 } });
     const wrapper = mount(KaloTabBar, {
-      global: { plugins: [router, store, i18n] },
+      global: {
+        plugins: [router, store, i18n],
+        stubs: { ComposeConversation: true },
+      },
     });
 
     const tabs = wrapper
@@ -32,7 +39,10 @@ describe('KaloTabBar', () => {
     const { router, store, i18n } = createKaloTestEnv();
     await router.push({ name: 'home', params: { accountId: 1 } });
     const wrapper = mount(KaloTabBar, {
-      global: { plugins: [router, store, i18n] },
+      global: {
+        plugins: [router, store, i18n],
+        stubs: { ComposeConversation: true },
+      },
     });
     await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
     const sheet = wrapper.find('[data-test-id="kalo-more-sheet"]');
@@ -44,5 +54,54 @@ describe('KaloTabBar', () => {
     ).toBe(false);
     await sheet.find('[data-test-id="kalo-sheet-logout"]').trigger('click');
     expect(Auth.logout).toHaveBeenCalled();
+  });
+
+  const openSheet = async env => {
+    await env.router.push({ name: 'home', params: { accountId: 1 } });
+    const wrapper = mount(KaloTabBar, {
+      attachTo: document.body,
+      global: {
+        plugins: [env.router, env.store, env.i18n],
+        stubs: { ComposeConversation: true },
+      },
+    });
+    await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
+    return wrapper;
+  };
+
+  it('keeps the create-account entry for a single account when the flag is on', async () => {
+    const wrapper = await openSheet(
+      createKaloTestEnv({ createNewAccount: true })
+    );
+    expect(
+      wrapper.find('[data-test-id="kalo-sheet-switch-account"]').text()
+    ).toContain('Tạo cửa hàng mới');
+    wrapper.unmount();
+  });
+
+  it('closes the sheet on Escape and on backdrop click', async () => {
+    const wrapper = await openSheet(createKaloTestEnv());
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find('[data-test-id="kalo-more-sheet"]').exists()).toBe(
+      false
+    );
+    await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
+    await wrapper.find('[data-test-id="kalo-sheet-backdrop"]').trigger('click');
+    expect(wrapper.find('[data-test-id="kalo-more-sheet"]').exists()).toBe(
+      false
+    );
+    wrapper.unmount();
+  });
+
+  it('lists message filters inside the sheet and registers shortcuts', async () => {
+    const wrapper = await openSheet(
+      createKaloTestEnv({ inboxes: [{ id: 3, name: 'Zalo shop' }] })
+    );
+    expect(wrapper.find('[data-test-id="kalo-more-sheet"]').text()).toContain(
+      'Zalo shop'
+    );
+    expect(useKeyboardEvents).toHaveBeenCalled();
+    wrapper.unmount();
   });
 });

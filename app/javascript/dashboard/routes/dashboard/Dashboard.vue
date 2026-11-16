@@ -130,6 +130,7 @@ export default {
     <KaloRail
       v-if="!isSmallScreen"
       @open-key-shortcut-modal="toggleKeyShortcutModal"
+      @close-key-shortcut-modal="closeKeyShortcutModal"
       @show-create-account-modal="openCreateAccountModal"
     />
 
@@ -160,6 +161,8 @@ export default {
     </main>
     <KaloTabBar
       v-if="isSmallScreen"
+      @open-key-shortcut-modal="toggleKeyShortcutModal"
+      @close-key-shortcut-modal="closeKeyShortcutModal"
       @show-create-account-modal="openCreateAccountModal"
     />
   </div>

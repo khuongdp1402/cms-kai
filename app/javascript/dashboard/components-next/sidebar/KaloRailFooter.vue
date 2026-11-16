@@ -8,12 +8,21 @@ import SidebarNotificationBell from './SidebarNotificationBell.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import SidebarProfileMenu from './SidebarProfileMenu.vue';
 
-const emit = defineEmits(['openKeyShortcutModal', 'showCreateAccountModal']);
+const emit = defineEmits([
+  'openKeyShortcutModal',
+  'closeKeyShortcutModal',
+  'showCreateAccountModal',
+]);
 
 const { t } = useI18n();
 const router = useRouter();
 const userAccounts = useMapGetter('getUserAccounts');
-const hasManyAccounts = computed(() => userAccounts.value.length > 1);
+const globalConfig = useMapGetter('globalConfig/get');
+const showAccountMenu = computed(
+  () =>
+    userAccounts.value.length > 1 ||
+    !!globalConfig.value.createNewAccountFromDashboard
+);
 </script>
 
 <template>
@@ -31,7 +40,7 @@ const hasManyAccounts = computed(() => userAccounts.value.length > 1);
       <KaloIcon name="search" class="size-5" />
     </button>
     <SidebarAccountSwitcher
-      v-if="hasManyAccounts"
+      v-if="showAccountMenu"
       is-collapsed
       @show-create-account-modal="emit('showCreateAccountModal')"
     />
