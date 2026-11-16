@@ -101,11 +101,28 @@ RSpec.describe Kchat::Reports do
     expect(count_queries { summary('month') }).to eq(few)
   end
 
-  it 'falls back to UTC for an invalid reporting_timezone instead of failing' do
+  it 'falls back to the default Vietnam timezone for an invalid reporting_timezone instead of failing' do
     account.update_columns(settings: account.settings.merge('reporting_timezone' => 'Mars/Base')) # rubocop:disable Rails/SkipsModelValidations
-    order(price: 1000, paid_at: Time.utc(2026, 11, 16, 0, 30))
+    order(price: 1000, paid_at: Time.utc(2026, 11, 15, 18, 0)) # 01:00 on 16 Nov in HCM, still 15 Nov in UTC
 
     expect(summary('today')[:revenue]).to eq(1000)
+  end
+
+  it 'uses the default Vietnam timezone when the account has none' do
+    plain = create(:account)
+    order(price: 1000, account: plain, paid_at: Time.utc(2026, 11, 15, 18, 0)) # 01:00 on 16 Nov in HCM
+    order(price: 2000, account: plain, paid_at: Time.utc(2026, 11, 15, 16, 59)) # 23:59 on 15 Nov in HCM
+
+    result = summary('today', plain)
+    expect(result[:revenue]).to eq(1000)
+    expect(result[:daily]).to eq([{ date: '2026-11-16', revenue: 1000 }])
+  end
+
+  it 'prefers an explicit account timezone over the default' do
+    utc = create(:account, reporting_timezone: 'UTC')
+    order(price: 1000, account: utc, paid_at: Time.utc(2026, 11, 15, 18, 0)) # 15 Nov in UTC, not today
+
+    expect(summary('today', utc)[:revenue]).to eq(0)
   end
 
   it 'rejects an unknown range' do
