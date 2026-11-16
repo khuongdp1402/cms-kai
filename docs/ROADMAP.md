@@ -183,5 +183,5 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 |---|---|---|
 | 2026-09-28 | Tạo roadmap ban đầu | Chủ dự án chọn phương án 2 (CMS riêng, Chatwoot headless) |
 | 2026-09-29 | Thêm Phase B, tạm dừng Phase 2–8 | ADR-007: chủ dự án chọn giữ giao diện Chatwoot và đổi thương hiệu thay vì viết CMS mới |
-| 2026-11-17 | Phase K: mã nguồn xong, thêm backlog "Sau launch" | Kết thúc đợt Kalo launch; việc hoãn lấy từ ledger SDD và rà soát bảo mật |
 | 2026-09-29 | Thêm P0-07 (chiến lược nhánh), P0-08 (K8s toàn stack), P1-09/P1-10 (làm cứng và dọn Zalo bridge), P4-08/P4-09 (tích hợp CRM/ERP KTech); mở rộng P0-06 (dọn CI thừa hưởng từ Chatwoot) | Rà soát kế hoạch do Antigravity đề xuất: giữ ADR-001, chỉ lấy các mục roadmap còn thiếu |
+| 2026-11-17 | Phase K: mã nguồn xong, thêm backlog "Sau launch" | Kết thúc đợt Kalo launch; việc hoãn lấy từ ledger SDD và rà soát bảo mật |
