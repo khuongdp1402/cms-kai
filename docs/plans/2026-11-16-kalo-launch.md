@@ -62,6 +62,8 @@ Tiền tố `/api/v1/accounts/:account_id/kchat`. Xác thực như API tài kho�
 - Người không đủ quyền nhận 401 (đúng cách Chatwoot đang làm), không phải 403. Lỗi kiểm tra dữ liệu khác: 422 `{error:'validation_failed', message}`.
 - `PATCH /payment_settings` kiểm tra trên giá trị sau khi gộp: lần đầu cấu hình phải gửi đủ cả bốn trường; `bank_bin` đúng 6 chữ số, `account_number` 6–19 chữ số.
 - `send_qr` thêm mã lỗi 422: `invalid_amount` (tổng 0đ), `order_not_payable` (đơn không ở `pending_payment`), `conversation_contact_mismatch`; ảnh sản phẩm chỉ nhận png/jpeg/gif/webp ≤ 5 MB.
+- **Gói cước / Console (Task 4):** trong thời gian dùng thử `subscription.plan` là `null` và `valid_until` là ngày hết dùng thử; `channels` trong báo cáo tính theo loại kênh của hộp thư (không có thì theo `source` của đơn); `waiting_messages` = số hội thoại đang mở có `waiting_since`; danh sách Console cũng trả `{payload, meta}`; `assign` chỉ nhận sự kiện `unmatched` (nếu khác: 422 `event_not_assignable`); trạng thái sự kiện: `matched | underpaid | unmatched | applied`; hết hạn dùng thử: 403 `subscription_expired` khi tạo sản phẩm, đơn hoặc gọi AI.
+- **Giới hạn gói (số nhân viên, số kênh) KHÔNG được áp dụng** (`Account#usage_limits` của Chatwoot bỏ qua `account.limits`). Giao diện và landing không được nêu giới hạn này.
 
 **Console** (tiền tố `/api/v1/console`, chỉ `SuperAdmin`, người khác nhận 403):
 - `GET /overview` → `{ shops, revenue_month, expiring_7d, unmatched_payments, recent_payments:[…], shops_by_plan:{starter,growth,enterprise} }`
