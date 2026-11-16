@@ -2,11 +2,24 @@
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'dashboard/composables/store';
+import { useAccount } from 'dashboard/composables/useAccount';
 import LiveChatCampaignsPage from 'dashboard/routes/dashboard/campaigns/pages/LiveChatCampaignsPage.vue';
 import ContentIdeas from './ContentIdeas.vue';
 
 const { t } = useI18n();
 const store = useStore();
+const { accountScopedRoute } = useAccount();
+
+const CAMPAIGN_LINKS = [
+  {
+    labelKey: 'KALO_MARKETING.CAMPAIGN_LINKS.SMS',
+    route: 'campaigns_sms_index',
+  },
+  {
+    labelKey: 'KALO_MARKETING.CAMPAIGN_LINKS.WHATSAPP',
+    route: 'campaigns_whatsapp_index',
+  },
+];
 
 const TABS = [
   { value: 'campaigns', labelKey: 'KALO_MARKETING.TABS.CAMPAIGNS' },
@@ -50,7 +63,20 @@ onMounted(() => {
         </button>
       </div>
     </div>
-    <LiveChatCampaignsPage v-if="activeTab === 'campaigns'" />
+    <template v-if="activeTab === 'campaigns'">
+      <div class="flex gap-4 px-6 pt-3 text-sm">
+        <router-link
+          v-for="link in CAMPAIGN_LINKS"
+          :key="link.route"
+          data-test="campaign-link"
+          :to="accountScopedRoute(link.route)"
+          class="font-semibold text-n-slate-11 hover:text-n-slate-12"
+        >
+          {{ t(link.labelKey) }}
+        </router-link>
+      </div>
+      <LiveChatCampaignsPage />
+    </template>
     <div v-else class="p-6">
       <ContentIdeas />
     </div>

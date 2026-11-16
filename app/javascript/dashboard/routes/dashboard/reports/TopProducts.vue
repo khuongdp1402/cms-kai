@@ -33,8 +33,8 @@ const isLow = stock => typeof stock === 'number' && stock <= LOW_STOCK_LIMIT;
       </thead>
       <tbody class="text-n-slate-12">
         <tr
-          v-for="product in products"
-          :key="product.name"
+          v-for="(product, index) in products"
+          :key="`${index}-${product.name}`"
           class="border-t border-n-weak"
         >
           <td class="px-4 py-3">{{ product.name }}</td>

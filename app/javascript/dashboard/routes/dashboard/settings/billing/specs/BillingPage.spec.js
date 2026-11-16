@@ -24,8 +24,8 @@ const subscription = (overrides = {}) => ({
   },
 });
 
-const mountPage = async () => {
-  const { plugins } = createPageTestEnv();
+const mountPage = async (role = 'administrator') => {
+  const { plugins } = createPageTestEnv({ role });
   const wrapper = mount(BillingPage, { global: { plugins } });
   await flushPromises();
   return wrapper;
@@ -42,6 +42,8 @@ describe('BillingPage', () => {
     const text = wrapper.text();
     expect(text).toContain('Tăng trưởng');
     expect(text).toContain('15');
+    expect(wrapper.find('[data-test="days-left"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="days-left"]').exists()).toBe(true);
     expect(text).toContain('Vietcombank');
     expect(text).toContain('0123456789');
     expect(text).toContain('CONG TY KALO');
@@ -84,5 +86,20 @@ describe('BillingPage', () => {
     await flushPromises();
     expect(writeText).toHaveBeenCalledWith('KALO 1 PLAN');
     expect(wrapper.find('[data-test="memo"]').exists()).toBe(true);
+  });
+
+  it('does not throw and hides the date line when valid_until is null', async () => {
+    subscriptionAPI.get.mockResolvedValue(subscription({ valid_until: null }));
+    const wrapper = await mountPage();
+    expect(wrapper.find('[data-test="plan"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="valid-until"]').exists()).toBe(false);
+  });
+
+  it('hides the days-left line when expired', async () => {
+    subscriptionAPI.get.mockResolvedValue(
+      subscription({ status: 'expired', days_left: 0 })
+    );
+    const wrapper = await mountPage();
+    expect(wrapper.find('[data-test="days-left"]').exists()).toBe(false);
   });
 });

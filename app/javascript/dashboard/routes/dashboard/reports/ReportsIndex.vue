@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAccount } from 'dashboard/composables/useAccount';
@@ -25,16 +25,20 @@ const summary = ref(null);
 const isLoading = ref(false);
 const hasError = ref(false);
 
+let latestRequest = 0;
+
 const load = async () => {
+  latestRequest += 1;
+  const request = latestRequest;
   isLoading.value = true;
   hasError.value = false;
   try {
     const { data } = await reportsAPI.summary(range.value);
-    summary.value = data;
+    if (request === latestRequest) summary.value = data;
   } catch {
-    hasError.value = true;
+    if (request === latestRequest) hasError.value = true;
   } finally {
-    isLoading.value = false;
+    if (request === latestRequest) isLoading.value = false;
   }
 };
 
@@ -43,7 +47,7 @@ const selectRange = value => {
   load();
 };
 
-const kpis = () => [
+const kpis = computed(() => [
   {
     key: 'REVENUE',
     value: formatMoney(summary.value?.revenue ?? 0),
@@ -51,9 +55,11 @@ const kpis = () => [
   { key: 'ORDERS', value: summary.value?.orders_count ?? 0 },
   { key: 'WAITING', value: summary.value?.waiting_messages ?? 0 },
   { key: 'CONTACTS', value: summary.value?.new_contacts ?? 0 },
-];
+]);
 
-const isEmpty = () => summary.value && summary.value.orders_count === 0;
+const isEmpty = computed(
+  () => summary.value && summary.value.orders_count === 0
+);
 
 onMounted(load);
 </script>
@@ -98,7 +104,7 @@ onMounted(load);
     <template v-if="summary && !hasError">
       <div class="grid gap-4 mt-6 sm:grid-cols-2 xl:grid-cols-4">
         <div
-          v-for="kpi in kpis()"
+          v-for="kpi in kpis"
           :key="kpi.key"
           class="p-4 border rounded-2xl bg-n-solid-1 border-n-weak"
         >
@@ -110,7 +116,7 @@ onMounted(load);
       </div>
 
       <div
-        v-if="isEmpty()"
+        v-if="isEmpty"
         class="flex flex-col items-center gap-4 py-12 text-center"
       >
         <p data-test="empty" class="text-sm text-n-slate-11">

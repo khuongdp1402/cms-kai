@@ -2,15 +2,18 @@
 import { ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useAdmin } from 'dashboard/composables/useAdmin';
 import contentIdeasAPI from 'dashboard/api/kchat/contentIdeas';
 import Button from 'dashboard/components-next/button/Button.vue';
 
 const { t } = useI18n();
 const { accountScopedRoute } = useAccount();
+const { isAdmin } = useAdmin();
 
 const topic = ref('');
 const job = ref(null);
 const decisions = ref({});
+const pending = ref({});
 const isLoading = ref(false);
 const notice = ref('');
 const needsRenewal = ref(false);
@@ -37,6 +40,7 @@ const submit = async () => {
     const { data } = await contentIdeasAPI.repurpose(topic.value.trim());
     job.value = data;
     decisions.value = {};
+    pending.value = {};
   } catch (error) {
     job.value = null;
     notice.value = explainError(error) || 'KALO_MARKETING.IDEAS.ERROR';
@@ -46,12 +50,16 @@ const submit = async () => {
 };
 
 const decide = async (index, action) => {
+  if (pending.value[index]) return;
   notice.value = '';
+  pending.value = { ...pending.value, [index]: true };
   try {
     await contentIdeasAPI.decide(job.value.id, action);
     decisions.value = { ...decisions.value, [index]: action };
   } catch (error) {
     notice.value = explainError(error) || 'KALO_MARKETING.IDEAS.DECIDE_ERROR';
+  } finally {
+    pending.value = { ...pending.value, [index]: false };
   }
 };
 </script>
@@ -84,13 +92,16 @@ const decide = async (index, action) => {
     >
       <span>{{ t(notice) }}</span>
       <router-link
-        v-if="needsRenewal"
+        v-if="needsRenewal && isAdmin"
         data-test="renew-link"
         :to="accountScopedRoute('kalo_billing')"
         class="font-semibold text-n-brand"
       >
         {{ t('KALO_MARKETING.IDEAS.RENEW') }}
       </router-link>
+      <span v-else-if="needsRenewal" data-test="renew-ask-admin">
+        {{ t('KALO_MARKETING.IDEAS.ASK_ADMIN') }}
+      </span>
     </div>
 
     <ul v-if="job" class="flex flex-col gap-3">
@@ -127,6 +138,7 @@ const decide = async (index, action) => {
           <Button
             :label="t('KALO_MARKETING.IDEAS.APPROVE')"
             size="sm"
+            :disabled="pending[index]"
             @click="decide(index, 'approve')"
           />
           <Button
@@ -134,6 +146,7 @@ const decide = async (index, action) => {
             size="sm"
             variant="faded"
             color="slate"
+            :disabled="pending[index]"
             @click="decide(index, 'reject')"
           />
         </div>

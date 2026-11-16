@@ -85,4 +85,27 @@ describe('ReportsIndex', () => {
     );
     expect(wrapper.find('[data-test="bar"]').exists()).toBe(false);
   });
+
+  it('ignores a slower earlier response so the screen matches the selected range', async () => {
+    let resolveFirst;
+    reportsAPI.summary
+      .mockReturnValueOnce(
+        new Promise(resolve => {
+          resolveFirst = resolve;
+        })
+      )
+      .mockResolvedValueOnce(summary({ range: 'month', revenue: 9000000 }));
+    const { plugins, router } = createPageTestEnv();
+    await router.push({ name: 'kalo_orders', params: { accountId: 1 } });
+    const wrapper = mount(ReportsIndex, { global: { plugins } });
+    await wrapper
+      .findAll('[role="tab"]')
+      .find(t => t.text() === 'Tháng này')
+      .trigger('click');
+    await flushPromises();
+    resolveFirst(summary({ range: 'today', revenue: 1234 }));
+    await flushPromises();
+    expect(wrapper.text()).toContain('9.000.000đ');
+    expect(wrapper.text()).not.toContain('1.234đ');
+  });
 });

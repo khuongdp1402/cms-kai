@@ -7,10 +7,15 @@ defineProps({
 
 const { t, te } = useI18n();
 
-const channelName = channel =>
-  te(`KALO_REPORTS.CHANNELS.${channel}`)
-    ? t(`KALO_REPORTS.CHANNELS.${channel}`)
-    : channel;
+// "Channel::WebWidget" -> "webwidget"; plain keys such as "zalo" pass through.
+const channelName = channel => {
+  const key = String(channel)
+    .replace(/^Channel::/, '')
+    .toLowerCase();
+  return te(`KALO_REPORTS.CHANNELS.${key}`)
+    ? t(`KALO_REPORTS.CHANNELS.${key}`)
+    : t('KALO_REPORTS.CHANNELS.OTHER');
+};
 </script>
 
 <template>

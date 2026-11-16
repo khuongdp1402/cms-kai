@@ -1667,8 +1667,7 @@
     },
     "CHART": {
       "TITLE": "Doanh thu theo ngày",
-      "TOTAL": "Tổng {total}",
-      "TODAY": "Hôm nay"
+      "TOTAL": "Tổng {total}"
     },
     "WEEKDAYS": [
       "CN",
@@ -1687,11 +1686,22 @@
       "pos": "Tại quầy",
       "web": "Website",
       "chat": "Tin nhắn",
-      "manual": "Tạo tay"
+      "manual": "Tạo tay",
+      "whatsapp": "WhatsApp",
+      "sms": "SMS",
+      "twiliosms": "SMS",
+      "email": "Email",
+      "webwidget": "Website",
+      "facebookpage": "Facebook",
+      "instagram": "Instagram",
+      "twitterprofile": "Twitter",
+      "telegram": "Telegram",
+      "line": "Line",
+      "zalopersonal": "Zalo",
+      "OTHER": "Khác"
     },
     "PRODUCTS": {
       "TITLE": "Bán chạy",
-      "NAME": "Sản phẩm",
       "SOLD": "Đã bán",
       "REVENUE": "Doanh thu",
       "STOCK": "Còn trong kho",
@@ -1714,7 +1724,6 @@
       "TOPIC_LABEL": "Bạn muốn viết về gì?",
       "TOPIC_PLACEHOLDER": "Ví dụ: nến thơm mùa Tết",
       "SUBMIT": "Tạo ý tưởng",
-      "LOADING": "Đang tạo ý tưởng",
       "ANGLE_TITLE": "Hướng {index}: {angle}",
       "APPROVE": "Duyệt",
       "REJECT": "Bỏ qua",
@@ -1724,7 +1733,12 @@
       "EXPIRED": "Gói của bạn đã hết hạn. Gia hạn để tiếp tục dùng gợi ý nội dung.",
       "RENEW": "Gia hạn",
       "ERROR": "Chưa tạo được ý tưởng. Thử lại sau ít phút.",
-      "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút."
+      "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút.",
+      "ASK_ADMIN": "Hãy nhờ quản trị viên gia hạn."
+    },
+    "CAMPAIGN_LINKS": {
+      "SMS": "Tin nhắn SMS",
+      "WHATSAPP": "WhatsApp"
     }
   },
   "KALO_BILLING": {

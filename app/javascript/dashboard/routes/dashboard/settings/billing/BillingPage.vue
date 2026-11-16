@@ -25,9 +25,9 @@ const planName = computed(() =>
     : t('KALO_BILLING.TRIAL')
 );
 const validUntil = computed(() => {
-  const [year, month, day] = subscription.value.valid_until
-    .slice(0, 10)
-    .split('-');
+  const iso = subscription.value?.valid_until;
+  if (!iso) return null;
+  const [year, month, day] = iso.slice(0, 10).split('-');
   return `${day}/${month}/${year}`;
 });
 
@@ -71,7 +71,11 @@ onMounted(async () => {
           <b data-test="plan" class="text-xl font-extrabold text-n-slate-12">{{
             planName
           }}</b>
-          <p class="mt-1 text-sm text-n-slate-11">
+          <p
+            v-if="validUntil"
+            data-test="valid-until"
+            class="mt-1 text-sm text-n-slate-11"
+          >
             {{ t('KALO_BILLING.VALID_UNTIL', { date: validUntil }) }}
           </p>
         </div>
@@ -83,7 +87,11 @@ onMounted(async () => {
           >
             {{ t(`KALO_BILLING.STATUS.${subscription.status}`) }}
           </span>
-          <span class="text-sm font-semibold text-n-slate-12">
+          <span
+            v-if="!isExpired"
+            data-test="days-left"
+            class="text-sm font-semibold text-n-slate-12"
+          >
             {{ t('KALO_BILLING.DAYS_LEFT', { count: subscription.days_left }) }}
           </span>
         </div>
