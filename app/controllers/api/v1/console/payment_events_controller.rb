@@ -2,7 +2,9 @@ class Api::V1::Console::PaymentEventsController < Api::V1::Console::BaseControll
   ASSIGNABLE_STATUS = 'unmatched'.freeze
 
   class NotAssignable < StandardError; end
+  class AmbiguousDescription < StandardError; end
 
+  rescue_from AmbiguousDescription, with: -> { render_error('description_ambiguous', :unprocessable_entity) }
   rescue_from NotAssignable, with: -> { render_error('event_not_assignable', :unprocessable_entity) }
 
   def index
@@ -29,6 +31,8 @@ class Api::V1::Console::PaymentEventsController < Api::V1::Console::BaseControll
 
   def apply_to(account, event)
     parsed = Casso::WebhookHandler.parse_description(event.description)
+    raise AmbiguousDescription if parsed[:order_type].nil?
+
     status = Casso::WebhookHandler.apply_payment(account, amount: event.amount, order_type: parsed[:order_type], order_id: parsed[:order_id],
                                                           tid: event.tid)
     event.update!(account: account, status: status == 'matched_and_activated' ? 'applied' : 'underpaid')

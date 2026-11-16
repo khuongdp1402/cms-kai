@@ -2,7 +2,7 @@
 
 # Applies Casso (VietQR open banking) bank transactions to tenant accounts.
 #
-# Transfer description format: "KALO <ACCOUNT_REF> [PLAN|TOKEN|SEED] <ORDER_ID>"
+# Transfer description format: "KALO <ACCOUNT_REF> [PLAN|TOKEN|SEED] [ORDER_ID]"
 # ACCOUNT_REF is the numeric account id or the `tenant_slug` custom attribute (set by super admin only).
 # Account names are never used for matching because they are not unique.
 #
@@ -10,8 +10,11 @@
 # the event is inserted in the same DB transaction as the credit, and a RecordNotUnique means it was already handled.
 class Casso::WebhookHandler
   # The order id is optional: the memo shown to customers is "KALO <account_id> PLAN". Banks wrap the memo in their own text
-  # ("MBVCB.123.KALO 12 PLAN.CT tu ..."), so only require non-alphanumeric boundaries around it.
-  DESCRIPTION_PATTERN = /(?<![A-Za-z0-9])KALO[\s\-_]+([A-Za-z0-9_-]+?)(?:[\s\-_]+(PLAN|TOKEN|SEED))?(?:[\s\-_]+([0-9]+))?(?![A-Za-z0-9])/i
+  # ("MBVCB.123.KALO 12 PLAN.CT tu ..."), so only require non-alphanumeric boundaries around it. The reference is greedy over
+  # [A-Za-z0-9_-] so a slug like "hana-shop" is never cut at its dash (a wrong guess would credit another tenant).
+  DESCRIPTION_PATTERN = /(?<![A-Za-z0-9])KALO[\s\-_]+([A-Za-z0-9_-]+)(?:\s+(PLAN|TOKEN|SEED)(?![A-Za-z0-9]))?(?:\s+([0-9]+))?(?![A-Za-z0-9])/i
+  # "TOKENS", "PLANS", "SEEDX"...: a keyword with extra letters must never fall back to the default PLAN.
+  INEXACT_KEYWORD = /\A\s+(?:PLAN|TOKEN|SEED)[A-Za-z0-9]/i
   # Casso reports `when` as Vietnam local time without a zone.
   CASSO_TIME_ZONE = ActiveSupport::TimeZone['Asia/Ho_Chi_Minh']
   # Monthly plan prices in VND, highest first.
@@ -37,9 +40,12 @@ class Casso::WebhookHandler
     Time.zone.parse(valid_until) > Time.current
   end
 
-  # Order type (PLAN|TOKEN|SEED) and order id written in a transfer description; PLAN when it has none.
+  # Order type (PLAN|TOKEN|SEED) and order id written in a transfer description; PLAN when it has none,
+  # nil order_type when the keyword is inexact (e.g. TOKENS) so callers refuse to guess.
   def self.parse_description(description)
     match = description.to_s.match(DESCRIPTION_PATTERN)
+    return { order_type: nil, order_id: nil } if match&.post_match&.match?(INEXACT_KEYWORD)
+
     { order_type: (match&.[](2) || 'PLAN').upcase, order_id: match&.[](3) }
   end
 
@@ -94,7 +100,7 @@ class Casso::WebhookHandler
   def process_single_transaction(transaction)
     log_data = {
       tid: (transaction['tid'] || transaction['id']).to_s.strip,
-      amount: transaction['amount'].to_i,
+      amount: parse_amount(transaction['amount']),
       description: transaction['description'].to_s,
       received_at: parse_received_at(transaction['when']).iso8601
     }
@@ -106,6 +112,10 @@ class Casso::WebhookHandler
     log_data.merge(status: 'duplicate_ignored')
   end
 
+  def parse_amount(value)
+    value.is_a?(Numeric) || value.is_a?(String) ? value.to_i : 0
+  end
+
   def parse_received_at(value)
     CASSO_TIME_ZONE.parse(value.to_s) || Time.current
   rescue ArgumentError
@@ -115,7 +125,9 @@ class Casso::WebhookHandler
   # Fills log_data with the parsed order and returns the matching account, or nil when none matches.
   def match_account(log_data)
     match = log_data[:description].match(DESCRIPTION_PATTERN)
-    account = match && find_account(match[1])
+    return if match.nil? || match.post_match.match?(INEXACT_KEYWORD)
+
+    account = find_account(match[1])
     log_data.merge!(account_id: account.id, order_type: (match[2] || 'PLAN').upcase, order_id: match[3]) if account
     account
   end

@@ -140,4 +140,55 @@ RSpec.describe Casso::WebhookHandler do
       expect(Kchat::PaymentEvent.find_by(tid: 'V1').received_at.utc.iso8601).to eq('2026-11-15T17:30:00Z')
     end
   end
+
+  describe 'slugs with punctuation and inexact keywords' do
+    let!(:shop) { create(:account, custom_attributes: { 'tenant_slug' => 'hana-shop' }) }
+    let!(:snake) { create(:account, custom_attributes: { 'tenant_slug' => 'hana_shop' }) }
+
+    it 'credits the tenant named by a dashed or underscored slug, not the shorter one' do
+      expect(run(description: 'KALO hana-shop PLAN 9', amount: 299_000)).to include(account_id: shop.id, order_type: 'PLAN')
+      expect(run(description: 'KALO HANA_SHOP TOKEN', amount: 50_000)).to include(account_id: snake.id, order_type: 'TOKEN')
+      expect(run(description: 'KALO hana-shop TOKEN 7', amount: 10_000)).to include(account_id: shop.id, order_type: 'TOKEN')
+
+      expect(shop.reload.custom_attributes).to include('subscription_plan' => 'starter', 'ai_tokens_balance' => 10_000)
+      expect(snake.reload.custom_attributes['ai_tokens_balance']).to eq(50_000)
+      expect(account_hana.reload.custom_attributes).not_to include('subscription_plan', 'ai_tokens_balance')
+    end
+
+    it 'fails closed when the reference runs into the keyword' do
+      result = run(description: 'KALO 12-PLAN', amount: 299_000)
+
+      expect(result[:status]).to eq('unmatched_account_recorded')
+      expect(Kchat::PaymentEvent.last.status).to eq('unmatched')
+    end
+
+    %w[TOKENS SEEDS PLANS Tokenx].each do |word|
+      it "records KALO <id> #{word} as unmatched instead of defaulting to a plan" do
+        result = run(description: "KALO #{account_hana.id} #{word} 5", amount: 699_000)
+
+        expect(result[:status]).to eq('unmatched_account_recorded')
+        expect(account_hana.reload.custom_attributes).not_to include('subscription_plan', 'ai_tokens_balance')
+        expect(Kchat::PaymentEvent.last.status).to eq('unmatched')
+      end
+    end
+
+    it 'keeps other trailing words as a default plan for the reference' do
+      expect(run(description: "KALO #{account_hana.id} FT2611123", amount: 299_000)).to include(status: 'matched_and_activated', order_type: 'PLAN')
+    end
+
+    it 'has no order type for an inexact keyword when parsing for manual assignment' do
+      expect(described_class.parse_description('KALO 12 TOKENS 5')).to eq(order_type: nil, order_id: nil)
+    end
+  end
+
+  it 'treats a non-numeric amount as an invalid transaction without aborting the batch' do
+    batch = [{ 'tid' => 'A1', 'description' => 'KALO HANA TOKEN 1', 'amount' => { 'x' => 1 } },
+             { 'tid' => 'A2', 'description' => 'KALO HANA TOKEN 1', 'amount' => [5] },
+             { 'tid' => 'A3', 'description' => 'KALO HANA TOKEN 1', 'amount' => 'abc' },
+             { 'tid' => 'A4', 'description' => 'KALO HANA TOKEN 1', 'amount' => '1000' }]
+    results = described_class.new('data' => batch).process[:results]
+
+    expect(results.pluck(:status)).to eq(%w[invalid_transaction invalid_transaction invalid_transaction matched_and_activated])
+    expect(account_hana.reload.custom_attributes['ai_tokens_balance']).to eq(1000)
+  end
 end

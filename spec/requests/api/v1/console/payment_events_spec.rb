@@ -61,6 +61,17 @@ RSpec.describe 'Console payment events API', type: :request do
       expect(account.reload.custom_attributes['ai_tokens_balance']).to eq(50_000)
     end
 
+    it 'refuses to guess the type of an inexact keyword' do
+      event = Kchat::PaymentEvent.create!(tid: 'T9', amount: 699_000, description: 'KALO XXX TOKENS 3', status: 'unmatched',
+                                          received_at: Time.current)
+      post "#{base}/#{event.id}/assign", params: { account_id: account.id }, headers: headers, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body['error']).to eq('description_ambiguous')
+      expect(account.reload.custom_attributes).not_to include('subscription_plan')
+      expect(event.reload.status).to eq('unmatched')
+    end
+
     it 'refuses events that are already matched' do
       post "#{base}/#{matched.id}/assign", params: { account_id: account.id }, headers: headers, as: :json
       expect(response).to have_http_status(:unprocessable_entity)
