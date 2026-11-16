@@ -54,6 +54,45 @@ RSpec.describe Kchat::Order do
     end
   end
 
+  describe 'input hardening' do
+    it 'casts string quantities and rejects non-numeric or huge ones with RecordInvalid' do
+      expect(build_order(items: [{ name: 'x', unit_price: 5, quantity: '2' }]).total).to eq(10)
+      ['abc', nil, '2.5', 100_001, 10**30].each do |quantity|
+        expect { build_order(items: [{ name: 'x', unit_price: 5, quantity: quantity }]) }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+    end
+
+    it 'string quantity works with tracked stock' do
+      product = Kchat::Product.create!(account: account, name: 'A', price: 10, stock: 5)
+      build_order(items: [{ product_id: product.id.to_s, quantity: '2' }])
+      expect(product.reload.stock).to eq(3)
+    end
+
+    it 'ignores caller supplied status, paid_at, number, subtotal and total' do
+      order = build_order(attributes: base.merge(status: 'completed', paid_at: Time.zone.now, total: 1, subtotal: 1, number: 7))
+      expect(order).to have_attributes(status: 'pending_payment', paid_at: nil, subtotal: 2000, total: 2000, number: 1001)
+      string_keys = build_order(attributes: base.stringify_keys.merge('status' => 'completed'))
+      expect(string_keys.status).to eq('pending_payment')
+    end
+
+    it 'rejects a contact or conversation from another account' do
+      other = create(:account)
+      contact = create(:contact, account: other)
+      expect { build_order(attributes: base.merge(contact_id: contact.id)) }.to raise_error(ActiveRecord::RecordInvalid, /contact_wrong_account/)
+      conversation = create(:conversation, account: other)
+      expect do
+        build_order(attributes: base.merge(conversation_id: conversation.id))
+      end.to raise_error(ActiveRecord::RecordInvalid, /conversation_wrong_account/)
+      own = create(:contact, account: account)
+      expect(build_order(attributes: base.merge(contact_id: own.id)).contact_id).to eq(own.id)
+    end
+
+    it 'rejects inactive products' do
+      product = Kchat::Product.create!(account: account, name: 'A', price: 10, active: false)
+      expect { build_order(items: [{ product_id: product.id, quantity: 1 }]) }.to raise_error(ActiveRecord::RecordInvalid, /product_inactive/)
+    end
+  end
+
   describe 'stock' do
     it 'decrements stock of tracked products and leaves untracked products alone' do
       tracked = Kchat::Product.create!(account: account, name: 'T', price: 10, stock: 5)

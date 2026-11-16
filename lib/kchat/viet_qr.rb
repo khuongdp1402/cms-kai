@@ -6,10 +6,12 @@ module Kchat::VietQr
   module_function
 
   def payload(bin:, account_number:, amount:, memo:)
+    raise ArgumentError, 'amount must be positive' unless Integer(amount).positive?
+
     beneficiary = field('00', bin) + field('01', account_number)
     merchant = field('00', GUID) + field('01', beneficiary) + field('02', SERVICE_CODE)
     body = [field('00', '01'), field('01', '12'), field('38', merchant), field('53', '704'), field('54', Integer(amount).to_s),
-            field('58', 'VN'), field('62', field('08', sanitize_memo(memo))), '6304'].join
+            field('58', 'VN'), additional_data(memo), '6304'].join
     format('%<body>s%<crc>04X', body: body, crc: crc16(body))
   end
 
@@ -22,7 +24,14 @@ module Kchat::VietQr
         .gsub(/[^A-Za-z0-9 ]/, '').squeeze(' ').strip[0, MEMO_LIMIT].strip
   end
 
+  def additional_data(memo)
+    clean = sanitize_memo(memo)
+    clean.empty? ? '' : field('62', field('08', clean))
+  end
+
   def field(id, value)
+    raise ArgumentError, "field #{id} longer than 99 characters" if value.length > 99
+
     format('%<id>s%<len>02d%<value>s', id: id, len: value.length, value: value)
   end
 

@@ -27,5 +27,5 @@ class Kchat::OrderItem < ApplicationRecord
 
   validates :name, presence: true
   validates :unit_price, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :quantity, numericality: { only_integer: true, greater_than: 0 }
+  validates :quantity, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 100_000 }
 end

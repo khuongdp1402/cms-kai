@@ -56,6 +56,25 @@ RSpec.describe Kchat::VietQr do
     end
   end
 
+  describe 'guards' do
+    let(:args) { { bin: '970436', account_number: '1', amount: 1000, memo: 'x' } }
+
+    it 'omits tag 62 when the sanitized memo is empty' do
+      result = described_class.payload(**args, memo: '😀 #')
+      expect(result).not_to include('62040800')
+      expect(result).to end_with("5802VN6304#{result[-4..]}")
+      expect(described_class.payload(**args, memo: '')).not_to include('6204')
+    end
+
+    it 'rejects non-positive amounts' do
+      [0, -1].each { |amount| expect { described_class.payload(**args, amount: amount) }.to raise_error(ArgumentError) }
+    end
+
+    it 'rejects field values longer than 99 characters' do
+      expect { described_class.payload(**args, account_number: '1' * 100) }.to raise_error(ArgumentError)
+    end
+  end
+
   describe '.png' do
     it 'returns binary PNG data' do
       expect(described_class.png(payload).b).to start_with("\x89PNG".b)

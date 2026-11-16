@@ -72,13 +72,17 @@ class Kchat::Order < ApplicationRecord
   validates :items, presence: true
   validates :shipping_fee, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :total, numericality: { only_integer: true, less_than_or_equal_to: MAX_TOTAL }
+  validate :contact_and_conversation_belong_to_account
+  validate :products_active, on: :create
+
+  PROTECTED_ATTRIBUTES = %i[status paid_at number subtotal total account account_id].freeze
 
   class << self
     def create_with_items!(account:, attributes:, items:)
       transaction do
         account.with_lock do
           lines = build_lines(account, items)
-          order = new(attributes.merge(account: account, number: next_number(account)))
+          order = new(attributes.to_h.symbolize_keys.except(*PROTECTED_ATTRIBUTES).merge(account: account, number: next_number(account)))
           lines.each { |line| order.items.build(line.except(:product)) }
           order.apply_totals
           order.apply_initial_status
@@ -101,9 +105,15 @@ class Kchat::Order < ApplicationRecord
     end
 
     def build_line(item, product)
-      return { product: product, product_id: product.id, name: product.name, unit_price: product.price, quantity: item[:quantity] } if product
+      quantity = cast_quantity(item[:quantity])
+      return { product: product, product_id: product.id, name: product.name, unit_price: product.price, quantity: quantity } if product
 
-      { product: nil, product_id: nil, name: item[:name], unit_price: item[:unit_price], quantity: item[:quantity] }
+      { product: nil, product_id: nil, name: item[:name], unit_price: item[:unit_price], quantity: quantity }
+    end
+
+    # nil for anything that is not an integer or an integer string, so item validation reports it
+    def cast_quantity(value)
+      value.is_a?(Integer) ? value : (Integer(value, 10, exception: false) if value.is_a?(String))
     end
 
     def wanted_quantities(lines)
@@ -138,10 +148,22 @@ class Kchat::Order < ApplicationRecord
   end
 
   def apply_initial_status
-    return unless payment_method_cash? || payment_method_card?
+    if payment_method_cash? || payment_method_card?
+      self.status = 'paid'
+      self.paid_at = Time.current
+    else
+      self.status = 'pending_payment'
+      self.paid_at = nil
+    end
+  end
 
-    self.status = 'paid'
-    self.paid_at = Time.current
+  def products_active
+    errors.add(:base, 'product_inactive') if items.any? { |i| i.product && !i.product.active }
+  end
+
+  def contact_and_conversation_belong_to_account
+    errors.add(:base, 'contact_wrong_account') if contact && contact.account_id != account_id
+    errors.add(:base, 'conversation_wrong_account') if conversation && conversation.account_id != account_id
   end
 
   private
