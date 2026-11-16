@@ -30,7 +30,11 @@ export function useAccountEnrichment(fields) {
   const detectBestLocale = () => {
     const codes = (enabledLanguages || []).map(l => l.iso_639_1_code);
     const browserLang = navigator.language?.replace('-', '_');
-    const accountLocale = currentAccount.value?.locale || 'en';
+    // The account can still be loading on the first run, so fall back to the page locale (DEFAULT_LOCALE).
+    const accountLocale =
+      currentAccount.value?.locale ||
+      window.chatwootConfig?.selectedLocale ||
+      'en';
     // Kalo: Kalo strings are Vietnamese-first, so a Vietnamese account (DEFAULT_LOCALE=vi)
     // keeps its language instead of being switched to the browser's.
     if (accountLocale === 'vi') return accountLocale;
