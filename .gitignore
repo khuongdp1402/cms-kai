@@ -29,6 +29,18 @@ master.key
 
 # Ignore env files
 .env
+# Real deployment secrets (never commit); the *.example templates stay tracked
+.env.production
+.env.production.*
+!.env.production.example
+.env.staging*
+!.env.staging*.example
+.env.*.local
+
+# Database / storage backup dumps
+backups/
+*.dump
+*.sql.gz
 
 public/uploads
 public/packs*
