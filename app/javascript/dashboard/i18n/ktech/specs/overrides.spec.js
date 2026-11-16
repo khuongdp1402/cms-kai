@@ -1,40 +1,47 @@
 import en from '../../locale/en';
 import overrides from '../index';
-
-const flatten = (obj, prefix = '', out = {}) => {
-  Object.entries(obj).forEach(([key, value]) => {
-    const full = prefix ? `${prefix}.${key}` : key;
-    if (value && typeof value === 'object' && !Array.isArray(value)) {
-      flatten(value, full, out);
-    } else {
-      out[full] = value;
-    }
-  });
-  return out;
-};
-
-const tokens = text =>
-  (text.match(/\{[^}]*\}|@(?:\.\w+)?:[\w.]+/g) || []).sort();
-
-const english = flatten(en);
+import { findOverlayProblems } from './overlayProblems';
 
 describe.each(Object.keys(overrides))('KTech %s overrides', locale => {
-  const entries = Object.entries(flatten(overrides[locale]));
+  it('has no problems against the English base', () => {
+    expect(findOverlayProblems(overrides[locale], en)).toEqual([]);
+  });
+});
 
-  it.each(entries)('%s is a known English key', key => {
-    expect(english).toHaveProperty([key]);
+describe('findOverlayProblems', () => {
+  const english = { A: { B: 'Hello {name}' } };
+
+  it('accepts a KALO_ key without an English counterpart', () => {
+    expect(
+      findOverlayProblems({ KALO_NAV: { HOME: 'Trang chủ' } }, english)
+    ).toEqual([]);
   });
 
-  it.each(entries)('%s is a non-empty string', (_key, text) => {
-    expect(typeof text).toBe('string');
-    expect(text.trim()).not.toBe('');
+  it('still rejects a non-KALO key without an English counterpart', () => {
+    expect(findOverlayProblems({ OTHER: { X: 'Xin chào' } }, english)).toEqual([
+      'OTHER.X: not a known English key',
+    ]);
   });
 
-  it.each(entries)('%s has no visible KTech or Chatwoot name', (_key, text) => {
-    expect(text).not.toMatch(/KTech|Chatwoot/i);
+  it('keeps placeholder checks for non-KALO keys', () => {
+    expect(findOverlayProblems({ A: { B: 'Xin chào' } }, english)).toEqual([
+      'A.B: placeholders differ from English',
+    ]);
   });
 
-  it.each(entries)('%s keeps the English placeholders', (key, text) => {
-    expect(tokens(text)).toEqual(tokens(english[key]));
+  it('handles arrays of strings under KALO_ keys without throwing', () => {
+    const overlay = { KALO_REPORTS: { WEEKDAYS: ['T2', 'T3', ''] } };
+    expect(findOverlayProblems(overlay, english)).toEqual([
+      'KALO_REPORTS.WEEKDAYS[2]: not a non-empty string',
+    ]);
+    expect(
+      findOverlayProblems({ KALO_REPORTS: { WEEKDAYS: ['T2', 'T3'] } }, english)
+    ).toEqual([]);
+  });
+
+  it('flags unbalanced braces in KALO_ strings', () => {
+    expect(
+      findOverlayProblems({ KALO_X: { Y: 'Xin {name' } }, english)
+    ).toEqual(['KALO_X.Y: unbalanced placeholder braces']);
   });
 });
