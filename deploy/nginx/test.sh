@@ -28,4 +28,12 @@ echo "$RENDERED" | grep -q 'root /usr/share/nginx/html;' || { echo "FAIL: landin
 echo "$RENDERED" | grep -q 'casso/(webhook|status)' || { echo "FAIL: casso location missing"; exit 1; }
 echo "$RENDERED" | grep -q 'Upgrade \$http_upgrade' || { echo "FAIL: websocket upgrade missing"; exit 1; }
 if echo "$RENDERED" | grep -v "^ *#" | grep -qiE "KCHAT_DOMAIN|KALO_DOMAIN|\$\{"; then echo "FAIL: unsubstituted domain variable"; exit 1; fi
+# Every proxied location must clear the client-supplied Forwarded header (Rack 3 trusts it over X-Forwarded-For).
+echo "$RENDERED" | awk '
+  /^[ \t]*location / { inloc = 1; has_pass = 0; has_clear = 0; name = $0 }
+  inloc && /proxy_pass/ { has_pass = 1 }
+  inloc && /proxy_set_header[ \t]+Forwarded[ \t]+"";/ { has_clear = 1 }
+  inloc && /}/ { if (has_pass && !has_clear) { print "FAIL: proxied location does not clear Forwarded: " name; bad = 1 } inloc = 0 }
+  END { exit bad }' || exit 1
+echo "$RENDERED" | grep -q 'proxy_pass' || { echo "FAIL: no proxy_pass found"; exit 1; }
 echo "OK: nginx template renders and nginx -t passes"

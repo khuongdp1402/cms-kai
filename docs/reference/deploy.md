@@ -99,15 +99,54 @@ kc exec rails bundle exec rails runner '
 ## 7. Backup theo cron
 
 ```bash
-sudo mkdir -p /var/backups/kalo
-# 02:15 mỗi ngày
+sudo install -d -m 700 -o "$USER" /var/backups/kalo   # chỉ chủ sở hữu được vào thư mục
+# 02:15 mỗi ngày (chạy bằng user riêng, không phải root dùng chung)
 15 2 * * * cd /opt/kalo && set -a && . ./.env.production && set +a && BACKUP_DIR=/var/backups/kalo script/ops/pg_backup.sh >> /var/log/kalo-backup.log 2>&1
 ```
 
-- `script/ops/pg_backup.sh`: `pg_dump -Fc` vào `/var/backups/kalo/YYYY-MM-DD/`, giữ 14 ngày, thoát mã khác 0 khi lỗi.
-- `script/ops/pg_restore_test.sh`: khôi phục bản mới nhất vào DB tạm, đếm bảng `accounts`, rồi xóa DB tạm. Chạy hằng tuần để chắc bản backup dùng được.
-- Volume `storage_data` (tệp tải lên) không nằm trong dump; sao lưu riêng: `docker run --rm -v kalo_storage_data:/s -v /var/backups/kalo:/b alpine tar czf /b/storage-$(date +%F).tgz -C /s .`
-- Sao chép thư mục backup ra máy khác (rsync/rclone); backup cùng ổ đĩa chưa phải backup.
+- `script/ops/pg_backup.sh`: `umask 077`, `pg_dump -Fc` vào `/var/backups/kalo/YYYY-MM-DD/` (thư mục 0700, file `.dump` 0600), giữ 14 ngày, thoát mã khác 0 khi lỗi. Dump chứa dữ liệu mọi tenant (token đăng nhập, thông tin ngân hàng, khách hàng) nên không để file đọc được bởi user khác.
+- `script/ops/pg_restore_test.sh`: khôi phục bản mới nhất vào DB tạm, đếm bảng `accounts`, rồi xóa DB tạm. Chạy hằng tuần bằng chính user đã tạo backup (file 0600 chỉ user đó đọc được).
+- Volume `storage_data` (tệp tải lên) không nằm trong dump; sao lưu riêng, cũng với `umask 077` để tarball là 0600:
+
+  ```bash
+  ( umask 077; docker run --rm -v kalo_storage_data:/s alpine tar czf - -C /s . > /var/backups/kalo/storage-$(date +%F).tgz )
+  ```
+
+  Không dùng `-v /var/backups/kalo:/b` với `tar czf /b/...` vì file tạo bởi root trong container sẽ có quyền theo umask của container (0644).
+- Backup cùng ổ đĩa chưa phải backup: sao chép ra máy khác (rsync/rclone), nhưng **mã hóa trước khi gửi ra ngoài** và cất khóa ở nơi khác.
+
+### Mã hóa backup trước khi đưa ra ngoài
+
+Dùng khóa công khai để máy chủ chỉ cần giữ public key; khóa riêng (giải mã) cất ở nơi khác (password manager, máy của người vận hành, két offline), không để cùng máy chủ hay cùng nơi lưu backup.
+
+Với `age` (khuyến nghị):
+
+```bash
+# một lần, trên máy KHÔNG phải server: tạo cặp khóa, cất kalo-backup.key nơi an toàn
+age-keygen -o kalo-backup.key          # in ra "Public key: age1..."
+# trên server, chỉ cần public key
+RECIPIENT=age1xxxxxxxx...              # public key ở trên
+for f in /var/backups/kalo/*/*.dump /var/backups/kalo/storage-*.tgz; do
+  [ -e "$f.age" ] || ( umask 077; age -r "$RECIPIENT" -o "$f.age" "$f" )
+done
+rclone copy /var/backups/kalo remote:kalo-backups --include '*.age'   # chỉ đẩy file đã mã hóa
+# khôi phục (trên máy có khóa riêng):
+age -d -i kalo-backup.key -o kalo.dump kalo_020000.dump.age
+```
+
+Với `gpg`:
+
+```bash
+# một lần: nhập public key của người vận hành (khóa riêng giữ ở máy khác)
+gpg --import kalo-backup-pub.asc
+for f in /var/backups/kalo/*/*.dump /var/backups/kalo/storage-*.tgz; do
+  [ -e "$f.gpg" ] || ( umask 077; gpg --batch --yes --trust-model always -r backup@<tên miền> -o "$f.gpg" -e "$f" )
+done
+# khôi phục (trên máy có khóa riêng):
+gpg -d -o kalo.dump kalo_020000.dump.gpg
+```
+
+Sau khi đã mã hóa và đẩy đi, bản `.age`/`.gpg` cũng phải 0600 (umask 077 ở trên đã lo). Thử giải mã một bản mỗi tháng để chắc khóa còn dùng được.
 
 ## 8. Webhook Casso
 

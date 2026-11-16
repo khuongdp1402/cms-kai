@@ -87,6 +87,43 @@ RSpec.describe 'Console accounts API', type: :request do
       expect(trial.reload.custom_attributes['subscription_valid_until']).to be_nil
     end
 
+    it 'enforces extend_days between 1 and 365 with 422 invalid_extend_days' do
+      [0, -1, 366, 'abc', 10.5, '', nil, [5], { a: 1 }, 999_999_999].each do |bad|
+        patch "#{base}/#{trial.id}", params: { extend_days: bad }, headers: headers, as: :json
+        expect(response).to have_http_status(:unprocessable_entity), "extend_days=#{bad.inspect} gave #{response.status}"
+        expect(response.parsed_body['error']).to eq('invalid_extend_days')
+      end
+      expect(trial.reload.custom_attributes['subscription_valid_until']).to be_nil
+    end
+
+    it 'accepts extend_days at the boundaries and as a numeric string' do
+      [1, 365, '10'].each do |ok|
+        patch "#{base}/#{trial.id}", params: { extend_days: ok }, headers: headers, as: :json
+        expect(response).to have_http_status(:ok), "extend_days=#{ok.inspect} gave #{response.status}"
+      end
+      expect(Time.zone.parse(trial.reload.custom_attributes['subscription_valid_until'])).to be_within(1.minute).of((1 + 365 + 10).days.from_now)
+    end
+
+    it 'keeps the list and overview working when a stored subscription_valid_until is not a valid timestamp' do
+      %w[garbage +2739-01-01 2026-02-30T00:00:00Z 99999-01-01T00:00:00Z].each_with_index do |bad, i|
+        create(:account, name: "Broken #{i}", custom_attributes: { 'subscription_valid_until' => bad })
+      end
+
+      %w[trial expiring all locked].each do |filter|
+        get base, params: { filter: filter }, headers: headers, as: :json
+        expect(response).to have_http_status(:ok), "filter=#{filter} gave #{response.status}"
+      end
+      get '/api/v1/console/overview', headers: headers, as: :json
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'still lists an account whose valid_until is a well-formed timestamp with an offset or fraction' do
+      create(:account, name: 'Offset Shop', created_at: 60.days.ago,
+                       custom_attributes: { 'subscription_valid_until' => 3.days.from_now.in_time_zone('Asia/Ho_Chi_Minh').iso8601(3) })
+
+      expect(names(filter: 'expiring')).to include('Offset Shop')
+    end
+
     it 'returns 404 for an unknown account' do
       patch "#{base}/0", params: { locked: true }, headers: headers, as: :json
       expect(response).to have_http_status(:not_found)

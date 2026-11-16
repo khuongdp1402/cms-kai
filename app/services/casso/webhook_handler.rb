@@ -21,11 +21,26 @@ class Casso::WebhookHandler
   PLAN_PRICES = { 'enterprise' => 1_990_000, 'growth' => 699_000, 'starter' => 299_000 }.freeze
   SEED_CREDIT_PRICE = 500
 
+  # Keys Rails adds to the params of a JSON request; they are not part of a top-level Casso transaction.
+  ROUTING_KEYS = %w[controller action format casso webhook].freeze
+
   attr_reader :transactions
 
+  # Accepted shapes: `data` as an array of transactions, `data` as one transaction object (Casso webhook v2),
+  # or a top-level transaction object (`tid`/`id` and `amount`) without `data`. Anything else is an invalid payload.
   def initialize(params)
+    payload = (params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params.to_h).with_indifferent_access
+    @transactions = extract_transactions(payload)
+  end
+
+  def valid_payload?
+    !transactions.nil?
+  end
+
+  # Describes the payload shape without ever including its content (safe to log).
+  def self.describe_shape(params)
     payload = params.respond_to?(:to_unsafe_h) ? params.to_unsafe_h : params.to_h
-    @transactions = Array(payload['data'] || payload[:data])
+    "data=#{payload['data'].class} keys=#{payload.keys.size}"
   end
 
   def process
@@ -34,10 +49,18 @@ class Casso::WebhookHandler
   end
 
   def self.subscription_active?(account)
-    valid_until = account&.custom_attributes&.dig('subscription_valid_until')
-    return false if valid_until.blank?
+    valid_until = parse_valid_until(account&.custom_attributes&.dig('subscription_valid_until'))
+    valid_until.present? && valid_until > Time.current
+  end
 
-    Time.zone.parse(valid_until) > Time.current
+  # nil for a blank or unparseable stored value (hand-edited, wrong type): never raise, because an exception here would make
+  # the webhook answer 500 and Casso would retry that payment forever. The value itself is not logged.
+  def self.parse_valid_until(value)
+    return if value.blank?
+
+    parsed = Kchat::Entitlements.parse_valid_until(value)
+    Rails.logger.warn '[Casso] ignoring invalid stored subscription_valid_until' if parsed.nil?
+    parsed
   end
 
   # Order type (PLAN|TOKEN|SEED) and order id written in a transfer description; PLAN when it has none,
@@ -87,7 +110,7 @@ class Casso::WebhookHandler
       return 'underpaid_recorded'
     end
 
-    current_until = attrs['subscription_valid_until'].present? ? Time.zone.parse(attrs['subscription_valid_until']) : Time.current
+    current_until = parse_valid_until(attrs['subscription_valid_until']) || Time.current
     attrs['subscription_plan'] = plan
     attrs['subscription_valid_until'] = ([current_until, Time.current].max + 30.days).iso8601
     attrs['subscription_status'] = 'active'
@@ -96,6 +119,19 @@ class Casso::WebhookHandler
   private_class_method :credit, :extend_subscription
 
   private
+
+  def extract_transactions(payload)
+    data = payload['data']
+    return data if data.is_a?(Array)
+    return [data] if data.is_a?(Hash)
+    return unless data.nil? && transaction_like?(payload)
+
+    [payload.except(*ROUTING_KEYS)]
+  end
+
+  def transaction_like?(payload)
+    (payload['tid'].present? || payload['id'].present?) && payload.key?('amount')
+  end
 
   def process_single_transaction(transaction)
     log_data = {
@@ -146,10 +182,16 @@ class Casso::WebhookHandler
     end
   end
 
+  # tenant_slug is not unique: an ambiguous slug is treated as unmatched (never guess which tenant to credit).
   def find_account(ref)
     clean_ref = ref.to_s.strip.downcase
     return Account.find_by(id: clean_ref) if clean_ref.match?(/\A\d+\z/)
 
-    Account.find_by("lower(custom_attributes->>'tenant_slug') = ?", clean_ref)
+    candidates = Account.where("lower(custom_attributes->>'tenant_slug') = ?", clean_ref).limit(2).to_a
+    if candidates.size > 1
+      Rails.logger.warn "[Casso] ambiguous tenant_slug=#{clean_ref} matches #{candidates.size}+ accounts; treating as unmatched"
+      return
+    end
+    candidates.first
   end
 end

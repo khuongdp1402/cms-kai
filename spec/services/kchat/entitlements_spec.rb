@@ -35,4 +35,28 @@ RSpec.describe Kchat::Entitlements do
       expect(described_class.status(account_created(30, 'subscription_valid_until' => Time.current.iso8601))).to eq(:expired)
     end
   end
+
+  describe 'a stored subscription_valid_until that is not a parseable string' do
+    [20_261_231, 12.5, true, ['2026-01-01'], { 'a' => 1 }, 'garbage', '5', '2026-12-01', '2026-12-01T10:00:00', '2026-02-30T00:00:00Z',
+     '10 Dec 2026'].each do |bad|
+      it "treats #{bad.inspect} as no paid period instead of raising" do
+        account = account_created(1, 'subscription_valid_until' => bad)
+
+        expect(described_class.paid_until(account)).to be_nil
+        expect(described_class.status(account)).to eq(:trial)
+      end
+    end
+  end
+
+  describe '.parse_valid_until' do
+    it 'accepts a full ISO 8601 timestamp with Z or an offset, with optional fraction' do
+      expect(described_class.parse_valid_until('2026-12-01T10:00:00Z')).to eq(Time.utc(2026, 12, 1, 10))
+      expect(described_class.parse_valid_until('2026-12-01T17:00:00+07:00')).to eq(Time.utc(2026, 12, 1, 10))
+      expect(described_class.parse_valid_until('2026-12-01T10:00:00.250Z')).to eq(Time.utc(2026, 12, 1, 10, 0, 0.25))
+    end
+
+    it 'rejects partial parses, date-only values (same rule as the SQL guard) and non-strings' do
+      ['5', '2026-12-01', '', nil, 5, 'tomorrow'].each { |bad| expect(described_class.parse_valid_until(bad)).to be_nil }
+    end
+  end
 end

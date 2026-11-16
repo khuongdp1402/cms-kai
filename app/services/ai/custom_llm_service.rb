@@ -4,6 +4,10 @@
 # Gemini REST is used only when AI_PROVIDER=gemini_api.
 class Ai::CustomLlmService
   class NotConfiguredError < StandardError; end
+  class PromptTooLargeError < StandardError; end
+
+  # Defense in depth behind the controller limits: a paid call never carries more than this many characters in total.
+  MAX_PROMPT_CHARS = 20_000
 
   DEFAULT_BASE_URL = 'https://agentgw.cloud/v1'
   DEFAULT_CHAT_MODEL = 'agentgw-gpt-5.5'
@@ -36,6 +40,7 @@ class Ai::CustomLlmService
   # Returns the assistant text, or raises NotConfiguredError / StandardError on provider failure.
   def complete(messages, model: nil)
     raise NotConfiguredError, 'AI provider is not configured' unless configured?
+    raise PromptTooLargeError, 'AI prompt is too large' if messages.sum { |m| m[:content].to_s.length } > MAX_PROMPT_CHARS
 
     text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
     self.class.strip_think(text)

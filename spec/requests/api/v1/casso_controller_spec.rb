@@ -46,4 +46,42 @@ RSpec.describe 'Casso webhook', type: :request do
                                          'syntax' => 'KALO <ACCOUNT_ID> [PLAN|TOKEN|SEED] [ORDER_ID]')
     end
   end
+
+  describe 'payload shapes' do
+    let(:headers) { { 'Secure-Token' => 'secret-token' } }
+    let(:tx) { { tid: 'FT10', description: 'KALO HANA 1', amount: 699_000 } }
+
+    around { |ex| with_modified_env(CASSO_SECURE_TOKEN: 'secret-token') { ex.run } }
+
+    it 'credits a payment sent as a single `data` object' do
+      post '/api/v1/casso/webhook', params: { error: 0, data: tx }, headers: headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(account.reload.custom_attributes['subscription_status']).to eq('active')
+    end
+
+    it 'credits a payment sent as a top-level transaction' do
+      post '/api/v1/casso/webhook', params: tx, headers: headers, as: :json
+
+      expect(response).to have_http_status(:ok)
+      expect(account.reload.custom_attributes['subscription_status']).to eq('active')
+    end
+
+    [
+      ['without data', { error: 0 }],
+      ['with null data', { error: 0, data: nil }],
+      ['with string data', { error: 0, data: 'x' }],
+      ['with number data', { error: 0, data: 12 }]
+    ].each do |label, body|
+      it "answers 400 invalid_payload #{label} and logs a warning without the body" do
+        allow(Rails.logger).to receive(:warn)
+
+        post '/api/v1/casso/webhook', params: body.merge(note: 'SECRET-BODY-MARKER'), headers: headers, as: :json
+
+        expect(response).to have_http_status(:bad_request)
+        expect(response.parsed_body).to eq('error' => 'invalid_payload')
+        expect(Rails.logger).to have_received(:warn).with(satisfy { |m| m.include?('[Casso]') && m.exclude?('SECRET-BODY-MARKER') })
+      end
+    end
+  end
 end

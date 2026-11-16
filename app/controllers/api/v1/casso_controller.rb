@@ -10,7 +10,13 @@ class Api::V1::CassoController < ApplicationController
 
   # POST /api/v1/casso/webhook
   def webhook
-    render json: Casso::WebhookHandler.new(params).process, status: :ok
+    handler = Casso::WebhookHandler.new(params)
+    unless handler.valid_payload?
+      Rails.logger.warn "[Casso] rejected webhook with invalid payload shape (#{Casso::WebhookHandler.describe_shape(params)})"
+      return render json: { error: 'invalid_payload' }, status: :bad_request
+    end
+
+    render json: handler.process, status: :ok
   end
 
   # GET /api/v1/casso/status — public: bank details customers transfer to.

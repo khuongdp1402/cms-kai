@@ -1,5 +1,6 @@
 class Api::V1::Console::AccountsController < Api::V1::Console::BaseController
   FILTERS = %w[all trial expiring locked].freeze
+  MAX_EXTEND_DAYS = 365
 
   before_action :require_string_query!, only: :index
 
@@ -43,12 +44,12 @@ class Api::V1::Console::AccountsController < Api::V1::Console::BaseController
                 q: "%#{Account.sanitize_sql_like(params[:query])}%", id: params[:query].to_s)
   end
 
-  # nil when absent, :invalid when not a positive integer
+  # nil when absent, :invalid unless an integer from 1 to MAX_EXTEND_DAYS
   def parse_extend_days
     return unless params.key?(:extend_days)
 
     days = Integer(params[:extend_days].to_s, 10, exception: false)
-    days&.positive? ? days : :invalid
+    days&.between?(1, MAX_EXTEND_DAYS) ? days : :invalid
   end
 
   def extend_subscription(account, days)

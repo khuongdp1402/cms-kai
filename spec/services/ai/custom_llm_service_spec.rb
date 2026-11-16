@@ -37,4 +37,20 @@ RSpec.describe Ai::CustomLlmService do
     end
     expect(stub).to have_been_requested
   end
+
+  it 'refuses a prompt over the maximum total size before calling the provider' do
+    request = stub_request(:post, 'https://agentgw.cloud/v1/chat/completions')
+    huge = [{ role: 'user', content: 'a' * (described_class::MAX_PROMPT_CHARS + 1) }]
+
+    expect { service.complete(huge) }.to raise_error(described_class::PromptTooLargeError)
+    expect(request).not_to have_been_requested
+  end
+
+  it 'accepts a prompt exactly at the maximum total size' do
+    stub_request(:post, 'https://agentgw.cloud/v1/chat/completions').to_return(
+      status: 200, headers: { 'Content-Type' => 'application/json' }, body: { choices: [{ message: { content: 'ok' } }] }.to_json
+    )
+
+    expect(service.complete([{ role: 'user', content: 'a' * described_class::MAX_PROMPT_CHARS }])).to eq('ok')
+  end
 end
