@@ -18,7 +18,7 @@ export default {
     return {
       inboxName: '',
       channelWebsiteUrl: '',
-      channelWidgetColor: '#1E5EFF',
+      channelWidgetColor: '#C93F24',
       channelWelcomeTitle: '',
       channelWelcomeTagline: '',
       greetingEnabled: false,
