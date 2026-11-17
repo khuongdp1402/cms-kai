@@ -3,6 +3,7 @@
 // <input id="conversationAttachment"> and the Cmd/Ctrl+Alt+A shortcut that clicks it
 // (skipped when the editor is disabled), plus when the attach button is shown.
 import { mount } from '@vue/test-utils';
+import FileUpload from 'vue-upload-component';
 import { createStore } from 'vuex';
 import ReplyBottomPanel from '../ReplyBottomPanel.vue';
 import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
@@ -81,5 +82,28 @@ describe('ReplyBottomPanel attachment', () => {
   it('shows the attach button in private-note mode even without channel file upload', () => {
     wrapper = mountPanel({ showFileUpload: false, isNote: true });
     expect(document.querySelector('#conversationAttachment')).not.toBeNull();
+  });
+
+  it('enables drag-and-drop on the upload component (C-60)', () => {
+    wrapper = mountPanel();
+    expect(wrapper.findComponent(FileUpload).props('drop')).toBe(true);
+  });
+
+  it('disables drag-and-drop while the new-conversation modal is active (C-60)', () => {
+    wrapper = mountPanel({ newConversationModalActive: true });
+    expect(wrapper.findComponent(FileUpload).props('drop')).toBe(false);
+  });
+
+  it('forwards the upload component input-file event to the onFileUpload prop (C-59/C-60)', () => {
+    const onFileUpload = vi.fn();
+    wrapper = mountPanel({ onFileUpload });
+    const file = { name: 'a.png' };
+    wrapper.findComponent(FileUpload).vm.$emit('inputFile', file);
+    expect(onFileUpload).toHaveBeenCalledWith(file);
+  });
+
+  it('allows multiple files only when enableMultipleFileUpload is set', () => {
+    wrapper = mountPanel({ enableMultipleFileUpload: false });
+    expect(wrapper.findComponent(FileUpload).props('multiple')).toBe(false);
   });
 });

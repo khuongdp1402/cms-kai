@@ -100,10 +100,14 @@ describe('ResolveAction', () => {
     wrapper.vm.$.setupState.resolveAttributesModalRef = { open };
     await events()['Alt+KeyE'].action();
     expect(toggleStatus).not.toHaveBeenCalled();
-    expect(open).toHaveBeenCalledWith(['plan'], {}, {
-      id: 7,
-      snoozedUntil: null,
-    });
+    expect(open).toHaveBeenCalledWith(
+      ['plan'],
+      {},
+      {
+        id: 7,
+        snoozedUntil: null,
+      }
+    );
   });
 
   it('Cmd+Alt+E resolves and clicks the next .conversation after .active', async () => {
