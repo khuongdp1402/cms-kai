@@ -12,12 +12,16 @@ defineProps({
 </script>
 
 <template>
+  <!-- Flat rows live inside a router-link (hub), which is already focusable. -->
   <div
-    class="flex items-center gap-3 px-4 py-3 transition-colors duration-150 motion-reduce:transition-none"
+    :role="clickable && !flat ? 'link' : undefined"
+    :tabindex="clickable && !flat ? 0 : undefined"
+    class="flex items-center gap-3 px-4 py-3 transition-colors duration-150 motion-reduce:transition-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
     :class="[
       flat ? '' : 'border rounded-2xl border-n-weak bg-n-solid-1',
       clickable ? 'cursor-pointer hover:bg-n-alpha-1' : '',
     ]"
+    @keydown.enter.self="clickable && !flat && $event.target.click()"
   >
     <slot name="leading">
       <span

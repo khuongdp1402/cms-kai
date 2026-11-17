@@ -1,3 +1,4 @@
+import { flushPromises } from '@vue/test-utils';
 import CannedIndex from '../canned/Index.vue';
 import InboxIndex from '../inbox/Index.vue';
 import LabelsIndex from '../labels/Index.vue';
@@ -83,6 +84,31 @@ describe('Kalo settings list pages', () => {
       const { wrapper, router } = await mountInboxes({ isAdmin: false });
       await wrapper.find('[data-test="inbox-row"]').trigger('click');
       expect(router.currentRoute.value.name).toBe('settings_page');
+    });
+
+    it('opens the delete dialog without navigating when Delete is clicked', async () => {
+      const { wrapper, router } = await mountInboxes();
+      const deleteButton = wrapper
+        .find('[data-test="inbox-row"]')
+        .findAll('button')
+        .find(button => button.attributes('aria-label') === 'Xóa');
+      await deleteButton.trigger('click');
+      await flushPromises();
+      expect(router.currentRoute.value.name).toBe('settings_page');
+      expect(
+        wrapper.findComponent({ name: 'WootConfirmDeleteModal' }).exists()
+      ).toBe(true);
+    });
+
+    it('opens the row with the Enter key', async () => {
+      const { wrapper, router } = await mountInboxes();
+      const row = wrapper.find('[data-test="inbox-row"]');
+      expect(row.attributes('role')).toBe('link');
+      expect(row.attributes('tabindex')).toBe('0');
+      await row.trigger('keydown', { key: 'Enter' });
+      await vi.waitFor(() =>
+        expect(router.currentRoute.value.name).toBe('settings_inbox_show')
+      );
     });
 
     it('shows a friendly empty state with one call to action', async () => {

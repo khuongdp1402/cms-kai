@@ -85,7 +85,8 @@ const hubRoute = computed(() => ({
     >
       <p
         v-if="description || $slots.description"
-        class="max-w-3xl mb-0 text-sm line-clamp-2"
+        :title="description || undefined"
+        class="max-w-3xl mb-0 text-sm line-clamp-3 sm:line-clamp-none"
       >
         <slot name="description">{{ description }}</slot>
       </p>

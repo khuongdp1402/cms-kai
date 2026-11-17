@@ -12,7 +12,7 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
-- **B34 (2026-11-17): Nút "Xem hồ sơ & Đăng xuất" của Zalo cá nhân không làm gì.**
+- **B36 (2026-11-17): Nút "Xem hồ sơ & Đăng xuất" của Zalo cá nhân không làm gì.**
   - Triệu chứng: bấm nút trên banner Zalo cá nhân (Cài đặt hộp thư) không chuyển sang tab Cấu hình.
   - Nguyên nhân: template gán `selectedTabKey = 'configuration'`, mà `selectedTabKey` là computed chỉ đọc nên Vue bỏ qua (chỉ cảnh báo console).
   - Quy tắc: đổi tab bằng phương thức thật (`openTabByKey`/`onTabChange`), không gán vào computed trong template; viết UI bằng tay (không qua i18n) thì kiểm lại bằng spec hoặc trình duyệt.
