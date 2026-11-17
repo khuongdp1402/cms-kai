@@ -67,7 +67,7 @@ useKeyboardEvents(keyboardEvents);
     >
       {{ item.name }}
       <span
-        v-if="item.count"
+        v-if="item.count !== undefined"
         class="text-xs tabular-nums"
         :class="index === activeTabIndex ? 'opacity-80' : 'text-n-slate-10'"
       >

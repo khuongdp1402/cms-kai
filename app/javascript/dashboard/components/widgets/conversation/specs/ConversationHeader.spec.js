@@ -11,7 +11,6 @@ import { createStore } from 'vuex';
 import { ref } from 'vue';
 import ConversationHeader from '../ConversationHeader.vue';
 import MoreActions from '../MoreActions.vue';
-import BackButton from '../../BackButton.vue';
 import InboxName from '../../InboxName.vue';
 import { copyTextToClipboard } from 'shared/helpers/clipboard';
 
@@ -93,11 +92,13 @@ describe('ConversationHeader', () => {
     ).toBe(true);
   });
 
+  // Kalo UI phase 2: BackButton became an icon-only button (selector change only).
   it('back button is rendered only when showBackButton is set', () => {
-    expect(mountHeader().findComponent(BackButton).exists()).toBe(false);
+    const back = '[data-test-id="kalo-back-button"]';
+    expect(mountHeader().find(back).exists()).toBe(false);
     expect(
       mountHeader({ props: { showBackButton: true } })
-        .findComponent(BackButton)
+        .find(back)
         .exists()
     ).toBe(true);
   });

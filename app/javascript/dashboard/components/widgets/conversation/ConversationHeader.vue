@@ -1,14 +1,14 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { useStore } from 'vuex';
 import { useElementSize } from '@vueuse/core';
-import BackButton from '../BackButton.vue';
 import InboxName from '../InboxName.vue';
 import MoreActions from './MoreActions.vue';
 import Avatar from 'next/avatar/Avatar.vue';
 import SLACardLabel from './components/SLACardLabel.vue';
 import ConversationCallButton from './ConversationCallButton.vue';
+import KaloIcon from 'next/icon/KaloIcon.vue';
 import KaloChannelBadge from 'dashboard/components-next/icon/KaloChannelBadge.vue';
 import wootConstants from 'dashboard/constants/globals';
 import { conversationListPageURL } from 'dashboard/helper/URLHelper';
@@ -32,6 +32,7 @@ const props = defineProps({
 const { t } = useI18n();
 const store = useStore();
 const route = useRoute();
+const router = useRouter();
 const conversationHeader = ref(null);
 const { width } = useElementSize(conversationHeader);
 const { isAWebWidgetInbox } = useInbox();
@@ -114,12 +115,17 @@ const copyConversationId = async () => {
     class="flex items-center justify-between flex-1 w-full min-w-0 gap-3 px-4 py-2.5 min-h-[3.75rem]"
   >
     <div class="flex items-center flex-1 min-w-0 gap-2.5">
-      <BackButton
+      <button
         v-if="showBackButton"
-        :back-url="backButtonUrl"
+        type="button"
+        data-test-id="kalo-back-button"
         :aria-label="$t('GENERAL_SETTINGS.BACK')"
-        class="grid rounded-lg size-8 place-items-center !text-[0px] hover:bg-n-alpha-2 shrink-0"
-      />
+        :title="$t('GENERAL_SETTINGS.BACK')"
+        class="grid rounded-lg size-8 shrink-0 place-items-center text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12"
+        @click="router.push(backButtonUrl)"
+      >
+        <KaloIcon name="back" class="size-5 rtl:rotate-180" />
+      </button>
       <Avatar
         :name="currentContact.name"
         :src="currentContact.thumbnail"

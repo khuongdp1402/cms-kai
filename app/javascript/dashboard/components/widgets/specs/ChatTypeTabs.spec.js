@@ -66,4 +66,14 @@ describe('ChatTypeTabs', () => {
     useKeyboardEvents.mock.calls[0][0]['Alt+KeyN'].action();
     expect(wrapper.emitted('chatTabChange')).toEqual([['me']]);
   });
+
+  it('shows a zero count like the old tabs did', () => {
+    const wrapper = mount(ChatTypeTabs, {
+      props: {
+        items: [{ key: 'me', name: 'Mine', count: 0 }],
+        activeTab: 'me',
+      },
+    });
+    expect(tabs(wrapper)[0].text().replace(/\s+/g, ' ')).toBe('Mine 0');
+  });
 });
