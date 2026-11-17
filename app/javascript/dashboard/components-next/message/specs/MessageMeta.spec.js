@@ -1,6 +1,8 @@
 // Kalo UI phase 2 (task 1b-ii), C-49: message meta shows HH:mm (the day lives in the
 // day separator), reveals the time on hover on pointer devices, and Zalo personal
-// outgoing messages get real sent/delivered/read ticks (they used to stay on "sending").
+// outgoing messages accepted by the bridge (source id set) get the "sent" tick instead of
+// staying on "sending". The bridge does not emit delivered/read today; the mapping below
+// only shows those ticks if the backend ever stores such a status.
 import { mount } from '@vue/test-utils';
 import { ref, computed } from 'vue';
 import MessageMeta from '../MessageMeta.vue';
@@ -63,13 +65,16 @@ describe('MessageMeta', () => {
     ['sent', 'sent'],
     ['delivered', 'delivered'],
     ['read', 'read'],
-  ])('Zalo personal %s message shows the %s tick', (status, expected) => {
-    inboxFlags.zalo = true;
-    ctx.status.value = status;
-    expect(mountMeta().findComponent(MessageStatus).props('status')).toBe(
-      expected
-    );
-  });
+  ])(
+    'Zalo personal status %s maps to the %s tick (only "sent" occurs today)',
+    (status, expected) => {
+      inboxFlags.zalo = true;
+      ctx.status.value = status;
+      expect(mountMeta().findComponent(MessageStatus).props('status')).toBe(
+        expected
+      );
+    }
+  );
 
   it('a Zalo personal message not yet accepted by the bridge (no source id) shows progress', () => {
     inboxFlags.zalo = true;
