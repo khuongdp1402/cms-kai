@@ -80,8 +80,8 @@ const tableHeaders = computed(() => {
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="$t('MACROS.HEADER')"
-        :description="$t('MACROS.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.HUB.LINKS.MACROS.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.HUB.LINKS.MACROS.DESC')"
         :link-text="$t('MACROS.LEARN_MORE')"
         :search-placeholder="$t('MACROS.SEARCH_PLACEHOLDER')"
         feature-name="macros"

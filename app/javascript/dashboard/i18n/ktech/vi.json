@@ -2028,5 +2028,222 @@
   },
   "KALO_ONBOARDING": {
     "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
+  },
+  "KALO_SETTINGS_UI": {
+    "BACK_TO_HUB": "Cài đặt",
+    "COMMON": {
+      "EDIT": "Sửa",
+      "DELETE": "Xóa",
+      "SETTINGS": "Cài đặt",
+      "DELETE_YES": "Xóa",
+      "KEEP": "Giữ lại",
+      "DELETE_ERROR": "Chưa xóa được, bạn thử lại sau nhé",
+      "NO_RESULTS": "Không tìm thấy kết quả phù hợp",
+      "TYPE_TO_CONFIRM": "Gõ {name} để xác nhận"
+    },
+    "HUB": {
+      "TITLE": "Cài đặt",
+      "SUBTITLE": "Kênh bán, nhân viên và thông tin cửa hàng",
+      "GROUPS": {
+        "CHANNELS": "Kênh bán hàng",
+        "TEAM": "Nhân viên & nhóm",
+        "REPLIES": "Nhãn & trả lời nhanh",
+        "SHOP": "Cửa hàng",
+        "ME": "Tài khoản của tôi",
+        "ADVANCED": "Nâng cao",
+        "REPORTS": "Báo cáo chi tiết"
+      },
+      "LINKS": {
+        "INBOXES": {
+          "TITLE": "Kênh nhận tin",
+          "DESC": "Zalo, Facebook, website và các kênh khác"
+        },
+        "CAMPAIGNS": {
+          "TITLE": "Lời chào trên website",
+          "DESC": "Tin nhắn tự gửi cho khách đang xem website"
+        },
+        "HELP_CENTER": {
+          "TITLE": "Trang hỏi đáp",
+          "DESC": "Bài viết trả lời câu hỏi thường gặp"
+        },
+        "AGENTS": {
+          "TITLE": "Nhân viên",
+          "DESC": "Mời và phân quyền người cùng bán"
+        },
+        "TEAMS": {
+          "TITLE": "Nhóm",
+          "DESC": "Chia nhân viên theo ca hoặc theo việc"
+        },
+        "LABELS": {
+          "TITLE": "Nhãn",
+          "DESC": "Đánh dấu tin nhắn và khách để dễ lọc"
+        },
+        "CANNED": {
+          "TITLE": "Trả lời nhanh",
+          "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn"
+        },
+        "ACCOUNT": {
+          "TITLE": "Thông tin cửa hàng",
+          "DESC": "Tên cửa hàng, ngôn ngữ, email"
+        },
+        "PLAN": {
+          "TITLE": "Gói cước",
+          "DESC": "Hạn dùng và cách gia hạn"
+        },
+        "PROFILE": {
+          "TITLE": "Hồ sơ",
+          "DESC": "Ảnh, tên, chữ ký và phím gửi tin"
+        },
+        "SECURITY": {
+          "TITLE": "Bảo mật",
+          "DESC": "Mật khẩu, xác thực 2 bước, phiên đăng nhập"
+        },
+        "NOTIFICATIONS": {
+          "TITLE": "Thông báo",
+          "DESC": "Âm báo và thông báo khi có tin mới"
+        },
+        "ATTRIBUTES": {
+          "TITLE": "Thông tin thêm",
+          "DESC": "Trường riêng cho khách và hội thoại"
+        },
+        "AUTOMATION": {
+          "TITLE": "Tự động hóa",
+          "DESC": "Tự gắn nhãn, tự giao việc theo điều kiện"
+        },
+        "MACROS": {
+          "TITLE": "Thao tác nhanh",
+          "DESC": "Gộp nhiều bước thành một nút bấm"
+        },
+        "WORKFLOW": {
+          "TITLE": "Quy trình hội thoại",
+          "DESC": "Tự đóng hội thoại, thông tin bắt buộc khi đóng"
+        },
+        "INTEGRATIONS": {
+          "TITLE": "Kết nối ứng dụng",
+          "DESC": "Nối cửa hàng với ứng dụng khác"
+        },
+        "BOTS": {
+          "TITLE": "Bot trả lời",
+          "DESC": "Bot tự động trả lời khách"
+        },
+        "DATA_IMPORT": {
+          "TITLE": "Nhập dữ liệu",
+          "DESC": "Chuyển khách và hội thoại từ nơi khác sang"
+        },
+        "REPORT_OVERVIEW": {
+          "TITLE": "Tổng quan",
+          "DESC": "Số hội thoại và thời gian phản hồi"
+        },
+        "REPORT_CONVERSATIONS": {
+          "TITLE": "Hội thoại",
+          "DESC": "Lượng tin nhắn theo thời gian"
+        },
+        "REPORT_AGENTS": {
+          "TITLE": "Theo nhân viên",
+          "DESC": "Hiệu quả của từng người"
+        },
+        "REPORT_LABELS": {
+          "TITLE": "Theo nhãn",
+          "DESC": "Hội thoại theo từng nhãn"
+        },
+        "REPORT_INBOXES": {
+          "TITLE": "Theo kênh",
+          "DESC": "Hội thoại theo từng kênh"
+        },
+        "REPORT_TEAMS": {
+          "TITLE": "Theo nhóm",
+          "DESC": "Hội thoại theo từng nhóm"
+        },
+        "REPORT_CSAT": {
+          "TITLE": "Đánh giá của khách",
+          "DESC": "Mức hài lòng sau khi chat"
+        }
+      }
+    },
+    "PAGES": {
+      "INBOXES": {
+        "TITLE": "Kênh nhận tin",
+        "DESC": "Mỗi kênh là một nơi khách nhắn cho bạn: Zalo, Facebook, website...",
+        "ADD": "Thêm kênh",
+        "ADD_FIRST": "Kết nối kênh đầu tiên",
+        "EMPTY": "Chưa có kênh nào. Kết nối Zalo hoặc Facebook để bắt đầu nhận tin.",
+        "SEARCH": "Tìm kênh...",
+        "COUNT": "{n} kênh",
+        "DELETE_TITLE": "Xóa kênh này?",
+        "DELETE_MESSAGE": "Kênh {name} và các tin nhắn của nó sẽ bị xóa.",
+        "DELETED": "Đã xóa kênh",
+        "WIZARD_STEP": "Bước {step}/{total}"
+      },
+      "AGENTS": {
+        "TITLE": "Nhân viên",
+        "DESC": "Người cùng trả lời khách và xử lý đơn",
+        "ADD": "Mời nhân viên",
+        "EMPTY": "Chưa có nhân viên nào khác. Mời người cùng bán để chia việc.",
+        "SEARCH": "Tìm nhân viên...",
+        "COUNT": "{n} người",
+        "PENDING": "Chưa xác nhận email",
+        "DELETE_TITLE": "Xóa nhân viên?",
+        "DELETE_MESSAGE": "{name} sẽ không đăng nhập vào cửa hàng được nữa.",
+        "DELETED": "Đã xóa nhân viên"
+      },
+      "TEAMS": {
+        "TITLE": "Nhóm",
+        "DESC": "Chia nhân viên theo ca hoặc theo việc để giao tin nhắn",
+        "ADD": "Tạo nhóm",
+        "EMPTY": "Chưa có nhóm nào.",
+        "SEARCH": "Tìm nhóm...",
+        "COUNT": "{n} nhóm",
+        "DELETE_TITLE": "Xóa nhóm {name}?",
+        "DELETE_MESSAGE": "Các hội thoại đang giao cho nhóm này sẽ không còn thuộc nhóm.",
+        "DELETED": "Đã xóa nhóm"
+      },
+      "LABELS": {
+        "TITLE": "Nhãn",
+        "DESC": "Đánh dấu tin nhắn và khách để dễ lọc",
+        "ADD": "Tạo nhãn",
+        "EMPTY": "Chưa có nhãn nào. Tạo nhãn như \"Khách quen\", \"Chờ chuyển khoản\".",
+        "SEARCH": "Tìm nhãn...",
+        "COUNT": "{n} nhãn",
+        "DELETE_TITLE": "Xóa nhãn?",
+        "DELETE_MESSAGE": "Nhãn {name} sẽ bị gỡ khỏi mọi tin nhắn và khách.",
+        "DELETED": "Đã xóa nhãn"
+      },
+      "CANNED": {
+        "TITLE": "Trả lời nhanh",
+        "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn",
+        "ADD": "Thêm câu mẫu",
+        "EMPTY": "Chưa có câu mẫu nào. Lưu câu hay dùng như số tài khoản, phí ship.",
+        "SEARCH": "Tìm câu mẫu...",
+        "COUNT": "{n} câu",
+        "SORT_ASC": "A → Z",
+        "SORT_DESC": "Z → A",
+        "DELETE_TITLE": "Xóa câu mẫu?",
+        "DELETE_MESSAGE": "Câu mẫu /{name} sẽ bị xóa.",
+        "DELETED": "Đã xóa câu mẫu"
+      },
+      "ACCOUNT": {
+        "TITLE": "Thông tin cửa hàng",
+        "DESC": "Tên cửa hàng, ngôn ngữ và email liên hệ"
+      },
+      "PLAN": {
+        "DESC": "Hạn dùng và cách gia hạn gói"
+      },
+      "PROFILE": {
+        "TITLE": "Hồ sơ của tôi",
+        "DESC": "Ảnh, tên, mật khẩu và thông báo của riêng bạn"
+      }
+    },
+    "CHANNELS": {
+      "ZALO_PERSONAL": {
+        "TITLE": "Zalo cá nhân",
+        "DESC": "Kết nối Zalo cá nhân bằng mã QR, miễn phí"
+      }
+    },
+    "ZALO_PERSONAL": {
+      "CONNECTED": "Đang kết nối",
+      "DISCONNECTED": "Đã ngắt kết nối",
+      "USER_ID": "ID Zalo: {id}",
+      "MANAGE": "Xem hồ sơ và đăng xuất"
+    }
   }
 }

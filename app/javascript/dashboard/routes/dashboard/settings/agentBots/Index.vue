@@ -101,8 +101,8 @@ onMounted(() => {
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="t('AGENT_BOTS.HEADER')"
-        :description="t('AGENT_BOTS.DESCRIPTION')"
+        :title="t('KALO_SETTINGS_UI.HUB.LINKS.BOTS.TITLE')"
+        :description="t('KALO_SETTINGS_UI.HUB.LINKS.BOTS.DESC')"
         :link-text="t('AGENT_BOTS.LEARN_MORE')"
         :search-placeholder="t('AGENT_BOTS.SEARCH_PLACEHOLDER')"
         feature-name="agent_bots"

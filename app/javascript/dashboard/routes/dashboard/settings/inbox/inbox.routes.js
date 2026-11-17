@@ -41,7 +41,7 @@ export default {
         const showBackButton = params.name !== 'settings_inbox_list';
         const fullWidth = params.name === 'settings_inbox_show';
         return {
-          headerTitle: 'INBOX_MGMT.HEADER',
+          headerTitle: 'KALO_SETTINGS_UI.PAGES.INBOXES.TITLE',
           icon: 'mail-inbox-all',
           showBackButton,
           fullWidth,

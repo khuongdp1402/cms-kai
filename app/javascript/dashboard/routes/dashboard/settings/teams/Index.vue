@@ -12,11 +12,19 @@ import { useI18n } from 'vue-i18n';
 import Icon from 'dashboard/components-next/icon/Icon.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import EmojiIcon from 'dashboard/components-next/emoji-icon-picker/EmojiIcon.vue';
+import KaloSettingsRow from '../components/KaloSettingsRow.vue';
+import { useRouter } from 'vue-router';
 
 const store = useStore();
 const { t } = useI18n();
 const getters = useStoreGetters();
 const { isAdmin } = useAdmin();
+const router = useRouter();
+
+const openTeam = team => {
+  if (!isAdmin.value) return;
+  router.push({ name: 'settings_teams_edit', params: { teamId: team.id } });
+};
 
 const loading = ref({});
 const searchQuery = ref('');
@@ -35,9 +43,9 @@ const deleteTeam = async ({ id }) => {
   try {
     loading.value[id] = true;
     await store.dispatch('teams/delete', id);
-    useAlert(t('TEAMS_SETTINGS.DELETE.API.SUCCESS_MESSAGE'));
+    useAlert(t('KALO_SETTINGS_UI.PAGES.TEAMS.DELETED'));
   } catch (error) {
-    useAlert(t('TEAMS_SETTINGS.DELETE.API.ERROR_MESSAGE'));
+    useAlert(t('KALO_SETTINGS_UI.COMMON.DELETE_ERROR'));
   } finally {
     loading.value[id] = false;
   }
@@ -61,21 +69,21 @@ const confirmDeletion = () => {
   closeDelete();
 };
 
-const deleteConfirmText = computed(
-  () => `${t('TEAMS_SETTINGS.DELETE.CONFIRM.YES')} ${selectedTeam.value.name}`
+const deleteConfirmText = computed(() =>
+  t('KALO_SETTINGS_UI.COMMON.DELETE_YES')
 );
 
-const deleteRejectText = computed(() => t('TEAMS_SETTINGS.DELETE.CONFIRM.NO'));
+const deleteRejectText = computed(() => t('KALO_SETTINGS_UI.COMMON.KEEP'));
 
 const confirmDeleteTitle = computed(() =>
-  t('TEAMS_SETTINGS.DELETE.CONFIRM.TITLE', {
-    teamName: selectedTeam.value.name,
+  t('KALO_SETTINGS_UI.PAGES.TEAMS.DELETE_TITLE', {
+    name: selectedTeam.value.name,
   })
 );
 
 const confirmPlaceHolderText = computed(() =>
-  t('TEAMS_SETTINGS.DELETE.CONFIRM.PLACE_HOLDER', {
-    teamName: selectedTeam.value.name,
+  t('KALO_SETTINGS_UI.COMMON.TYPE_TO_CONFIRM', {
+    name: selectedTeam.value.name,
   })
 );
 </script>
@@ -85,103 +93,106 @@ const confirmPlaceHolderText = computed(() =>
     :is-loading="uiFlags.isFetching"
     :loading-message="$t('TEAMS_SETTINGS.LOADING')"
     :no-records-found="!teamsList.length"
-    :no-records-message="$t('TEAMS_SETTINGS.LIST.404')"
+    :no-records-message="$t('KALO_SETTINGS_UI.PAGES.TEAMS.EMPTY')"
+    empty-icon="home"
   >
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="$t('TEAMS_SETTINGS.HEADER')"
-        :description="$t('TEAMS_SETTINGS.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.PAGES.TEAMS.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.PAGES.TEAMS.DESC')"
         :link-text="$t('TEAMS_SETTINGS.LEARN_MORE')"
-        :search-placeholder="$t('TEAMS_SETTINGS.SEARCH_PLACEHOLDER')"
+        :search-placeholder="$t('KALO_SETTINGS_UI.PAGES.TEAMS.SEARCH')"
         feature-name="team_management"
       >
         <template v-if="teamsList?.length" #count>
-          <span class="text-body-main text-n-slate-11">
-            {{ $t('TEAMS_SETTINGS.COUNT', { n: teamsList.length }) }}
+          <span class="text-sm text-n-slate-11">
+            {{
+              $t('KALO_SETTINGS_UI.PAGES.TEAMS.COUNT', { n: teamsList.length })
+            }}
           </span>
         </template>
-        <template #actions>
-          <router-link v-if="isAdmin" :to="{ name: 'settings_teams_new' }">
-            <Button :label="$t('TEAMS_SETTINGS.NEW_TEAM')" size="sm" />
+        <template v-if="isAdmin" #actions>
+          <router-link :to="{ name: 'settings_teams_new' }">
+            <Button
+              :label="$t('KALO_SETTINGS_UI.PAGES.TEAMS.ADD')"
+              icon="i-lucide-plus"
+              size="sm"
+            />
           </router-link>
         </template>
       </BaseSettingsHeader>
     </template>
+    <template v-if="isAdmin" #emptyAction>
+      <router-link :to="{ name: 'settings_teams_new' }">
+        <Button :label="$t('KALO_SETTINGS_UI.PAGES.TEAMS.ADD')" />
+      </router-link>
+    </template>
     <template #body>
       <span
         v-if="!filteredTeamsList.length && searchQuery"
-        class="flex-1 flex items-center justify-center py-20 text-center text-body-main !text-base text-n-slate-11"
+        class="flex items-center justify-center flex-1 py-16 text-sm text-center text-n-slate-11"
       >
-        {{ $t('TEAMS_SETTINGS.NO_RESULTS') }}
+        {{ $t('KALO_SETTINGS_UI.COMMON.NO_RESULTS') }}
       </span>
 
-      <div v-else class="divide-y divide-n-weak border-t border-n-weak">
-        <div
-          v-for="team in filteredTeamsList"
-          :key="team.id"
-          class="flex justify-between flex-row items-start gap-4 py-4"
-        >
-          <div class="flex items-start gap-4">
-            <div
-              class="flex items-center flex-shrink-0 size-10 justify-center rounded-xl outline outline-1 outline-n-weak -outline-offset-1 text-lg"
-            >
-              <EmojiIcon
-                v-if="team.icon"
-                :value="team.icon"
-                :color="team.icon_color"
-                class="size-5"
-              />
-              <Icon
-                v-else
-                icon="i-lucide-users-round"
-                class="size-4 text-n-slate-11"
-              />
-            </div>
-            <div class="flex flex-col items-start gap-1">
-              <span class="block text-heading-3 text-n-slate-12 capitalize">
-                {{ team.name }}
+      <ul v-else class="flex flex-col gap-2 list-none">
+        <li v-for="team in filteredTeamsList" :key="team.id">
+          <KaloSettingsRow
+            :title="team.name"
+            :description="team.description"
+            :clickable="isAdmin"
+            data-test="team-row"
+            @click="openTeam(team)"
+          >
+            <template #leading>
+              <span
+                class="grid text-lg border rounded-xl size-10 shrink-0 place-items-center border-n-weak"
+              >
+                <EmojiIcon
+                  v-if="team.icon"
+                  :value="team.icon"
+                  :color="team.icon_color"
+                  class="size-5"
+                />
+                <Icon
+                  v-else
+                  icon="i-lucide-users-round"
+                  class="size-4 text-n-slate-11"
+                />
               </span>
-              <p class="mb-0 text-n-slate-11 text-body-main">
-                {{ team.description }}
-              </p>
-            </div>
-          </div>
-          <div class="flex justify-end gap-3">
-            <router-link
-              :to="{
-                name: 'settings_teams_edit',
-                params: { teamId: team.id },
-              }"
-            >
+            </template>
+            <template v-if="isAdmin" #actions>
               <Button
-                v-if="isAdmin"
-                v-tooltip.top="$t('TEAMS_SETTINGS.LIST.EDIT_TEAM')"
+                v-tooltip.top="$t('KALO_SETTINGS_UI.COMMON.EDIT')"
+                :aria-label="$t('KALO_SETTINGS_UI.COMMON.EDIT')"
                 icon="i-woot-settings"
                 slate
+                ghost
                 sm
+                @click="openTeam(team)"
               />
-            </router-link>
-
-            <Button
-              v-if="isAdmin"
-              v-tooltip.top="$t('TEAMS_SETTINGS.DELETE.BUTTON_TEXT')"
-              icon="i-woot-bin"
-              slate
-              sm
-              class="hover:enabled:text-n-ruby-11 hover:enabled:bg-n-ruby-2"
-              :is-loading="loading[team.id]"
-              @click="openDelete(team)"
-            />
-          </div>
-        </div>
-      </div>
+              <Button
+                v-tooltip.top="$t('KALO_SETTINGS_UI.COMMON.DELETE')"
+                :aria-label="$t('KALO_SETTINGS_UI.COMMON.DELETE')"
+                icon="i-woot-bin"
+                slate
+                ghost
+                sm
+                class="hover:enabled:text-n-ruby-11 hover:enabled:bg-n-ruby-2"
+                :is-loading="loading[team.id]"
+                @click="openDelete(team)"
+              />
+            </template>
+          </KaloSettingsRow>
+        </li>
+      </ul>
     </template>
     <woot-confirm-delete-modal
       v-if="showDeletePopup"
       v-model:show="showDeletePopup"
       :title="confirmDeleteTitle"
-      :message="$t('TEAMS_SETTINGS.DELETE.CONFIRM.MESSAGE')"
+      :message="$t('KALO_SETTINGS_UI.PAGES.TEAMS.DELETE_MESSAGE')"
       :confirm-text="deleteConfirmText"
       :reject-text="deleteRejectText"
       :confirm-value="selectedTeam.name"

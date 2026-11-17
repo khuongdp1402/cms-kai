@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B34 (2026-11-17): Nút "Xem hồ sơ & Đăng xuất" của Zalo cá nhân không làm gì.**
+  - Triệu chứng: bấm nút trên banner Zalo cá nhân (Cài đặt hộp thư) không chuyển sang tab Cấu hình.
+  - Nguyên nhân: template gán `selectedTabKey = 'configuration'`, mà `selectedTabKey` là computed chỉ đọc nên Vue bỏ qua (chỉ cảnh báo console).
+  - Quy tắc: đổi tab bằng phương thức thật (`openTabByKey`/`onTabChange`), không gán vào computed trong template; viết UI bằng tay (không qua i18n) thì kiểm lại bằng spec hoặc trình duyệt.
 - **B16 (2026-11-17): Task agent chỉ chạy thư mục test của mình nên bỏ sót 468 ca hỏng ở spec overlay i18n.**
   - Triệu chứng: sau khi gộp Task 8, `i18n/ktech/specs/overrides.spec.js` hỏng 468 ca (mọi khóa `KALO_*` không có khóa tiếng Anh tương ứng, mảng `WEEKDAYS` làm `text.match` lỗi); từng task đều báo "test xanh".
   - Nguyên nhân: mỗi agent chỉ chạy spec trong thư mục mình sửa, không ai chạy cả bộ.
