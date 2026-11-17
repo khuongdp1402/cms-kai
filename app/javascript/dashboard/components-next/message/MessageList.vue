@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import Message from './Message.vue';
+import { isRenderableMessage } from './messageVisibility.js';
 import { MESSAGE_TYPES } from './constants.js';
 import { useCamelCase } from 'dashboard/composables/useTransformKeys';
 import { useMapGetter } from 'dashboard/composables/store.js';
@@ -60,23 +61,29 @@ const allMessages = computed(() => {
 const currentChat = useMapGetter('getSelectedChat');
 const { t } = useI18n();
 
-// A subtle day separator before the first message of each day (the list is not virtualised).
-const isNewDay = (index, list) => {
-  if (index === 0) return true;
-  const previous = list[index - 1];
-  if (!previous?.createdAt || !list[index]?.createdAt) return false;
-  return !isSameDay(
-    fromUnixTime(previous.createdAt),
-    fromUnixTime(list[index].createdAt)
-  );
-};
-
 const dayLabel = createdAt => {
   const date = fromUnixTime(createdAt);
   if (isToday(date)) return t('KALO_CHAT_THREAD.TODAY');
   if (isYesterday(date)) return t('KALO_CHAT_THREAD.YESTERDAY');
   return format(date, isThisYear(date) ? 'dd/MM' : 'dd/MM/yyyy');
 };
+
+// A subtle day separator before the first visible message of each day (the list is not
+// virtualised). Messages that render no bubble are skipped so no day shows an empty
+// separator. Grouped bubbles never straddle midnight: grouping needs the same minute.
+const daySeparators = computed(() => {
+  const labels = {};
+  let previousDate = null;
+  allMessages.value.forEach((message, index) => {
+    if (!message.createdAt || !isRenderableMessage(message)) return;
+    const date = fromUnixTime(message.createdAt);
+    if (!previousDate || !isSameDay(previousDate, date)) {
+      labels[index] = dayLabel(message.createdAt);
+    }
+    previousDate = date;
+  });
+  return labels;
+});
 
 // Cache for fetched reply messages to avoid duplicate API calls
 const fetchedReplyMessages = reactive(new Map());
@@ -195,14 +202,14 @@ const getInReplyToMessage = parentMessage => {
     <slot name="beforeAll" />
     <template v-for="(message, index) in allMessages" :key="message.id">
       <li
-        v-if="message.createdAt && isNewDay(index, allMessages)"
+        v-if="daySeparators[index]"
         data-test="day-separator"
         class="flex justify-center my-3 list-none"
       >
         <span
           class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-n-alpha-2 text-n-slate-11"
         >
-          {{ dayLabel(message.createdAt) }}
+          {{ daySeparators[index] }}
         </span>
       </li>
       <slot

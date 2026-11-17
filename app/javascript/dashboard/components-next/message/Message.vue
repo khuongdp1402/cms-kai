@@ -2,6 +2,7 @@
 import { onMounted, computed, ref, toRefs } from 'vue';
 import { useTimeoutFn } from '@vueuse/core';
 import { provideMessageContext } from './provider.js';
+import { isRenderableMessage } from './messageVisibility.js';
 import { useTrack } from 'dashboard/composables';
 import { useMapGetter } from 'dashboard/composables/store';
 import { emitter } from 'shared/helpers/mitt';
@@ -423,30 +424,7 @@ const contextMenuEnabledOptions = computed(() => {
   };
 });
 
-const shouldRenderMessage = computed(() => {
-  const hasAttachments = !!(props.attachments && props.attachments.length > 0);
-  const isEmailContentType = props.contentType === CONTENT_TYPES.INCOMING_EMAIL;
-  const isUnsupported = props.contentAttributes?.isUnsupported;
-  const isAnIntegrationMessage =
-    props.contentType === CONTENT_TYPES.INTEGRATIONS;
-  const isFailedMessage = props.status === MESSAGE_STATUS.FAILED;
-  const hasExternalError = !!props.contentAttributes?.externalError;
-  // Zalo stickers are sent with no content and no attachment (stickers_controller).
-  const isSticker =
-    props.contentType === CONTENT_TYPES.STICKER ||
-    !!props.contentAttributes?.sticker;
-
-  return (
-    hasAttachments ||
-    isSticker ||
-    props.content ||
-    isEmailContentType ||
-    isUnsupported ||
-    isAnIntegrationMessage ||
-    isFailedMessage ||
-    hasExternalError
-  );
-});
+const shouldRenderMessage = computed(() => isRenderableMessage(props));
 
 function openContextMenu(e) {
   const shouldSkipContextMenu =

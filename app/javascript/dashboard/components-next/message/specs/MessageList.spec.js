@@ -77,6 +77,35 @@ describe('MessageList day separators', () => {
     expect(wrapper.findAll('.message-stub')).toHaveLength(3);
   });
 
+  it('skips a day whose messages render no bubble', () => {
+    const hidden = { ...message(2, '2026-11-16T09:00:00'), content: null };
+    const wrapper = mountList([
+      message(1, '2026-11-15T09:00:00'),
+      hidden,
+      message(3, '2026-11-17T08:00:00'),
+    ]);
+    expect(separators(wrapper)).toEqual(['15/11', 'Hôm nay']);
+  });
+
+  it('a hidden first message of a day moves the separator to the first visible one', () => {
+    const hidden = { ...message(1, '2026-11-17T07:00:00'), content: '' };
+    const wrapper = mountList([hidden, message(2, '2026-11-17T08:00:00')]);
+    const items = wrapper
+      .findAll('li, .message-stub')
+      .map(el => el.attributes('data-test') || el.attributes('id'));
+    expect(items).toEqual(['message1', 'day-separator', 'message2']);
+  });
+
+  it('counts a Zalo sticker without content as visible', () => {
+    const sticker = {
+      ...message(1, '2026-11-17T07:00:00'),
+      content: null,
+      content_type: 'sticker',
+      content_attributes: { sticker: { id: '5' } },
+    };
+    expect(separators(mountList([sticker]))).toEqual(['Hôm nay']);
+  });
+
   it('puts the separator before the message and keeps the unread badge slot', () => {
     const wrapper = mountList(
       [message(1, '2026-11-16T08:00:00'), message(2, '2026-11-17T08:00:00')],
