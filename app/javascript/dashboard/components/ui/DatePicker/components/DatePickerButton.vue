@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import { dateRanges } from '../helpers/DatePickerHelper';
-import { format, isSameYear, isValid } from 'date-fns';
+import { isValid } from 'date-fns';
+import { formatDateRange as formatRange } from 'shared/helpers/dateLocale';
 import Icon from 'dashboard/components-next/icon/Icon.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
 
@@ -27,24 +29,18 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['open', 'navigateMonth']);
+const { t } = useI18n();
 
 const formatDateRange = computed(() => {
   const startDate = props.selectedStartDate;
   const endDate = props.selectedEndDate;
 
   if (!isValid(startDate) || !isValid(endDate)) {
-    return 'Select a date range';
+    return t('KALO_POLISH.DATE_RANGE_EMPTY');
   }
 
-  const crossesYears = !isSameYear(startDate, endDate);
-
-  // Always show years when crossing year boundaries
-  if (crossesYears) {
-    return `${format(startDate, 'MMM d, yyyy')} - ${format(endDate, 'MMM d, yyyy')}`;
-  }
-
-  // For same year, always show the year for clarity
-  return `${format(startDate, 'MMM d')} - ${format(endDate, 'MMM d, yyyy')}`;
+  // Year always shown; both years when the range crosses one. Follows UI locale.
+  return formatRange(startDate, endDate);
 });
 
 const activeDateRange = computed(

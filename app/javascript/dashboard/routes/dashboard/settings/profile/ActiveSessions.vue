@@ -1,7 +1,8 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { formatDistanceToNow, parseISO } from 'date-fns';
+import { parseISO } from 'date-fns';
+import { relativeTime as timeAgo } from 'shared/helpers/dateLocale';
 import { useAlert } from 'dashboard/composables';
 import authAPI from 'dashboard/api/auth';
 import AnalyticsHelper from 'dashboard/helper/AnalyticsHelper';
@@ -15,7 +16,7 @@ const loading = ref(false);
 
 const relativeTime = dateStr => {
   if (!dateStr) return '';
-  return formatDistanceToNow(parseISO(dateStr), { addSuffix: true });
+  return timeAgo(parseISO(dateStr));
 };
 
 const isUnknown = val => !val || val === 'Unknown' || val === 'Unknown Browser';
@@ -46,7 +47,7 @@ const sessionLabel = session => {
   }
   if (!isUnknown(session.platform_name)) parts.push(session.platform_name);
   return (
-    parts.join(' on ') ||
+    parts.join(' · ') ||
     t('PROFILE_SETTINGS.FORM.SESSIONS_SECTION.UNKNOWN_DEVICE')
   );
 };
