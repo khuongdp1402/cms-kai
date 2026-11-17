@@ -32,6 +32,11 @@ const createFlowSteps = computed(() => {
   });
 });
 
+const currentStep = computed(
+  () =>
+    createFlowSteps.value.findIndex(step => step.route === route.name) + 1 || 1
+);
+
 const isFirstStep = computed(() => {
   return route.name === 'settings_inbox_new';
 });
@@ -59,10 +64,23 @@ const items = computed(() => {
 </script>
 
 <template>
-  <div class="mx-auto flex flex-col gap-6 mb-8 max-w-7xl w-full !px-6">
-    <PageHeader class="block lg:hidden !mb-0" :header-title="pageTitle" />
+  <div class="flex flex-col w-full gap-4 mx-auto mb-8 max-w-7xl sm:px-2">
+    <div class="flex flex-col gap-1 lg:hidden">
+      <span
+        data-test="inbox-wizard-step"
+        class="text-xs font-semibold text-n-blue-11"
+      >
+        {{
+          t('KALO_SETTINGS_UI.PAGES.INBOXES.WIZARD_STEP', {
+            step: currentStep,
+            total: createFlowSteps.length,
+          })
+        }}
+      </span>
+      <PageHeader class="!mb-0" :header-title="pageTitle" />
+    </div>
     <div
-      class="grid grid-cols-1 lg:grid-cols-8 lg:divide-x lg:divide-n-weak rounded-xl border border-n-weak h-full min-h-[50dvh]"
+      class="grid grid-cols-1 lg:grid-cols-8 lg:divide-x lg:divide-n-weak rounded-2xl border border-n-weak bg-n-solid-1 h-full min-h-[50dvh]"
     >
       <woot-wizard
         class="hidden lg:block col-span-2 h-fit py-8 px-6"

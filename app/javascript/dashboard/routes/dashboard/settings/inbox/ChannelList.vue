@@ -20,14 +20,23 @@ const hasTiktokConfigured = computed(() => {
   return window.chatwootConfig?.tiktokAppId;
 });
 
+// Ordered for a Vietnamese online shop: Zalo and social channels first.
+// Voice and WhatsApp calling are not listed: their backend is enterprise-only
+// and absent here (inventory S-X7).
 const channelList = computed(() => {
   const { apiChannelName } = globalConfig.value;
   const channels = [
     {
-      key: 'website',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WEBSITE.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WEBSITE.DESCRIPTION'),
-      icon: 'i-woot-website',
+      key: 'zalo_personal',
+      title: t('KALO_SETTINGS_UI.CHANNELS.ZALO_PERSONAL.TITLE'),
+      description: t('KALO_SETTINGS_UI.CHANNELS.ZALO_PERSONAL.DESC'),
+      icon: 'i-ri-user-smile-fill',
+    },
+    {
+      key: 'zalo',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.ZALO.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.ZALO.DESCRIPTION'),
+      icon: 'i-ri-chat-3-fill',
     },
     {
       key: 'facebook',
@@ -36,28 +45,34 @@ const channelList = computed(() => {
       icon: 'i-woot-messenger',
     },
     {
+      key: 'instagram',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.INSTAGRAM.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.INSTAGRAM.DESCRIPTION'),
+      icon: 'i-woot-instagram',
+    },
+  ];
+
+  if (hasTiktokConfigured.value) {
+    channels.push({
+      key: 'tiktok',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.TIKTOK.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.TIKTOK.DESCRIPTION'),
+      icon: 'i-woot-tiktok',
+    });
+  }
+
+  channels.push(
+    {
+      key: 'website',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WEBSITE.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WEBSITE.DESCRIPTION'),
+      icon: 'i-woot-website',
+    },
+    {
       key: 'whatsapp',
       title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WHATSAPP.TITLE'),
       description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WHATSAPP.DESCRIPTION'),
       icon: 'i-woot-whatsapp',
-    },
-    {
-      key: 'sms',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.SMS.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.SMS.DESCRIPTION'),
-      icon: 'i-woot-sms',
-    },
-    {
-      key: 'email',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.EMAIL.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.EMAIL.DESCRIPTION'),
-      icon: 'i-woot-mail',
-    },
-    {
-      key: 'api',
-      title: apiChannelName || t('INBOX_MGMT.ADD.AUTH.CHANNEL.API.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.API.DESCRIPTION'),
-      icon: 'i-woot-api',
     },
     {
       key: 'telegram',
@@ -72,47 +87,24 @@ const channelList = computed(() => {
       icon: 'i-woot-line',
     },
     {
-      key: 'instagram',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.INSTAGRAM.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.INSTAGRAM.DESCRIPTION'),
-      icon: 'i-woot-instagram',
+      key: 'email',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.EMAIL.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.EMAIL.DESCRIPTION'),
+      icon: 'i-woot-mail',
     },
     {
-      key: 'zalo',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.ZALO.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.ZALO.DESCRIPTION'),
-      icon: 'i-ri-chat-3-fill',
+      key: 'sms',
+      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.SMS.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.SMS.DESCRIPTION'),
+      icon: 'i-woot-sms',
     },
     {
-      key: 'zalo_personal',
-      title: 'Zalo Cá Nhân',
-      description: 'Tích hợp tài khoản Zalo cá nhân miễn phí 100%',
-      icon: 'i-ri-user-smile-fill',
-    },
-  ];
-
-  if (hasTiktokConfigured.value) {
-    channels.push({
-      key: 'tiktok',
-      title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.TIKTOK.TITLE'),
-      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.TIKTOK.DESCRIPTION'),
-      icon: 'i-woot-tiktok',
-    });
-  }
-
-  channels.push({
-    key: 'voice',
-    title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.VOICE.TITLE'),
-    description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.VOICE.DESCRIPTION'),
-    icon: 'i-woot-voice',
-  });
-
-  channels.push({
-    key: 'whatsapp_call',
-    title: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WHATSAPP_CALL.TITLE'),
-    description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.WHATSAPP_CALL.DESCRIPTION'),
-    icon: 'i-woot-whatsapp',
-  });
+      key: 'api',
+      title: apiChannelName || t('INBOX_MGMT.ADD.AUTH.CHANNEL.API.TITLE'),
+      description: t('INBOX_MGMT.ADD.AUTH.CHANNEL.API.DESCRIPTION'),
+      icon: 'i-woot-api',
+    }
+  );
 
   return channels;
 });
@@ -128,7 +120,7 @@ const initChannelAuth = channel => {
 
 <template>
   <div
-    class="grid max-w-3xl grid-cols-1 xs:grid-cols-2 mx-0 gap-6 sm:grid-cols-3 p-8"
+    class="grid grid-cols-1 gap-4 p-4 mx-0 sm:p-6 lg:p-8 xs:grid-cols-2 sm:grid-cols-3 max-w-3xl"
   >
     <ChannelItem
       v-for="channel in channelList"

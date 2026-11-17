@@ -16,6 +16,10 @@
   - Triệu chứng: `emitter.on(CMD_SEND_TRANSCRIPT, toggleEmailModal)` trong `MoreActions.vue`; chọn lệnh trên thanh Cmd+K thì modal không hiện, cờ thành `undefined`.
   - Nguyên nhân: mitt luôn gọi listener với một đối số (payload, ở đây `undefined`); `toggle(value)` của `useToggle` hễ có đối số là gán đúng giá trị đó thay vì đảo.
   - Quy tắc: không truyền thẳng `toggle`/setter nhận đối số làm listener của bus event hoặc `@event`; bọc bằng hàm không đối số (`() => toggle(true)`). Trong spec component, ref của vueuse không re-render dưới vitest ở repo này: component mới dùng `ref` thường.
+- **B36 (2026-11-17): Nút "Xem hồ sơ & Đăng xuất" của Zalo cá nhân không làm gì.**
+  - Triệu chứng: bấm nút trên banner Zalo cá nhân (Cài đặt hộp thư) không chuyển sang tab Cấu hình.
+  - Nguyên nhân: template gán `selectedTabKey = 'configuration'`, mà `selectedTabKey` là computed chỉ đọc nên Vue bỏ qua (chỉ cảnh báo console).
+  - Quy tắc: đổi tab bằng phương thức thật (`openTabByKey`/`onTabChange`), không gán vào computed trong template; viết UI bằng tay (không qua i18n) thì kiểm lại bằng spec hoặc trình duyệt.
 - **B16 (2026-11-17): Task agent chỉ chạy thư mục test của mình nên bỏ sót 468 ca hỏng ở spec overlay i18n.**
   - Triệu chứng: sau khi gộp Task 8, `i18n/ktech/specs/overrides.spec.js` hỏng 468 ca (mọi khóa `KALO_*` không có khóa tiếng Anh tương ứng, mảng `WEEKDAYS` làm `text.match` lỗi); từng task đều báo "test xanh".
   - Nguyên nhân: mỗi agent chỉ chạy spec trong thư mục mình sửa, không ai chạy cả bộ.

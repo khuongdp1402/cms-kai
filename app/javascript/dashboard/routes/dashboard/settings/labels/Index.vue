@@ -10,11 +10,7 @@ import EditLabel from './EditLabel.vue';
 import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
 import SettingsLayout from '../SettingsLayout.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
-import {
-  BaseTable,
-  BaseTableRow,
-  BaseTableCell,
-} from 'dashboard/components-next/table';
+import KaloSettingsRow from '../components/KaloSettingsRow.vue';
 
 const getters = useStoreGetters();
 const store = useStore();
@@ -39,7 +35,11 @@ const filteredRecords = computed(() => {
 });
 const uiFlags = computed(() => getters['labels/getUIFlags'].value);
 
-const deleteMessage = computed(() => ` ${selectedLabel.value.title}?`);
+const deleteMessage = computed(() =>
+  t('KALO_SETTINGS_UI.PAGES.LABELS.DELETE_MESSAGE', {
+    name: selectedLabel.value.title,
+  })
+);
 
 const openAddPopup = () => {
   showAddPopup.value = true;
@@ -67,10 +67,10 @@ const closeDeletePopup = () => {
 const deleteLabel = async id => {
   try {
     await store.dispatch('labels/delete', id);
-    useAlert(t('LABEL_MGMT.DELETE.API.SUCCESS_MESSAGE'));
+    useAlert(t('KALO_SETTINGS_UI.PAGES.LABELS.DELETED'));
   } catch (error) {
     const errorMessage =
-      error?.message || t('LABEL_MGMT.DELETE.API.ERROR_MESSAGE');
+      error?.message || t('KALO_SETTINGS_UI.COMMON.DELETE_ERROR');
     useAlert(errorMessage);
   } finally {
     loading.value[selectedLabel.value.id] = false;
@@ -83,15 +83,6 @@ const confirmDeletion = () => {
   deleteLabel(selectedLabel.value.id);
 };
 
-const tableHeaders = computed(() => {
-  return [
-    t('LABEL_MGMT.LIST.TABLE_HEADER.NAME'),
-    t('LABEL_MGMT.LIST.TABLE_HEADER.DESCRIPTION'),
-    t('LABEL_MGMT.LIST.TABLE_HEADER.COLOR'),
-    t('LABEL_MGMT.LIST.TABLE_HEADER.ACTION'),
-  ];
-});
-
 onBeforeMount(() => {
   store.dispatch('labels/get');
 });
@@ -102,91 +93,93 @@ onBeforeMount(() => {
     :is-loading="uiFlags.isFetching"
     :loading-message="$t('LABEL_MGMT.LOADING')"
     :no-records-found="!records.length"
-    :no-records-message="$t('LABEL_MGMT.LIST.404')"
+    :no-records-message="$t('KALO_SETTINGS_UI.PAGES.LABELS.EMPTY')"
+    empty-icon="tag"
   >
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="$t('LABEL_MGMT.HEADER')"
-        :description="$t('LABEL_MGMT.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.PAGES.LABELS.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.PAGES.LABELS.DESC')"
         :link-text="$t('LABEL_MGMT.LEARN_MORE')"
-        :search-placeholder="$t('LABEL_MGMT.SEARCH_PLACEHOLDER')"
+        :search-placeholder="$t('KALO_SETTINGS_UI.PAGES.LABELS.SEARCH')"
         feature-name="labels"
       >
         <template v-if="records?.length" #count>
-          <span class="text-body-main text-n-slate-11">
-            {{ $t('LABEL_MGMT.COUNT', { n: records.length }) }}
+          <span class="text-sm text-n-slate-11">
+            {{
+              $t('KALO_SETTINGS_UI.PAGES.LABELS.COUNT', { n: records.length })
+            }}
           </span>
         </template>
         <template #actions>
           <Button
-            :label="$t('LABEL_MGMT.HEADER_BTN_TXT')"
+            :label="$t('KALO_SETTINGS_UI.PAGES.LABELS.ADD')"
+            icon="i-lucide-plus"
             size="sm"
             @click="openAddPopup"
           />
         </template>
       </BaseSettingsHeader>
     </template>
+    <template #emptyAction>
+      <Button
+        :label="$t('KALO_SETTINGS_UI.PAGES.LABELS.ADD')"
+        @click="openAddPopup"
+      />
+    </template>
     <template #body>
-      <BaseTable
-        :headers="tableHeaders"
-        :items="filteredRecords"
-        :no-data-message="
-          searchQuery ? $t('LABEL_MGMT.NO_RESULTS') : $t('LABEL_MGMT.LIST.404')
-        "
+      <span
+        v-if="!filteredRecords.length && searchQuery"
+        class="flex items-center justify-center flex-1 py-16 text-sm text-center text-n-slate-11"
       >
-        <template #row="{ items }">
-          <BaseTableRow v-for="label in items" :key="label.title" :item="label">
-            <template #default>
-              <BaseTableCell>
-                <span class="text-body-main text-n-slate-12">
-                  {{ label.title }}
-                </span>
-              </BaseTableCell>
-
-              <BaseTableCell>
-                <span class="text-body-main text-n-slate-11">
-                  {{ label.description }}
-                </span>
-              </BaseTableCell>
-
-              <BaseTableCell>
-                <div class="flex items-center">
-                  <span
-                    class="w-4 h-4 ltr:mr-2 rtl:ml-2 border border-solid rounded border-n-weak"
-                    :style="{ backgroundColor: label.color }"
-                  />
-                  <span class="text-body-main text-n-slate-12">
-                    {{ label.color }}
-                  </span>
-                </div>
-              </BaseTableCell>
-
-              <BaseTableCell align="end">
-                <div class="flex gap-3 justify-end flex-shrink-0">
-                  <Button
-                    v-tooltip.top="$t('LABEL_MGMT.FORM.EDIT')"
-                    icon="i-woot-edit-pen"
-                    slate
-                    sm
-                    :is-loading="loading[label.id]"
-                    @click="openEditPopup(label)"
-                  />
-                  <Button
-                    v-tooltip.top="$t('LABEL_MGMT.FORM.DELETE')"
-                    icon="i-woot-bin"
-                    slate
-                    sm
-                    class="hover:enabled:text-n-ruby-11 hover:enabled:bg-n-ruby-2"
-                    :is-loading="loading[label.id]"
-                    @click="openDeletePopup(label)"
-                  />
-                </div>
-              </BaseTableCell>
+        {{ $t('KALO_SETTINGS_UI.COMMON.NO_RESULTS') }}
+      </span>
+      <ul v-else class="grid gap-2 list-none sm:grid-cols-2">
+        <li v-for="label in filteredRecords" :key="label.title">
+          <KaloSettingsRow
+            :title="label.title"
+            :description="label.description"
+            class="h-full"
+            data-test="label-row"
+          >
+            <template #leading>
+              <span
+                class="grid rounded-xl size-10 shrink-0 place-items-center bg-n-alpha-2"
+                :title="label.color"
+              >
+                <span
+                  class="border rounded-full size-4 border-n-weak"
+                  :style="{ backgroundColor: label.color }"
+                />
+              </span>
             </template>
-          </BaseTableRow>
-        </template>
-      </BaseTable>
+            <template #actions>
+              <Button
+                v-tooltip.top="$t('KALO_SETTINGS_UI.COMMON.EDIT')"
+                :aria-label="$t('KALO_SETTINGS_UI.COMMON.EDIT')"
+                icon="i-woot-edit-pen"
+                slate
+                ghost
+                sm
+                :is-loading="loading[label.id]"
+                @click="openEditPopup(label)"
+              />
+              <Button
+                v-tooltip.top="$t('KALO_SETTINGS_UI.COMMON.DELETE')"
+                :aria-label="$t('KALO_SETTINGS_UI.COMMON.DELETE')"
+                icon="i-woot-bin"
+                slate
+                ghost
+                sm
+                class="hover:enabled:text-n-ruby-11 hover:enabled:bg-n-ruby-2"
+                :is-loading="loading[label.id]"
+                @click="openDeletePopup(label)"
+              />
+            </template>
+          </KaloSettingsRow>
+        </li>
+      </ul>
     </template>
 
     <woot-modal v-model:show="showAddPopup" :on-close="hideAddPopup">
@@ -201,11 +194,11 @@ onBeforeMount(() => {
       v-model:show="showDeleteConfirmationPopup"
       :on-close="closeDeletePopup"
       :on-confirm="confirmDeletion"
-      :title="$t('LABEL_MGMT.DELETE.CONFIRM.TITLE')"
-      :message="$t('LABEL_MGMT.DELETE.CONFIRM.MESSAGE')"
-      :message-value="deleteMessage"
-      :confirm-text="$t('LABEL_MGMT.DELETE.CONFIRM.YES')"
-      :reject-text="$t('LABEL_MGMT.DELETE.CONFIRM.NO')"
+      :title="$t('KALO_SETTINGS_UI.PAGES.LABELS.DELETE_TITLE')"
+      :message="deleteMessage"
+      message-value=""
+      :confirm-text="$t('KALO_SETTINGS_UI.COMMON.DELETE_YES')"
+      :reject-text="$t('KALO_SETTINGS_UI.COMMON.KEEP')"
     />
   </SettingsLayout>
 </template>

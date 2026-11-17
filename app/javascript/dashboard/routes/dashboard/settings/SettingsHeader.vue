@@ -41,18 +41,20 @@ export default {
 
 <template>
   <div
-    class="flex justify-between items-center h-20 min-h-[3.5rem] px-6 py-2 bg-n-surface-1"
+    class="flex items-center justify-between px-4 pt-4 pb-2 sm:px-6 sm:pt-6 bg-n-surface-1"
   >
-    <h1 class="flex items-center mb-0 text-2xl text-n-slate-12">
+    <h1
+      class="flex flex-wrap items-center gap-x-4 gap-y-1 mb-0 text-n-slate-12"
+    >
       <BackButton
         v-if="showBackButton"
         :button-label="backButtonLabel"
         :back-url="backUrl"
-        class="ltr:mr-4 rtl:ml-4"
+        compact
       />
 
       <slot />
-      <span class="text-xl font-medium text-n-slate-12">
+      <span class="text-xl font-extrabold text-n-slate-12">
         {{ headerTitle }}
       </span>
     </h1>
