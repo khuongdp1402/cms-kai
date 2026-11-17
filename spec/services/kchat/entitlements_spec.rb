@@ -16,6 +16,13 @@ RSpec.describe Kchat::Entitlements do
     expect(described_class.status(account_created(40, 'subscription_valid_until' => 2.days.ago.iso8601))).to eq(:expired)
   end
 
+  # ADR-019: subscription_status is only a marker written next to a paid period; the
+  # paid period itself (subscription_valid_until) is the source of truth.
+  it 'ignores subscription_status without a running paid period' do
+    expect(described_class.status(account_created(1, 'subscription_status' => 'active'))).to eq(:trial)
+    expect(described_class.status(account_created(20, 'subscription_status' => 'active'))).to eq(:expired)
+  end
+
   it 'require_active! raises Expired only when expired' do
     expect { described_class.require_active!(account_created(1)) }.not_to raise_error
     expect { described_class.require_active!(account_created(20)) }.to raise_error(described_class::Expired)
