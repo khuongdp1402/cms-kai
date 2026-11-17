@@ -52,3 +52,30 @@ en:
       title: System status
       metric: Metric
       value: Value
+    new_resource: "Add %{name}"
+    resources:
+      account: account
+      user: user
+      agent_bot: bot
+      platform_app: platform app
+      installation_config: config
+      platform_banner: banner
+    dashboard:
+      title: Overview
+      accounts: Accounts
+      users: Users
+      inboxes: Inboxes
+      conversations: Conversations
+    users:
+      mfa: MFA
+      enabled: Enabled
+      disabled: Disabled
+    settings:
+      title: Settings
+      subtitle: Update your system settings
+      installation_identifier: Installation identifier
+      current_plan: Current plan
+      refresh: Refresh
+      manage: Manage
+      features: Features
+      agent_overage: "The system has %{count} agents. Please add more licenses to add more users."

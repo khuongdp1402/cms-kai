@@ -22,7 +22,7 @@ const prepareData = sourceData => {
         type: 'bar',
         backgroundColor: 'rgb(31, 147, 255)',
         yAxisID: 'y',
-        label: 'Conversations',
+        label: props.componentData.labels?.conversations ?? 'Conversations',
         data: data,
       },
     ],
@@ -35,13 +35,21 @@ const chartData = computed(() => {
 
 const { accountsCount, usersCount, inboxesCount, conversationsCount } =
   props.componentData;
+const labels = {
+  title: 'Admin Dashboard',
+  accounts: 'Accounts',
+  users: 'Users',
+  inboxes: 'Inboxes',
+  conversations: 'Conversations',
+  ...props.componentData.labels,
+};
 </script>
 
 <template>
   <div class="w-full h-full">
     <header class="main-content__header" role="banner">
       <h1 id="page-title" class="main-content__page-title">
-        {{ 'Admin Dashboard' }}
+        {{ labels.title }}
       </h1>
     </header>
 
@@ -49,19 +57,19 @@ const { accountsCount, usersCount, inboxesCount, conversationsCount } =
       <div class="report--list">
         <div class="report-card">
           <div class="metric">{{ accountsCount }}</div>
-          <div>{{ 'Accounts' }}</div>
+          <div>{{ labels.accounts }}</div>
         </div>
         <div class="report-card">
           <div class="metric">{{ usersCount }}</div>
-          <div>{{ 'Users' }}</div>
+          <div>{{ labels.users }}</div>
         </div>
         <div class="report-card">
           <div class="metric">{{ inboxesCount }}</div>
-          <div>{{ 'Inboxes' }}</div>
+          <div>{{ labels.inboxes }}</div>
         </div>
         <div class="report-card">
           <div class="metric">{{ conversationsCount }}</div>
-          <div>{{ 'Conversations' }}</div>
+          <div>{{ labels.conversations }}</div>
         </div>
       </div>
     </section>

@@ -22,7 +22,8 @@ RSpec.describe 'Super admin Kalo style', type: :request do
   def expect_kalo_page
     expect(response).to have_http_status(:ok)
     expect(response.body).to include('kalo-nav')
-    expect(response.body).not_to include('Chatwoot'), -> { "#{request.path}: #{response.body[/.{80}Chatwoot.{80}/m]}" }
+    expect(response.body).not_to match(/chatwoot/i), -> { "#{request.path}: #{response.body[/.{80}chatwoot.{80}/mi]}" }
+    expect(response.body).not_to match(/translation[ _]missing/i)
   end
 
   describe 'login page' do
@@ -30,7 +31,7 @@ RSpec.describe 'Super admin Kalo style', type: :request do
       get '/super_admin/sign_in'
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('kalo-login')
-      expect(response.body).not_to include('Chatwoot')
+      expect(response.body).not_to match(/chatwoot|translation[ _]missing/i)
     end
   end
 
@@ -99,6 +100,68 @@ RSpec.describe 'Super admin Kalo style', type: :request do
       get '/super_admin/accounts', params: { search: 'zzz-no-such-account-zzz' }
       expect(response).to have_http_status(:ok)
       expect(response.body).to include('kalo-empty')
+    end
+  end
+
+  describe 'locale' do
+    let(:paths) do
+      [
+        '/super_admin', '/super_admin/accounts', "/super_admin/accounts/#{account.id}", "/super_admin/accounts/#{account.id}/edit",
+        '/super_admin/accounts/new', '/super_admin/users', "/super_admin/users/#{user.id}", "/super_admin/users/#{user.id}/edit",
+        '/super_admin/users/new', '/super_admin/agent_bots', '/super_admin/agent_bots/new', '/super_admin/platform_apps',
+        '/super_admin/platform_apps/new', '/super_admin/installation_configs', '/super_admin/installation_configs/new',
+        '/super_admin/access_tokens', '/super_admin/instance_status', '/super_admin/settings'
+      ]
+    end
+
+    context 'when the installation locale is vi' do
+      include_context 'with super admin locale', :vi
+
+      it 'renders Vietnamese chrome on login' do
+        get '/super_admin/sign_in'
+        expect(response.body).to include('Đăng nhập quản trị').and include('Mật khẩu')
+        expect(response.body).not_to match(/translation[ _]missing/i)
+      end
+
+      it 'renders Vietnamese chrome with no missing translations on every page' do
+        sign_in(super_admin, scope: :super_admin)
+        get '/super_admin/accounts'
+        expect(response.body).to include('Tài khoản shop').and include('Thêm tài khoản').and include('Tìm trong')
+        paths.each do |path|
+          get path
+          expect(response).to have_http_status(:ok), "#{path} => #{response.status}"
+          expect(response.body).not_to match(/translation[ _]missing/i), -> { "#{path}: #{response.body[/.{80}translation.missing.{80}/mi]}" }
+          expect(response.body).not_to match(/chatwoot/i), -> { "#{path}: #{response.body[/.{80}chatwoot.{80}/mi]}" }
+        end
+      end
+    end
+
+    context 'when the installation locale is en' do
+      include_context 'with super admin locale', :en
+
+      it 'still renders English chrome' do
+        sign_in(super_admin, scope: :super_admin)
+        get '/super_admin/accounts'
+        expect(response.body).to include('Shop accounts').and include('Add account')
+      end
+
+      it 'still renders the English login' do
+        get '/super_admin/sign_in'
+        expect(response.body).to include('Admin sign in')
+      end
+    end
+  end
+
+  describe 'settings page conditional blocks' do
+    it 'has no support, community or premium-warning blocks' do
+      sign_in(super_admin, scope: :super_admin)
+      allow(Redis::Alfred).to receive(:get).and_call_original
+      allow(Redis::Alfred).to receive(:get).with(Redis::Alfred::CHATWOOT_INSTALLATION_CONFIG_RESET_WARNING).and_return('true')
+      allow(ChatwootHub).to receive(:pricing_plan).and_return('premium')
+      allow(ChatwootHub).to receive(:pricing_plan_quantity).and_return(0)
+      get '/super_admin/settings'
+      expect_kalo_page
+      expect(response.body).not_to match(/discord|community support|chat support|sales@/i)
     end
   end
 

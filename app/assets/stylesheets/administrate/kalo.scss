@@ -35,14 +35,12 @@ body.kalo-admin {
 }
 
 .kalo-admin {
-  a { color: var(--kalo-action-ink); }
+  // Colour only Administrate markup so Tailwind/Vue pages keep their own styles.
+  .main-content__body dl a,
+  .flash a,
+  .main-content__page-title a { color: var(--kalo-action-ink); }
 
-  h1, h2, h3, legend { color: var(--kalo-ink); }
-
-  *:focus-visible {
-    box-shadow: var(--kalo-focus);
-    outline: 2px solid transparent;
-  }
+  .main-content__page-title, legend { color: var(--kalo-ink); }
 
   .sr-only {
     clip: rect(0, 0, 0, 0);
@@ -66,6 +64,12 @@ body.kalo-admin {
   z-index: 50;
 
   &:focus { top: 8px; }
+}
+
+// Zero-specificity focus ring for every control.
+:where(.kalo-admin) :focus-visible {
+  box-shadow: var(--kalo-focus);
+  outline: 2px solid transparent;
 }
 
 // ---- Shell ----
@@ -180,24 +184,22 @@ body.kalo-admin {
 .kalo-admin .main-content__body { padding: 20px 24px; }
 .kalo-admin .main-content__body--flush { padding-left: 24px; padding-right: 24px; }
 
-// ---- Buttons ----
+// ---- Buttons (Administrate markup only; Tailwind buttons keep their classes) ----
 .kalo-admin {
-  button:not(.reset-base),
-  input[type='button']:not(.reset-base),
-  input[type='reset']:not(.reset-base),
-  input[type='submit']:not(.reset-base),
-  .button:not(.reset-base) {
+  .main-content__header .button:not(.reset-base),
+  .main-content__body .button:not(.reset-base),
+  form input[type='submit']:not(.reset-base),
+  form button[type='submit']:not(.reset-base) {
+    align-items: center;
     background-color: var(--kalo-action);
     border-radius: var(--kalo-radius-sm);
     color: #fff;
     font-family: var(--kalo-font);
     font-weight: 600;
     min-height: 40px;
-    align-items: center;
     padding: 0 16px;
 
     &:hover { background-color: var(--kalo-action-hover); color: #fff; }
-    &:focus-visible { box-shadow: var(--kalo-focus); outline: 2px solid transparent; }
   }
 
   .button--danger { background-color: var(--kalo-danger) !important; }
@@ -275,6 +277,7 @@ body.kalo-admin {
 }
 
 .kalo-admin table { color: var(--kalo-ink); }
+.kalo-admin .kalo-table-scroll td a { color: var(--kalo-action-ink); }
 
 .kalo-admin thead th {
   background: var(--kalo-surface-2);
@@ -340,9 +343,10 @@ body.kalo-admin {
 .kalo-admin .attribute-label { color: var(--kalo-muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
 .kalo-admin .attribute-data { color: var(--kalo-ink); overflow-wrap: anywhere; }
 
-.kalo-admin input[type='text'], .kalo-admin input[type='email'], .kalo-admin input[type='password'],
-.kalo-admin input[type='number'], .kalo-admin input[type='url'], .kalo-admin input[type='search'],
-.kalo-admin select, .kalo-admin textarea {
+.kalo-admin .field-unit input[type='text'], .kalo-admin .field-unit input[type='email'],
+.kalo-admin .field-unit input[type='password'], .kalo-admin .field-unit input[type='number'],
+.kalo-admin .field-unit input[type='url'], .kalo-admin .field-unit select,
+.kalo-admin .field-unit textarea {
   background: var(--kalo-surface);
   border: 1px solid var(--kalo-line-2);
   border-radius: var(--kalo-radius-sm);

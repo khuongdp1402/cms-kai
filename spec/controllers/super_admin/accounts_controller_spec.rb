@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Super Admin accounts API', type: :request do
+  include_context 'with super admin locale', :en
+
   include ActiveJob::TestHelper
 
   let!(:super_admin) { create(:super_admin) }
@@ -19,7 +21,7 @@ RSpec.describe 'Super Admin accounts API', type: :request do
         sign_in(super_admin, scope: :super_admin)
         get '/super_admin/accounts'
         expect(response).to have_http_status(:success)
-        expect(response.body).to include(I18n.t('kalo_super_admin.actions.new'))
+        expect(response.body).to include('Add account')
         expect(response.body).to include(account.name)
       end
     end

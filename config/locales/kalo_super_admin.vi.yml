@@ -52,3 +52,50 @@ vi:
       title: Tình trạng hệ thống
       metric: Chỉ số
       value: Giá trị
+    new_resource: "Thêm %{name}"
+    resources:
+      account: tài khoản
+      user: người dùng
+      agent_bot: bot
+      platform_app: ứng dụng nền tảng
+      installation_config: cấu hình
+      platform_banner: thông báo
+    dashboard:
+      title: Tổng quan
+      accounts: Tài khoản
+      users: Người dùng
+      inboxes: Hộp thư
+      conversations: Hội thoại
+    users:
+      mfa: Xác thực hai bước (MFA)
+      enabled: Đã bật
+      disabled: Đã tắt
+    settings:
+      title: Cài đặt
+      subtitle: Cập nhật cài đặt hệ thống
+      installation_identifier: Mã định danh cài đặt
+      current_plan: Gói hiện tại
+      refresh: Làm mới
+      manage: Quản lý
+      features: Tính năng
+      agent_overage: "Hệ thống có %{count} nhân viên. Hãy bổ sung giấy phép để thêm người dùng."
+  # Keys of the stock super admin views that vi.yml lacks (kept here, vi.yml is synced from upstream).
+  super_admin:
+    account_suspension:
+      categories:
+        spam: Spam
+        non_payment: Chưa thanh toán
+        other: Khác
+      form:
+        category: Loại tạm ngưng
+        category_prompt: Chọn loại
+        reason: Lý do tạm ngưng
+        reason_hint: Nhập lý do tối đa 256 ký tự.
+      history:
+        suspended_at: Tạm ngưng lúc
+        category: Loại
+        reason: Lý do
+        empty: Chưa có lịch sử tạm ngưng.
+    captain_model_overrides:
+      features:
+        conversation_faq_matching: Đối chiếu FAQ hội thoại
