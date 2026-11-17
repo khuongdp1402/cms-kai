@@ -11,7 +11,7 @@
       <% settings_pages.each do |_feature_key, attrs| %>
         <% url = super_admin_app_config_path(config: attrs['config_key']) %>
         <li class="kalo-nav__item">
-          <%= link_to attrs['name'], url, class: "kalo-nav__link#{' is-active' if current_page?(url)}", 'aria-current': (current_page?(url) ? 'page' : nil) %>
+          <%= link_to t("kalo_super_admin.app_config.groups.#{attrs['config_key']}", default: attrs['name']), url, class: "kalo-nav__link#{' is-active' if current_page?(url)}", 'aria-current': (current_page?(url) ? 'page' : nil) %>
         </li>
       <% end %>
     </ul>

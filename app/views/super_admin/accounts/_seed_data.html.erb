@@ -5,10 +5,10 @@
 
   <div class="form-actions">
     <div class="pb-3">
-      <p>Click the button to generate seed data into this account for demos.</p>
-      <p class="text-color-red">Note: This will clear all the existing data in this account.</p>
+      <p><%= t('kalo_super_admin.account_actions.seed_intro') %></p>
+      <p class="text-color-red"><%= t('kalo_super_admin.account_actions.seed_warning') %></p>
     </div>
-  <%= f.submit 'Generate Seed Data' %>
+  <%= f.submit t('kalo_super_admin.account_actions.seed_submit') %>
   </div>
   <% end %>
 </section>

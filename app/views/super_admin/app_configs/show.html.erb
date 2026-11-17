@@ -1,5 +1,5 @@
 <% content_for(:title) do %>
-  Configure Settings - <%= @config.titleize %>
+  <%= t('kalo_super_admin.app_config.title', name: t("kalo_super_admin.app_config.groups.#{@config}", default: @config.titleize)) %>
 <% end %>
 
 <header class="main-content__header" role="banner">
@@ -19,12 +19,12 @@
     <% @allowed_configs.each do |key| %>
       <div class="flex mb-8">
         <div class="field-unit__label">
-          <%= form.label "app_config[#{key}]", @installation_configs[key]&.dig('display_title') || key %>
+          <%= form.label "app_config[#{key}]", t("kalo_super_admin.app_config.fields.#{key}.label", default: @installation_configs[key]&.dig('display_title') || key) %>
         </div>
         <div class="-mt-2 field-unit__field ">
           <% if @installation_configs[key]&.dig('type') == 'boolean' %>
             <%= form.select "app_config[#{key}]",
-              [["True", true], ["False", false]],
+              [[t('kalo_super_admin.app_config.true'), true], [t('kalo_super_admin.app_config.false'), false]],
               { selected: ActiveModel::Type::Boolean.new.cast(@app_config[key]) },
               class: "mt-2 border border-slate-100 p-1 rounded-md"
             %>
@@ -64,14 +64,17 @@
         <% end %>
           <%if @installation_configs[key]&.dig('description').present? %>
             <p class="pt-2 text-xs italic text-slate-400">
-              <%= @installation_configs[key]&.dig('description').to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name) %>
+              <%= t(
+                "kalo_super_admin.app_config.fields.#{key}.description",
+                default: @installation_configs[key]&.dig('description').to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name)
+              ) %>
             </p>
           <% end %>
         </div>
       </div>
     <% end %>
     <div class="form-actions">
-      <%= form.submit "Submit" %>
+      <%= form.submit t('kalo_super_admin.app_config.submit') %>
     </div>
   <% end %>
 </section>

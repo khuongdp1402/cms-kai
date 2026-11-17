@@ -39,7 +39,7 @@ for a collection of resources.
       <option value=""><%= t('kalo_super_admin.filters.all') %></option>
       <% dashboard_class::COLLECTION_FILTERS.each do |filter_name, _| %>
         <option value="<%= filter_name %>" <%= 'selected' if filter_name.to_s == current_filter %>>
-          <%= filter_name.to_s.titleize %>
+          <%= t("kalo_super_admin.filter_names.#{filter_name}", default: filter_name.to_s.titleize) %>
         </option>
       <% end %>
     </select>

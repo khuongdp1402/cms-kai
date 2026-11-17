@@ -1,0 +1,114 @@
+# Vietnamese model names, attribute labels and submit buttons for the super
+# admin (Administrate reads activerecord.models and helpers.label/submit).
+# Upstream vi.yml has none of these keys, so nothing is overridden here.
+vi:
+  activerecord:
+    models:
+      account:
+        one: Tài khoản shop
+        other: Tài khoản shop
+      account_user:
+        one: Nhân viên trong shop
+        other: Nhân viên trong shop
+      user:
+        one: Người dùng
+        other: Người dùng
+      super_admin:
+        one: Quản trị hệ thống
+        other: Quản trị hệ thống
+      access_token:
+        one: Khóa truy cập
+        other: Khóa truy cập
+      agent_bot:
+        one: Bot tự động
+        other: Bot tự động
+      platform_app:
+        one: Ứng dụng nền tảng
+        other: Ứng dụng nền tảng
+      installation_config:
+        one: Cấu hình hệ thống
+        other: Cấu hình hệ thống
+      platform_banner:
+        one: Thông báo hệ thống
+        other: Thông báo hệ thống
+  helpers:
+    submit:
+      create: 'Thêm %{model}'
+      update: 'Lưu %{model}'
+      submit: 'Lưu %{model}'
+    label:
+      account:
+        id: Mã
+        name: Tên
+        locale: Ngôn ngữ
+        users: Người dùng
+        conversations: Hội thoại
+        status: Trạng thái
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+        suspension_history: Lịch sử tạm ngưng
+        account_users: Nhân viên
+        custom_attributes: Thuộc tính tùy chỉnh
+      account_user:
+        id: Mã
+        account: Tài khoản shop
+        account_id: Tài khoản shop
+        user: Người dùng
+        user_id: Người dùng
+        inviter: Người mời
+        inviter_id: Người mời
+        role: Vai trò
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+      user:
+        id: Mã
+        avatar_url: Ảnh đại diện
+        avatar: Ảnh đại diện
+        name: Tên
+        display_name: Tên hiển thị
+        email: Email
+        password: Mật khẩu
+        accounts: Tài khoản shop
+        account_users: Tài khoản shop đã tham gia
+        type: Loại
+        unconfirmed_email: Email chờ xác nhận
+        confirmed_at: Xác nhận email lúc
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+        access_token: Khóa truy cập
+      access_token:
+        id: Mã
+        owner: Chủ sở hữu
+        token: Khóa
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+      agent_bot:
+        id: Mã
+        avatar_url: Ảnh đại diện
+        avatar: Ảnh đại diện
+        account: Tài khoản shop
+        name: Tên
+        description: Mô tả
+        outgoing_url: URL nhận sự kiện
+        access_token: Khóa truy cập
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+      platform_app:
+        id: Mã
+        name: Tên
+        access_token: Khóa truy cập
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+      installation_config:
+        id: Mã
+        name: Tên
+        value: Giá trị
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc
+      platform_banner:
+        id: Mã
+        banner_message: Nội dung thông báo
+        banner_type: Loại thông báo
+        active: Đang hiện
+        created_at: Ngày tạo
+        updated_at: Cập nhật lúc

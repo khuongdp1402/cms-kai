@@ -79,6 +79,212 @@ vi:
       manage: Quản lý
       features: Tính năng
       agent_overage: "Hệ thống có %{count} nhân viên. Hãy bổ sung giấy phép để thêm người dùng."
+    # Filter names (COLLECTION_FILTERS) and select values; anything missing falls back to the raw name.
+    filter_names:
+      active: Đang hoạt động
+      suspended: Đã tạm ngưng
+      recent: Tạo trong 30 ngày
+      marked_for_deletion: Chờ xóa
+      super_admin: Quản trị hệ thống
+      confirmed: Đã xác nhận email
+      unconfirmed: Chưa xác nhận email
+      user: Người dùng
+      agent_bot: Bot tự động
+      platform_app: Ứng dụng nền tảng
+    values:
+      status:
+        active: Đang hoạt động
+        suspended: Đã tạm ngưng
+      role:
+        agent: Nhân viên
+        administrator: Quản trị viên
+      type:
+        SuperAdmin: Quản trị hệ thống
+    account_actions:
+      seed_intro: Tạo dữ liệu mẫu trong tài khoản này để demo.
+      seed_warning: "Lưu ý: toàn bộ dữ liệu hiện có của tài khoản sẽ bị xóa."
+      seed_submit: Tạo dữ liệu mẫu
+      reset_cache_intro: Xóa khóa bộ nhớ đệm IndexedDB trong Redis.
+      reset_cache_next: Lần tải sau sẽ lấy lại dữ liệu từ máy chủ.
+      reset_cache_submit: Xóa bộ nhớ đệm giao diện
+    impersonate:
+      caution: "Lưu ý: mọi thao tác sau khi đăng nhập thay sẽ được ghi nhận như do người dùng này thực hiện - [%{name}]"
+      submit: Đăng nhập với tư cách người dùng
+    app_config:
+      title: "Cấu hình - %{name}"
+      submit: Lưu
+      'true': Bật
+      'false': Tắt
+      groups:
+        general: Chung
+        email: Email
+        facebook: Facebook
+        instagram: Instagram
+        tiktok: TikTok
+        google: Google
+        microsoft: Microsoft
+        linear: Linear
+        notion: Notion
+        slack: Slack
+        whatsapp_embedded: WhatsApp nhúng
+        shopify: Shopify
+        captain: Captain
+      fields:
+        ENABLE_ACCOUNT_SIGNUP:
+          label: Cho phép tự đăng ký tài khoản
+          description: Người dùng mới tự tạo được tài khoản shop
+        FIREBASE_PROJECT_ID:
+          label: Mã dự án Firebase
+          description: Mã dự án Firebase (Project ID)
+        FIREBASE_CREDENTIALS:
+          label: Thông tin xác thực Firebase
+          description: Nội dung file JSON thông tin xác thực Firebase
+        WEBHOOK_TIMEOUT:
+          label: Thời gian chờ webhook (giây)
+          description: Thời gian tối đa chờ webhook phản hồi trước khi báo lỗi
+        MAXIMUM_FILE_UPLOAD_SIZE:
+          label: Dung lượng tệp đính kèm tối đa (MB)
+          description: Dung lượng tối đa của mỗi tệp tải lên, tính bằng MB
+        WIDGET_TOKEN_EXPIRY:
+          label: Hạn mã khung chat website
+          description: Số ngày mã của khung chat website còn hiệu lực
+        MAILER_INBOUND_EMAIL_DOMAIN:
+          label: Tên miền nhận email
+          description: Tên miền dùng để tạo địa chỉ trả lời nối tiếp hội thoại (reply+id@tenmien.com)
+        ACCOUNT_EMAILS_LIMIT:
+          label: Giới hạn email mỗi ngày của tài khoản
+          description: Số email (ngoài kênh email) tối đa một tài khoản được gửi mỗi ngày
+        ACCOUNT_EMAILS_PLAN_LIMITS:
+          label: Giới hạn email theo gói (mỗi ngày)
+          description: Giới hạn gửi email mỗi ngày theo từng gói, dạng JSON
+        FB_APP_ID:
+          label: Mã ứng dụng Facebook (App ID)
+        FB_VERIFY_TOKEN:
+          label: Mã xác minh Facebook
+          description: Mã xác minh dùng cho webhook Facebook Messenger
+        FB_APP_SECRET:
+          label: Khóa bí mật ứng dụng Facebook
+        IG_VERIFY_TOKEN:
+          label: Mã xác minh Instagram
+          description: Mã xác minh dùng cho webhook Instagram
+        FACEBOOK_API_VERSION:
+          label: Phiên bản API Facebook
+          description: Chỉ đổi khi cần dùng phiên bản API Facebook khác. Phiên bản bắt đầu bằng chữ `v`
+        ENABLE_MESSENGER_CHANNEL_HUMAN_AGENT:
+          label: Bật chế độ nhân viên trả lời (Messenger)
+          description: "Cho phép trả lời khách trên Messenger trong thời gian dài hơn. Cần Meta duyệt thêm: https://developers.facebook.com/docs/features-reference/human-agent/"
+        INSTAGRAM_APP_ID:
+          label: Mã ứng dụng Instagram (App ID)
+        INSTAGRAM_APP_SECRET:
+          label: Khóa bí mật ứng dụng Instagram
+          description: Khóa bí mật dùng để xác thực Instagram
+        INSTAGRAM_VERIFY_TOKEN:
+          label: Mã xác minh Instagram
+          description: Mã xác minh dùng cho webhook Instagram
+        INSTAGRAM_API_VERSION:
+          label: Phiên bản API Instagram
+          description: Chỉ đổi khi cần dùng phiên bản API Instagram khác. Phiên bản bắt đầu bằng chữ `v`
+        ENABLE_INSTAGRAM_CHANNEL_HUMAN_AGENT:
+          label: Bật chế độ nhân viên trả lời (Instagram)
+          description: "Cho phép trả lời khách trên Instagram trong thời gian dài hơn. Cần Meta duyệt thêm: https://developers.facebook.com/docs/features-reference/human-agent/"
+        TIKTOK_APP_ID:
+          label: Mã ứng dụng TikTok (App ID)
+        TIKTOK_APP_SECRET:
+          label: Khóa bí mật ứng dụng TikTok
+        TIKTOK_API_VERSION:
+          label: Phiên bản API TikTok
+          description: Chỉ đổi khi cần dùng phiên bản API TikTok khác. Phiên bản bắt đầu bằng chữ `v`
+        GOOGLE_OAUTH_CLIENT_ID:
+          label: Google OAuth Client ID
+          description: Client ID của Google OAuth dùng để xác thực email
+        GOOGLE_OAUTH_CLIENT_SECRET:
+          label: Google OAuth Client Secret
+          description: Client Secret của Google OAuth dùng để xác thực email
+        GOOGLE_OAUTH_REDIRECT_URI:
+          label: Google OAuth Redirect URI
+          description: Địa chỉ chuyển hướng đã khai báo trong ứng dụng Google OAuth
+        ENABLE_GOOGLE_OAUTH_LOGIN:
+          label: Cho phép đăng nhập bằng Google
+          description: Hiện nút đăng nhập bằng Google khi đã cấu hình thông tin xác thực
+        AZURE_APP_ID:
+          label: Mã ứng dụng Azure (App ID)
+          description: Mã ứng dụng dùng để xác thực tài khoản Microsoft của khách. Hướng dẫn cài Azure https://chwt.app/dev/ms
+        AZURE_APP_SECRET:
+          label: Khóa bí mật ứng dụng Azure
+        LINEAR_CLIENT_ID:
+          label: Linear Client ID
+          description: Client ID của Linear
+        LINEAR_CLIENT_SECRET:
+          label: Linear Client Secret
+          description: Client Secret của Linear
+        NOTION_CLIENT_ID:
+          label: Notion Client ID
+          description: Client ID của Notion
+        NOTION_CLIENT_SECRET:
+          label: Notion Client Secret
+          description: Client Secret của Notion
+        SLACK_CLIENT_ID:
+          label: Slack Client ID
+          description: Client ID của Slack
+        SLACK_CLIENT_SECRET:
+          label: Slack Client Secret
+          description: Client Secret của Slack
+        WHATSAPP_APP_ID:
+          label: Mã ứng dụng WhatsApp (App ID)
+          description: Mã ứng dụng Facebook dùng cho WhatsApp Business API
+        WHATSAPP_APP_SECRET:
+          label: Khóa bí mật ứng dụng WhatsApp
+          description: Khóa bí mật cho luồng đăng ký WhatsApp nhúng (bắt buộc)
+        WHATSAPP_CONFIGURATION_ID:
+          label: Mã cấu hình WhatsApp
+          description: Mã cấu hình cho luồng đăng ký WhatsApp nhúng (bắt buộc)
+        WHATSAPP_API_VERSION:
+          label: Phiên bản API WhatsApp
+          description: Chỉ đổi khi cần dùng phiên bản API WhatsApp khác. Phiên bản bắt đầu bằng chữ `v`
+        SHOPIFY_CLIENT_ID:
+          label: Shopify Client ID
+          description: Client ID (API Key) trong tài khoản Shopify Partner
+        SHOPIFY_CLIENT_SECRET:
+          label: Shopify Client Secret
+          description: Client Secret (API Secret Key) trong tài khoản Shopify Partner
+    features:
+      help_center:
+        name: Trung tâm trợ giúp
+        description: Nhân viên viết bài hướng dẫn và đăng lên trang trợ giúp.
+      live_chat:
+        name: Chat trên website
+        description: Gắn khung chat lên website để trò chuyện với khách.
+      email:
+        description: Quản lý email của khách ngay trong %{brand}.
+      sms:
+        description: Quản lý tin nhắn SMS của khách ngay trong %{brand}.
+      messenger:
+        description: Trò chuyện với khách qua Facebook và Instagram.
+      instagram:
+        description: Trò chuyện với khách qua Instagram.
+      tiktok:
+        description: Trò chuyện với khách qua TikTok.
+      whatsapp:
+        description: Quản lý tin nhắn WhatsApp Business ngay trong %{brand}.
+      telegram:
+        description: Quản lý tin nhắn Telegram ngay trong %{brand}.
+      line:
+        description: Quản lý tin nhắn Line ngay trong %{brand}.
+      google:
+        description: Cấu hình đăng nhập Google OAuth.
+      microsoft:
+        description: Cấu hình email Microsoft.
+      linear:
+        description: Cấu hình tích hợp Linear.
+      notion:
+        description: Cấu hình tích hợp Notion.
+      slack:
+        description: Cấu hình tích hợp Slack.
+      whatsapp_embedded:
+        name: WhatsApp nhúng
+        description: Cấu hình tích hợp WhatsApp nhúng.
+      shopify:
+        description: Cấu hình tích hợp Shopify.
   # Keys of the stock super admin views that vi.yml lacks (kept here, vi.yml is synced from upstream).
   super_admin:
     account_suspension:

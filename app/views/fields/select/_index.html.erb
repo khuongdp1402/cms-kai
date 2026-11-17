@@ -1,0 +1,2 @@
+<%# Kalo: show translated select values (kalo_super_admin.values.<attribute>.<value>), raw value otherwise. %>
+<%= field.data.present? ? t("kalo_super_admin.values.#{field.attribute}.#{field.data}", default: field.data.to_s) : field.data %>
