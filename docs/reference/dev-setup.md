@@ -49,6 +49,9 @@ Seed tạo sẵn tài khoản đăng nhập: `john@acme.inc` / `Password1!`.
 - **Trùng port:** nếu máy đã có project khác chiếm port, đặt `KCHAT_POSTGRES_PORT`, `KCHAT_BRIDGE_PORT`… trong `.env` (danh sách ở cuối `.env.example`). Port bên trong mạng docker không đổi.
 - Lần `up` đầu tiên, container `vite` mất vài phút để `pnpm install` vào volume `node_modules`. Trong thời gian đó `/app/login` trả 500 ("Vite Ruby can't find entrypoints"). Theo dõi bằng `docker compose logs -f vite` và chờ tới dòng `VITE ... ready`.
 - Bridge không có channel sẽ bị Rails trả 404 ở webhook, vì `set_channel` chạy trước bước verify chữ ký. Đó là hành vi đúng, không phải lỗi secret.
+- **Trang Gói cước** (`Cài đặt → Cửa hàng → Gói cước`) cần tài khoản nhận tiền của Kalo trong `.env`: `CASSO_BANK_NAME`, `CASSO_ACCOUNT_NUMBER`, `CASSO_ACCOUNT_NAME` (dev điền giá trị giả là đủ, ví dụ `MB Bank`, `0123456789`, `KALO DEV`). Thiếu một biến thì `GET /kchat/subscription` trả 503 `{error: "billing_not_configured"}` (ghi log lỗi) và trang hiện "Chưa cấu hình thanh toán gói cước". Webhook Casso còn cần `CASSO_SECURE_TOKEN`.
+- **Tài khoản nhận tiền của shop** (để gửi mã QR cho khách) không nằm trong ENV: quản trị viên nhập ở `Cài đặt → Cửa hàng → Nhận tiền`.
+- **Gợi ý trả lời AI** cần `AGENTGW_API_KEY` (hoặc `AI_PROVIDER=gemini_api` + `GEMINI_API_KEY`). Không có khóa thì `brand_growth/chat_reply` trả 503, khóa sai/nhà cung cấp lỗi thì 502 `ai_unavailable`; cả hai trường hợp ô gợi ý tự ẩn.
 - Windows: repo có `.gitattributes` ép LF vì code được mount thẳng vào container Linux. Xem LESSONS B5.
 - Compose này chỉ dành cho dev. Staging/production dùng manifest K8s (P0-08).
 

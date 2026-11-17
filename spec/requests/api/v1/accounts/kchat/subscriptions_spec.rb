@@ -45,11 +45,17 @@ RSpec.describe 'Kchat subscription API', type: :request do
     end
   end
 
-  it 'fails loudly when bank settings are missing' do
-    with_modified_env(CASSO_BANK_NAME: nil) do
-      get url, headers: agent.create_new_auth_token, as: :json
+  %w[CASSO_BANK_NAME CASSO_ACCOUNT_NUMBER CASSO_ACCOUNT_NAME].each do |key|
+    it "fails loudly with a JSON 503 billing_not_configured when #{key} is missing" do
+      allow(Rails.logger).to receive(:error)
+      with_modified_env(key => nil) do
+        get url, headers: agent.create_new_auth_token, as: :json
+      end
+      expect(response).to have_http_status(:service_unavailable)
+      expect(response.media_type).to eq('application/json')
+      expect(response.parsed_body).to eq('error' => 'billing_not_configured')
+      expect(Rails.logger).to have_received(:error).with(/#{key}/)
     end
-    expect(response).to have_http_status(:internal_server_error)
   end
 
   it 'returns a memo that the Casso webhook matches and credits' do
