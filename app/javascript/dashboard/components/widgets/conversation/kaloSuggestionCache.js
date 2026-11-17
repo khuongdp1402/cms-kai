@@ -3,6 +3,8 @@
 const SILENT_MS = 60000;
 const MAX_ENTRIES = 200;
 const entries = new Map();
+// Account-wide pause after an error that no other message would avoid.
+let silentUntil = 0;
 
 export const cacheKey = (conversationId, messageId) =>
   `${conversationId}:${messageId}`;
@@ -25,7 +27,18 @@ const put = (key, entry) => {
 
 export const cacheReply = (key, reply) => put(key, { reply });
 
-// A disabled AI (503) or expired plan (403) is not retried for a minute.
+// A failed message is not retried for a minute.
 export const cacheSilent = key => put(key, { until: Date.now() + SILENT_MS });
 
-export const clearSuggestionCache = () => entries.clear();
+// AI unavailable (502), not configured (503), plan expired (403) or rate
+// limited (429): every conversation would fail the same way for a while.
+export const silenceAll = () => {
+  silentUntil = Date.now() + SILENT_MS;
+};
+
+export const isSilenced = () => silentUntil > Date.now();
+
+export const clearSuggestionCache = () => {
+  entries.clear();
+  silentUntil = 0;
+};

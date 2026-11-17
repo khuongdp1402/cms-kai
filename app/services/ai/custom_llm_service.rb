@@ -5,6 +5,10 @@
 class Ai::CustomLlmService
   class NotConfiguredError < StandardError; end
   class PromptTooLargeError < StandardError; end
+  # The provider was reached but refused (bad key, 5xx, garbage body) or could not be reached at all.
+  class ProviderError < StandardError; end
+
+  NETWORK_ERRORS = [Timeout::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError, EOFError, HTTParty::Error].freeze
 
   # Defense in depth behind the controller limits: a paid call never carries more than this many characters in total.
   MAX_PROMPT_CHARS = 20_000
@@ -37,13 +41,15 @@ class Ai::CustomLlmService
     @base_url.end_with?('/chat/completions') ? @base_url : "#{@base_url}/chat/completions"
   end
 
-  # Returns the assistant text, or raises NotConfiguredError / StandardError on provider failure.
+  # Returns the assistant text, or raises NotConfiguredError / PromptTooLargeError / ProviderError.
   def complete(messages, model: nil)
     raise NotConfiguredError, 'AI provider is not configured' unless configured?
     raise PromptTooLargeError, 'AI prompt is too large' if messages.sum { |m| m[:content].to_s.length } > MAX_PROMPT_CHARS
 
     text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
     self.class.strip_think(text)
+  rescue *NETWORK_ERRORS, JSON::ParserError => e
+    raise ProviderError, "AI provider failed: #{e.class}"
   end
 
   def generate_reply_suggestion(conversation_messages, brand_profile: {})
@@ -139,7 +145,7 @@ class Ai::CustomLlmService
       body: { model: model, messages: messages, temperature: 0.7 }.to_json,
       timeout: 35
     )
-    raise "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
 
     JSON.parse(response.body).dig('choices', 0, 'message', 'content')
   end
@@ -156,7 +162,7 @@ class Ai::CustomLlmService
       body: { system_instruction: { parts: [{ text: system_text }] }, contents: contents }.to_json,
       timeout: 35
     )
-    raise "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
 
     JSON.parse(response.body).dig('candidates', 0, 'content', 'parts', 0, 'text')
   end

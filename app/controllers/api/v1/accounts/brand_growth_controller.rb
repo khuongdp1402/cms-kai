@@ -18,6 +18,10 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
   rescue_from Ai::CustomLlmService::NotConfiguredError do
     render json: { error: 'ai_not_configured' }, status: :service_unavailable
   end
+  rescue_from Ai::CustomLlmService::ProviderError do |e|
+    Rails.logger.error("[brand_growth] #{e.message}")
+    render json: { error: 'ai_unavailable' }, status: :bad_gateway
+  end
   rescue_from Ai::CustomLlmService::PromptTooLargeError do
     render json: { error: 'prompt_too_large' }, status: :unprocessable_entity
   end
