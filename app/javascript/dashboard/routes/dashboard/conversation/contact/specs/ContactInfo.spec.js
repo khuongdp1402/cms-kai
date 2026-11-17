@@ -41,7 +41,7 @@ const contact = {
   additional_attributes: { company_name: 'Shop A', description: 'VIP' },
 };
 
-const mountInfo = (props = {}) => {
+const mountInfo = (props = {}, extraStubs = {}) => {
   const store = createStore({
     getters: {
       'contacts/getUIFlags': () => ({}),
@@ -64,6 +64,7 @@ const mountInfo = (props = {}) => {
           methods: { focus() {} },
           template: '<input />',
         },
+        ...extraStubs,
       },
     },
   });
@@ -270,6 +271,25 @@ describe('ContactInfo', () => {
       expect(wrapper.findComponent(EditContact).props('show')).toBe(true);
       await wrapper.findComponent(EditContact).vm.$emit('cancel');
       expect(wrapper.findComponent(EditContact).props('show')).toBe(false);
+    });
+
+    it('gives every icon-only action button an accessible name', () => {
+      isAdmin.value = true;
+      const renderTrigger = { template: '<div><slot name="trigger" /></div>' };
+      const wrapper = mountInfo(
+        {},
+        {
+          ComposeConversation: renderTrigger,
+          ContactMergeModal: renderTrigger,
+          ContactDeleteModal: renderTrigger,
+        }
+      );
+      const labels = wrapper
+        .findAll('next-button-stub')
+        .map(button => button.attributes('aria-label'));
+      // new message, edit, merge, delete
+      expect(labels).toHaveLength(4);
+      labels.forEach(label => expect(label).toBeTruthy());
     });
 
     it('links to the full contact profile in a new tab', () => {

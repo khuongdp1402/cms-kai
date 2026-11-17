@@ -121,6 +121,18 @@ describe('ChatListHeader', () => {
     }
   );
 
+  it.each([{ hasAppliedFilters: true }, { hasActiveFolders: true }])(
+    'gives every icon-only button an accessible name (%o)',
+    async props => {
+      const wrapper = await mountHeader(props);
+      const buttons = wrapper.findAll('next-button-stub');
+      expect(buttons.length).toBeGreaterThanOrEqual(3);
+      buttons.forEach(button => {
+        expect(button.attributes('aria-label')).toBeTruthy();
+      });
+    }
+  );
+
   it('has no extra layout switch when the popover is shown', async () => {
     const wrapper = await mountHeader();
     expect(wrapper.findComponent(SwitchLayout).exists()).toBe(false);
