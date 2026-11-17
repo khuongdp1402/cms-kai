@@ -217,6 +217,8 @@ body.kalo-admin {
 
 .kalo-admin .search__input {
   background: transparent;
+  border: 0;
+  box-shadow: none;
   color: var(--kalo-ink);
   font-family: var(--kalo-font);
   min-height: 38px;
@@ -244,9 +246,10 @@ body.kalo-admin {
 }
 
 .kalo-filter__label { color: var(--kalo-muted); display: flex; margin-right: 6px; }
-.kalo-filter__select {
-  background: transparent;
+.kalo-admin .kalo-filter__select {
+  background-color: transparent;
   border: 0;
+  box-shadow: none;
   color: var(--kalo-ink);
   cursor: pointer;
   flex: 1;
@@ -404,6 +407,7 @@ body.kalo-admin {
 // ---- Mobile: top bar + menu button, no horizontal page scroll ----
 @media (max-width: 767px) {
   .kalo-shell { flex-direction: column; }
+  .kalo-main { flex: 1 1 auto; width: 100%; }
 
   .kalo-nav {
     border-bottom: 1px solid var(--kalo-line);
