@@ -1,10 +1,20 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import Message from './Message.vue';
+import { isRenderableMessage } from './messageVisibility.js';
 import { MESSAGE_TYPES } from './constants.js';
 import { useCamelCase } from 'dashboard/composables/useTransformKeys';
 import { useMapGetter } from 'dashboard/composables/store.js';
 import MessageApi from 'dashboard/api/inbox/message.js';
+import { useI18n } from 'vue-i18n';
+import {
+  format,
+  fromUnixTime,
+  isSameDay,
+  isThisYear,
+  isToday,
+  isYesterday,
+} from 'date-fns';
 
 /**
  * Props definition for the component
@@ -49,6 +59,31 @@ const allMessages = computed(() => {
 });
 
 const currentChat = useMapGetter('getSelectedChat');
+const { t } = useI18n();
+
+const dayLabel = createdAt => {
+  const date = fromUnixTime(createdAt);
+  if (isToday(date)) return t('KALO_CHAT_THREAD.TODAY');
+  if (isYesterday(date)) return t('KALO_CHAT_THREAD.YESTERDAY');
+  return format(date, isThisYear(date) ? 'dd/MM' : 'dd/MM/yyyy');
+};
+
+// A subtle day separator before the first visible message of each day (the list is not
+// virtualised). Messages that render no bubble are skipped so no day shows an empty
+// separator. Grouped bubbles never straddle midnight: grouping needs the same minute.
+const daySeparators = computed(() => {
+  const labels = {};
+  let previousDate = null;
+  allMessages.value.forEach((message, index) => {
+    if (!message.createdAt || !isRenderableMessage(message)) return;
+    const date = fromUnixTime(message.createdAt);
+    if (!previousDate || !isSameDay(previousDate, date)) {
+      labels[index] = dayLabel(message.createdAt);
+    }
+    previousDate = date;
+  });
+  return labels;
+});
 
 // Cache for fetched reply messages to avoid duplicate API calls
 const fetchedReplyMessages = reactive(new Map());
@@ -163,9 +198,20 @@ const getInReplyToMessage = parentMessage => {
 </script>
 
 <template>
-  <ul class="px-4 bg-n-surface-1">
+  <ul class="px-3 sm:px-6 bg-n-background">
     <slot name="beforeAll" />
     <template v-for="(message, index) in allMessages" :key="message.id">
+      <li
+        v-if="daySeparators[index]"
+        data-test="day-separator"
+        class="flex justify-center my-3 list-none"
+      >
+        <span
+          class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-n-alpha-2 text-n-slate-11"
+        >
+          {{ daySeparators[index] }}
+        </span>
+      </li>
       <slot
         v-if="firstUnreadId && message.id === firstUnreadId"
         name="unreadBadge"

@@ -3,6 +3,7 @@ import { computed } from 'vue';
 
 import MessageMeta from '../MessageMeta.vue';
 import CaptainGenerationDetails from '../CaptainGenerationDetails.vue';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 
 import { emitter } from 'shared/helpers/mitt';
 import { useMessageContext } from '../provider.js';
@@ -34,7 +35,7 @@ const isCaptainMessage = computed(
 
 const metaColorClass = computed(() =>
   variant.value === MESSAGE_VARIANTS.PRIVATE
-    ? 'text-n-amber-12/50'
+    ? 'text-n-amber-11'
     : 'text-n-slate-11'
 );
 
@@ -45,8 +46,8 @@ const emailMetaClass = computed(() =>
 const varaintBaseMap = {
   [MESSAGE_VARIANTS.AGENT]: 'bg-n-solid-blue text-n-slate-12',
   [MESSAGE_VARIANTS.PRIVATE]:
-    'bg-n-solid-amber text-n-amber-12 [&_.prosemirror-mention-node]:font-semibold',
-  [MESSAGE_VARIANTS.USER]: 'bg-n-slate-4 text-n-slate-12',
+    'bg-n-solid-amber text-n-amber-12 border border-n-amber-7/40 [&_.prosemirror-mention-node]:font-semibold',
+  [MESSAGE_VARIANTS.USER]: 'bg-n-solid-1 text-n-slate-12 border border-n-weak',
   [MESSAGE_VARIANTS.ACTIVITY]: 'bg-n-alpha-1 text-n-slate-11 text-sm',
   [MESSAGE_VARIANTS.BOT]: 'bg-n-solid-iris text-n-slate-12',
   [MESSAGE_VARIANTS.TEMPLATE]: 'bg-n-solid-iris text-n-slate-12',
@@ -58,10 +59,10 @@ const varaintBaseMap = {
 
 const orientationMap = {
   [ORIENTATION.LEFT]:
-    'left-bubble rounded-xl ltr:rounded-bl-sm rtl:rounded-br-sm',
+    'left-bubble rounded-2xl ltr:rounded-bl-md rtl:rounded-br-md',
   [ORIENTATION.RIGHT]:
-    'right-bubble rounded-xl ltr:rounded-br-sm rtl:rounded-bl-sm',
-  [ORIENTATION.CENTER]: 'rounded-md',
+    'right-bubble rounded-2xl ltr:rounded-br-md rtl:rounded-bl-md',
+  [ORIENTATION.CENTER]: 'rounded-xl',
 };
 
 const flexOrientationClass = computed(() => {
@@ -127,6 +128,15 @@ const replyToPreview = computed(() => {
     ]"
   >
     <div
+      v-if="variant === MESSAGE_VARIANTS.PRIVATE"
+      data-test="private-note-badge"
+      class="flex items-center gap-1 mb-1 text-xs font-semibold text-n-amber-11"
+      :title="t('KALO_CHAT_THREAD.PRIVATE_NOTE')"
+    >
+      <KaloIcon name="lock" class="size-3.5" />
+      {{ t('KALO_CHAT_THREAD.COMPOSER.NOTE') }}
+    </div>
+    <div
       v-if="inReplyTo"
       class="p-2 -mx-1 mb-2 rounded-lg cursor-pointer bg-n-alpha-black1"
       @click="scrollToMessage"
@@ -150,7 +160,7 @@ const replyToPreview = computed(() => {
       <MessageMeta
         v-else
         :class="[flexOrientationClass, emailMetaClass, metaColorClass]"
-        class="mt-2"
+        class="mt-1"
       />
     </template>
   </div>

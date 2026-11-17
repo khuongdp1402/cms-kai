@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B31 (2026-11-17): Chuỗi i18n có ký tự "@" làm hỏng placeholder ghi chú.**
+  - Triệu chứng: trình duyệt báo "Message compilation error: Invalid linked format" cho "Ghi chú chỉ nhân viên thấy… (gõ @ để nhắc tên)"; spec vitest vẫn xanh vì không mount chuỗi đó.
+  - Nguyên nhân: trong vue-i18n `@` là cú pháp liên kết khóa (cũng như `{`, `}`, `|`).
+  - Quy tắc: muốn hiện ký tự đó thì viết `{'@'}`. Namespace mới nên có spec dịch toàn bộ khóa và bắt lỗi biên dịch (xem `KaloChatThreadI18n.spec.js`).
 - **B35 (2026-11-17): Gắn thẳng hàm `toggle` của vueuse làm listener của bus `mitt` nên lệnh "Gửi transcript" trên thanh lệnh không mở modal.**
   - Triệu chứng: `emitter.on(CMD_SEND_TRANSCRIPT, toggleEmailModal)` trong `MoreActions.vue`; chọn lệnh trên thanh Cmd+K thì modal không hiện, cờ thành `undefined`.
   - Nguyên nhân: mitt luôn gọi listener với một đối số (payload, ở đây `undefined`); `toggle(value)` của `useToggle` hễ có đối số là gán đúng giá trị đó thay vì đảo.

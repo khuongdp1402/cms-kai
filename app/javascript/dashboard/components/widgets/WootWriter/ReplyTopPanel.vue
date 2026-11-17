@@ -6,14 +6,14 @@ import { useTrack } from 'dashboard/composables';
 import { vOnClickOutside } from '@vueuse/components';
 import { REPLY_EDITOR_MODES, CHAR_LENGTH_WARNING } from './constants';
 import { CAPTAIN_EVENTS } from 'dashboard/helper/AnalyticsHelper/events';
-import NextButton from 'dashboard/components-next/button/Button.vue';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import EditorModeToggle from './EditorModeToggle.vue';
 import CopilotMenuBar from './CopilotMenuBar.vue';
 
 export default {
   name: 'ReplyTopPanel',
   components: {
-    NextButton,
+    KaloIcon,
     EditorModeToggle,
     CopilotMenuBar,
   },
@@ -152,7 +152,7 @@ export default {
 
 <template>
   <div
-    class="flex justify-between gap-2 h-[3.25rem] items-center ltr:pl-3 ltr:pr-2 rtl:pr-3 rtl:pl-2"
+    class="flex items-center justify-between gap-2 pt-2 pb-1 ltr:pl-2 ltr:pr-2 rtl:pr-2 rtl:pl-2"
   >
     <EditorModeToggle
       :mode="mode"
@@ -160,27 +160,28 @@ export default {
       :is-reply-restricted="isReplyRestricted"
       @toggle-mode="handleModeToggle"
     />
-    <div class="flex items-center mx-4 my-0">
-      <div v-if="isMessageLengthReachingThreshold" class="text-xs">
-        <span :class="charLengthClass">
-          {{ characterLengthWarning }}
-        </span>
-      </div>
-    </div>
-    <div v-if="captainTasksEnabled" class="flex items-center gap-2">
-      <div class="relative">
-        <NextButton
+    <div class="flex items-center gap-1">
+      <span
+        v-if="isMessageLengthReachingThreshold"
+        class="text-xs ltr:mr-2 rtl:ml-2"
+        :class="charLengthClass"
+      >
+        {{ characterLengthWarning }}
+      </span>
+      <div v-if="captainTasksEnabled" class="relative">
+        <button
           ref="copilotToggleRef"
-          ghost
+          type="button"
+          data-test="ai-menu"
           :disabled="disabled || isEditorDisabled"
-          :class="{
-            'text-n-violet-9 hover:enabled:!bg-n-violet-3': !showCopilotMenu,
-            'text-n-violet-9 bg-n-violet-3': showCopilotMenu,
-          }"
-          sm
-          icon="i-ph-sparkle-fill"
+          :title="$t('KALO_CHAT_THREAD.COMPOSER.AI')"
+          :aria-label="$t('KALO_CHAT_THREAD.COMPOSER.AI')"
+          class="grid rounded-lg size-8 place-content-center text-n-slate-11 enabled:hover:bg-n-alpha-2 enabled:hover:text-n-slate-12 disabled:opacity-50"
+          :class="{ 'bg-n-alpha-2 text-n-slate-12': showCopilotMenu }"
           @click="toggleCopilotMenu"
-        />
+        >
+          <KaloIcon name="spark" class="size-4" />
+        </button>
         <CopilotMenuBar
           v-if="showCopilotMenu"
           v-on-click-outside="[
@@ -194,13 +195,16 @@ export default {
           @execute-copilot-action="handleCopilotAction"
         />
       </div>
-      <NextButton
-        ghost
-        class="text-n-slate-11"
-        sm
-        icon="i-lucide-maximize-2"
+      <button
+        type="button"
+        data-test="toggle-editor-size"
+        :title="$t('KALO_CHAT_THREAD.COMPOSER.EXPAND')"
+        :aria-label="$t('KALO_CHAT_THREAD.COMPOSER.EXPAND')"
+        class="grid rounded-lg size-8 place-content-center text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12"
         @click="$emit('toggleEditorSize')"
-      />
+      >
+        <KaloIcon name="expand" class="size-4" />
+      </button>
     </div>
   </div>
 </template>

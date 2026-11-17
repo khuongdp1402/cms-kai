@@ -26,4 +26,13 @@ export const KALO_ICON_NAMES = [
   'plug',
   'arrow',
   'zap',
+  'lock',
+  'clip',
+  'smile',
+  'mic',
+  'chevron',
+  'pen',
+  'quote',
+  'book',
+  'expand',
 ];

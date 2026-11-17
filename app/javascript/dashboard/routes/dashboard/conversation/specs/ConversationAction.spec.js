@@ -37,7 +37,7 @@ const actions = {
 
 const currentUser = { id: 1, name: 'Me', account_id: 1, avatar_url: 'a.png' };
 
-const mountAction = (chat = {}) => {
+const mountAction = (chat = {}, props = {}) => {
   const store = createStore({
     getters: {
       getSelectedChat: () => ({
@@ -52,7 +52,7 @@ const mountAction = (chat = {}) => {
     actions,
   });
   return shallowMount(ConversationAction, {
-    props: { conversationId: 50 },
+    props: { conversationId: 50, ...props },
     global: { plugins: [store] },
   });
 };
@@ -62,6 +62,12 @@ describe('ConversationAction', () => {
     const wrapper = mountAction();
     expect(wrapper.findAllComponents(MultiselectDropdown)).toHaveLength(3);
     expect(wrapper.findComponent(LabelBox).exists()).toBe(true);
+  });
+
+  it('showLabels=false leaves the labels to the Kalo panel "Nhãn" section', () => {
+    const wrapper = mountAction({}, { showLabels: false });
+    expect(wrapper.findAllComponents(MultiselectDropdown)).toHaveLength(3);
+    expect(wrapper.findComponent(LabelBox).exists()).toBe(false);
   });
 
   describe('assignee', () => {

@@ -2,6 +2,7 @@
 import { onMounted, computed, ref, toRefs } from 'vue';
 import { useTimeoutFn } from '@vueuse/core';
 import { provideMessageContext } from './provider.js';
+import { isRenderableMessage } from './messageVisibility.js';
 import { useTrack } from 'dashboard/composables';
 import { useMapGetter } from 'dashboard/composables/store';
 import { emitter } from 'shared/helpers/mitt';
@@ -423,25 +424,7 @@ const contextMenuEnabledOptions = computed(() => {
   };
 });
 
-const shouldRenderMessage = computed(() => {
-  const hasAttachments = !!(props.attachments && props.attachments.length > 0);
-  const isEmailContentType = props.contentType === CONTENT_TYPES.INCOMING_EMAIL;
-  const isUnsupported = props.contentAttributes?.isUnsupported;
-  const isAnIntegrationMessage =
-    props.contentType === CONTENT_TYPES.INTEGRATIONS;
-  const isFailedMessage = props.status === MESSAGE_STATUS.FAILED;
-  const hasExternalError = !!props.contentAttributes?.externalError;
-
-  return (
-    hasAttachments ||
-    props.content ||
-    isEmailContentType ||
-    isUnsupported ||
-    isAnIntegrationMessage ||
-    isFailedMessage ||
-    hasExternalError
-  );
-});
+const shouldRenderMessage = computed(() => isRenderableMessage(props));
 
 function openContextMenu(e) {
   const shouldSkipContextMenu =
@@ -524,7 +507,6 @@ const avatarTooltip = computed(() => {
   return `${t('CONVERSATION.SENT_BY')} ${avatarInfo.value.name}`;
 });
 
-
 const setupHighlightTimer = () => {
   if (Number(route.query.messageId) !== Number(props.id)) {
     return;
@@ -554,7 +536,7 @@ provideMessageContext({
   <div
     v-if="shouldRenderMessage"
     :id="`message${props.id}`"
-    class="flex w-full mb-2 message-bubble-container"
+    class="flex w-full mb-2 message-bubble-container group/msg"
     :data-message-id="props.id"
     :class="[
       flexOrientationClass,

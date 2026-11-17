@@ -41,9 +41,11 @@ watch(() => props.contactId, load, { immediate: true });
 </script>
 
 <template>
-  <div v-if="!failed" class="flex flex-col gap-3 px-2 py-3 text-n-slate-12">
+  <div v-if="!failed" class="flex flex-col gap-4 px-2 py-4 text-n-slate-12">
     <section>
-      <h3 class="mb-2 text-sm font-semibold">
+      <h3
+        class="mb-2 text-xs font-semibold tracking-wide uppercase text-n-slate-11"
+      >
         {{ t('KALO_CHAT.PANEL.PURCHASE') }}
       </h3>
       <dl data-test="purchase-summary" class="flex flex-col gap-1 text-sm">
@@ -60,7 +62,9 @@ watch(() => props.contactId, load, { immediate: true });
       </dl>
     </section>
     <section>
-      <h3 class="mb-2 text-sm font-semibold">
+      <h3
+        class="mb-2 text-xs font-semibold tracking-wide uppercase text-n-slate-11"
+      >
         {{ t('KALO_CHAT.PANEL.RECENT') }}
       </h3>
       <p
@@ -75,7 +79,7 @@ watch(() => props.contactId, load, { immediate: true });
           v-for="order in recent"
           :key="order.id"
           data-test="recent-order"
-          class="flex flex-wrap items-center gap-2 text-sm"
+          class="flex flex-wrap items-center gap-2 px-3 py-2 text-sm border rounded-xl border-n-weak bg-n-solid-1"
         >
           <b>#{{ order.number }}</b>
           <span>{{ formatVnd(order.total) }}</span>

@@ -686,4 +686,61 @@ describe('ReplyBox', () => {
       });
     });
   });
+
+  // Kalo UI phase 2 (task 1b-ii): composer toolbar wiring.
+  describe('Kalo composer toolbar', () => {
+    it('the canned button inserts "/" into the editor to open the canned menu (C-56)', async () => {
+      ({ wrapper } = mountReplyBox());
+      child(wrapper, 'ReplyBottomPanel').vm.$emit('insertCanned');
+      await flushPromises();
+      expect(
+        child(wrapper, 'WootMessageEditor').props('updateSelectionWith')
+      ).toBe('/');
+    });
+
+    it.each([
+      ['', '/'],
+      [' ', '/'],
+      ['\n', '/'],
+      ['a', ' /'],
+      ['.', ' /'],
+    ])(
+      'after "%s" the canned button inserts "%s" so the "/" menu opens',
+      (before, expected) => {
+        const addIntoEditor = vi.fn();
+        ReplyBox.methods.insertCannedTrigger.call({
+          messageEditor: { charBeforeCursor: () => before },
+          addIntoEditor,
+        });
+        expect(addIntoEditor).toHaveBeenCalledWith(expected);
+      }
+    );
+
+    it('send label is plain and the shortcut goes to the hint: Enter (C-52)', () => {
+      ({ wrapper } = mountReplyBox());
+      const panel = child(wrapper, 'ReplyBottomPanel');
+      expect(panel.props('sendButtonText')).toBe(
+        'KALO_CHAT_THREAD.COMPOSER.SEND'
+      );
+      expect(panel.props('sendButtonHint')).toBe('↵');
+    });
+
+    it('with Cmd/Ctrl+Enter configured the hint shows that shortcut (C-52)', () => {
+      ({ wrapper } = mountReplyBox({
+        uiSettings: { editor_message_key: 'cmd_enter' },
+      }));
+      expect(
+        child(wrapper, 'ReplyBottomPanel').props('sendButtonHint')
+      ).not.toBe('↵');
+    });
+
+    it('a private note uses the "save note" label', async () => {
+      ({ wrapper } = mountReplyBox());
+      child(wrapper, 'ReplyTopPanel').vm.$emit('setReplyMode', 'NOTE');
+      await flushPromises();
+      expect(child(wrapper, 'ReplyBottomPanel').props('sendButtonText')).toBe(
+        'KALO_CHAT_THREAD.COMPOSER.SEND_NOTE'
+      );
+    });
+  });
 });

@@ -173,3 +173,23 @@ describe('Editor suggestion menus', () => {
     await expect(events['$mod+Shift+KeyV'].action()).resolves.toBeUndefined();
   });
 });
+
+// Kalo UI phase 2 (task 1b-ii): the "Mẫu câu" button needs the character before the
+// cursor, because the "/" menu only opens after whitespace or at the start of a line.
+describe('Editor charBeforeCursor', () => {
+  let wrapper;
+  afterEach(() => wrapper?.unmount());
+
+  it.each([
+    ['', 'start', ''],
+    ['hello', 'start', ''],
+    ['hello', 'end', 'o'],
+  ])(
+    'text "%s" with the cursor at the %s gives "%s"',
+    (text, pos, expected) => {
+      wrapper = mountEditor({ modelValue: text });
+      wrapper.vm.focusEditorInputField(pos);
+      expect(wrapper.vm.charBeforeCursor()).toBe(expected);
+    }
+  );
+});

@@ -224,8 +224,8 @@ export default {
         return this.$t('CONVERSATION.FOOTER.MESSAGING_RESTRICTED');
       }
       return this.isPrivate
-        ? this.$t('CONVERSATION.FOOTER.PRIVATE_MSG_INPUT')
-        : this.$t('CONVERSATION.FOOTER.MSG_INPUT');
+        ? this.$t('KALO_CHAT_THREAD.COMPOSER.NOTE_PLACEHOLDER')
+        : this.$t('KALO_CHAT_THREAD.COMPOSER.PLACEHOLDER');
     },
     isMessageLengthReachingThreshold() {
       return this.message.length > this.maxLength - 50;
@@ -310,14 +310,15 @@ export default {
       );
     },
     replyButtonLabel() {
-      let sendMessageText = this.$t('CONVERSATION.REPLYBOX.SEND');
+      let sendMessageText = this.$t('KALO_CHAT_THREAD.COMPOSER.SEND');
       if (this.isPrivate) {
-        sendMessageText = this.$t('CONVERSATION.REPLYBOX.CREATE');
+        sendMessageText = this.$t('KALO_CHAT_THREAD.COMPOSER.SEND_NOTE');
       }
-      const keyLabel = this.isEditorHotKeyEnabled('cmd_enter')
-        ? `(${this.shortcutKey})`
-        : '(↵)';
-      return `${sendMessageText} ${keyLabel}`;
+      return sendMessageText;
+    },
+    // The send shortcut follows the profile setting (Enter or Cmd/Ctrl+Enter).
+    replyButtonHint() {
+      return this.isEditorHotKeyEnabled('cmd_enter') ? this.shortcutKey : '↵';
     },
     replyBoxClass() {
       return {
@@ -954,6 +955,11 @@ export default {
       this.updateEditorSelectionWith = content;
       this.onFocus();
     },
+    // The canned menu only opens when "/" follows whitespace or starts the line.
+    insertCannedTrigger() {
+      const before = this.messageEditor?.charBeforeCursor?.() ?? '';
+      this.addIntoEditor(before && !/\s/.test(before) ? ' /' : '/');
+    },
     executeCopilotAction(action, data) {
       this.copilot.execute(action, data);
     },
@@ -1265,7 +1271,16 @@ export default {
     :contact-id="currentChat.meta?.sender?.id"
     @select="message = $event"
   />
-  <div ref="replyEditor" class="reply-box" :class="replyBoxClass">
+  <div
+    ref="replyEditor"
+    class="relative mx-3 mb-3 border shadow-sm reply-box rounded-2xl transition-colors duration-150 motion-reduce:transition-none"
+    :class="[
+      replyBoxClass,
+      isPrivate
+        ? 'bg-n-solid-amber border-n-amber-7/50'
+        : 'bg-n-solid-1 border-n-weak focus-within:border-n-brand/40',
+    ]"
+  >
     <ReplyTopPanel
       :mode="replyType"
       :conversation-id="conversationId"
@@ -1403,13 +1418,6 @@ export default {
       </div>
     </Transition>
 
-    <KaloComposerActions
-      v-if="!isOnPrivateNote && !copilot.isActive.value"
-      :contact-id="currentChat.meta?.sender?.id"
-      :conversation-id="currentChat.id"
-      :is-reply-restricted="isReplyRestricted"
-    />
-
     <Transition
       mode="out-in"
       enter-active-class="transition-all duration-300 ease-out"
@@ -1445,6 +1453,7 @@ export default {
         :recording-audio-duration-text="recordingAudioDurationText"
         :recording-audio-state="recordingAudioState"
         :send-button-text="replyButtonLabel"
+        :send-button-hint="replyButtonHint"
         :show-audio-recorder="showAudioRecorder"
         :show-emoji-picker="showEmojiPicker"
         :show-file-upload="showFileUpload"
@@ -1460,7 +1469,17 @@ export default {
         @select-content-template="openContentTemplateModal"
         @toggle-insert-article="toggleInsertArticle"
         @toggle-quoted-reply="toggleQuotedReply"
-      />
+        @insert-canned="insertCannedTrigger"
+      >
+        <template #actions>
+          <KaloComposerActions
+            v-if="!isOnPrivateNote"
+            :contact-id="currentChat.meta?.sender?.id"
+            :conversation-id="currentChat.id"
+            :is-reply-restricted="isReplyRestricted"
+          />
+        </template>
+      </ReplyBottomPanel>
     </Transition>
 
     <WhatsappTemplates
@@ -1488,18 +1507,6 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-.send-button {
-  @apply mb-0;
-}
-
-.reply-box {
-  @apply relative mb-2 mx-2 border border-n-weak rounded-xl bg-n-solid-1;
-
-  &.is-private {
-    @apply bg-n-solid-amber dark:border-n-amber-3/10 border-n-amber-12/5;
-  }
-}
-
 .send-button {
   @apply mb-0;
 }
