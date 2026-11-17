@@ -1,4 +1,5 @@
-const PRODUCT_NAME = /chatwoot/gi;
+// \b keeps code identifiers such as window.chatwootSettings intact.
+const PRODUCT_NAME = /\bchatwoot\b/gi;
 // Captured so String#split keeps them at odd indexes: placeholders, linked keys, URLs.
 const PROTECTED = /(\{[^}]*\}|@(?:\.\w+)?:[\w.]+|https?:\/\/\S+)/;
 

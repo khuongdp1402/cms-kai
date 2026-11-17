@@ -56,6 +56,16 @@ describe('installationBrandName', () => {
     expect(installationBrandName()).toBe('KTech');
   });
 
+  it('keeps code identifiers that contain the product name', () => {
+    const out = brandMessages(
+      { SNIPPET: 'window.chatwootSettings = {options}; chatwootSDK.run()' },
+      'Kalo'
+    );
+    expect(out.SNIPPET).toBe(
+      'window.chatwootSettings = {options}; chatwootSDK.run()'
+    );
+  });
+
   it('returns undefined without globalConfig', () => {
     expect(installationBrandName()).toBeUndefined();
   });
