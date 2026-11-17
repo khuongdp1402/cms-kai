@@ -23,7 +23,11 @@ const conversations = [
   { id: 3, inbox_id: 3, meta: { sender: { id: 9 } } },
 ];
 
-const mountPanel = ({ list = conversations, isFetching = false, props = {} } = {}) => {
+const mountPanel = ({
+  list = conversations,
+  isFetching = false,
+  props = {},
+} = {}) => {
   const store = createStore({
     getters: {
       getSelectedChat: () => ({ id: 2 }),
@@ -90,9 +94,7 @@ describe('ContactConversations', () => {
 
   it('clicking a card navigates to that conversation', async () => {
     const wrapper = mountPanel();
-    await wrapper
-      .findAllComponents(ConversationCard)[0]
-      .vm.$emit('click', {});
+    await wrapper.findAllComponents(ConversationCard)[0].vm.$emit('click', {});
     expect(mockPush).toHaveBeenCalledWith({
       path: '/app/accounts/1/conversations/1',
     });

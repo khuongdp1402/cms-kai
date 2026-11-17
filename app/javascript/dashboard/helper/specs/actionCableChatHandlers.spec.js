@@ -88,9 +88,9 @@ describe('ActionCableConnector chat handlers', () => {
 
     it('plays the new message sound / favicon dot through the audio helper', () => {
       cable.onMessageCreated(data);
-      expect(DashboardAudioNotificationHelper.onNewMessage).toHaveBeenCalledWith(
-        data
-      );
+      expect(
+        DashboardAudioNotificationHelper.onNewMessage
+      ).toHaveBeenCalledWith(data);
     });
   });
 
@@ -165,7 +165,10 @@ describe('ActionCableConnector chat handlers', () => {
   });
 
   describe('typing indicator (C-40, C-97)', () => {
-    const payload = { conversation: { id: 12 }, user: { id: 5, name: 'Khach' } };
+    const payload = {
+      conversation: { id: 12 },
+      user: { id: 5, name: 'Khach' },
+    };
 
     it('typing_on creates the typing status', () => {
       cable.onTypingOn(payload);
@@ -177,10 +180,13 @@ describe('ActionCableConnector chat handlers', () => {
 
     it('typing_off destroys the typing status', () => {
       cable.onTypingOff(payload);
-      expect(dispatch).toHaveBeenCalledWith('conversationTypingStatus/destroy', {
-        conversationId: 12,
-        user: payload.user,
-      });
+      expect(dispatch).toHaveBeenCalledWith(
+        'conversationTypingStatus/destroy',
+        {
+          conversationId: 12,
+          user: payload.user,
+        }
+      );
     });
 
     it('typing turns itself off after 30 seconds without a typing_off', () => {
@@ -189,10 +195,13 @@ describe('ActionCableConnector chat handlers', () => {
       vi.advanceTimersByTime(29999);
       expect(dispatch).not.toHaveBeenCalled();
       vi.advanceTimersByTime(1);
-      expect(dispatch).toHaveBeenCalledWith('conversationTypingStatus/destroy', {
-        conversationId: 12,
-        user: payload.user,
-      });
+      expect(dispatch).toHaveBeenCalledWith(
+        'conversationTypingStatus/destroy',
+        {
+          conversationId: 12,
+          user: payload.user,
+        }
+      );
     });
 
     it('a second typing_on restarts the 30 second timer', () => {
@@ -221,7 +230,9 @@ describe('ActionCableConnector chat handlers', () => {
   describe('contacts, presence, notifications', () => {
     it('contact.updated / contact.deleted reach the contacts store', () => {
       cable.onContactUpdate({ id: 3 });
-      expect(dispatch).toHaveBeenCalledWith('contacts/updateContact', { id: 3 });
+      expect(dispatch).toHaveBeenCalledWith('contacts/updateContact', {
+        id: 3,
+      });
       cable.onContactDelete({ id: 3 });
       expect(dispatch).toHaveBeenCalledWith(
         'contacts/deleteContactThroughConversations',
@@ -236,7 +247,10 @@ describe('ActionCableConnector chat handlers', () => {
         'contacts/updatePresence',
         data.contacts
       );
-      expect(dispatch).toHaveBeenCalledWith('agents/updatePresence', data.users);
+      expect(dispatch).toHaveBeenCalledWith(
+        'agents/updatePresence',
+        data.users
+      );
       expect(dispatch).toHaveBeenCalledWith(
         'setCurrentUserAvailability',
         data.users
@@ -249,13 +263,19 @@ describe('ActionCableConnector chat handlers', () => {
         id: 1,
       });
       cable.onNotificationUpdated({ id: 1 });
-      expect(dispatch).toHaveBeenCalledWith('notifications/updateNotification', {
-        id: 1,
-      });
+      expect(dispatch).toHaveBeenCalledWith(
+        'notifications/updateNotification',
+        {
+          id: 1,
+        }
+      );
       cable.onNotificationDeleted({ id: 1 });
-      expect(dispatch).toHaveBeenCalledWith('notifications/deleteNotification', {
-        id: 1,
-      });
+      expect(dispatch).toHaveBeenCalledWith(
+        'notifications/deleteNotification',
+        {
+          id: 1,
+        }
+      );
     });
   });
 

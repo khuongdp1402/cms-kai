@@ -18,7 +18,10 @@ vi.mock('dashboard/composables/useUISettings', () => ({
 const setChatStatusFilter = vi.fn();
 const setChatSortFilter = vi.fn();
 
-const mountFilter = ({ status = 'open', sort = 'last_activity_at_desc' } = {}) =>
+const mountFilter = ({
+  status = 'open',
+  sort = 'last_activity_at_desc',
+} = {}) =>
   mount(ConversationBasicFilter, {
     props: { isOnExpandedLayout: false },
     global: {

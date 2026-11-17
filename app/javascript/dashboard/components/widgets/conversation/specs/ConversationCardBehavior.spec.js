@@ -70,9 +70,11 @@ describe('ConversationCard behavior', () => {
 
   it('shows the unread badge with the count only when unread_count > 0', () => {
     expect(
-      mountCard({ chat: { unread_count: 0 } }).findComponent({
-        name: 'UnreadBadge',
-      }).exists()
+      mountCard({ chat: { unread_count: 0 } })
+        .findComponent({
+          name: 'UnreadBadge',
+        })
+        .exists()
     ).toBe(false);
     const wrapper = mountCard({ chat: { unread_count: 3 } });
     const badge = wrapper.findComponent({ name: 'UnreadBadge' });
@@ -125,9 +127,13 @@ describe('ConversationCard behavior', () => {
     it('is hidden until the avatar is hovered', async () => {
       const wrapper = mountCard();
       expect(wrapper.find('input[type="checkbox"]').exists()).toBe(false);
-      await wrapper.get('div.relative:not(.conversation)').trigger('mouseenter');
+      await wrapper
+        .get('div.relative:not(.conversation)')
+        .trigger('mouseenter');
       expect(wrapper.find('input[type="checkbox"]').exists()).toBe(true);
-      await wrapper.get('div.relative:not(.conversation)').trigger('mouseleave');
+      await wrapper
+        .get('div.relative:not(.conversation)')
+        .trigger('mouseleave');
       expect(wrapper.find('input[type="checkbox"]').exists()).toBe(false);
     });
 
@@ -140,13 +146,17 @@ describe('ConversationCard behavior', () => {
 
     it('does not appear on hover when hideThumbnail is set', async () => {
       const wrapper = mountCard({ hideThumbnail: true });
-      await wrapper.get('div.relative:not(.conversation)').trigger('mouseenter');
+      await wrapper
+        .get('div.relative:not(.conversation)')
+        .trigger('mouseenter');
       expect(wrapper.find('input[type="checkbox"]').exists()).toBe(false);
     });
 
     it('ticking emits selectConversation(chatId, inboxId)', async () => {
       const wrapper = mountCard();
-      await wrapper.get('div.relative:not(.conversation)').trigger('mouseenter');
+      await wrapper
+        .get('div.relative:not(.conversation)')
+        .trigger('mouseenter');
       const input = wrapper.find('input[type="checkbox"]');
       input.element.checked = true;
       await input.trigger('change');

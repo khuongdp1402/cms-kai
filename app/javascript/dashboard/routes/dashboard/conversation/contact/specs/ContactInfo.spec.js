@@ -126,31 +126,42 @@ describe('ContactInfo', () => {
       const wrapper = mountInfo();
       rowByTitle(wrapper, 'Email Address').vm.$emit('update', 'new@x.vn');
       await flushPromises();
-      expect(actions['contacts/update']).toHaveBeenCalledWith(expect.anything(), {
-        id: 5,
-        email: 'new@x.vn',
-      });
-      expect(actions['contacts/fetchContactableInbox']).toHaveBeenCalledTimes(2);
+      expect(actions['contacts/update']).toHaveBeenCalledWith(
+        expect.anything(),
+        {
+          id: 5,
+          email: 'new@x.vn',
+        }
+      );
+      expect(actions['contacts/fetchContactableInbox']).toHaveBeenCalledTimes(
+        2
+      );
     });
 
     it('phone row update saves phone_number', async () => {
       const wrapper = mountInfo();
       rowByTitle(wrapper, 'Phone number').vm.$emit('update', '+84900000000');
       await flushPromises();
-      expect(actions['contacts/update']).toHaveBeenCalledWith(expect.anything(), {
-        id: 5,
-        phone_number: '+84900000000',
-      });
+      expect(actions['contacts/update']).toHaveBeenCalledWith(
+        expect.anything(),
+        {
+          id: 5,
+          phone_number: '+84900000000',
+        }
+      );
     });
 
     it('company row update keeps the other additional attributes', async () => {
       const wrapper = mountInfo();
       rowByTitle(wrapper, 'Company').vm.$emit('update', 'Shop B');
       await flushPromises();
-      expect(actions['contacts/update']).toHaveBeenCalledWith(expect.anything(), {
-        id: 5,
-        additional_attributes: { company_name: 'Shop B', description: 'VIP' },
-      });
+      expect(actions['contacts/update']).toHaveBeenCalledWith(
+        expect.anything(),
+        {
+          id: 5,
+          additional_attributes: { company_name: 'Shop B', description: 'VIP' },
+        }
+      );
     });
 
     it('clicking the name opens an inline input; saving a new name dispatches contacts/update', async () => {
@@ -161,10 +172,13 @@ describe('ContactInfo', () => {
       await input.vm.$emit('update:modelValue', '  Jane Smith ');
       await input.vm.$emit('enterPress');
       await flushPromises();
-      expect(actions['contacts/update']).toHaveBeenCalledWith(expect.anything(), {
-        id: 5,
-        name: 'Jane Smith',
-      });
+      expect(actions['contacts/update']).toHaveBeenCalledWith(
+        expect.anything(),
+        {
+          id: 5,
+          name: 'Jane Smith',
+        }
+      );
     });
 
     it('does not save when the name is unchanged or blank', async () => {

@@ -25,7 +25,11 @@ const mountBase = () =>
     slots: { default: '<span class="body">body</span>' },
     global: {
       stubs: { MessageMeta: { template: '<i class="meta-stub" />' } },
-      directives: { 'dompurify-html': (el, { value }) => (el.innerHTML = value) },
+      directives: {
+        'dompurify-html': (el, { value }) => {
+          el.innerHTML = value;
+        },
+      },
     },
   });
 

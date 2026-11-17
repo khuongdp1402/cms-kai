@@ -222,10 +222,13 @@ describe('MessagesView', () => {
     await wrapper
       .findComponent(MessageList)
       .vm.$emit('retry', { id: 102, conversationId: 12, contentType: 'text' });
-    expect(actions.sendMessageWithData).toHaveBeenCalledWith(expect.anything(), {
-      id: 102,
-      conversation_id: 12,
-      content_type: 'text',
-    });
+    expect(actions.sendMessageWithData).toHaveBeenCalledWith(
+      expect.anything(),
+      {
+        id: 102,
+        conversation_id: 12,
+        content_type: 'text',
+      }
+    );
   });
 });

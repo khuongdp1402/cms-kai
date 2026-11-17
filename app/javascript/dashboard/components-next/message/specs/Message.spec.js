@@ -71,7 +71,9 @@ const mountMessage = (props = {}) =>
 // provideMessageContext stores the context under a module-private Symbol; find it by shape.
 const ctxOf = wrapper => {
   const { provides } = wrapper.vm.$;
-  const key = Object.getOwnPropertySymbols(provides).find(k => provides[k]?.variant);
+  const key = Object.getOwnPropertySymbols(provides).find(
+    k => provides[k]?.variant
+  );
   return provides[key];
 };
 const variantOf = wrapper => ctxOf(wrapper).variant.value;
@@ -192,7 +194,10 @@ describe('Message bubble selection per channel/content type', () => {
   });
 
   it('sticker content type uses the sticker bubble', () => {
-    const wrapper = mountMessage({ content: '[sticker]', contentType: 'sticker' });
+    const wrapper = mountMessage({
+      content: '[sticker]',
+      contentType: 'sticker',
+    });
     expect(wrapper.findComponent(StickerBubble).exists()).toBe(true);
   });
 
@@ -201,10 +206,13 @@ describe('Message bubble selection per channel/content type', () => {
     expect(wrapper.findComponent(CSATBubble).exists()).toBe(true);
   });
 
-  it.each(['input_select', 'form'])('%s content type uses the form bubble', type => {
-    const wrapper = mountMessage({ contentType: type });
-    expect(wrapper.findComponent(FormBubble).exists()).toBe(true);
-  });
+  it.each(['input_select', 'form'])(
+    '%s content type uses the form bubble',
+    type => {
+      const wrapper = mountMessage({ contentType: type });
+      expect(wrapper.findComponent(FormBubble).exists()).toBe(true);
+    }
+  );
 
   it('dyte call messages use the Dyte bubble', () => {
     const wrapper = mountMessage({ contentAttributes: { type: 'dyte' } });

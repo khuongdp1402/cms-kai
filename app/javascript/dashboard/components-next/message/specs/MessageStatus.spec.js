@@ -42,15 +42,14 @@ describe('MessageStatus', () => {
   });
 
   it('progress shows a clock icon', () => {
-    expect(
-      mountStatus('progress').findComponent(Icon).props('icon')
-    ).toMatch(/^i-lucide-clock-/);
+    expect(mountStatus('progress').findComponent(Icon).props('icon')).toMatch(
+      /^i-lucide-clock-/
+    );
   });
 });
 
 describe('MessageError', () => {
-  const mountError = () =>
-    mount(MessageError, { props: { error: 'Boom' } });
+  const mountError = () => mount(MessageError, { props: { error: 'Boom' } });
 
   beforeEach(() => {
     mockContext.status.value = 'failed';
