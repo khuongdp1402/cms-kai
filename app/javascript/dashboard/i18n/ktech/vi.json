@@ -101,25 +101,82 @@
     }
   },
   "AGENT_MGMT": {
+    "ADD": {
+      "API": {
+        "SUCCESS_MESSAGE": "Đã thêm nhân viên"
+      },
+      "FORM": {
+        "AGENT_TYPE": {
+          "ERROR": "Bạn cần chọn vai trò",
+          "LABEL": "Vai trò"
+        },
+        "NAME": {
+          "LABEL": "Tên nhân viên",
+          "PLACEHOLDER": "Nhập tên nhân viên"
+        },
+        "SUBMIT": "Thêm nhân viên"
+      },
+      "TITLE": "Thêm nhân viên"
+    },
+    "AGENT_TYPES": {
+      "AGENT": "Nhân viên"
+    },
     "COUNT": "{n} nhân viên | {n} nhân viên",
+    "DELETE": {
+      "API": {
+        "SUCCESS_MESSAGE": "Đã xóa nhân viên"
+      }
+    },
     "DESCRIPTION": "Nhân viên là người trong đội của bạn có thể xem và trả lời tin nhắn khách. Danh sách dưới đây là tất cả nhân viên.",
     "EDIT": {
+      "API": {
+        "SUCCESS_MESSAGE": "Đã cập nhật nhân viên"
+      },
       "FORM": {
         "AGENT_AVAILABILITY": {
           "ERROR": "Cần chọn trạng thái hoạt động",
           "PLACEHOLDER": "Chọn trạng thái hoạt động"
-        }
-      }
+        },
+        "AGENT_TYPE": {
+          "ERROR": "Bạn cần chọn vai trò",
+          "LABEL": "Vai trò"
+        },
+        "NAME": {
+          "LABEL": "Tên nhân viên",
+          "PLACEHOLDER": "Nhập tên nhân viên"
+        },
+        "SUBMIT": "Lưu"
+      },
+      "PASSWORD_RESET": {
+        "ADMIN_SUCCESS_MESSAGE": "Đã gửi email hướng dẫn đặt lại mật khẩu cho nhân viên",
+        "SUCCESS_MESSAGE": "Đã đặt lại mật khẩu cho nhân viên"
+      },
+      "TITLE": "Sửa nhân viên"
     },
+    "HEADER": "Nhân viên",
+    "HEADER_BTN_TXT": "Thêm nhân viên",
     "LEARN_MORE": "Tìm hiểu về vai trò",
     "LIST": {
       "AVAILABLE_CUSTOM_ROLE": "Quyền của vai trò tùy chỉnh",
-      "EMAIL": "EMAIL"
+      "DESC": "Bạn có thể thêm hoặc bớt nhân viên của shop.",
+      "EMAIL": "EMAIL",
+      "TITLE": "Quản lý nhân viên của shop"
+    },
+    "LOADING": "Đang tải danh sách nhân viên",
+    "MULTI_SELECTOR": {
+      "SEARCH": {
+        "NO_RESULTS": {
+          "AGENT": "Không tìm thấy nhân viên"
+        }
+      }
     },
     "NO_RESULTS": "Không có nhân viên nào khớp"
   },
   "AGENT_REPORTS": {
-    "DESCRIPTION": "Theo dõi hiệu quả làm việc của nhân viên qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào tên nhân viên để xem chi tiết."
+    "DESCRIPTION": "Theo dõi hiệu quả làm việc của nhân viên qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào tên nhân viên để xem chi tiết.",
+    "DOWNLOAD_AGENT_REPORTS": "Tải báo cáo nhân viên",
+    "FILTER_DROPDOWN_LABEL": "Chọn nhân viên",
+    "HEADER": "Tổng quan nhân viên"
   },
   "APP_GLOBAL": {
     "ACCOUNT_SUSPENDED": {
@@ -148,6 +205,9 @@
         "ENABLE_REGEX": {
           "LABEL": "Bật kiểm tra theo mẫu"
         },
+        "KEY": {
+          "ERROR": "Cần có khóa"
+        },
         "REGEX_CUE": {
           "LABEL": "Gợi ý nhập",
           "PLACEHOLDER": "Nhập gợi ý cho mẫu kiểm tra (không bắt buộc)"
@@ -166,6 +226,11 @@
       "RESOLUTION": "Khi đóng hội thoại"
     },
     "COUNT": "{n} thuộc tính | {n} thuộc tính",
+    "EDIT": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa cập nhật được thuộc tính tùy chỉnh. Bạn thử lại nhé"
+      }
+    },
     "LEARN_MORE": "Tìm hiểu về thuộc tính",
     "LIST": {
       "ENABLE_REGEX": {
@@ -208,7 +273,18 @@
       "SEND_EMAIL_TO_TEAM": "Gửi email cho nhóm",
       "SEND_EMAIL_TRANSCRIPT": "Gửi bản ghi hội thoại qua email",
       "SEND_MESSAGE": "Gửi tin nhắn",
-      "SEND_WEBHOOK_EVENT": "Gửi sự kiện Webhook"
+      "SEND_WEBHOOK_EVENT": "Gửi sự kiện Webhook",
+      "SNOOZE_CONVERSATION": "Hoãn hội thoại"
+    },
+    "ADD": {
+      "FORM": {
+        "DESC": {
+          "ERROR": "Cần có mô tả"
+        },
+        "EVENT": {
+          "ERROR": "Cần chọn sự kiện"
+        }
+      }
     },
     "ATTRIBUTES": {
       "ASSIGNEE_NAME": "Người được giao",
@@ -220,7 +296,18 @@
       "REFERER_LINK": "Đường dẫn giới thiệu"
     },
     "COUNT": "{n} quy tắc tự động | {n} quy tắc tự động",
+    "DELETE": {
+      "API": {
+        "SUCCESS_MESSAGE": "Đã xóa luật tự động"
+      }
+    },
     "DESCRIPTION": "Quy trình tự động hóa giúp thay thế và tối ưu các thao tác thủ công thường nhật, như gắn nhãn và giao cuộc trò chuyện cho nhân viên phù hợp nhất. Nhờ đó đội ngũ có thể tập trung vào thế mạnh của mình và tiết kiệm thời gian.",
+    "EDIT": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa cập nhật được luật tự động. Bạn thử lại sau nhé",
+        "SUCCESS_MESSAGE": "Đã cập nhật luật tự động"
+      }
+    },
     "ERRORS": {
       "ACTION_PARAMETERS_REQUIRED": "Tham số hành động là bắt buộc",
       "ATLEAST_ONE_ACTION_REQUIRED": "Cần ít nhất một hành động",
@@ -242,7 +329,10 @@
       "OUTGOING": "Tin nhắn đi"
     },
     "NO_RESULTS": "Không tìm thấy quy tắc tự động nào phù hợp với tìm kiếm",
-    "SEARCH_PLACEHOLDER": "Tìm kiếm quy tắc tự động..."
+    "SEARCH_PLACEHOLDER": "Tìm kiếm quy tắc tự động...",
+    "TOGGLE": {
+      "DEACTIVATION_TITLE": "Tắt luật tự động"
+    }
   },
   "BOT_REPORTS": {
     "HEADER": "Báo cáo bot",
@@ -293,6 +383,7 @@
     },
     "UNASSIGN_AGENT_CONFIRMATION_LABEL": "Bạn có chắc muốn hủy giao {n} cuộc trò chuyện? | Bạn có chắc muốn hủy giao {n} cuộc trò chuyện?",
     "UPDATE": {
+      "SNOOZE_UNTIL": "Hoãn",
       "UPDATE_FAILED": "Không cập nhật được cuộc trò chuyện, vui lòng thử lại."
     }
   },
@@ -415,7 +506,8 @@
           "ERROR": "Cần nhập mã ngắn.",
           "LABEL": "Mã ngắn",
           "PLACEHOLDER": "Nhập mã ngắn."
-        }
+        },
+        "SUBMIT": "Lưu"
       },
       "TITLE": "Thêm câu trả lời mẫu"
     },
@@ -444,7 +536,8 @@
           "ERROR": "Cần nhập mã ngắn.",
           "LABEL": "Mã ngắn",
           "PLACEHOLDER": "Nhập mã ngắn."
-        }
+        },
+        "SUBMIT": "Lưu"
       },
       "TITLE": "Sửa câu trả lời mẫu"
     },
@@ -498,6 +591,7 @@
       }
     },
     "FAILED_TO_SEND": "Gửi thất bại",
+    "MESSAGE_READ": "Đã đọc",
     "SENDING": "Đang gửi",
     "SORT_ORDER_ITEMS": {
       "created_at_asc": {
@@ -531,7 +625,8 @@
         "TEXT": "Chờ phản hồi: ngắn nhất trước"
       }
     },
-    "SORT_TOOLTIP_LABEL": "Sắp xếp cuộc trò chuyện"
+    "SORT_TOOLTIP_LABEL": "Sắp xếp cuộc trò chuyện",
+    "UNATTENDED_HEADING": "Chưa trả lời"
   },
   "COMBOBOX": {
     "EMPTY_SEARCH_RESULTS": "Không có kết quả cho `{searchTerm}`",
@@ -547,6 +642,7 @@
       "CHANGE_APPEARANCE": "Thay đổi giao diện",
       "DARK_MODE": "Tối",
       "LIGHT_MODE": "Sáng",
+      "SNOOZE_CONVERSATION": "Hoãn hội thoại",
       "SNOOZE_NOTIFICATION": "Tạm ẩn thông báo",
       "SYSTEM_MODE": "Theo hệ thống",
       "UNTIL_CUSTOM_TIME": "Tùy chỉnh...",
@@ -557,6 +653,7 @@
       "APPEARANCE": "Giao diện",
       "BULK_ACTIONS": "Thao tác hàng loạt",
       "CHANGE_PRIORITY": "Đổi mức ưu tiên",
+      "SNOOZE_CONVERSATION": "Hoãn hội thoại",
       "SNOOZE_NOTIFICATION": "Tạm ẩn thông báo"
     },
     "SNOOZE_PLACEHOLDER": "Nhập thời gian ví dụ: ngày mai, 2 giờ, thứ sáu tới, 15/01..."
@@ -853,6 +950,7 @@
         "PLACEHOLDER": "Nhập tên thành phố"
       },
       "COUNTRY": {
+        "PLACEHOLDER": "Nhập tên quốc gia",
         "SELECT_COUNTRY": "Chọn quốc gia"
       },
       "PHONE_NUMBER": {
@@ -891,6 +989,9 @@
     "WHATSAPP_CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cho phép gọi tới khách. Hãy thử lại khi khách đồng ý."
   },
   "CONTENT_TEMPLATES": {
+    "FORM": {
+      "BACK_BUTTON": "Trở về"
+    },
     "MODAL": {
       "SUBTITLE": "Chọn mẫu tin Twilio muốn gửi",
       "TEMPLATE_SELECTED_SUBTITLE": "Cài đặt mẫu tin: {templateName}",
@@ -961,7 +1062,10 @@
       "MARK_AS_READ": "Đánh dấu đã đọc",
       "NO_LABELS_FOUND": "Không có nhãn nào",
       "OPEN_IN_NEW_TAB": "Mở trong tab mới",
-      "SEARCH_LABELS": "Tìm nhãn"
+      "SEARCH_LABELS": "Tìm nhãn",
+      "SNOOZE": {
+        "TITLE": "Hoãn"
+      }
     },
     "CONTEXT_MENU": {
       "COPY_PERMALINK": "Sao chép liên kết tin nhắn",
@@ -991,6 +1095,9 @@
       },
       "TRANSLATE": "Dịch"
     },
+    "CUSTOM_SNOOZE": {
+      "APPLY": "Hoãn"
+    },
     "DELETE_CONVERSATION": {
       "DESCRIPTION": "Bạn có chắc muốn xóa cuộc trò chuyện này?",
       "TITLE": "Xóa cuộc trò chuyện #{conversationId}"
@@ -1004,7 +1111,8 @@
     "FOOTER": {
       "MESSAGING_RESTRICTED": "Bạn không thể trả lời cuộc trò chuyện này",
       "MESSAGING_RESTRICTED_API": "Đã quá khung thời gian trả lời nên bạn chỉ có thể trả lời bằng tin nhắn mẫu",
-      "MESSAGING_RESTRICTED_WHATSAPP": "Đã quá khung 24 giờ nên bạn chỉ có thể trả lời bằng tin nhắn mẫu"
+      "MESSAGING_RESTRICTED_WHATSAPP": "Đã quá khung 24 giờ nên bạn chỉ có thể trả lời bằng tin nhắn mẫu",
+      "PRIVATE_MSG_INPUT": "Shift + Enter để xuống dòng. Ghi chú này chỉ nhân viên thấy"
     },
     "HEADER": {
       "COPY_ID_SUCCESS": "Đã sao chép mã cuộc trò chuyện",
@@ -1023,6 +1131,9 @@
       "WHATSAPP_CALL_PERMISSION_PENDING": "Yêu cầu cho phép gọi vừa được gửi. Hãy thử lại khi khách đồng ý.",
       "WHATSAPP_CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cho phép gọi tới khách. Hãy thử lại khi khách đồng ý."
     },
+    "MENTION": {
+      "AGENTS": "Nhân viên"
+    },
     "NATIVE_APP": "Ứng dụng gốc",
     "NATIVE_APP_ADVISORY": "Tin nhắn này được gửi từ ứng dụng gốc. Hãy trả lời từ hệ thống để giữ khung thời gian nhắn tin.",
     "OLD_INSTAGRAM_INBOX_REPLY_BANNER": "Tài khoản Instagram này đã chuyển sang hộp thư Instagram mới. Tin nhắn mới sẽ hiển thị ở đó và bạn không thể gửi tin từ cuộc trò chuyện này nữa.",
@@ -1039,10 +1150,12 @@
       "DISMISS_REPLY": "Bỏ trả lời",
       "EMAIL_HEAD": {
         "BCC": {
-          "LABEL": "Bcc"
+          "LABEL": "Bcc",
+          "PLACEHOLDER": "Các email, cách nhau bởi dấu phẩy"
         },
         "CC": {
-          "LABEL": "Cc"
+          "LABEL": "Cc",
+          "PLACEHOLDER": "Các email, cách nhau bởi dấu phẩy"
         },
         "TO": "ĐẾN"
       },
@@ -1060,6 +1173,9 @@
       }
     },
     "REPLY_MESSAGE_NOT_FOUND": "Tin nhắn không còn",
+    "RESOLVE_DROPDOWN": {
+      "SNOOZE_UNTIL": "Hoãn"
+    },
     "RESPONSE": "Phản hồi",
     "SHARED_ATTACHMENT": {
       "CONTACT": "{sender} đã chia sẻ một liên hệ",
@@ -1132,6 +1248,7 @@
   },
   "CONVERSATION_SIDEBAR": {
     "ACCORDION": {
+      "CONVERSATION_ACTIONS": "Thao tác hội thoại",
       "LINEAR_ISSUES": "Issue Linear liên kết",
       "MACROS": "Macro",
       "SHARED_FILES": "Tệp đính kèm",
@@ -1232,6 +1349,9 @@
   "CSAT_REPORTS": {
     "DOWNLOAD_FAILED": "Chưa tải được báo cáo đánh giá",
     "FILTERS": {
+      "AGENTS": {
+        "LABEL": "Nhân viên"
+      },
       "CLEAR_ALL": "Xóa tất cả",
       "INPUT_PLACEHOLDER": {
         "INBOXES": "Tìm kênh",
@@ -1264,6 +1384,7 @@
     },
     "TABLE": {
       "HEADER": {
+        "AGENT_NAME": "Nhân viên",
         "CUSTOMER": "Khách",
         "HANDLED_BY": "Người xử lý",
         "RESPONSE": "Phản hồi"
@@ -1276,6 +1397,13 @@
     "SHOW_MORE": "Xem tất cả thuộc tính",
     "VALIDATIONS": {
       "INVALID_INPUT": "Giá trị không hợp lệ"
+    }
+  },
+  "CUSTOM_ROLE": {
+    "FORM": {
+      "DESCRIPTION": {
+        "ERROR": "Cần có mô tả."
+      }
     }
   },
   "DATA_IMPORTS": {
@@ -1478,6 +1606,7 @@
       "SUCCESS": "Tài khoản đã được lên lịch xóa",
       "TITLE": "Xóa tài khoản của bạn"
     },
+    "BACK": "Trở về",
     "DISMISS": "Bỏ qua",
     "FORM": {
       "AUDIO_TRANSCRIPTION": {
@@ -1646,6 +1775,7 @@
       }
     },
     "ARTICLE_SEARCH": {
+      "BACK": "Trở về",
       "BACK_RESULTS": "Quay lại kết quả",
       "IFRAME_ERROR": "Đường dẫn trống hoặc không hợp lệ, không hiển thị được nội dung.",
       "INSERT_ARTICLE": "Chèn liên kết",
@@ -1885,6 +2015,9 @@
     },
     "PORTAL": {
       "ADD": {
+        "CREATE_FLOW_PAGE": {
+          "BACK_BUTTON": "Trở về"
+        },
         "DOMAIN": {
           "HELP_TEXT": "Chỉ thêm nếu bạn muốn dùng tên miền riêng cho trang trợ giúp. Ví dụ: {exampleURL}"
         },
@@ -2083,6 +2216,9 @@
     }
   },
   "INBOX": {
+    "ACTION_HEADER": {
+      "BACK": "Trở về"
+    },
     "ALERTS": {
       "DELETE": "Đã xóa thông báo",
       "DELETE_ALL": "Đã xóa tất cả thông báo",
@@ -2095,7 +2231,8 @@
     "DISPLAY_MENU": {
       "DISPLAY": "Hiển thị:",
       "DISPLAY_OPTIONS": {
-        "CONVERSATION_ID": "Mã cuộc trò chuyện"
+        "CONVERSATION_ID": "Mã cuộc trò chuyện",
+        "READ": "Đã đọc"
       },
       "SORT": "Sắp xếp",
       "SORT_OPTIONS": {
@@ -2109,7 +2246,8 @@
     "MENU_ITEM": {
       "DELETE_ALL": "Xóa tất cả",
       "DELETE_ALL_READ": "Xóa tất cả đã đọc",
-      "MARK_AS_READ": "Đánh dấu đã đọc"
+      "MARK_AS_READ": "Đánh dấu đã đọc",
+      "SNOOZE": "Hoãn"
     },
     "REAUTHORIZE": {
       "BUTTON_TEXT": "Kết nối lại WhatsApp",
@@ -2279,6 +2417,9 @@
     },
     "ADD": {
       "AGENTS": {
+        "DESC": "Chọn nhân viên phụ trách kênh này. Chỉ những nhân viên được chọn mới xem và trả lời được tin nhắn của kênh. <br> <b>Lưu ý:</b> nếu bạn là quản trị viên và muốn xem mọi kênh, hãy thêm chính mình vào từng kênh bạn tạo.",
+        "PICK_AGENTS": "Chọn nhân viên cho kênh",
+        "TITLE": "Nhân viên",
         "VALIDATION_ERROR": "Hãy thêm ít nhất một nhân viên vào kênh mới"
       },
       "API_CHANNEL": {
@@ -2400,6 +2541,9 @@
       },
       "SMS": {
         "BANDWIDTH": {
+          "API": {
+            "ERROR_MESSAGE": "Chưa xác thực được thông tin Bandwidth. Bạn thử lại nhé"
+          },
           "API_KEY": {
             "PLACEHOLDER": "Nhập khóa API Bandwidth"
           },
@@ -2410,6 +2554,11 @@
         "PROVIDERS": {
           "BANDWIDTH": "Bandwidth",
           "TWILIO": "Twilio"
+        }
+      },
+      "TELEGRAM_CHANNEL": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa lưu được kênh Telegram"
         }
       },
       "TIKTOK": {
@@ -2569,6 +2718,10 @@
         "DESC": "Kết nối Zalo cá nhân để gửi và nhận tin nhắn ngay trong ứng dụng."
       }
     },
+    "AGENTS": {
+      "ADD_AGENTS": "Đang thêm nhân viên vào kênh...",
+      "BUTTON_TEXT": "Thêm nhân viên"
+    },
     "ASSIGNMENT": {
       "ASSIGNMENT_METHOD_LABEL": "Phương thức phân công",
       "ASSIGNMENT_ORDER_LABEL": "Thứ tự phân công",
@@ -2635,6 +2788,10 @@
     "COMPLETE_REGISTRATION": "Hoàn tất đăng ký",
     "COUNT": "{n} kênh | {n} kênh",
     "CREATE_FLOW": {
+      "AGENT": {
+        "BODY": "Chọn nhân viên phụ trách kênh vừa tạo.",
+        "TITLE": "Thêm nhân viên"
+      },
       "CHANNEL": {
         "BODY": "Chọn nhà cung cấp bạn muốn kết nối."
       },
@@ -2804,6 +2961,7 @@
         "TITLE": "Xác thực danh tính",
         "VIEW_DOCS": "Xem hướng dẫn"
       },
+      "INBOX_AGENTS": "Nhân viên",
       "LOCK_TO_SINGLE_CONVERSATION": "Cách tạo hội thoại",
       "LOCK_TO_SINGLE_CONVERSATION_SUB_TEXT": "Chọn cách tạo hội thoại cho khách đã nhắn trước đó",
       "SENDER_NAME_SECTION": "Hiện tên nhân viên trong email",
@@ -2836,6 +2994,7 @@
           "ACCESS_TOKEN_PLACEHOLDER": "Dán mã truy cập",
           "ACTION_REQUIRED_DESCRIPTION": "Kênh kết nối bằng ứng dụng Meta riêng không bị ảnh hưởng bởi hạn chế của ứng dụng dùng chung. Các bước dưới đây cập nhật kết nối WhatsApp API mà không tạo kênh mới.",
           "ACTION_REQUIRED_TITLE": "Kết nối lại bằng ứng dụng Meta của bạn",
+          "BACK": "Trở về",
           "CONTINUE": "Tiếp tục",
           "DISPLAY_PHONE_NUMBER": "Số hiển thị",
           "DISPLAY_PHONE_NUMBER_HELP": "Số WhatsApp khách nhìn thấy. Không đổi được khi chuyển.",
@@ -2996,6 +3155,7 @@
       },
       "LEARN_MORE": "Tìm hiểu về ứng dụng bảng điều khiển",
       "LIST": {
+        "404": "Tài khoản này chưa có ứng dụng bảng điều khiển nào",
         "TABLE_HEADER": {
           "ENDPOINT": "Đường dẫn"
         }
@@ -3741,6 +3901,19 @@
     "TITLE": "Đơn hàng",
     "WALK_IN": "Khách lẻ"
   },
+  "KALO_POLISH": {
+    "COMMAND_BAR": {
+      "CLOSE": "đóng",
+      "CLOSE_KEY": "Esc",
+      "NAVIGATE": "di chuyển",
+      "NAVIGATE_KEY": "↑ ↓",
+      "PARENT": "quay lại mục trước",
+      "PARENT_KEY": "Backspace",
+      "SELECT": "chọn",
+      "SELECT_KEY": "Enter"
+    },
+    "DATE_RANGE_EMPTY": "Chọn khoảng thời gian"
+  },
   "KALO_POS": {
     "ADD_PRODUCT": "Thêm sản phẩm",
     "CART": {
@@ -4126,7 +4299,8 @@
       "SEND_ATTACHMENT": "Gửi tệp đính kèm",
       "SEND_EMAIL_TRANSCRIPT": "Gửi nội dung hội thoại qua email",
       "SEND_MESSAGE": "Gửi tin nhắn",
-      "SEND_WEBHOOK_EVENT": "Gửi sự kiện webhook"
+      "SEND_WEBHOOK_EVENT": "Gửi sự kiện webhook",
+      "SNOOZE_CONVERSATION": "Hoãn hội thoại"
     },
     "COUNT": "{n} thao tác nhanh | {n} thao tác nhanh",
     "DESCRIPTION": "Thao tác nhanh là một nhóm hành động lưu sẵn giúp nhân viên làm việc nhanh, ví dụ gắn nhãn hội thoại, gửi tin nhắn hay giao cho nhóm chỉ bằng một cú bấm.",
@@ -4164,6 +4338,9 @@
     },
     "SEARCH": {
       "ERROR_MESSAGE": "Đã có lỗi, vui lòng thử lại sau."
+    },
+    "SUMMARY": {
+      "ATTRIBUTE_WARNING": "Thông tin liên hệ của <strong>{primaryContactName}</strong> sẽ được sao chép sang <strong>{parentContactName}</strong>."
     }
   },
   "MFA_SETTINGS": {
@@ -4264,7 +4441,10 @@
     },
     "GREETING_AFTERNOON": "👋 Chào buổi chiều, {name}. Chào mừng bạn đến với {installationName}.",
     "GREETING_EVENING": "👋 Chào buổi tối, {name}. Chào mừng bạn đến với {installationName}.",
-    "GREETING_MORNING": "👋 Chào buổi sáng, {name}. Chào mừng bạn đến với {installationName}."
+    "GREETING_MORNING": "👋 Chào buổi sáng, {name}. Chào mừng bạn đến với {installationName}.",
+    "LABELS": {
+      "DESCRIPTION": "Nhãn giúp bạn phân loại hội thoại dễ hơn. Tạo vài nhãn như #ho-tro, #hoi-gia… để dùng trong hội thoại sau này."
+    }
   },
   "ONBOARDING_INBOX_SETUP": {
     "CHANNELS": {
@@ -4280,6 +4460,7 @@
       "VIEW_ALL": "Xem tất cả"
     },
     "CHANNELS_DIALOG": {
+      "BACK": "Trở về",
       "CONNECT_SUBTITLE": "Điền các thông tin nhanh sau",
       "CONNECT_TITLE": "Kết nối tài khoản {name} của bạn",
       "FACEBOOK_ERROR": "Không thể kết nối với Facebook. Vui lòng thử lại.",
@@ -4345,6 +4526,15 @@
     "YOUR_DETAILS": "Thông tin của bạn"
   },
   "OVERVIEW_REPORTS": {
+    "ACCOUNT_CONVERSATIONS": {
+      "UNATTENDED": "Chưa trả lời"
+    },
+    "AGENT_CONVERSATIONS": {
+      "TABLE_HEADER": {
+        "AGENT": "Nhân viên",
+        "UNATTENDED": "Chưa trả lời"
+      }
+    },
     "CONVERSATION_HEATMAP": {
       "CONVERSATION": "{count} hội thoại",
       "CONVERSATIONS": "{count} hội thoại",
@@ -4363,7 +4553,10 @@
       "ALL_TEAMS": "Tất cả nhóm",
       "HEADER": "Hội thoại theo nhóm",
       "LOADING_MESSAGE": "Đang tải số liệu nhóm...",
-      "NO_TEAMS": "Chưa có dữ liệu"
+      "NO_TEAMS": "Chưa có dữ liệu",
+      "TABLE_HEADER": {
+        "UNATTENDED": "Chưa trả lời"
+      }
     }
   },
   "PHONE_INPUT": {
@@ -4462,6 +4655,9 @@
         },
         "TYPE_TITLE": "Loại thông báo"
       },
+      "PASSWORD_CONFIRMATION": {
+        "PLACEHOLDER": "Nhập lại mật khẩu mới"
+      },
       "PUSH_NOTIFICATIONS_SECTION": {
         "PARTICIPATING_CONVERSATION_NEW_MESSAGE": "Gửi thông báo đẩy khi có tin nhắn mới trong cuộc trò chuyện tôi tham gia",
         "SLA_MISSED_FIRST_RESPONSE": "Gửi thông báo đẩy khi cuộc trò chuyện trễ SLA phản hồi đầu tiên",
@@ -4558,7 +4754,9 @@
     "EMPTY_STATE_DEFAULT": "Tìm theo mã cuộc trò chuyện, email, số điện thoại hoặc nội dung tin nhắn để có kết quả tốt hơn.",
     "EMPTY_STATE_FULL": "Không có kết quả cho '{query}'",
     "FILTERS": {
+      "AGENTS": "Nhân viên",
       "FILTER_MESSAGE": "Lọc tin nhắn theo:",
+      "NO_AGENTS": "Không tìm thấy nhân viên",
       "NO_CONTACTS": "Hãy nhập từ khóa để xem kết quả",
       "NO_INBOXES": "Không có hộp thư nào"
     },
@@ -4633,6 +4831,7 @@
     "NO_ITEMS": "Không có mục nào",
     "PARTICIPATING_CONVERSATIONS": "Đang tham gia",
     "REAUTHORIZE": "Kết nối của hộp thư đã hết hạn, vui lòng kết nối lại\n để tiếp tục nhận và gửi tin nhắn",
+    "REPORTS_AGENT": "Nhân viên",
     "SECURITY": "Bảo mật",
     "SETTINGS": "Cài đặt",
     "SET_AUTO_OFFLINE": {
@@ -4681,7 +4880,18 @@
     "STRIKETHROUGH": "Gạch ngang",
     "TABLE": "Bảng"
   },
+  "SLA_REPORTS": {
+    "DROPDOWN": {
+      "AGENTS": "Nhân viên"
+    },
+    "TABLE": {
+      "HEADER": {
+        "AGENT": "Nhân viên"
+      }
+    }
+  },
   "SUMMARY_REPORTS": {
+    "AGENT": "Nhân viên",
     "AVG_FIRST_RESPONSE_TIME": "Thời gian phản hồi đầu trung bình",
     "AVG_REPLY_TIME": "Thời gian khách chờ trung bình",
     "AVG_RESOLUTION_TIME": "Thời gian xử lý trung bình"
@@ -4690,16 +4900,53 @@
     "TOGGLE": "Bật/tắt"
   },
   "TEAMS_SETTINGS": {
+    "ADD": {
+      "BUTTON_TEXT": "Thêm nhân viên",
+      "DESC": "Thêm nhân viên vào nhóm vừa tạo để cùng xử lý hội thoại và nhận thông báo về hội thoại của nhóm.",
+      "SELECTED_COUNT": "Đã chọn {selected} trên {total} nhân viên.",
+      "SELECT_ALL": "chọn tất cả nhân viên",
+      "TITLE": "Thêm nhân viên vào nhóm - {teamName}"
+    },
     "AGENTS": {
-      "EMAIL": "Email"
+      "ADD_AGENTS": "Đang thêm nhân viên vào nhóm...",
+      "AGENT": "Nhân viên",
+      "BUTTON_TEXT": "Thêm nhân viên",
+      "EMAIL": "Email",
+      "SELECTED_COUNT": "Đã chọn {selected} trên {total} nhân viên.",
+      "SELECT_ALL": "chọn tất cả nhân viên"
     },
     "COUNT": "{n} nhóm | {n} nhóm",
+    "CREATE_FLOW": {
+      "AGENTS": {
+        "BUTTON_TEXT": "Thêm nhân viên vào nhóm",
+        "DESC": "Thêm nhân viên vào nhóm vừa tạo để cùng xử lý hội thoại và nhận thông báo về hội thoại của nhóm.",
+        "TITLE": "Thêm nhân viên vào nhóm - {teamName}"
+      },
+      "WIZARD_ADD_AGENTS": {
+        "BODY": "Thêm nhân viên vào nhóm.",
+        "TITLE": "Thêm nhân viên"
+      },
+      "WIZARD_CREATE": {
+        "BODY": "Tạo một nhóm nhân viên mới."
+      }
+    },
     "DELETE": {
       "CONFIRM": {
         "TITLE": "Bạn chắc chắn muốn xóa nhóm này?"
       }
     },
     "DESCRIPTION": "Nhóm giúp bạn xếp nhân viên theo việc phụ trách. Một nhân viên có thể thuộc nhiều nhóm và bạn có thể giao hội thoại cho từng nhóm.",
+    "EDIT_FLOW": {
+      "AGENTS": {
+        "BUTTON_TEXT": "Cập nhật nhân viên trong nhóm",
+        "DESC": "Thêm nhân viên vào nhóm. Mọi nhân viên trong nhóm sẽ nhận thông báo khi có hội thoại được giao cho nhóm.",
+        "TITLE": "Thêm nhân viên vào nhóm - {teamName}"
+      },
+      "EDIT_WIZARD_AGENTS": {
+        "BODY": "Sửa danh sách nhân viên trong nhóm.",
+        "TITLE": "Sửa nhân viên"
+      }
+    },
     "LEARN_MORE": "Tìm hiểu về nhóm",
     "LOADING": "Đang tải nhóm",
     "NO_RESULTS": "Không có nhóm nào khớp"

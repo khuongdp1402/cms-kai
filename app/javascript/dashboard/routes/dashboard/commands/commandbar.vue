@@ -59,6 +59,13 @@ const placeholder = computed(() =>
     : t('COMMAND_BAR.SEARCH_PLACEHOLDER')
 );
 
+const footerHints = computed(() =>
+  ['SELECT', 'NAVIGATE', 'CLOSE', 'PARENT'].map(hint => ({
+    key: t(`KALO_POLISH.COMMAND_BAR.${hint}_KEY`),
+    label: t(`KALO_POLISH.COMMAND_BAR.${hint}`),
+  }))
+);
+
 const SNOOZE_PRESET_IDS = new Set(Object.values(wootConstants.SNOOZE_OPTIONS));
 
 const hotKeys = computed(() => {
@@ -227,7 +234,27 @@ onMounted(() => {
     @change="onCommandBarChange"
     @selected="onSelected"
     @closed="onClosed"
-  />
+  >
+    <!-- Replaces the library's English footer (slot "footer"). -->
+    <div
+      slot="footer"
+      data-test-id="command-bar-footer"
+      class="flex flex-wrap items-center gap-x-4 gap-y-1 px-4 py-2 border-t border-n-weak text-xs text-n-slate-11"
+    >
+      <span
+        v-for="hint in footerHints"
+        :key="hint.key"
+        class="inline-flex items-center gap-1.5"
+      >
+        <kbd
+          class="rounded border border-n-weak bg-n-alpha-2 px-1.5 py-0.5 font-sans text-xs text-n-slate-12"
+        >
+          {{ hint.key }}
+        </kbd>
+        {{ hint.label }}
+      </span>
+    </div>
+  </ninja-keys>
 </template>
 
 <style lang="scss">
