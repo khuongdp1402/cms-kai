@@ -1,7 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useAlert } from 'dashboard/composables';
-import { useToggle } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
 import { useStore, useStoreGetters } from 'dashboard/composables/store';
 import { useEmitter } from 'dashboard/composables/emitter';
@@ -29,9 +28,13 @@ const arrowDownButtonRef = ref(null);
 const isLoading = ref(false);
 const resolveAttributesModalRef = ref(null);
 
-const [showActionsDropdown, toggleDropdown] = useToggle();
-const closeDropdown = () => toggleDropdown(false);
-const openDropdown = () => toggleDropdown(true);
+const showActionsDropdown = ref(false);
+const closeDropdown = () => {
+  showActionsDropdown.value = false;
+};
+const openDropdown = () => {
+  showActionsDropdown.value = true;
+};
 
 const currentChat = computed(() => getters.getSelectedChat.value);
 
@@ -77,6 +80,7 @@ const getConversationParams = () => {
 };
 
 const openSnoozeModal = () => {
+  closeDropdown();
   const ninja = document.querySelector('ninja-keys');
   ninja.open({ parent: 'snooze_conversation' });
 };
