@@ -405,6 +405,7 @@ export default {
         type="button"
         data-test="canned"
         :title="$t('KALO_CHAT_THREAD.COMPOSER.CANNED_HINT')"
+        :aria-label="$t('KALO_CHAT_THREAD.COMPOSER.CANNED')"
         :class="toolClass"
         @click="$emit('insertCanned')"
       >

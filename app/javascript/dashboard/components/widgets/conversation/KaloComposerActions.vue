@@ -132,6 +132,7 @@ const dialogClass =
       data-test="create-order"
       :class="buttonClass"
       :title="t('KALO_CHAT.ACTIONS.CREATE_ORDER')"
+      :aria-label="t('KALO_CHAT.ACTIONS.CREATE_ORDER')"
       @click="openForm"
     >
       <KaloIcon name="bag" class="size-4" />
@@ -144,6 +145,7 @@ const dialogClass =
       data-test="pick-qr"
       :class="buttonClass"
       :title="t('KALO_CHAT.ACTIONS.QR')"
+      :aria-label="t('KALO_CHAT.ACTIONS.QR')"
       @click="pickQr"
     >
       <KaloIcon name="qr" class="size-4" />

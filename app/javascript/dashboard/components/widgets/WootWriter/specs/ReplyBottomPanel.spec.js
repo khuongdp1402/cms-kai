@@ -133,7 +133,12 @@ describe('ReplyBottomPanel essentials and "+" menu', () => {
 
   it('canned button asks the reply box to insert "/" (C-56), not in notes', async () => {
     wrapper = mountPanel();
-    await wrapper.find('[data-test="canned"]').trigger('click');
+    const canned = wrapper.find('[data-test="canned"]');
+    // the label collapses to an icon below 640px, so the name lives in aria-label
+    expect(canned.attributes('aria-label')).toBe(
+      'KALO_CHAT_THREAD.COMPOSER.CANNED'
+    );
+    await canned.trigger('click');
     expect(wrapper.emitted('insertCanned')).toHaveLength(1);
     wrapper.unmount();
     wrapper = mountPanel({ isOnPrivateNote: true, isNote: true });

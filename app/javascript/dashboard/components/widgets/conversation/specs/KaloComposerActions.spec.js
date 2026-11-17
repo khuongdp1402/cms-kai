@@ -49,6 +49,16 @@ describe('KaloComposerActions', () => {
     expect(wrapper.find('[data-test="pick-qr"]').text()).toBe('Mã QR');
   });
 
+  it('keeps an accessible name when the labels collapse to icons on narrow screens', () => {
+    const { wrapper } = mountIt();
+    expect(
+      wrapper.find('[data-test="create-order"]').attributes('aria-label')
+    ).toBe('Tạo đơn');
+    expect(wrapper.find('[data-test="pick-qr"]').attributes('aria-label')).toBe(
+      'Mã QR'
+    );
+  });
+
   it('Tạo đơn opens the form prefilled with contact id and conversation display id', async () => {
     const { wrapper } = mountIt();
     await wrapper.find('[data-test="create-order"]').trigger('click');
