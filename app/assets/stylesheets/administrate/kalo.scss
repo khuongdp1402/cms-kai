@@ -1,0 +1,451 @@
+// Kalo skin for the Administrate super admin (ADR-020).
+// Tailwind is not available on Rails pages, so the tokens of
+// app/javascript/dashboard/assets/scss/_ktech-theme.scss (coral palette,
+// radius, shadow, font) are copied here as plain CSS variables.
+// Contrast: action #C93F24 on white = 4.97:1, muted #6E625B on #FFF8F5 = 5.4:1.
+
+:root {
+  --kalo-bg: #fff8f5;
+  --kalo-surface: #fff;
+  --kalo-surface-2: #fff4ef;
+  --kalo-line: #f0e4dd;
+  --kalo-line-2: #e6d6cd;
+  --kalo-ink: #1f1714;
+  --kalo-muted: #6e625b;
+  --kalo-coral: #ff6b4a;
+  --kalo-action: #c93f24;
+  --kalo-action-hover: #b03720;
+  --kalo-action-ink: #a3361d;
+  --kalo-action-soft: #ffe9e1;
+  --kalo-danger: #b42318;
+  --kalo-radius: 12px;
+  --kalo-radius-sm: 8px;
+  --kalo-shadow: 0 1px 0 var(--kalo-line), 0 12px 40px -18px rgba(80, 40, 20, .25);
+  --kalo-focus: 0 0 0 3px #fff, 0 0 0 5px var(--kalo-action);
+  --kalo-font: 'Be Vietnam Pro', 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+// `body.kalo-admin` + !important beats the Inter rule of the Tailwind pack.
+body.kalo-admin {
+  background: var(--kalo-bg);
+  color: var(--kalo-ink);
+  font-family: var(--kalo-font) !important;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.kalo-admin {
+  // Colour only Administrate markup so Tailwind/Vue pages keep their own styles.
+  .main-content__body dl a,
+  .flash a,
+  .main-content__page-title a { color: var(--kalo-action-ink); }
+
+  .main-content__page-title, legend { color: var(--kalo-ink); }
+
+  .sr-only {
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    position: absolute;
+    white-space: nowrap;
+    width: 1px;
+  }
+}
+
+.kalo-skip {
+  background: var(--kalo-action);
+  border-radius: var(--kalo-radius-sm);
+  color: #fff !important;
+  left: 8px;
+  padding: 8px 12px;
+  position: absolute;
+  top: -48px;
+  z-index: 50;
+
+  &:focus { top: 8px; }
+}
+
+// Zero-specificity focus ring for every control.
+:where(.kalo-admin) :focus-visible {
+  box-shadow: var(--kalo-focus);
+  outline: 2px solid transparent;
+}
+
+// ---- Shell ----
+.kalo-shell {
+  display: flex;
+  min-height: 100%;
+  width: 100%;
+}
+
+.kalo-main {
+  background: var(--kalo-bg);
+  flex: 1 1 0;
+  min-width: 0;
+  outline: none;
+  overflow-x: hidden;
+}
+
+// ---- Navigation ----
+.kalo-nav {
+  background: var(--kalo-surface);
+  border-right: 1px solid var(--kalo-line);
+  display: flex;
+  flex: 0 0 15rem;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  width: 15rem;
+}
+
+.kalo-nav__bar { padding: 20px 16px 8px; }
+
+.kalo-brand {
+  align-items: center;
+  border-radius: var(--kalo-radius-sm);
+  display: flex;
+  gap: 10px;
+  text-decoration: none;
+
+  &:hover { text-decoration: none; }
+}
+
+.kalo-brand__text { display: flex; flex-direction: column; line-height: 1.2; }
+.kalo-brand__name { color: var(--kalo-ink); font-size: 17px; font-weight: 700; }
+.kalo-brand__sub { color: var(--kalo-muted); font-size: 12px; }
+
+.kalo-nav__drawer { display: flex; flex: 1; flex-direction: column; }
+.kalo-nav__toggle { display: none; }
+.kalo-nav__body { display: flex; flex: 1; flex-direction: column; padding: 4px 12px 16px; }
+.kalo-nav__group { margin-top: 14px; }
+.kalo-nav__group--footer { border-top: 1px solid var(--kalo-line); margin-top: auto; padding-top: 12px; }
+
+.kalo-nav__heading {
+  color: var(--kalo-muted);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .04em;
+  margin: 0 8px 4px;
+  text-transform: uppercase;
+}
+
+.kalo-nav__list { list-style: none; margin: 0; padding: 0; }
+.kalo-nav__list--sub { margin: 2px 0 4px 26px; }
+.kalo-nav__item { margin: 0 0 2px; }
+
+.kalo-nav__link {
+  align-items: center;
+  border-radius: var(--kalo-radius-sm);
+  color: var(--kalo-ink) !important;
+  cursor: pointer;
+  display: flex;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 10px;
+  list-style: none;
+  padding: 8px 10px;
+  text-decoration: none;
+
+  &::-webkit-details-marker { display: none; }
+  &:hover { background: var(--kalo-surface-2); color: var(--kalo-action-ink) !important; text-decoration: none; }
+  &.is-active { background: var(--kalo-action-soft); color: var(--kalo-action-ink) !important; font-weight: 600; }
+  svg { flex: none; }
+}
+
+.kalo-nav__sub-link { color: inherit !important; flex: 1; text-decoration: none; &:hover { text-decoration: none; } }
+.kalo-nav__caret { margin-left: auto; transition: transform .2s; }
+.kalo-nav__sub[open] > summary .kalo-nav__caret { transform: rotate(180deg); }
+
+// ---- Page header ----
+.kalo-admin .main-content__header {
+  background: transparent;
+  border-bottom: 1px solid var(--kalo-line);
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 4.25rem;
+  padding: 16px 24px;
+}
+
+.kalo-admin .main-content__page-title {
+  color: var(--kalo-ink);
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0 auto 0 0;
+}
+
+.kalo-header-row { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; width: 100%; }
+.kalo-header-tools { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; }
+.kalo-header-tools__search { align-items: center; display: flex; flex-wrap: wrap; gap: 12px; }
+.kalo-header-tools__action { white-space: nowrap; }
+
+.kalo-admin .main-content__body { padding: 20px 24px; }
+.kalo-admin .main-content__body--flush { padding-left: 24px; padding-right: 24px; }
+
+// ---- Buttons (Administrate markup only; Tailwind buttons keep their classes) ----
+.kalo-admin {
+  .main-content__header .button:not(.reset-base),
+  .main-content__body .button:not(.reset-base),
+  form input[type='submit']:not(.reset-base),
+  form button[type='submit']:not(.reset-base) {
+    align-items: center;
+    background-color: var(--kalo-action);
+    border-radius: var(--kalo-radius-sm);
+    color: #fff;
+    font-family: var(--kalo-font);
+    font-weight: 600;
+    min-height: 40px;
+    padding: 0 16px;
+
+    &:hover { background-color: var(--kalo-action-hover); color: #fff; }
+  }
+
+  .button--danger { background-color: var(--kalo-danger) !important; }
+  .button--alt { background: transparent; border: 1px solid var(--kalo-action); color: var(--kalo-action-ink); }
+}
+
+// ---- Search / filter ----
+.kalo-admin .search {
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line-2);
+  border-radius: var(--kalo-radius-sm);
+  max-width: 100%;
+  width: 260px;
+
+  &:focus-within { border-color: var(--kalo-action); box-shadow: var(--kalo-focus); }
+}
+
+.kalo-admin .search__input {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--kalo-ink);
+  font-family: var(--kalo-font);
+  min-height: 38px;
+
+  &::placeholder { color: var(--kalo-muted); opacity: 1; }
+  &:focus, &:focus-visible { box-shadow: none; outline: none; }
+}
+
+.kalo-admin .search__eyeglass-icon,
+.kalo-admin .search__clear-icon { color: var(--kalo-muted); fill: currentColor; }
+
+.kalo-filter {
+  align-items: center;
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line-2);
+  border-radius: var(--kalo-radius-sm);
+  display: flex;
+  max-width: 100%;
+  min-height: 40px;
+  padding: 0 8px;
+  position: relative;
+  width: 240px;
+
+  &:focus-within { border-color: var(--kalo-action); box-shadow: var(--kalo-focus); }
+}
+
+.kalo-filter__label { color: var(--kalo-muted); display: flex; margin-right: 6px; }
+.kalo-admin .kalo-filter__select {
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+  color: var(--kalo-ink);
+  cursor: pointer;
+  flex: 1;
+  font-family: var(--kalo-font);
+  font-size: 14px;
+  margin: 0;
+  min-width: 0;
+  padding: 8px 20px 8px 0;
+  width: 100%;
+
+  &:focus, &:focus-visible { box-shadow: none; outline: none; }
+}
+.kalo-filter__clear { color: var(--kalo-muted) !important; font-size: 20px; line-height: 1; padding: 0 6px; text-decoration: none; }
+
+// ---- Table ----
+.kalo-table-scroll {
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line);
+  border-radius: var(--kalo-radius);
+  box-shadow: var(--kalo-shadow);
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.kalo-admin table { color: var(--kalo-ink); }
+.kalo-admin .kalo-table-scroll td a { color: var(--kalo-action-ink); }
+
+.kalo-admin thead th {
+  background: var(--kalo-surface-2);
+  color: var(--kalo-muted);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .02em;
+  white-space: nowrap;
+
+  a { color: inherit; }
+}
+
+.kalo-admin tr { border-bottom: 1px solid var(--kalo-line); }
+.kalo-admin tbody tr:last-child { border-bottom: 0; }
+.kalo-admin tbody tr:hover { background: var(--kalo-surface-2); }
+.kalo-admin tbody tr:focus-visible { box-shadow: inset 0 0 0 2px var(--kalo-action); outline: none; }
+.kalo-admin .action-edit { color: var(--kalo-action-ink); font-weight: 600; }
+.kalo-admin .text-color-red { color: var(--kalo-danger); font-weight: 600; }
+
+.kalo-empty { color: var(--kalo-muted); padding: 40px 16px; text-align: center; }
+.kalo-empty__title { color: var(--kalo-ink); font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+.kalo-empty__body { margin: 0; }
+
+// ---- Pagination ----
+.kalo-admin .pagination, .kalo-admin nav.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  margin: 16px 0;
+
+  a, span, em {
+    border-radius: var(--kalo-radius-sm);
+    color: var(--kalo-action-ink);
+    padding: 6px 10px;
+    text-decoration: none;
+  }
+  .current, em { background: var(--kalo-action-soft); font-style: normal; font-weight: 600; }
+}
+
+// ---- Flashes ----
+.kalo-admin .flashes { padding: 16px 24px 0; }
+.kalo-admin .flash {
+  border: 1px solid transparent;
+  border-radius: var(--kalo-radius-sm);
+  font-size: 14px;
+  padding: 12px 16px;
+  text-align: left;
+}
+.kalo-admin .flash-notice, .kalo-admin .flash-success { background: #ecfdf3; border-color: #abefc6; color: #05603a; }
+.kalo-admin .flash-alert { background: #fffaeb; border-color: #fedf89; color: #7a2e0e; }
+.kalo-admin .flash-error { background: #fef3f2; border-color: #fecdca; color: #912018; }
+
+// ---- Show / form ----
+.kalo-admin .main-content__body dl {
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line);
+  border-radius: var(--kalo-radius);
+  box-shadow: var(--kalo-shadow);
+  margin: 0;
+  padding: 8px 20px;
+}
+.kalo-admin .attribute-label { color: var(--kalo-muted); font-size: 12px; font-weight: 600; letter-spacing: .02em; }
+.kalo-admin .attribute-data { color: var(--kalo-ink); overflow-wrap: anywhere; }
+
+.kalo-admin .field-unit input[type='text'], .kalo-admin .field-unit input[type='email'],
+.kalo-admin .field-unit input[type='password'], .kalo-admin .field-unit input[type='number'],
+.kalo-admin .field-unit input[type='url'], .kalo-admin .field-unit select,
+.kalo-admin .field-unit textarea {
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line-2);
+  border-radius: var(--kalo-radius-sm);
+  color: var(--kalo-ink);
+  font-family: var(--kalo-font);
+  max-width: 100%;
+
+  &:focus { border-color: var(--kalo-action); box-shadow: var(--kalo-focus); outline: 2px solid transparent; }
+}
+
+// ---- Login ----
+.kalo-login { background: var(--kalo-bg); min-height: 100vh; }
+.kalo-login__main { align-items: center; display: flex; flex-direction: column; gap: 24px; justify-content: center; min-height: 100vh; padding: 32px 16px; }
+.kalo-login__brand { text-align: center; }
+.kalo-login__title { font-size: 24px; font-weight: 700; margin: 12px 0 4px; }
+.kalo-login__subtitle { color: var(--kalo-muted); margin: 0; }
+.kalo-login__card {
+  background: var(--kalo-surface);
+  border-radius: 18px;
+  box-shadow: var(--kalo-shadow);
+  max-width: 28rem;
+  padding: 28px;
+  width: 100%;
+}
+.kalo-field { margin-bottom: 16px; }
+.kalo-field__label { color: var(--kalo-ink); display: block; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.kalo-admin .kalo-field__input, .kalo-field__input {
+  border: 1px solid var(--kalo-line-2);
+  border-radius: var(--kalo-radius-sm);
+  box-sizing: border-box;
+  display: block;
+  font-size: 15px;
+  min-height: 44px;
+  padding: 0 12px;
+  width: 100%;
+
+  &::placeholder { color: var(--kalo-muted); opacity: 1; }
+}
+.kalo-login__submit {
+  background: var(--kalo-action);
+  border: 0;
+  border-radius: var(--kalo-radius-sm);
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--kalo-font);
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 44px;
+  width: 100%;
+
+  &:hover { background: var(--kalo-action-hover); }
+}
+.kalo-login__error {
+  background: #fef3f2;
+  border: 1px solid #fecdca;
+  border-radius: var(--kalo-radius-sm);
+  color: #912018;
+  margin-bottom: 16px;
+  padding: 12px;
+}
+
+// ---- Mobile: top bar + menu button, no horizontal page scroll ----
+@media (max-width: 767px) {
+  .kalo-shell { flex-direction: column; }
+  .kalo-main { flex: 1 1 auto; width: 100%; }
+
+  .kalo-nav {
+    border-bottom: 1px solid var(--kalo-line);
+    border-right: 0;
+    flex: none;
+    height: auto;
+    overflow: visible;
+    position: static;
+    width: 100%;
+  }
+
+  .kalo-nav__bar { padding: 12px 16px 4px; }
+  .kalo-nav__drawer { display: block; }
+  .kalo-nav__toggle {
+    align-items: center;
+    border-radius: var(--kalo-radius-sm);
+    color: var(--kalo-ink);
+    cursor: pointer;
+    display: flex;
+    font-weight: 600;
+    gap: 8px;
+    list-style: none;
+    margin: 4px 12px 8px;
+    min-height: 44px;
+    padding: 0 10px;
+
+    &::-webkit-details-marker { display: none; }
+  }
+  .kalo-nav__link { min-height: 44px; }
+
+  .kalo-admin .main-content__header { padding: 12px 16px; }
+  .kalo-admin .main-content__body, .kalo-admin .main-content__body--flush { padding-left: 16px; padding-right: 16px; }
+  .kalo-admin .flashes { padding: 12px 16px 0; }
+  .kalo-header-tools, .kalo-header-tools__search { width: 100%; }
+  .kalo-admin .search, .kalo-filter { width: 100%; }
+  .kalo-header-tools__field { flex: 1; }
+}

@@ -1,0 +1,101 @@
+vi:
+  kalo_super_admin:
+    brand_subtitle: Quản trị hệ thống
+    skip_to_content: Bỏ qua điều hướng
+    nav:
+      label: Điều hướng quản trị
+      dashboard: Tổng quan
+      groups:
+        overview: Tổng quan
+        customers: Khách hàng
+        platform: Nền tảng
+        system: Hệ thống
+      accounts: Tài khoản shop
+      users: Người dùng
+      agent_bots: Bot tự động
+      platform_apps: Ứng dụng nền tảng
+      platform_banners: Thông báo hệ thống
+      access_tokens: Khóa truy cập
+      installation_configs: Cấu hình hệ thống
+      settings: Cài đặt
+      instance_status: Tình trạng hệ thống
+      push_diagnostics: Chẩn đoán thông báo đẩy
+      sidekiq: Tác vụ nền (Sidekiq)
+      agent_dashboard: Về ứng dụng Kalo
+      logout: Đăng xuất
+    actions:
+      new: Thêm mới
+      edit: Sửa
+      destroy: Xóa
+      confirm: Bạn chắc chắn muốn xóa?
+    search:
+      placeholder: "Tìm trong %{resource}"
+      clear: Xóa từ khóa
+    filters:
+      label: Lọc theo
+      all: Tất cả bản ghi
+    collection:
+      empty_title: Chưa có dữ liệu
+      empty_search: Không tìm thấy kết quả phù hợp.
+      empty_body: Khi có bản ghi mới, chúng sẽ hiện ở đây.
+    flashes:
+      label: Thông báo
+    login:
+      title: Đăng nhập quản trị
+      subtitle: Dành cho quản trị viên hệ thống Kalo
+      email: Email
+      email_placeholder: "Ví dụ: ten@congty.vn"
+      password: Mật khẩu
+      password_placeholder: Nhập mật khẩu
+      submit: Đăng nhập
+    instance_status:
+      title: Tình trạng hệ thống
+      metric: Chỉ số
+      value: Giá trị
+    new_resource: "Thêm %{name}"
+    resources:
+      account: tài khoản
+      user: người dùng
+      agent_bot: bot
+      platform_app: ứng dụng nền tảng
+      installation_config: cấu hình
+      platform_banner: thông báo
+    dashboard:
+      title: Tổng quan
+      accounts: Tài khoản
+      users: Người dùng
+      inboxes: Hộp thư
+      conversations: Hội thoại
+    users:
+      mfa: Xác thực hai bước (MFA)
+      enabled: Đã bật
+      disabled: Đã tắt
+    settings:
+      title: Cài đặt
+      subtitle: Cập nhật cài đặt hệ thống
+      installation_identifier: Mã định danh cài đặt
+      current_plan: Gói hiện tại
+      refresh: Làm mới
+      manage: Quản lý
+      features: Tính năng
+      agent_overage: "Hệ thống có %{count} nhân viên. Hãy bổ sung giấy phép để thêm người dùng."
+  # Keys of the stock super admin views that vi.yml lacks (kept here, vi.yml is synced from upstream).
+  super_admin:
+    account_suspension:
+      categories:
+        spam: Spam
+        non_payment: Chưa thanh toán
+        other: Khác
+      form:
+        category: Loại tạm ngưng
+        category_prompt: Chọn loại
+        reason: Lý do tạm ngưng
+        reason_hint: Nhập lý do tối đa 256 ký tự.
+      history:
+        suspended_at: Tạm ngưng lúc
+        category: Loại
+        reason: Lý do
+        empty: Chưa có lịch sử tạm ngưng.
+    captain_model_overrides:
+      features:
+        conversation_faq_matching: Đối chiếu FAQ hội thoại

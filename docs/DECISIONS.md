@@ -208,3 +208,10 @@
 - **Q4:** CRM/ERP của KTech: hệ thống nào, có tài liệu API không, xác thực kiểu gì, bên nào là nguồn gốc dữ liệu khách hàng? Chặn P4-08.
 - **Q5:** Zalo Personal dùng `zca-js` (thư viện không chính thức), nên có rủi ro bị khóa tài khoản và vi phạm điều khoản Zalo. Chủ dự án có chấp nhận rủi ro này không, và mỗi account được phép gửi tối đa bao nhiêu tin/phút? Ảnh hưởng tới P1-09.
 
+
+## ADR-020 — Super admin `/super_admin` dùng SCSS riêng theo style Kalo · `accepted` (2026-11-17)
+- **Bối cảnh:** trang super admin là Rails/Administrate, không có Tailwind của app Vue; phần còn lại của Kalo dùng token trong `_ktech-theme.scss`.
+- **Quyết định:** thêm `app/assets/stylesheets/administrate/kalo.scss` (nạp cuối `application.scss`), sao chép các token cần dùng (bảng màu coral, radius, bóng, font Be Vietnam Pro) thành biến CSS `--kalo-*`. Chỉ đổi lớp trình bày: layout, `_navigation`, `_nav_item`, `_settings_menu`, `_collection`, `_filters`, `_search`, `_flashes`, `index`, `show`, trang đăng nhập. Không đổi route, controller, dashboard.
+- **Chữ:** nhãn giao diện nằm trong `config/locales/kalo_super_admin.{vi,en}.yml` (namespace `kalo_super_admin`), không ghi đè khóa `administrate.*`. Tên thương hiệu lấy từ `INSTALLATION_NAME`.
+- **Menu:** rút gọn theo nhóm (Tổng quan, Khách hàng, Nền tảng, Hệ thống), chỉ gồm mục có controller chạy được. Bỏ widget hỗ trợ của Chatwoot khỏi `_javascript`.
+- **Đánh đổi:** hai nguồn token (SCSS app và SCSS super admin) phải cập nhật song song khi đổi bảng màu.

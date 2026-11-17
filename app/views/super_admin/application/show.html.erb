@@ -23,19 +23,19 @@ as well as a link to its edit page.
     <%= content_for(:title) %>
   </h1>
 
-  <div>
+  <div class="kalo-header-tools__action">
     <%= link_to(
-      "Edit",
+      t("kalo_super_admin.actions.edit"),
       [:edit, namespace, page.resource],
       class: "button",
     ) if accessible_action?(page.resource, :edit) %>
 
     <%= link_to(
-      t("administrate.actions.destroy"),
+      t("kalo_super_admin.actions.destroy"),
       [namespace, page.resource],
       class: "button button--danger",
       method: :delete,
-      data: { confirm: t("administrate.actions.confirm") }
+      data: { confirm: t("kalo_super_admin.actions.confirm") }
     ) if accessible_action?(page.resource, :destroy) %>
   </div>
 </header>

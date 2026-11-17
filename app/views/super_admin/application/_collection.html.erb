@@ -18,6 +18,7 @@ to display a collection of resources in an HTML table.
 [1]: http://www.rubydoc.info/gems/administrate/Administrate/Page/Collection
 %>
 
+<div class="kalo-table-scroll" tabindex="0" role="region" aria-labelledby="<%= table_title %>">
 <table aria-labelledby="<%= table_title %>">
   <thead>
     <tr>
@@ -74,7 +75,7 @@ to display a collection of resources in an HTML table.
 
         <% if existing_action? collection_presenter.resource_name, :edit %>
           <td><%= link_to(
-            t("administrate.actions.edit"),
+            t("kalo_super_admin.actions.edit"),
             [:edit, namespace, resource],
             class: "action-edit",
           ) if authorized_action? resource, :edit%></td>
@@ -82,14 +83,23 @@ to display a collection of resources in an HTML table.
 
         <% if existing_action? collection_presenter.resource_name, :destroy %>
           <td><%= link_to(
-            t("administrate.actions.destroy"),
+            t("kalo_super_admin.actions.destroy"),
             [namespace, resource],
             class: "text-color-red",
             method: :delete,
-            data: { confirm: t("administrate.actions.confirm") }
+            data: { confirm: t("kalo_super_admin.actions.confirm") }
           ) if authorized_action? resource, :destroy %></td>
         <% end %>
       </tr>
     <% end %>
   </tbody>
 </table>
+<% if resources.empty? %>
+  <div class="kalo-empty" role="status">
+    <p class="kalo-empty__title"><%= t('kalo_super_admin.collection.empty_title') %></p>
+    <p class="kalo-empty__body">
+      <%= params[:search].present? ? t('kalo_super_admin.collection.empty_search') : t('kalo_super_admin.collection.empty_body') %>
+    </p>
+  </div>
+<% end %>
+</div>

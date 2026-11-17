@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe 'Super Admin Users API', type: :request do
+  include_context 'with super admin locale', :en
+
   let(:super_admin) { create(:super_admin) }
 
   describe 'GET /super_admin/users' do
@@ -50,7 +52,7 @@ RSpec.describe 'Super Admin Users API', type: :request do
         header_texts = doc.css('table thead th').map { |header| header.text.squish }
 
         expect(response).to have_http_status(:success)
-        expect(response.body).to include('New user')
+        expect(response.body).to include('Add user')
         expect(response.body).to include(CGI.escapeHTML(user.name))
         expect(header_texts).not_to include('MFA')
       end

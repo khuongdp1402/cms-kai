@@ -1,15 +1,8 @@
 <%#
-# Application Layout
+# Application Layout (Kalo)
 
-This view template is used as the layout
-for every page that Administrate generates.
-
-By default, it renders:
-- Navigation
-- Content for a search bar
-  (if provided by a `content_for` block in a nested page)
-- Flashes
-- Links to stylesheets and JavaScripts
+Layout for every page Administrate generates: navigation, flashes,
+stylesheets and scripts. Styled by administrate/kalo.scss (see ADR-020).
 %>
 
 <!DOCTYPE html>
@@ -17,20 +10,22 @@ By default, it renders:
 <head>
   <meta charset="utf-8">
   <meta name="ROBOTS" content="NOODP">
-  <meta name="viewport" content="initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>
-    <%= content_for(:title) %> - <%= application_title %>
+    <%= content_for(:title) %> - <%= SuperAdmin::KaloNavigation.brand_name %>
   </title>
+  <link rel="icon" type="image/svg+xml" href="/brand-assets/kalo-mark.svg">
   <%= render "stylesheet" %>
   <%= vite_client_tag %>
   <%= vite_javascript_tag 'superadmin' %>
   <%= csrf_meta_tags %>
 </head>
-<body class="antialiased w-full h-full">
+<body class="kalo-admin antialiased w-full h-full">
   <%= render "icons" %>
-  <div class="flex w-full h-full">
+  <a class="kalo-skip" href="#kalo-main"><%= t('kalo_super_admin.skip_to_content') %></a>
+  <div class="kalo-shell">
     <%= render "navigation" -%>
-    <main class="w-full overflow-auto" role="main">
+    <main id="kalo-main" class="kalo-main" role="main" tabindex="-1">
       <%= render "flashes" -%>
       <%= yield %>
     </main>
