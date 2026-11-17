@@ -1,40 +1,27 @@
 <script setup>
 import { computed } from 'vue';
 import ContactPanel from 'dashboard/routes/dashboard/conversation/ContactPanel.vue';
-import { useUISettings } from 'dashboard/composables/useUISettings';
-import { useWindowSize } from '@vueuse/core';
 import { vOnClickOutside } from '@vueuse/components';
-import wootConstants from 'dashboard/constants/globals';
+import { useContactPanel } from 'dashboard/composables/useContactPanel';
 
-defineProps({
+const props = defineProps({
   currentChat: {
     required: true,
     type: Object,
   },
 });
 
-const { uiSettings, updateUISettings } = useUISettings();
-const { width: windowWidth } = useWindowSize();
+const { isSmallScreen, isContactPanelOpenFor, closeContactPanel: close } =
+  useContactPanel();
 
-const activeTab = computed(() => {
-  const { is_contact_sidebar_open: isContactSidebarOpen } = uiSettings.value;
-
-  if (isContactSidebarOpen) {
-    return 0;
-  }
-  return null;
-});
-
-const isSmallScreen = computed(
-  () => windowWidth.value < wootConstants.SMALL_SCREEN_BREAKPOINT
+const activeTab = computed(() =>
+  isContactPanelOpenFor(props.currentChat.id) ? 0 : null
 );
 
+// Small screens only: the panel overlays the thread, a click outside closes it.
 const closeContactPanel = () => {
-  if (isSmallScreen.value && uiSettings.value?.is_contact_sidebar_open) {
-    updateUISettings({
-      is_contact_sidebar_open: false,
-      is_copilot_panel_open: false,
-    });
+  if (isSmallScreen.value && activeTab.value === 0) {
+    close();
   }
 };
 </script>
