@@ -29,3 +29,10 @@
 - **Q1:** Nhóm tính năng enterprise (Captain AI, SLA, Custom Roles, Audit Logs, Companies, SAML, Calls) cần cái nào? Cái nào cần thì phải tự viết backend, không được copy code enterprise của Chatwoot.
 - **Q2:** Shopee, TikTok Shop và Zalo OA có nằm trong phạm vi parity không, hay để Phase 9?
 - **Q3:** Quyền sở hữu: file `LICENSE-PROPRIETARY` ghi DSFSoft. Cần làm rõ quan hệ giữa KTech và DSFSoft trước khi đầu tư lớn. License MIT bắt buộc giữ file `LICENSE`.
+
+## ADR-020 — Super admin `/super_admin` dùng SCSS riêng theo style Kalo · `accepted` (2026-11-17)
+- **Bối cảnh:** trang super admin là Rails/Administrate, không có Tailwind của app Vue; phần còn lại của Kalo dùng token trong `_ktech-theme.scss`.
+- **Quyết định:** thêm `app/assets/stylesheets/administrate/kalo.scss` (nạp cuối `application.scss`), sao chép các token cần dùng (bảng màu coral, radius, bóng, font Be Vietnam Pro) thành biến CSS `--kalo-*`. Chỉ đổi lớp trình bày: layout, `_navigation`, `_nav_item`, `_settings_menu`, `_collection`, `_filters`, `_search`, `_flashes`, `index`, `show`, trang đăng nhập. Không đổi route, controller, dashboard.
+- **Chữ:** nhãn giao diện nằm trong `config/locales/kalo_super_admin.{vi,en}.yml` (namespace `kalo_super_admin`), không ghi đè khóa `administrate.*`. Tên thương hiệu lấy từ `INSTALLATION_NAME`.
+- **Menu:** rút gọn theo nhóm (Tổng quan, Khách hàng, Nền tảng, Hệ thống), chỉ gồm mục có controller chạy được. Bỏ widget hỗ trợ của Chatwoot khỏi `_javascript`.
+- **Đánh đổi:** hai nguồn token (SCSS app và SCSS super admin) phải cập nhật song song khi đổi bảng màu.

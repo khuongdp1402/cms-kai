@@ -121,7 +121,7 @@
               <% end %>
             </div>
           </div>
-          <p class="text-n-slate-11 mb-0"><%= attrs[:description] %></p>
+          <p class="text-n-slate-11 mb-0"><%= attrs[:description].to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name) %></p>
         </div>
       <% end %>
     </div>

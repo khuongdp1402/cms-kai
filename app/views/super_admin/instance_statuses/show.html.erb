@@ -1,5 +1,5 @@
 <% content_for(:title) do %>
-  Instance Status
+  <%= t('kalo_super_admin.instance_status.title') %>
 <% end %>
 <header class="main-content__header" role="banner">
   <h1 class="main-content__page-title" id="page-title">
@@ -7,17 +7,22 @@
   </h1>
 </header>
 <section class="main-content__body">
-  <table>
-  <tr>
-    <th>Metric</th>
-    <th>Value</th>
-  </tr>
-  <% @metrics.each do |key,value| %>
-   <tr>
-   <td> <%= key %> </td>
-   <td> <%= value %></td>
-  </tr>
-  <% end %>
-</table>
-
+  <div class="kalo-table-scroll" tabindex="0" role="region" aria-labelledby="page-title">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col"><%= t('kalo_super_admin.instance_status.metric') %></th>
+          <th scope="col"><%= t('kalo_super_admin.instance_status.value') %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @metrics.each do |key, value| %>
+          <tr>
+            <td><%= key.to_s.sub('Chatwoot', SuperAdmin::KaloNavigation.brand_name) %></td>
+            <td><%= value %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 </section>

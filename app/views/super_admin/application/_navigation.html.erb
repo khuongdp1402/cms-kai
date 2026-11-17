@@ -1,58 +1,60 @@
 <%#
-# Navigation
+# Navigation (Kalo)
 
-This partial is used to display the navigation in Administrate.
-By default, the navigation contains navigation links
-for all resources in the admin dashboard,
-as defined by the routes in the `admin/` namespace
+Grouped sidebar built from SuperAdmin::KaloNavigation.groups.
+Collapses into a top bar with a menu button on narrow screens.
 %>
 
 <%= vite_client_tag %>
 <%= vite_javascript_tag 'superadmin_pages' %>
 
-<%
-  sidebar_icons = {
-    accounts: 'icon-building-4-line',
-    users: 'icon-user-follow-line',
-    platform_apps: 'icon-apps-2-line',
-    agent_bots: 'icon-robot-line',
-    platform_banners: 'icon-megaphone-line',
-  }
-%>
+<aside class="kalo-nav">
+  <div class="kalo-nav__bar">
+    <%= link_to super_admin_root_path, class: 'kalo-brand', 'aria-label': SuperAdmin::KaloNavigation.brand_name do %>
+      <img src="/brand-assets/kalo-mark.svg" alt="" class="kalo-brand__mark" width="36" height="36">
+      <span class="kalo-brand__text">
+        <span class="kalo-brand__name"><%= SuperAdmin::KaloNavigation.brand_name %></span>
+        <span class="kalo-brand__sub"><%= t('kalo_super_admin.brand_subtitle') %></span>
+      </span>
+    <% end %>
+  </div>
 
-<div class="border-slate-100 border-r w-56 flex-shrink-0 justify-between h-full flex flex-col" role="navigation">
-  <div>
-    <div class="flex mx-4 mb-4 border-slate-100 border-b py-6">
-      <%= link_to image_tag('/brand-assets/logo_thumbnail.svg', alt: 'Chatwoot Admin Dashboard', class: 'h-10'), super_admin_root_url %>
-      <div class="flex flex-col ml-3">
-        <div class="text-sm">Chatwoot <%= Chatwoot.config[:version] %></div>
-        <div class="text-xs text-slate-700 mt-0.5">Super Admin Console</div>
-      </div>
-    </div>
+  <details class="kalo-nav__drawer" id="kalo-nav-drawer" open>
+    <summary class="kalo-nav__toggle">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 5h14M3 10h14M3 15h14"/></svg>
+      <span><%= t('kalo_super_admin.nav.label') %></span>
+    </summary>
 
-    <ul class="my-4">
-      <%= render partial: "nav_item", locals: { icon: 'icon-grid-line', url: super_admin_root_url, label: 'Dashboard' } %>
-      <% Administrate::Namespace.new(namespace).resources.each do |resource| %>
-        <% next if ["account_users", "access_tokens", "installation_configs", "dashboard", "devise/sessions", "app_configs", "instance_statuses", "settings", "push_diagnostics"].include?  resource.resource %>
-        <% next if resource.resource == "platform_banners" && !ChatwootApp.chatwoot_cloud? %>
-        <%= render partial: "nav_item", locals: {
-            icon: sidebar_icons[resource.resource.to_sym],
-            url: resource_index_route(resource),
-            label: display_resource_name(resource),
-          }
-        %>
-
+    <nav class="kalo-nav__body" aria-label="<%= t('kalo_super_admin.nav.label') %>">
+      <% SuperAdmin::KaloNavigation.groups(self).each do |group| %>
+        <div class="kalo-nav__group">
+          <p class="kalo-nav__heading"><%= group[:title] %></p>
+          <ul class="kalo-nav__list">
+            <% group[:items].each do |item| %>
+              <%= render partial: "nav_item", locals: { icon: item[:icon], url: item[:url], label: item[:label] } %>
+            <% end %>
+            <% if group[:key] == :system %>
+              <%= render 'settings_menu', open: settings_open? %>
+            <% end %>
+          </ul>
+        </div>
       <% end %>
-      <%= render 'settings_menu', open: settings_open? %>
-    </ul>
-  </div>
-  <div>
-    <ul class="my-4">
-      <%= render partial: "nav_item", locals: { icon: 'icon-mist-fill', url: sidekiq_web_url, label: 'Sidekiq Dashboard' } %>
-      <%= render partial: "nav_item", locals: { icon: 'icon-health-book-line', url: super_admin_instance_status_url, label: 'Instance Health' } %>
-      <%= render partial: "nav_item", locals: { icon: 'icon-mail-send-fill', url: super_admin_push_diagnostics_url, label: 'Push Diagnostics' } %>
-      <%= render partial: "nav_item", locals: { icon: 'icon-dashboard-line', url: '/', label: 'Agent Dashboard' } %>
-      <%= render partial: "nav_item", locals: { icon: 'icon-logout-circle-r-line', url: super_admin_logout_url, label: 'Logout' } %>
-    </ul>
-  </div>
-</div>
+
+      <div class="kalo-nav__group kalo-nav__group--footer">
+        <ul class="kalo-nav__list">
+          <%= render partial: "nav_item", locals: { icon: 'icon-mist-fill', url: sidekiq_web_url, label: t('kalo_super_admin.nav.sidekiq') } %>
+          <%= render partial: "nav_item", locals: { icon: 'icon-dashboard-line', url: '/', label: t('kalo_super_admin.nav.agent_dashboard') } %>
+          <%= render partial: "nav_item", locals: { icon: 'icon-logout-circle-r-line', url: super_admin_logout_path, label: t('kalo_super_admin.nav.logout') } %>
+        </ul>
+      </div>
+    </nav>
+  </details>
+</aside>
+
+<script>
+  // Menu starts closed on narrow screens, open on desktop.
+  (function () {
+    var drawer = document.getElementById('kalo-nav-drawer');
+    if (drawer && window.matchMedia('(max-width: 767px)').matches) drawer.removeAttribute('open');
+  })();
+</script>

@@ -64,7 +64,7 @@
         <% end %>
           <%if @installation_configs[key]&.dig('description').present? %>
             <p class="pt-2 text-xs italic text-slate-400">
-              <%= @installation_configs[key]&.dig('description') %>
+              <%= @installation_configs[key]&.dig('description').to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name) %>
             </p>
           <% end %>
         </div>

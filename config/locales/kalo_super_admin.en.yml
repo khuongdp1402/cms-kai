@@ -1,0 +1,54 @@
+en:
+  kalo_super_admin:
+    brand_subtitle: System administration
+    skip_to_content: Skip navigation
+    nav:
+      label: Admin navigation
+      dashboard: Overview
+      groups:
+        overview: Overview
+        customers: Customers
+        platform: Platform
+        system: System
+      accounts: Shop accounts
+      users: Users
+      agent_bots: Bots
+      platform_apps: Platform apps
+      platform_banners: System banners
+      access_tokens: Access tokens
+      installation_configs: System config
+      settings: Settings
+      instance_status: System status
+      push_diagnostics: Push diagnostics
+      sidekiq: Background jobs (Sidekiq)
+      agent_dashboard: Back to Kalo app
+      logout: Log out
+    actions:
+      new: Add new
+      edit: Edit
+      destroy: Delete
+      confirm: Are you sure you want to delete this?
+    search:
+      placeholder: "Search %{resource}"
+      clear: Clear search
+    filters:
+      label: Filter by
+      all: All records
+    collection:
+      empty_title: No data yet
+      empty_search: No matching results.
+      empty_body: New records will show up here.
+    flashes:
+      label: Notifications
+    login:
+      title: Admin sign in
+      subtitle: For Kalo system administrators
+      email: Email
+      email_placeholder: e.g. name@company.com
+      password: Password
+      password_placeholder: Enter your password
+      submit: Sign in
+    instance_status:
+      title: System status
+      metric: Metric
+      value: Value
