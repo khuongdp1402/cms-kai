@@ -53,7 +53,9 @@ export const findOverlayProblems = (overlay, english) => {
       add('not a non-empty string');
       return;
     }
-    if (/KTech|Chatwoot/i.test(text)) add('visible KTech or Chatwoot name');
+    // Placeholder names are code identifiers, not shown text.
+    if (/KTech|Chatwoot/i.test(text.replace(/\{[^}]*\}/g, '')))
+      add('visible KTech or Chatwoot name');
     if (kalo) {
       if (!balanced(text)) add('unbalanced placeholder braces');
     } else if (
