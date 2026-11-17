@@ -12,7 +12,7 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
-- **B34 (2026-11-17): Gắn thẳng hàm `toggle` của vueuse làm listener của bus `mitt` nên lệnh "Gửi transcript" trên thanh lệnh không mở modal.**
+- **B35 (2026-11-17): Gắn thẳng hàm `toggle` của vueuse làm listener của bus `mitt` nên lệnh "Gửi transcript" trên thanh lệnh không mở modal.**
   - Triệu chứng: `emitter.on(CMD_SEND_TRANSCRIPT, toggleEmailModal)` trong `MoreActions.vue`; chọn lệnh trên thanh Cmd+K thì modal không hiện, cờ thành `undefined`.
   - Nguyên nhân: mitt luôn gọi listener với một đối số (payload, ở đây `undefined`); `toggle(value)` của `useToggle` hễ có đối số là gán đúng giá trị đó thay vì đảo.
   - Quy tắc: không truyền thẳng `toggle`/setter nhận đối số làm listener của bus event hoặc `@event`; bọc bằng hàm không đối số (`() => toggle(true)`). Trong spec component, ref của vueuse không re-render dưới vitest ở repo này: component mới dùng `ref` thường.
