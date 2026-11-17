@@ -187,8 +187,8 @@ onBeforeUnmount(() => {
   >
     <template #header>
       <BaseSettingsHeader
-        :title="$t('DATA_IMPORTS.HEADER')"
-        :description="$t('DATA_IMPORTS.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.HUB.LINKS.DATA_IMPORT.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.HUB.LINKS.DATA_IMPORT.DESC')"
       >
         <template #tabs>
           <TabBar

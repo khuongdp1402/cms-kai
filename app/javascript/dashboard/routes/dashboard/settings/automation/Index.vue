@@ -191,8 +191,8 @@ const tableHeaders = computed(() => {
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="$t('AUTOMATION.HEADER')"
-        :description="$t('AUTOMATION.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.HUB.LINKS.AUTOMATION.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.HUB.LINKS.AUTOMATION.DESC')"
         :link-text="$t('AUTOMATION.LEARN_MORE')"
         :search-placeholder="$t('AUTOMATION.SEARCH_PLACEHOLDER')"
         feature-name="automation"

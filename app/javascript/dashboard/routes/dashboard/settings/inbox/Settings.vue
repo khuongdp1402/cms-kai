@@ -239,40 +239,8 @@ export default {
         ];
       }
 
-      if (
-        this.isATwilioChannel &&
-        this.inbox.phone_number &&
-        this.inbox.medium === 'sms' &&
-        this.isFeatureEnabledonAccount(
-          this.accountId,
-          FEATURE_FLAGS.CHANNEL_VOICE
-        )
-      ) {
-        visibleToAllChannelTabs = [
-          ...visibleToAllChannelTabs,
-          {
-            key: 'voice-configuration',
-            name: this.$t('INBOX_MGMT.TABS.VOICE'),
-          },
-        ];
-      }
-
-      if (
-        this.isAWhatsAppCloudChannel &&
-        this.isFeatureEnabledonAccount(
-          this.accountId,
-          FEATURE_FLAGS.CHANNEL_VOICE
-        )
-      ) {
-        visibleToAllChannelTabs = [
-          ...visibleToAllChannelTabs,
-          {
-            key: 'calls-configuration',
-            name: this.$t('INBOX_MGMT.TABS.CALLS'),
-          },
-        ];
-      }
-
+      // Voice and WhatsApp calling tabs are not offered: the calls/voice
+      // controllers are enterprise-only and absent here (inventory S-X7).
       return visibleToAllChannelTabs;
     },
     currentInboxId() {
@@ -593,11 +561,12 @@ export default {
       }
     },
     goToWhatsAppConfiguration() {
-      const configurationTabIndex = this.tabs.findIndex(
-        tab => tab.key === 'configuration'
-      );
-      if (configurationTabIndex !== -1) {
-        this.onTabChange(configurationTabIndex);
+      this.openTabByKey('configuration');
+    },
+    openTabByKey(key) {
+      const tabIndex = this.tabs.findIndex(tab => tab.key === key);
+      if (tabIndex !== -1) {
+        this.onTabChange(tabIndex);
       }
     },
     async registerWebhook() {
@@ -845,37 +814,58 @@ export default {
             <!-- Zalo Personal Account Summary Banner -->
             <div
               v-if="isAZaloPersonalChannel"
-              class="mb-6 p-4 rounded-xl border border-n-weak bg-n-solid-2 flex items-center justify-between gap-4"
+              data-test="zalo-personal-summary"
+              class="flex flex-wrap items-center justify-between gap-4 p-4 mb-6 border rounded-2xl border-n-weak bg-n-solid-1"
             >
-              <div class="flex items-center gap-3 min-w-0">
+              <div class="flex items-center min-w-0 gap-3">
                 <img
                   v-if="inbox.avatar_url"
                   :src="inbox.avatar_url"
-                  alt="Zalo Avatar"
-                  class="size-12 rounded-full border-2 border-blue-500 shadow-sm object-cover shrink-0"
+                  :alt="inbox.display_name || inbox.name"
+                  class="object-cover border-2 rounded-full shadow-sm size-12 border-n-blue-8 shrink-0"
                 />
                 <div
                   v-else
-                  class="size-12 rounded-full bg-blue-100 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 font-bold text-lg flex items-center justify-center shrink-0 border border-blue-500/30"
+                  class="flex items-center justify-center text-lg font-bold border rounded-full size-12 bg-n-blue-3 text-n-blue-11 shrink-0 border-n-blue-6"
                 >
                   {{ (inbox.display_name || inbox.name || 'Z')[0] }}
                 </div>
                 <div class="min-w-0">
-                  <div class="text-sm font-bold text-n-slate-12 truncate">
+                  <div class="text-sm font-bold truncate text-n-slate-12">
                     {{ inbox.display_name || inbox.name }}
                   </div>
-                  <div class="text-xs text-n-slate-11 flex items-center gap-2 mt-0.5">
+                  <div
+                    class="text-xs text-n-slate-11 flex flex-wrap items-center gap-2 mt-0.5"
+                  >
                     <span
                       class="inline-flex items-center gap-1 font-medium"
-                      :class="inbox.connection_status === 'connected' ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'"
+                      :class="
+                        inbox.connection_status === 'connected'
+                          ? 'text-n-teal-11'
+                          : 'text-n-ruby-11'
+                      "
                     >
                       <span
                         class="size-1.5 rounded-full"
-                        :class="inbox.connection_status === 'connected' ? 'bg-emerald-500' : 'bg-rose-500'"
+                        :class="
+                          inbox.connection_status === 'connected'
+                            ? 'bg-n-teal-9'
+                            : 'bg-n-ruby-9'
+                        "
                       />
-                      {{ inbox.connection_status === 'connected' ? 'Đang kết nối' : 'Đã ngắt kết nối' }}
+                      {{
+                        inbox.connection_status === 'connected'
+                          ? $t('KALO_SETTINGS_UI.ZALO_PERSONAL.CONNECTED')
+                          : $t('KALO_SETTINGS_UI.ZALO_PERSONAL.DISCONNECTED')
+                      }}
                     </span>
-                    <span v-if="inbox.zalo_user_id" class="text-n-slate-10">• ID: {{ inbox.zalo_user_id }}</span>
+                    <span v-if="inbox.zalo_user_id" class="text-n-slate-10">
+                      {{
+                        $t('KALO_SETTINGS_UI.ZALO_PERSONAL.USER_ID', {
+                          id: inbox.zalo_user_id,
+                        })
+                      }}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -883,8 +873,9 @@ export default {
                 ghost
                 blue
                 size="sm"
-                label="Xem hồ sơ & Đăng xuất →"
-                @click="selectedTabKey = 'configuration'"
+                data-test="zalo-personal-manage"
+                :label="$t('KALO_SETTINGS_UI.ZALO_PERSONAL.MANAGE')"
+                @click="openTabByKey('configuration')"
               />
             </div>
 

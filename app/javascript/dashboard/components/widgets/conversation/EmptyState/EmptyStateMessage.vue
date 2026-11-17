@@ -1,33 +1,24 @@
-<script>
-import FeaturePlaceholder from './FeaturePlaceholder.vue';
-export default {
-  components: { FeaturePlaceholder },
-  props: {
-    message: {
-      type: String,
-      required: true,
-    },
-  },
-};
+<script setup>
+import KaloIcon from 'next/icon/KaloIcon.vue';
+
+defineProps({
+  message: { type: String, required: true },
+});
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center h-full">
-    <img
-      class="m-4 w-32 hidden dark:block"
-      src="dashboard/assets/images/no-chat-dark.svg"
-      alt="No Chat dark"
-    />
-    <img
-      class="m-4 w-32 block dark:hidden"
-      src="dashboard/assets/images/no-chat.svg"
-      alt="No Chat"
-    />
-    <span class="text-sm text-n-slate-12 font-medium text-center">
-      {{ message }}
-      <br />
+  <div
+    data-test-id="kalo-empty-message"
+    class="flex flex-col items-center justify-center h-full gap-4 px-6 text-center"
+  >
+    <span
+      aria-hidden="true"
+      class="grid rounded-[1.75rem] size-20 bg-n-blue-2 place-items-center text-n-blue-9"
+    >
+      <KaloIcon name="msg" class="size-10" />
     </span>
-    <!-- Cmd bar, keyboard shortcuts placeholder -->
-    <FeaturePlaceholder />
+    <p class="max-w-xs text-sm font-medium text-n-slate-11">
+      {{ message }}
+    </p>
   </div>
 </template>

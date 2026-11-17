@@ -13,7 +13,7 @@ const route = useRoute();
 
 <template>
   <div
-    class="flex flex-col w-full h-full m-0 pb-8 pt-4 px-6 overflow-auto bg-n-surface-1"
+    class="flex flex-col w-full h-full px-4 pt-4 pb-8 m-0 overflow-auto sm:px-6 sm:pt-6 bg-n-surface-1"
   >
     <div class="flex items-start w-full max-w-5xl mx-auto">
       <router-view v-slot="{ Component }">

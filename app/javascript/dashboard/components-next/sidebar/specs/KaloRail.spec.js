@@ -159,4 +159,31 @@ describe('KaloRail', () => {
       single.findComponent({ name: 'SidebarAccountSwitcher' }).exists()
     ).toBe(false);
   });
+
+  // Kalo UI phase 2 (1b-i): the Chatwoot Sidebar used to load these lists; without them the
+  // chat list had no inbox names / channel badges and showed the "no channel" welcome.
+  it('loads the account lists the chat screens read from the store', async () => {
+    const { router, store, i18n } = createKaloTestEnv();
+    const dispatch = vi.spyOn(store, 'dispatch').mockImplementation(() => {});
+    await router.push({ name: 'home', params: { accountId: 1 } });
+    wrappers.push(
+      mount(KaloRail, {
+        global: {
+          plugins: [router, store, i18n],
+          stubs: { SidebarProfileMenuStatus: true, ComposeConversation: true },
+        },
+      })
+    );
+    const calls = dispatch.mock.calls.map(c => c.slice(0, 2).join(':'));
+    expect(calls).toEqual(
+      expect.arrayContaining([
+        'labels/get',
+        'inboxes/get',
+        'teams/get',
+        'attributes/get',
+        'customViews/get:conversation',
+        'customViews/get:contact',
+      ])
+    );
+  });
 });

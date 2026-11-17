@@ -1,7 +1,6 @@
 <script setup>
 import { useStoreGetters, useStore } from 'dashboard/composables/store';
 import { computed, onMounted, ref } from 'vue';
-import { useBranding } from 'shared/composables/useBranding';
 import { picoSearch } from '@scmmishra/pico-search';
 import IntegrationItem from './IntegrationItem.vue';
 import SettingsLayout from '../SettingsLayout.vue';
@@ -9,7 +8,6 @@ import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
 
 const store = useStore();
 const getters = useStoreGetters();
-const { replaceInstallationName } = useBranding();
 
 const searchQuery = ref('');
 const uiFlags = getters['integrations/getUIFlags'];
@@ -37,10 +35,8 @@ onMounted(() => {
     <template #header>
       <BaseSettingsHeader
         v-model:search-query="searchQuery"
-        :title="$t('INTEGRATION_SETTINGS.HEADER')"
-        :description="
-          replaceInstallationName($t('INTEGRATION_SETTINGS.DESCRIPTION'))
-        "
+        :title="$t('KALO_SETTINGS_UI.HUB.LINKS.INTEGRATIONS.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.HUB.LINKS.INTEGRATIONS.DESC')"
         :link-text="$t('INTEGRATION_SETTINGS.LEARN_MORE')"
         :search-placeholder="$t('INTEGRATION_SETTINGS.SEARCH_PLACEHOLDER')"
         feature-name="integrations"

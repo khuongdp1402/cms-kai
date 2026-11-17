@@ -32,8 +32,8 @@ const showRequiredAttributes = computed(() => {
   <SettingsLayout :no-records-found="false" class="gap-10">
     <template #header>
       <BaseSettingsHeader
-        :title="$t('CONVERSATION_WORKFLOW.INDEX.HEADER.TITLE')"
-        :description="$t('CONVERSATION_WORKFLOW.INDEX.HEADER.DESCRIPTION')"
+        :title="$t('KALO_SETTINGS_UI.HUB.LINKS.WORKFLOW.TITLE')"
+        :description="$t('KALO_SETTINGS_UI.HUB.LINKS.WORKFLOW.DESC')"
         feature-name="conversation-workflow"
       />
     </template>

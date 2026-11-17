@@ -2,7 +2,7 @@
 // Pins components/ConversationList.vue:
 //  - wrapper keeps class `conversations-list` (keyboard nav, Cmd+Alt+E scroll reset) :72
 //  - virtualized list of ConversationItem                                            :66-84
-//  - spinner while loading / end-of-list message / otherwise an IntersectionObserver
+//  - skeleton rows while loading / end-of-list message / otherwise an IntersectionObserver
 //    sentinel whose `observed` event emits `loadMore`                                :85-96
 import { mount } from '@vue/test-utils';
 import ConversationList from '../ConversationList.vue';
@@ -67,9 +67,12 @@ describe('ConversationList', () => {
     expect(wrapper.emitted('loadMore')).toHaveLength(1);
   });
 
-  it('shows a spinner (no sentinel) while loading', () => {
+  // Kalo UI phase 2: the spinner became skeleton rows (selector change only).
+  it('shows a loading indicator (no sentinel) while loading', () => {
     const wrapper = mountList({ isLoading: true });
-    expect(wrapper.find('.spinner-stub').exists()).toBe(true);
+    expect(wrapper.find('[data-test-id="kalo-list-skeleton"]').exists()).toBe(
+      true
+    );
     expect(wrapper.findComponent(IntersectionObserver).exists()).toBe(false);
   });
 

@@ -50,7 +50,7 @@ const actionURL = computed(() =>
 
 <template>
   <div
-    class="flex flex-col flex-1 p-4 m-px outline outline-n-container outline-1 bg-n-card rounded-xl"
+    class="flex flex-col flex-1 p-4 border rounded-2xl border-n-weak bg-n-solid-1"
   >
     <div class="flex items-start justify-between">
       <div class="flex h-12 w-12 mb-2">

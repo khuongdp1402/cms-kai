@@ -127,6 +127,11 @@ export default {
     if (this.currentUserId) {
       this.initializeUser();
     }
+    // Hub links "Bảo mật" and "Thông báo" open this page at a section.
+    const section =
+      this.$route.hash && document.getElementById(this.$route.hash.slice(1));
+    if (section)
+      this.$nextTick(() => section.scrollIntoView({ block: 'start' }));
   },
   methods: {
     initializeUser() {
@@ -229,7 +234,10 @@ export default {
 
 <template>
   <div class="grid max-w-2xl ltr:mr-auto rtl:ml-auto">
-    <BaseSettingsHeader :title="$t('PROFILE_SETTINGS.TITLE')" description="" />
+    <BaseSettingsHeader
+      :title="$t('KALO_SETTINGS_UI.PAGES.PROFILE.TITLE')"
+      :description="$t('KALO_SETTINGS_UI.PAGES.PROFILE.DESC')"
+    />
     <SectionLayout title="" description="" class="!pt-0">
       <div class="flex flex-col gap-6">
         <UserProfilePicture
@@ -314,49 +322,53 @@ export default {
         </RadioCard>
       </div>
     </SectionLayout>
-    <SectionLayout
-      v-if="!globalConfig.disableUserProfileUpdate"
-      with-border
-      :title="$t('PROFILE_SETTINGS.FORM.PASSWORD_SECTION.TITLE')"
-      description=""
-    >
-      <ChangePassword />
-    </SectionLayout>
-    <SectionLayout
-      v-if="isMfaEnabled"
-      with-border
-      :title="$t('PROFILE_SETTINGS.FORM.SECURITY_SECTION.TITLE')"
-      :description="$t('PROFILE_SETTINGS.FORM.SECURITY_SECTION.NOTE')"
-    >
-      <MfaSettingsCard />
-    </SectionLayout>
-    <SectionLayout
-      with-border
-      :title="$t('PROFILE_SETTINGS.FORM.SESSIONS_SECTION.TITLE')"
-      :description="$t('PROFILE_SETTINGS.FORM.SESSIONS_SECTION.NOTE')"
-    >
-      <ActiveSessions />
-    </SectionLayout>
-    <Policy :permissions="audioNotificationPermissions">
+    <div id="security" class="scroll-mt-4">
       <SectionLayout
+        v-if="!globalConfig.disableUserProfileUpdate"
         with-border
-        :title="$t('PROFILE_SETTINGS.FORM.AUDIO_NOTIFICATIONS_SECTION.TITLE')"
-        :description="
-          $t('PROFILE_SETTINGS.FORM.AUDIO_NOTIFICATIONS_SECTION.NOTE')
-        "
-      >
-        <AudioNotifications />
-      </SectionLayout>
-    </Policy>
-    <Policy :permissions="notificationPermissions">
-      <SectionLayout
-        with-border
-        :title="$t('PROFILE_SETTINGS.FORM.NOTIFICATIONS.TITLE')"
+        :title="$t('PROFILE_SETTINGS.FORM.PASSWORD_SECTION.TITLE')"
         description=""
       >
-        <NotificationPreferences />
+        <ChangePassword />
       </SectionLayout>
-    </Policy>
+      <SectionLayout
+        v-if="isMfaEnabled"
+        with-border
+        :title="$t('PROFILE_SETTINGS.FORM.SECURITY_SECTION.TITLE')"
+        :description="$t('PROFILE_SETTINGS.FORM.SECURITY_SECTION.NOTE')"
+      >
+        <MfaSettingsCard />
+      </SectionLayout>
+      <SectionLayout
+        with-border
+        :title="$t('PROFILE_SETTINGS.FORM.SESSIONS_SECTION.TITLE')"
+        :description="$t('PROFILE_SETTINGS.FORM.SESSIONS_SECTION.NOTE')"
+      >
+        <ActiveSessions />
+      </SectionLayout>
+    </div>
+    <div id="notifications" class="scroll-mt-4">
+      <Policy :permissions="audioNotificationPermissions">
+        <SectionLayout
+          with-border
+          :title="$t('PROFILE_SETTINGS.FORM.AUDIO_NOTIFICATIONS_SECTION.TITLE')"
+          :description="
+            $t('PROFILE_SETTINGS.FORM.AUDIO_NOTIFICATIONS_SECTION.NOTE')
+          "
+        >
+          <AudioNotifications />
+        </SectionLayout>
+      </Policy>
+      <Policy :permissions="notificationPermissions">
+        <SectionLayout
+          with-border
+          :title="$t('PROFILE_SETTINGS.FORM.NOTIFICATIONS.TITLE')"
+          description=""
+        >
+          <NotificationPreferences />
+        </SectionLayout>
+      </Policy>
+    </div>
     <SectionLayout
       with-border
       :title="$t('PROFILE_SETTINGS.FORM.ACCESS_TOKEN.TITLE')"
