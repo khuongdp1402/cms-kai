@@ -15,6 +15,7 @@ import SaveCustomView from 'next/filter/SaveCustomView.vue';
 import ChatTypeTabs from './widgets/ChatTypeTabs.vue';
 import DeleteCustomViews from 'dashboard/routes/dashboard/customviews/DeleteCustomViews.vue';
 import ConversationBulkActions from './widgets/conversation/conversationBulkActions/Index.vue';
+import KaloChatListEmpty from './widgets/conversation/KaloChatListEmpty.vue';
 import TeleportWithDirection from 'dashboard/components-next/TeleportWithDirection.vue';
 import ConversationResolveAttributesModal from 'dashboard/components-next/ConversationWorkflow/ConversationResolveAttributesModal.vue';
 
@@ -182,7 +183,7 @@ const assigneeTabItems = computed(() => {
     item => item.permissions
   ).map(({ key, count: countKey }) => ({
     key,
-    name: t(`CHAT_LIST.ASSIGNEE_TYPE_TABS.${key}`),
+    name: t(`KALO_CHAT_LIST.TABS.${key.toUpperCase()}`),
     count: conversationStats.value[countKey] || 0,
   }));
 });
@@ -268,7 +269,7 @@ const activeTeam = computed(() => {
 
 const pageTitle = computed(() => {
   if (hasAppliedFilters.value) {
-    return t('CHAT_LIST.TAB_HEADING');
+    return t('KALO_CHAT_LIST.TITLE');
   }
   if (inbox.value.name) {
     return inbox.value.name;
@@ -293,7 +294,7 @@ const pageTitle = computed(() => {
   if (hasActiveFolders.value) {
     return activeFolder.value.name;
   }
-  return t('CHAT_LIST.TAB_HEADING');
+  return t('KALO_CHAT_LIST.TITLE');
 });
 
 function filterByAssigneeTab(conversations) {
@@ -931,16 +932,14 @@ watch(conversationFilters, (newVal, oldVal) => {
       v-if="!hasAppliedFiltersOrActiveFolders"
       :items="assigneeTabItems"
       :active-tab="activeAssigneeTab"
-      is-compact
       @chat-tab-change="updateAssigneeTab"
     />
 
-    <p
+    <KaloChatListEmpty
       v-if="!chatListLoading && !conversationList.length"
-      class="flex overflow-auto justify-center items-center p-4"
-    >
-      {{ $t('CHAT_LIST.LIST.404') }}
-    </p>
+      :is-filtered="hasAppliedFilters"
+      @clear-filters="resetAndFetchData"
+    />
     <ConversationBulkActions
       :conversations="selectedConversations"
       :all-conversations-selected="allConversationsSelected"

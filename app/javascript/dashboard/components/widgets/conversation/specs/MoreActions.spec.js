@@ -4,7 +4,8 @@
 //  - mute/unmute dispatch `muteConversation` / `unmuteConversation`            :75-82,87-95
 //  - send transcript opens EmailTranscriptModal                                :83-84,138-144
 //  - Zalo sync calls ConversationAPI.syncZaloMessages(inboxId)                 :63-73
-//  - command-bar events CMD_MUTE/UNMUTE_CONVERSATION and CMD_SEND_TRANSCRIPT   :98-106
+//  - command-bar events CMD_MUTE/UNMUTE_CONVERSATION and CMD_SEND_TRANSCRIPT (opens the modal)
+//  - assign / team / label / priority entries open the command bar (Kalo UI phase 2)
 //  - contains ResolveAction (resolve/reopen/snooze)                            :112-115
 import { mount, flushPromises } from '@vue/test-utils';
 import { createStore } from 'vuex';
@@ -150,13 +151,28 @@ describe('MoreActions', () => {
     expect(actions.muteConversation).not.toHaveBeenCalled();
   });
 
-  // NOTE (observed, not endorsed): MoreActions registers `toggleEmailModal` directly as the
-  // CMD_SEND_TRANSCRIPT listener. vueuse's toggle sets the value when called with ANY argument,
-  // and mitt calls the listener with `undefined`, so emitting the event sets the flag to
-  // undefined (falsy) instead of opening the modal. Pinned so a rebuild notices a change.
-  it('CMD_SEND_TRANSCRIPT currently leaves the modal flag falsy (listener is the raw toggle)', () => {
+  // Fixed in Kalo UI phase 2 (LESSONS B34): the listener used to be vueuse's raw toggle, which
+  // mitt calls with `undefined`, so the flag became undefined and the modal never opened.
+  it('CMD_SEND_TRANSCRIPT opens the email transcript modal', () => {
     const wrapper = mountActions();
     emitter.emit(CMD_SEND_TRANSCRIPT);
-    expect(wrapper.vm.$.setupState.showEmailActionsModal).toBeFalsy();
+    expect(wrapper.vm.$.setupState.showEmailActionsModal).toBe(true);
+  });
+
+  it('assign / label / priority entries open the command bar on their sub-list', () => {
+    const ninja = document.createElement('ninja-keys');
+    ninja.open = vi.fn();
+    document.body.appendChild(ninja);
+    const wrapper = mountActions();
+    // menu items call openCommandBar(item.action); the toggle ref does not re-render here
+    wrapper.vm.$.setupState.openCommandBar('assign_an_agent');
+    expect(ninja.open).toHaveBeenCalledWith({ parent: 'assign_an_agent' });
+    expect(wrapper.vm.$.setupState.commandBarItems.map(i => i.action)).toEqual([
+      'assign_an_agent',
+      'assign_a_team',
+      'add_a_label_to_the_conversation',
+      'assign_priority',
+    ]);
+    ninja.remove();
   });
 });

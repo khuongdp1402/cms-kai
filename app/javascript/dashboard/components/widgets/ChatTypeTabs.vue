@@ -46,19 +46,33 @@ useKeyboardEvents(keyboardEvents);
 </script>
 
 <template>
-  <woot-tabs
-    :index="activeTabIndex"
-    class="w-full px-3 -mt-1 py-0 [&_ul]:p-0 h-10"
-    @change="onTabChange"
+  <div
+    role="tablist"
+    class="flex items-center w-full gap-1 px-4 pb-2 overflow-x-auto [scrollbar-width:none]"
   >
-    <woot-tabs-item
+    <button
       v-for="(item, index) in items"
       :key="item.key"
-      class="text-sm [&_a]:font-medium"
-      :index="index"
-      :name="item.name"
-      :count="item.count"
-      is-compact
-    />
-  </woot-tabs>
+      type="button"
+      role="tab"
+      data-test-id="kalo-chat-tab"
+      :aria-selected="index === activeTabIndex"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors duration-150 motion-reduce:transition-none"
+      :class="
+        index === activeTabIndex
+          ? 'bg-n-slate-12 text-n-solid-1'
+          : 'text-n-slate-11 hover:bg-n-alpha-2'
+      "
+      @click="onTabChange(index)"
+    >
+      {{ item.name }}
+      <span
+        v-if="item.count"
+        class="text-xs tabular-nums"
+        :class="index === activeTabIndex ? 'opacity-80' : 'text-n-slate-10'"
+      >
+        {{ item.count }}
+      </span>
+    </button>
+  </div>
 </template>

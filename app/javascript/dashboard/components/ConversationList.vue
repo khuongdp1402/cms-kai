@@ -4,7 +4,6 @@ import { Virtualizer } from 'virtua/vue';
 import { useBreakpoints } from '@vueuse/core';
 import { useChatListKeyboardEvents } from 'dashboard/composables/chatlist/useChatListKeyboardEvents';
 import ConversationItem from './ConversationItem.vue';
-import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
 import IntersectionObserver from 'dashboard/components/IntersectionObserver.vue';
 
 import wootConstants from 'dashboard/constants/globals';
@@ -67,7 +66,6 @@ defineExpose({ conversationListRef });
       ref="virtualListRef"
       v-slot="{ item }"
       :data="conversationList"
-      class="[&>div:has(+_div_.active)>*]:!border-n-surface-1 [&>div:has(+_div_.selected)>*]:!border-n-surface-1"
     >
       <ConversationItem
         :source="item"
@@ -79,10 +77,28 @@ defineExpose({ conversationListRef });
         :show-expanded="showExpandedCards"
       />
     </Virtualizer>
-    <div v-if="isLoading" class="flex justify-center my-4">
-      <Spinner class="text-n-brand" />
+    <div
+      v-if="isLoading"
+      data-test-id="kalo-list-skeleton"
+      role="status"
+      :aria-label="$t('KALO_CHAT_LIST.LOADING')"
+    >
+      <div
+        v-for="row in conversationList.length ? 2 : 8"
+        :key="row"
+        class="flex items-center gap-3 px-4 py-3 border-b border-n-weak animate-pulse motion-reduce:animate-none"
+      >
+        <span class="rounded-full size-10 shrink-0 bg-n-alpha-2" />
+        <span class="flex flex-col flex-1 min-w-0 gap-2">
+          <span class="w-2/5 h-3 rounded-full bg-n-alpha-2" />
+          <span class="w-4/5 h-3 rounded-full bg-n-alpha-1" />
+        </span>
+      </div>
     </div>
-    <p v-else-if="showEndOfListMessage" class="p-4 text-center text-n-slate-11">
+    <p
+      v-else-if="showEndOfListMessage"
+      class="px-4 py-5 text-xs text-center text-n-slate-10"
+    >
       {{ $t('CHAT_LIST.EOF') }}
     </p>
     <IntersectionObserver

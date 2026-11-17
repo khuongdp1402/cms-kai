@@ -1,5 +1,5 @@
 // Characterization spec (chat-parity C-01, C-02).
-// Pins components/widgets/ChatTypeTabs.vue:9-47: Alt+N cycles tabs, emits `chatTabChange`
+// Pins components/widgets/ChatTypeTabs.vue: Alt+N cycles tabs, emits `chatTabChange`
 // with the tab key; from the "all" tab it wraps to the first tab.
 import { mount } from '@vue/test-utils';
 import ChatTypeTabs from '../ChatTypeTabs.vue';
@@ -9,57 +9,49 @@ vi.mock('dashboard/composables/useKeyboardEvents', () => ({
   useKeyboardEvents: vi.fn(),
 }));
 
-const WootTabs = {
-  name: 'WootTabs',
-  props: ['index'],
-  template: '<div><slot /></div>',
-};
-const WootTabsItem = {
-  name: 'WootTabsItem',
-  props: ['name', 'count', 'index', 'isCompact'],
-  template: '<span class="tab-item" />',
-};
-
 const items = [
   { key: 'me', name: 'Mine', count: 3 },
   { key: 'unassigned', name: 'Unassigned', count: 2 },
   { key: 'all', name: 'All', count: 5 },
 ];
 
+// Kalo UI phase 2: woot-tabs became pill buttons; selectors changed, intent kept.
+const tabs = wrapper => wrapper.findAll('[data-test-id="kalo-chat-tab"]');
+
 const mountTabs = activeTab =>
   mount(ChatTypeTabs, {
     props: { items, activeTab },
-    global: {
-      components: { WootTabs, WootTabsItem },
-    },
   });
 
 describe('ChatTypeTabs', () => {
   it('renders one tab item per entry with name and count', () => {
     const wrapper = mountTabs('me');
-    const tabs = wrapper.findAllComponents(WootTabsItem);
-    expect(tabs).toHaveLength(3);
-    expect(tabs.map(t => [t.props('name'), t.props('count')])).toEqual([
-      ['Mine', 3],
-      ['Unassigned', 2],
-      ['All', 5],
+    expect(tabs(wrapper)).toHaveLength(3);
+    expect(tabs(wrapper).map(t => t.text().replace(/\s+/g, ' '))).toEqual([
+      'Mine 3',
+      'Unassigned 2',
+      'All 5',
     ]);
   });
 
-  it('passes the index of the active tab to woot-tabs', () => {
+  it('marks the active tab as selected', () => {
     const wrapper = mountTabs('unassigned');
-    expect(wrapper.findComponent(WootTabs).props('index')).toBe(1);
+    expect(tabs(wrapper).map(t => t.attributes('aria-selected'))).toEqual([
+      'false',
+      'true',
+      'false',
+    ]);
   });
 
-  it('woot-tabs change event emits chatTabChange with the new key', async () => {
+  it('clicking a tab emits chatTabChange with the new key', async () => {
     const wrapper = mountTabs('me');
-    await wrapper.findComponent(WootTabs).vm.$emit('change', 1);
+    await tabs(wrapper)[1].trigger('click');
     expect(wrapper.emitted('chatTabChange')).toEqual([['unassigned']]);
   });
 
   it('does not emit when the selected tab is already active', async () => {
     const wrapper = mountTabs('me');
-    await wrapper.findComponent(WootTabs).vm.$emit('change', 0);
+    await tabs(wrapper)[0].trigger('click');
     expect(wrapper.emitted('chatTabChange')).toBeUndefined();
   });
 

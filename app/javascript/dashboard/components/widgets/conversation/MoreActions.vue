@@ -8,8 +8,7 @@ import { emitter } from 'shared/helpers/mitt';
 import { useInbox } from 'dashboard/composables/useInbox';
 import EmailTranscriptModal from './EmailTranscriptModal.vue';
 import ResolveAction from '../../buttons/ResolveAction.vue';
-import ButtonV4 from 'dashboard/components-next/button/Button.vue';
-import DropdownMenu from 'dashboard/components-next/dropdown-menu/DropdownMenu.vue';
+import KaloIcon from 'next/icon/KaloIcon.vue';
 import ConversationAPI from 'dashboard/api/conversations';
 
 import {
@@ -34,14 +33,14 @@ const actionMenuItems = computed(() => {
 
   if (!currentChat.value.muted) {
     items.push({
-      icon: 'i-lucide-volume-off',
+      icon: 'bell',
       label: t('CONTACT_PANEL.MUTE_CONTACT'),
       action: 'mute',
       value: 'mute',
     });
   } else {
     items.push({
-      icon: 'i-lucide-volume-1',
+      icon: 'bell',
       label: t('CONTACT_PANEL.UNMUTE_CONTACT'),
       action: 'unmute',
       value: 'unmute',
@@ -49,7 +48,7 @@ const actionMenuItems = computed(() => {
   }
 
   items.push({
-    icon: 'i-lucide-share',
+    icon: 'send',
     label: t('CONTACT_PANEL.SEND_TRANSCRIPT'),
     action: 'send_transcript',
     value: 'send_transcript',
@@ -58,7 +57,7 @@ const actionMenuItems = computed(() => {
   // Sync messages button for Zalo Personal inboxes
   if (isAZaloPersonalChannel.value) {
     items.push({
-      icon: 'i-lucide-refresh-cw',
+      icon: 'arrow',
       label: isSyncing.value
         ? t('CONVERSATION.HEADER.ZALO_SYNC_IN_PROGRESS')
         : t('CONVERSATION.HEADER.ZALO_SYNC_MESSAGES'),
@@ -70,6 +69,31 @@ const actionMenuItems = computed(() => {
 
   return items;
 });
+
+// Assign / label / priority already live in the command bar (useConversationHotKeys);
+// the overflow menu opens it on the matching sub-list.
+const COMMAND_BAR_ITEMS = [
+  { action: 'assign_an_agent', icon: 'users', labelKey: 'ASSIGN' },
+  { action: 'assign_a_team', icon: 'users', labelKey: 'ASSIGN_TEAM' },
+  { action: 'add_a_label_to_the_conversation', icon: 'tag', labelKey: 'LABEL' },
+  { action: 'assign_priority', icon: 'zap', labelKey: 'PRIORITY' },
+];
+
+const commandBarItems = computed(() =>
+  COMMAND_BAR_ITEMS.map(item => ({
+    ...item,
+    label: t(`KALO_CHAT_LIST.HEADER.${item.labelKey}`),
+  }))
+);
+
+const openCommandBar = parent => {
+  toggleDropdown(false);
+  document.querySelector('ninja-keys')?.open({ parent });
+};
+
+// mitt calls listeners with the event payload (undefined), and vueuse's toggle treats any
+// argument as the new value, so the command-bar event must open the modal explicitly.
+const openTranscriptModal = () => toggleEmailModal(true);
 
 const syncZaloMessages = async () => {
   if (isSyncing.value) return;
@@ -117,40 +141,77 @@ const unmute = () => {
 
 emitter.on(CMD_MUTE_CONVERSATION, mute);
 emitter.on(CMD_UNMUTE_CONVERSATION, unmute);
-emitter.on(CMD_SEND_TRANSCRIPT, toggleEmailModal);
+emitter.on(CMD_SEND_TRANSCRIPT, openTranscriptModal);
 
 onUnmounted(() => {
   emitter.off(CMD_MUTE_CONVERSATION, mute);
   emitter.off(CMD_UNMUTE_CONVERSATION, unmute);
-  emitter.off(CMD_SEND_TRANSCRIPT, toggleEmailModal);
+  emitter.off(CMD_SEND_TRANSCRIPT, openTranscriptModal);
 });
 </script>
 
 <template>
-  <div class="relative flex items-center gap-2 actions--container">
+  <div class="relative flex items-center gap-1.5 actions--container">
     <ResolveAction
       :conversation-id="currentChat.id"
       :status="currentChat.status"
     />
     <div
       v-on-clickaway="() => toggleDropdown(false)"
-      class="relative flex items-center group"
+      class="relative flex items-center"
     >
-      <ButtonV4
-        v-tooltip="$t('CONVERSATION.HEADER.MORE_ACTIONS')"
-        size="sm"
-        variant="ghost"
-        color="slate"
-        icon="i-lucide-more-vertical"
-        class="rounded-md group-hover:bg-n-alpha-2"
+      <button
+        type="button"
+        data-test-id="kalo-more-actions"
+        :title="$t('KALO_CHAT_LIST.HEADER.MORE')"
+        :aria-label="$t('KALO_CHAT_LIST.HEADER.MORE')"
+        :aria-expanded="showActionsDropdown"
+        class="grid rounded-lg size-8 place-items-center text-n-slate-11 transition-colors duration-150 motion-reduce:transition-none hover:bg-n-alpha-2 hover:text-n-slate-12"
+        :class="{ 'bg-n-alpha-2 text-n-slate-12': showActionsDropdown }"
         @click="toggleDropdown()"
-      />
-      <DropdownMenu
-        v-if="showActionsDropdown"
-        :menu-items="actionMenuItems"
-        class="mt-1 ltr:right-0 rtl:left-0 top-full"
-        @action="handleActionClick"
-      />
+      >
+        <KaloIcon name="more" class="size-5" />
+      </button>
+      <Transition
+        enter-active-class="transition duration-150 ease-out motion-reduce:transition-none"
+        enter-from-class="-translate-y-1 opacity-0"
+        leave-active-class="transition duration-100 ease-in motion-reduce:transition-none"
+        leave-to-class="-translate-y-1 opacity-0"
+      >
+        <div
+          v-if="showActionsDropdown"
+          role="menu"
+          data-test-id="kalo-more-menu"
+          class="absolute z-50 flex flex-col p-1.5 mt-2 border shadow-xl top-full w-60 rounded-2xl ltr:right-0 rtl:left-0 border-n-weak bg-n-surface-1"
+        >
+          <button
+            v-for="item in commandBarItems"
+            :key="item.action"
+            type="button"
+            role="menuitem"
+            :data-test-id="`kalo-more-${item.action}`"
+            class="flex items-center gap-2.5 px-2.5 py-2 text-sm rounded-lg text-start text-n-slate-12 hover:bg-n-alpha-2"
+            @click="openCommandBar(item.action)"
+          >
+            <KaloIcon :name="item.icon" class="size-[18px] text-n-slate-11" />
+            {{ item.label }}
+          </button>
+          <div class="my-1 border-t border-n-weak" />
+          <button
+            v-for="item in actionMenuItems"
+            :key="item.action"
+            type="button"
+            role="menuitem"
+            :disabled="item.disabled"
+            :data-test-id="`kalo-more-${item.action}`"
+            class="flex items-center gap-2.5 px-2.5 py-2 text-sm rounded-lg text-start text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50 disabled:pointer-events-none"
+            @click="handleActionClick(item)"
+          >
+            <KaloIcon :name="item.icon" class="size-[18px] text-n-slate-11" />
+            {{ item.label }}
+          </button>
+        </div>
+      </Transition>
     </div>
     <EmailTranscriptModal
       v-if="showEmailActionsModal"

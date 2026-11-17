@@ -143,12 +143,13 @@ onUnmounted(() => {
     >
       <div
         v-if="allConversationsSelected"
-        class="bg-n-amber-2 outline -outline-offset-1 outline-1 outline-n-amber-5 rounded-lg text-sm mb-2 py-1.5 px-2 text-n-amber-text"
+        class="bg-n-amber-2 outline -outline-offset-1 outline-1 outline-n-amber-5 rounded-xl text-sm mb-2 py-1.5 px-3 text-n-amber-text"
       >
         {{ $t('BULK_ACTION.ALL_CONVERSATIONS_SELECTED_ALERT') }}
       </div>
       <div
-        class="flex items-center justify-between p-2 bg-n-button-color outline outline-1 -outline-offset-1 rounded-[10px] outline-n-weak shadow-[0_0_12px_0_rgba(27,40,59,0.08)]"
+        data-test-id="kalo-bulk-bar"
+        class="flex flex-wrap items-center justify-between gap-2 p-2 border shadow-xl bg-n-surface-1 border-n-weak rounded-2xl"
       >
         <div class="ltr:ml-0.5 rtl:mr-0.5 flex items-center gap-1">
           <label class="cursor-pointer flex items-center gap-1.5">
@@ -156,7 +157,7 @@ onUnmounted(() => {
               v-model="allSelected"
               :indeterminate="!allConversationsSelected"
             />
-            <span class="cursor-pointer">
+            <span class="text-sm font-semibold cursor-pointer text-n-slate-12">
               {{
                 $t('BULK_ACTION.CONVERSATIONS_SELECTED', {
                   conversationCount: conversations.length,
@@ -173,7 +174,7 @@ onUnmounted(() => {
             @click="allSelected = false"
           />
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-1">
           <BulkLabelActions @assign="onAssignLabels" />
           <BulkLabelActions
             action="remove"

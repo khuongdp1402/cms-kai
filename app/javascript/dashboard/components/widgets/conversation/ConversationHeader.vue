@@ -9,6 +9,7 @@ import MoreActions from './MoreActions.vue';
 import Avatar from 'next/avatar/Avatar.vue';
 import SLACardLabel from './components/SLACardLabel.vue';
 import ConversationCallButton from './ConversationCallButton.vue';
+import KaloChannelBadge from 'dashboard/components-next/icon/KaloChannelBadge.vue';
 import wootConstants from 'dashboard/constants/globals';
 import { conversationListPageURL } from 'dashboard/helper/URLHelper';
 import { snoozedReopenTime } from 'dashboard/helper/snoozeHelpers';
@@ -110,29 +111,27 @@ const copyConversationId = async () => {
 <template>
   <div
     ref="conversationHeader"
-    class="flex flex-col gap-3 items-center justify-between flex-1 w-full min-w-0 xl:flex-row px-3 pt-3 pb-2 h-24 xl:h-12"
+    class="flex items-center justify-between flex-1 w-full min-w-0 gap-3 px-4 py-2.5 min-h-[3.75rem]"
   >
-    <div
-      class="flex items-center justify-start w-full xl:w-auto max-w-full min-w-0 xl:flex-1"
-    >
+    <div class="flex items-center flex-1 min-w-0 gap-2.5">
       <BackButton
         v-if="showBackButton"
         :back-url="backButtonUrl"
-        class="ltr:mr-2 rtl:ml-2"
+        :aria-label="$t('GENERAL_SETTINGS.BACK')"
+        class="grid rounded-lg size-8 place-items-center !text-[0px] hover:bg-n-alpha-2 shrink-0"
       />
       <Avatar
         :name="currentContact.name"
         :src="currentContact.thumbnail"
-        :size="32"
+        :size="38"
         :status="currentContact.availability_status"
+        rounded-full
         hide-offline-status
       />
-      <div
-        class="flex flex-col items-start min-w-0 ml-2 overflow-hidden rtl:ml-0 rtl:mr-2"
-      >
-        <div class="flex flex-row items-center max-w-full gap-1 p-0 m-0">
+      <div class="flex flex-col items-start min-w-0 overflow-hidden">
+        <div class="flex flex-row items-center max-w-full gap-1">
           <span
-            class="text-sm font-medium truncate leading-tight text-n-slate-12"
+            class="text-[15px] font-bold leading-tight truncate text-n-slate-12"
           >
             {{ currentContact.name }}
           </span>
@@ -144,28 +143,42 @@ const copyConversationId = async () => {
             icon="warning"
           />
         </div>
-
         <div
-          class="flex items-center gap-1 overflow-hidden text-xs conversation--header--actions text-n-slate-11 text-ellipsis whitespace-nowrap"
+          class="flex items-center max-w-full gap-1.5 overflow-hidden text-xs conversation--header--actions text-n-slate-11 whitespace-nowrap"
         >
+          <KaloChannelBadge :inbox="inbox" class="!size-3.5 !text-[9px]" />
+          <InboxName
+            v-if="hasMultipleInboxes"
+            :inbox="inbox"
+            class="!mx-0 min-w-0 [&>:first-child]:hidden"
+          />
+          <span
+            v-if="hasMultipleInboxes"
+            aria-hidden="true"
+            class="rounded-full size-1 shrink-0 bg-n-slate-8"
+          />
           <button
             type="button"
-            class="truncate text-label-small text-n-slate-11 hover:text-n-slate-12 !p-0 cucursor-pointer"
+            :title="$t('KALO_CHAT_LIST.HEADER.COPY_ID')"
+            class="truncate text-xs text-n-slate-10 hover:text-n-slate-12 !p-0 cursor-pointer tabular-nums"
             @click="copyConversationId"
           >
             {{ `#${chat.id}` }}
           </button>
-          <span v-if="hasMultipleInboxes">•</span>
-          <InboxName v-if="hasMultipleInboxes" :inbox="inbox" class="!mx-0" />
-          <span v-if="isSnoozed">•</span>
-          <span v-if="isSnoozed" class="font-medium text-n-amber-10">
-            {{ snoozedDisplayText }}
-          </span>
+          <template v-if="isSnoozed">
+            <span
+              aria-hidden="true"
+              class="rounded-full size-1 shrink-0 bg-n-slate-8"
+            />
+            <span class="font-semibold truncate text-n-amber-11">
+              {{ snoozedDisplayText }}
+            </span>
+          </template>
         </div>
       </div>
     </div>
     <div
-      class="flex flex-row items-center justify-start xl:justify-end flex-shrink-0 gap-2 w-full xl:w-auto header-actions-wrap"
+      class="flex flex-row items-center justify-end flex-shrink-0 gap-2 header-actions-wrap"
     >
       <SLACardLabel
         v-if="hasSlaPolicyId"
