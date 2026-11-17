@@ -7,6 +7,7 @@ import wootConstants from 'dashboard/constants/globals';
 import { useAccount } from 'dashboard/composables/useAccount';
 import ConversationBasicFilter from './widgets/conversation/ConversationBasicFilter.vue';
 import NextButton from 'dashboard/components-next/button/Button.vue';
+import SwitchLayout from 'dashboard/routes/dashboard/conversation/search/SwitchLayout.vue';
 import KaloIcon from 'next/icon/KaloIcon.vue';
 
 const props = defineProps({
@@ -170,6 +171,12 @@ const toggleConversationLayout = () => {
           @change-filter="onBasicFilterChange"
           @open-advanced-filter="emit('filtersModal')"
           @toggle-layout="toggleConversationLayout"
+        />
+        <!-- The popover (with the layout switch) is hidden while a filter/folder is active. -->
+        <SwitchLayout
+          v-if="hasAppliedFiltersOrActiveFolders"
+          :is-on-expanded-layout="isOnExpandedLayout"
+          @toggle="toggleConversationLayout"
         />
       </div>
     </div>

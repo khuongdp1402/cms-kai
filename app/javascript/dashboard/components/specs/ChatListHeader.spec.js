@@ -8,6 +8,7 @@ import { createRouter, createMemoryHistory } from 'vue-router';
 import { createStore } from 'vuex';
 import ChatListHeader from '../ChatListHeader.vue';
 import ConversationBasicFilter from '../widgets/conversation/ConversationBasicFilter.vue';
+import SwitchLayout from 'dashboard/routes/dashboard/conversation/search/SwitchLayout.vue';
 
 const mockUpdateUISettings = vi.fn();
 vi.mock('dashboard/composables/useUISettings', () => ({
@@ -103,5 +104,25 @@ describe('ChatListHeader', () => {
     expect(wrapper.find('[data-test-id="kalo-chat-search"]').exists()).toBe(
       false
     );
+  });
+
+  it.each([{ hasAppliedFilters: true }, { hasActiveFolders: true }])(
+    'keeps a layout switch in filtered / folder mode (%o)',
+    async props => {
+      mockUpdateUISettings.mockClear();
+      const wrapper = await mountHeader(props);
+      const switcher = wrapper.findComponent(SwitchLayout);
+      expect(switcher.exists()).toBe(true);
+      await switcher.vm.$emit('toggle');
+      expect(mockUpdateUISettings).toHaveBeenCalledWith({
+        conversation_display_type: 'expanded',
+        previously_used_conversation_display_type: 'expanded',
+      });
+    }
+  );
+
+  it('has no extra layout switch when the popover is shown', async () => {
+    const wrapper = await mountHeader();
+    expect(wrapper.findComponent(SwitchLayout).exists()).toBe(false);
   });
 });
