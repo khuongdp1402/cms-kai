@@ -172,36 +172,37 @@ useEmitter(CMD_RESOLVE_CONVERSATION, onCmdResolveConversation);
 
 <template>
   <div class="flex relative justify-end items-center resolve-actions">
-    <ButtonGroup
-      class="flex-shrink-0 rounded-lg shadow outline-1 outline"
-      :class="!showOpenButton ? 'outline-n-container' : 'outline-transparent'"
-    >
+    <ButtonGroup class="flex-shrink-0 rounded-[10px]">
       <Button
         v-if="isOpen"
-        :label="t('CONVERSATION.HEADER.RESOLVE_ACTION')"
+        :label="t('KALO_CHAT_LIST.HEADER.RESOLVE')"
+        icon="i-lucide-check"
         size="sm"
-        color="slate"
+        color="blue"
         no-animation
-        class="ltr:rounded-r-none rtl:rounded-l-none !outline-0"
+        class="ltr:rounded-r-none rtl:rounded-l-none !outline-0 font-semibold"
         :is-loading="isLoading"
         @click="onCmdResolveConversation"
       />
       <Button
         v-else-if="isResolved"
-        :label="t('CONVERSATION.HEADER.REOPEN_ACTION')"
+        :label="t('KALO_CHAT_LIST.HEADER.REOPEN')"
         size="sm"
-        color="slate"
+        color="blue"
+        variant="faded"
         no-animation
-        class="ltr:rounded-r-none rtl:rounded-l-none !outline-0"
+        class="ltr:rounded-r-none rtl:rounded-l-none !outline-0 font-semibold"
         :is-loading="isLoading"
         @click="onCmdOpenConversation"
       />
       <Button
         v-else-if="showOpenButton"
-        :label="t('CONVERSATION.HEADER.OPEN_ACTION')"
+        :label="t('KALO_CHAT_LIST.HEADER.OPEN')"
         size="sm"
-        color="slate"
+        color="blue"
+        variant="faded"
         no-animation
+        class="font-semibold"
         :is-loading="isLoading"
         @click="onCmdOpenConversation"
       />
@@ -212,8 +213,9 @@ useEmitter(CMD_RESOLVE_CONVERSATION, onCmdResolveConversation);
         :disabled="isLoading"
         size="sm"
         no-animation
-        class="ltr:rounded-l-none rtl:rounded-r-none !outline-0"
-        color="slate"
+        class="ltr:rounded-l-none rtl:rounded-r-none !outline-0 ltr:border-l rtl:border-r border-white/30"
+        color="blue"
+        :variant="isOpen ? 'solid' : 'faded'"
         trailing-icon
         @click="openDropdown"
       />
@@ -221,12 +223,12 @@ useEmitter(CMD_RESOLVE_CONVERSATION, onCmdResolveConversation);
     <div
       v-if="showActionsDropdown"
       v-on-clickaway="closeDropdown"
-      class="border rounded-lg shadow-lg border-n-strong dark:border-n-strong box-content p-2 w-fit z-10 bg-n-alpha-3 backdrop-blur-[100px] absolute block left-auto top-full mt-0.5 start-0 xl:start-auto xl:end-0 max-w-[12.5rem] min-w-[9.75rem] [&_ul>li]:mb-0"
+      class="border rounded-2xl shadow-xl border-n-weak box-content p-1.5 w-fit z-20 bg-n-surface-1 absolute block top-full mt-2 end-0 max-w-[14rem] min-w-[11rem] [&_ul>li]:mb-0"
     >
       <WootDropdownMenu class="mb-0">
         <WootDropdownItem v-if="!isPending">
           <Button
-            :label="t('CONVERSATION.RESOLVE_DROPDOWN.SNOOZE_UNTIL')"
+            :label="t('KALO_CHAT_LIST.HEADER.SNOOZE')"
             ghost
             slate
             sm
@@ -238,7 +240,7 @@ useEmitter(CMD_RESOLVE_CONVERSATION, onCmdResolveConversation);
         </WootDropdownItem>
         <WootDropdownItem v-if="!isPending">
           <Button
-            :label="t('CONVERSATION.RESOLVE_DROPDOWN.MARK_PENDING')"
+            :label="t('KALO_CHAT_LIST.HEADER.PENDING')"
             ghost
             slate
             sm

@@ -73,6 +73,14 @@ export function useKaloNav() {
   );
 
   store.dispatch('notifications/unReadCount');
+  // The Chatwoot Sidebar (no longer rendered) loaded these account lists on mount; the chat
+  // list, filters, bulk actions, channel badges and welcome screen read them from the store.
+  store.dispatch('labels/get');
+  store.dispatch('inboxes/get');
+  store.dispatch('teams/get');
+  store.dispatch('attributes/get');
+  store.dispatch('customViews/get', 'conversation');
+  store.dispatch('customViews/get', 'contact');
 
   watch(
     [accountId, unreadEnabled],

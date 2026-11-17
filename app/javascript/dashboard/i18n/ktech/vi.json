@@ -2028,5 +2028,87 @@
   },
   "KALO_ONBOARDING": {
     "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
+  },
+  "KALO_CHAT_LIST": {
+    "TITLE": "Tin nhắn",
+    "TABS": {
+      "ME": "Của tôi",
+      "UNASSIGNED": "Chưa ai nhận",
+      "ALL": "Tất cả"
+    },
+    "SEARCH": "Tìm khách, tin nhắn",
+    "LOADING": "Đang tải tin nhắn",
+    "STATUS": {
+      "OPEN": "Đang mở",
+      "RESOLVED": "Đã xong",
+      "PENDING": "Chờ xử lý",
+      "SNOOZED": "Tạm hoãn",
+      "ALL": "Tất cả"
+    },
+    "FILTER": {
+      "OPEN": "Lọc",
+      "STATUS": "Trạng thái",
+      "SORT": "Sắp xếp",
+      "VIEWS": "Xem nhanh",
+      "ADVANCED": "Lọc theo điều kiện",
+      "LAYOUT_COMPACT": "Danh sách gọn",
+      "LAYOUT_EXPANDED": "Danh sách rộng"
+    },
+    "VIEWS": {
+      "ALL": "Tất cả tin nhắn",
+      "MENTIONS": "Được nhắc tên",
+      "UNATTENDED": "Chưa trả lời",
+      "PARTICIPATING": "Đang tham gia"
+    },
+    "EMPTY": {
+      "TITLE": "Chưa có tin nhắn nào",
+      "HINT": "Khi khách nhắn, tin sẽ hiện ở đây.",
+      "FILTERED": "Không có tin nhắn khớp bộ lọc",
+      "FILTERED_HINT": "Thử bỏ bớt điều kiện lọc.",
+      "CLEAR": "Bỏ lọc"
+    },
+    "HEADER": {
+      "MORE": "Thêm thao tác",
+      "RESOLVE": "Xong",
+      "REOPEN": "Mở lại",
+      "OPEN": "Mở",
+      "SNOOZE": "Tạm hoãn đến…",
+      "PENDING": "Chuyển sang chờ",
+      "ASSIGN": "Giao cho nhân viên",
+      "ASSIGN_TEAM": "Giao cho nhóm",
+      "LABEL": "Gắn nhãn",
+      "PRIORITY": "Mức ưu tiên",
+      "COPY_ID": "Sao chép mã cuộc trò chuyện",
+      "MUTE": "Tắt thông báo",
+      "UNMUTE": "Bật lại thông báo",
+      "TRANSCRIPT": "Gửi bản ghi qua email"
+    },
+    "WELCOME": {
+      "GREETING_MORNING": "Chào buổi sáng, {name}!",
+      "GREETING_AFTERNOON": "Chào buổi chiều, {name}!",
+      "GREETING_EVENING": "Chào buổi tối, {name}!",
+      "SUBTITLE": "Ba bước để bắt đầu bán hàng trên Kalo.",
+      "PICK": "Chọn một cuộc trò chuyện bên trái để trả lời khách.",
+      "NOT_FOUND": "Không tìm thấy cuộc trò chuyện này.",
+      "NO_INBOX_AGENT": "Shop chưa kết nối kênh nào. Nhờ chủ shop kết nối Zalo hoặc Facebook nhé.",
+      "NO_CONVERSATIONS": "Chưa có tin nhắn nào. Khi khách nhắn, tin sẽ hiện ở đây.",
+      "LOADING_INBOXES": "Đang tải kênh bán hàng…",
+      "LOADING_CONVERSATIONS": "Đang tải tin nhắn…",
+      "STEPS": {
+        "CHANNEL": {
+          "TITLE": "Kết nối Zalo, Facebook",
+          "DESC": "Gom tin nhắn của khách về một chỗ"
+        },
+        "PRODUCT": {
+          "TITLE": "Thêm sản phẩm đầu tiên",
+          "DESC": "Để lên đơn và báo giá nhanh"
+        },
+        "ORDER": {
+          "TITLE": "Tạo đơn đầu tiên",
+          "DESC": "Gửi mã QR để khách chuyển khoản"
+        },
+        "DONE": "Đã xong"
+      }
+    }
   }
 }
