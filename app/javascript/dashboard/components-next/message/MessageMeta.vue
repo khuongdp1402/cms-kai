@@ -1,9 +1,8 @@
 <script setup>
 import { computed } from 'vue';
-import { messageTimestamp } from 'shared/helpers/timeHelper';
+import { messageStamp } from 'shared/helpers/timeHelper';
 
 import MessageStatus from './MessageStatus.vue';
-import Icon from 'next/icon/Icon.vue';
 import { useInbox } from 'dashboard/composables/useInbox';
 import { useMessageContext } from './provider.js';
 
@@ -21,6 +20,7 @@ const {
   isAnEmailChannel,
   isAnInstagramChannel,
   isATiktokChannel,
+  isAZaloPersonalChannel,
 } = useInbox();
 
 const {
@@ -32,8 +32,10 @@ const {
   contentAttributes,
 } = useMessageContext();
 
-const readableTime = computed(() =>
-  messageTimestamp(createdAt.value, 'LLL d, h:mm a')
+// Date separators in MessageList carry the day; the bubble shows only the time.
+const readableTime = computed(() => messageStamp(createdAt.value, 'HH:mm'));
+const fullTime = computed(() =>
+  messageStamp(createdAt.value, 'dd/MM/yyyy HH:mm')
 );
 
 const showStatusIndicator = computed(() => {
@@ -62,7 +64,8 @@ const isSent = computed(() => {
     isASmsInbox.value ||
     isATelegramChannel.value ||
     isAnInstagramChannel.value ||
-    isATiktokChannel.value
+    isATiktokChannel.value ||
+    isAZaloPersonalChannel.value
   ) {
     return sourceId.value && status.value === MESSAGE_STATUS.SENT;
   }
@@ -85,7 +88,8 @@ const isDelivered = computed(() => {
     isASmsInbox.value ||
     isAFacebookInbox.value ||
     isAnInstagramChannel.value ||
-    isATiktokChannel.value
+    isATiktokChannel.value ||
+    isAZaloPersonalChannel.value
   ) {
     return sourceId.value && status.value === MESSAGE_STATUS.DELIVERED;
   }
@@ -110,7 +114,8 @@ const isRead = computed(() => {
     isATwilioChannel.value ||
     isAFacebookInbox.value ||
     isAnInstagramChannel.value ||
-    isATiktokChannel.value
+    isATiktokChannel.value ||
+    isAZaloPersonalChannel.value
   ) {
     return sourceId.value && status.value === MESSAGE_STATUS.READ;
   }
@@ -132,11 +137,14 @@ const statusToShow = computed(() => {
 </script>
 
 <template>
-  <div class="text-xs flex items-center gap-1.5">
-    <div class="inline">
-      <time class="inline">{{ readableTime }}</time>
-    </div>
-    <Icon v-if="isPrivate" icon="i-lucide-lock-keyhole" class="size-3" />
+  <div class="text-[11px] flex items-center gap-1.5">
+    <!-- Time shows on hover/focus of the message on pointer devices; always on touch screens. -->
+    <time
+      :title="fullTime"
+      class="inline transition-opacity duration-150 motion-reduce:transition-none [@media(hover:hover)]:opacity-0 group-hover/msg:opacity-100 group-focus-within/msg:opacity-100"
+    >
+      {{ readableTime }}
+    </time>
     <MessageStatus v-if="showStatusIndicator" :status="statusToShow" />
   </div>
 </template>

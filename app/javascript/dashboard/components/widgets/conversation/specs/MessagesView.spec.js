@@ -163,12 +163,16 @@ describe('MessagesView', () => {
   describe('typing indicator (C-40)', () => {
     it('is hidden when nobody is typing', () => {
       wrapper = mountView();
-      expect(wrapper.find('img[alt="Someone is typing"]').exists()).toBe(false);
+      expect(wrapper.find('[data-test="typing-indicator"]').exists()).toBe(
+        false
+      );
     });
 
     it('shows the typing user name when someone types', () => {
       wrapper = mountView({ typing: [{ id: 5, name: 'Khach A' }] });
-      expect(wrapper.find('img[alt="Someone is typing"]').exists()).toBe(true);
+      expect(wrapper.find('[data-test="typing-indicator"]').exists()).toBe(
+        true
+      );
       expect(wrapper.text()).toContain('Khach A');
     });
   });

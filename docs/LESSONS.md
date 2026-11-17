@@ -12,6 +12,11 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B31 (2026-11-17): Chuỗi i18n có ký tự "@" làm hỏng placeholder ghi chú.**
+  - Triệu chứng: trình duyệt báo "Message compilation error: Invalid linked format" cho "Ghi chú chỉ nhân viên thấy… (gõ @ để nhắc tên)"; spec vitest vẫn xanh vì không mount chuỗi đó.
+  - Nguyên nhân: trong vue-i18n `@` là cú pháp liên kết khóa (cũng như `{`, `}`, `|`).
+  - Quy tắc: muốn hiện ký tự đó thì viết `{'@'}`. Namespace mới nên có spec dịch toàn bộ khóa và bắt lỗi biên dịch (xem `KaloChatThreadI18n.spec.js`).
+
 - **B16 (2026-11-17): Task agent chỉ chạy thư mục test của mình nên bỏ sót 468 ca hỏng ở spec overlay i18n.**
   - Triệu chứng: sau khi gộp Task 8, `i18n/ktech/specs/overrides.spec.js` hỏng 468 ca (mọi khóa `KALO_*` không có khóa tiếng Anh tương ứng, mảng `WEEKDAYS` làm `text.match` lỗi); từng task đều báo "test xanh".
   - Nguyên nhân: mỗi agent chỉ chạy spec trong thư mục mình sửa, không ai chạy cả bộ.

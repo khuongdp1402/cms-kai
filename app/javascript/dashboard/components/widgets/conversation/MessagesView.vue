@@ -491,13 +491,15 @@ export default {
       <template #unreadBadge>
         <li
           v-show="unreadMessageCount != 0"
-          class="list-none flex justify-center items-center"
+          class="list-none flex items-center gap-3 my-3"
         >
+          <span class="flex-1 h-px bg-n-brand/30" />
           <span
-            class="shadow-lg rounded-full bg-n-brand text-white text-xs font-medium my-2.5 mx-auto px-2.5 py-1.5"
+            class="rounded-full bg-n-brand text-white text-xs font-semibold px-2.5 py-1"
           >
             {{ unreadMessageLabel }}
           </span>
+          <span class="flex-1 h-px bg-n-brand/30" />
         </li>
       </template>
       <template #after>
@@ -509,20 +511,28 @@ export default {
         />
       </template>
     </MessageList>
-    <div class="flex relative flex-col bg-n-surface-1">
+    <div class="flex relative flex-col bg-n-background">
       <div
         v-if="isAnyoneTyping"
         class="absolute flex items-center w-full h-0 -top-7"
       >
         <div
-          class="flex py-2 pr-4 pl-5 shadow-md rounded-full bg-white dark:bg-n-solid-3 text-n-slate-11 text-xs font-semibold my-2.5 mx-auto"
+          data-test="typing-indicator"
+          role="status"
+          class="flex items-center gap-2 py-1.5 px-3.5 shadow-sm border border-n-weak rounded-full bg-n-solid-1 text-n-slate-11 text-xs font-medium my-2.5 mx-auto"
         >
           {{ typingUserNames }}
-          <img
-            class="w-6 ltr:ml-2 rtl:mr-2"
-            src="assets/images/typing.gif"
-            alt="Someone is typing"
-          />
+          <span class="flex items-center gap-0.5" aria-hidden="true">
+            <span
+              class="rounded-full size-1.5 bg-n-brand animate-bounce motion-reduce:animate-none"
+            />
+            <span
+              class="rounded-full size-1.5 bg-n-brand animate-bounce [animation-delay:150ms] motion-reduce:animate-none"
+            />
+            <span
+              class="rounded-full size-1.5 bg-n-brand animate-bounce [animation-delay:300ms] motion-reduce:animate-none"
+            />
+          </span>
         </div>
       </div>
       <ResizableEditorWrapper

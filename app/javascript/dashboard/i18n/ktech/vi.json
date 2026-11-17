@@ -2026,6 +2026,53 @@
       "EMPTY": "Khách chưa có đơn nào."
     }
   },
+  "KALO_CHAT_THREAD": {
+    "TODAY": "Hôm nay",
+    "YESTERDAY": "Hôm qua",
+    "STICKER": "Nhãn dán",
+    "PRIVATE_NOTE": "Ghi chú nội bộ, khách không thấy",
+    "TYPING": "đang soạn tin",
+    "COMPOSER": {
+      "REPLY": "Trả lời",
+      "NOTE": "Ghi chú nội bộ",
+      "PLACEHOLDER": "Nhập tin nhắn… (gõ / để chọn mẫu câu)",
+      "NOTE_PLACEHOLDER": "Ghi chú chỉ nhân viên thấy… (gõ {'@'} để nhắc tên)",
+      "EMOJI": "Biểu tượng cảm xúc",
+      "ATTACH": "Đính kèm ảnh, tệp",
+      "CANNED": "Mẫu câu",
+      "CANNED_HINT": "Chèn mẫu câu (gõ /)",
+      "MORE": "Thêm",
+      "VOICE": "Ghi âm",
+      "VOICE_STOP": "Dừng ghi âm",
+      "SIGNATURE": "Chữ ký",
+      "QUOTE": "Kèm thư trước",
+      "WHATSAPP_TEMPLATE": "Mẫu tin WhatsApp",
+      "CONTENT_TEMPLATE": "Mẫu tin Twilio",
+      "ARTICLE": "Chèn bài hướng dẫn",
+      "EXPAND": "Phóng to khung soạn",
+      "AI": "Viết lại bằng AI",
+      "DROP": "Thả tệp vào đây để gửi kèm",
+      "SEND": "Gửi",
+      "SEND_NOTE": "Lưu ghi chú"
+    },
+    "PANEL": {
+      "TITLE": "Khách hàng",
+      "LABELS": "Nhãn",
+      "NOTES": "Ghi chú",
+      "ASSIGN": "Giao việc",
+      "MORE_INFO": "Thông tin thêm",
+      "SHOW_MORE": "Xem thêm",
+      "SHOW_LESS": "Thu gọn",
+      "PREVIOUS": "Hội thoại trước",
+      "PARTICIPANTS": "Người theo dõi",
+      "CONVERSATION_INFO": "Thông tin hội thoại",
+      "MACROS": "Thao tác nhanh",
+      "FILES": "Ảnh và tệp đã gửi",
+      "LINEAR": "Linear",
+      "SHOPIFY": "Đơn Shopify",
+      "NO_ATTRIBUTES": "Chưa có thông tin thêm."
+    }
+  },
   "KALO_ONBOARDING": {
     "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
   }

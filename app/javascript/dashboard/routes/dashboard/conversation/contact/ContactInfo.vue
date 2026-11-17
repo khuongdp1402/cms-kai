@@ -178,21 +178,24 @@ export default {
 </script>
 
 <template>
-  <div class="relative items-center w-full p-4">
+  <div class="relative w-full px-4 pt-5 pb-4">
     <div class="flex flex-col w-full gap-2 text-left rtl:text-right">
-      <div class="flex flex-row justify-between">
+      <div class="flex flex-row justify-center">
         <Avatar
           v-if="showAvatar"
           :src="contact.thumbnail"
           :name="contact.name"
           :status="contact.availability_status"
-          :size="48"
+          :size="64"
           hide-offline-status
         />
       </div>
 
       <div class="flex flex-col items-start gap-1.5 min-w-0 w-full">
-        <div v-if="showAvatar" class="flex items-center w-full min-w-0 gap-3">
+        <div
+          v-if="showAvatar"
+          class="flex items-center justify-center w-full min-w-0 gap-2"
+        >
           <InlineInput
             v-if="isEditingName"
             ref="nameInput"
@@ -205,7 +208,7 @@ export default {
           />
           <h3
             v-else
-            class="group/name flex-shrink max-w-full min-w-0 my-0 text-base capitalize break-words text-n-slate-12 cursor-pointer hover:text-n-slate-12/80"
+            class="group/name flex-shrink max-w-full min-w-0 my-0 text-base font-semibold text-center capitalize break-words text-n-slate-12 cursor-pointer hover:text-n-slate-12/80"
             :title="$t('CONTACT_PANEL.CLICK_TO_EDIT')"
             @click="startEditingName"
           >
@@ -235,7 +238,10 @@ export default {
           </div>
         </div>
 
-        <p v-if="additionalAttributes.description" class="break-words mb-0.5">
+        <p
+          v-if="additionalAttributes.description"
+          class="w-full mb-0.5 text-center break-words text-n-slate-11"
+        >
           {{ additionalAttributes.description }}
         </p>
         <div class="flex flex-col items-start w-full gap-2">
@@ -292,7 +298,7 @@ export default {
           <SocialIcons :social-profiles="socialProfiles" />
         </div>
       </div>
-      <div class="flex items-center w-full mt-0.5 gap-2">
+      <div class="flex items-center justify-center w-full gap-2 mt-1">
         <ComposeConversation :contact-id="String(contact.id)">
           <template #trigger>
             <NextButton

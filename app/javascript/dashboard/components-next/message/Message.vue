@@ -431,9 +431,14 @@ const shouldRenderMessage = computed(() => {
     props.contentType === CONTENT_TYPES.INTEGRATIONS;
   const isFailedMessage = props.status === MESSAGE_STATUS.FAILED;
   const hasExternalError = !!props.contentAttributes?.externalError;
+  // Zalo stickers are sent with no content and no attachment (stickers_controller).
+  const isSticker =
+    props.contentType === CONTENT_TYPES.STICKER ||
+    !!props.contentAttributes?.sticker;
 
   return (
     hasAttachments ||
+    isSticker ||
     props.content ||
     isEmailContentType ||
     isUnsupported ||
@@ -524,7 +529,6 @@ const avatarTooltip = computed(() => {
   return `${t('CONVERSATION.SENT_BY')} ${avatarInfo.value.name}`;
 });
 
-
 const setupHighlightTimer = () => {
   if (Number(route.query.messageId) !== Number(props.id)) {
     return;
@@ -554,7 +558,7 @@ provideMessageContext({
   <div
     v-if="shouldRenderMessage"
     :id="`message${props.id}`"
-    class="flex w-full mb-2 message-bubble-container"
+    class="flex w-full mb-2 message-bubble-container group/msg"
     :data-message-id="props.id"
     :class="[
       flexOrientationClass,

@@ -23,6 +23,11 @@ export default {
       type: [Number, String],
       required: true,
     },
+    // The Kalo contact panel shows labels in their own section.
+    showLabels: {
+      type: Boolean,
+      default: true,
+    },
   },
   setup() {
     const { agentsList } = useAgentsList(true, { includeAgentBots: true });
@@ -298,10 +303,12 @@ export default {
         @select="onClickAssignPriority"
       />
     </div>
-    <ContactDetailsItem
-      compact
-      :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONVERSATION_LABELS')"
-    />
-    <ConversationLabels :conversation-id="conversationId" />
+    <template v-if="showLabels">
+      <ContactDetailsItem
+        compact
+        :title="$t('CONVERSATION_SIDEBAR.ACCORDION.CONVERSATION_LABELS')"
+      />
+      <ConversationLabels :conversation-id="conversationId" />
+    </template>
   </div>
 </template>

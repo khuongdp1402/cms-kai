@@ -101,7 +101,7 @@ const isVisible = computed(
   <div
     v-if="isVisible"
     data-test="ai-suggestions"
-    class="flex flex-wrap items-center gap-2 px-4 py-2"
+    class="flex flex-wrap items-center gap-2 px-3 pt-1 pb-2"
     role="group"
     :aria-label="t('KALO_CHAT.AI.LABEL')"
   >
@@ -110,7 +110,7 @@ const isVisible = computed(
       :key="text"
       type="button"
       data-test="ai-suggestion"
-      class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm text-start rounded-full bg-woot-50 text-woot-600 hover:bg-woot-100"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-start rounded-full border border-dashed border-n-brand/40 bg-n-solid-1 text-n-blue-11 hover:bg-n-solid-blue transition-colors duration-150 motion-reduce:transition-none"
       @click="emit('select', text)"
     >
       <KaloIcon name="spark" class="size-4" />

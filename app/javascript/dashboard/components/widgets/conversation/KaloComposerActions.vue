@@ -118,7 +118,7 @@ const chooseQr = async order => {
 defineExpose({ openForm, pickQr });
 
 const buttonClass =
-  'inline-flex items-center gap-1.5 px-2 py-1 text-sm font-medium rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12';
+  'inline-flex items-center gap-1.5 h-8 px-2 text-sm font-medium rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12 transition-colors duration-150 motion-reduce:transition-none';
 const overlayClass =
   'fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm';
 const dialogClass =
@@ -126,27 +126,28 @@ const dialogClass =
 </script>
 
 <template>
-  <div
-    v-if="contactId && !isReplyRestricted"
-    class="flex items-center gap-1 px-4 pb-1"
-  >
+  <div v-if="contactId && !isReplyRestricted" class="flex items-center gap-0.5">
     <button
       type="button"
       data-test="create-order"
       :class="buttonClass"
+      :title="t('KALO_CHAT.ACTIONS.CREATE_ORDER')"
       @click="openForm"
     >
       <KaloIcon name="bag" class="size-4" />
-      {{ t('KALO_CHAT.ACTIONS.CREATE_ORDER') }}
+      <span class="hidden sm:inline">{{
+        t('KALO_CHAT.ACTIONS.CREATE_ORDER')
+      }}</span>
     </button>
     <button
       type="button"
       data-test="pick-qr"
       :class="buttonClass"
+      :title="t('KALO_CHAT.ACTIONS.QR')"
       @click="pickQr"
     >
       <KaloIcon name="qr" class="size-4" />
-      {{ t('KALO_CHAT.ACTIONS.QR') }}
+      <span class="hidden sm:inline">{{ t('KALO_CHAT.ACTIONS.QR') }}</span>
     </button>
 
     <Teleport to="body">

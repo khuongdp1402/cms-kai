@@ -1,6 +1,6 @@
 // Characterization spec for the bubble base (chat-parity C-45, C-47).
 // Pins components-next/message/bubbles/Base.vue:41-89,100-185: private notes are amber
-// (`bg-n-solid-amber`), agent blue, user slate, error ruby, unsupported dashed;
+// (`bg-n-solid-amber`), agent coral tint, user white (Kalo UI phase 2), error ruby, unsupported dashed;
 // the reply-to quote block scrolls to the original message (SCROLL_TO_MESSAGE bus event);
 // meta (time/status) is hidden when grouped with the next message.
 import { mount } from '@vue/test-utils';
@@ -44,7 +44,7 @@ describe('bubble Base', () => {
   it.each([
     ['private', 'bg-n-solid-amber'],
     ['agent', 'bg-n-solid-blue'],
-    ['user', 'bg-n-slate-4'],
+    ['user', 'bg-n-solid-1'],
     ['bot', 'bg-n-solid-iris'],
     ['error', 'bg-n-ruby-4'],
     ['unsupported', 'border-dashed'],
@@ -57,6 +57,20 @@ describe('bubble Base', () => {
     expect(mountBase().classes()).toContain('left-bubble');
     ctx.orientation.value = 'right';
     expect(mountBase().classes()).toContain('right-bubble');
+  });
+
+  it('private notes carry a lock badge so they never read as a customer message', () => {
+    ctx.variant.value = 'private';
+    const badge = mountBase().find('[data-test="private-note-badge"]');
+    expect(badge.exists()).toBe(true);
+    expect(badge.find('use').attributes('href')).toBe('/kalo-icons.svg#i-lock');
+  });
+
+  it.each(['user', 'agent', 'bot'])('%s messages have no private badge', v => {
+    ctx.variant.value = v;
+    expect(mountBase().find('[data-test="private-note-badge"]').exists()).toBe(
+      false
+    );
   });
 
   it('renders the slot content and the meta row', () => {

@@ -1,0 +1,103 @@
+// Kalo UI phase 2 (task 1b-ii): subtle day separators in the message stream
+// (Hôm nay / Hôm qua / dd/MM). The list is a plain <ul> (not virtualised), so the
+// separator is one <li> before the first message of each day.
+import { mount } from '@vue/test-utils';
+import { createStore } from 'vuex';
+import { createI18n } from 'vue-i18n';
+import viMessages from 'dashboard/i18n/ktech/vi.json';
+import MessageList from '../MessageList.vue';
+
+const MessageStub = {
+  name: 'Message',
+  props: ['id'],
+  template: '<div class="message-stub" :id="\'message\' + id" />',
+};
+
+const at = iso => Math.floor(new Date(iso).getTime() / 1000);
+
+const message = (id, iso) => ({
+  id,
+  message_type: 0,
+  status: 'sent',
+  content: `m${id}`,
+  conversation_id: 1,
+  created_at: at(iso),
+  sender: { id: 2 },
+});
+
+const mountList = (messages, slots = {}) =>
+  mount(MessageList, {
+    props: { currentUserId: 1, messages },
+    slots,
+    global: {
+      plugins: [
+        createStore({ getters: { getSelectedChat: () => ({ id: 1 }) } }),
+        createI18n({
+          legacy: false,
+          locale: 'vi',
+          messages: { vi: viMessages },
+        }),
+      ],
+      stubs: { Message: MessageStub },
+    },
+  });
+
+const separators = wrapper =>
+  wrapper.findAll('[data-test="day-separator"]').map(li => li.text());
+
+describe('MessageList day separators', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-11-17T10:00:00'));
+  });
+  afterEach(() => vi.useRealTimers());
+
+  it('labels today, yesterday and older days in Vietnamese', () => {
+    const wrapper = mountList([
+      message(1, '2025-12-30T09:00:00'),
+      message(2, '2026-11-03T09:00:00'),
+      message(3, '2026-11-16T21:00:00'),
+      message(4, '2026-11-17T08:00:00'),
+    ]);
+    expect(separators(wrapper)).toEqual([
+      '30/12/2025',
+      '03/11',
+      'Hôm qua',
+      'Hôm nay',
+    ]);
+  });
+
+  it('adds one separator per day, not per message', () => {
+    const wrapper = mountList([
+      message(1, '2026-11-17T08:00:00'),
+      message(2, '2026-11-17T08:01:00'),
+      message(3, '2026-11-17T09:30:00'),
+    ]);
+    expect(separators(wrapper)).toEqual(['Hôm nay']);
+    expect(wrapper.findAll('.message-stub')).toHaveLength(3);
+  });
+
+  it('puts the separator before the message and keeps the unread badge slot', () => {
+    const wrapper = mountList(
+      [message(1, '2026-11-16T08:00:00'), message(2, '2026-11-17T08:00:00')],
+      { unreadBadge: '<li class="unread-badge" />' }
+    );
+    wrapper.setProps({ firstUnreadId: 2 });
+    return wrapper.vm.$nextTick().then(() => {
+      const items = wrapper
+        .findAll('li, .message-stub')
+        .map(el =>
+          el.classes('message-stub')
+            ? el.attributes('id')
+            : el.attributes('data-test') || el.classes()[0]
+        );
+      expect(items).toEqual([
+        'day-separator',
+        'message1',
+        'day-separator',
+        'unread-badge',
+        'message2',
+      ]);
+    });
+  });
+});

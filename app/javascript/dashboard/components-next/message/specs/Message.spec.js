@@ -193,6 +193,29 @@ describe('Message bubble selection per channel/content type', () => {
     expect(wrapper.findComponent(StickerBubble).exists()).toBe(true);
   });
 
+  // The Zalo sticker endpoint (conversations/zalo_personal/stickers_controller.rb) creates
+  // the message with content: nil and no attachment; it must still be rendered.
+  it('Zalo sticker with no content and no attachment is still rendered', () => {
+    const wrapper = mountMessage({
+      messageType: MESSAGE_TYPES.OUTGOING,
+      sender: agentSender,
+      senderId: 7,
+      content: null,
+      contentType: 'sticker',
+      contentAttributes: { sticker: { id: '123', packId: 1 } },
+    });
+    expect(wrapper.find('#message100').exists()).toBe(true);
+    expect(wrapper.findComponent(StickerBubble).exists()).toBe(true);
+  });
+
+  it('a message with only sticker attributes (no content type) is rendered too', () => {
+    const wrapper = mountMessage({
+      content: null,
+      contentAttributes: { sticker: { id: '99' } },
+    });
+    expect(wrapper.findComponent(StickerBubble).exists()).toBe(true);
+  });
+
   it('sticker content type uses the sticker bubble', () => {
     const wrapper = mountMessage({
       content: '[sticker]',

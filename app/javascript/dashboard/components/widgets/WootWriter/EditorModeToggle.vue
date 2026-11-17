@@ -1,6 +1,7 @@
 <script setup>
-import { computed, useTemplateRef } from 'vue';
-import { useElementSize } from '@vueuse/core';
+import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import { REPLY_EDITOR_MODES } from './constants';
 
 const props = defineProps({
@@ -18,80 +19,58 @@ const props = defineProps({
   },
 });
 
-defineEmits(['toggleMode']);
+const emit = defineEmits(['toggleMode']);
 
-const wootEditorReplyMode = useTemplateRef('wootEditorReplyMode');
-const wootEditorPrivateMode = useTemplateRef('wootEditorPrivateMode');
+const { t } = useI18n();
 
-const replyModeSize = useElementSize(wootEditorReplyMode);
-const privateModeSize = useElementSize(wootEditorPrivateMode);
+// When replies are restricted (24h window, API inbox) only private notes are possible.
+const isPrivate = computed(
+  () => props.isReplyRestricted || props.mode === REPLY_EDITOR_MODES.NOTE
+);
 
-/**
- * Computed boolean indicating if the editor is in private note mode
- * When isReplyRestricted is true, force switch to private note
- * Otherwise, respect the current mode prop
- * @type {ComputedRef<boolean>}
- */
-const isPrivate = computed(() => {
-  if (props.isReplyRestricted) {
-    // Force switch to private note when replies are restricted
-    return true;
-  }
-  // Otherwise respect the current mode
-  return props.mode === REPLY_EDITOR_MODES.NOTE;
-});
+// Two explicit tabs; the parent contract stays a single `toggleMode` emit,
+// fired only when the tab that is not active is chosen.
+const choose = wantsPrivate => {
+  if (props.disabled || wantsPrivate === isPrivate.value) return;
+  if (!wantsPrivate && props.isReplyRestricted) return;
+  emit('toggleMode');
+};
 
-/**
- * Computes the width of the sliding background chip in pixels
- * Includes 16px of padding in the calculation
- * @type {ComputedRef<string>}
- */
-const width = computed(() => {
-  const widthToUse = isPrivate.value
-    ? privateModeSize.width.value
-    : replyModeSize.width.value;
-
-  const widthWithPadding = widthToUse + 16;
-  return `${widthWithPadding}px`;
-});
-
-/**
- * Computes the X translation value for the sliding background chip
- * Translates by the width of reply mode + padding when in private mode
- * @type {ComputedRef<string>}
- */
-const translateValue = computed(() => {
-  const xTranslate = isPrivate.value ? replyModeSize.width.value + 16 : 0;
-
-  return `${xTranslate}px`;
-});
+const tabClass = active => [
+  'inline-flex items-center gap-1.5 h-8 px-3 text-sm font-semibold rounded-full transition-colors duration-150 motion-reduce:transition-none disabled:cursor-not-allowed',
+  active
+    ? 'bg-n-solid-1 text-n-slate-12 shadow-sm'
+    : 'text-n-slate-11 enabled:hover:text-n-slate-12',
+];
 </script>
 
 <template>
-  <button
-    class="flex items-center w-auto h-8 p-1 transition-all border rounded-full bg-n-alpha-2 group relative duration-300 ease-in-out z-0 active:scale-[0.995] active:duration-75"
-    :disabled="disabled || isReplyRestricted"
-    :class="{
-      'cursor-not-allowed': disabled || isReplyRestricted,
-    }"
-    @click="$emit('toggleMode')"
+  <div
+    role="tablist"
+    class="inline-flex items-center gap-0.5 p-0.5 rounded-full bg-n-alpha-2"
   >
-    <div ref="wootEditorReplyMode" class="flex items-center gap-1 px-2 z-20">
-      {{ $t('CONVERSATION.REPLYBOX.REPLY') }}
-    </div>
-    <div ref="wootEditorPrivateMode" class="flex items-center gap-1 px-2 z-20">
-      {{ $t('CONVERSATION.REPLYBOX.PRIVATE_NOTE') }}
-    </div>
-    <div
-      class="absolute shadow-sm rounded-full h-6 w-[var(--chip-width)] ease-in-out translate-x-[var(--translate-x)] rtl:translate-x-[var(--rtl-translate-x)] bg-n-solid-1"
-      :class="{
-        'transition-all duration-300': !disabled && !isReplyRestricted,
-      }"
-      :style="{
-        '--chip-width': width,
-        '--translate-x': translateValue,
-        '--rtl-translate-x': `calc(-1 * var(--translate-x))`,
-      }"
-    />
-  </button>
+    <button
+      type="button"
+      role="tab"
+      data-test="mode-reply"
+      :aria-selected="!isPrivate"
+      :disabled="disabled || isReplyRestricted"
+      :class="tabClass(!isPrivate)"
+      @click="choose(false)"
+    >
+      {{ t('KALO_CHAT_THREAD.COMPOSER.REPLY') }}
+    </button>
+    <button
+      type="button"
+      role="tab"
+      data-test="mode-note"
+      :aria-selected="isPrivate"
+      :disabled="disabled"
+      :class="[tabClass(isPrivate), { '!text-n-amber-11': isPrivate }]"
+      @click="choose(true)"
+    >
+      <KaloIcon name="lock" class="size-3.5" />
+      {{ t('KALO_CHAT_THREAD.COMPOSER.NOTE') }}
+    </button>
+  </div>
 </template>

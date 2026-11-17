@@ -5,6 +5,15 @@ import { MESSAGE_TYPES } from './constants.js';
 import { useCamelCase } from 'dashboard/composables/useTransformKeys';
 import { useMapGetter } from 'dashboard/composables/store.js';
 import MessageApi from 'dashboard/api/inbox/message.js';
+import { useI18n } from 'vue-i18n';
+import {
+  format,
+  fromUnixTime,
+  isSameDay,
+  isThisYear,
+  isToday,
+  isYesterday,
+} from 'date-fns';
 
 /**
  * Props definition for the component
@@ -49,6 +58,25 @@ const allMessages = computed(() => {
 });
 
 const currentChat = useMapGetter('getSelectedChat');
+const { t } = useI18n();
+
+// A subtle day separator before the first message of each day (the list is not virtualised).
+const isNewDay = (index, list) => {
+  if (index === 0) return true;
+  const previous = list[index - 1];
+  if (!previous?.createdAt || !list[index]?.createdAt) return false;
+  return !isSameDay(
+    fromUnixTime(previous.createdAt),
+    fromUnixTime(list[index].createdAt)
+  );
+};
+
+const dayLabel = createdAt => {
+  const date = fromUnixTime(createdAt);
+  if (isToday(date)) return t('KALO_CHAT_THREAD.TODAY');
+  if (isYesterday(date)) return t('KALO_CHAT_THREAD.YESTERDAY');
+  return format(date, isThisYear(date) ? 'dd/MM' : 'dd/MM/yyyy');
+};
 
 // Cache for fetched reply messages to avoid duplicate API calls
 const fetchedReplyMessages = reactive(new Map());
@@ -163,9 +191,20 @@ const getInReplyToMessage = parentMessage => {
 </script>
 
 <template>
-  <ul class="px-4 bg-n-surface-1">
+  <ul class="px-3 sm:px-6 bg-n-background">
     <slot name="beforeAll" />
     <template v-for="(message, index) in allMessages" :key="message.id">
+      <li
+        v-if="message.createdAt && isNewDay(index, allMessages)"
+        data-test="day-separator"
+        class="flex justify-center my-3 list-none"
+      >
+        <span
+          class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-n-alpha-2 text-n-slate-11"
+        >
+          {{ dayLabel(message.createdAt) }}
+        </span>
+      </li>
       <slot
         v-if="firstUnreadId && message.id === firstUnreadId"
         name="unreadBadge"
