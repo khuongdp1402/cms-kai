@@ -1,0 +1,38 @@
+# Kalo Vietnamese descriptions for Settings > Applications. Upstream vi.yml is
+# synced from Crowdin and keeps them in English, so they are overridden here.
+# The file name must sort after vi.yml: Rails loads config/locales in name
+# order and the last file wins.
+vi:
+  integration_apps:
+    dashboard_apps:
+      description: 'Nhúng trang web của bạn (thông tin khách, đơn hàng, lịch sử thanh toán) vào khung chat để nhân viên có thêm ngữ cảnh khi hỗ trợ khách.'
+    dyte:
+      short_description: 'Gọi video hoặc gọi thoại với khách ngay trong hội thoại.'
+      description: 'Dyte thêm gọi thoại và gọi video vào ứng dụng. Nhân viên có thể bắt đầu cuộc gọi với khách ngay trong hội thoại.'
+    slack:
+      short_description: 'Nhận thông báo và trả lời hội thoại ngay trên Slack.'
+      description: 'Kết nối Slack để cả đội nắm tin nhắn mới: nhận thông báo hội thoại mới và trả lời khách ngay trong Slack.'
+    webhooks:
+      description: 'Webhook gửi cập nhật tức thì về hoạt động trong tài khoản. Chọn các sự kiện cần theo dõi, hệ thống sẽ gọi HTTP tới địa chỉ của bạn mỗi khi có thay đổi.'
+    dialogflow:
+      short_description: 'Tạo chatbot trả lời câu hỏi ban đầu trước khi chuyển cho nhân viên.'
+      description: 'Tạo chatbot bằng Dialogflow và gắn vào kênh. Bot trả lời các câu hỏi ban đầu rồi chuyển cho nhân viên khi cần.'
+    google_translate:
+      short_description: 'Tự động dịch tin nhắn của khách cho nhân viên.'
+      description: 'Dùng Google Translate để dịch tin nhắn của khách. Hệ thống tự nhận ra ngôn ngữ và dịch sang ngôn ngữ nhân viên đang dùng.'
+    openai:
+      short_description: 'Gợi ý câu trả lời, tóm tắt và chỉnh câu chữ bằng AI.'
+      description: 'Dùng mô hình ngôn ngữ của OpenAI để gợi ý câu trả lời, tóm tắt hội thoại, viết lại tin nhắn, sửa chính tả và gợi ý nhãn.'
+    linear:
+      short_description: 'Tạo và liên kết việc trên Linear ngay từ hội thoại.'
+      description: 'Tạo việc (issue) trên Linear ngay trong khung hội thoại, hoặc liên kết việc đã có để theo dõi gọn hơn.'
+      attachment_link_title: 'Hội thoại (#%{conversation_id}) với %{name}'
+    notion:
+      short_description: 'Kết nối cơ sở dữ liệu, tài liệu và trang Notion.'
+      description: 'Kết nối không gian làm việc Notion để dùng nội dung trong cơ sở dữ liệu, tài liệu và trang khi trả lời khách.'
+    shopify:
+      short_description: 'Xem đơn hàng và thông tin khách từ cửa hàng Shopify.'
+      description: 'Kết nối cửa hàng Shopify để xem đơn hàng, thông tin khách và sản phẩm ngay trong hội thoại, giúp nhân viên hỗ trợ khách nhanh hơn.'
+    leadsquared:
+      short_description: 'Đồng bộ liên hệ và hội thoại với LeadSquared CRM.'
+      description: 'Đồng bộ liên hệ và hội thoại với LeadSquared CRM: tự tạo khách tiềm năng khi có liên hệ mới và ghi lại hoạt động hội thoại cho đội bán hàng.'
