@@ -103,6 +103,25 @@ describe('KaloOrderCard', () => {
     );
   });
 
+  it('links to the payment settings when the shop has no bank account yet', async () => {
+    const sendQr = vi.fn(() =>
+      Promise.reject({
+        response: { data: { error: 'payment_settings_missing' } },
+      })
+    );
+    const wrapper = mountCard(buildStore({ orders: [makeOrder()], sendQr }));
+    await wrapper.find('[data-test="send-qr"]').trigger('click');
+    await flushPromises();
+    expect(alertMock).toHaveBeenCalledWith(
+      viMessages.KALO_ORDERS.ERRORS.PAYMENT_SETTINGS_MISSING,
+      expect.objectContaining({
+        type: 'link',
+        to: { name: 'kalo_payment_settings' },
+        message: viMessages.KALO_PAYMENT.SETUP_LINK,
+      })
+    );
+  });
+
   it('hides the button for paid and non transfer_qr orders', () => {
     const paid = mountCard(
       buildStore({ orders: [makeOrder({ status: 'paid' })] })

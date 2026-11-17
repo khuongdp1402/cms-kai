@@ -162,6 +162,25 @@ describe('OrdersIndex', () => {
     expect(useAlert).toHaveBeenCalledWith('Đơn này không chuyển bước được nữa');
   });
 
+  it('offers a link to the payment settings when Gửi QR fails for a missing bank account', async () => {
+    const sendQr = vi.fn().mockRejectedValue({
+      response: { data: { error: 'payment_settings_missing' } },
+    });
+    const { wrapper } = mountIndex([makeOrder({ id: 2 })], { sendQr });
+    await flushPromises();
+    await wrapper.find('[data-test="row-action"]').trigger('click');
+    await flushPromises();
+    expect(useAlert).toHaveBeenCalledWith(
+      'Chưa cài đặt tài khoản nhận tiền',
+      {
+        type: 'link',
+        to: { name: 'kalo_payment_settings' },
+        message: 'Cài đặt nhận tiền',
+        duration: 6000,
+      }
+    );
+  });
+
   it('labels the search input', async () => {
     const { wrapper } = mountIndex([makeOrder()]);
     await flushPromises();

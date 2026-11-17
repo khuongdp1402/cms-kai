@@ -1,5 +1,5 @@
 import viMessages from 'dashboard/i18n/ktech/vi.json';
-import { kchatErrorKey } from '../kchatErrors';
+import { kchatErrorAction, kchatErrorKey } from '../kchatErrors';
 
 const lookup = key =>
   key.split('.').reduce((node, part) => node?.[part], viMessages);
@@ -29,5 +29,23 @@ describe('kchatErrorKey', () => {
     expect(lookup(kchatErrorKey(new Error('network')))).toBe(
       'Có lỗi xảy ra, thử lại sau'
     );
+  });
+});
+
+describe('kchatErrorAction', () => {
+  const t = key => lookup(key);
+
+  it('links to the payment settings page when the bank account is missing', () => {
+    expect(kchatErrorAction(fail('payment_settings_missing'), t)).toEqual({
+      type: 'link',
+      to: { name: 'kalo_payment_settings' },
+      message: 'Cài đặt nhận tiền',
+      duration: 6000,
+    });
+  });
+
+  it('has no action for other errors', () => {
+    expect(kchatErrorAction(fail('order_not_payable'), t)).toBeNull();
+    expect(kchatErrorAction(new Error('network'), t)).toBeNull();
   });
 });

@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
 import { formatVnd } from 'dashboard/helper/formatVnd';
-import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
+import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import {
   paymentChip,
@@ -53,7 +53,7 @@ const sendQr = async () => {
     });
     useAlert(t('KALO_ORDERS.QR_SENT'));
   } catch (error) {
-    useAlert(t(kchatErrorKey(error)));
+    alertKchatError(error, t);
   } finally {
     isSending.value = false;
   }

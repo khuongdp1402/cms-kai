@@ -31,7 +31,17 @@ const mountCart = ({ create, transition } = {}) => {
     locale: 'vi',
     messages: { vi: viMessages },
   });
-  return mount(PosCart, { global: { plugins: [store, i18n] } });
+  return mount(PosCart, {
+    global: {
+      plugins: [store, i18n],
+      stubs: {
+        RouterLink: {
+          props: ['to'],
+          template: '<a :data-to="JSON.stringify(to)"><slot /></a>',
+        },
+      },
+    },
+  });
 };
 
 describe('PosCart', () => {
@@ -160,6 +170,11 @@ describe('PosCart', () => {
     expect(wrapper.find('[role="alert"]').text()).toBe(
       'Chưa cài đặt tài khoản nhận tiền'
     );
+    const setup = wrapper.find('[data-test="qr-setup"]');
+    expect(setup.text()).toBe('Cài đặt nhận tiền');
+    expect(JSON.parse(setup.attributes('data-to'))).toEqual({
+      name: 'kalo_payment_settings',
+    });
     await wrapper.find('[data-test="qr-retry"]').trigger('click');
     await flushPromises();
     expect(wrapper.find('img[data-test="qr-image"]').exists()).toBe(true);

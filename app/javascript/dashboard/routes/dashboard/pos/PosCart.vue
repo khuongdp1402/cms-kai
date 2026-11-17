@@ -170,6 +170,15 @@ defineExpose({ add });
       >
         {{ qr.error.value || errorMessage }}
       </p>
+      <router-link
+        v-if="qr.error.value && qr.needsSetup.value"
+        :to="{ name: 'kalo_payment_settings' }"
+        data-test="qr-setup"
+        class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold rounded-lg bg-n-brand text-white hover:opacity-90"
+      >
+        <KaloIcon name="wallet" class="size-4" />
+        {{ t('KALO_PAYMENT.SETUP_LINK') }}
+      </router-link>
       <div v-if="qr.error.value" class="flex w-full gap-2">
         <button
           type="button"

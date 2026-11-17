@@ -5,7 +5,7 @@ import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
 import OrdersAPI from 'dashboard/api/kchat/orders';
 import { formatVnd } from 'dashboard/helper/formatVnd';
-import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
+import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import OrderForm from 'dashboard/routes/dashboard/orders/OrderForm.vue';
 
@@ -38,7 +38,7 @@ const sendQr = async orderId => {
     useAlert(t('KALO_ORDERS.QR_SENT'));
     return true;
   } catch (error) {
-    useAlert(t(kchatErrorKey(error)));
+    alertKchatError(error, t);
     return false;
   } finally {
     isSending.value = false;
@@ -105,7 +105,7 @@ const pickQr = async () => {
       focusDialog();
     }
   } catch (error) {
-    useAlert(t(kchatErrorKey(error)));
+    alertKchatError(error, t);
   } finally {
     isPicking.value = false;
   }

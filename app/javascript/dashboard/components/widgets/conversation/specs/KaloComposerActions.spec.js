@@ -174,26 +174,51 @@ describe('KaloComposerActions', () => {
     expect(wrapper.findAll('[data-test="qr-picker"]')).toHaveLength(1);
   });
 
-  it.each([
-    'order_not_payable',
-    'conversation_contact_mismatch',
-    'payment_settings_missing',
-  ])('maps the %s error of send_qr to a friendly alert', async code => {
+  it('maps payment_settings_missing to a friendly alert with a link to the payment settings', async () => {
     OrdersAPI.get.mockResolvedValue({
       data: { payload: [makeOrder({ id: 3 })], meta: {} },
     });
     const sendQr = vi.fn(() =>
       Promise.reject(
-        Object.assign(new Error('422'), { response: { data: { error: code } } })
+        Object.assign(new Error('422'), {
+          response: { data: { error: 'payment_settings_missing' } },
+        })
       )
     );
     const { wrapper } = mountIt({ sendQr });
     await wrapper.find('[data-test="pick-qr"]').trigger('click');
     await flushPromises();
     expect(alertMock).toHaveBeenCalledWith(
-      viMessages.KALO_ORDERS.ERRORS[code.toUpperCase()]
+      viMessages.KALO_ORDERS.ERRORS.PAYMENT_SETTINGS_MISSING,
+      expect.objectContaining({
+        type: 'link',
+        to: { name: 'kalo_payment_settings' },
+        message: viMessages.KALO_PAYMENT.SETUP_LINK,
+      })
     );
   });
+
+  it.each(['order_not_payable', 'conversation_contact_mismatch'])(
+    'maps the %s error of send_qr to a friendly alert',
+    async code => {
+      OrdersAPI.get.mockResolvedValue({
+        data: { payload: [makeOrder({ id: 3 })], meta: {} },
+      });
+      const sendQr = vi.fn(() =>
+        Promise.reject(
+          Object.assign(new Error('422'), {
+            response: { data: { error: code } },
+          })
+        )
+      );
+      const { wrapper } = mountIt({ sendQr });
+      await wrapper.find('[data-test="pick-qr"]').trigger('click');
+      await flushPromises();
+      expect(alertMock).toHaveBeenCalledWith(
+        viMessages.KALO_ORDERS.ERRORS[code.toUpperCase()]
+      );
+    }
+  );
 
   describe('dialog accessibility', () => {
     const escape = () =>
