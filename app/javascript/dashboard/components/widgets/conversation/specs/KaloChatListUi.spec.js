@@ -126,6 +126,8 @@ describe('KaloChannelBadge', () => {
     });
     expect(wrapper.text()).toBe(mark);
     expect(wrapper.attributes('title')).toBe('Shop');
+    expect(wrapper.attributes('role')).toBe('img');
+    expect(wrapper.attributes('aria-label')).toBe('Shop');
   });
 
   it('uses the sprite glyph for TikTok and nothing for an API inbox', () => {
@@ -198,6 +200,20 @@ describe('ConversationBasicFilter popover (single filter entry)', () => {
       .find('[data-test-id="kalo-advanced-filter"]')
       .trigger('click');
     expect(wrapper.emitted('openAdvancedFilter')).toHaveLength(1);
+    expect(wrapper.vm.$.setupState.showActionsDropdown).toBe(false);
+  });
+
+  it('Escape closes the panel; trigger advertises the popup', async () => {
+    const wrapper = await mountFilter();
+    const trigger = wrapper.find('[data-test-id="kalo-filter-trigger"]');
+    expect(trigger.attributes('aria-haspopup')).toBe('dialog');
+    expect(trigger.attributes('aria-expanded')).toBe('true');
+    expect(
+      wrapper.find('[data-test-id="kalo-filter-panel"]').attributes('role')
+    ).toBe('dialog');
+    await wrapper
+      .find('[data-test-id="kalo-sort-select"]')
+      .trigger('keydown', { key: 'Escape' });
     expect(wrapper.vm.$.setupState.showActionsDropdown).toBe(false);
   });
 

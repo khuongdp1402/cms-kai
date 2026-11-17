@@ -149,10 +149,16 @@ const handleSortChange = value => {
 </script>
 
 <template>
-  <div v-on-click-outside="closeDropdown" class="relative flex">
+  <div
+    v-on-click-outside="closeDropdown"
+    class="relative flex"
+    @keydown.escape="closeDropdown"
+  >
     <button
       type="button"
       data-test-id="kalo-filter-trigger"
+      aria-haspopup="dialog"
+      aria-controls="kalo-chat-filter-panel"
       :aria-expanded="showActionsDropdown"
       :title="$t('KALO_CHAT_LIST.FILTER.OPEN')"
       class="relative inline-flex items-center gap-1.5 h-8 px-2.5 text-sm font-medium rounded-lg transition-colors duration-150 motion-reduce:transition-none text-n-slate-12 hover:bg-n-alpha-2"
@@ -177,6 +183,9 @@ const handleSortChange = value => {
     >
       <div
         v-if="showActionsDropdown"
+        id="kalo-chat-filter-panel"
+        role="dialog"
+        :aria-label="$t('KALO_CHAT_LIST.FILTER.OPEN')"
         data-test-id="kalo-filter-panel"
         class="absolute z-40 flex flex-col gap-4 p-4 mt-2 border shadow-xl top-full w-[19rem] max-w-[calc(100vw-2rem)] max-h-[70vh] overflow-y-auto rounded-2xl border-n-weak bg-n-surface-1 ltr:right-0 rtl:left-0"
       >
