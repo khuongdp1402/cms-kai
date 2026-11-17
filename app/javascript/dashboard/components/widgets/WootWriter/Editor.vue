@@ -860,7 +860,21 @@ onMounted(() => {
   }
 });
 
-defineExpose({ focusEditorInputField });
+// The character right before the cursor ('' at the start of a block). Used to decide
+// whether an inserted suggestion trigger ("/") needs a leading space to open its menu.
+function charBeforeCursor() {
+  if (!editorView) return '';
+  const { $from } = editorView.state.selection;
+  if (!$from.parent.isTextblock || $from.parentOffset === 0) return '';
+  return $from.parent.textBetween(
+    $from.parentOffset - 1,
+    $from.parentOffset,
+    '',
+    '￼'
+  );
+}
+
+defineExpose({ focusEditorInputField, charBeforeCursor });
 
 // BUS Event to insert text or markdown into the editor at the
 // current cursor position.

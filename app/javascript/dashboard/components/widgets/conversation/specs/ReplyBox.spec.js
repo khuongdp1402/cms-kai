@@ -698,6 +698,24 @@ describe('ReplyBox', () => {
       ).toBe('/');
     });
 
+    it.each([
+      ['', '/'],
+      [' ', '/'],
+      ['\n', '/'],
+      ['a', ' /'],
+      ['.', ' /'],
+    ])(
+      'after "%s" the canned button inserts "%s" so the "/" menu opens',
+      (before, expected) => {
+        const addIntoEditor = vi.fn();
+        ReplyBox.methods.insertCannedTrigger.call({
+          messageEditor: { charBeforeCursor: () => before },
+          addIntoEditor,
+        });
+        expect(addIntoEditor).toHaveBeenCalledWith(expected);
+      }
+    );
+
     it('send label is plain and the shortcut goes to the hint: Enter (C-52)', () => {
       ({ wrapper } = mountReplyBox());
       const panel = child(wrapper, 'ReplyBottomPanel');

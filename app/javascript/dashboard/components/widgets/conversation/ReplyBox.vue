@@ -955,6 +955,11 @@ export default {
       this.updateEditorSelectionWith = content;
       this.onFocus();
     },
+    // The canned menu only opens when "/" follows whitespace or starts the line.
+    insertCannedTrigger() {
+      const before = this.messageEditor?.charBeforeCursor?.() ?? '';
+      this.addIntoEditor(before && !/\s/.test(before) ? ' /' : '/');
+    },
     executeCopilotAction(action, data) {
       this.copilot.execute(action, data);
     },
@@ -1464,7 +1469,7 @@ export default {
         @select-content-template="openContentTemplateModal"
         @toggle-insert-article="toggleInsertArticle"
         @toggle-quoted-reply="toggleQuotedReply"
-        @insert-canned="addIntoEditor('/')"
+        @insert-canned="insertCannedTrigger"
       >
         <template #actions>
           <KaloComposerActions
