@@ -34,14 +34,14 @@ const actionMenuItems = computed(() => {
   if (!currentChat.value.muted) {
     items.push({
       icon: 'bell',
-      label: t('CONTACT_PANEL.MUTE_CONTACT'),
+      label: t('KALO_CHAT_LIST.HEADER.MUTE'),
       action: 'mute',
       value: 'mute',
     });
   } else {
     items.push({
       icon: 'bell',
-      label: t('CONTACT_PANEL.UNMUTE_CONTACT'),
+      label: t('KALO_CHAT_LIST.HEADER.UNMUTE'),
       action: 'unmute',
       value: 'unmute',
     });
@@ -49,7 +49,7 @@ const actionMenuItems = computed(() => {
 
   items.push({
     icon: 'send',
-    label: t('CONTACT_PANEL.SEND_TRANSCRIPT'),
+    label: t('KALO_CHAT_LIST.HEADER.TRANSCRIPT'),
     action: 'send_transcript',
     value: 'send_transcript',
   });
@@ -159,12 +159,14 @@ onUnmounted(() => {
     <div
       v-on-clickaway="() => toggleDropdown(false)"
       class="relative flex items-center"
+      @keydown.escape="toggleDropdown(false)"
     >
       <button
         type="button"
         data-test-id="kalo-more-actions"
         :title="$t('KALO_CHAT_LIST.HEADER.MORE')"
         :aria-label="$t('KALO_CHAT_LIST.HEADER.MORE')"
+        aria-haspopup="menu"
         :aria-expanded="showActionsDropdown"
         class="grid rounded-lg size-8 place-items-center text-n-slate-11 transition-colors duration-150 motion-reduce:transition-none hover:bg-n-alpha-2 hover:text-n-slate-12"
         :class="{ 'bg-n-alpha-2 text-n-slate-12': showActionsDropdown }"

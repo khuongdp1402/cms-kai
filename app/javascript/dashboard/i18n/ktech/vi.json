@@ -2078,7 +2078,10 @@
       "ASSIGN_TEAM": "Giao cho nhóm",
       "LABEL": "Gắn nhãn",
       "PRIORITY": "Mức ưu tiên",
-      "COPY_ID": "Sao chép mã cuộc trò chuyện"
+      "COPY_ID": "Sao chép mã cuộc trò chuyện",
+      "MUTE": "Tắt thông báo",
+      "UNMUTE": "Bật lại thông báo",
+      "TRANSCRIPT": "Gửi bản ghi qua email"
     },
     "WELCOME": {
       "GREETING_MORNING": "Chào buổi sáng, {name}!",

@@ -85,6 +85,12 @@ describe('MoreActions', () => {
     ]);
   });
 
+  it('mute and unmute entries carry different labels', () => {
+    const [mute] = items(mountActions());
+    const [unmute] = items(mountActions({ muted: true }));
+    expect(mute.label).not.toBe(unmute.label);
+  });
+
   it('offers unmute instead of mute on a muted conversation', () => {
     expect(items(mountActions({ muted: true })).map(i => i.action)).toEqual([
       'unmute',
@@ -151,7 +157,7 @@ describe('MoreActions', () => {
     expect(actions.muteConversation).not.toHaveBeenCalled();
   });
 
-  // Fixed in Kalo UI phase 2 (LESSONS B34): the listener used to be vueuse's raw toggle, which
+  // Fixed in Kalo UI phase 2 (LESSONS B35): the listener used to be vueuse's raw toggle, which
   // mitt calls with `undefined`, so the flag became undefined and the modal never opened.
   it('CMD_SEND_TRANSCRIPT opens the email transcript modal', () => {
     const wrapper = mountActions();
