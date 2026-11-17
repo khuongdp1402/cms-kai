@@ -49,6 +49,7 @@ const GROUPS = [
     key: 'SHOP',
     links: [
       ['ACCOUNT', 'store', 'general_settings_index'],
+      ['PAYMENT', 'qr', 'kalo_payment_settings'],
       ['PLAN', 'wallet', 'kalo_billing'],
     ],
   },

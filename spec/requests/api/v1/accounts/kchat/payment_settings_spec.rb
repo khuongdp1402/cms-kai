@@ -31,6 +31,36 @@ RSpec.describe 'Kchat payment settings API', type: :request do
     expect(account.reload.custom_attributes['payment']['account_number']).to eq('0123456789')
   end
 
+  describe 'GET preview_qr' do
+    let(:preview_url) { "#{url}/preview_qr" }
+
+    it 'returns a VietQR PNG for unsaved values with a sample amount' do
+      allow(Kchat::VietQr).to receive(:payload).and_call_original
+      get preview_url, params: { bank_bin: '970436', account_number: '0123456789' }, headers: admin.create_new_auth_token
+
+      expect(response).to have_http_status(:ok)
+      expect(response.media_type).to eq('image/png')
+      expect(response.body.byteslice(0, 8)).to eq("\x89PNG\r\n\x1A\n".b)
+      expect(Kchat::VietQr).to have_received(:payload)
+        .with(bin: '970436', account_number: '0123456789', amount: Api::V1::Accounts::Kchat::PaymentSettingsController::PREVIEW_AMOUNT,
+              memo: Api::V1::Accounts::Kchat::PaymentSettingsController::PREVIEW_MEMO)
+      expect(account.reload.custom_attributes&.dig('payment')).to be_nil
+    end
+
+    it 'rejects malformed values with the same validation error' do
+      get preview_url, params: { bank_bin: '12345', account_number: '0123456789' }, headers: admin.create_new_auth_token, as: :json
+
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response.parsed_body).to include('error' => 'validation_failed')
+    end
+
+    it 'is for administrators only' do
+      get preview_url, params: { bank_bin: '970436', account_number: '0123456789' }, headers: agent.create_new_auth_token, as: :json
+
+      expect(response).to have_http_status(:unauthorized)
+    end
+  end
+
   {
     bank_bin: %w[12345 12345a 1234567],
     account_number: ['12345', '12a456789', '1' * 20],

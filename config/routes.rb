@@ -60,7 +60,9 @@ Rails.application.routes.draw do
                 get :qr
               end
             end
-            resource :payment_settings, only: [:show, :update]
+            resource :payment_settings, only: [:show, :update] do
+              get :preview_qr
+            end
             resources :reports, only: [] do
               get :summary, on: :collection
             end

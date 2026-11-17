@@ -3741,6 +3741,51 @@
     "TITLE": "Đơn hàng",
     "WALK_IN": "Khách lẻ"
   },
+  "KALO_PAYMENT": {
+    "BILLING_NOT_CONFIGURED": "Chưa cấu hình thanh toán gói cước, bạn liên hệ quản trị Kalo để được hỗ trợ.",
+    "DESC": "Tài khoản ngân hàng để tạo mã QR chuyển khoản cho khách",
+    "ERRORS": {
+      "ACCOUNT_NAME": "Nhập tên chủ tài khoản, tối đa 60 ký tự",
+      "ACCOUNT_NUMBER": "Số tài khoản gồm 6 đến 19 chữ số",
+      "BANK": "Chọn ngân hàng nhận tiền",
+      "BANK_NAME": "Nhập tên ngân hàng, tối đa 60 ký tự",
+      "BIN": "Mã BIN gồm đúng 6 chữ số",
+      "LOAD": "Chưa tải được cài đặt nhận tiền. Thử lại sau ít phút.",
+      "SAVE": "Chưa lưu được, bạn thử lại sau ít phút",
+      "VALIDATION": "Thông tin chưa hợp lệ, bạn kiểm tra lại nhé"
+    },
+    "FORM": {
+      "ACCOUNT_NAME": "Tên chủ tài khoản",
+      "ACCOUNT_NAME_HINT": "Viết hoa, không dấu, đúng như tên hiện trên app ngân hàng",
+      "ACCOUNT_NUMBER": "Số tài khoản",
+      "ACCOUNT_NUMBER_HINT": "Chỉ gồm chữ số, từ 6 đến 19 số",
+      "BANK": "Ngân hàng",
+      "BANK_EMPTY": "Không thấy ngân hàng này, chọn \"Ngân hàng khác\"",
+      "BANK_NAME": "Tên ngân hàng",
+      "BANK_PLACEHOLDER": "Chọn ngân hàng",
+      "BANK_SEARCH": "Tìm theo tên hoặc mã ngân hàng",
+      "BIN": "Mã BIN ngân hàng",
+      "BIN_HINT": "Gồm 6 chữ số theo NAPAS, hỏi ngân hàng nếu chưa rõ",
+      "OTHER_BANK": "Ngân hàng khác (tự nhập mã BIN)",
+      "SAVE": "Lưu"
+    },
+    "LOADING": "Đang tải",
+    "PREVIEW": {
+      "ALT": "Mã QR chuyển khoản mẫu",
+      "EMPTY": "Chọn ngân hàng và nhập số tài khoản để xem mã QR",
+      "ERROR": "Chưa tạo được mã QR xem trước",
+      "HINT": "Quét thử bằng app ngân hàng: app sẽ hiện tên chủ tài khoản để bạn kiểm tra. Mã mẫu 10.000đ, không cần chuyển tiền.",
+      "LOADING": "Đang tạo mã",
+      "TITLE": "Xem trước mã QR"
+    },
+    "SAVED": "Đã lưu tài khoản nhận tiền",
+    "SETUP_LINK": "Cài đặt nhận tiền",
+    "STATUS": {
+      "CONFIGURED": "Đã cài đặt",
+      "MISSING": "Chưa cài đặt"
+    },
+    "TITLE": "Nhận tiền"
+  },
   "KALO_POS": {
     "ADD_PRODUCT": "Thêm sản phẩm",
     "CART": {
@@ -3916,6 +3961,10 @@
         "NOTIFICATIONS": {
           "DESC": "Âm báo và thông báo khi có tin mới",
           "TITLE": "Thông báo"
+        },
+        "PAYMENT": {
+          "DESC": "Tài khoản ngân hàng để gửi mã QR cho khách",
+          "TITLE": "Nhận tiền"
         },
         "PLAN": {
           "DESC": "Hạn dùng và cách gia hạn",
