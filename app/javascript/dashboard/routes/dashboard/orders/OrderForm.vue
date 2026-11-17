@@ -88,6 +88,9 @@ onMounted(() => store.dispatch('kchatProducts/fetch', { active: true }));
 
 const inputClass =
   'w-full px-3 py-2 text-sm border rounded-lg border-n-weak bg-n-solid-1 text-n-slate-12';
+// The global select arrow (_base.scss) is positioned only under [dir] and
+// relative to the content box, which px-3 shrinks: pin it to the right here.
+const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.75rem_center]`;
 </script>
 
 <template>
@@ -106,7 +109,7 @@ const inputClass =
         <select
           v-model="line.productId"
           data-test="line-product"
-          :class="inputClass"
+          :class="selectClass"
         >
           <option value="" />
           <option v-for="p in products" :key="p.id" :value="String(p.id)">
@@ -161,7 +164,7 @@ const inputClass =
 
     <label class="text-xs font-medium text-n-slate-11">
       {{ t('KALO_ORDERS.FORM.PAYMENT_METHOD') }}
-      <select v-model="paymentMethod" :class="inputClass">
+      <select v-model="paymentMethod" :class="selectClass">
         <option value="transfer_qr">
           {{ t('KALO_ORDERS.FORM.METHOD_QR') }}
         </option>
