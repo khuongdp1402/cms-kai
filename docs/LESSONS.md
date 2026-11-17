@@ -12,6 +12,15 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B45 (2026-11-17): Mũi tên của ô chọn (select) hiện ở góc trên bên trái, đè lên chữ.**
+  - Triệu chứng: ô "Sản phẩm" và "Thanh toán" của form đơn hàng có mũi tên ở góc trên trái, đè chữ "Hàng khác"/"Mã QR".
+  - Nguyên nhân: `_base.scss` chỉ đặt vị trí mũi tên trong biến thể `ltr:`/`rtl:` (cần thuộc tính `dir`) và tính theo content box; thiếu `dir` thì vị trí về `0 0`.
+  - Quy tắc: select tự tạo kiểu bằng Tailwind phải đặt rõ `pr-8 bg-origin-padding !bg-[position:right_0.75rem_center]` (xem `selectClass` trong `OrderForm.vue`), không dựa vào vị trí mặc định của `_base.scss`.
+- **B46 (2026-11-17): Trạng thái gói trong Console không đọc `subscription_status`.**
+  - Triệu chứng: shop có `subscription_status=active` vẫn hiện "Dùng thử" trong Console.
+  - Nguyên nhân: theo ADR-019, trạng thái chỉ tính từ `subscription_valid_until` (và 14 ngày dùng thử); `subscription_status` chỉ là dấu ghi kèm khi cộng kỳ trả phí, không ai đọc.
+  - Quy tắc: muốn kích hoạt gói bằng tay thì đặt `subscription_valid_until` (ISO 8601 đầy đủ) hoặc dùng nút gia hạn trong Console, không sửa riêng `subscription_status`.
+
 - **B31 (2026-11-17): Chuỗi i18n có ký tự "@" làm hỏng placeholder ghi chú.**
   - Triệu chứng: trình duyệt báo "Message compilation error: Invalid linked format" cho "Ghi chú chỉ nhân viên thấy… (gõ @ để nhắc tên)"; spec vitest vẫn xanh vì không mount chuỗi đó.
   - Nguyên nhân: trong vue-i18n `@` là cú pháp liên kết khóa (cũng như `{`, `}`, `|`).
