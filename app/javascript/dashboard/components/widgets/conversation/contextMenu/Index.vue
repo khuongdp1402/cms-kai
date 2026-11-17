@@ -209,11 +209,11 @@ export default {
       return [
         {
           confirmed: true,
-          name: 'None',
+          name: this.$t('KALO_SWEEP.NO_ASSIGNEE'),
           id: null,
           role: 'agent',
           account_id: 0,
-          email: 'None',
+          email: this.$t('KALO_SWEEP.NO_ASSIGNEE'),
         },
         ...this.filteredAgentOnAvailability,
       ];

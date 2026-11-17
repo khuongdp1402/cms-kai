@@ -660,13 +660,13 @@ export default {
               <li>Mở Chrome ➔ Đảm bảo đã cài Extension <b>J2TEAM Cookies</b></li>
               <li>Mở trang <a href="https://oa.zalo.me/chat" target="_blank" rel="noopener noreferrer" class="text-n-blue-11 underline font-medium">https://oa.zalo.me/chat</a> (Zalo OA Chat Web)</li>
               <li>Bấm icon <b>J2TEAM Cookies</b> ➔ Bấm <b>Export Cookies</b> để tải file <code>.json</code> về máy</li>
-              <li>Bấm nút <b>Choose File</b> bên dưới ➔ Chọn file <code>.json</code> vừa tải ➔ Bấm <b>🔌 Đăng nhập Zalo OA Web</b></li>
+              <li>Bấm nút <b>{{ $t('KALO_SWEEP.ZALO_COOKIE.CHOOSE_FILE') }}</b> bên dưới ➔ Chọn file <code>.json</code> vừa tải ➔ Bấm <b>🔌 Đăng nhập Zalo OA Web</b></li>
             </ol>
           </div>
 
           <div class="space-y-4">
             <h4 class="text-sm font-bold text-n-slate-12 flex items-center gap-2">
-              <span>🔑 Import File J2TEAM JSON</span>
+              <span>🔑 {{ $t('KALO_SWEEP.ZALO_COOKIE.IMPORT_TITLE') }}</span>
             </h4>
 
             <!-- File Upload Box -->
@@ -687,10 +687,10 @@ export default {
                   class="px-4 py-2 text-xs font-semibold bg-n-solid-3 hover:bg-n-solid-4 border border-n-weak rounded-xl text-n-slate-12 transition-colors flex items-center gap-2"
                   @click="$refs.j2teamFileInput.click()"
                 >
-                  <span>Choose File</span>
+                  <span>{{ $t('KALO_SWEEP.ZALO_COOKIE.CHOOSE_FILE') }}</span>
                 </button>
                 <span class="text-xs text-n-slate-11 font-mono">
-                  {{ selectedJ2TeamFileName || 'No file chosen' }}
+                  {{ selectedJ2TeamFileName || $t('KALO_SWEEP.ZALO_COOKIE.NO_FILE') }}
                 </span>
               </div>
             </div>
@@ -746,7 +746,7 @@ export default {
       <div v-else-if="activeZaloTab === 'personal'" class="space-y-6 pt-2">
         <div class="p-4 rounded-xl bg-blue-500/10 border border-blue-500/20 text-xs text-blue-700 dark:text-blue-300 leading-relaxed">
           <b>💡 Phương thức 2: Zalo Cá Nhân (ZCA Personal Bridge)</b><br />
-          Tích hợp tài khoản Zalo cá nhân vào Chatwoot. Quét mã QR bên dưới bằng ứng dụng Zalo cá nhân để kết nối nhận & trả lời tin nhắn trực tiếp.
+          Kết nối tài khoản Zalo cá nhân vào hệ thống. Quét mã QR bên dưới bằng ứng dụng Zalo cá nhân để kết nối nhận & trả lời tin nhắn trực tiếp.
         </div>
 
         <SettingsFieldSection
@@ -771,7 +771,7 @@ export default {
 
         <SettingsFieldSection
           label="Webhook Callback Zalo Cá Nhân"
-          help-text="URL webhook nội bộ kết nối bridge Zalo cá nhân với Chatwoot"
+          help-text="URL webhook nội bộ kết nối bridge Zalo cá nhân với hệ thống"
         >
           <woot-code script="http://zalo_personal_bridge:5001/chatwoot-webhook" lang="html" />
         </SettingsFieldSection>

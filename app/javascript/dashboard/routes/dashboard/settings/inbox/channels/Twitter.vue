@@ -36,7 +36,7 @@ export default {
         <NextButton
           type="submit"
           icon="i-ri-twitter-x-fill"
-          label="Sign in with Twitter"
+          :label="$t('KALO_SWEEP.SIGN_IN_TWITTER')"
           :is-loading="isRequestingAuthorization"
         />
       </form>

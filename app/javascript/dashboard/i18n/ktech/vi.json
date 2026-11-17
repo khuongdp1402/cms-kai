@@ -1,4 +1,126 @@
 {
+  "AGENT_BOTS": {
+    "ACCESS_TOKEN": {
+      "COPY_SUCCESSFUL": "Đã sao chép mã truy cập",
+      "DESCRIPTION": "Sao chép mã truy cập và lưu ở nơi an toàn",
+      "RESET_ERROR": "Chưa tạo lại được mã truy cập. Bạn thử lại nhé",
+      "RESET_SUCCESS": "Đã tạo lại mã truy cập"
+    },
+    "ADD": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa thêm được bot. Bạn thử lại sau nhé.",
+        "SUCCESS_MESSAGE": "Đã thêm bot."
+      },
+      "TITLE": "Thêm bot"
+    },
+    "AVATAR": {
+      "ERROR_DELETE": "Chưa xóa được ảnh bot. Bạn thử lại nhé.",
+      "SUCCESS_DELETE": "Đã xóa ảnh bot"
+    },
+    "BOT_CONFIGURATION": {
+      "DESC": "Gắn bot vào kênh. Bot trả lời khách trước và chuyển cho nhân viên khi cần.",
+      "DISCONNECT": "Ngắt kết nối bot",
+      "DISCONNECTED_ERROR_MESSAGE": "Chưa ngắt kết nối được bot. Bạn thử lại nhé.",
+      "DISCONNECTED_SUCCESS_MESSAGE": "Đã ngắt kết nối bot.",
+      "ERROR_MESSAGE": "Chưa cập nhật được bot. Bạn thử lại nhé.",
+      "SELECT_PLACEHOLDER": "Chọn bot",
+      "SUCCESS_MESSAGE": "Đã cập nhật bot.",
+      "TITLE": "Chọn bot"
+    },
+    "COUNT": "{n} bot | {n} bot",
+    "DELETE": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa xóa được bot. Bạn thử lại nhé.",
+        "SUCCESS_MESSAGE": "Đã xóa bot."
+      },
+      "CONFIRM": {
+        "MESSAGE": "Bạn chắc chắn muốn xóa {name}?"
+      },
+      "TITLE": "Xóa bot"
+    },
+    "DESCRIPTION": "Bot như một nhân viên trực 24/7: lo những việc nhỏ để bạn tập trung vào việc quan trọng. Bạn có thể kết nối bot với kênh để trả lời khách trước.",
+    "EDIT": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa cập nhật được bot. Bạn thử lại nhé.",
+        "SUCCESS_MESSAGE": "Đã cập nhật bot."
+      },
+      "TITLE": "Sửa bot"
+    },
+    "FORM": {
+      "AVATAR": {
+        "LABEL": "Ảnh bot"
+      },
+      "CREATE": "Tạo bot",
+      "ERRORS": {
+        "NAME": "Cần nhập tên bot",
+        "URL": "Cần nhập đường dẫn webhook",
+        "VALID_URL": "Hãy nhập đường dẫn hợp lệ, bắt đầu bằng http:// hoặc https://"
+      },
+      "NAME": {
+        "LABEL": "Tên bot",
+        "PLACEHOLDER": "Nhập tên bot",
+        "REQUIRED": "Cần nhập tên bot"
+      },
+      "UPDATE": "Cập nhật bot",
+      "WEBHOOK_URL": {
+        "LABEL": "Đường dẫn webhook",
+        "PLACEHOLDER": "https://example.com/webhook",
+        "REQUIRED": "Cần nhập đường dẫn webhook"
+      }
+    },
+    "GLOBAL_BOT": "Bot hệ thống",
+    "GLOBAL_BOT_BADGE": "Hệ thống",
+    "HEADER": "Bot",
+    "LEARN_MORE": "Tìm hiểu về bot",
+    "LIST": {
+      "404": "Chưa có bot nào. Bấm nút 'Thêm bot' để tạo bot.",
+      "LOADING": "Đang tải bot...",
+      "TABLE_HEADER": {
+        "DETAILS": "Thông tin bot",
+        "URL": "Đường dẫn webhook"
+      }
+    },
+    "LOADING_EDITOR": "Đang tải trình soạn thảo...",
+    "NO_RESULTS": "Không có bot nào khớp",
+    "SEARCH_PLACEHOLDER": "Tìm bot...",
+    "SECRET": {
+      "COPY": "Sao chép khóa bí mật",
+      "COPY_SUCCESS": "Đã sao chép khóa bí mật",
+      "CREATED_DESC": "Dùng khóa bí mật dưới đây để kiểm tra chữ ký webhook. Hãy sao chép ngay, bạn cũng có thể xem lại trong cài đặt bot.",
+      "DONE": "Xong",
+      "LABEL": "Khóa bí mật webhook",
+      "RESET_ERROR": "Chưa tạo lại được khóa bí mật. Bạn thử lại nhé",
+      "RESET_SUCCESS": "Đã tạo lại khóa bí mật webhook",
+      "TOGGLE": "Hiện hoặc ẩn khóa bí mật"
+    },
+    "TYPES": {
+      "WEBHOOK": "Bot webhook"
+    },
+    "WEBHOOK": {
+      "DESCRIPTION": "Cài bot webhook để kết nối với dịch vụ riêng của bạn. Bot nhận sự kiện từ hội thoại, xử lý và trả lời."
+    }
+  },
+  "AGENT_MGMT": {
+    "COUNT": "{n} nhân viên | {n} nhân viên",
+    "DESCRIPTION": "Nhân viên là người trong đội của bạn có thể xem và trả lời tin nhắn khách. Danh sách dưới đây là tất cả nhân viên.",
+    "EDIT": {
+      "FORM": {
+        "AGENT_AVAILABILITY": {
+          "ERROR": "Cần chọn trạng thái hoạt động",
+          "PLACEHOLDER": "Chọn trạng thái hoạt động"
+        }
+      }
+    },
+    "LEARN_MORE": "Tìm hiểu về vai trò",
+    "LIST": {
+      "AVAILABLE_CUSTOM_ROLE": "Quyền của vai trò tùy chỉnh",
+      "EMAIL": "EMAIL"
+    },
+    "NO_RESULTS": "Không có nhân viên nào khớp"
+  },
+  "AGENT_REPORTS": {
+    "DESCRIPTION": "Theo dõi hiệu quả làm việc của nhân viên qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào tên nhân viên để xem chi tiết."
+  },
   "APP_GLOBAL": {
     "ACCOUNT_SUSPENDED": {
       "MANAGE_BILLING": "Quản lý thanh toán"
@@ -12,6 +134,59 @@
       "TITLE": "Không tìm thấy tài khoản"
     },
     "RESEND_VERIFICATION_MAIL": "Gửi lại email xác minh"
+  },
+  "ATTRIBUTES_MGMT": {
+    "ADD": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa tạo được thuộc tính. Bạn thử lại sau nhé."
+      },
+      "FORM": {
+        "BADGES": {
+          "PRE_CHAT": "Trước khi chat",
+          "RESOLUTION": "Khi đóng hội thoại"
+        },
+        "ENABLE_REGEX": {
+          "LABEL": "Bật kiểm tra theo mẫu"
+        },
+        "REGEX_CUE": {
+          "LABEL": "Gợi ý nhập",
+          "PLACEHOLDER": "Nhập gợi ý cho mẫu kiểm tra (không bắt buộc)"
+        },
+        "REGEX_PATTERN": {
+          "LABEL": "Mẫu kiểm tra (regex)",
+          "PLACEHOLDER": "Nhập mẫu kiểm tra regex (không bắt buộc)"
+        }
+      }
+    },
+    "ATTRIBUTE_TYPES": {
+      "DATE": "Ngày"
+    },
+    "BADGES": {
+      "PRE_CHAT": "Trước khi chat",
+      "RESOLUTION": "Khi đóng hội thoại"
+    },
+    "COUNT": "{n} thuộc tính | {n} thuộc tính",
+    "LEARN_MORE": "Tìm hiểu về thuộc tính",
+    "LIST": {
+      "ENABLE_REGEX": {
+        "LABEL": "Bật kiểm tra theo mẫu"
+      },
+      "REGEX_CUE": {
+        "LABEL": "Gợi ý nhập",
+        "PLACEHOLDER": "Nhập gợi ý cho mẫu kiểm tra (không bắt buộc)"
+      },
+      "REGEX_PATTERN": {
+        "LABEL": "Mẫu kiểm tra (regex)",
+        "PLACEHOLDER": "Nhập mẫu kiểm tra regex (không bắt buộc)"
+      }
+    },
+    "NO_RESULTS": "Không có thuộc tính nào khớp"
+  },
+  "AUDIT_LOGS": {
+    "LIST": {
+      "DESC": "Nhật ký hoạt động ghi lại các sự kiện và thao tác trong hệ thống."
+    },
+    "SIDEBAR_TXT": "<p><b>Nhật ký hoạt động</b> </p><p> Nhật ký hoạt động ghi lại các sự kiện và thao tác trong hệ thống. </p>"
   },
   "AUTOMATION": {
     "ACTION": {
@@ -68,6 +243,27 @@
     },
     "NO_RESULTS": "Không tìm thấy quy tắc tự động nào phù hợp với tìm kiếm",
     "SEARCH_PLACEHOLDER": "Tìm kiếm quy tắc tự động..."
+  },
+  "BOT_REPORTS": {
+    "HEADER": "Báo cáo bot",
+    "METRIC": {
+      "HANDOFF_RATE": {
+        "LABEL": "Tỷ lệ chuyển cho nhân viên",
+        "TOOLTIP": "Số hội thoại chuyển cho nhân viên / Số hội thoại bot đã xử lý * 100"
+      },
+      "RESOLUTION_RATE": {
+        "LABEL": "Tỷ lệ giải quyết",
+        "TOOLTIP": "Số hội thoại bot tự giải quyết / Số hội thoại bot đã xử lý * 100"
+      },
+      "TOTAL_CONVERSATIONS": {
+        "LABEL": "Số hội thoại",
+        "TOOLTIP": "Tổng số hội thoại bot đã xử lý"
+      },
+      "TOTAL_RESPONSES": {
+        "LABEL": "Tổng số lượt trả lời",
+        "TOOLTIP": "Tổng số tin nhắn bot đã gửi"
+      }
+    }
   },
   "BREADCRUMB": {
     "ARIA_LABEL": "Đường dẫn"
@@ -203,6 +399,67 @@
       "NEW_CAMPAIGN": "Tạo chiến dịch"
     }
   },
+  "CANNED_MGMT": {
+    "ADD": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa kết nối được máy chủ. Bạn thử lại nhé.",
+        "SUCCESS_MESSAGE": "Đã thêm câu trả lời mẫu."
+      },
+      "DESC": "Câu trả lời mẫu là tin nhắn soạn sẵn để trả lời khách nhanh hơn.",
+      "FORM": {
+        "CONTENT": {
+          "ERROR": "Cần nhập nội dung.",
+          "PLACEHOLDER": "Nhập nội dung tin nhắn bạn muốn lưu làm mẫu."
+        },
+        "SHORT_CODE": {
+          "ERROR": "Cần nhập mã ngắn.",
+          "LABEL": "Mã ngắn",
+          "PLACEHOLDER": "Nhập mã ngắn."
+        }
+      },
+      "TITLE": "Thêm câu trả lời mẫu"
+    },
+    "COUNT": "{n} câu trả lời mẫu | {n} câu trả lời mẫu",
+    "DELETE": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa kết nối được máy chủ. Bạn thử lại nhé.",
+        "SUCCESS_MESSAGE": "Đã xóa câu trả lời mẫu."
+      },
+      "CONFIRM": {
+        "NO": "Không, giữ lại",
+        "YES": "Có, xóa"
+      }
+    },
+    "DESCRIPTION": "Câu trả lời mẫu là tin nhắn soạn sẵn để trả lời nhanh. Khi chat, gõ dấu '/' rồi mã ngắn để chèn câu trả lời mẫu.",
+    "EDIT": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa kết nối được máy chủ. Bạn thử lại nhé.",
+        "SUCCESS_MESSAGE": "Đã cập nhật câu trả lời mẫu."
+      },
+      "FORM": {
+        "CONTENT": {
+          "PLACEHOLDER": "Nhập nội dung tin nhắn bạn muốn lưu làm mẫu."
+        },
+        "SHORT_CODE": {
+          "ERROR": "Cần nhập mã ngắn.",
+          "LABEL": "Mã ngắn",
+          "PLACEHOLDER": "Nhập mã ngắn."
+        }
+      },
+      "TITLE": "Sửa câu trả lời mẫu"
+    },
+    "HEADER_BTN_TXT": "Thêm câu trả lời mẫu",
+    "LEARN_MORE": "Tìm hiểu về câu trả lời mẫu",
+    "LIST": {
+      "DESC": "Câu trả lời mẫu là tin nhắn soạn sẵn để trả lời khách nhanh hơn.",
+      "TABLE_HEADER": {
+        "SHORT_CODE": "Mã ngắn"
+      }
+    },
+    "LOADING": "Đang tải câu trả lời mẫu...",
+    "NO_RESULTS": "Không có câu trả lời mẫu nào khớp",
+    "SEARCH_PLACEHOLDER": "Tìm câu trả lời mẫu..."
+  },
   "CHANNEL_SELECTOR": {
     "COMING_SOON": "Sắp ra mắt!"
   },
@@ -334,7 +591,10 @@
         "TAG_INPUT_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo tên, email hoặc số điện thoại"
       },
       "EMAIL_OPTIONS": {
+        "BCC_BUTTON": "Bcc",
+        "BCC_LABEL": "Bcc:",
         "BCC_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo email",
+        "CC_LABEL": "Cc:",
         "CC_PLACEHOLDER": "Nhập ít nhất 2 ký tự để tìm theo email",
         "SUBJECT_PLACEHOLDER": "Nhập tiêu đề email"
       },
@@ -484,6 +744,7 @@
       "BUTTONS": {
         "UPDATE_SEGMENT": "Cập nhật phân khúc"
       },
+      "EMAIL": "Email",
       "SEGMENT": {
         "INPUT_PLACEHOLDER": "Nhập tên phân khúc",
         "LABEL": "Tên phân khúc"
@@ -529,6 +790,11 @@
           "OPTIONS": {
             "ASCENDING": "Tăng dần",
             "DESCENDING": "Giảm dần"
+          }
+        },
+        "SORT_BY": {
+          "OPTIONS": {
+            "EMAIL": "Email"
           }
         },
         "UNBLOCK_ERROR_MESSAGE": "Không bỏ chặn được liên hệ, vui lòng thử lại sau.",
@@ -592,6 +858,20 @@
       "PHONE_NUMBER": {
         "DIAL_CODE_ERROR": "Vui lòng chọn mã quốc gia trong danh sách",
         "HELP": "Số điện thoại theo định dạng E.164, ví dụ: +84912345678 [+][mã quốc gia][số thuê bao]. Bạn có thể chọn mã quốc gia trong danh sách."
+      },
+      "SOCIAL_PROFILES": {
+        "FACEBOOK": {
+          "LABEL": "Facebook"
+        },
+        "GITHUB": {
+          "LABEL": "Github"
+        },
+        "LINKEDIN": {
+          "LABEL": "LinkedIn"
+        },
+        "TWITTER": {
+          "LABEL": "Twitter"
+        }
       }
     }
   },
@@ -610,13 +890,58 @@
     "WHATSAPP_CALL_PERMISSION_PENDING": "Yêu cầu cho phép gọi vừa được gửi. Hãy thử lại khi khách đồng ý.",
     "WHATSAPP_CALL_PERMISSION_REQUESTED": "Đã gửi yêu cầu cho phép gọi tới khách. Hãy thử lại khi khách đồng ý."
   },
+  "CONTENT_TEMPLATES": {
+    "MODAL": {
+      "SUBTITLE": "Chọn mẫu tin Twilio muốn gửi",
+      "TEMPLATE_SELECTED_SUBTITLE": "Cài đặt mẫu tin: {templateName}",
+      "TITLE": "Mẫu tin Twilio"
+    },
+    "PARSER": {
+      "MEDIA_HEADER_LABEL": "Đầu tin {type}",
+      "MEDIA_URL_LABEL": "Nhập đầy đủ đường dẫn tệp",
+      "MEDIA_URL_PLACEHOLDER": "https://example.com/image.jpg"
+    },
+    "PICKER": {
+      "BODY": "Nội dung",
+      "BUTTONS": "Nút bấm",
+      "FOOTER": "Chân tin",
+      "HEADER": "Đầu tin",
+      "MEDIA_CONTENT": "Ảnh, video hoặc tệp",
+      "MEDIA_CONTENT_FALLBACK": "ảnh, video hoặc tệp",
+      "NO_CONTENT": "Không có nội dung",
+      "NO_TEMPLATES_AVAILABLE": "Chưa có mẫu tin Twilio. Bấm làm mới để đồng bộ mẫu tin từ Twilio.",
+      "REFRESH_BUTTON": "Làm mới mẫu tin",
+      "REFRESH_ERROR": "Chưa làm mới được mẫu tin. Bạn thử lại nhé.",
+      "REFRESH_SUCCESS": "Đã bắt đầu làm mới mẫu tin. Có thể mất vài phút để cập nhật.",
+      "TYPES": {
+        "CALL_TO_ACTION": "Kêu gọi hành động",
+        "MEDIA": "Ảnh, video, tệp",
+        "QUICK_REPLY": "Trả lời nhanh"
+      }
+    }
+  },
   "CONVERSATION": {
     "API_HOURS_WINDOW": "Bạn chỉ có thể trả lời cuộc trò chuyện này trong vòng {hours} giờ",
+    "BOT": "Bot",
     "BOT_HANDOFF_ACTION": "Mở lại và giao cho tôi",
     "BOT_HANDOFF_ERROR": "Không tiếp nhận được cuộc trò chuyện, vui lòng thử lại.",
     "BOT_HANDOFF_MESSAGE": "Cuộc trò chuyện này đang do trợ lý hoặc bot xử lý.",
     "BOT_HANDOFF_REOPEN_ACTION": "Mở lại cuộc trò chuyện",
     "BOT_HANDOFF_SUCCESS": "Cuộc trò chuyện đã được chuyển cho bạn",
+    "CAPTAIN_GENERATION": {
+      "CREDITS": "Điểm: {credits}",
+      "EMPTY": "Chưa có chi tiết cho tin nhắn này.",
+      "GENERATED_BY": "Do trợ lý AI tạo",
+      "LOADING": "Đang tải chi tiết…",
+      "MODEL": "Tạo bằng {model}",
+      "REASONING": "Lý do",
+      "SOURCES": "Kho kiến thức",
+      "SOURCES_SUMMARY": "{count} kết quả | {count} kết quả",
+      "STEP_HANDOFF": "Đã chuyển cho {name}",
+      "STEP_TOOL": "Đã gọi {name}",
+      "TIMELINE": "Các bước thực hiện",
+      "TITLE": "Câu trả lời này được tạo ra thế nào?"
+    },
     "CARD": {
       "LABELS_COUNT": "{count} nhãn"
     },
@@ -646,6 +971,24 @@
       },
       "LINK_COPIED": "Đã sao chép liên kết tin nhắn",
       "REPLY_TO": "Trả lời tin nhắn này",
+      "REPORT_MESSAGE": {
+        "DESCRIPTION": "Câu trả lời của AI có vấn đề? Hãy cho chúng tôi biết để cải thiện độ chính xác.",
+        "DESCRIPTION_PLACEHOLDER": "Mô tả chi tiết vấn đề",
+        "ERROR": "Chưa báo lỗi được. Bạn thử lại nhé.",
+        "LABEL": "Báo lỗi tin nhắn",
+        "PROBLEM_TYPE": "Loại vấn đề",
+        "PROBLEM_TYPE_PLACEHOLDER": "Chọn loại vấn đề",
+        "REASONS": {
+          "inappropriate_response": "Trả lời không phù hợp",
+          "incomplete_response": "Trả lời chưa đủ",
+          "incorrect_information": "Thông tin sai",
+          "other": "Khác",
+          "outdated_information": "Thông tin cũ"
+        },
+        "SUBMIT": "Gửi báo lỗi",
+        "SUCCESS": "Cảm ơn bạn đã báo lỗi.",
+        "TITLE": "Báo lỗi tin nhắn của AI"
+      },
       "TRANSLATE": "Dịch"
     },
     "DELETE_CONVERSATION": {
@@ -667,7 +1010,10 @@
       "COPY_ID_SUCCESS": "Đã sao chép mã cuộc trò chuyện",
       "MORE_ACTIONS": "Thao tác khác",
       "SLA_STATUS": {
-        "MISSED": "trễ"
+        "FRT": "Phản hồi đầu {status}",
+        "MISSED": "trễ",
+        "NRT": "Phản hồi kế {status}",
+        "RT": "Xử lý xong {status}"
       },
       "SNOOZED_UNTIL": "Tạm hoãn đến",
       "VOICE_CALL": "Gọi điện",
@@ -692,6 +1038,12 @@
       "AUDIO_CONVERSION_FAILED": "Không chuyển đổi được âm thanh, vui lòng thử lại.",
       "DISMISS_REPLY": "Bỏ trả lời",
       "EMAIL_HEAD": {
+        "BCC": {
+          "LABEL": "Bcc"
+        },
+        "CC": {
+          "LABEL": "Cc"
+        },
         "TO": "ĐẾN"
       },
       "QUOTED_REPLY": {
@@ -713,6 +1065,9 @@
       "CONTACT": "{sender} đã chia sẻ một liên hệ",
       "FILE": "{sender} đã chia sẻ một tệp",
       "LOCATION": "{sender} đã chia sẻ một vị trí"
+    },
+    "SIDEBAR": {
+      "COPILOT": "Trợ lý AI"
     },
     "SUCCESS_DELETE_CONVERSATION": "Đã xóa cuộc trò chuyện",
     "UNSUPPORTED_MESSAGE_FACEBOOK": "Chưa hỗ trợ hiển thị tin nhắn này. Bạn có thể xem trên ứng dụng Facebook Messenger.",
@@ -812,8 +1167,109 @@
       "ORDER_ID": "Đơn hàng #{id}"
     }
   },
+  "CONVERSATION_WORKFLOW": {
+    "INDEX": {
+      "HEADER": {
+        "DESCRIPTION": "Cài quy tắc và các trường bắt buộc khi đóng hội thoại.",
+        "TITLE": "Quy trình hội thoại"
+      }
+    },
+    "REQUIRED_ATTRIBUTES": {
+      "ADD": {
+        "TITLE": "Thêm thuộc tính"
+      },
+      "DESCRIPTION": "Khi đóng hội thoại, nhân viên sẽ được nhắc điền các thuộc tính này nếu chưa có.",
+      "ENTERPRISE_PAYWALL": {
+        "ASK_ADMIN": "Hãy liên hệ quản trị viên để nâng cấp.",
+        "AVAILABLE_ON": "Thuộc tính bắt buộc có ở các gói trả phí.",
+        "UPGRADE_PROMPT": "Nâng cấp lên gói trả phí để bắt buộc điền thuộc tính trước khi đóng hội thoại."
+      },
+      "MODAL": {
+        "DESCRIPTION": "Hãy điền các thuộc tính sau trước khi đóng hội thoại này",
+        "PLACEHOLDERS": {
+          "DATE": "Chọn ngày",
+          "LINK": "Thêm đường dẫn",
+          "LIST": "Chọn một mục",
+          "NUMBER": "Nhập một số",
+          "TEXT": "Viết ghi chú..."
+        }
+      },
+      "NO_ATTRIBUTES": "Chưa thêm thuộc tính nào",
+      "PAYWALL": {
+        "AVAILABLE_ON": "Thuộc tính bắt buộc có ở các gói cao hơn.",
+        "CANCEL_ANYTIME": "Bạn có thể đổi hoặc hủy gói bất cứ lúc nào",
+        "TITLE": "Nâng cấp để dùng thuộc tính bắt buộc",
+        "UPGRADE_NOW": "Nâng cấp ngay",
+        "UPGRADE_PROMPT": "Nâng cấp gói để nhắc nhân viên điền thuộc tính bắt buộc trước khi đóng hội thoại."
+      },
+      "SAVE": {
+        "ERROR": "Chưa cập nhật được thuộc tính bắt buộc, bạn thử lại nhé",
+        "SUCCESS": "Đã cập nhật thuộc tính bắt buộc"
+      },
+      "TITLE": "Thuộc tính bắt buộc khi đóng hội thoại"
+    }
+  },
   "COPILOT": {
     "TRY_THESE_PROMPTS": "Thử các gợi ý sau"
+  },
+  "CREATE_ACCOUNT": {
+    "FORM": {
+      "NAME": {
+        "PLACEHOLDER": "Tên cửa hàng của bạn"
+      }
+    },
+    "NO_ACCOUNT_WARNING": "Ồ ồ! Chúng tôi không tìm thấy tài khoản nào. Vui lòng tạo tài khoản mới để tiếp tục."
+  },
+  "CSAT": {
+    "RATINGS": {
+      "AVERAGE": "😐 Bình thường",
+      "EXCELLENT": "😍 Rất tốt",
+      "FAIR": "😑 Tạm",
+      "GOOD": "😀 Tốt",
+      "POOR": "😞 Tệ"
+    }
+  },
+  "CSAT_REPORTS": {
+    "DOWNLOAD_FAILED": "Chưa tải được báo cáo đánh giá",
+    "FILTERS": {
+      "CLEAR_ALL": "Xóa tất cả",
+      "INPUT_PLACEHOLDER": {
+        "INBOXES": "Tìm kênh",
+        "RATINGS": "Tìm mức đánh giá"
+      },
+      "NO_FILTER": "Không có bộ lọc"
+    },
+    "METRIC": {
+      "RATING_DISTRIBUTION": "Phân bố đánh giá"
+    },
+    "NO_AGENT": "Chưa giao nhân viên",
+    "NO_FEEDBACK": "Khách chưa góp ý",
+    "NO_RECORDS": "Chưa có phản hồi",
+    "NO_RECORDS_DESCRIPTION": "Phản hồi đánh giá sẽ hiện ở đây khi khách bắt đầu gửi đánh giá.",
+    "REVIEW_NOTES": {
+      "PAYWALL": {
+        "AVAILABLE_ON": "Ghi chú xem xét chỉ có ở các gói cao hơn.",
+        "CANCEL_ANYTIME": "Bạn có thể đổi hoặc hủy gói bất cứ lúc nào",
+        "TITLE": "Nâng cấp để thêm ghi chú xem xét",
+        "UPGRADE_NOW": "Nâng cấp ngay",
+        "UPGRADE_PROMPT": "Thêm ghi chú nội bộ cho mỗi đánh giá để nắm rõ chuyện gì đã xảy ra và cải thiện dịch vụ nhanh hơn."
+      },
+      "PLACEHOLDER": "Thêm ghi chú về đánh giá này...",
+      "SAVE": "Lưu",
+      "SAVED": "Đã lưu ghi chú",
+      "SAVE_ERROR": "Chưa lưu được ghi chú",
+      "TITLE": "Ghi chú xem xét",
+      "UPDATED_BY": "{name} cập nhật {time}",
+      "UPDATED_BY_LABEL": "Cập nhật bởi"
+    },
+    "TABLE": {
+      "HEADER": {
+        "CUSTOMER": "Khách",
+        "HANDLED_BY": "Người xử lý",
+        "RESPONSE": "Phản hồi"
+      },
+      "UNKNOWN_CUSTOMER": "Khách chưa rõ"
+    }
   },
   "CUSTOM_ATTRIBUTES": {
     "SHOW_LESS": "Thu gọn thuộc tính",
@@ -821,6 +1277,112 @@
     "VALIDATIONS": {
       "INVALID_INPUT": "Giá trị không hợp lệ"
     }
+  },
+  "DATA_IMPORTS": {
+    "ALERTS": {
+      "IMPORT_ABANDONED": "Đã bỏ lần nhập từ Intercom.",
+      "IMPORT_FAILED": "Chưa bắt đầu được lần nhập từ Intercom.",
+      "IMPORT_RETRIED": "Đã xếp hàng để nhập tiếp từ Intercom.",
+      "IMPORT_RETRY_FAILED": "Chưa thử lại được lần nhập từ Intercom.",
+      "IMPORT_STARTED": "Đã bắt đầu nhập từ Intercom."
+    },
+    "DEFAULT_IMPORT_NAME": "Nhập từ Intercom",
+    "DESCRIPTION": "Chuyển khách và hội thoại cũ từ công cụ hỗ trợ khác vào tài khoản này.",
+    "DETAIL": {
+      "BACK": "Quay lại các lần nhập",
+      "DOWNLOAD_ERROR_LOGS": "Tải CSV",
+      "DOWNLOAD_SKIP_LOGS": "Tải CSV",
+      "ERRORS": "Lỗi",
+      "ERROR_CODE": "Mã",
+      "IMPORT_TYPES": "Loại dữ liệu nhập",
+      "INITIATED_BY": "Bắt đầu bởi",
+      "KIND": "Loại",
+      "LAST_UPDATED_TOOLTIP": "Cập nhật lần cuối {time}",
+      "NO_ERRORS": "Không có lỗi.",
+      "NO_SKIP_LOGS": "Không có mục nào bị bỏ qua hoặc lỗi.",
+      "PROGRESS": "Tiến độ nhập",
+      "PROGRESS_IMPORTED": "đã nhập",
+      "PROGRESS_OF_TOTAL": "trên tổng {total} đã nhập",
+      "PROGRESS_WITHOUT_TOTAL": "Đã nhập {imported}",
+      "PROGRESS_WITH_TOTAL": "Đã nhập {imported} trên {total}",
+      "SKIP_LOGS": "Mục bị bỏ qua",
+      "SOURCE": "Nguồn",
+      "SOURCE_OBJECT": "Đối tượng nguồn"
+    },
+    "DRAWER": {
+      "ACCESS_KEY": "Khóa truy cập Intercom",
+      "ACCESS_KEY_PLACEHOLDER": "Dán khóa truy cập Intercom",
+      "ACTIVE_IMPORT": "Hãy chờ lần nhập đang chạy xong trước khi bắt đầu lần mới.",
+      "DATA_TYPES": "Dữ liệu cần nhập",
+      "INVALID_KEY": "Khóa truy cập không hợp lệ.",
+      "NAME": "Tên lần nhập",
+      "NAME_PLACEHOLDER": "Chuyển dữ liệu Intercom tháng 7",
+      "SOURCE": "Nguồn",
+      "TITLE": "Nhập dữ liệu mới",
+      "VALIDATING": "Đang kiểm tra khóa truy cập...",
+      "VALID_KEY": "Khóa truy cập hợp lệ."
+    },
+    "EXPORT": {
+      "COMING_SOON": "Sắp có",
+      "DESCRIPTION": "Xuất khách và hội thoại ra khỏi tài khoản này. Tính năng sắp có.",
+      "TITLE": "Xuất dữ liệu sắp có"
+    },
+    "HEADER": "Dữ liệu",
+    "LOADING": "Đang tải các lần nhập",
+    "MONITOR": {
+      "LAST_UPDATED": "Cập nhật lần cuối {time}",
+      "LIVE": "Tự cập nhật mỗi {seconds} giây",
+      "REFRESHING": "Đang làm mới",
+      "STAGES": {
+        "abandoned": "Đã bỏ",
+        "completed_with_errors": "Xong, có lỗi",
+        "contacts": "Đang nhập khách",
+        "conversations": "Đang nhập hội thoại",
+        "failed": "Thất bại",
+        "finalizing": "Đang hoàn tất",
+        "queued": "Đang xếp hàng",
+        "unknown": "Đang chờ cập nhật"
+      }
+    },
+    "TABLE": {
+      "ABANDON": "Bỏ",
+      "COUNT": "{count} lần nhập",
+      "EMPTY": "Chưa nhập dữ liệu lần nào",
+      "EMPTY_DESCRIPTION": "Hãy bắt đầu nhập để chuyển lịch sử khách hàng hiện có vào tài khoản này.",
+      "IMPORTED": "Đã nhập",
+      "IMPORTED_COUNT": "Đã nhập {count}",
+      "RETRY": "Thử lại",
+      "TITLE": "Các lần nhập gần đây",
+      "UNNAMED": "Lần nhập chưa đặt tên",
+      "VIEW": "Xem lần nhập"
+    },
+    "TABS": {
+      "EXPORT": "Xuất dữ liệu"
+    }
+  },
+  "DATE_PICKER": {
+    "CLEAR_BUTTON": "Xóa",
+    "DATE_RANGE_INPUT": {
+      "END": "Đến ngày",
+      "START": "Từ ngày"
+    },
+    "DATE_RANGE_OPTIONS": {
+      "MONTH_TO_DATE": "Tháng này",
+      "THIS_WEEK": "Tuần này",
+      "TITLE": "KHOẢNG NGÀY"
+    },
+    "NEXT_PERIOD": "Kỳ sau",
+    "PREVIOUS_PERIOD": "Kỳ trước",
+    "WEEK_NUMBER": "Tuần {weekNumber}"
+  },
+  "DAYS_OF_WEEK": {
+    "FRIDAY": "Thứ sáu",
+    "MONDAY": "Thứ hai",
+    "SATURDAY": "Thứ bảy",
+    "SUNDAY": "Chủ nhật",
+    "THURSDAY": "Thứ năm",
+    "TUESDAY": "Thứ ba",
+    "WEDNESDAY": "Thứ tư"
   },
   "DROPDOWN_MENU": {
     "SEARCH_PLACEHOLDER": "Tìm kiếm..."
@@ -832,13 +1394,55 @@
     "PLACEHOLDER": "Nhập thời lượng"
   },
   "EMAIL_HEADER": {
+    "BCC": "Bcc",
+    "CC": "Cc",
     "EXPAND": "Mở rộng email"
   },
   "EMAIL_TRANSCRIPT": {
     "SEND_EMAIL_PAYMENT_REQUIRED": "Gói hiện tại chưa hỗ trợ gửi bản ghi qua email. Vui lòng nâng cấp để dùng tính năng này."
   },
+  "EMOJI": {
+    "NOT_FOUND": "Không có biểu tượng nào khớp",
+    "PLACEHOLDER": "Tìm biểu tượng cảm xúc"
+  },
+  "EMOJI_ICON_PICKER": {
+    "COLORS": {
+      "AMBER": "Vàng cam",
+      "BLUE": "Xanh dương",
+      "GREEN": "Xanh lá",
+      "INDIGO": "Chàm",
+      "ORANGE": "Cam",
+      "PINK": "Hồng",
+      "RED": "Đỏ",
+      "SLATE": "Xám",
+      "TEAL": "Xanh ngọc",
+      "VIOLET": "Tím"
+    },
+    "FREQUENTLY_USED": "Hay dùng",
+    "NO_EMOJI": "Không có biểu tượng cảm xúc nào khớp",
+    "NO_ICON": "Không có biểu tượng nào khớp",
+    "SEARCH_EMOJI": "Tìm cảm xúc…",
+    "SEARCH_ICON": "Tìm biểu tượng…",
+    "STYLE": {
+      "FILLED": "Biểu tượng đặc",
+      "OUTLINE": "Biểu tượng viền"
+    },
+    "TABS": {
+      "EMOJIS": "Cảm xúc",
+      "ICONS": "Biểu tượng"
+    }
+  },
   "FEATURE_SPOTLIGHT": {
     "WATCH_VIDEO": "Xem video"
+  },
+  "FILTER": {
+    "CONTACT_FALLBACK": "Khách #{id}",
+    "ERRORS": {
+      "ATTRIBUTE_KEY_REQUIRED": "Cần chọn thuộc tính",
+      "FILTER_OPERATOR_REQUIRED": "Cần chọn phép so sánh",
+      "VALUE_MUST_BE_BETWEEN_1_AND_998": "Giá trị phải từ 1 đến 998"
+    },
+    "INPUT_PLACEHOLDER": "Nhập giá trị"
   },
   "FORMS": {
     "MULTISELECT": {
@@ -850,6 +1454,7 @@
   },
   "GENERAL": {
     "ACCEPT": "Chấp nhận",
+    "BETA": "Thử nghiệm",
     "BETA_DESCRIPTION": "Tính năng đang thử nghiệm và có thể thay đổi.",
     "DISCARD": "Bỏ",
     "PREFERRED": "Ưu tiên",
@@ -936,7 +1541,546 @@
     },
     "OPEN_BILLING": "Mở trang thanh toán",
     "PAYMENT_PENDING": "Khoản thanh toán của bạn đang chờ xử lý. Vui lòng cập nhật thông tin thanh toán để tiếp tục sử dụng",
+    "UPDATE_CHATWOOT": "Đã có bản cập nhật {latestChatwootVersion}. Vui lòng cập nhật phiên bản của bạn.",
     "UPGRADE": "Nâng cấp để tiếp tục sử dụng"
+  },
+  "HELP_CENTER": {
+    "ARTICLES_PAGE": {
+      "ARTICLES_HEADER": {
+        "CATEGORY": {
+          "ALL": "Tất cả danh mục"
+        },
+        "LOCALE": {
+          "ALL": "Tất cả ngôn ngữ"
+        },
+        "NEW_ARTICLE": "Bài viết mới",
+        "SEARCH_PLACEHOLDER": "Tìm bài viết...",
+        "TABS": {
+          "ALL": "Tất cả bài viết"
+        }
+      },
+      "ARTICLE_CARD": {
+        "CARD": {
+          "CATEGORY": {
+            "UNCATEGORISED": "Chưa phân loại"
+          },
+          "DROPDOWN_MENU": {
+            "ARCHIVE": "Lưu trữ",
+            "TRANSLATE": "Dịch"
+          },
+          "PENDING_EDITS": "Chỉnh sửa chưa xuất bản",
+          "PENDING_EDITS_TOOLTIP": "Bài đã xuất bản này có chỉnh sửa chưa xuất bản",
+          "VIEWS": "{count} lượt xem | {count} lượt xem"
+        }
+      },
+      "BULK_ACTIONS": {
+        "ARCHIVE": "Lưu trữ",
+        "CATEGORY_ERROR": "Chưa chuyển được bài viết",
+        "CATEGORY_SUCCESS": "Đã chuyển bài viết",
+        "DELETE_CONFIRM_DESCRIPTION": "Bài viết đã chọn sẽ bị xóa vĩnh viễn và không thể khôi phục. | {count} bài viết đã chọn sẽ bị xóa vĩnh viễn và không thể khôi phục.",
+        "DELETE_CONFIRM_TITLE": "Xóa bài viết | Xóa {count} bài viết",
+        "DELETE_ERROR": "Chưa xóa được bài viết",
+        "DELETE_SUCCESS": "Đã xóa bài viết",
+        "STATUS_ERROR": "Chưa cập nhật được bài viết",
+        "STATUS_SKIPPED": "Bỏ qua 1 bài có chỉnh sửa chưa xuất bản, hãy mở bài để xuất bản hoặc hủy. | Bỏ qua {count} bài có chỉnh sửa chưa xuất bản, hãy mở từng bài để xuất bản hoặc hủy.",
+        "STATUS_SKIPPED_ALL": "Các bài này có chỉnh sửa chưa xuất bản, hãy mở từng bài để xuất bản hoặc hủy.",
+        "STATUS_SUCCESS": "Đã cập nhật bài viết",
+        "TRANSLATE": "Dịch"
+      },
+      "BULK_TRANSLATE": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa bắt đầu dịch được. Bạn thử lại nhé.",
+          "SUCCESS_MESSAGE": "Đang dịch. Bài sẽ hiện ở dạng bản nháp khi xong."
+        },
+        "CATEGORY_LABEL": "Danh mục đích",
+        "CATEGORY_PLACEHOLDER": "Chọn danh mục",
+        "CLEAR_SELECTION": "Bỏ chọn",
+        "CONFIRM": "Dịch",
+        "CONFIRM_OVERWRITE": "Ghi đè và dịch",
+        "DESCRIPTION": "Dịch bài viết đã chọn sang ngôn ngữ khác. | Dịch các bài viết đã chọn sang ngôn ngữ khác.",
+        "DUPLICATE_CONFIRM_HINT": "Bấm dịch lần nữa để ghi đè bản dịch hiện có.",
+        "DUPLICATE_WARNING": "Bài viết này đã có bản dịch ở ngôn ngữ đã chọn. | Đã có bản dịch của {count} bài viết ở ngôn ngữ đã chọn.",
+        "LOCALE_LABEL": "Ngôn ngữ đích",
+        "LOCALE_PLACEHOLDER": "Chọn ngôn ngữ",
+        "OPTIONAL": "(không bắt buộc)",
+        "SELECTED_COUNT": "Đã chọn {count}",
+        "SELECT_ALL": "Chọn tất cả ({count})",
+        "TITLE": "Dịch bài viết | Dịch {count} bài viết",
+        "TRANSLATE_BUTTON": "Dịch"
+      },
+      "EMPTY_STATE": {
+        "ALL": {
+          "BUTTON_LABEL": "Bài viết mới",
+          "SUBTITLE": "Hãy viết bài đầu tiên nào!",
+          "TITLE": "Viết một bài viết"
+        },
+        "ARCHIVED": {
+          "SUBTITLE": "Bài lưu trữ không hiện trên trang trợ giúp, dùng để đánh dấu bài đã cũ hoặc không còn dùng",
+          "TITLE": "Chưa có bài lưu trữ"
+        },
+        "CATEGORY": {
+          "SUBTITLE": "Bài viết trong danh mục này sẽ hiện ở đây",
+          "TITLE": "Danh mục này chưa có bài viết"
+        },
+        "DRAFT": {
+          "SUBTITLE": "Bài nháp sẽ hiện ở đây",
+          "TITLE": "Chưa có bài nháp"
+        },
+        "MINE": {
+          "SUBTITLE": "Các bài bạn viết sẽ hiện ở đây để mở nhanh.",
+          "TITLE": "Bạn chưa viết bài nào ở đây"
+        },
+        "PUBLISHED": {
+          "SUBTITLE": "Bài đã xuất bản sẽ hiện ở đây",
+          "TITLE": "Chưa có bài đã xuất bản"
+        },
+        "SEARCH": {
+          "SUBTITLE": "Không tìm thấy bài nào khớp với tìm kiếm. Bạn thử từ khóa khác nhé.",
+          "TITLE": "Không có bài viết phù hợp"
+        }
+      }
+    },
+    "ARTICLE_EDITOR": {
+      "IMAGE_UPLOAD": {
+        "UN_AUTHORIZED_ERROR": "Bạn không có quyền tải ảnh lên"
+      }
+    },
+    "ARTICLE_SEARCH": {
+      "BACK_RESULTS": "Quay lại kết quả",
+      "IFRAME_ERROR": "Đường dẫn trống hoặc không hợp lệ, không hiển thị được nội dung.",
+      "INSERT_ARTICLE": "Chèn liên kết",
+      "OPEN_ARTICLE_SEARCH": "Chèn bài viết từ Trung tâm trợ giúp",
+      "PLACEHOLDER": "Tìm bài viết",
+      "SUCCESS_ARTICLE_INSERTED": "Đã chèn bài viết",
+      "TITLE": "Tìm bài viết"
+    },
+    "ARTICLE_SEARCH_RESULT": {
+      "EMPTY_TEXT": "Tìm bài viết để chèn vào câu trả lời.",
+      "SEARCH_RESULTS": "Kết quả tìm kiếm cho {query}"
+    },
+    "CATEGORY": {
+      "ADD": {
+        "NAME": {
+          "HELP_TEXT": "Tên và biểu tượng danh mục hiện trên trang trợ giúp để phân loại bài viết."
+        },
+        "SLUG": {
+          "HELP_TEXT": "example.com/hc/my-portal/en-US/categories/my-slug",
+          "LABEL": "Đường dẫn rút gọn"
+        }
+      },
+      "EDIT": {
+        "NAME": {
+          "HELP_TEXT": "Tên và biểu tượng danh mục hiện trên trang trợ giúp để phân loại bài viết."
+        },
+        "SLUG": {
+          "HELP_TEXT": "example.com/hc/my-portal/en-US/categories/my-slug",
+          "LABEL": "Đường dẫn rút gọn"
+        }
+      }
+    },
+    "CATEGORY_PAGE": {
+      "CATEGORY_CARD": {
+        "ARTICLES_COUNT": "{count} bài viết | {count} bài viết"
+      },
+      "CATEGORY_DIALOG": {
+        "FORM": {
+          "SLUG": {
+            "HELP_TEXT": "example.com/hc/{portalSlug}/{localeCode}/categories/{categorySlug}",
+            "LABEL": "Đường dẫn rút gọn"
+          }
+        }
+      },
+      "CATEGORY_EMPTY_STATE": {
+        "SUBTITLE": "Danh mục sẽ hiện ở đây. Bấm nút 'Danh mục mới' để thêm."
+      },
+      "CATEGORY_HEADER": {
+        "BREADCRUMB": {
+          "ACTIVE_CATEGORY": "{categoryName} ({categoryCount} bài viết) | {categoryName} ({categoryCount} bài viết)",
+          "CATEGORY_LOCALE": "Danh mục ({localeCode})"
+        },
+        "CATEGORIES_COUNT": "{n} danh mục | {n} danh mục",
+        "SEARCH_PLACEHOLDER": "Tìm danh mục..."
+      },
+      "SEARCH_EMPTY_STATE": {
+        "SUBTITLE": "Không tìm thấy danh mục nào khớp với tìm kiếm. Bạn thử từ khóa khác nhé.",
+        "TITLE": "Không có danh mục phù hợp"
+      }
+    },
+    "CONTENT_GENERATION": {
+      "DESCRIPTION": "Tải PDF lên để AI tự tạo nội dung câu hỏi thường gặp",
+      "DRAG_DROP": "Kéo thả file PDF vào đây, hoặc bấm để chọn",
+      "FILE_TOO_LARGE": "File phải nhỏ hơn 512MB",
+      "FROM_DOCUMENT": "Từ tài liệu",
+      "GENERATED_CONTENT": "Nội dung câu hỏi thường gặp đã tạo",
+      "INVALID_FILE_TYPE": "Hãy chọn file PDF hợp lệ",
+      "LOADING": "Đang tải nội dung đã tạo...",
+      "NO_CONTENT": "Chưa có nội dung. Tải PDF lên để bắt đầu.",
+      "PUBLISHING": "Đang xuất bản...",
+      "PUBLISH_SELECTED": "Xuất bản mục đã chọn",
+      "SELECT_FILE": "Chọn file PDF",
+      "TITLE": "Tạo nội dung",
+      "UPLOADING": "Đang xử lý tài liệu...",
+      "UPLOAD_ERROR": "Chưa tải được tài liệu. Bạn thử lại nhé.",
+      "UPLOAD_SUCCESS": "Đã xử lý xong tài liệu!",
+      "UPLOAD_TITLE": "Tải tài liệu PDF"
+    },
+    "CREATE_PORTAL_DIALOG": {
+      "DESCRIPTION": "Đặt tên cho trang và tạo đường dẫn rút gọn dễ nhớ. Bạn có thể sửa cả hai sau trong cài đặt.",
+      "NAME": {
+        "MESSAGE": "Hãy đặt tên cho trang trợ giúp.",
+        "PLACEHOLDER": "Hướng dẫn sử dụng"
+      },
+      "SLUG": {
+        "FORMAT_ERROR": "Hãy nhập đường dẫn hợp lệ, ví dụ: huong-dan",
+        "LABEL": "Đường dẫn rút gọn",
+        "PLACEHOLDER": "huong-dan"
+      },
+      "TITLE": "Tạo trang trợ giúp mới"
+    },
+    "DRAFT_ARTICLE": {
+      "API": {
+        "ERROR": "Chưa chuyển được bài về bản nháp",
+        "SUCCESS": "Đã chuyển bài về bản nháp"
+      }
+    },
+    "EDIT_ARTICLE_PAGE": {
+      "ARTICLE_PROPERTIES": {
+        "ARTICLE_PROPERTIES": "Thuộc tính bài viết",
+        "META_DESCRIPTION_PLACEHOLDER": "Thêm mô tả meta",
+        "META_TAGS_PLACEHOLDER": "Thêm thẻ meta",
+        "META_TITLE_PLACEHOLDER": "Thêm tiêu đề meta"
+      },
+      "DIFF_DIALOG": {
+        "DESCRIPTION": "So sánh bản nháp với bản đang hiển thị.",
+        "TITLE": "Thay đổi chưa xuất bản"
+      },
+      "EDIT_ARTICLE": {
+        "EDITOR_PLACEHOLDER": "Viết nội dung ở đây. Gõ '/' để chọn kiểu định dạng.",
+        "MORE_PROPERTIES": "Thêm thuộc tính"
+      },
+      "HEADER": {
+        "ARCHIVE": "Lưu trữ",
+        "BACK_TO_ARTICLES": "Quay lại bài viết",
+        "DISCARD_CHANGES": "Hủy thay đổi",
+        "DISCARD_CHANGES_ERROR": "Chưa hủy được thay đổi",
+        "DISCARD_CHANGES_SUCCESS": "Đã hủy thay đổi",
+        "PENDING_CHANGES": "Thay đổi chờ xuất bản",
+        "PUBLISH_CHANGES": "Xuất bản thay đổi",
+        "PUBLISH_CHANGES_ERROR": "Chưa xuất bản được thay đổi",
+        "PUBLISH_CHANGES_SUCCESS": "Đã xuất bản thay đổi",
+        "SAVE_IN_PROGRESS": "Đang lưu thay đổi mới nhất, bạn thử lại sau giây lát.",
+        "VIEW_CHANGES": "Xem thay đổi chưa xuất bản"
+      },
+      "PENDING_CHANGES_POPOVER": {
+        "APPLY": "Áp dụng thay đổi",
+        "DESCRIPTION": "Bài này có thay đổi nháp chưa hiện ra ngoài. Áp dụng trước khi đổi trạng thái, hay hủy?",
+        "DISCARD": "Hủy thay đổi",
+        "TITLE": "Thay đổi chưa xuất bản"
+      }
+    },
+    "HEADER": {
+      "LOCALE_SELECT": {
+        "NO_RESULT": "Không tìm thấy ngôn ngữ",
+        "PLACEHOLDER": "Chọn ngôn ngữ",
+        "SEARCH_PLACEHOLDER": "Tìm ngôn ngữ",
+        "TITLE": "Chọn ngôn ngữ"
+      }
+    },
+    "LOADING": "Đang tải...",
+    "LOCALES_PAGE": {
+      "ADD_LOCALE_DIALOG": {
+        "COMBOBOX": {
+          "PLACEHOLDER": "Chọn ngôn ngữ..."
+        },
+        "DESCRIPTION": "Chọn ngôn ngữ viết bài. Ngôn ngữ sẽ được thêm vào danh sách bản dịch và bạn có thể thêm nữa sau."
+      },
+      "CONTENT_DIALOG": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa cập nhật được nội dung ngôn ngữ. Bạn thử lại nhé.",
+          "SUCCESS_MESSAGE": "Đã cập nhật nội dung ngôn ngữ"
+        },
+        "DESCRIPTION": "Đặt giá trị riêng cho ngôn ngữ này. Mục để trống sẽ dùng giá trị của ngôn ngữ mặc định.",
+        "HEADER_TEXT": {
+          "LABEL": "Chữ đầu trang"
+        },
+        "PAGE_TITLE": {
+          "LABEL": "Tiêu đề trang"
+        },
+        "TITLE": "Tùy chỉnh nội dung theo ngôn ngữ"
+      },
+      "LOCALES_COUNT": "Chưa có ngôn ngữ | {n} ngôn ngữ | {n} ngôn ngữ",
+      "LOCALE_CARD": {
+        "ARTICLES_COUNT": "{count} bài viết | {count} bài viết",
+        "CATEGORIES_COUNT": "{count} danh mục | {count} danh mục",
+        "DROPDOWN_MENU": {
+          "CUSTOMIZE_CONTENT": "Tùy chỉnh nội dung theo ngôn ngữ",
+          "MAKE_DEFAULT": "Đặt làm mặc định",
+          "MOVE_TO_DRAFT": "Chuyển về bản nháp",
+          "PUBLISH_LOCALE": "Xuất bản ngôn ngữ",
+          "SELECT_POPULAR_CONTENT": "Chọn nội dung nổi bật"
+        }
+      },
+      "NEW_LOCALE_BUTTON_TEXT": "Thêm ngôn ngữ",
+      "POPULAR_CONTENT_DIALOG": {
+        "ADD_ANOTHER": "Thêm mục khác...",
+        "API": {
+          "ERROR_MESSAGE": "Chưa cập nhật được nội dung nổi bật. Bạn thử lại nhé.",
+          "SUCCESS_MESSAGE": "Đã cập nhật nội dung nổi bật"
+        },
+        "ARTICLES": {
+          "IN_CATEGORY": "trong {category}",
+          "LABEL": "Bài viết nổi bật"
+        },
+        "CATEGORIES": {
+          "ARTICLES_COUNT": "Chưa có bài viết | {count} bài viết | {count} bài viết",
+          "LABEL": "Danh mục nổi bật"
+        },
+        "CONFIRM": "Lưu nội dung nổi bật",
+        "DESCRIPTION": "Chọn tối đa 3 danh mục và 6 bài viết để hiện ở trang chủ trợ giúp của ngôn ngữ này. Kéo thả để sắp xếp thứ tự hiển thị.",
+        "EMPTY": "Không có kết quả phù hợp",
+        "OVERRIDING_DEFAULTS": "Đang thay cài đặt mặc định cho ngôn ngữ này",
+        "SEARCH": "Tìm...",
+        "SLOTS_LEFT": "Còn {count} vị trí",
+        "TITLE": "Nội dung nổi bật"
+      },
+      "SEARCH_EMPTY_STATE": {
+        "SUBTITLE": "Không tìm thấy ngôn ngữ nào khớp với tìm kiếm. Bạn thử từ khóa khác nhé.",
+        "TITLE": "Không có ngôn ngữ phù hợp"
+      },
+      "SEARCH_PLACEHOLDER": "Tìm ngôn ngữ..."
+    },
+    "NEW_PAGE": {
+      "DESCRIPTION": "Tạo trang trợ giúp để khách tự tìm câu trả lời nhanh, không phải chờ. Giảm số câu hỏi lặp lại và giúp nhân viên làm việc hiệu quả hơn."
+    },
+    "PDF_DOCUMENTS": {
+      "CONFIRM_DELETE": "Bạn chắc chắn muốn xóa {filename}?",
+      "DESCRIPTION": "Quản lý tài liệu PDF đã tải lên và tạo câu hỏi thường gặp từ đó",
+      "EMPTY_STATE": {
+        "DESCRIPTION": "Tải PDF lên để AI tự tạo câu hỏi thường gặp",
+        "TITLE": "Chưa có tài liệu PDF"
+      },
+      "GENERATE_FAQS": "Tạo câu hỏi thường gặp",
+      "GENERATING": "Đang tạo...",
+      "STATUS": {
+        "FAILED": "Lỗi",
+        "PROCESSING": "Đang xử lý",
+        "UPLOADED": "Sẵn sàng"
+      },
+      "TITLE": "Tài liệu PDF",
+      "UPLOADED_BY": "Tải lên bởi",
+      "UPLOAD_FIRST_PDF": "Tải PDF đầu tiên",
+      "UPLOAD_PDF": "Tải PDF"
+    },
+    "PDF_UPLOAD": {
+      "ADDITIONAL_CONTEXT_LABEL": "Thông tin thêm (không bắt buộc)",
+      "ADDITIONAL_CONTEXT_PLACEHOLDER": "Nhập thông tin hoặc hướng dẫn thêm cho việc tạo câu hỏi thường gặp...",
+      "DESCRIPTION": "Tải PDF lên để AI tự tạo câu hỏi thường gặp",
+      "DRAG_DROP_TEXT": "Kéo thả file PDF vào đây, hoặc bấm để chọn",
+      "ERROR_FILE_TOO_LARGE": "File phải nhỏ hơn 512MB",
+      "ERROR_INVALID_TYPE": "Hãy chọn file PDF hợp lệ",
+      "ERROR_UPLOAD_FAILED": "Chưa tải được PDF. Bạn thử lại nhé.",
+      "SELECT_FILE": "Chọn file PDF",
+      "TITLE": "Tải tài liệu PDF",
+      "UPLOAD": "Tải lên và xử lý"
+    },
+    "PORTAL": {
+      "ADD": {
+        "DOMAIN": {
+          "HELP_TEXT": "Chỉ thêm nếu bạn muốn dùng tên miền riêng cho trang trợ giúp. Ví dụ: {exampleURL}"
+        },
+        "HOME_PAGE_LINK": {
+          "HELP_TEXT": "Đường dẫn để quay từ trang trợ giúp về trang chủ. Ví dụ: {exampleURL}"
+        },
+        "LOGO": {
+          "IMAGE_DELETE_ERROR": "Chưa xóa được logo",
+          "IMAGE_UPLOAD_ERROR": "Chưa tải được logo",
+          "IMAGE_UPLOAD_SUCCESS": "Đã tải logo lên",
+          "LABEL": "Logo"
+        },
+        "SLUG": {
+          "LABEL": "Đường dẫn rút gọn"
+        }
+      },
+      "DRAFT_LOCALE": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa chuyển được về bản nháp. Bạn thử lại nhé.",
+          "SUCCESS_MESSAGE": "Đã chuyển ngôn ngữ về bản nháp"
+        }
+      },
+      "PORTAL_SETTINGS": {
+        "LIST_ITEM": {
+          "PORTAL_CONFIG": {
+            "ITEMS": {
+              "SLUG": "Đường dẫn rút gọn"
+            }
+          }
+        },
+        "SEND_CNAME_INSTRUCTIONS": {
+          "API": {
+            "ERROR_MESSAGE": "Chưa gửi được hướng dẫn CNAME",
+            "SUCCESS_MESSAGE": "Đã gửi hướng dẫn CNAME"
+          }
+        }
+      },
+      "PUBLISH_LOCALE": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa xuất bản được. Bạn thử lại nhé.",
+          "SUCCESS_MESSAGE": "Đã xuất bản ngôn ngữ"
+        }
+      }
+    },
+    "PORTAL_SETTINGS": {
+      "API": {
+        "CREATE_PORTAL": {
+          "ERROR_MESSAGE": "Chưa tạo được trang trợ giúp"
+        },
+        "UPDATE_PORTAL": {
+          "ERROR_MESSAGE": "Chưa cập nhật được trang trợ giúp"
+        }
+      },
+      "CONFIGURATION_FORM": {
+        "CUSTOM_DOMAIN": {
+          "ADD_BUTTON": "Thêm tên miền riêng",
+          "DESCRIPTION": "Bạn có thể đặt trang trợ giúp trên tên miền riêng. Ví dụ website là yourdomain.com và muốn trang trợ giúp ở docs.yourdomain.com thì nhập vào ô này.",
+          "DIALOG": {
+            "ADD_CONFIRM_BUTTON_LABEL": "Thêm tên miền",
+            "ADD_HEADER": "Thêm tên miền riêng",
+            "EDIT_CONFIRM_BUTTON_LABEL": "Cập nhật tên miền",
+            "EDIT_HEADER": "Sửa tên miền riêng",
+            "ERROR": "Cần nhập tên miền riêng",
+            "FORMAT_ERROR": "Hãy nhập tên miền hợp lệ, ví dụ docs.yourdomain.com"
+          },
+          "DNS_CONFIGURATION_DIALOG": {
+            "COPY": "Đã sao chép CNAME",
+            "DESCRIPTION": "Đăng nhập tài khoản nhà cung cấp DNS và thêm bản ghi CNAME cho tên miền phụ, trỏ tới địa chỉ bên dưới",
+            "HEADER": "Cấu hình DNS",
+            "SEND_INSTRUCTIONS": {
+              "DESCRIPTION": "Nếu muốn nhờ người kỹ thuật làm bước này, hãy nhập email của họ bên dưới, chúng tôi sẽ gửi hướng dẫn cần thiết.",
+              "ERROR": "Hãy nhập email hợp lệ",
+              "HEADER": "Gửi hướng dẫn",
+              "PLACEHOLDER": "Nhập email của họ"
+            }
+          },
+          "STATUS": {
+            "ERROR": "Xác minh không thành công",
+            "PENDING": "Đang chờ xác minh"
+          },
+          "STATUS_DESCRIPTION": "Trang riêng của bạn sẽ chạy ngay khi được xác minh."
+        },
+        "DELETE_PORTAL": {
+          "BUTTON": "Xóa {portalName}",
+          "DESCRIPTION": "Xóa vĩnh viễn trang trợ giúp này. Không thể hoàn tác",
+          "DIALOG": {
+            "DESCRIPTION": "Đây là thao tác vĩnh viễn, không thể hoàn tác.",
+            "HEADER": "Bạn chắc chắn muốn xóa {portalName}?"
+          }
+        },
+        "EDIT_CONFIGURATION": "Sửa cấu hình"
+      },
+      "FORM": {
+        "AVATAR": {
+          "IMAGE_DELETE_ERROR": "Chưa xóa được logo",
+          "IMAGE_DELETE_SUCCESS": "Đã xóa logo",
+          "IMAGE_UPLOAD_ERROR": "Chưa tải được ảnh. Bạn thử lại nhé",
+          "IMAGE_UPLOAD_SUCCESS": "Đã thêm ảnh. Bấm lưu thay đổi để lưu logo",
+          "LABEL": "Logo"
+        },
+        "BRAND_COLOR": {
+          "LABEL": "Màu thương hiệu"
+        },
+        "HEADER_TEXT": {
+          "LABEL": "Chữ đầu trang"
+        },
+        "HOME_PAGE_LINK": {
+          "ERROR": "Nhập đường dẫn hợp lệ. Liên kết trang chủ phải bắt đầu bằng 'http://' hoặc 'https://'.",
+          "LABEL": "Liên kết trang chủ"
+        },
+        "LIVE_CHAT_WIDGET": {
+          "HELP_TEXT": "Chọn khung chat sẽ hiện trên trang trợ giúp",
+          "LABEL": "Khung chat trực tiếp",
+          "NONE_OPTION": "Không dùng khung chat",
+          "PLACEHOLDER": "Chọn khung chat trực tiếp"
+        },
+        "PAGE_TITLE": {
+          "LABEL": "Tiêu đề trang"
+        },
+        "SAVE_CHANGES": "Lưu thay đổi",
+        "SLUG": {
+          "LABEL": "Đường dẫn rút gọn",
+          "PLACEHOLDER": "Đường dẫn rút gọn của trang"
+        }
+      },
+      "LAYOUT_CONTENT": {
+        "DESCRIPTION": "Chọn bố cục phù hợp với cách khách đọc.",
+        "HEADER": "Giao diện",
+        "LAYOUT": {
+          "CLASSIC": {
+            "DESCRIPTION": "Trang chủ thân thiện có ô tìm kiếm và chủ đề nổi bật.",
+            "TITLE": "Cổ điển"
+          },
+          "SIDEBAR": {
+            "DESCRIPTION": "Menu bên cạnh giúp mở mọi bài hướng dẫn chỉ với một cú bấm.",
+            "TITLE": "Tài liệu"
+          }
+        },
+        "SAVE": "Lưu thay đổi",
+        "SOCIAL_LINKS": {
+          "ADD": "Thêm liên kết",
+          "DESCRIPTION": "Nhập tên tài khoản của từng mạng, trang trợ giúp sẽ tự tạo liên kết đầy đủ. Hiện ở chân trang của bố cục tài liệu.",
+          "HEADER": "Liên kết mạng xã hội",
+          "PLACEHOLDER": "tên tài khoản"
+        }
+      }
+    },
+    "PORTAL_SWITCHER": {
+      "CREATE_PORTAL": "Tạo và quản lý nhiều trang trợ giúp",
+      "NEW_PORTAL": "Trang trợ giúp mới"
+    },
+    "REORDER_ARTICLE": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa sắp xếp lại được bài viết. Bạn thử lại nhé."
+      }
+    },
+    "REORDER_CATEGORY": {
+      "API": {
+        "ERROR_MESSAGE": "Chưa sắp xếp lại được danh mục. Bạn thử lại nhé."
+      }
+    },
+    "TABLE": {
+      "COLUMNS": {
+        "AUTHOR_NOT_AVAILABLE": "Không rõ tác giả"
+      },
+      "HEADERS": {
+        "READ_COUNT": "Lượt xem"
+      }
+    },
+    "TITLE": "Trung tâm trợ giúp",
+    "UPGRADE_PAGE": {
+      "BUTTON": {
+        "UPGRADE": "Nâng cấp"
+      },
+      "DESCRIPTION": "Tạo trang trợ giúp dễ dùng để khách tự đọc bài và được hỗ trợ 24/7. Nâng cấp gói để bật tính năng này.",
+      "FEATURES": {
+        "API": {
+          "DESCRIPTION": "Dùng trang trợ giúp như một CMS không giao diện với giao diện web riêng qua API.",
+          "TITLE": "Hỗ trợ đầy đủ API"
+        },
+        "LOCALES": {
+          "DESCRIPTION": "Dịch trang trợ giúp sang ngôn ngữ của bạn. Hỗ trợ mọi ngôn ngữ và bản dịch cho từng bài viết.",
+          "TITLE": "Hỗ trợ đầy đủ ngôn ngữ"
+        },
+        "PORTALS": {
+          "DESCRIPTION": "Tạo nhiều trang trợ giúp cho các sản phẩm khác nhau trong cùng một tài khoản.",
+          "TITLE": "Nhiều trang trợ giúp"
+        },
+        "SEO": {
+          "DESCRIPTION": "Tùy chỉnh thẻ meta để dễ được tìm thấy hơn trên công cụ tìm kiếm.",
+          "TITLE": "Thân thiện với công cụ tìm kiếm"
+        }
+      },
+      "SELF_HOSTED_DESCRIPTION": "Tạo trang trợ giúp dễ dùng để khách tự đọc bài và được hỗ trợ 24/7. Hãy liên hệ quản trị viên để bật tính năng này.",
+      "TITLE": "Trung tâm trợ giúp"
+    }
   },
   "INBOX": {
     "ALERTS": {
@@ -1006,6 +2150,425 @@
     }
   },
   "INBOX_MGMT": {
+    "ACCOUNT_HEALTH": {
+      "ERRORS": {
+        "AUTHORIZATION": {
+          "EMBEDDED_DESCRIPTION": "Meta không xác minh được kết nối của kênh này. Vào Cấu hình để cài lại bằng đăng ký tích hợp.",
+          "EMBEDDED_TITLE": "Cần làm mới kết nối WhatsApp",
+          "MANUAL_DESCRIPTION": "Meta không xác minh được mã truy cập của kênh này. Vào Cấu hình để kiểm tra hoặc thay mã.",
+          "MANUAL_TITLE": "Mã truy cập WhatsApp cần kiểm tra"
+        },
+        "GENERIC_DESCRIPTION": "Meta chưa trả về thông tin tình trạng. Xem lỗi bên dưới rồi thử lại sau.",
+        "GENERIC_TITLE": "Chưa lấy được tình trạng WhatsApp",
+        "GO_TO_CONFIGURATION": "Vào Cấu hình"
+      },
+      "FIELDS": {
+        "ACCOUNT_MODE": {
+          "LABEL": "Chế độ tài khoản"
+        },
+        "BUSINESS_ACCOUNT_ID": {
+          "LABEL": "Mã tài khoản WhatsApp Business",
+          "TOOLTIP": "Mã Meta của tài khoản WhatsApp Business đã liên kết"
+        },
+        "BUSINESS_ACCOUNT_NAME": {
+          "LABEL": "Tên tài khoản WhatsApp Business",
+          "TOOLTIP": "Tên tài khoản WhatsApp Business gắn với số này"
+        },
+        "BUSINESS_PORTFOLIO_ID": {
+          "LABEL": "Mã danh mục doanh nghiệp",
+          "TOOLTIP": "Mã Meta của danh mục doanh nghiệp sở hữu tài khoản WhatsApp Business"
+        },
+        "BUSINESS_PORTFOLIO_NAME": {
+          "LABEL": "Tên danh mục doanh nghiệp",
+          "TOOLTIP": "Tên danh mục doanh nghiệp Meta sở hữu tài khoản WhatsApp Business"
+        },
+        "CODE_VERIFICATION_STATUS": {
+          "LABEL": "Xác minh mã",
+          "TOOLTIP": "Trạng thái mã xác minh Meta báo cho số này"
+        },
+        "COEXISTENCE": {
+          "LABEL": "Dùng song song",
+          "TOOLTIP": "Số này kết nối với cả ứng dụng WhatsApp Business và Cloud API"
+        },
+        "DISPLAY_NAME_STATUS": {
+          "LABEL": "Trạng thái tên hiển thị"
+        },
+        "DISPLAY_PHONE_NUMBER": {
+          "LABEL": "Số hiển thị",
+          "TOOLTIP": "Số điện thoại hiển thị với khách"
+        },
+        "LAST_ONBOARDED_TIME": {
+          "LABEL": "Đăng ký gần nhất",
+          "TOOLTIP": "Lần gần nhất Meta đăng ký số này"
+        },
+        "MESSAGING_LIMIT_TIER": {
+          "LABEL": "Mức giới hạn tin nhắn"
+        },
+        "PHONE_NUMBER_ID": {
+          "LABEL": "Mã số điện thoại",
+          "TOOLTIP": "Mã Meta của số WhatsApp này"
+        },
+        "PHONE_NUMBER_STATUS": {
+          "LABEL": "Trạng thái số điện thoại",
+          "TOOLTIP": "Trạng thái kết nối hiện tại của số này trên WhatsApp"
+        },
+        "QUALITY_RATING": {
+          "LABEL": "Đánh giá chất lượng"
+        },
+        "THROUGHPUT_LEVEL": {
+          "LABEL": "Tốc độ gửi",
+          "TOOLTIP": "Mức tốc độ gửi tin được cấp cho số này"
+        }
+      },
+      "GO_TO_SETTINGS": "Mở Meta Business Manager",
+      "NO_DATA": "Chưa có dữ liệu tình trạng",
+      "SECTIONS": {
+        "BUSINESS_ACCOUNT": "Tài khoản doanh nghiệp",
+        "HEALTH_AND_CAPACITY": "Tình trạng và hạn mức",
+        "PHONE_NUMBER": "Số điện thoại"
+      },
+      "TITLE": "Quản lý tài khoản WhatsApp",
+      "VALUES": {
+        "MODES": {
+          "SANDBOX": "Chế độ thử"
+        },
+        "NOT_AVAILABLE": "Không có",
+        "STATUSES": {
+          "ACTIVE": "Đang hoạt động",
+          "APPROVED": "Đã duyệt",
+          "AVAILABLE_WITHOUT_REVIEW": "Dùng được, không cần duyệt",
+          "BANNED": "Bị khóa",
+          "CONNECTED": "Đã kết nối",
+          "DECLINED": "Bị từ chối",
+          "DISCONNECTED": "Đã ngắt kết nối",
+          "EXPIRED": "Đã hết hạn",
+          "FLAGGED": "Bị cảnh báo",
+          "NON_EXISTS": "Không tồn tại",
+          "PENDING_REVIEW": "Đang chờ duyệt",
+          "REJECTED": "Bị từ chối",
+          "RESTRICTED": "Bị hạn chế",
+          "STANDARD": "Tiêu chuẩn",
+          "UNKNOWN": "Không có",
+          "VERIFIED": "Đã xác minh"
+        },
+        "TIERS": {
+          "TIER_1000": "1.000 khách mỗi 24 giờ",
+          "TIER_100K": "100.000 khách mỗi 24 giờ",
+          "TIER_10K": "10.000 khách mỗi 24 giờ",
+          "TIER_1K": "1.000 khách mỗi 24 giờ",
+          "TIER_250": "250 khách mỗi 24 giờ",
+          "TIER_2K": "2.000 khách mỗi 24 giờ",
+          "TIER_UNLIMITED": "Không giới hạn khách mỗi 24 giờ",
+          "UNKNOWN": "Chưa có đánh giá"
+        }
+      },
+      "WEBHOOK": {
+        "ACTION_REQUIRED": "Chưa cấu hình webhook",
+        "CONFIGURED_SUCCESS": "Đã cấu hình webhook",
+        "CONFIGURED_URL": "Đường dẫn đang cài",
+        "COPY_SUCCESS": "Đã sao chép đường dẫn webhook",
+        "COPY_URL": "Sao chép đường dẫn webhook",
+        "DESCRIPTION": "Tài khoản WhatsApp Business cần đường dẫn webhook để nhận tin nhắn của khách",
+        "EXPECTED_URL": "Đường dẫn cần có",
+        "REGISTER_BUTTON": "Đăng ký webhook",
+        "REGISTER_ERROR": "Chưa đăng ký được webhook. Bạn thử lại nhé.",
+        "REGISTER_SUCCESS": "Đã đăng ký webhook",
+        "TITLE": "Cấu hình webhook",
+        "URL_MISMATCH": "Đường dẫn webhook không khớp"
+      }
+    },
+    "ADD": {
+      "AGENTS": {
+        "VALIDATION_ERROR": "Hãy thêm ít nhất một nhân viên vào kênh mới"
+      },
+      "API_CHANNEL": {
+        "WEBHOOK_URL": {
+          "LABEL": "Đường dẫn webhook",
+          "PLACEHOLDER": "Đường dẫn webhook",
+          "SUBTITLE": "Nhập đường dẫn nhận thông báo khi có sự kiện."
+        }
+      },
+      "AUTH": {
+        "CHANNEL": {
+          "API": {
+            "DESCRIPTION": "Tạo kênh riêng bằng API",
+            "TITLE": "API"
+          },
+          "EMAIL": {
+            "DESCRIPTION": "Kết nối Gmail, Outlook hoặc email khác",
+            "TITLE": "Email"
+          },
+          "FACEBOOK": {
+            "DESCRIPTION": "Kết nối trang Facebook của bạn",
+            "TITLE": "Facebook"
+          },
+          "INSTAGRAM": {
+            "DESCRIPTION": "Kết nối tài khoản Instagram",
+            "TITLE": "Instagram"
+          },
+          "LINE": {
+            "DESCRIPTION": "Kết nối kênh Line",
+            "TITLE": "Line"
+          },
+          "SMS": {
+            "DESCRIPTION": "Kết nối kênh SMS qua Twilio hoặc Bandwidth",
+            "TITLE": "SMS"
+          },
+          "TELEGRAM": {
+            "DESCRIPTION": "Kết nối Telegram bằng mã bot",
+            "TITLE": "Telegram"
+          },
+          "TIKTOK": {
+            "DESCRIPTION": "Kết nối tài khoản TikTok",
+            "TITLE": "TikTok"
+          },
+          "VOICE": {
+            "DESCRIPTION": "Kết nối Twilio Voice",
+            "TITLE": "Gọi thoại"
+          },
+          "WEBSITE": {
+            "DESCRIPTION": "Tạo khung chat trên website",
+            "TITLE": "Website"
+          },
+          "WHATSAPP": {
+            "DESCRIPTION": "Hỗ trợ khách qua WhatsApp",
+            "TITLE": "WhatsApp"
+          },
+          "WHATSAPP_CALL": {
+            "DESCRIPTION": "Nhận cuộc gọi thoại trên số WhatsApp",
+            "TITLE": "Gọi WhatsApp"
+          },
+          "ZALO": {
+            "TITLE": "Zalo OA"
+          },
+          "ZALO_PERSONAL": {
+            "DESCRIPTION": "Kết nối Zalo cá nhân bằng mã QR",
+            "TITLE": "Zalo cá nhân"
+          }
+        },
+        "DESC": "Kênh là nơi khách nhắn tin cho bạn: Facebook, Zalo, WhatsApp, email, chat trên web... Muốn làm kênh riêng, bạn có thể dùng kênh API. Để bắt đầu, hãy chọn một kênh bên dưới.",
+        "TITLE_FINISH": "Xong rồi!",
+        "TITLE_NEXT": "Hoàn tất cài đặt"
+      },
+      "DETAILS": {
+        "DESC": "Chọn Trang Facebook bạn muốn kết nối trong danh sách bên dưới. Bạn cũng có thể đặt tên riêng cho kênh để dễ nhận biết."
+      },
+      "EMAIL_CHANNEL": {
+        "CONFIGURE_SMTP_IMAP_TEXT": " để cài đặt IMAP và SMTP",
+        "DESC": "Kết nối hộp thư email của bạn.",
+        "EMAIL": {
+          "LABEL": "Email",
+          "PLACEHOLDER": "Email",
+          "SUBTITLE": "Nhập địa chỉ email để khách gửi yêu cầu hỗ trợ."
+        },
+        "FINISH_MESSAGE_NO_FORWARDING": "Đã tạo kênh email! Bạn cần cài đặt SMTP và IMAP để gửi và nhận email.",
+        "FORWARDING_ADDRESS_LABEL": "Chuyển tiếp email đến địa chỉ này:"
+      },
+      "EMAIL_PROVIDER": {
+        "DESCRIPTION": "Chọn nhà cung cấp email trong danh sách. Nếu không thấy, chọn \"Khác\" rồi nhập thông tin IMAP và SMTP.",
+        "TITLE": "Chọn nhà cung cấp email"
+      },
+      "FB": {
+        "HELP": "Lưu ý: khi đăng nhập, chúng tôi chỉ xem được tin nhắn trên Trang của bạn và không bao giờ truy cập được tin nhắn riêng tư.",
+        "PICK_NAME": "Đặt tên cho kênh"
+      },
+      "FINISH": {
+        "DESC": "Bạn đã kết nối thành công Trang Facebook. Lần tới khi khách nhắn tin cho Trang, hội thoại sẽ tự động hiện trong hộp thư.<br>Chúng tôi cũng cho bạn đoạn mã khung chat để dán vào website. Khi đó khách có thể nhắn tin ngay trên website và hội thoại sẽ hiện ngay tại đây.<br>Tiện đúng không? :)"
+      },
+      "GOOGLE": {
+        "DESCRIPTION": "Bấm nút Đăng nhập với Google để bắt đầu. Bạn sẽ được chuyển sang trang đăng nhập email, sau khi đồng ý quyền truy cập sẽ quay lại bước tạo kênh.",
+        "EMAIL_PLACEHOLDER": "Nhập địa chỉ email",
+        "ERROR_MESSAGE": "Chưa kết nối được Google. Bạn thử lại nhé.",
+        "SIGN_IN": "Đăng nhập với Google",
+        "TITLE": "Email Google"
+      },
+      "INSTAGRAM": {
+        "CONNECT_YOUR_INSTAGRAM_PROFILE": "Kết nối tài khoản Instagram",
+        "CONTINUE_WITH_INSTAGRAM": "Tiếp tục với Instagram",
+        "DUPLICATE_INBOX_BANNER": "Tài khoản Instagram này đã chuyển sang kênh Instagram mới. Bạn không thể gửi hoặc nhận tin Instagram ở kênh này nữa.",
+        "ERROR_AUTH": "Chưa kết nối được Instagram. Bạn thử lại nhé.",
+        "ERROR_MESSAGE": "Chưa kết nối được Instagram. Bạn thử lại nhé.",
+        "HELP": "Để thêm Instagram làm kênh, bấm 'Tiếp tục với Instagram' và đăng nhập tài khoản của bạn.",
+        "NEW_INBOX_SUGGESTION": "Tài khoản Instagram này trước đây gắn với một kênh khác và đã được chuyển sang đây. Mọi hội thoại mới sẽ vào kênh này."
+      },
+      "MICROSOFT": {
+        "DESCRIPTION": "Bấm nút Đăng nhập với Microsoft để bắt đầu. Bạn sẽ được chuyển sang trang đăng nhập email, sau khi đồng ý quyền truy cập sẽ quay lại bước tạo kênh.",
+        "EMAIL_PLACEHOLDER": "Nhập địa chỉ email",
+        "ERROR_MESSAGE": "Chưa kết nối được Microsoft. Bạn thử lại nhé.",
+        "SIGN_IN": "Đăng nhập với Microsoft",
+        "TITLE": "Email Microsoft"
+      },
+      "SMS": {
+        "BANDWIDTH": {
+          "API_KEY": {
+            "PLACEHOLDER": "Nhập khóa API Bandwidth"
+          },
+          "API_SECRET": {
+            "PLACEHOLDER": "Nhập API Secret Bandwidth"
+          }
+        },
+        "PROVIDERS": {
+          "BANDWIDTH": "Bandwidth",
+          "TWILIO": "Twilio"
+        }
+      },
+      "TIKTOK": {
+        "CONNECT_YOUR_TIKTOK_PROFILE": "Kết nối tài khoản TikTok",
+        "CONTINUE_WITH_TIKTOK": "Tiếp tục với TikTok",
+        "ERROR_AUTH": "Chưa kết nối được TikTok. Bạn thử lại nhé.",
+        "ERROR_MESSAGE": "Chưa kết nối được TikTok. Bạn thử lại nhé.",
+        "HELP": "Để thêm TikTok làm kênh, bấm 'Tiếp tục với TikTok' và đăng nhập tài khoản của bạn.",
+        "NORTH_AMERICA_WARNING": "Tạm thời chưa kết nối được TikTok cho tài khoản ở Bắc Mỹ."
+      },
+      "TWILIO": {
+        "API_KEY": {
+          "LABEL": "API Key SID",
+          "PLACEHOLDER": "Nhập API Key SID",
+          "USE_API_KEY": "Đăng nhập bằng khóa API"
+        },
+        "API_KEY_SECRET": {
+          "LABEL": "API Key Secret",
+          "PLACEHOLDER": "Nhập API Key Secret"
+        }
+      },
+      "VOICE": {
+        "API": {
+          "ERROR_MESSAGE": "Chưa tạo được kênh gọi thoại"
+        },
+        "CONFIGURATION": {
+          "TWILIO_STATUS_URL_SUBTITLE": "Đặt đường dẫn này làm Status Callback URL cho số điện thoại trên Twilio.",
+          "TWILIO_STATUS_URL_TITLE": "Đường dẫn báo trạng thái Twilio",
+          "TWILIO_VOICE_URL_SUBTITLE": "Đặt đường dẫn này làm Voice URL cho số điện thoại và TwiML App trên Twilio.",
+          "TWILIO_VOICE_URL_TITLE": "Đường dẫn Twilio Voice"
+        },
+        "DESC": "Kết nối Twilio Voice để hỗ trợ khách qua điện thoại.",
+        "PHONE_NUMBER": {
+          "ERROR": "Số điện thoại chưa đúng định dạng E.164 (ví dụ +84901234567)",
+          "PLACEHOLDER": "Nhập số điện thoại (ví dụ +84901234567)"
+        },
+        "SUBMIT_BUTTON": "Tạo kênh gọi thoại",
+        "TITLE": "Kênh gọi thoại",
+        "TWILIO": {
+          "ACCOUNT_SID": {
+            "PLACEHOLDER": "Nhập Account SID của Twilio",
+            "REQUIRED": "Cần nhập Account SID"
+          },
+          "API_KEY_SECRET": {
+            "LABEL": "API Key Secret",
+            "PLACEHOLDER": "Nhập API Key Secret của Twilio",
+            "REQUIRED": "Cần nhập API Key Secret"
+          },
+          "API_KEY_SID": {
+            "LABEL": "API Key SID",
+            "PLACEHOLDER": "Nhập API Key SID của Twilio",
+            "REQUIRED": "Cần nhập API Key SID"
+          },
+          "AUTH_TOKEN": {
+            "PLACEHOLDER": "Nhập Auth Token của Twilio",
+            "REQUIRED": "Cần nhập Auth Token"
+          }
+        }
+      },
+      "WEBSITE_CHANNEL": {
+        "CHANNEL_WEBHOOK_SECRET": {
+          "COPY": "Sao chép khóa bí mật",
+          "COPY_SUCCESS": "Đã sao chép khóa bí mật",
+          "LABEL": "Khóa bí mật webhook",
+          "RESET_ERROR": "Chưa tạo lại được khóa bí mật. Bạn thử lại nhé.",
+          "RESET_SUCCESS": "Đã tạo lại khóa bí mật webhook",
+          "TOGGLE": "Hiện hoặc ẩn khóa bí mật"
+        },
+        "CHANNEL_WEBHOOK_URL": {
+          "LABEL": "Đường dẫn webhook",
+          "PLACEHOLDER": "Nhập đường dẫn webhook"
+        }
+      },
+      "WHATSAPP": {
+        "API_CALLBACK": {
+          "WEBHOOK_URL": "Đường dẫn webhook"
+        },
+        "EMBEDDED_SIGNUP": {
+          "AUTH_NOT_COMPLETED": "Chưa đăng nhập xong. Bạn bắt đầu lại nhé.",
+          "AUTH_PROCESSING": "Đang đăng nhập với Meta",
+          "BENEFITS": {
+            "AUTO_CONFIG": "Tự cấu hình webhook và số điện thoại",
+            "EASY_SETUP": "Không cần cấu hình thủ công",
+            "SECURE_AUTH": "Đăng nhập an toàn qua OAuth",
+            "TITLE": "Lợi ích của đăng ký tích hợp:"
+          },
+          "CALLING_ENABLE_FAILED": "Kênh WhatsApp đã sẵn sàng nhưng chưa bật được gọi thoại vì số này chưa đăng ký dịch vụ gọi của WhatsApp Business.",
+          "CANCELLED": "Đã hủy đăng ký WhatsApp",
+          "DESC": "Dùng đăng ký tích hợp của WhatsApp để thêm số mới nhanh. Bạn sẽ được chuyển sang Meta để đăng nhập tài khoản WhatsApp Business. Có quyền quản trị sẽ giúp cài đặt dễ hơn.",
+          "ENABLING_CALLING": "Đang bật gọi thoại WhatsApp cho số của bạn…",
+          "INVALID_BUSINESS_DATA": "Thông tin doanh nghiệp nhận từ Facebook không hợp lệ. Bạn thử lại nhé.",
+          "LEARN_MORE": {
+            "LINK_TEXT": "liên kết này",
+            "TEXT": "Để biết thêm về đăng ký tích hợp, giá và giới hạn, xem {link}."
+          },
+          "LOADING_SDK": "Đang tải Facebook SDK...",
+          "MANUAL_FALLBACK": "Nếu số của bạn đã kết nối với WhatsApp Business Platform (API), hoặc bạn là đơn vị kỹ thuật tự thêm số, hãy dùng cách {link}",
+          "MANUAL_LINK_TEXT": "cài đặt thủ công",
+          "PROCESSING": "Đang cài đặt tài khoản WhatsApp Business",
+          "SIGNUP_ERROR": "Đăng ký bị lỗi",
+          "SUBMIT_BUTTON": "Kết nối WhatsApp Business",
+          "SUCCESS_FALLBACK": "Đã cài đặt xong tài khoản WhatsApp Business",
+          "SUCCESS_TITLE": "Đã kết nối WhatsApp Business!",
+          "TITLE": "Cài nhanh với Meta",
+          "WAITING_FOR_AUTH": "Đang chờ đăng nhập...",
+          "WAITING_FOR_BUSINESS_INFO": "Hãy hoàn tất thông tin doanh nghiệp trong cửa sổ Meta..."
+        },
+        "PROVIDERS": {
+          "360_DIALOG": "360Dialog",
+          "TWILIO": "Twilio",
+          "TWILIO_DESC": "Kết nối bằng tài khoản Twilio",
+          "WHATSAPP_CLOUD_DESC": "Cài nhanh qua Meta",
+          "WHATSAPP_EMBEDDED": "WhatsApp Business"
+        },
+        "SELECT_PROVIDER": {
+          "DESCRIPTION": "Chọn nhà cung cấp WhatsApp. Bạn có thể kết nối thẳng qua Meta (không cần cài đặt) hoặc qua Twilio bằng tài khoản Twilio của bạn.",
+          "TITLE": "Chọn nhà cung cấp API"
+        },
+        "WEBHOOK_VERIFY_TOKEN": {
+          "PLACEHOLDER": "Nhập mã xác minh bạn muốn dùng cho webhook Facebook."
+        }
+      },
+      "ZALO_CHANNEL": {
+        "PLACEHOLDERS": {
+          "ACCESS_TOKEN": "Dán mã truy cập Zalo vào đây...",
+          "APP_ID": "Nhập mã ứng dụng Zalo",
+          "APP_SECRET": "Nhập khóa bí mật ứng dụng Zalo",
+          "OA_ID": "Nhập mã Zalo OA",
+          "REFRESH_TOKEN": "Dán mã làm mới Zalo vào đây..."
+        },
+        "ZALO_ACCESS_TOKEN": {
+          "LABEL": "Mã truy cập Zalo"
+        },
+        "ZALO_APP_ID": {
+          "ERROR": "Hãy nhập mã ứng dụng Zalo",
+          "LABEL": "Mã ứng dụng Zalo",
+          "PLACEHOLDER": "Nhập mã ứng dụng Zalo",
+          "SUBTITLE": "Mã ứng dụng lấy từ trang developers.zalo.me"
+        },
+        "ZALO_APP_SECRET": {
+          "ERROR": "Hãy nhập khóa bí mật ứng dụng Zalo",
+          "LABEL": "Khóa bí mật ứng dụng Zalo",
+          "PLACEHOLDER": "Nhập khóa bí mật ứng dụng Zalo",
+          "SUBTITLE": "Khóa bí mật lấy từ trang developers.zalo.me, dùng để tự làm mới mã truy cập."
+        },
+        "ZALO_OA_ID": {
+          "LABEL": "Mã Zalo OA"
+        },
+        "ZALO_REFRESH_TOKEN": {
+          "ERROR": "Hãy nhập mã làm mới",
+          "LABEL": "Mã làm mới Zalo",
+          "PLACEHOLDER": "Nhập mã làm mới Zalo",
+          "SUBTITLE": "Mã làm mới lấy từ API Explorer, dùng để tự gia hạn mã truy cập trước khi hết hạn."
+        }
+      },
+      "ZALO_PERSONAL": {
+        "DESC": "Kết nối Zalo cá nhân để gửi và nhận tin nhắn ngay trong ứng dụng."
+      }
+    },
     "ASSIGNMENT": {
       "ASSIGNMENT_METHOD_LABEL": "Phương thức phân công",
       "ASSIGNMENT_ORDER_LABEL": "Thứ tự phân công",
@@ -1020,6 +2583,8 @@
       "DEFAULT_RULE_1": "Ưu tiên cuộc trò chuyện được tạo sớm nhất",
       "DEFAULT_RULE_2": "Phân phối xoay vòng (Round robin)",
       "DELETE_POLICY": "Xóa chính sách",
+      "DESCRIPTION": "Tự động giao hội thoại mới cho nhân viên đang rảnh theo chính sách phân công",
+      "ENABLE_AUTO_ASSIGNMENT": "Bật tự động giao hội thoại",
       "LINK_ERROR": "Không thể liên kết chính sách phân công",
       "LINK_EXISTING_POLICY": "Liên kết chính sách có sẵn",
       "LINK_SUCCESS": "Đã liên kết chính sách phân công",
@@ -1064,6 +2629,18 @@
       "VOICE": "Thoại (Voice)",
       "WEB_WIDGET": "Trang web (Website)",
       "WHATSAPP": "WhatsApp"
+    },
+    "CHANNEL_PREFERENCES": "Tùy chọn kênh",
+    "CLICK_TO_RECONNECT": "Bấm vào đây để kết nối lại.",
+    "COMPLETE_REGISTRATION": "Hoàn tất đăng ký",
+    "COUNT": "{n} kênh | {n} kênh",
+    "CREATE_FLOW": {
+      "CHANNEL": {
+        "BODY": "Chọn nhà cung cấp bạn muốn kết nối."
+      },
+      "FINISH": {
+        "TITLE": "Xong rồi!"
+      }
     },
     "CSAT": {
       "API": {
@@ -1127,6 +2704,38 @@
       },
       "WHATSAPP_NOTE": "Lưu ý: Khi lưu, hệ thống tạo mẫu CSAT chuyên dụng trên WhatsApp (để ghi nhận điểm và phản hồi) và gửi duyệt dạng Utility. Sau khi duyệt, khảo sát sẽ được gửi theo quy tắc."
     },
+    "DESCRIPTION": "Kênh là nơi khách nhắn tin cho bạn (Facebook, Zalo, email, chat trên web...). Mỗi kênh có một hộp thư để bạn trả lời khách ở một chỗ.",
+    "DETAILS": {
+      "ERROR_FB_LOADING": "Không tải được Facebook SDK. Hãy tắt trình chặn quảng cáo hoặc thử trình duyệt khác.",
+      "ERROR_FB_UNAUTHORIZED": "Bạn không có quyền thực hiện thao tác này. ",
+      "ERROR_FB_UNAUTHORIZED_HELP": "Hãy chắc chắn bạn có toàn quyền với trang Facebook. Xem thêm về vai trò Facebook <a href=\" https://www.facebook.com/help/187316341316631\">tại đây</a>."
+    },
+    "EDIT": {
+      "LOCK_TO_SINGLE_CONVERSATION": {
+        "DISABLED": "Tạo hội thoại mới",
+        "DISABLED_DESCRIPTION": "Mỗi lần khách nhắn sau khi hội thoại cũ đã đóng sẽ tạo hội thoại mới.",
+        "ENABLED": "Mở lại hội thoại cũ",
+        "ENABLED_DESCRIPTION": "Khi khách nhắn lại, hội thoại trước đó sẽ được mở lại."
+      },
+      "SENDER_NAME_SECTION": {
+        "BUSINESS_NAME": {
+          "BUTTON_TEXT": "Cài tên doanh nghiệp",
+          "PLACEHOLDER": "Nhập tên doanh nghiệp",
+          "SAVE_BUTTON_TEXT": "Lưu"
+        },
+        "FOR_EG": "Ví dụ:",
+        "FRIENDLY": {
+          "SUBTITLE": "Thêm tên nhân viên đã trả lời vào tên người gửi cho thân thiện.",
+          "TITLE": "Thân thiện"
+        },
+        "PROFESSIONAL": {
+          "SUBTITLE": "Chỉ dùng tên doanh nghiệp đã cài làm tên người gửi.",
+          "TITLE": "Chuyên nghiệp"
+        },
+        "SUB_TEXT": "Chọn tên hiển thị cho khách khi nhận email từ nhân viên.",
+        "TITLE": "Tên người gửi"
+      }
+    },
     "EMAIL_PROVIDERS": {
       "GOOGLE": {
         "DESCRIPTION": "Kết nối với Google",
@@ -1141,6 +2750,21 @@
         "TITLE": "Nhà cung cấp khác"
       }
     },
+    "FEATURES": {
+      "USE_INBOX_AVATAR_FOR_BOT": "Dùng tên và ảnh của kênh cho bot"
+    },
+    "FINISH": {
+      "MESSENGER_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Messenger",
+      "TELEGRAM_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Telegram",
+      "WHATSAPP_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh WhatsApp"
+    },
+    "HELP_CENTER": {
+      "LABEL": "Trung tâm trợ giúp",
+      "PLACEHOLDER": "Chọn trung tâm trợ giúp",
+      "REMOVE": "Gỡ trung tâm trợ giúp",
+      "SELECT_PLACEHOLDER": "Chọn trung tâm trợ giúp",
+      "SUB_TEXT": "Gắn trung tâm trợ giúp vào kênh này"
+    },
     "IMAP": {
       "PORT": {
         "LABEL": "Cổng (Port)",
@@ -1149,9 +2773,131 @@
       "TITLE": "IMAP",
       "TOGGLE_HELP": "Bật IMAP để hệ thống có thể nhận email từ hộp thư của bạn"
     },
+    "LEARN_MORE": "Tìm hiểu về kênh",
     "MICROSOFT": {
       "SUBTITLE": "Xác thực lại tài khoản Microsoft của bạn",
       "TITLE": "Microsoft"
+    },
+    "NO_RESULTS": "Không có kênh nào khớp",
+    "RECONNECTION_REQUIRED": "Kênh đã mất kết nối. Bạn sẽ không nhận tin mới cho đến khi kết nối lại.",
+    "SEARCH_PLACEHOLDER": "Tìm kênh...",
+    "SETTINGS_POPUP": {
+      "ALLOWED_DOMAINS": {
+        "DESCRIPTION": "Giới hạn website được nhúng khung chat. Để an toàn, chỉ thêm tên miền của bạn. Nhập nhiều tên miền, cách nhau bằng dấu phẩy. Để trống là cho phép mọi tên miền (không nên dùng khi chạy thật).",
+        "PLACEHOLDER": "example.com, www.example.com, app.example.com",
+        "TITLE": "Tên miền được phép"
+      },
+      "ALLOW_MOBILE_WEBVIEW": {
+        "LABEL": "Bật khung chat trong ứng dụng di động",
+        "SUBTITLE": "Chọn nếu bạn nhúng khung chat vào ứng dụng iOS hoặc Android. Ứng dụng di động không gửi thông tin tên miền."
+      },
+      "ENABLE_CONTINUITY_VIA_EMAIL_DISABLED_TEXT": "Tính năng này chỉ có ở gói trả phí.",
+      "FORWARD_EMAIL_NOT_CONFIGURED": "Chuyển tiếp email vào kênh đang bị tắt trên hệ thống này. Hãy liên hệ quản trị viên để bật.",
+      "HMAC_DESCRIPTION": "Dùng khóa này để tạo mã bí mật xác minh danh tính người dùng.",
+      "HMAC_LINK_TO_DOCS": "Xem thêm tại đây.",
+      "HMAC_MANDATORY_DESCRIPTION": "Nếu bật, yêu cầu không xác minh được sẽ bị từ chối.",
+      "IDENTITY_VALIDATION": {
+        "DESCRIPTION": "Xác thực người dùng bằng mã bảo mật, tránh người lạ mạo danh người khác trong khung chat.",
+        "REQUIRE_DESCRIPTION": "Khi bật, người dùng phải có mã xác thực hợp lệ mới bắt đầu được hội thoại. Yêu cầu không có mã hợp lệ sẽ bị từ chối.",
+        "REQUIRE_LABEL": "Bắt buộc xác thực danh tính cho mọi hội thoại",
+        "SECRET_KEY": "Khóa bí mật",
+        "TITLE": "Xác thực danh tính",
+        "VIEW_DOCS": "Xem hướng dẫn"
+      },
+      "LOCK_TO_SINGLE_CONVERSATION": "Cách tạo hội thoại",
+      "LOCK_TO_SINGLE_CONVERSATION_SUB_TEXT": "Chọn cách tạo hội thoại cho khách đã nhắn trước đó",
+      "SENDER_NAME_SECTION": "Hiện tên nhân viên trong email",
+      "SENDER_NAME_SECTION_TEXT": "Bật hoặc tắt hiện tên nhân viên trong email. Nếu tắt sẽ hiện tên doanh nghiệp.",
+      "UPDATE_PRE_CHAT_FORM_SETTINGS": "Cập nhật form trước khi chat",
+      "WHATSAPP_APP_ID_MISSING": "Chưa cài mã ứng dụng WhatsApp. Hãy liên hệ quản trị viên.",
+      "WHATSAPP_CALLING_ENABLED": {
+        "DESCRIPTION": "Cho nhân viên bắt đầu và nhận cuộc gọi thoại WhatsApp ở kênh này. Chỉ có ở kênh WhatsApp Cloud đăng ký tích hợp và đã được Meta cấp quyền gọi.",
+        "LABEL": "Bật gọi thoại"
+      },
+      "WHATSAPP_CONFIG_ID_MISSING": "Chưa cài mã cấu hình WhatsApp. Hãy liên hệ quản trị viên.",
+      "WHATSAPP_CONNECT_DESCRIPTION": "Kết nối kênh này với WhatsApp Business để có thêm tính năng và quản lý dễ hơn.",
+      "WHATSAPP_CONNECT_ERROR": "Chưa kết nối được WhatsApp Business. Bạn thử lại nhé.",
+      "WHATSAPP_CONNECT_SUBHEADER": "Nâng cấp lên đăng ký tích hợp WhatsApp để quản lý dễ hơn.",
+      "WHATSAPP_CONNECT_SUCCESS": "Đã kết nối WhatsApp Business!",
+      "WHATSAPP_CONNECT_TITLE": "Kết nối WhatsApp Business",
+      "WHATSAPP_EMBEDDED_SIGNUP_DESCRIPTION": "Bạn có thể cài lại kênh này để cập nhật cài đặt WhatsApp Business.",
+      "WHATSAPP_EMBEDDED_SIGNUP_SUBHEADER": "Kênh này kết nối qua đăng ký tích hợp WhatsApp.",
+      "WHATSAPP_EMBEDDED_SIGNUP_TITLE": "Đăng ký tích hợp WhatsApp",
+      "WHATSAPP_LOGIN_CANCELLED": "Đã hủy đăng nhập WhatsApp. Bạn thử lại nhé.",
+      "WHATSAPP_MANUAL_MIGRATION": {
+        "BANNER": {
+          "DESCRIPTION": "Kênh này kết nối qua ứng dụng Meta dùng chung, vốn bị Meta hạn chế gần đây. Để tránh sự cố, bạn nên kết nối lại bằng ứng dụng Meta của riêng bạn.",
+          "GUIDE": "Xem hướng dẫn",
+          "START": "Bắt đầu chuyển thủ công",
+          "TITLE": "Nên cài thủ công"
+        },
+        "DIALOG": {
+          "ACCESS_TOKEN": "Mã truy cập vĩnh viễn hoặc mã người dùng hệ thống",
+          "ACCESS_TOKEN_PLACEHOLDER": "Dán mã truy cập",
+          "ACTION_REQUIRED_DESCRIPTION": "Kênh kết nối bằng ứng dụng Meta riêng không bị ảnh hưởng bởi hạn chế của ứng dụng dùng chung. Các bước dưới đây cập nhật kết nối WhatsApp API mà không tạo kênh mới.",
+          "ACTION_REQUIRED_TITLE": "Kết nối lại bằng ứng dụng Meta của bạn",
+          "CONTINUE": "Tiếp tục",
+          "DISPLAY_PHONE_NUMBER": "Số hiển thị",
+          "DISPLAY_PHONE_NUMBER_HELP": "Số WhatsApp khách nhìn thấy. Không đổi được khi chuyển.",
+          "DISPLAY_PHONE_NUMBER_PLACEHOLDER": "Nhập số hiển thị",
+          "EYEBROW": "Chuyển WhatsApp thủ công",
+          "GUIDE_LINK": "Mở hướng dẫn cài thủ công",
+          "NOT_ENTERED": "Chưa nhập",
+          "PHONE_NUMBER_HELP": "Mã riêng của Meta cho số WhatsApp nối với kênh này.",
+          "PHONE_NUMBER_ID": "Mã số điện thoại",
+          "PHONE_NUMBER_PLACEHOLDER": "Nhập mã số điện thoại",
+          "PRESERVED_DESCRIPTION": "Hội thoại, khách, người cộng tác, phân công, giờ làm việc và cài đặt kênh.",
+          "PRESERVED_TITLE": "Được giữ nguyên",
+          "RECONNECT": "Kết nối lại kênh WhatsApp",
+          "REVIEW_MIGRATION": "Xem lại",
+          "REVIEW_TITLE": "Xem lại trước khi kết nối",
+          "TITLE": "Kết nối lại kênh WhatsApp",
+          "TOKEN_HELP_PREFIX": "Mã phải có quyền",
+          "TOKEN_HELP_SUFFIX": "để đồng bộ và quản lý mẫu tin.",
+          "UPDATED_DESCRIPTION": "Mã WABA, mã số điện thoại, mã truy cập và cấu hình webhook.",
+          "UPDATED_TITLE": "Được cập nhật",
+          "VERIFY_NOTICE": "Hệ thống sẽ kiểm tra thông tin này với Meta trước khi áp dụng. Nếu kiểm tra lỗi, cấu hình hiện tại được giữ nguyên.",
+          "WABA_HELP": "Tài khoản WhatsApp Business sở hữu số điện thoại này.",
+          "WABA_ID": "Mã WABA",
+          "WABA_PLACEHOLDER": "Nhập mã WABA"
+        },
+        "STEPS": {
+          "ACCESS_TOKEN": {
+            "DESCRIPTION": "Dán mã truy cập vĩnh viễn hoặc mã người dùng hệ thống có quyền WhatsApp.",
+            "TITLE": "Mã truy cập"
+          },
+          "BEFORE_YOU_START": {
+            "DESCRIPTION": "Thao tác này kết nối lại thông tin WhatsApp API của kênh. Hội thoại, người cộng tác, phân công, giờ làm việc, đánh giá và bot được giữ nguyên.",
+            "TITLE": "Trước khi bắt đầu"
+          },
+          "BUSINESS_DETAILS": {
+            "DESCRIPTION": "Nhập thông tin WhatsApp từ tài khoản Meta Business của khách hàng.",
+            "TITLE": "Thông tin doanh nghiệp"
+          },
+          "REVIEW_MIGRATION": {
+            "DESCRIPTION": "Xác nhận thông tin kết nối trước khi kết nối lại. Hệ thống sẽ kiểm tra mã, WABA và số điện thoại với Meta trước khi áp dụng.",
+            "TITLE": "Xem lại"
+          }
+        }
+      },
+      "WHATSAPP_MANUAL_TRANSFER_API_KEY_PLACEHOLDER": "Nhập mã truy cập vĩnh viễn từ ứng dụng Meta của bạn",
+      "WHATSAPP_MANUAL_TRANSFER_BUTTON": "Chuyển sang cài thủ công",
+      "WHATSAPP_MANUAL_TRANSFER_ERROR": "Chưa chuyển được sang cài thủ công. Hãy kiểm tra thông tin rồi thử lại.",
+      "WHATSAPP_MANUAL_TRANSFER_PHONE_NUMBER_ID_LABEL": "Mã số điện thoại",
+      "WHATSAPP_MANUAL_TRANSFER_SUBHEADER": "Kênh này kết nối qua đăng ký tích hợp WhatsApp, cách này không còn được hỗ trợ. Hãy nhập thông tin WhatsApp Business để chuyển sang cài thủ công.",
+      "WHATSAPP_MANUAL_TRANSFER_SUCCESS": "Đã chuyển kênh sang cài thủ công.",
+      "WHATSAPP_MANUAL_TRANSFER_TITLE": "Chuyển sang cài thủ công",
+      "WHATSAPP_RECONFIGURE_BUTTON": "Cài lại",
+      "WHATSAPP_RECONFIGURE_ERROR": "Chưa cài lại được WhatsApp Business. Bạn thử lại nhé.",
+      "WHATSAPP_RECONFIGURE_SUCCESS": "Đã cài lại WhatsApp Business!",
+      "WHATSAPP_SECTION_UPDATE_PLACEHOLDER": "Nhập khóa API mới ở đây",
+      "WHATSAPP_SECTION_UPDATE_SUBHEADER": "Nhập khóa API mới để kết nối với WhatsApp.",
+      "WHATSAPP_SECTION_UPDATE_TITLE": "Cập nhật khóa API",
+      "WHATSAPP_TEMPLATES_SYNC_BUTTON": "Đồng bộ mẫu tin",
+      "WHATSAPP_TEMPLATES_SYNC_SUBHEADER": "Đồng bộ thủ công các mẫu tin từ WhatsApp để cập nhật danh sách mẫu.",
+      "WHATSAPP_TEMPLATES_SYNC_SUCCESS": "Đã bắt đầu đồng bộ mẫu tin. Có thể mất vài phút để cập nhật.",
+      "WHATSAPP_TEMPLATES_SYNC_TITLE": "Đồng bộ mẫu tin",
+      "WHATSAPP_WEBHOOK_SUBHEADER": "Mã này dùng để xác minh webhook là thật."
     },
     "SMTP": {
       "PORT": {
@@ -1161,7 +2907,48 @@
       "SSL_TLS": "SSL/TLS",
       "START_TLS": "STARTTLS"
     },
+    "TABS": {
+      "ACCOUNT_HEALTH": "Tình trạng tài khoản",
+      "CALLS": "Cuộc gọi",
+      "CSAT": "Đánh giá",
+      "VOICE": "Gọi thoại"
+    },
+    "VOICE_CONFIGURATION": {
+      "CREDENTIALS": {
+        "DESCRIPTION": "Gọi thoại cần khóa API của Twilio, dùng để tạo mã kết nối cho nhân viên."
+      },
+      "ENABLE_VOICE": {
+        "DESCRIPTION": "Bật gọi thoại cho kênh này. Nhân viên có thể gọi và nhận cuộc gọi.",
+        "LABEL": "Bật gọi thoại"
+      },
+      "INBOUND": {
+        "DESCRIPTION": "Cho khách gọi vào số này. Khi tắt, cuộc gọi đến bị từ chối tự động, nhân viên không nhận thông báo và không tạo hội thoại. Nhân viên vẫn gọi ra được.",
+        "LABEL": "Cho phép gọi đến"
+      }
+    },
+    "WHATSAPP_CALLING": {
+      "ENABLE": {
+        "DESCRIPTION": "Cho nhân viên nhận và gọi điện qua WhatsApp ở kênh này. Khách có thể gọi thẳng vào số doanh nghiệp từ WhatsApp.",
+        "LABEL": "Bật gọi WhatsApp"
+      },
+      "ENABLE_FAILED": "Chưa bật được gọi thoại cho số này vì số chưa đăng ký dịch vụ gọi của WhatsApp Business.",
+      "HOW_IT_WORKS": {
+        "DESCRIPTION": "Cuộc gọi đi trực tiếp giữa trình duyệt của nhân viên và Meta, không cần thêm khóa nào. Hãy cho phép trình duyệt dùng micro cho trang này.",
+        "LABEL": "Cách hoạt động"
+      },
+      "PERMISSION_REQUEST_BODY": {
+        "HELP_TEXT": "Hiện cho khách chưa đồng ý nhận cuộc gọi. Để trống để dùng nội dung mặc định.",
+        "LABEL": "Tin nhắn xin phép gọi",
+        "PLACEHOLDER": "Chúng tôi muốn gọi cho bạn về cuộc trò chuyện vừa rồi."
+      },
+      "PHONE_NUMBER": {
+        "HELP_TEXT": "Số WhatsApp khách sẽ gọi vào.",
+        "LABEL": "Số điện thoại doanh nghiệp"
+      }
+    },
+    "WHATSAPP_REGISTRATION_INCOMPLETE": "Bạn chưa đăng ký xong WhatsApp Business. Hãy kiểm tra trạng thái tên hiển thị trong Meta Business Manager.",
     "WIDGET_BUILDER": {
+      "BRANDING_TEXT": "Chat bởi ứng dụng của chúng tôi",
       "WIDGET_OPTIONS": {
         "WIDGET_BUBBLE": "Bong bóng chat",
         "WIDGET_BUBBLE_LAUNCHER_TITLE": {
@@ -1172,10 +2959,1133 @@
       "WIDGET_SCREEN": {
         "CHAT": "Chế độ chat"
       }
+    },
+    "WIDGET_FEATURES": "Tính năng khung chat",
+    "ZALO_PERSONAL_SETTINGS": {
+      "ZALO_ID": "Mã người dùng Zalo"
+    }
+  },
+  "INBOX_REPORTS": {
+    "ALL_INBOXES": "Tất cả kênh",
+    "DESCRIPTION": "Xem nhanh hiệu quả của từng kênh qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào kênh để xem chi tiết.",
+    "FILTERS": {
+      "INPUT_PLACEHOLDER": {
+        "INBOXES": "Tìm kênh"
+      }
+    },
+    "SEARCH_INBOX": "Tìm kênh"
+  },
+  "INTEGRATION_APPS": {
+    "ADD": {
+      "FORM": {
+        "VALIDATING_OPENAI": "Đang kiểm tra với OpenAI..."
+      }
+    },
+    "COUNT": "{n} tích hợp | {n} tích hợp",
+    "NO_RESULTS": "Không có kết quả nào khớp",
+    "SEARCH_PLACEHOLDER": "Tìm...",
+    "SIDEBAR_DESCRIPTION": {
+      "DIALOGFLOW": "Dialogflow là nền tảng xử lý ngôn ngữ tự nhiên để xây dựng bot trò chuyện. Khi kết nối với {installationName}, bot trả lời trước và chuyển cho nhân viên khi cần, giúp lọc khách tiềm năng và giảm việc trả lời câu hỏi thường gặp. Để thêm Dialogflow, tạo Service Account trong Google Console rồi chia sẻ thông tin đăng nhập. Xem tài liệu để biết chi tiết"
+    }
+  },
+  "INTEGRATION_SETTINGS": {
+    "DASHBOARD_APPS": {
+      "COUNT": "{n} ứng dụng bảng điều khiển | {n} ứng dụng bảng điều khiển",
+      "FORM": {
+        "URL_LABEL": "Đường dẫn"
+      },
+      "LEARN_MORE": "Tìm hiểu về ứng dụng bảng điều khiển",
+      "LIST": {
+        "TABLE_HEADER": {
+          "ENDPOINT": "Đường dẫn"
+        }
+      },
+      "NO_RESULTS": "Không có ứng dụng nào khớp",
+      "SEARCH_PLACEHOLDER": "Tìm ứng dụng bảng điều khiển..."
+    },
+    "DESCRIPTION": "Kết nối với các công cụ và dịch vụ khác để làm việc hiệu quả hơn. Chọn ứng dụng bạn muốn cài đặt trong danh sách dưới đây.",
+    "DYTE": {
+      "CLICK_HERE_TO_JOIN": "Bấm vào đây để tham gia",
+      "CREATE_ERROR": "Chưa tạo được đường dẫn cuộc họp. Bạn thử lại nhé.",
+      "JOIN_ERROR": "Chưa vào được cuộc gọi. Bạn thử lại nhé.",
+      "LEAVE_THE_ROOM": "Rời phòng",
+      "START_VIDEO_CALL_HELP_TEXT": "Bắt đầu cuộc gọi video với khách"
+    },
+    "LEARN_MORE": "Tìm hiểu về tích hợp",
+    "LINEAR": {
+      "ADD_OR_LINK": {
+        "CREATE_ERROR": "Chưa tạo được issue. Bạn thử lại nhé.",
+        "CREATE_SUCCESS": "Đã tạo issue",
+        "DESCRIPTION": "Tạo issue Linear từ hội thoại hoặc liên kết issue có sẵn để theo dõi liền mạch.",
+        "FORM": {
+          "ASSIGNEE": {
+            "LABEL": "Người phụ trách",
+            "PLACEHOLDER": "Chọn người phụ trách",
+            "SEARCH": "Tìm người phụ trách"
+          },
+          "DESCRIPTION": {
+            "PLACEHOLDER": "Nhập mô tả"
+          },
+          "LABEL": {
+            "PLACEHOLDER": "Chọn nhãn",
+            "SEARCH": "Tìm nhãn"
+          },
+          "PRIORITY": {
+            "SEARCH": "Tìm mức ưu tiên"
+          },
+          "PROJECT": {
+            "LABEL": "Dự án",
+            "PLACEHOLDER": "Chọn dự án",
+            "SEARCH": "Tìm dự án"
+          },
+          "STATUS": {
+            "PLACEHOLDER": "Chọn trạng thái",
+            "SEARCH": "Tìm trạng thái"
+          },
+          "TEAM": {
+            "REQUIRED_ERROR": "Cần chọn nhóm",
+            "SEARCH": "Tìm nhóm"
+          },
+          "TITLE": {
+            "PLACEHOLDER": "Nhập tiêu đề"
+          }
+        },
+        "LOADING_TEAM_ENTITIES_ERROR": "Chưa tải được dữ liệu của nhóm. Bạn thử lại nhé.",
+        "LOADING_TEAM_ERROR": "Chưa tải được danh sách nhóm. Bạn thử lại nhé.",
+        "TITLE": "Tạo hoặc liên kết issue Linear"
+      },
+      "ADD_OR_LINK_BUTTON": "Tạo hoặc liên kết issue Linear",
+      "CTA": {
+        "AGENT_DESCRIPTION": "Chưa kết nối Linear. Hãy nhờ quản trị viên kết nối để dùng.",
+        "BUTTON_TEXT": "Kết nối Linear",
+        "DESCRIPTION": "Chưa kết nối Linear. Bấm nút bên dưới để kết nối.",
+        "TITLE": "Kết nối Linear"
+      },
+      "DELETE": {
+        "MESSAGE": "Bạn chắc chắn muốn xóa kết nối này?",
+        "TITLE": "Bạn chắc chắn muốn xóa kết nối này?"
+      },
+      "HEADER": "Linear",
+      "ISSUE": {
+        "ASSIGNEE": "Người phụ trách",
+        "CREATED_AT": "Tạo lúc {createdAt}"
+      },
+      "LINK": {
+        "EMPTY_LIST": "Không có issue Linear nào",
+        "ERROR": "Chưa tải được issue Linear. Bạn thử lại nhé.",
+        "LINK_ERROR": "Chưa liên kết được issue. Bạn thử lại nhé.",
+        "LINK_SUCCESS": "Đã liên kết issue",
+        "LINK_TITLE": "Hội thoại (#{conversationId}) với {name}",
+        "LOADING": "Đang tải",
+        "SEARCH": "Tìm issue",
+        "SELECT": "Chọn issue"
+      },
+      "LOADING": "Đang tải issue Linear...",
+      "LOADING_ERROR": "Chưa tải được issue Linear. Bạn thử lại nhé.",
+      "NO_LINKED_ISSUES": "Chưa có issue nào được liên kết",
+      "UNLINK": {
+        "ERROR": "Chưa bỏ liên kết được issue. Bạn thử lại nhé.",
+        "SUCCESS": "Đã bỏ liên kết issue",
+        "TITLE": "Bỏ liên kết"
+      }
+    },
+    "LOADING": "Đang tải tích hợp",
+    "NOTION": {
+      "DELETE": {
+        "MESSAGE": "Xóa kết nối sẽ mất quyền truy cập Notion và dừng các tính năng liên quan.",
+        "TITLE": "Bạn chắc chắn muốn xóa kết nối Notion?"
+      },
+      "HEADER": "Notion"
+    },
+    "NO_RESULTS": "Không có tích hợp nào khớp",
+    "OPEN_AI": {
+      "AI_ASSIST": "Trợ giúp AI",
+      "ASSISTANCE_MODAL": {
+        "AI_WRITING": "AI đang viết",
+        "BUTTONS": {
+          "APPLY": "Dùng gợi ý này"
+        },
+        "DRAFT_TITLE": "Nội dung nháp",
+        "GENERATED_TITLE": "Nội dung AI viết"
+      },
+      "BUTTONS": {
+        "GENERATE": "Tạo",
+        "GENERATING": "Đang tạo..."
+      },
+      "CTA_MODAL": {
+        "BUTTONS": {
+          "DISMISS": "Bỏ qua",
+          "FINISH": "Hoàn tất cài đặt"
+        },
+        "DESC": "Thêm tính năng AI cho khung làm việc bằng mô hình GPT của OpenAI. Để bắt đầu, nhập khóa API từ tài khoản OpenAI của bạn.",
+        "DISMISS_MESSAGE": "Bạn có thể cài đặt OpenAI sau, lúc nào cũng được.",
+        "KEY_PLACEHOLDER": "Nhập khóa API OpenAI",
+        "SUCCESS_MESSAGE": "Đã cài đặt OpenAI",
+        "TITLE": "Kết nối OpenAI"
+      },
+      "OPTIONS": {
+        "CASUAL": "Dùng giọng thoải mái",
+        "CONFIDENT": "Dùng giọng tự tin",
+        "EXPAND": "Viết dài hơn",
+        "FIX_SPELLING_GRAMMAR": "Sửa chính tả và ngữ pháp",
+        "MAKE_FORMAL": "Dùng giọng trang trọng",
+        "MAKE_FRIENDLY": "Đổi sang giọng thân thiện",
+        "PROFESSIONAL": "Dùng giọng chuyên nghiệp",
+        "REPHRASE": "Viết hay hơn",
+        "REPLY_SUGGESTION": "Gợi ý trả lời",
+        "SHORTEN": "Rút gọn",
+        "SIMPLIFY": "Viết đơn giản hơn",
+        "STRAIGHTFORWARD": "Dùng giọng thẳng thắn",
+        "SUMMARIZE": "Tóm tắt"
+      },
+      "REPLY_OPTIONS": {
+        "ASK_COPILOT": "Hỏi trợ lý AI",
+        "CHANGE_TONE": {
+          "OPTIONS": {
+            "CASUAL": "Thoải mái",
+            "CONFIDENT": "Tự tin",
+            "FRIENDLY": "Thân thiện",
+            "PROFESSIONAL": "Chuyên nghiệp",
+            "STRAIGHTFORWARD": "Thẳng thắn"
+          },
+          "TITLE": "Đổi giọng văn"
+        },
+        "GRAMMAR": "Sửa chính tả và ngữ pháp",
+        "IMPROVE_REPLY": "Viết lại câu trả lời cho hay hơn",
+        "IMPROVE_REPLY_SELECTION": "Viết lại đoạn đã chọn cho hay hơn",
+        "SUGGESTION": "Gợi ý câu trả lời",
+        "SUMMARIZE": "Tóm tắt hội thoại"
+      },
+      "REPLY_TITLE": "Gợi ý trả lời bằng AI",
+      "SUBTITLE": "AI sẽ viết lại câu trả lời hay hơn dựa trên bản nháp của bạn.",
+      "SUMMARY_TITLE": "Tóm tắt bằng AI",
+      "TITLE": "Viết hay hơn bằng AI",
+      "TONE": {
+        "OPTIONS": {
+          "FRIENDLY": "Thân thiện",
+          "PROFESSIONAL": "Chuyên nghiệp"
+        },
+        "TITLE": "Giọng văn"
+      },
+      "WITH_AI": " {option} bằng AI "
+    },
+    "SEARCH_PLACEHOLDER": "Tìm tích hợp...",
+    "SHOPIFY": {
+      "DELETE": {
+        "MESSAGE": "Bạn chắc chắn muốn xóa kết nối Shopify?",
+        "TITLE": "Xóa kết nối Shopify"
+      },
+      "ERROR": "Chưa kết nối được Shopify. Bạn thử lại hoặc liên hệ hỗ trợ nếu vẫn lỗi.",
+      "HEADER": "Shopify",
+      "STORE_URL": {
+        "HELP": "Nhập địa chỉ myshopify.com của cửa hàng",
+        "LABEL": "Địa chỉ cửa hàng",
+        "SUBMIT": "Kết nối cửa hàng",
+        "TITLE": "Kết nối cửa hàng Shopify"
+      }
+    },
+    "SLACK": {
+      "DELETE_CONFIRMATION": {
+        "MESSAGE": "Bạn chắc chắn muốn xóa kết nối? Bạn sẽ không còn xem được hội thoại trên Slack.",
+        "TITLE": "Xóa kết nối"
+      },
+      "FAILED_TO_FETCH_CHANNELS": "Chưa lấy được danh sách kênh từ Slack. Bạn thử lại nhé.",
+      "HEADER": "Slack",
+      "HELP_TEXT": {
+        "BODY": "Với kết nối này, mọi hội thoại mới sẽ được đồng bộ vào kênh ***{selectedChannelName}*** trên Slack. Bạn quản lý hội thoại với khách ngay trong kênh Slack và không bỏ lỡ tin nào.\n\n**Trả lời từ Slack:** gõ tin nhắn và gửi dưới dạng chuỗi trả lời trong kênh ***{selectedChannelName}***, tin sẽ được gửi đến khách.\n\n**Ghi chú nội bộ:** bắt đầu tin nhắn bằng ***`note:`*** để tạo ghi chú riêng, khách sẽ không thấy.\n\n**Gắn với nhân viên:** nếu người trả lời trên Slack có tài khoản nhân viên với cùng email, tin sẽ được ghi theo nhân viên đó. Nếu không, tin sẽ hiện từ bot.",
+        "SELECTED": "đã chọn"
+      },
+      "SELECT_CHANNEL": {
+        "ATTENTION_REQUIRED": "Cần xử lý",
+        "BUTTON_TEXT": "Kết nối kênh",
+        "DESCRIPTION": "Slack của bạn đã liên kết với ứng dụng nhưng chưa hoạt động. Bấm nút bên dưới để chọn kênh Slack và bật kết nối.\n\n**Lưu ý:** nếu muốn kết nối kênh riêng tư, hãy thêm ứng dụng vào kênh Slack đó trước.",
+        "EXPIRED": "Kết nối Slack đã hết hạn. Để tiếp tục nhận tin trên Slack, hãy xóa kết nối rồi kết nối lại.",
+        "OPTION_LABEL": "Chọn kênh Slack"
+      },
+      "UPDATE_ERROR": "Chưa cập nhật được kết nối. Bạn thử lại nhé.",
+      "UPDATE_SUCCESS": "Đã kết nối kênh"
+    },
+    "WEBHOOK": {
+      "COUNT": "{n} webhook | {n} webhook",
+      "FORM": {
+        "DESC": "Webhook gửi cho bạn thông tin theo thời gian thực về những gì đang xảy ra trong tài khoản. Hãy nhập một đường dẫn hợp lệ để cài đặt.",
+        "END_POINT": {
+          "LABEL": "Đường dẫn webhook",
+          "PLACEHOLDER": "Ví dụ: {webhookExampleURL}"
+        },
+        "NAME": {
+          "LABEL": "Tên webhook",
+          "PLACEHOLDER": "Nhập tên webhook"
+        },
+        "SUBSCRIPTIONS": {
+          "EVENTS": {
+            "CONTACT_CREATED": "Khách mới được tạo",
+            "CONTACT_UPDATED": "Khách được cập nhật",
+            "CONVERSATION_TYPING_OFF": "Ngừng nhập tin trong hội thoại",
+            "CONVERSATION_TYPING_ON": "Bắt đầu nhập tin trong hội thoại",
+            "INBOX_UPDATED": "Kênh được cập nhật"
+          }
+        }
+      },
+      "LEARN_MORE": "Tìm hiểu về webhook",
+      "LIST": {
+        "TABLE_HEADER": {
+          "WEBHOOK_ENDPOINT": "Đường dẫn webhook"
+        }
+      },
+      "NO_RESULTS": "Không có webhook nào khớp",
+      "PAYWALL": {
+        "AVAILABLE_ON": "Dùng webhook để nhận sự kiện theo thời gian thực từ tài khoản của bạn.",
+        "CANCEL_ANYTIME": "Bạn có thể đổi hoặc hủy gói bất cứ lúc nào.",
+        "TITLE": "Webhook có ở các gói trả phí",
+        "UPGRADE_NOW": "Nâng cấp ngay",
+        "UPGRADE_PROMPT": "Nâng cấp gói để dùng webhook."
+      },
+      "SEARCH_PLACEHOLDER": "Tìm webhook...",
+      "SECRET": {
+        "COPY": "Sao chép khóa bí mật",
+        "COPY_SUCCESS": "Đã sao chép khóa bí mật",
+        "CREATED_DESC": "Đã tạo webhook. Dùng khóa bí mật dưới đây để kiểm tra chữ ký webhook. Hãy sao chép ngay, bạn cũng có thể xem lại trong form sửa webhook.",
+        "DONE": "Xong",
+        "LABEL": "Khóa bí mật",
+        "TOGGLE": "Hiện hoặc ẩn khóa bí mật"
+      },
+      "SIDEBAR_TXT": "<p><b>Webhook</b> </p> <p>Webhook là lệnh gọi lại HTTP, bật được cho từng tài khoản. Chúng chạy khi có sự kiện như có tin nhắn mới. Bạn có thể tạo nhiều webhook cho tài khoản này. <br /><br /> Để tạo <b>webhook</b>, bấm <b>Tạo mới</b>. Bạn cũng có thể xóa webhook bằng nút Xóa.</p>",
+      "TITLE": "Webhook"
+    }
+  },
+  "KALO_BILLING": {
+    "ACCOUNT_NAME": "Chủ tài khoản",
+    "ACCOUNT_NUMBER": "Số tài khoản",
+    "BANK": "Ngân hàng",
+    "COPIED": "Đã chép",
+    "COPY": "Chép nội dung",
+    "DAYS_LEFT": "Còn {count} ngày",
+    "ERROR": "Chưa tải được thông tin gói cước. Thử lại sau ít phút.",
+    "LOADING": "Đang tải",
+    "MEMO": "Nội dung chuyển khoản",
+    "PLAN": "Gói hiện tại",
+    "PLANS": {
+      "enterprise": "Doanh nghiệp",
+      "growth": "Tăng trưởng",
+      "starter": "Cơ bản"
+    },
+    "PRICES_TITLE": "Giá các gói mỗi tháng",
+    "RENEW_STEPS": "Chuyển khoản đúng số tiền của gói bạn chọn vào tài khoản bên dưới. Ghi đúng nội dung chuyển khoản để hệ thống nhận ra cửa hàng của bạn.",
+    "RENEW_TITLE": "Gia hạn",
+    "STATUS": {
+      "active": "Đang hoạt động",
+      "expired": "Đã hết hạn",
+      "trial": "Đang dùng thử"
+    },
+    "TITLE": "Gói cước",
+    "TRIAL": "Dùng thử",
+    "VALID_UNTIL": "Hết hạn ngày {date}"
+  },
+  "KALO_CHAT": {
+    "ACTIONS": {
+      "CLOSE": "Đóng",
+      "CREATE_ORDER": "Tạo đơn",
+      "QR": "Mã QR"
+    },
+    "AI": {
+      "LABEL": "Gợi ý trả lời"
+    },
+    "CARD": {
+      "LINE": "{quantity} × {price}",
+      "SENDING": "Đang gửi…",
+      "SEND_QR": "Gửi mã QR",
+      "SHIPPING": "Phí giao",
+      "TITLE": "Đơn #{number}",
+      "TOTAL": "Tổng",
+      "UNAVAILABLE": "Không tải được đơn"
+    },
+    "CREATED": {
+      "LATER": "Để sau",
+      "SEND_QR": "Gửi mã QR",
+      "TITLE": "Đã tạo đơn #{number}"
+    },
+    "PANEL": {
+      "EMPTY": "Khách chưa có đơn nào.",
+      "ORDERS_COUNT": "Số đơn",
+      "PAID_TOTAL": "Đã thanh toán",
+      "PURCHASE": "Mua hàng",
+      "RECENT": "Đơn gần đây"
+    },
+    "QR_PICKER": {
+      "EMPTY": "Khách chưa có đơn nào chờ thanh toán bằng mã QR.",
+      "TITLE": "Chọn đơn để gửi mã QR"
+    }
+  },
+  "KALO_CHAT_LIST": {
+    "EMPTY": {
+      "CLEAR": "Bỏ lọc",
+      "FILTERED": "Không có tin nhắn khớp bộ lọc",
+      "FILTERED_HINT": "Thử bỏ bớt điều kiện lọc.",
+      "HINT": "Khi khách nhắn, tin sẽ hiện ở đây.",
+      "TITLE": "Chưa có tin nhắn nào"
+    },
+    "FILTER": {
+      "ADVANCED": "Lọc theo điều kiện",
+      "LAYOUT_COMPACT": "Danh sách gọn",
+      "LAYOUT_EXPANDED": "Danh sách rộng",
+      "OPEN": "Lọc",
+      "SORT": "Sắp xếp",
+      "STATUS": "Trạng thái",
+      "VIEWS": "Xem nhanh"
+    },
+    "HEADER": {
+      "ASSIGN": "Giao cho nhân viên",
+      "ASSIGN_TEAM": "Giao cho nhóm",
+      "COPY_ID": "Sao chép mã cuộc trò chuyện",
+      "LABEL": "Gắn nhãn",
+      "MORE": "Thêm thao tác",
+      "MUTE": "Tắt thông báo",
+      "OPEN": "Mở",
+      "PENDING": "Chuyển sang chờ",
+      "PRIORITY": "Mức ưu tiên",
+      "REOPEN": "Mở lại",
+      "RESOLVE": "Xong",
+      "SNOOZE": "Tạm hoãn đến…",
+      "TRANSCRIPT": "Gửi bản ghi qua email",
+      "UNMUTE": "Bật lại thông báo"
+    },
+    "LOADING": "Đang tải tin nhắn",
+    "SEARCH": "Tìm khách, tin nhắn",
+    "STATUS": {
+      "ALL": "Tất cả",
+      "OPEN": "Đang mở",
+      "PENDING": "Chờ xử lý",
+      "RESOLVED": "Đã xong",
+      "SNOOZED": "Tạm hoãn"
+    },
+    "TABS": {
+      "ALL": "Tất cả",
+      "ME": "Của tôi",
+      "UNASSIGNED": "Chưa ai nhận"
+    },
+    "TITLE": "Tin nhắn",
+    "VIEWS": {
+      "ALL": "Tất cả tin nhắn",
+      "MENTIONS": "Được nhắc tên",
+      "PARTICIPATING": "Đang tham gia",
+      "UNATTENDED": "Chưa trả lời"
+    },
+    "WELCOME": {
+      "GREETING_AFTERNOON": "Chào buổi chiều, {name}!",
+      "GREETING_EVENING": "Chào buổi tối, {name}!",
+      "GREETING_MORNING": "Chào buổi sáng, {name}!",
+      "LOADING_CONVERSATIONS": "Đang tải tin nhắn…",
+      "LOADING_INBOXES": "Đang tải kênh bán hàng…",
+      "NOT_FOUND": "Không tìm thấy cuộc trò chuyện này.",
+      "NO_CONVERSATIONS": "Chưa có tin nhắn nào. Khi khách nhắn, tin sẽ hiện ở đây.",
+      "NO_INBOX_AGENT": "Shop chưa kết nối kênh nào. Nhờ chủ shop kết nối Zalo hoặc Facebook nhé.",
+      "PICK": "Chọn một cuộc trò chuyện bên trái để trả lời khách.",
+      "STEPS": {
+        "CHANNEL": {
+          "DESC": "Gom tin nhắn của khách về một chỗ",
+          "TITLE": "Kết nối Zalo, Facebook"
+        },
+        "DONE": "Đã xong",
+        "ORDER": {
+          "DESC": "Gửi mã QR để khách chuyển khoản",
+          "TITLE": "Tạo đơn đầu tiên"
+        },
+        "PRODUCT": {
+          "DESC": "Để lên đơn và báo giá nhanh",
+          "TITLE": "Thêm sản phẩm đầu tiên"
+        }
+      },
+      "SUBTITLE": "Ba bước để bắt đầu bán hàng trên Kalo."
+    }
+  },
+  "KALO_CHAT_THREAD": {
+    "COMPOSER": {
+      "AI": "Viết lại bằng AI",
+      "ARTICLE": "Chèn bài hướng dẫn",
+      "ATTACH": "Đính kèm ảnh, tệp",
+      "CANNED": "Mẫu câu",
+      "CANNED_HINT": "Chèn mẫu câu (gõ /)",
+      "CONTENT_TEMPLATE": "Mẫu tin Twilio",
+      "DROP": "Thả tệp vào đây để gửi kèm",
+      "EMOJI": "Biểu tượng cảm xúc",
+      "EXPAND": "Phóng to khung soạn",
+      "MORE": "Thêm",
+      "NOTE": "Ghi chú nội bộ",
+      "NOTE_PLACEHOLDER": "Ghi chú chỉ nhân viên thấy… (gõ {'@'} để nhắc tên)",
+      "PLACEHOLDER": "Nhập tin nhắn… (gõ / để chọn mẫu câu)",
+      "QUOTE": "Kèm thư trước",
+      "REPLY": "Trả lời",
+      "SEND": "Gửi",
+      "SEND_NOTE": "Lưu ghi chú",
+      "SIGNATURE": "Chữ ký",
+      "VOICE": "Ghi âm",
+      "VOICE_STOP": "Dừng ghi âm",
+      "WHATSAPP_TEMPLATE": "Mẫu tin WhatsApp"
+    },
+    "PANEL": {
+      "ASSIGN": "Giao việc",
+      "CONVERSATION_INFO": "Thông tin hội thoại",
+      "FILES": "Ảnh và tệp đã gửi",
+      "LABELS": "Nhãn",
+      "LINEAR": "Linear",
+      "MACROS": "Thao tác nhanh",
+      "MORE_INFO": "Thông tin thêm",
+      "NOTES": "Ghi chú",
+      "NO_ATTRIBUTES": "Chưa có thông tin thêm.",
+      "PARTICIPANTS": "Người theo dõi",
+      "PREVIOUS": "Hội thoại trước",
+      "SHOPIFY": "Đơn Shopify",
+      "SHOW_LESS": "Thu gọn",
+      "SHOW_MORE": "Xem thêm",
+      "TITLE": "Khách hàng"
+    },
+    "PRIVATE_NOTE": "Ghi chú nội bộ, khách không thấy",
+    "STICKER": "Nhãn dán",
+    "TODAY": "Hôm nay",
+    "YESTERDAY": "Hôm qua"
+  },
+  "KALO_CONSOLE": {
+    "BRAND": "Console",
+    "BRAND_NAME": "kalo",
+    "COMMON": {
+      "CANCEL": "Hủy",
+      "ERROR": "Không tải được. Thử lại.",
+      "LOADING": "Đang tải…",
+      "NEXT": "Sau",
+      "PAGE": "Trang {page} / {pages}",
+      "PREV": "Trước",
+      "RETRY": "Tải lại",
+      "SEARCH": "Tìm"
+    },
+    "NAV": {
+      "BACK_TO_APP": "Về ứng dụng",
+      "LOGOUT": "Đăng xuất",
+      "OVERVIEW": "Tổng quan",
+      "PAYMENTS": "Thanh toán",
+      "SHOPS": "Shop"
+    },
+    "OVERVIEW": {
+      "BY_PLAN": "Shop theo gói",
+      "EMPTY_PAYMENTS": "Chưa có thanh toán nào.",
+      "KPI": {
+        "EXPIRING": "Sắp hết hạn (7 ngày)",
+        "PAID": "Shop đang trả phí",
+        "REVENUE": "Doanh thu tháng",
+        "SHOPS": "Tổng số shop",
+        "UNMATCHED": "Chuyển khoản cần ghép"
+      },
+      "LATEST": "Thanh toán mới nhất",
+      "TITLE": "Tổng quan",
+      "UNKNOWN_SHOP": "Không rõ shop",
+      "VIEW_ALL": "Xem tất cả"
+    },
+    "PAYMENTS": {
+      "ASSIGN": "Ghép shop",
+      "ASSIGN_AMBIGUOUS": "Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý.",
+      "ASSIGN_DONE": "Đã ghép shop",
+      "ASSIGN_EMPTY": "Không tìm thấy shop.",
+      "ASSIGN_ERROR": "Không ghép được. Thử lại.",
+      "ASSIGN_GONE": "Giao dịch này đã được xử lý hoặc không còn tồn tại",
+      "ASSIGN_SEARCH": "Tên shop hoặc mã",
+      "ASSIGN_SUBMIT": "Ghép",
+      "COLUMNS": {
+        "ACTIONS": "Thao tác",
+        "AMOUNT": "Số tiền",
+        "SHOP": "Shop",
+        "STATUS": "Trạng thái",
+        "TIME": "Thời gian"
+      },
+      "EMPTY": "Chưa có thanh toán nào.",
+      "SEARCH_ERROR": "Không tìm được shop. Thử lại.",
+      "STATUS": {
+        "APPLIED": "Đã kích hoạt",
+        "MATCHED": "Đã kích hoạt",
+        "UNDERPAID": "Chuyển thiếu",
+        "UNMATCHED": "Cần ghép shop"
+      },
+      "TITLE": "Thanh toán",
+      "UNDERPAID_NOTE": "Shop chuyển thiếu tiền nên gói chưa được kích hoạt.",
+      "UNKNOWN_SHOP": "Không rõ shop"
+    },
+    "PLANS": {
+      "ENTERPRISE": "Doanh nghiệp",
+      "GROWTH": "Tăng trưởng",
+      "NONE": "Dùng thử",
+      "STARTER": "Cơ bản"
+    },
+    "SHOPS": {
+      "CODE": "Mã {id}",
+      "COLUMNS": {
+        "ACTIONS": "Thao tác",
+        "PLAN": "Gói",
+        "SHOP": "Shop",
+        "STATUS": "Trạng thái",
+        "VALID_UNTIL": "Hết hạn"
+      },
+      "CONFIRM": "Đồng ý",
+      "CONFIRM_LOCK": "Khóa {name}? Shop sẽ không đăng nhập được.",
+      "CONFIRM_UNLOCK": "Mở khóa {name}?",
+      "EMPTY": "Không có shop nào.",
+      "EXTEND": "Gia hạn",
+      "EXTEND_DAYS": "Số ngày",
+      "EXTEND_DONE": "Đã gia hạn",
+      "LOCK": "Khóa shop",
+      "LOCK_DONE": "Đã khóa shop",
+      "SEARCH_PLACEHOLDER": "Tên shop hoặc mã",
+      "STATUS": {
+        "ACTIVE": "Đang dùng",
+        "DAYS_LEFT": "Còn {days} ngày",
+        "EXPIRED": "Hết hạn",
+        "LOCKED": "Đã khóa",
+        "TRIAL": "Dùng thử"
+      },
+      "TABS": {
+        "ALL": "Tất cả",
+        "EXPIRING": "Sắp hết hạn",
+        "LOCKED": "Đã khóa",
+        "TRIAL": "Dùng thử"
+      },
+      "TITLE": "Shop",
+      "UNLOCK": "Mở khóa",
+      "UNLOCK_DONE": "Đã mở khóa shop",
+      "UPDATE_ERROR": "Không cập nhật được. Thử lại."
+    }
+  },
+  "KALO_MARKETING": {
+    "CAMPAIGN_LINKS": {
+      "SMS": "Tin nhắn SMS",
+      "WHATSAPP": "WhatsApp"
+    },
+    "IDEAS": {
+      "AI_OFF": "Gợi ý nội dung chưa được bật cho cửa hàng của bạn.",
+      "ANGLE_TITLE": "Hướng {index}: {angle}",
+      "APPROVE": "Duyệt",
+      "APPROVED": "Đã duyệt",
+      "ASK_ADMIN": "Hãy nhờ quản trị viên gia hạn.",
+      "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút.",
+      "ERROR": "Chưa tạo được ý tưởng. Thử lại sau ít phút.",
+      "EXPIRED": "Gói của bạn đã hết hạn. Gia hạn để tiếp tục dùng gợi ý nội dung.",
+      "REJECT": "Bỏ qua",
+      "REJECTED": "Đã bỏ qua",
+      "RENEW": "Gia hạn",
+      "SUBMIT": "Tạo ý tưởng",
+      "TOPIC_LABEL": "Bạn muốn viết về gì?",
+      "TOPIC_PLACEHOLDER": "Ví dụ: nến thơm mùa Tết"
+    },
+    "TABS": {
+      "CAMPAIGNS": "Chiến dịch",
+      "IDEAS": "Ý tưởng nội dung"
+    },
+    "TABS_LABEL": "Marketing",
+    "TITLE": "Marketing"
+  },
+  "KALO_NAV": {
+    "CUSTOMERS": "Khách",
+    "FILTERS": {
+      "FOLDERS": "Thư mục đã lưu",
+      "INBOXES": "Hộp thư",
+      "LABELS": "Nhãn",
+      "NEW_CONVERSATION": "Tạo cuộc trò chuyện",
+      "OPEN": "Lọc tin nhắn",
+      "TEAMS": "Nhóm"
+    },
+    "HUB": {
+      "GROUPS": {
+        "ACCOUNT": "Tài khoản",
+        "AUTOMATION": "Tự động hóa",
+        "CHANNELS": "Kênh và hộp thư",
+        "REPORTS": "Báo cáo cũ",
+        "SELLING": "Bán hàng và chăm khách",
+        "TEAM": "Đội ngũ"
+      },
+      "LINKS": {
+        "ACCOUNT": "Thông tin cửa hàng",
+        "AGENTS": "Nhân viên",
+        "ATTRIBUTES": "Thông tin khách",
+        "AUTOMATION": "Tự động trả lời",
+        "BILLING": "Thanh toán",
+        "CAMPAIGNS": "Chiến dịch",
+        "CANNED": "Mẫu câu",
+        "HELP_CENTER": "Trung tâm trợ giúp",
+        "INBOXES": "Hộp thư và kênh",
+        "INTEGRATIONS": "Tích hợp",
+        "LABELS": "Nhãn",
+        "MACROS": "Thao tác nhanh",
+        "PROFILE": "Hồ sơ của tôi",
+        "REPORT_AGENTS": "Nhân viên",
+        "REPORT_CONVERSATIONS": "Hội thoại",
+        "REPORT_CSAT": "Đánh giá khách hàng",
+        "REPORT_INBOXES": "Hộp thư",
+        "REPORT_LABELS": "Nhãn",
+        "REPORT_OVERVIEW": "Tổng quan",
+        "REPORT_TEAMS": "Nhóm",
+        "TEAMS": "Nhóm"
+      },
+      "TITLE": "Cài đặt"
+    },
+    "LOGOUT": "Đăng xuất",
+    "MAIN_NAV": "Điều hướng chính",
+    "MARKETING": "Marketing",
+    "MESSAGES": "Tin nhắn",
+    "MORE": "Thêm",
+    "NEW_ACCOUNT": "Tạo cửa hàng mới",
+    "NOTIFICATIONS": "Thông báo",
+    "ORDERS": "Đơn hàng",
+    "PAGES": {
+      "MARKETING": "Marketing",
+      "ORDERS": "Đơn hàng",
+      "POS": "Bán tại quầy",
+      "REPORTS": "Báo cáo"
+    },
+    "PROFILE": "Hồ sơ",
+    "REPORTS": "Báo cáo",
+    "SEARCH": "Tìm kiếm",
+    "SETTINGS": "Cài đặt",
+    "SWITCH_ACCOUNT": "Đổi tài khoản"
+  },
+  "KALO_ONBOARDING": {
+    "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
+  },
+  "KALO_ORDERS": {
+    "ACTIONS": {
+      "CANCEL": "Hủy đơn",
+      "CLOSE": "Đóng",
+      "COMPLETE": "Hoàn tất",
+      "KEEP": "Giữ đơn",
+      "MARK_PAID": "Đã nhận tiền",
+      "SEND_QR": "Gửi QR",
+      "SHIP": "Giao hàng"
+    },
+    "COLUMNS": {
+      "CUSTOMER": "Khách",
+      "DELIVERY": "Giao hàng",
+      "ORDER": "Đơn",
+      "PAYMENT": "Thanh toán",
+      "PRODUCTS": "Sản phẩm",
+      "TOTAL": "Tổng"
+    },
+    "CREATE": "Tạo đơn",
+    "DELIVERY_CHIP": {
+      "CANCELLED": "Đã hủy",
+      "COMPLETED": "Đã giao",
+      "NOT_SHIPPED": "Chưa giao",
+      "SHIPPING": "Đang giao"
+    },
+    "DRAWER": {
+      "ADDRESS": "Địa chỉ giao",
+      "CONFIRM_CANCEL": "Hủy đơn này? Hàng sẽ được trả lại kho.",
+      "CONTACT": "Khách",
+      "ITEMS": "Sản phẩm",
+      "LABEL": "Chi tiết đơn",
+      "QR_ALT": "Mã QR thanh toán",
+      "QR_LOADING": "Đang tạo mã QR…",
+      "SHIPPING_FEE": "Phí giao",
+      "SUBTOTAL": "Tạm tính",
+      "TOTAL": "Tổng"
+    },
+    "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
+    "ERRORS": {
+      "CONVERSATION_CONTACT_MISMATCH": "Cuộc trò chuyện này không thuộc khách của đơn",
+      "INSUFFICIENT_STOCK": "Không đủ hàng",
+      "INVALID_AMOUNT": "Đơn 0đ không có mã QR",
+      "INVALID_TRANSITION": "Đơn này không chuyển bước được nữa",
+      "ORDER_NOT_PAYABLE": "Đơn này không còn chờ thanh toán",
+      "PAYMENT_SETTINGS_MISSING": "Chưa cài đặt tài khoản nhận tiền",
+      "SUBSCRIPTION_EXPIRED": "Gói dùng thử đã hết hạn",
+      "UNKNOWN": "Có lỗi xảy ra, thử lại sau",
+      "VALIDATION_FAILED": "Thông tin chưa đúng, hãy kiểm tra lại"
+    },
+    "FORM": {
+      "ADDRESS": "Địa chỉ giao",
+      "ADD_ITEM": "Thêm hàng",
+      "CUSTOM_ITEM": "Hàng khác",
+      "METHOD_COD": "Thu khi giao",
+      "METHOD_QR": "Mã QR",
+      "NAME": "Tên hàng",
+      "PAYMENT_METHOD": "Cách trả",
+      "PRICE": "Giá",
+      "PRODUCT": "Sản phẩm",
+      "QUANTITY": "Số lượng",
+      "REMOVE_ITEM": "Xóa",
+      "SHIPPING_FEE": "Phí giao",
+      "SUBMIT": "Tạo đơn",
+      "TITLE": "Tạo đơn",
+      "TOTAL": "Tổng"
+    },
+    "LOAD_MORE": "Xem thêm",
+    "NONE": "Không có đơn nào",
+    "OPEN_POS": "Mở POS",
+    "PAYMENT_CHIP": {
+      "CANCELLED": "Đã hủy",
+      "CARD": "Thẻ",
+      "CASH": "Tiền mặt",
+      "COD": "Thu khi giao",
+      "PAID": "Đã nhận tiền",
+      "PENDING_PAYMENT": "Chờ thanh toán"
+    },
+    "QR_SENT": "Đã gửi mã QR cho khách",
+    "SEARCH": "Mã đơn, tên khách",
+    "SOURCE": {
+      "CHAT": "Tin nhắn",
+      "MANUAL": "Tạo tay",
+      "POS": "Tại quầy"
+    },
+    "TABS": {
+      "ALL": "Tất cả",
+      "COMPLETED": "Hoàn tất",
+      "PAID": "Cần giao",
+      "PENDING_PAYMENT": "Chờ thanh toán",
+      "SHIPPING": "Đang giao"
+    },
+    "TITLE": "Đơn hàng",
+    "WALK_IN": "Khách lẻ"
+  },
+  "KALO_POS": {
+    "ADD_PRODUCT": "Thêm sản phẩm",
+    "CART": {
+      "CANCEL_ORDER": "Hủy đơn",
+      "CONFIRM_PAID": "Đã nhận tiền",
+      "DECREASE": "Giảm",
+      "EMPTY": "Chạm sản phẩm để thêm vào đơn.",
+      "INCREASE": "Tăng",
+      "METHOD_CARD": "Thẻ",
+      "METHOD_CASH": "Tiền mặt",
+      "METHOD_QR": "Mã QR",
+      "NEW_ORDER": "Đơn mới",
+      "PAID": "Đã nhận tiền",
+      "PAY": "Thanh toán {amount}",
+      "QR_ALT": "Mã QR thanh toán",
+      "QR_LOADING": "Đang tạo mã QR…",
+      "RETRY": "Thử lại",
+      "SCAN_TO_PAY": "Khách quét mã để trả {amount}",
+      "TITLE": "Đơn tại quầy",
+      "TOTAL": "Tổng"
+    },
+    "EMPTY": "Chưa có sản phẩm nào để bán.",
+    "EXIT": "Thoát POS",
+    "PRODUCT_FORM": {
+      "NAME": "Tên sản phẩm",
+      "PRICE": "Giá",
+      "STOCK": "Số lượng trong kho",
+      "SUBMIT": "Lưu sản phẩm"
+    },
+    "SEARCH": "Tìm sản phẩm",
+    "TITLE": "Bán tại quầy"
+  },
+  "KALO_REPORTS": {
+    "CHANNELS": {
+      "OTHER": "Khác",
+      "TITLE": "Đơn đến từ đâu",
+      "chat": "Tin nhắn",
+      "email": "Email",
+      "facebook_page": "Facebook",
+      "instagram": "Instagram",
+      "line": "Line",
+      "manual": "Tạo tay",
+      "pos": "Tại quầy",
+      "sms": "SMS",
+      "telegram": "Telegram",
+      "tiktok": "TikTok",
+      "twilio_sms": "SMS",
+      "twitter_profile": "Twitter",
+      "web_widget": "Website",
+      "whatsapp": "WhatsApp",
+      "zalo_personal": "Zalo"
+    },
+    "CHART": {
+      "TITLE": "Doanh thu theo ngày",
+      "TOTAL": "Tổng {total}"
+    },
+    "EMPTY": "Chưa có đơn nào trong khoảng này. Tạo đơn đầu tiên để thấy báo cáo.",
+    "EMPTY_ACTION": "Tạo đơn",
+    "ERROR": "Chưa tải được báo cáo. Thử lại sau ít phút.",
+    "KPI": {
+      "CONTACTS": "Khách mới",
+      "ORDERS": "Đơn mới",
+      "REVENUE": "Doanh thu",
+      "WAITING": "Tin nhắn chờ trả lời"
+    },
+    "LOADING": "Đang tải",
+    "PRODUCTS": {
+      "LOW": "Còn {count} · sắp hết",
+      "NO_STOCK_TRACKING": "—",
+      "REVENUE": "Doanh thu",
+      "SOLD": "Đã bán",
+      "STOCK": "Còn trong kho",
+      "TITLE": "Bán chạy"
+    },
+    "RANGES": {
+      "MONTH": "Tháng này",
+      "SEVEN_DAYS": "7 ngày",
+      "TODAY": "Hôm nay"
+    },
+    "RANGE_LABEL": "Khoảng thời gian",
+    "TITLE": "Báo cáo",
+    "WEEKDAYS": [
+      "CN",
+      "T2",
+      "T3",
+      "T4",
+      "T5",
+      "T6",
+      "T7"
+    ]
+  },
+  "KALO_SETTINGS_UI": {
+    "BACK_TO_HUB": "Cài đặt",
+    "CHANNELS": {
+      "ZALO_PERSONAL": {
+        "DESC": "Kết nối Zalo cá nhân bằng mã QR, miễn phí",
+        "TITLE": "Zalo cá nhân"
+      }
+    },
+    "COMMON": {
+      "DELETE": "Xóa",
+      "DELETE_ERROR": "Chưa xóa được, bạn thử lại sau nhé",
+      "DELETE_YES": "Xóa",
+      "EDIT": "Sửa",
+      "KEEP": "Giữ lại",
+      "NO_RESULTS": "Không tìm thấy kết quả phù hợp",
+      "SETTINGS": "Cài đặt",
+      "TYPE_TO_CONFIRM": "Gõ {name} để xác nhận"
+    },
+    "HUB": {
+      "GROUPS": {
+        "ADVANCED": "Nâng cao",
+        "CHANNELS": "Kênh bán hàng",
+        "ME": "Tài khoản của tôi",
+        "REPLIES": "Nhãn & trả lời nhanh",
+        "REPORTS": "Báo cáo chi tiết",
+        "SHOP": "Cửa hàng",
+        "TEAM": "Nhân viên & nhóm"
+      },
+      "LINKS": {
+        "ACCOUNT": {
+          "DESC": "Tên cửa hàng, ngôn ngữ, email",
+          "TITLE": "Thông tin cửa hàng"
+        },
+        "AGENTS": {
+          "DESC": "Mời và phân quyền người cùng bán",
+          "TITLE": "Nhân viên"
+        },
+        "ATTRIBUTES": {
+          "DESC": "Trường riêng cho khách và hội thoại",
+          "TITLE": "Thông tin thêm"
+        },
+        "AUTOMATION": {
+          "DESC": "Tự gắn nhãn, tự giao việc theo điều kiện",
+          "TITLE": "Tự động hóa"
+        },
+        "BOTS": {
+          "DESC": "Bot tự động trả lời khách",
+          "TITLE": "Bot trả lời"
+        },
+        "CAMPAIGNS": {
+          "DESC": "Tin nhắn tự gửi cho khách đang xem website",
+          "TITLE": "Lời chào trên website"
+        },
+        "CANNED": {
+          "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn",
+          "TITLE": "Trả lời nhanh"
+        },
+        "DATA_IMPORT": {
+          "DESC": "Chuyển khách và hội thoại từ nơi khác sang",
+          "TITLE": "Nhập dữ liệu"
+        },
+        "HELP_CENTER": {
+          "DESC": "Bài viết trả lời câu hỏi thường gặp",
+          "TITLE": "Trang hỏi đáp"
+        },
+        "INBOXES": {
+          "DESC": "Zalo, Facebook, website và các kênh khác",
+          "TITLE": "Kênh nhận tin"
+        },
+        "INTEGRATIONS": {
+          "DESC": "Nối cửa hàng với ứng dụng khác",
+          "TITLE": "Kết nối ứng dụng"
+        },
+        "LABELS": {
+          "DESC": "Đánh dấu tin nhắn và khách để dễ lọc",
+          "TITLE": "Nhãn"
+        },
+        "MACROS": {
+          "DESC": "Gộp nhiều bước thành một nút bấm",
+          "TITLE": "Thao tác nhanh"
+        },
+        "NOTIFICATIONS": {
+          "DESC": "Âm báo và thông báo khi có tin mới",
+          "TITLE": "Thông báo"
+        },
+        "PLAN": {
+          "DESC": "Hạn dùng và cách gia hạn",
+          "TITLE": "Gói cước"
+        },
+        "PROFILE": {
+          "DESC": "Ảnh, tên, chữ ký và phím gửi tin",
+          "TITLE": "Hồ sơ"
+        },
+        "REPORT_AGENTS": {
+          "DESC": "Hiệu quả của từng người",
+          "TITLE": "Theo nhân viên"
+        },
+        "REPORT_CONVERSATIONS": {
+          "DESC": "Lượng tin nhắn theo thời gian",
+          "TITLE": "Hội thoại"
+        },
+        "REPORT_CSAT": {
+          "DESC": "Mức hài lòng sau khi chat",
+          "TITLE": "Đánh giá của khách"
+        },
+        "REPORT_INBOXES": {
+          "DESC": "Hội thoại theo từng kênh",
+          "TITLE": "Theo kênh"
+        },
+        "REPORT_LABELS": {
+          "DESC": "Hội thoại theo từng nhãn",
+          "TITLE": "Theo nhãn"
+        },
+        "REPORT_OVERVIEW": {
+          "DESC": "Số hội thoại và thời gian phản hồi",
+          "TITLE": "Tổng quan"
+        },
+        "REPORT_TEAMS": {
+          "DESC": "Hội thoại theo từng nhóm",
+          "TITLE": "Theo nhóm"
+        },
+        "SECURITY": {
+          "DESC": "Mật khẩu, xác thực 2 bước, phiên đăng nhập",
+          "TITLE": "Bảo mật"
+        },
+        "TEAMS": {
+          "DESC": "Chia nhân viên theo ca hoặc theo việc",
+          "TITLE": "Nhóm"
+        },
+        "WORKFLOW": {
+          "DESC": "Tự đóng hội thoại, thông tin bắt buộc khi đóng",
+          "TITLE": "Quy trình hội thoại"
+        }
+      },
+      "SUBTITLE": "Kênh bán, nhân viên và thông tin cửa hàng",
+      "TITLE": "Cài đặt"
+    },
+    "PAGES": {
+      "ACCOUNT": {
+        "DESC": "Tên cửa hàng, ngôn ngữ và email liên hệ",
+        "TITLE": "Thông tin cửa hàng"
+      },
+      "AGENTS": {
+        "ADD": "Mời nhân viên",
+        "COUNT": "{n} người",
+        "DELETED": "Đã xóa nhân viên",
+        "DELETE_MESSAGE": "{name} sẽ không đăng nhập vào cửa hàng được nữa.",
+        "DELETE_TITLE": "Xóa nhân viên?",
+        "DESC": "Người cùng trả lời khách và xử lý đơn",
+        "EMPTY": "Chưa có nhân viên nào khác. Mời người cùng bán để chia việc.",
+        "PENDING": "Chưa xác nhận email",
+        "SEARCH": "Tìm nhân viên...",
+        "TITLE": "Nhân viên"
+      },
+      "CANNED": {
+        "ADD": "Thêm câu mẫu",
+        "COUNT": "{n} câu",
+        "DELETED": "Đã xóa câu mẫu",
+        "DELETE_MESSAGE": "Câu mẫu /{name} sẽ bị xóa.",
+        "DELETE_TITLE": "Xóa câu mẫu?",
+        "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn",
+        "EMPTY": "Chưa có câu mẫu nào. Lưu câu hay dùng như số tài khoản, phí ship.",
+        "SEARCH": "Tìm câu mẫu...",
+        "SORT_ASC": "A → Z",
+        "SORT_DESC": "Z → A",
+        "TITLE": "Trả lời nhanh"
+      },
+      "INBOXES": {
+        "ADD": "Thêm kênh",
+        "ADD_FIRST": "Kết nối kênh đầu tiên",
+        "COUNT": "{n} kênh",
+        "DELETED": "Đã xóa kênh",
+        "DELETE_MESSAGE": "Kênh {name} và các tin nhắn của nó sẽ bị xóa.",
+        "DELETE_TITLE": "Xóa kênh này?",
+        "DESC": "Mỗi kênh là một nơi khách nhắn cho bạn: Zalo, Facebook, website...",
+        "EMPTY": "Chưa có kênh nào. Kết nối Zalo hoặc Facebook để bắt đầu nhận tin.",
+        "SEARCH": "Tìm kênh...",
+        "TITLE": "Kênh nhận tin",
+        "WIZARD_STEP": "Bước {step}/{total}"
+      },
+      "LABELS": {
+        "ADD": "Tạo nhãn",
+        "COUNT": "{n} nhãn",
+        "DELETED": "Đã xóa nhãn",
+        "DELETE_MESSAGE": "Nhãn {name} sẽ bị gỡ khỏi mọi tin nhắn và khách.",
+        "DELETE_TITLE": "Xóa nhãn?",
+        "DESC": "Đánh dấu tin nhắn và khách để dễ lọc",
+        "EMPTY": "Chưa có nhãn nào. Tạo nhãn như \"Khách quen\", \"Chờ chuyển khoản\".",
+        "SEARCH": "Tìm nhãn...",
+        "TITLE": "Nhãn"
+      },
+      "PLAN": {
+        "DESC": "Hạn dùng và cách gia hạn gói"
+      },
+      "PROFILE": {
+        "DESC": "Ảnh, tên, mật khẩu và thông báo của riêng bạn",
+        "TITLE": "Hồ sơ của tôi"
+      },
+      "TEAMS": {
+        "ADD": "Tạo nhóm",
+        "COUNT": "{n} nhóm",
+        "DELETED": "Đã xóa nhóm",
+        "DELETE_MESSAGE": "Các hội thoại đang giao cho nhóm này sẽ không còn thuộc nhóm.",
+        "DELETE_TITLE": "Xóa nhóm {name}?",
+        "DESC": "Chia nhân viên theo ca hoặc theo việc để giao tin nhắn",
+        "EMPTY": "Chưa có nhóm nào.",
+        "SEARCH": "Tìm nhóm...",
+        "TITLE": "Nhóm"
+      }
+    },
+    "ZALO_PERSONAL": {
+      "CONNECTED": "Đang kết nối",
+      "DISCONNECTED": "Đã ngắt kết nối",
+      "MANAGE": "Xem hồ sơ và đăng xuất",
+      "USER_ID": "ID Zalo: {id}"
+    }
+  },
+  "KALO_SWEEP": {
+    "DATE_PICKER": {
+      "INVALID_RANGE": "Hãy chọn khoảng thời gian hợp lệ"
+    },
+    "NO_ASSIGNEE": "Không ai",
+    "SIGN_IN_TWITTER": "Đăng nhập với Twitter",
+    "ZALO_COOKIE": {
+      "CHOOSE_FILE": "Chọn file",
+      "IMPORT_TITLE": "Nhập file JSON từ J2TEAM",
+      "NO_FILE": "Chưa chọn file"
     }
   },
   "LABEL": {
     "TAG_BUTTON": "gắn nhãn"
+  },
+  "LABEL_MGMT": {
+    "COUNT": "{n} nhãn | {n} nhãn",
+    "DESCRIPTION": "Nhãn giúp bạn phân loại hội thoại và khách. Gắn nhãn cho hội thoại hoặc khách ở bảng bên cạnh.",
+    "LEARN_MORE": "Tìm hiểu về nhãn",
+    "NO_RESULTS": "Không có nhãn nào khớp",
+    "SUGGESTIONS": {
+      "ADD_ALL_LABELS": "Thêm tất cả nhãn",
+      "ADD_SELECTED_LABEL": "Thêm nhãn đã chọn",
+      "ADD_SELECTED_LABELS": "Thêm các nhãn đã chọn",
+      "DISMISS": "Bỏ qua",
+      "POWERED_BY": "Gợi ý bởi AI",
+      "SUGGESTED_LABELS": "Nhãn gợi ý",
+      "TOOLTIP": {
+        "DESELECT": "Bỏ chọn nhãn",
+        "DISMISS": "Bỏ qua gợi ý",
+        "MULTIPLE_SUGGESTION": "Chọn nhãn này",
+        "SINGLE_SUGGESTION": "Gắn nhãn cho hội thoại"
+      }
+    }
+  },
+  "LABEL_REPORTS": {
+    "DESCRIPTION": "Theo dõi hiệu quả theo nhãn qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào nhãn để xem chi tiết."
   },
   "LOGIN": {
     "API": {
@@ -1203,6 +4113,51 @@
       }
     }
   },
+  "MACROS": {
+    "ACTIONS": {
+      "ADD_LABEL": "Thêm nhãn",
+      "ADD_PRIVATE_NOTE": "Thêm ghi chú nội bộ",
+      "ASSIGN_AGENT": "Giao cho nhân viên",
+      "ASSIGN_TEAM": "Giao cho nhóm",
+      "CHANGE_PRIORITY": "Đổi mức ưu tiên",
+      "REMOVE_ASSIGNED_AGENT": "Bỏ nhân viên phụ trách",
+      "REMOVE_ASSIGNED_TEAM": "Bỏ nhóm phụ trách",
+      "REMOVE_LABEL": "Gỡ nhãn",
+      "SEND_ATTACHMENT": "Gửi tệp đính kèm",
+      "SEND_EMAIL_TRANSCRIPT": "Gửi nội dung hội thoại qua email",
+      "SEND_MESSAGE": "Gửi tin nhắn",
+      "SEND_WEBHOOK_EVENT": "Gửi sự kiện webhook"
+    },
+    "COUNT": "{n} thao tác nhanh | {n} thao tác nhanh",
+    "DESCRIPTION": "Thao tác nhanh là một nhóm hành động lưu sẵn giúp nhân viên làm việc nhanh, ví dụ gắn nhãn hội thoại, gửi tin nhắn hay giao cho nhóm chỉ bằng một cú bấm.",
+    "EDITOR": {
+      "VISIBILITY": {
+        "GLOBAL": {
+          "CREATE_DISABLED_DESCRIPTION": "Chỉ quản trị viên mới tạo được thao tác nhanh dùng chung.",
+          "EDIT_DISABLED_DESCRIPTION": "Chỉ quản trị viên mới sửa được thao tác nhanh dùng chung."
+        }
+      }
+    },
+    "ERROR": "Có lỗi xảy ra. Bạn thử lại nhé",
+    "ERRORS": {
+      "ACTION_PARAMETERS_REQUIRED": "Cần nhập thông tin cho hành động",
+      "ATLEAST_ONE_ACTION_REQUIRED": "Cần ít nhất một hành động",
+      "ATLEAST_ONE_CONDITION_REQUIRED": "Cần ít nhất một điều kiện",
+      "ATTRIBUTE_KEY_REQUIRED": "Cần chọn thuộc tính",
+      "FILTER_OPERATOR_REQUIRED": "Cần chọn phép so sánh",
+      "VALUE_MUST_BE_BETWEEN_1_AND_998": "Giá trị phải từ 1 đến 998"
+    },
+    "HEADER": "Thao tác nhanh",
+    "HEADER_BTN_TXT": "Thêm thao tác nhanh",
+    "HEADER_BTN_TXT_SAVE": "Lưu thao tác nhanh",
+    "LEARN_MORE": "Tìm hiểu về thao tác nhanh",
+    "LOADING": "Đang tải thao tác nhanh",
+    "NO_RESULTS": "Không có thao tác nhanh nào khớp",
+    "SEARCH_PLACEHOLDER": "Tìm thao tác nhanh...",
+    "VIEW": {
+      "TOOLTIP": "Xem thao tác nhanh"
+    }
+  },
   "MERGE_CONTACTS": {
     "DROPDOWN_ITEM": {
       "ID": "(Mã: {identifier})"
@@ -1210,6 +4165,75 @@
     "SEARCH": {
       "ERROR_MESSAGE": "Đã có lỗi, vui lòng thử lại sau."
     }
+  },
+  "MFA_SETTINGS": {
+    "BACKUP": {
+      "CODES_COPIED": "Đã sao chép mã dự phòng",
+      "COMPLETE_SETUP": "Hoàn tất cài đặt",
+      "CONFIRM": "Tôi đã lưu mã dự phòng ở nơi an toàn và hiểu rằng sẽ không xem lại được",
+      "COPY_ALL": "Sao chép tất cả",
+      "DESCRIPTION": "Hãy giữ các mã này an toàn. Mỗi mã dùng được một lần nếu bạn mất ứng dụng xác thực",
+      "IMPORTANT": "Quan trọng:",
+      "IMPORTANT_NOTE": " Hãy lưu các mã này ở nơi an toàn. Bạn sẽ không xem lại được.",
+      "TITLE": "Lưu mã dự phòng"
+    },
+    "DESCRIPTION": "Thêm một lớp bảo mật cho tài khoản bằng mã dùng một lần theo thời gian (TOTP)",
+    "DISABLE": {
+      "BACKUP_CODE": "Mã dự phòng",
+      "BACKUP_CODE_PLACEHOLDER": "Nhập một mã dự phòng",
+      "CONFIRM": "Tắt xác thực hai bước",
+      "ERROR": "Chưa tắt được xác thực hai bước. Hãy kiểm tra lại thông tin.",
+      "OTP_CODE": "Mã xác minh",
+      "SUCCESS": "Đã tắt xác thực hai bước",
+      "TITLE": "Tắt xác thực hai bước",
+      "USE_BACKUP_CODE": "Mất ứng dụng xác thực? Dùng mã dự phòng",
+      "USE_OTP_CODE": "Dùng mã xác minh từ ứng dụng xác thực"
+    },
+    "ENABLE_BUTTON": "Bật xác thực hai bước",
+    "ENHANCE_SECURITY": "Tăng bảo mật tài khoản",
+    "ENHANCE_SECURITY_DESC": "Xác thực hai bước yêu cầu thêm mã từ ứng dụng xác thực ngoài mật khẩu, giúp tài khoản an toàn hơn.",
+    "MANAGEMENT": {
+      "BACKUP_CODES": "Mã dự phòng",
+      "BACKUP_CODES_DESC": "Tạo mã mới nếu bạn làm mất hoặc đã dùng hết mã cũ",
+      "DISABLE_BUTTON": "Tắt xác thực hai bước",
+      "DISABLE_MFA": "Tắt xác thực hai bước",
+      "DISABLE_MFA_DESC": "Gỡ xác thực hai bước khỏi tài khoản",
+      "REGENERATE": "Tạo lại mã dự phòng"
+    },
+    "REGENERATE": {
+      "CODES_IMPORTANT": "Quan trọng:",
+      "CODES_IMPORTANT_NOTE": " Mỗi mã chỉ dùng được một lần. Hãy lưu lại trước khi đóng cửa sổ này.",
+      "CODES_SAVED": "Tôi đã lưu mã",
+      "CONFIRM": "Tạo mã mới",
+      "COPY_ALL_CODES": "Sao chép tất cả mã",
+      "DESCRIPTION": "Các mã dự phòng cũ sẽ không còn dùng được và hệ thống tạo mã mới. Nhập mã xác minh để tiếp tục.",
+      "DOWNLOAD_CODES": "Tải mã về",
+      "ERROR": "Chưa tạo lại được mã dự phòng",
+      "NEW_CODES_DESC": "Mã dự phòng cũ đã bị vô hiệu. Hãy lưu các mã mới ở nơi an toàn.",
+      "NEW_CODES_TITLE": "Đã tạo mã dự phòng mới",
+      "OTP_CODE": "Mã xác minh",
+      "SUCCESS": "Đã tạo mã dự phòng mới",
+      "TITLE": "Tạo lại mã dự phòng"
+    },
+    "SETUP": {
+      "ENTER_CODE": "Nhập mã 6 chữ số từ ứng dụng xác thực",
+      "ERROR_STARTING": "Chưa bật xác thực hai bước. Hãy liên hệ quản trị viên.",
+      "INVALID_CODE": "Mã xác minh không đúng",
+      "LOADING_QR": "Đang tải...",
+      "MANUAL_ENTRY": "Không quét được? Nhập mã thủ công",
+      "SECRET_COPIED": "Đã sao chép khóa bí mật",
+      "SECRET_KEY": "Khóa bí mật",
+      "STEP1_DESCRIPTION": "Dùng Google Authenticator, Authy hoặc ứng dụng TOTP bất kỳ",
+      "STEP1_TITLE": "Quét mã QR bằng ứng dụng xác thực",
+      "SUCCESS": "Đã bật xác thực hai bước",
+      "VERIFY_BUTTON": "Xác minh và tiếp tục"
+    },
+    "STATUS_DESCRIPTION": "Quản lý xác thực hai bước và mã dự phòng",
+    "STATUS_ENABLED": "Xác thực hai bước đang bật",
+    "STATUS_ENABLED_DESC": "Tài khoản của bạn được bảo vệ thêm một lớp",
+    "STATUS_TITLE": "Trạng thái xác thực",
+    "SUBTITLE": "Bảo vệ tài khoản khỏi truy cập trái phép bằng mã xác thực dùng một lần (TOTP). Đây là thêm một lớp bảo mật cho tài khoản.",
+    "TITLE": "Xác thực hai bước"
   },
   "NETWORK": {
     "NOTIFICATION": {
@@ -1320,6 +4344,28 @@
     "VALIDATION_ERROR": "Vui lòng điền đầy đủ các trường bắt buộc",
     "YOUR_DETAILS": "Thông tin của bạn"
   },
+  "OVERVIEW_REPORTS": {
+    "CONVERSATION_HEATMAP": {
+      "CONVERSATION": "{count} hội thoại",
+      "CONVERSATIONS": "{count} hội thoại",
+      "DOWNLOAD_REPORT": "Tải báo cáo",
+      "HEADER": "Lượng hội thoại",
+      "NO_CONVERSATIONS": "Không có hội thoại"
+    },
+    "RESOLUTION_HEATMAP": {
+      "CONVERSATION": "{count} hội thoại",
+      "CONVERSATIONS": "{count} hội thoại",
+      "DOWNLOAD_REPORT": "Tải báo cáo",
+      "HEADER": "Hội thoại đã giải quyết",
+      "NO_CONVERSATIONS": "Không có hội thoại"
+    },
+    "TEAM_CONVERSATIONS": {
+      "ALL_TEAMS": "Tất cả nhóm",
+      "HEADER": "Hội thoại theo nhóm",
+      "LOADING_MESSAGE": "Đang tải số liệu nhóm...",
+      "NO_TEAMS": "Chưa có dữ liệu"
+    }
+  },
   "PHONE_INPUT": {
     "DIAL_CODE_ERROR": "Vui lòng chọn mã quốc gia trong danh sách",
     "ERROR": "Số điện thoại phải để trống hoặc theo định dạng E.164",
@@ -1401,6 +4447,7 @@
       },
       "NOTIFICATIONS": {
         "BROWSER_PERMISSION": "Cho phép trình duyệt hiển thị thông báo đẩy để bạn nhận được thông báo",
+        "EMAIL": "Email",
         "PUSH": "Thông báo đẩy",
         "TITLE": "Tùy chọn thông báo",
         "TYPES": {
@@ -1449,7 +4496,52 @@
       }
     }
   },
+  "REPORT": {
+    "DATA_FETCHING_FAILED": "Chưa lấy được dữ liệu, bạn thử lại sau nhé.",
+    "DATE_RANGE_OPTIONS": {
+      "LAST_MONTH": "Tháng trước",
+      "THIS_MONTH": "Tháng này"
+    },
+    "DOWNLOAD_CONVERSATION_REPORTS": "Tải báo cáo hội thoại",
+    "DRILLDOWN": {
+      "ADMIN_ONLY": "Chỉ quản trị viên mới xem được chi tiết bản ghi báo cáo.",
+      "CLOSE": "Đóng chi tiết",
+      "EMPTY": "Không có bản ghi nào cho cột này.",
+      "ERROR": "Chưa tải được bản ghi. Bạn thử lại nhé.",
+      "EVENT_OCCURRED_AT": "Sự kiện xảy ra lúc {time}",
+      "INCOMING_MESSAGE": "Tin khách gửi",
+      "LOAD_MORE": "Tải thêm",
+      "MESSAGE_CREATED_AT": "Tin nhắn tạo lúc {time}",
+      "NEXT_BUCKET": "Cột sau",
+      "NO_MESSAGE_CONTENT": "Không có nội dung tin nhắn",
+      "OUTGOING_MESSAGE": "Tin mình gửi",
+      "PREVIOUS_BUCKET": "Cột trước",
+      "RESULT_COUNT_CONVERSATION": "{count} hội thoại | {count} hội thoại",
+      "RESULT_COUNT_MESSAGE": "{count} tin nhắn | {count} tin nhắn",
+      "TITLE": "Chi tiết {metric}",
+      "UNKNOWN_CONTACT": "Khách chưa rõ",
+      "UNKNOWN_INBOX": "Kênh chưa rõ"
+    },
+    "FILTER_ACTIONS": {
+      "CLEAR_FILTER": "Xóa bộ lọc"
+    },
+    "METRICS": {
+      "BOT_HANDOFF_COUNT": {
+        "NAME": "Số lần chuyển cho nhân viên"
+      },
+      "REPLY_TIME": {
+        "NAME": "Thời gian khách chờ",
+        "TOOLTIP_TEXT": "Thời gian chờ là {metricValue} (tính trên {conversationCount} lượt trả lời)"
+      }
+    },
+    "PAGINATION": {
+      "PER_PAGE_TEMPLATE": "{size} / trang",
+      "RESULTS": "Hiện {start} đến {end} trong {total} kết quả"
+    },
+    "SUMMARY_FETCHING_FAILED": "Chưa lấy được tóm tắt, bạn thử lại sau nhé."
+  },
   "SEARCH": {
+    "BOT_LABEL": "Bot",
     "CLEAR_ALL": "Xóa tất cả",
     "CREATED_AT": "tạo {time}",
     "DATE_RANGE": {
@@ -1461,6 +4553,7 @@
       "CUSTOM_RANGE": "Tùy chọn khoảng thời gian:",
       "TIME_RANGE": "Lọc theo thời gian"
     },
+    "EMAIL": "Email",
     "EMPTY_STATE": "Không tìm thấy {item} cho '{query}'",
     "EMPTY_STATE_DEFAULT": "Tìm theo mã cuộc trò chuyện, email, số điện thoại hoặc nội dung tin nhắn để có kết quả tốt hơn.",
     "EMPTY_STATE_FULL": "Không có kết quả cho '{query}'",
@@ -1493,6 +4586,23 @@
     "VIEW_MORE": "Xem thêm",
     "WROTE": "đã viết:"
   },
+  "SECURITY_SETTINGS": {
+    "SAML": {
+      "SP_ENTITY_ID": {
+        "TOOLTIP": "Mã định danh của ứng dụng này với vai trò nhà cung cấp dịch vụ, cài trong IdP của bạn"
+      }
+    }
+  },
+  "SESSION_LIMIT": {
+    "CANCEL": "Quay lại đăng nhập",
+    "DESCRIPTION": "Bạn đã đạt giới hạn số phiên đăng nhập. Hãy kết thúc một phiên trước khi đăng nhập.",
+    "END": "Kết thúc",
+    "END_ALL": "Kết thúc tất cả phiên",
+    "LOG_IN": "Đăng nhập",
+    "STARTED": "Bắt đầu",
+    "TITLE": "Đã đạt giới hạn phiên đăng nhập",
+    "UNKNOWN_DEVICE": "Thiết bị chưa rõ"
+  },
   "SIDEBAR": {
     "ACCOUNT_SETTINGS": "Cài đặt tài khoản",
     "ACTIVE": "Đang hoạt động",
@@ -1502,10 +4612,12 @@
     "ALL_COMPANIES": "Tất cả công ty",
     "ALL_CONTACTS": "Tất cả liên hệ",
     "AUDIT_LOGS": "Nhật ký hoạt động",
+    "BETA": "Thử nghiệm",
     "CALLS": "Cuộc gọi",
     "CANNED_RESPONSES": "Câu trả lời mẫu",
     "COMPANIES": "Công ty",
     "CONVERSATION_WORKFLOW": "Quy trình cuộc trò chuyện",
+    "CSAT": "Đánh giá",
     "CUSTOM_ROLES": "Vai trò tùy chỉnh",
     "DATA": "Dữ liệu",
     "HELP_CENTER": {
@@ -1526,6 +4638,7 @@
     "SET_AUTO_OFFLINE": {
       "INFO_SHORT": "Tự chuyển sang ngoại tuyến khi bạn không dùng ứng dụng."
     },
+    "SMS": "SMS",
     "SORT_GROUPS": {
       "ALPHABETICAL": "Sắp xếp theo thứ tự chữ cái",
       "CREATED": "Sắp xếp theo ngày tạo",
@@ -1540,7 +4653,8 @@
       "UNREAD_COUNT_DESC": "Nhiều nhất trước"
     },
     "SORT_TOOLTIP": "Sắp xếp",
-    "UNATTENDED_CONVERSATIONS": "Chưa phản hồi"
+    "UNATTENDED_CONVERSATIONS": "Chưa phản hồi",
+    "WHATSAPP": "WhatsApp"
   },
   "SIDEBAR_ITEMS": {
     "APPEARANCE": "Đổi giao diện",
@@ -1567,8 +4681,35 @@
     "STRIKETHROUGH": "Gạch ngang",
     "TABLE": "Bảng"
   },
+  "SUMMARY_REPORTS": {
+    "AVG_FIRST_RESPONSE_TIME": "Thời gian phản hồi đầu trung bình",
+    "AVG_REPLY_TIME": "Thời gian khách chờ trung bình",
+    "AVG_RESOLUTION_TIME": "Thời gian xử lý trung bình"
+  },
   "SWITCH": {
     "TOGGLE": "Bật/tắt"
+  },
+  "TEAMS_SETTINGS": {
+    "AGENTS": {
+      "EMAIL": "Email"
+    },
+    "COUNT": "{n} nhóm | {n} nhóm",
+    "DELETE": {
+      "CONFIRM": {
+        "TITLE": "Bạn chắc chắn muốn xóa nhóm này?"
+      }
+    },
+    "DESCRIPTION": "Nhóm giúp bạn xếp nhân viên theo việc phụ trách. Một nhân viên có thể thuộc nhiều nhóm và bạn có thể giao hội thoại cho từng nhóm.",
+    "LEARN_MORE": "Tìm hiểu về nhóm",
+    "LOADING": "Đang tải nhóm",
+    "NO_RESULTS": "Không có nhóm nào khớp"
+  },
+  "TEAM_REPORTS": {
+    "DESCRIPTION": "Xem nhanh hiệu quả của nhóm qua số hội thoại, thời gian phản hồi, thời gian xử lý và số ca đã giải quyết. Bấm vào nhóm để xem chi tiết.",
+    "FILTERS": {
+      "CLEAR_ALL": "Xóa tất cả",
+      "NO_FILTER": "Không có bộ lọc"
+    }
   },
   "THUMBNAIL": {
     "AUTHOR": {
@@ -1587,799 +4728,32 @@
     "ONE": "{user} đang soạn tin",
     "TWO": "{user} và {secondUser} đang soạn tin"
   },
-  "KALO_NAV": {
-    "MESSAGES": "Tin nhắn",
-    "ORDERS": "Đơn hàng",
-    "CUSTOMERS": "Khách",
-    "MARKETING": "Marketing",
-    "REPORTS": "Báo cáo",
-    "SETTINGS": "Cài đặt",
-    "MORE": "Thêm",
-    "MAIN_NAV": "Điều hướng chính",
-    "PAGES": {
-      "ORDERS": "Đơn hàng",
-      "POS": "Bán tại quầy",
-      "MARKETING": "Marketing",
-      "REPORTS": "Báo cáo"
+  "WHATSAPP_TEMPLATES": {
+    "MODAL": {
+      "TEMPLATE_SELECTED_SUBTITLE": "Cài đặt mẫu tin: {templateName}"
     },
-    "HUB": {
-      "TITLE": "Cài đặt",
-      "GROUPS": {
-        "SELLING": "Bán hàng và chăm khách",
-        "REPORTS": "Báo cáo cũ",
-        "CHANNELS": "Kênh và hộp thư",
-        "TEAM": "Đội ngũ",
-        "AUTOMATION": "Tự động hóa",
-        "ACCOUNT": "Tài khoản"
-      },
-      "LINKS": {
-        "CAMPAIGNS": "Chiến dịch",
-        "HELP_CENTER": "Trung tâm trợ giúp",
-        "REPORT_OVERVIEW": "Tổng quan",
-        "REPORT_CONVERSATIONS": "Hội thoại",
-        "REPORT_AGENTS": "Nhân viên",
-        "REPORT_LABELS": "Nhãn",
-        "REPORT_INBOXES": "Hộp thư",
-        "REPORT_TEAMS": "Nhóm",
-        "REPORT_CSAT": "Đánh giá khách hàng",
-        "INBOXES": "Hộp thư và kênh",
-        "INTEGRATIONS": "Tích hợp",
-        "LABELS": "Nhãn",
-        "TEAMS": "Nhóm",
-        "AGENTS": "Nhân viên",
-        "CANNED": "Mẫu câu",
-        "AUTOMATION": "Tự động trả lời",
-        "MACROS": "Thao tác nhanh",
-        "ATTRIBUTES": "Thông tin khách",
-        "PROFILE": "Hồ sơ của tôi",
-        "ACCOUNT": "Thông tin cửa hàng",
-        "BILLING": "Thanh toán"
-      }
+    "PARSER": {
+      "BUTTON_LABEL": "Nút {index}",
+      "BUTTON_PARAMETER": "Nhập thông số nút bấm",
+      "BUTTON_PARAMETERS": "Thông số nút bấm",
+      "COUPON_CODE": "Nhập mã giảm giá (tối đa 15 ký tự)",
+      "DOCUMENT_NAME_PLACEHOLDER": "Nhập tên tệp (ví dụ: HoaDon_2025.pdf)",
+      "EXPIRY_MINUTES": "Nhập số phút hết hạn",
+      "MEDIA_HEADER_LABEL": "Đầu tin {type}",
+      "MEDIA_URL_LABEL": "Nhập đường dẫn {type}",
+      "OTP_CODE": "Nhập mã OTP 4 đến 8 chữ số"
     },
-    "NOTIFICATIONS": "Thông báo",
-    "SEARCH": "Tìm kiếm",
-    "PROFILE": "Hồ sơ",
-    "LOGOUT": "Đăng xuất",
-    "SWITCH_ACCOUNT": "Đổi tài khoản",
-    "NEW_ACCOUNT": "Tạo cửa hàng mới",
-    "FILTERS": {
-      "OPEN": "Lọc tin nhắn",
-      "INBOXES": "Hộp thư",
-      "LABELS": "Nhãn",
-      "TEAMS": "Nhóm",
-      "FOLDERS": "Thư mục đã lưu",
-      "NEW_CONVERSATION": "Tạo cuộc trò chuyện"
-    }
-  },
-  "KALO_REPORTS": {
-    "TITLE": "Báo cáo",
-    "RANGES": {
-      "TODAY": "Hôm nay",
-      "SEVEN_DAYS": "7 ngày",
-      "MONTH": "Tháng này"
-    },
-    "RANGE_LABEL": "Khoảng thời gian",
-    "KPI": {
-      "REVENUE": "Doanh thu",
-      "ORDERS": "Đơn mới",
-      "WAITING": "Tin nhắn chờ trả lời",
-      "CONTACTS": "Khách mới"
-    },
-    "CHART": {
-      "TITLE": "Doanh thu theo ngày",
-      "TOTAL": "Tổng {total}"
-    },
-    "WEEKDAYS": [
-      "CN",
-      "T2",
-      "T3",
-      "T4",
-      "T5",
-      "T6",
-      "T7"
-    ],
-    "CHANNELS": {
-      "TITLE": "Đơn đến từ đâu",
-      "web_widget": "Website",
-      "facebook_page": "Facebook",
-      "twilio_sms": "SMS",
-      "twitter_profile": "Twitter",
-      "zalo_personal": "Zalo",
-      "whatsapp": "WhatsApp",
-      "sms": "SMS",
-      "email": "Email",
-      "instagram": "Instagram",
-      "telegram": "Telegram",
-      "line": "Line",
-      "tiktok": "TikTok",
-      "chat": "Tin nhắn",
-      "pos": "Tại quầy",
-      "manual": "Tạo tay",
-      "OTHER": "Khác"
-    },
-    "PRODUCTS": {
-      "TITLE": "Bán chạy",
-      "SOLD": "Đã bán",
-      "REVENUE": "Doanh thu",
-      "STOCK": "Còn trong kho",
-      "LOW": "Còn {count} · sắp hết",
-      "NO_STOCK_TRACKING": "—"
-    },
-    "EMPTY": "Chưa có đơn nào trong khoảng này. Tạo đơn đầu tiên để thấy báo cáo.",
-    "EMPTY_ACTION": "Tạo đơn",
-    "ERROR": "Chưa tải được báo cáo. Thử lại sau ít phút.",
-    "LOADING": "Đang tải"
-  },
-  "KALO_MARKETING": {
-    "TITLE": "Marketing",
-    "TABS_LABEL": "Marketing",
-    "TABS": {
-      "CAMPAIGNS": "Chiến dịch",
-      "IDEAS": "Ý tưởng nội dung"
-    },
-    "IDEAS": {
-      "TOPIC_LABEL": "Bạn muốn viết về gì?",
-      "TOPIC_PLACEHOLDER": "Ví dụ: nến thơm mùa Tết",
-      "SUBMIT": "Tạo ý tưởng",
-      "ANGLE_TITLE": "Hướng {index}: {angle}",
-      "APPROVE": "Duyệt",
-      "REJECT": "Bỏ qua",
-      "APPROVED": "Đã duyệt",
-      "REJECTED": "Đã bỏ qua",
-      "AI_OFF": "Gợi ý nội dung chưa được bật cho cửa hàng của bạn.",
-      "EXPIRED": "Gói của bạn đã hết hạn. Gia hạn để tiếp tục dùng gợi ý nội dung.",
-      "RENEW": "Gia hạn",
-      "ERROR": "Chưa tạo được ý tưởng. Thử lại sau ít phút.",
-      "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút.",
-      "ASK_ADMIN": "Hãy nhờ quản trị viên gia hạn."
-    },
-    "CAMPAIGN_LINKS": {
-      "SMS": "Tin nhắn SMS",
-      "WHATSAPP": "WhatsApp"
-    }
-  },
-  "KALO_BILLING": {
-    "TITLE": "Gói cước",
-    "PLAN": "Gói hiện tại",
-    "TRIAL": "Dùng thử",
-    "PLANS": {
-      "starter": "Cơ bản",
-      "growth": "Tăng trưởng",
-      "enterprise": "Doanh nghiệp"
-    },
-    "STATUS": {
-      "trial": "Đang dùng thử",
-      "active": "Đang hoạt động",
-      "expired": "Đã hết hạn"
-    },
-    "DAYS_LEFT": "Còn {count} ngày",
-    "VALID_UNTIL": "Hết hạn ngày {date}",
-    "PRICES_TITLE": "Giá các gói mỗi tháng",
-    "RENEW_TITLE": "Gia hạn",
-    "RENEW_STEPS": "Chuyển khoản đúng số tiền của gói bạn chọn vào tài khoản bên dưới. Ghi đúng nội dung chuyển khoản để hệ thống nhận ra cửa hàng của bạn.",
-    "BANK": "Ngân hàng",
-    "ACCOUNT_NUMBER": "Số tài khoản",
-    "ACCOUNT_NAME": "Chủ tài khoản",
-    "MEMO": "Nội dung chuyển khoản",
-    "COPY": "Chép nội dung",
-    "COPIED": "Đã chép",
-    "ERROR": "Chưa tải được thông tin gói cước. Thử lại sau ít phút.",
-    "LOADING": "Đang tải"
-  },
-  "KALO_ORDERS": {
-    "TITLE": "Đơn hàng",
-    "OPEN_POS": "Mở POS",
-    "CREATE": "Tạo đơn",
-    "SEARCH": "Mã đơn, tên khách",
-    "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
-    "TABS": {
-      "ALL": "Tất cả",
-      "PENDING_PAYMENT": "Chờ thanh toán",
-      "PAID": "Cần giao",
-      "SHIPPING": "Đang giao",
-      "COMPLETED": "Hoàn tất"
-    },
-    "COLUMNS": {
-      "ORDER": "Đơn",
-      "CUSTOMER": "Khách",
-      "PRODUCTS": "Sản phẩm",
-      "TOTAL": "Tổng",
-      "PAYMENT": "Thanh toán",
-      "DELIVERY": "Giao hàng"
-    },
-    "PAYMENT_CHIP": {
-      "PENDING_PAYMENT": "Chờ thanh toán",
-      "PAID": "Đã nhận tiền",
-      "CASH": "Tiền mặt",
-      "CARD": "Thẻ",
-      "COD": "Thu khi giao",
-      "CANCELLED": "Đã hủy"
-    },
-    "DELIVERY_CHIP": {
-      "NOT_SHIPPED": "Chưa giao",
-      "SHIPPING": "Đang giao",
-      "COMPLETED": "Đã giao",
-      "CANCELLED": "Đã hủy"
-    },
-    "SOURCE": {
-      "CHAT": "Tin nhắn",
-      "POS": "Tại quầy",
-      "MANUAL": "Tạo tay"
-    },
-    "WALK_IN": "Khách lẻ",
-    "ACTIONS": {
-      "SEND_QR": "Gửi QR",
-      "MARK_PAID": "Đã nhận tiền",
-      "SHIP": "Giao hàng",
-      "COMPLETE": "Hoàn tất",
-      "CANCEL": "Hủy đơn",
-      "CLOSE": "Đóng",
-      "KEEP": "Giữ đơn"
-    },
-    "QR_SENT": "Đã gửi mã QR cho khách",
-    "DRAWER": {
-      "ITEMS": "Sản phẩm",
-      "SUBTOTAL": "Tạm tính",
-      "SHIPPING_FEE": "Phí giao",
-      "TOTAL": "Tổng",
-      "ADDRESS": "Địa chỉ giao",
-      "CONTACT": "Khách",
-      "LABEL": "Chi tiết đơn",
-      "CONFIRM_CANCEL": "Hủy đơn này? Hàng sẽ được trả lại kho.",
-      "QR_ALT": "Mã QR thanh toán",
-      "QR_LOADING": "Đang tạo mã QR…"
-    },
-    "FORM": {
-      "TITLE": "Tạo đơn",
-      "PRODUCT": "Sản phẩm",
-      "CUSTOM_ITEM": "Hàng khác",
-      "NAME": "Tên hàng",
-      "PRICE": "Giá",
-      "QUANTITY": "Số lượng",
-      "ADD_ITEM": "Thêm hàng",
-      "REMOVE_ITEM": "Xóa",
-      "PAYMENT_METHOD": "Cách trả",
-      "METHOD_QR": "Mã QR",
-      "METHOD_COD": "Thu khi giao",
-      "ADDRESS": "Địa chỉ giao",
-      "SHIPPING_FEE": "Phí giao",
-      "TOTAL": "Tổng",
-      "SUBMIT": "Tạo đơn"
-    },
-    "ERRORS": {
-      "INSUFFICIENT_STOCK": "Không đủ hàng",
-      "INVALID_TRANSITION": "Đơn này không chuyển bước được nữa",
-      "PAYMENT_SETTINGS_MISSING": "Chưa cài đặt tài khoản nhận tiền",
-      "INVALID_AMOUNT": "Đơn 0đ không có mã QR",
-      "ORDER_NOT_PAYABLE": "Đơn này không còn chờ thanh toán",
-      "CONVERSATION_CONTACT_MISMATCH": "Cuộc trò chuyện này không thuộc khách của đơn",
-      "SUBSCRIPTION_EXPIRED": "Gói dùng thử đã hết hạn",
-      "VALIDATION_FAILED": "Thông tin chưa đúng, hãy kiểm tra lại",
-      "UNKNOWN": "Có lỗi xảy ra, thử lại sau"
-    },
-    "NONE": "Không có đơn nào",
-    "LOAD_MORE": "Xem thêm"
-  },
-  "KALO_POS": {
-    "TITLE": "Bán tại quầy",
-    "EXIT": "Thoát POS",
-    "SEARCH": "Tìm sản phẩm",
-    "EMPTY": "Chưa có sản phẩm nào để bán.",
-    "ADD_PRODUCT": "Thêm sản phẩm",
-    "PRODUCT_FORM": {
-      "NAME": "Tên sản phẩm",
-      "PRICE": "Giá",
-      "STOCK": "Số lượng trong kho",
-      "SUBMIT": "Lưu sản phẩm"
-    },
-    "CART": {
-      "TITLE": "Đơn tại quầy",
-      "EMPTY": "Chạm sản phẩm để thêm vào đơn.",
-      "INCREASE": "Tăng",
-      "DECREASE": "Giảm",
-      "TOTAL": "Tổng",
-      "METHOD_QR": "Mã QR",
-      "METHOD_CASH": "Tiền mặt",
-      "METHOD_CARD": "Thẻ",
-      "PAY": "Thanh toán {amount}",
-      "PAID": "Đã nhận tiền",
-      "NEW_ORDER": "Đơn mới",
-      "SCAN_TO_PAY": "Khách quét mã để trả {amount}",
-      "CONFIRM_PAID": "Đã nhận tiền",
-      "QR_LOADING": "Đang tạo mã QR…",
-      "QR_ALT": "Mã QR thanh toán",
-      "RETRY": "Thử lại",
-      "CANCEL_ORDER": "Hủy đơn"
-    }
-  },
-  "KALO_CONSOLE": {
-    "BRAND_NAME": "kalo",
-    "BRAND": "Console",
-    "NAV": {
-      "OVERVIEW": "Tổng quan",
-      "SHOPS": "Shop",
-      "PAYMENTS": "Thanh toán",
-      "BACK_TO_APP": "Về ứng dụng",
-      "LOGOUT": "Đăng xuất"
-    },
-    "COMMON": {
-      "PREV": "Trước",
-      "NEXT": "Sau",
-      "PAGE": "Trang {page} / {pages}",
-      "LOADING": "Đang tải…",
-      "ERROR": "Không tải được. Thử lại.",
-      "RETRY": "Tải lại",
-      "CANCEL": "Hủy",
-      "SEARCH": "Tìm"
-    },
-    "PLANS": {
-      "STARTER": "Cơ bản",
-      "GROWTH": "Tăng trưởng",
-      "ENTERPRISE": "Doanh nghiệp",
-      "NONE": "Dùng thử"
-    },
-    "OVERVIEW": {
-      "TITLE": "Tổng quan",
-      "KPI": {
-        "SHOPS": "Tổng số shop",
-        "REVENUE": "Doanh thu tháng",
-        "EXPIRING": "Sắp hết hạn (7 ngày)",
-        "UNMATCHED": "Chuyển khoản cần ghép",
-        "PAID": "Shop đang trả phí"
-      },
-      "LATEST": "Thanh toán mới nhất",
-      "VIEW_ALL": "Xem tất cả",
-      "EMPTY_PAYMENTS": "Chưa có thanh toán nào.",
-      "BY_PLAN": "Shop theo gói",
-      "UNKNOWN_SHOP": "Không rõ shop"
-    },
-    "SHOPS": {
-      "TITLE": "Shop",
-      "SEARCH_PLACEHOLDER": "Tên shop hoặc mã",
-      "TABS": {
-        "ALL": "Tất cả",
-        "TRIAL": "Dùng thử",
-        "EXPIRING": "Sắp hết hạn",
-        "LOCKED": "Đã khóa"
-      },
-      "COLUMNS": {
-        "SHOP": "Shop",
-        "PLAN": "Gói",
-        "VALID_UNTIL": "Hết hạn",
-        "STATUS": "Trạng thái",
-        "ACTIONS": "Thao tác"
-      },
-      "CODE": "Mã {id}",
-      "STATUS": {
-        "ACTIVE": "Đang dùng",
-        "TRIAL": "Dùng thử",
-        "EXPIRED": "Hết hạn",
-        "LOCKED": "Đã khóa",
-        "DAYS_LEFT": "Còn {days} ngày"
-      },
-      "EXTEND": "Gia hạn",
-      "EXTEND_DAYS": "Số ngày",
-      "EXTEND_DONE": "Đã gia hạn",
-      "LOCK": "Khóa shop",
-      "UNLOCK": "Mở khóa",
-      "CONFIRM_LOCK": "Khóa {name}? Shop sẽ không đăng nhập được.",
-      "CONFIRM_UNLOCK": "Mở khóa {name}?",
-      "CONFIRM": "Đồng ý",
-      "LOCK_DONE": "Đã khóa shop",
-      "UNLOCK_DONE": "Đã mở khóa shop",
-      "EMPTY": "Không có shop nào.",
-      "UPDATE_ERROR": "Không cập nhật được. Thử lại."
-    },
-    "PAYMENTS": {
-      "TITLE": "Thanh toán",
-      "COLUMNS": {
-        "SHOP": "Shop",
-        "AMOUNT": "Số tiền",
-        "TIME": "Thời gian",
-        "STATUS": "Trạng thái",
-        "ACTIONS": "Thao tác"
-      },
-      "STATUS": {
-        "MATCHED": "Đã kích hoạt",
-        "APPLIED": "Đã kích hoạt",
-        "UNDERPAID": "Chuyển thiếu",
-        "UNMATCHED": "Cần ghép shop"
-      },
-      "UNDERPAID_NOTE": "Shop chuyển thiếu tiền nên gói chưa được kích hoạt.",
-      "ASSIGN": "Ghép shop",
-      "ASSIGN_SUBMIT": "Ghép",
-      "ASSIGN_SEARCH": "Tên shop hoặc mã",
-      "ASSIGN_EMPTY": "Không tìm thấy shop.",
-      "ASSIGN_DONE": "Đã ghép shop",
-      "ASSIGN_ERROR": "Không ghép được. Thử lại.",
-      "EMPTY": "Chưa có thanh toán nào.",
-      "UNKNOWN_SHOP": "Không rõ shop",
-      "ASSIGN_GONE": "Giao dịch này đã được xử lý hoặc không còn tồn tại",
-      "SEARCH_ERROR": "Không tìm được shop. Thử lại.",
-      "ASSIGN_AMBIGUOUS": "Nội dung chuyển khoản chưa rõ loại giao dịch (gói, token hay seeding). Hãy nhờ kỹ thuật xử lý."
-    }
-  },
-  "KALO_CHAT": {
-    "CARD": {
-      "TITLE": "Đơn #{number}",
-      "LINE": "{quantity} × {price}",
-      "SHIPPING": "Phí giao",
-      "TOTAL": "Tổng",
-      "SEND_QR": "Gửi mã QR",
-      "SENDING": "Đang gửi…",
-      "UNAVAILABLE": "Không tải được đơn"
-    },
-    "ACTIONS": {
-      "CREATE_ORDER": "Tạo đơn",
-      "QR": "Mã QR",
-      "CLOSE": "Đóng"
-    },
-    "QR_PICKER": {
-      "TITLE": "Chọn đơn để gửi mã QR",
-      "EMPTY": "Khách chưa có đơn nào chờ thanh toán bằng mã QR."
-    },
-    "CREATED": {
-      "TITLE": "Đã tạo đơn #{number}",
-      "SEND_QR": "Gửi mã QR",
-      "LATER": "Để sau"
-    },
-    "AI": {
-      "LABEL": "Gợi ý trả lời"
-    },
-    "PANEL": {
-      "PURCHASE": "Mua hàng",
-      "ORDERS_COUNT": "Số đơn",
-      "PAID_TOTAL": "Đã thanh toán",
-      "RECENT": "Đơn gần đây",
-      "EMPTY": "Khách chưa có đơn nào."
-    }
-  },
-  "KALO_CHAT_THREAD": {
-    "TODAY": "Hôm nay",
-    "YESTERDAY": "Hôm qua",
-    "STICKER": "Nhãn dán",
-    "PRIVATE_NOTE": "Ghi chú nội bộ, khách không thấy",
-    "COMPOSER": {
-      "REPLY": "Trả lời",
-      "NOTE": "Ghi chú nội bộ",
-      "PLACEHOLDER": "Nhập tin nhắn… (gõ / để chọn mẫu câu)",
-      "NOTE_PLACEHOLDER": "Ghi chú chỉ nhân viên thấy… (gõ {'@'} để nhắc tên)",
-      "EMOJI": "Biểu tượng cảm xúc",
-      "ATTACH": "Đính kèm ảnh, tệp",
-      "CANNED": "Mẫu câu",
-      "CANNED_HINT": "Chèn mẫu câu (gõ /)",
-      "MORE": "Thêm",
-      "VOICE": "Ghi âm",
-      "VOICE_STOP": "Dừng ghi âm",
-      "SIGNATURE": "Chữ ký",
-      "QUOTE": "Kèm thư trước",
-      "WHATSAPP_TEMPLATE": "Mẫu tin WhatsApp",
-      "CONTENT_TEMPLATE": "Mẫu tin Twilio",
-      "ARTICLE": "Chèn bài hướng dẫn",
-      "EXPAND": "Phóng to khung soạn",
-      "AI": "Viết lại bằng AI",
-      "DROP": "Thả tệp vào đây để gửi kèm",
-      "SEND": "Gửi",
-      "SEND_NOTE": "Lưu ghi chú"
-    },
-    "PANEL": {
-      "TITLE": "Khách hàng",
-      "LABELS": "Nhãn",
-      "NOTES": "Ghi chú",
-      "ASSIGN": "Giao việc",
-      "MORE_INFO": "Thông tin thêm",
-      "SHOW_MORE": "Xem thêm",
-      "SHOW_LESS": "Thu gọn",
-      "PREVIOUS": "Hội thoại trước",
-      "PARTICIPANTS": "Người theo dõi",
-      "CONVERSATION_INFO": "Thông tin hội thoại",
-      "MACROS": "Thao tác nhanh",
-      "FILES": "Ảnh và tệp đã gửi",
-      "LINEAR": "Linear",
-      "SHOPIFY": "Đơn Shopify",
-      "NO_ATTRIBUTES": "Chưa có thông tin thêm."
-    }
-  },
-  "KALO_ONBOARDING": {
-    "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
-  },
-  "KALO_CHAT_LIST": {
-    "TITLE": "Tin nhắn",
-    "TABS": {
-      "ME": "Của tôi",
-      "UNASSIGNED": "Chưa ai nhận",
-      "ALL": "Tất cả"
-    },
-    "SEARCH": "Tìm khách, tin nhắn",
-    "LOADING": "Đang tải tin nhắn",
-    "STATUS": {
-      "OPEN": "Đang mở",
-      "RESOLVED": "Đã xong",
-      "PENDING": "Chờ xử lý",
-      "SNOOZED": "Tạm hoãn",
-      "ALL": "Tất cả"
-    },
-    "FILTER": {
-      "OPEN": "Lọc",
-      "STATUS": "Trạng thái",
-      "SORT": "Sắp xếp",
-      "VIEWS": "Xem nhanh",
-      "ADVANCED": "Lọc theo điều kiện",
-      "LAYOUT_COMPACT": "Danh sách gọn",
-      "LAYOUT_EXPANDED": "Danh sách rộng"
-    },
-    "VIEWS": {
-      "ALL": "Tất cả tin nhắn",
-      "MENTIONS": "Được nhắc tên",
-      "UNATTENDED": "Chưa trả lời",
-      "PARTICIPATING": "Đang tham gia"
-    },
-    "EMPTY": {
-      "TITLE": "Chưa có tin nhắn nào",
-      "HINT": "Khi khách nhắn, tin sẽ hiện ở đây.",
-      "FILTERED": "Không có tin nhắn khớp bộ lọc",
-      "FILTERED_HINT": "Thử bỏ bớt điều kiện lọc.",
-      "CLEAR": "Bỏ lọc"
-    },
-    "HEADER": {
-      "MORE": "Thêm thao tác",
-      "RESOLVE": "Xong",
-      "REOPEN": "Mở lại",
-      "OPEN": "Mở",
-      "SNOOZE": "Tạm hoãn đến…",
-      "PENDING": "Chuyển sang chờ",
-      "ASSIGN": "Giao cho nhân viên",
-      "ASSIGN_TEAM": "Giao cho nhóm",
-      "LABEL": "Gắn nhãn",
-      "PRIORITY": "Mức ưu tiên",
-      "COPY_ID": "Sao chép mã cuộc trò chuyện",
-      "MUTE": "Tắt thông báo",
-      "UNMUTE": "Bật lại thông báo",
-      "TRANSCRIPT": "Gửi bản ghi qua email"
-    },
-    "WELCOME": {
-      "GREETING_MORNING": "Chào buổi sáng, {name}!",
-      "GREETING_AFTERNOON": "Chào buổi chiều, {name}!",
-      "GREETING_EVENING": "Chào buổi tối, {name}!",
-      "SUBTITLE": "Ba bước để bắt đầu bán hàng trên Kalo.",
-      "PICK": "Chọn một cuộc trò chuyện bên trái để trả lời khách.",
-      "NOT_FOUND": "Không tìm thấy cuộc trò chuyện này.",
-      "NO_INBOX_AGENT": "Shop chưa kết nối kênh nào. Nhờ chủ shop kết nối Zalo hoặc Facebook nhé.",
-      "NO_CONVERSATIONS": "Chưa có tin nhắn nào. Khi khách nhắn, tin sẽ hiện ở đây.",
-      "LOADING_INBOXES": "Đang tải kênh bán hàng…",
-      "LOADING_CONVERSATIONS": "Đang tải tin nhắn…",
-      "STEPS": {
-        "CHANNEL": {
-          "TITLE": "Kết nối Zalo, Facebook",
-          "DESC": "Gom tin nhắn của khách về một chỗ"
-        },
-        "PRODUCT": {
-          "TITLE": "Thêm sản phẩm đầu tiên",
-          "DESC": "Để lên đơn và báo giá nhanh"
-        },
-        "ORDER": {
-          "TITLE": "Tạo đơn đầu tiên",
-          "DESC": "Gửi mã QR để khách chuyển khoản"
-        },
-        "DONE": "Đã xong"
-      }
-    }
-  },
-  "KALO_SETTINGS_UI": {
-    "BACK_TO_HUB": "Cài đặt",
-    "COMMON": {
-      "EDIT": "Sửa",
-      "DELETE": "Xóa",
-      "SETTINGS": "Cài đặt",
-      "DELETE_YES": "Xóa",
-      "KEEP": "Giữ lại",
-      "DELETE_ERROR": "Chưa xóa được, bạn thử lại sau nhé",
-      "NO_RESULTS": "Không tìm thấy kết quả phù hợp",
-      "TYPE_TO_CONFIRM": "Gõ {name} để xác nhận"
-    },
-    "HUB": {
-      "TITLE": "Cài đặt",
-      "SUBTITLE": "Kênh bán, nhân viên và thông tin cửa hàng",
-      "GROUPS": {
-        "CHANNELS": "Kênh bán hàng",
-        "TEAM": "Nhân viên & nhóm",
-        "REPLIES": "Nhãn & trả lời nhanh",
-        "SHOP": "Cửa hàng",
-        "ME": "Tài khoản của tôi",
-        "ADVANCED": "Nâng cao",
-        "REPORTS": "Báo cáo chi tiết"
-      },
-      "LINKS": {
-        "INBOXES": {
-          "TITLE": "Kênh nhận tin",
-          "DESC": "Zalo, Facebook, website và các kênh khác"
-        },
-        "CAMPAIGNS": {
-          "TITLE": "Lời chào trên website",
-          "DESC": "Tin nhắn tự gửi cho khách đang xem website"
-        },
-        "HELP_CENTER": {
-          "TITLE": "Trang hỏi đáp",
-          "DESC": "Bài viết trả lời câu hỏi thường gặp"
-        },
-        "AGENTS": {
-          "TITLE": "Nhân viên",
-          "DESC": "Mời và phân quyền người cùng bán"
-        },
-        "TEAMS": {
-          "TITLE": "Nhóm",
-          "DESC": "Chia nhân viên theo ca hoặc theo việc"
-        },
-        "LABELS": {
-          "TITLE": "Nhãn",
-          "DESC": "Đánh dấu tin nhắn và khách để dễ lọc"
-        },
-        "CANNED": {
-          "TITLE": "Trả lời nhanh",
-          "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn"
-        },
-        "ACCOUNT": {
-          "TITLE": "Thông tin cửa hàng",
-          "DESC": "Tên cửa hàng, ngôn ngữ, email"
-        },
-        "PLAN": {
-          "TITLE": "Gói cước",
-          "DESC": "Hạn dùng và cách gia hạn"
-        },
-        "PROFILE": {
-          "TITLE": "Hồ sơ",
-          "DESC": "Ảnh, tên, chữ ký và phím gửi tin"
-        },
-        "SECURITY": {
-          "TITLE": "Bảo mật",
-          "DESC": "Mật khẩu, xác thực 2 bước, phiên đăng nhập"
-        },
-        "NOTIFICATIONS": {
-          "TITLE": "Thông báo",
-          "DESC": "Âm báo và thông báo khi có tin mới"
-        },
-        "ATTRIBUTES": {
-          "TITLE": "Thông tin thêm",
-          "DESC": "Trường riêng cho khách và hội thoại"
-        },
-        "AUTOMATION": {
-          "TITLE": "Tự động hóa",
-          "DESC": "Tự gắn nhãn, tự giao việc theo điều kiện"
-        },
-        "MACROS": {
-          "TITLE": "Thao tác nhanh",
-          "DESC": "Gộp nhiều bước thành một nút bấm"
-        },
-        "WORKFLOW": {
-          "TITLE": "Quy trình hội thoại",
-          "DESC": "Tự đóng hội thoại, thông tin bắt buộc khi đóng"
-        },
-        "INTEGRATIONS": {
-          "TITLE": "Kết nối ứng dụng",
-          "DESC": "Nối cửa hàng với ứng dụng khác"
-        },
-        "BOTS": {
-          "TITLE": "Bot trả lời",
-          "DESC": "Bot tự động trả lời khách"
-        },
-        "DATA_IMPORT": {
-          "TITLE": "Nhập dữ liệu",
-          "DESC": "Chuyển khách và hội thoại từ nơi khác sang"
-        },
-        "REPORT_OVERVIEW": {
-          "TITLE": "Tổng quan",
-          "DESC": "Số hội thoại và thời gian phản hồi"
-        },
-        "REPORT_CONVERSATIONS": {
-          "TITLE": "Hội thoại",
-          "DESC": "Lượng tin nhắn theo thời gian"
-        },
-        "REPORT_AGENTS": {
-          "TITLE": "Theo nhân viên",
-          "DESC": "Hiệu quả của từng người"
-        },
-        "REPORT_LABELS": {
-          "TITLE": "Theo nhãn",
-          "DESC": "Hội thoại theo từng nhãn"
-        },
-        "REPORT_INBOXES": {
-          "TITLE": "Theo kênh",
-          "DESC": "Hội thoại theo từng kênh"
-        },
-        "REPORT_TEAMS": {
-          "TITLE": "Theo nhóm",
-          "DESC": "Hội thoại theo từng nhóm"
-        },
-        "REPORT_CSAT": {
-          "TITLE": "Đánh giá của khách",
-          "DESC": "Mức hài lòng sau khi chat"
-        }
-      }
-    },
-    "PAGES": {
-      "INBOXES": {
-        "TITLE": "Kênh nhận tin",
-        "DESC": "Mỗi kênh là một nơi khách nhắn cho bạn: Zalo, Facebook, website...",
-        "ADD": "Thêm kênh",
-        "ADD_FIRST": "Kết nối kênh đầu tiên",
-        "EMPTY": "Chưa có kênh nào. Kết nối Zalo hoặc Facebook để bắt đầu nhận tin.",
-        "SEARCH": "Tìm kênh...",
-        "COUNT": "{n} kênh",
-        "DELETE_TITLE": "Xóa kênh này?",
-        "DELETE_MESSAGE": "Kênh {name} và các tin nhắn của nó sẽ bị xóa.",
-        "DELETED": "Đã xóa kênh",
-        "WIZARD_STEP": "Bước {step}/{total}"
-      },
-      "AGENTS": {
-        "TITLE": "Nhân viên",
-        "DESC": "Người cùng trả lời khách và xử lý đơn",
-        "ADD": "Mời nhân viên",
-        "EMPTY": "Chưa có nhân viên nào khác. Mời người cùng bán để chia việc.",
-        "SEARCH": "Tìm nhân viên...",
-        "COUNT": "{n} người",
-        "PENDING": "Chưa xác nhận email",
-        "DELETE_TITLE": "Xóa nhân viên?",
-        "DELETE_MESSAGE": "{name} sẽ không đăng nhập vào cửa hàng được nữa.",
-        "DELETED": "Đã xóa nhân viên"
-      },
-      "TEAMS": {
-        "TITLE": "Nhóm",
-        "DESC": "Chia nhân viên theo ca hoặc theo việc để giao tin nhắn",
-        "ADD": "Tạo nhóm",
-        "EMPTY": "Chưa có nhóm nào.",
-        "SEARCH": "Tìm nhóm...",
-        "COUNT": "{n} nhóm",
-        "DELETE_TITLE": "Xóa nhóm {name}?",
-        "DELETE_MESSAGE": "Các hội thoại đang giao cho nhóm này sẽ không còn thuộc nhóm.",
-        "DELETED": "Đã xóa nhóm"
-      },
-      "LABELS": {
-        "TITLE": "Nhãn",
-        "DESC": "Đánh dấu tin nhắn và khách để dễ lọc",
-        "ADD": "Tạo nhãn",
-        "EMPTY": "Chưa có nhãn nào. Tạo nhãn như \"Khách quen\", \"Chờ chuyển khoản\".",
-        "SEARCH": "Tìm nhãn...",
-        "COUNT": "{n} nhãn",
-        "DELETE_TITLE": "Xóa nhãn?",
-        "DELETE_MESSAGE": "Nhãn {name} sẽ bị gỡ khỏi mọi tin nhắn và khách.",
-        "DELETED": "Đã xóa nhãn"
-      },
-      "CANNED": {
-        "TITLE": "Trả lời nhanh",
-        "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn",
-        "ADD": "Thêm câu mẫu",
-        "EMPTY": "Chưa có câu mẫu nào. Lưu câu hay dùng như số tài khoản, phí ship.",
-        "SEARCH": "Tìm câu mẫu...",
-        "COUNT": "{n} câu",
-        "SORT_ASC": "A → Z",
-        "SORT_DESC": "Z → A",
-        "DELETE_TITLE": "Xóa câu mẫu?",
-        "DELETE_MESSAGE": "Câu mẫu /{name} sẽ bị xóa.",
-        "DELETED": "Đã xóa câu mẫu"
-      },
-      "ACCOUNT": {
-        "TITLE": "Thông tin cửa hàng",
-        "DESC": "Tên cửa hàng, ngôn ngữ và email liên hệ"
-      },
-      "PLAN": {
-        "DESC": "Hạn dùng và cách gia hạn gói"
-      },
-      "PROFILE": {
-        "TITLE": "Hồ sơ của tôi",
-        "DESC": "Ảnh, tên, mật khẩu và thông báo của riêng bạn"
-      }
-    },
-    "CHANNELS": {
-      "ZALO_PERSONAL": {
-        "TITLE": "Zalo cá nhân",
-        "DESC": "Kết nối Zalo cá nhân bằng mã QR, miễn phí"
-      }
-    },
-    "ZALO_PERSONAL": {
-      "CONNECTED": "Đang kết nối",
-      "DISCONNECTED": "Đã ngắt kết nối",
-      "USER_ID": "ID Zalo: {id}",
-      "MANAGE": "Xem hồ sơ và đăng xuất"
+    "PICKER": {
+      "BODY": "Nội dung",
+      "BUTTONS": "Nút bấm",
+      "FOOTER": "Chân tin",
+      "HEADER": "Đầu tin",
+      "MEDIA_CONTENT": "Ảnh, video hoặc tệp",
+      "MEDIA_CONTENT_FALLBACK": "ảnh, video hoặc tệp",
+      "NO_TEMPLATES_AVAILABLE": "Chưa có mẫu tin WhatsApp. Bấm làm mới để đồng bộ mẫu tin từ WhatsApp.",
+      "REFRESH_BUTTON": "Làm mới mẫu tin",
+      "REFRESH_ERROR": "Chưa làm mới được mẫu tin. Bạn thử lại nhé.",
+      "REFRESH_SUCCESS": "Đã bắt đầu làm mới mẫu tin. Có thể mất vài phút để cập nhật."
     }
   }
 }
