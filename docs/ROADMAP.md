@@ -6,6 +6,8 @@
 
 Kế hoạch chi tiết: [plans/2026-11-16-kalo-launch.md](plans/2026-11-16-kalo-launch.md). Đổi thương hiệu sang Kalo, thêm Đơn hàng, POS, Báo cáo, Console, landing có video, hạ tầng triển khai. Thay thế hướng Phase B (KTech/cobalt).
 
+**Đợt 2 giao diện (2026-11-18, xong):** khung chat, Cài đặt, `/super_admin`, trang Nhận tiền, rà tiếng Việt; kế hoạch [plans/2026-11-17-kalo-ui-phase2.md](plans/2026-11-17-kalo-ui-phase2.md). Việc để đợt sau: đăng nhập/đăng ký/onboarding/popup nhỏ, tick 'đã xem' cho Zalo (cần bridge phát delivered/read), cuộn tới tin chưa đọc (C-37), đối chiếu mã BIN ngân hàng với danh sách NAPAS, dịch các component dùng `data()`.
+
 - **Done:** T0–T11, sửa spec i18n, QA 12A, rà soát bảo mật 12C và vá bảo mật (xem bảng ở [STATUS.md](STATUS.md)), T13 phần tài liệu.
 - **In-progress:** T12B (kiểm tra khói trên stack thật + trình duyệt thật).
 - **Blocked (chờ chủ dự án):** triển khai thật. Danh sách việc cần chủ dự án: [reference/go-live-checklist.md](reference/go-live-checklist.md).
@@ -189,3 +191,4 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | 2026-09-29 | Thêm Phase B, tạm dừng Phase 2–8 | ADR-007: chủ dự án chọn giữ giao diện Chatwoot và đổi thương hiệu thay vì viết CMS mới |
 | 2026-09-29 | Thêm P0-07 (chiến lược nhánh), P0-08 (K8s toàn stack), P1-09/P1-10 (làm cứng và dọn Zalo bridge), P4-08/P4-09 (tích hợp CRM/ERP KTech); mở rộng P0-06 (dọn CI thừa hưởng từ Chatwoot) | Rà soát kế hoạch do Antigravity đề xuất: giữ ADR-001, chỉ lấy các mục roadmap còn thiếu |
 | 2026-11-17 | Phase K: mã nguồn xong, thêm backlog "Sau launch" | Kết thúc đợt Kalo launch; việc hoãn lấy từ ledger SDD và rà soát bảo mật |
+| 2026-11-18 | Đợt 2 giao diện Kalo xong, thêm việc đợt sau | Lột giao diện Chatwoot khỏi chat, Cài đặt, super admin; ghi các việc còn lại |
