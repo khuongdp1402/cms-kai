@@ -285,7 +285,7 @@ describe('ContactInfo', () => {
         }
       );
       const labels = wrapper
-        .findAll('next-button-stub')
+        .findAll('button[icon]')
         .map(button => button.attributes('aria-label'));
       // new message, edit, merge, delete
       expect(labels).toHaveLength(4);
