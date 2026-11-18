@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue';
-import { format, getMonth, setMonth, startOfMonth } from 'date-fns';
+import { getMonth, setMonth, startOfMonth } from 'date-fns';
+import { formatLocalized } from 'shared/helpers/dateLocale';
 import {
   yearName,
   CALENDAR_TYPES,
@@ -22,8 +23,10 @@ const emit = defineEmits(['selectMonth', 'prev', 'next', 'setView']);
 const { START_CALENDAR } = CALENDAR_TYPES;
 const { MONTH, YEAR } = CALENDAR_PERIODS;
 
-const months = Array.from({ length: 12 }, (_, index) =>
-  format(setMonth(startOfMonth(new Date()), index), 'MMM')
+const months = computed(() =>
+  Array.from({ length: 12 }, (_, index) =>
+    formatLocalized(setMonth(startOfMonth(new Date()), index), 'MMM')
+  )
 );
 
 const activeMonthIndex = computed(() => {

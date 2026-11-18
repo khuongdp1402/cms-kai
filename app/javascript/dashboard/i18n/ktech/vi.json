@@ -659,7 +659,8 @@
     "SNOOZE_PLACEHOLDER": "Nhập thời gian ví dụ: ngày mai, 2 giờ, thứ sáu tới, 15/01..."
   },
   "COMMON": {
-    "OR": "Hoặc"
+    "OR": "Hoặc",
+    "CLICK_HERE": "bấm vào đây"
   },
   "COMPONENTS": {
     "CODE": {
@@ -4818,7 +4819,11 @@
       "SP_ENTITY_ID": {
         "TOOLTIP": "Mã định danh của ứng dụng này với vai trò nhà cung cấp dịch vụ, cài trong IdP của bạn"
       }
-    }
+    },
+    "TITLE": "Bảo mật",
+    "DESCRIPTION": "Quản lý cài đặt bảo mật của tài khoản.",
+    "LINK_TEXT": "Tìm hiểu thêm về đăng nhập một lần (SAML SSO)",
+    "SAML_DISABLED_MESSAGE": "Đăng nhập một lần (SAML SSO) đang tắt. Vui lòng liên hệ quản trị viên để bật tính năng này."
   },
   "SESSION_LIMIT": {
     "CANCEL": "Quay lại đăng nhập",
@@ -5050,6 +5055,76 @@
       "HEADER": {
         "AGENT": "Nhân viên"
       }
+    }
+  },
+  "KALO_POLISH2": {
+    "A11Y": {
+      "CLOSE_CONTACT_PANEL": "Đóng thông tin liên hệ",
+      "COPY_FIELD": "Sao chép {field}",
+      "EDIT_FIELD": "Sửa {field}",
+      "OPEN_CONTACT_NEW_TAB": "Mở hồ sơ liên hệ trong tab mới",
+      "STATUS_MORE_ACTIONS": "Tùy chọn trạng thái khác",
+      "SELECT_CONVERSATION": "Chọn cuộc trò chuyện với {name}"
+    },
+    "SECURITY": {
+      "PASSWORD_LOGIN": "Tài khoản đăng nhập bằng email và mật khẩu. Đổi mật khẩu trong",
+      "PROFILE_LINK": "Hồ sơ cá nhân"
+    }
+  },
+  "REGISTER": {
+    "TRY_WOOT": "Tạo tài khoản",
+    "GET_STARTED": "Bắt đầu dùng Kalo",
+    "TERMS_ACCEPT": "Khi tạo tài khoản, bạn đồng ý với Điều khoản sử dụng và Chính sách bảo mật của Kalo.",
+    "OAUTH": {
+      "GOOGLE_SIGNUP": "Đăng ký bằng Google"
+    },
+    "COMPANY_NAME": {
+      "PLACEHOLDER": "Nhập tên shop. Ví dụ: Shop Hoa Mai"
+    },
+    "FULL_NAME": {
+      "PLACEHOLDER": "Nhập họ tên. Ví dụ: Nguyễn Văn An"
+    },
+    "EMAIL": {
+      "PLACEHOLDER": "Nhập email. Ví dụ: an{'@'}shophoamai{'.'}vn"
+    },
+    "PASSWORD": {
+      "REQUIREMENTS_LENGTH": "Ít nhất 6 ký tự",
+      "REQUIREMENTS_UPPERCASE": "Ít nhất một chữ in hoa",
+      "REQUIREMENTS_LOWERCASE": "Ít nhất một chữ thường",
+      "REQUIREMENTS_NUMBER": "Ít nhất một chữ số",
+      "REQUIREMENTS_SPECIAL": "Ít nhất một ký tự đặc biệt"
+    },
+    "CONFIRM_PASSWORD": {
+      "LABEL": "Nhập lại mật khẩu",
+      "PLACEHOLDER": "Nhập lại mật khẩu"
+    },
+    "API": {
+      "SUCCESS_MESSAGE": "Đăng ký thành công",
+      "ERROR_MESSAGE": "Không kết nối được máy chủ. Vui lòng thử lại."
+    },
+    "SUBMIT": "Tạo tài khoản",
+    "VERIFY_EMAIL": {
+      "TITLE": "Kiểm tra hộp thư của bạn",
+      "DESCRIPTION": "Chúng tôi đã gửi liên kết xác minh tới {email}. Bấm vào liên kết để xác minh email và bắt đầu.",
+      "RESEND": "Gửi lại email xác minh",
+      "RESEND_SUCCESS": "Đã gửi email xác minh. Vui lòng kiểm tra hộp thư.",
+      "RESEND_ERROR": "Không gửi được email xác minh. Vui lòng thử lại."
+    }
+  },
+  "RESET_PASSWORD": {
+    "DESCRIPTION": "Nhập email bạn dùng để đăng nhập Kalo để nhận hướng dẫn đặt lại mật khẩu.",
+    "GO_BACK_TO_LOGIN": "Nếu muốn quay lại trang đăng nhập,",
+    "API": {
+      "ERROR_MESSAGE": "Không kết nối được máy chủ. Vui lòng thử lại."
+    }
+  },
+  "SET_NEW_PASSWORD": {
+    "TITLE": "Đặt mật khẩu mới",
+    "CONFIRM_PASSWORD": {
+      "LABEL": "Nhập lại mật khẩu"
+    },
+    "API": {
+      "ERROR_MESSAGE": "Không kết nối được máy chủ. Vui lòng thử lại."
     }
   }
 }

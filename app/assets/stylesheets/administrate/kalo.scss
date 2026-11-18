@@ -448,4 +448,14 @@ body.kalo-admin {
   .kalo-header-tools, .kalo-header-tools__search { width: 100%; }
   .kalo-admin .search, .kalo-filter { width: 100%; }
   .kalo-header-tools__field { flex: 1; }
+
+  // Settings: the identifier label sits above its value instead of shrinking to one word per line.
+  .kalo-admin .kalo-settings-identifier {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 4px;
+
+    h4 { margin: 0; }
+  }
 }

@@ -142,7 +142,14 @@ watch(
             :style="{ width: `${size}px`, height: `${size}px` }"
             @click.stop
           >
-            <Checkbox v-model="selectedModel" />
+            <Checkbox
+              v-model="selectedModel"
+              :aria-label="
+                $t('KALO_POLISH2.A11Y.SELECT_CONVERSATION', {
+                  name: currentContact.name,
+                })
+              "
+            />
           </label>
         </template>
       </Avatar>

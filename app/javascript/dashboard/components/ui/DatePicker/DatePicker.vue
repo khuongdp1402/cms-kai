@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { formatMonthName } from 'shared/helpers/dateLocale';
 import {
   getActiveDateRange,
   moveCalendarDate,
@@ -94,9 +95,7 @@ const canNavigateNext = computed(() => {
 const navigationLabel = computed(() => {
   const range = selectedRange.value;
   if (range === DATE_RANGE_TYPES.MONTH_TO_DATE) {
-    return new Intl.DateTimeFormat(navigator.language, {
-      month: 'long',
-    }).format(selectedStartDate.value);
+    return formatMonthName(selectedStartDate.value);
   }
   if (range === DATE_RANGE_TYPES.THIS_WEEK) {
     const currentWeekRange = getActiveDateRange(range, currentDate.value);

@@ -2,13 +2,13 @@
 import { computed } from 'vue';
 import { useMemoize } from '@vueuse/core';
 
-import format from 'date-fns/format';
 import getDay from 'date-fns/getDay';
 
 import { getQuantileIntervals } from '@chatwoot/utils';
 
 import { groupHeatmapByDay } from 'helpers/ReportsDataHelper';
 import { useI18n } from 'vue-i18n';
+import { formatDayDate } from 'shared/helpers/dateLocale';
 import { useHeatmapTooltip } from './composables/useHeatmapTooltip';
 import HeatmapTooltip from './HeatmapTooltip.vue';
 
@@ -31,7 +31,7 @@ const props = defineProps({
     validator: value => ['blue', 'green'].includes(value),
   },
 });
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const dataRows = computed(() => {
   const groupedData = groupHeatmapByDay(props.heatmapData);
@@ -51,10 +51,11 @@ const quantileRange = computed(() => {
 });
 
 function formatDate(dateString) {
-  return format(new Date(dateString), 'MMM d, yyyy');
+  return formatDayDate(new Date(dateString));
 }
 
-const DAYS_OF_WEEK = [
+// Translated at render time: the page can mount before the account locale is applied.
+const daysOfWeek = () => [
   t('DAYS_OF_WEEK.SUNDAY'),
   t('DAYS_OF_WEEK.MONDAY'),
   t('DAYS_OF_WEEK.TUESDAY'),
@@ -65,9 +66,7 @@ const DAYS_OF_WEEK = [
 ];
 
 function getDayOfTheWeek(date) {
-  const dayIndex = getDay(date);
-
-  return DAYS_OF_WEEK[dayIndex];
+  return daysOfWeek()[getDay(date)];
 }
 
 const COLOR_SCHEMES = {
@@ -160,7 +159,7 @@ const tooltip = useHeatmapTooltip();
         <div
           v-for="row in dataRows"
           :key="row.dateKey"
-          v-memo="[row.dateKey]"
+          v-memo="[row.dateKey, locale]"
           class="h-8 min-w-[70px] text-n-slate-12 text-[10px] font-semibold flex flex-col items-end justify-center"
         >
           {{ getDayOfTheWeek(new Date(row.dateKey)) }}

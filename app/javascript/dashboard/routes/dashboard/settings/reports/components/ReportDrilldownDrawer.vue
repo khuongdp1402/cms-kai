@@ -2,7 +2,8 @@
 import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useEventListener } from '@vueuse/core';
 import { useI18n } from 'vue-i18n';
-import { formatTime } from '@chatwoot/utils';
+// Durations follow the app locale ("14 phút 36 giây").
+import { formatDuration as formatTime } from 'shared/helpers/dateLocale';
 import Button from 'dashboard/components-next/button/Button.vue';
 import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
 import TeleportWithDirection from 'dashboard/components-next/TeleportWithDirection.vue';

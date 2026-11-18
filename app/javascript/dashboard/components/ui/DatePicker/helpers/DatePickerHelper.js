@@ -18,6 +18,7 @@ import {
   isSameDay,
   isWithinInterval,
 } from 'date-fns';
+import { formatMonthName } from 'shared/helpers/dateLocale';
 
 // Constants for calendar and date ranges
 export const calendarWeeks = [
@@ -82,7 +83,7 @@ export const CALENDAR_PERIODS = {
 };
 
 // Utility functions for date operations
-export const monthName = currentDate => format(currentDate, 'MMMM');
+export const monthName = currentDate => formatMonthName(currentDate);
 export const yearName = currentDate => format(currentDate, 'yyyy');
 
 export const getIntlDateFormatForLocale = () => {

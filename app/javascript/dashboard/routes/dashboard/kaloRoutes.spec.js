@@ -20,4 +20,13 @@ describe('Kalo shell routes', () => {
     const target = settingsHome.redirect({ params: { accountId: '1' } });
     expect(router.resolve(target).path).toBe('/app/accounts/1/settings/hub');
   });
+
+  it('legacy /settings/billing opens the Kalo plan page', () => {
+    const legacy = router.resolve('/app/accounts/1/settings/billing');
+    expect(legacy.name).toBe('billing_settings_index');
+    const target = legacy.matched.at(-1).redirect(legacy);
+    expect(router.resolve(target).path).toBe(
+      '/app/accounts/1/settings/billing-kalo'
+    );
+  });
 });
