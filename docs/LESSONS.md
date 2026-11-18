@@ -21,6 +21,10 @@
   - Nguyên nhân: theo ADR-019, trạng thái chỉ tính từ `subscription_valid_until` (và 14 ngày dùng thử); `subscription_status` chỉ là dấu ghi kèm khi cộng kỳ trả phí, không ai đọc.
   - Quy tắc: muốn kích hoạt gói bằng tay thì đặt `subscription_valid_until` (ISO 8601 đầy đủ) hoặc dùng nút gia hạn trong Console, không sửa riêng `subscription_status`.
 
+- **B52 (2026-11-18): Chuỗi dịch "chốt" lúc tạo component nên vẫn hiện tiếng Anh dù app đã sang tiếng Việt.**
+  - Triệu chứng: mô tả phím gửi tin ở Hồ sơ và tên thứ trên heatmap báo cáo hiện "Send messages…", "Thursday" khi mở thẳng trang (F5), dù khóa tiếng Việt có sẵn.
+  - Nguyên nhân: gọi `t()`/`this.$t()` trong `data()` hoặc ở đầu `<script setup>` (mảng hằng); lúc đó locale còn là `en`, locale của tài khoản chỉ được áp sau khi tải `accounts/get`. Thêm `v-memo` chỉ theo dữ liệu nên không vẽ lại khi đổi locale. Ngoài ra date-fns 2 không có locale mặc định: mọi `format()` hiển thị phải đi qua `shared/helpers/dateLocale.js`.
+  - Quy tắc: lưu khóa i18n trong dữ liệu, dịch ở template hoặc computed; `v-memo` của phần có chữ phải gồm `locale`. Ngày/tháng/thời lượng hiển thị dùng `formatDayDate`, `formatMonthName`, `formatDuration`… thay vì `format()`/`formatTime` trần. Trang đăng nhập lấy ngôn ngữ từ `DEFAULT_LOCALE`: stack dev thiếu biến này thì trang đăng nhập ra tiếng Anh (không phải lỗi code).
 - **B31 (2026-11-17): Chuỗi i18n có ký tự "@" làm hỏng placeholder ghi chú.**
   - Triệu chứng: trình duyệt báo "Message compilation error: Invalid linked format" cho "Ghi chú chỉ nhân viên thấy… (gõ @ để nhắc tên)"; spec vitest vẫn xanh vì không mount chuỗi đó.
   - Nguyên nhân: trong vue-i18n `@` là cú pháp liên kết khóa (cũng như `{`, `}`, `|`).

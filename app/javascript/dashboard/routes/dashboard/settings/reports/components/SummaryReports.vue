@@ -1,7 +1,8 @@
 <script setup>
 import OverviewReportFilters from './OverviewReportFilters.vue';
 import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
-import { formatTime } from '@chatwoot/utils';
+// Durations follow the app locale ("14 phút 36 giây").
+import { formatDuration as formatTime } from 'shared/helpers/dateLocale';
 import { useStore, useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
 import Table from 'dashboard/components/table/Table.vue';

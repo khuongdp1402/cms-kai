@@ -26,6 +26,9 @@ function openNotificationPanel() {
 
 <template>
   <button
+    type="button"
+    :aria-label="$t('KALO_NAV.NOTIFICATIONS')"
+    :title="$t('KALO_NAV.NOTIFICATIONS')"
     class="size-8 rounded-lg hover:bg-n-alpha-1 flex-shrink-0 grid place-content-center relative"
     @click="openNotificationPanel"
   >

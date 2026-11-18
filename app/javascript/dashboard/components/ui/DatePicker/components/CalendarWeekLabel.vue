@@ -1,5 +1,11 @@
 <script setup>
-import { calendarWeeks } from '../helpers/DatePickerHelper';
+import { computed } from 'vue';
+import { weekdayLabels } from 'shared/helpers/dateLocale';
+
+// Monday-first narrow labels in the app locale (T2 … CN in Vietnamese).
+const calendarWeeks = computed(() =>
+  weekdayLabels().map((label, index) => ({ id: index + 1, label }))
+);
 </script>
 
 <template>

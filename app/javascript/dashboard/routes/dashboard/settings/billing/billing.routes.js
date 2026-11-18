@@ -1,7 +1,6 @@
 import { frontendURL } from '../../../../helper/URLHelper';
 import { INSTALLATION_TYPES } from 'dashboard/constants/installationTypes';
 import SettingsWrapper from '../SettingsWrapper.vue';
-import Index from './Index.vue';
 
 export default {
   routes: [
@@ -21,7 +20,9 @@ export default {
         {
           path: '',
           name: 'billing_settings_index',
-          component: Index,
+          // Kalo: the Chatwoot Cloud billing page has no backend here; links to it
+          // (banners, paywalls, /settings/billing) open the Kalo plan page instead.
+          redirect: to => ({ name: 'kalo_billing', params: to.params }),
           meta: {
             installationTypes: [INSTALLATION_TYPES.CLOUD],
             permissions: ['administrator'],

@@ -163,6 +163,13 @@ RSpec.describe 'Super admin Kalo style', type: :request do
       expect_kalo_page
       expect(response.body).not_to match(/discord|community support|chat support|sales@/i)
     end
+
+    it 'wraps the installation identifier in the block that stacks on mobile' do
+      sign_in(super_admin, scope: :super_admin)
+      get '/super_admin/settings'
+      expect(response.body).to include('kalo-settings-identifier')
+      expect(Rails.root.join('app/assets/stylesheets/administrate/kalo.scss').read).to include('.kalo-settings-identifier')
+    end
   end
 
   describe 'Vietnamese chrome' do

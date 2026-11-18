@@ -214,6 +214,9 @@ useEmitter(CMD_RESOLVE_CONVERSATION, onCmdResolveConversation);
         v-if="showAdditionalActions"
         ref="arrowDownButtonRef"
         icon="i-lucide-chevron-down"
+        :aria-label="t('KALO_POLISH2.A11Y.STATUS_MORE_ACTIONS')"
+        :aria-expanded="showActionsDropdown"
+        aria-haspopup="menu"
         :disabled="isLoading"
         size="sm"
         no-animation

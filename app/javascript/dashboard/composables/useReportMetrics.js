@@ -1,5 +1,6 @@
 import { useMapGetter } from 'dashboard/composables/store';
-import { formatTime } from '@chatwoot/utils';
+// Durations follow the app locale ("14 phút 36 giây").
+import { formatDuration as formatTime } from 'shared/helpers/dateLocale';
 
 /**
  * A composable function for report metrics calculations and display.

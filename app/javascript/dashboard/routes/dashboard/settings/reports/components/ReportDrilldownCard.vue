@@ -2,7 +2,8 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
-import { formatTime } from '@chatwoot/utils';
+// Durations follow the app locale ("14 phút 36 giây").
+import { formatDuration as formatTime } from 'shared/helpers/dateLocale';
 import format from 'date-fns/format';
 import fromUnixTime from 'date-fns/fromUnixTime';
 import Icon from 'dashboard/components-next/icon/Icon.vue';

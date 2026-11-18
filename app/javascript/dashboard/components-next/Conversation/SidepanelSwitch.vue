@@ -67,6 +67,8 @@ useKeyboardEvents(keyboardEvents);
   >
     <Button
       v-tooltip.top="$t('CONVERSATION.SIDEBAR.CONTACT')"
+      :aria-label="$t('CONVERSATION.SIDEBAR.CONTACT')"
+      :aria-pressed="isContactSidebarOpen"
       ghost
       slate
       sm
@@ -80,6 +82,7 @@ useKeyboardEvents(keyboardEvents);
     <Button
       v-if="showCopilotTab"
       v-tooltip.bottom="$t('CONVERSATION.SIDEBAR.COPILOT')"
+      :aria-label="$t('CONVERSATION.SIDEBAR.COPILOT')"
       ghost
       slate
       sm

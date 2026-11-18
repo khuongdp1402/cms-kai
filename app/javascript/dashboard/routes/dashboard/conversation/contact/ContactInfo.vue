@@ -232,6 +232,7 @@ export default {
               target="_blank"
               rel="noopener nofollow noreferrer"
               class="leading-3"
+              :aria-label="$t('KALO_POLISH2.A11Y.OPEN_CONTACT_NEW_TAB')"
             >
               <span class="i-lucide-external-link text-sm text-n-slate-10" />
             </a>

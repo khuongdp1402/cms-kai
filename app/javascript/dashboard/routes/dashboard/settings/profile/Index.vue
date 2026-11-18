@@ -70,23 +70,19 @@ export default {
       hotKeys: [
         {
           key: 'enter',
-          title: this.$t(
-            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.ENTER_KEY.HEADING'
-          ),
-          description: this.$t(
-            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.ENTER_KEY.CONTENT'
-          ),
+          // i18n keys, translated at render: data() can run before the locale is applied.
+          titleKey: 'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.ENTER_KEY.HEADING',
+          descriptionKey:
+            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.ENTER_KEY.CONTENT',
           lightImage: '/assets/images/dashboard/profile/hot-key-enter.svg',
           darkImage: '/assets/images/dashboard/profile/hot-key-enter-dark.svg',
         },
         {
           key: 'cmd_enter',
-          title: this.$t(
-            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.CMD_ENTER_KEY.HEADING'
-          ),
-          description: this.$t(
-            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.CMD_ENTER_KEY.CONTENT'
-          ),
+          titleKey:
+            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.CMD_ENTER_KEY.HEADING',
+          descriptionKey:
+            'PROFILE_SETTINGS.FORM.SEND_MESSAGE.CARD.CMD_ENTER_KEY.CONTENT',
           lightImage: '/assets/images/dashboard/profile/hot-key-ctrl-enter.svg',
           darkImage:
             '/assets/images/dashboard/profile/hot-key-ctrl-enter-dark.svg',
@@ -303,20 +299,20 @@ export default {
           v-for="hotKey in hotKeys"
           :id="hotKey.key"
           :key="hotKey.key"
-          :label="hotKey.title"
-          :description="hotKey.description"
+          :label="$t(hotKey.titleKey)"
+          :description="$t(hotKey.descriptionKey)"
           :is-active="isEditorHotKeyEnabled(hotKey.key)"
           class="sm:flex-1"
           @select="toggleHotKey"
         >
           <img
             :src="hotKey.lightImage"
-            :alt="`Light themed image for ${hotKey.title}`"
+            :alt="$t(hotKey.titleKey)"
             class="block object-cover w-full dark:hidden"
           />
           <img
             :src="hotKey.darkImage"
-            :alt="`Dark themed image for ${hotKey.title}`"
+            :alt="$t(hotKey.titleKey)"
             class="hidden object-cover w-full dark:block"
           />
         </RadioCard>

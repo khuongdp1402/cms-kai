@@ -127,6 +127,7 @@ export default {
         slate
         class="ltr:-ml-1 rtl:-mr-1"
         icon="i-lucide-clipboard"
+        :aria-label="$t('KALO_POLISH2.A11Y.COPY_FIELD', { field: title })"
         @click="onCopy"
       />
       <NextButton
@@ -136,6 +137,7 @@ export default {
         slate
         class="ltr:-ml-1 rtl:-mr-1 opacity-0 group-hover/row:opacity-100 transition-opacity"
         icon="i-lucide-pencil"
+        :aria-label="$t('KALO_POLISH2.A11Y.EDIT_FIELD', { field: title })"
         @click.prevent="startEditing"
       />
     </a>
@@ -163,6 +165,7 @@ export default {
         slate
         class="ltr:-ml-1 rtl:-mr-1 opacity-0 group-hover/row:opacity-100 transition-opacity"
         icon="i-lucide-pencil"
+        :aria-label="$t('KALO_POLISH2.A11Y.EDIT_FIELD', { field: title })"
         @click="startEditing"
       />
     </div>
