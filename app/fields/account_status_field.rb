@@ -7,6 +7,10 @@ class AccountStatusField < Administrate::Field::Select
     "/fields/select/#{page}"
   end
 
+  def selectable_options
+    super.map { |label, value| [I18n.t("kalo_super_admin.values.status.#{value}", default: label), value] }
+  end
+
   def suspension_category_options
     Account::SUSPENSION_CATEGORIES.map do |category|
       [I18n.t("super_admin.account_suspension.categories.#{category}"), category]

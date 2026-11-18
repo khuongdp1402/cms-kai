@@ -8,6 +8,7 @@ import {
 } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
 import { useUISettings } from 'dashboard/composables/useUISettings';
+import { useContactPanel } from 'dashboard/composables/useContactPanel';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 
 import AccordionItem from 'dashboard/components/Accordion/AccordionItem.vue';
@@ -148,12 +149,7 @@ const onDragEnd = () => {
   });
 };
 
-const closeContactPanel = () => {
-  updateUISettings({
-    is_contact_sidebar_open: false,
-    is_copilot_panel_open: false,
-  });
-};
+const { closeContactPanel } = useContactPanel();
 
 onMounted(() => {
   conversationSidebarItems.value = buildKaloSidebarOrder(

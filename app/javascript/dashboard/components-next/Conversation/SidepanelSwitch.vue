@@ -6,6 +6,7 @@ import { computed } from 'vue';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
+import { useContactPanel } from 'dashboard/composables/useContactPanel';
 
 const { updateUISettings } = useUISettings();
 
@@ -19,28 +20,33 @@ const showCopilotTab = computed(() =>
 );
 
 const { uiSettings } = useUISettings();
-const isContactSidebarOpen = computed(
-  () => uiSettings.value.is_contact_sidebar_open
+const currentChat = useMapGetter('getSelectedChat');
+const currentChatId = computed(() => currentChat.value?.id);
+const {
+  isSmallScreen,
+  isContactPanelOpenFor,
+  openContactPanel,
+  closeContactPanel,
+  toggleContactPanel,
+} = useContactPanel();
+
+const isContactSidebarOpen = computed(() =>
+  isContactPanelOpenFor(currentChatId.value)
 );
 const isCopilotPanelOpen = computed(
   () => uiSettings.value.is_copilot_panel_open
 );
 
 const toggleConversationSidebarToggle = () => {
-  updateUISettings({
-    is_contact_sidebar_open: !isContactSidebarOpen.value,
-    is_copilot_panel_open: false,
-  });
+  toggleContactPanel(currentChatId.value);
 };
 
 const handleConversationSidebarToggle = () => {
-  updateUISettings({
-    is_contact_sidebar_open: true,
-    is_copilot_panel_open: false,
-  });
+  openContactPanel(currentChatId.value);
 };
 
 const handleCopilotSidebarToggle = () => {
+  if (isSmallScreen.value) closeContactPanel();
   updateUISettings({
     is_contact_sidebar_open: false,
     is_copilot_panel_open: true,

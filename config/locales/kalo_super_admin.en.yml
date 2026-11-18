@@ -79,3 +79,18 @@ en:
       manage: Manage
       features: Features
       agent_overage: "The system has %{count} agents. Please add more licenses to add more users."
+    account_actions:
+      seed_intro: Generate demo seed data in this account.
+      seed_warning: "Note: this clears all existing data in this account."
+      seed_submit: Generate seed data
+      reset_cache_intro: Clears the IndexedDB cache keys from Redis.
+      reset_cache_next: The next load fetches the data from the server.
+      reset_cache_submit: Reset frontend cache
+    impersonate:
+      caution: "Caution: any action taken after impersonating appears as performed by this user - [%{name}]"
+      submit: Impersonate user
+    app_config:
+      title: "Configure settings - %{name}"
+      submit: Save
+      'true': 'True'
+      'false': 'False'

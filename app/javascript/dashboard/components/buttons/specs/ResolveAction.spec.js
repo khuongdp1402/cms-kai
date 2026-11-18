@@ -146,6 +146,21 @@ describe('ResolveAction', () => {
     expect(spy).toHaveBeenCalled();
   });
 
+  it('"snooze until…" closes the status dropdown and opens the snooze command', async () => {
+    const ninja = document.createElement('ninja-keys');
+    ninja.open = vi.fn();
+    document.body.appendChild(ninja);
+    wrapper = mountAction();
+    await wrapper.findAll('button')[1].trigger('click');
+    const snooze = wrapper
+      .findAll('button')
+      .find(button => button.html().includes('i-lucide-alarm-clock-minus'));
+    expect(snooze).toBeTruthy();
+    await snooze.trigger('click');
+    expect(ninja.open).toHaveBeenCalledWith({ parent: 'snooze_conversation' });
+    expect(wrapper.html()).not.toContain('i-lucide-alarm-clock-minus');
+  });
+
   it('reacts to the command-bar bus events (resolve and reopen)', async () => {
     wrapper = mountAction();
     await flushPromises();

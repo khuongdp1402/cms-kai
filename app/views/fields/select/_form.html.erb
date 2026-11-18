@@ -1,0 +1,23 @@
+<%#
+# Select Form Partial (Kalo): Administrate's stock partial, with option labels
+# translated from kalo_super_admin.values.<attribute>.<value> when available.
+%>
+<%
+  options = field.selectable_options.map do |option|
+    next option if option.is_a?(Array) || option.nil?
+
+    [t("kalo_super_admin.values.#{field.attribute}.#{option}", default: option.to_s), option]
+  end
+%>
+<div class="field-unit__label">
+  <%= f.label field.attribute %>
+</div>
+<div class="field-unit__field">
+  <%=
+    f.select(
+      field.attribute,
+      options_for_select(options, field.data),
+      include_blank: field.include_blank_option
+    )
+  %>
+</div>

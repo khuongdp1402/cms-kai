@@ -3,7 +3,8 @@ import { computed, ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore, useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
-import { dynamicTime } from 'shared/helpers/timeHelper';
+import { fromUnixTime } from 'date-fns';
+import { relativeTime } from 'shared/helpers/dateLocale';
 
 import Avatar from 'dashboard/components-next/avatar/Avatar.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
@@ -49,13 +50,13 @@ onMounted(() => {
 
 const createdAt = computed(() => {
   return contactData.value?.createdAt
-    ? dynamicTime(contactData.value.createdAt)
+    ? relativeTime(fromUnixTime(contactData.value.createdAt))
     : '';
 });
 
 const lastActivityAt = computed(() => {
   return contactData.value?.lastActivityAt
-    ? dynamicTime(contactData.value.lastActivityAt)
+    ? relativeTime(fromUnixTime(contactData.value.lastActivityAt))
     : '';
 });
 

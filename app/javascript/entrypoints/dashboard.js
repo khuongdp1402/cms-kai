@@ -1,4 +1,4 @@
-import { createApp } from 'vue';
+import { createApp, watch } from 'vue';
 import { createI18n } from 'vue-i18n';
 
 import axios from 'axios';
@@ -20,6 +20,7 @@ import {
   applyKaloFallback,
 } from 'shared/helpers/localeOverrides';
 import ktechLocaleOverrides from 'dashboard/i18n/ktech';
+import { setDateLocale } from 'shared/helpers/dateLocale';
 import createAxios from 'dashboard/helper/APIHelper';
 
 import commonHelpers, { isJSONValid } from 'dashboard/helper/commons';
@@ -53,6 +54,9 @@ const i18n = createI18n({
     installationBrandName()
   ),
 });
+
+// Dates and relative times follow the UI language (date-fns has no global locale).
+watch(() => i18n.global.locale.value, setDateLocale, { immediate: true });
 
 sync(store, router);
 

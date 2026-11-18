@@ -3,6 +3,11 @@ module SuperAdmin::FeaturesHelper
     YAML.load(ERB.new(Rails.root.join('app/helpers/super_admin/features.yml').read).result).with_indifferent_access
   end
 
+  # Features this build actually ships: enterprise ones and Captain have no code here (no enterprise/ dir).
+  def self.community_features
+    available_features.reject { |feature, attrs| attrs[:enterprise] || feature == 'captain' }
+  end
+
   def self.plan_details
     plan = ChatwootHub.pricing_plan
     quantity = ChatwootHub.pricing_plan_quantity

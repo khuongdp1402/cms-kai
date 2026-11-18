@@ -11,4 +11,13 @@ describe('Kalo shell routes', () => {
     expect(router.hasRoute(name)).toBe(true);
     expect(router.resolve({ name, params: { accountId: 1 } }).path).toBe(path);
   });
+
+  it('/settings lands on the settings hub', () => {
+    const settingsHome = router
+      .getRoutes()
+      .find(route => route.name === 'settings_home');
+    expect(settingsHome.path).toBe('/app/accounts/:accountId/settings');
+    const target = settingsHome.redirect({ params: { accountId: '1' } });
+    expect(router.resolve(target).path).toBe('/app/accounts/1/settings/hub');
+  });
 });

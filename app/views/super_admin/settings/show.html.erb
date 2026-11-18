@@ -65,7 +65,8 @@
       <h3 class="h-5 leading-5 text-n-slate-12 font-medium text-base"><%= t('kalo_super_admin.settings.features') %></h3>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-2 gap-y-3">
-      <% SuperAdmin::FeaturesHelper.available_features.each do |feature, attrs| %>
+      <%# Enterprise features (and Captain) have no code in this build: not shown. %>
+      <% SuperAdmin::FeaturesHelper.community_features.each do |feature, attrs| %>
         <div class="group outline outline-1 outline-n-container p-4 rounded-lg relative shadow-sm">
           <span class="<%= attrs[:enabled] ? 'bg-green-400 text-white': 'bg-slate-300 text-slate-800' %> absolute rounded-full p-1 inline-flex right-4 top-5">
             <svg width="14" height="14"><use xlink:href="<%= attrs[:enabled] ? '#icon-tick-line': '#icon-lock-line' %>" /></svg>
@@ -75,7 +76,7 @@
           </div>
           <div class="flex items-center justify-between mb-1.5 mt-4">
             <div class="flex items-center gap-2">
-              <h3 class="text-n-slate-12 font-medium"><%= attrs[:name] %></h3>
+              <h3 class="text-n-slate-12 font-medium"><%= t("kalo_super_admin.features.#{feature}.name", default: attrs[:name]) %></h3>
               <% if attrs[:enterprise] %>
                 <span class="px-2 h-4 leading-4 rounded-xl text-green-800 font-medium bg-green-100/70 text-xxs">EE</span>
               <% end %>
@@ -86,7 +87,11 @@
               <% end %>
             </div>
           </div>
-          <p class="text-n-slate-11 mb-0"><%= attrs[:description].to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name) %></p>
+          <p class="text-n-slate-11 mb-0"><%= t(
+            "kalo_super_admin.features.#{feature}.description",
+            brand: SuperAdmin::KaloNavigation.brand_name,
+            default: attrs[:description].to_s.gsub('Chatwoot', SuperAdmin::KaloNavigation.brand_name)
+          ) %></p>
         </div>
       <% end %>
     </div>
