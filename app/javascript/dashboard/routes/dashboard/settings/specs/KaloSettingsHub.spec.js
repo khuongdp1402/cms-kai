@@ -20,6 +20,7 @@ const ROUTES = {
   canned_list: { permissions: ALL },
   general_settings_index: { permissions: ADMIN },
   kalo_billing: { permissions: ADMIN },
+  kalo_payment_settings: { permissions: ADMIN },
   profile_settings_index: { permissions: ALL },
   attributes_list: { permissions: ADMIN },
   automation_list: { permissions: ADMIN },
@@ -105,6 +106,22 @@ describe('SettingsHub (Kalo groups)', () => {
     expect(names).toContain('conversation_workflow_index');
     expect(names).toContain('kalo_billing');
     expect(names).not.toContain('billing_settings_index');
+  });
+
+  it('lists Nhận tiền in the Cửa hàng group, after the shop info and before the plan', async () => {
+    const { wrapper } = await mountHub();
+    const shop = wrapper.find('[data-test="hub-group-SHOP"]');
+    const titles = shop.findAll('li').map(li => li.text());
+    expect(titles).toHaveLength(3);
+    expect(titles[1]).toContain('Nhận tiền');
+    const shopLinks = shop
+      .findAllComponents({ name: 'RouterLink' })
+      .map(link => link.props('to').name);
+    expect(shopLinks).toEqual([
+      'general_settings_index',
+      'kalo_payment_settings',
+      'kalo_billing',
+    ]);
   });
 
   it('links data import only when the account has the feature', async () => {

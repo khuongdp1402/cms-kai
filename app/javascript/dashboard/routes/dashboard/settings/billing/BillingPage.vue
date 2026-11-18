@@ -19,6 +19,7 @@ const STATUS_STYLES = {
 
 const subscription = ref(null);
 const hasError = ref(false);
+const isNotConfigured = ref(false);
 const copied = ref(false);
 
 const isExpired = computed(() => subscription.value?.status === 'expired');
@@ -47,8 +48,12 @@ onMounted(async () => {
   try {
     const { data } = await subscriptionAPI.get();
     subscription.value = data;
-  } catch {
-    hasError.value = true;
+  } catch (error) {
+    if (error?.response?.data?.error === 'billing_not_configured') {
+      isNotConfigured.value = true;
+    } else {
+      hasError.value = true;
+    }
   }
 });
 </script>
@@ -76,7 +81,19 @@ onMounted(async () => {
       <p class="mb-0 text-sm text-n-slate-11">
         {{ t('KALO_SETTINGS_UI.PAGES.PLAN.DESC') }}
       </p>
-      <p v-if="hasError" data-test="error" class="mt-6 text-sm text-n-slate-11">
+      <p
+        v-if="isNotConfigured"
+        data-test="billing-not-configured"
+        role="status"
+        class="p-4 mt-6 text-sm font-medium border rounded-2xl bg-n-amber-3 text-n-amber-11 border-n-amber-5"
+      >
+        {{ t('KALO_PAYMENT.BILLING_NOT_CONFIGURED') }}
+      </p>
+      <p
+        v-else-if="hasError"
+        data-test="error"
+        class="mt-6 text-sm text-n-slate-11"
+      >
         {{ t('KALO_BILLING.ERROR') }}
       </p>
       <p v-else-if="!subscription" class="mt-6 text-sm text-n-slate-11">

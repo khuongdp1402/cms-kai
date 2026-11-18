@@ -24,7 +24,27 @@ RSpec.describe Ai::CustomLlmService do
   it 'raises on provider errors instead of returning a fake reply' do
     stub_request(:post, 'https://agentgw.cloud/v1/chat/completions').to_return(status: 500)
 
-    expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(/HTTP 500/)
+    expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError, /HTTP 500/)
+  end
+
+  it 'raises ProviderError when the provider rejects the key' do
+    stub_request(:post, 'https://agentgw.cloud/v1/chat/completions').to_return(status: 401)
+
+    expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError, /HTTP 401/)
+  end
+
+  [Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNREFUSED, SocketError].each do |network_error|
+    it "raises ProviderError on #{network_error}" do
+      stub_request(:post, 'https://agentgw.cloud/v1/chat/completions').to_raise(network_error)
+
+      expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)
+    end
+  end
+
+  it 'raises ProviderError when the provider answers with a non-JSON body' do
+    stub_request(:post, 'https://agentgw.cloud/v1/chat/completions').to_return(status: 200, body: '<html>gateway</html>')
+
+    expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)
   end
 
   it 'sends the Gemini key in a header, not in the URL' do

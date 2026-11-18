@@ -8,6 +8,8 @@ import {
   cacheReply,
   cacheSilent,
   getCachedSuggestion,
+  isSilenced,
+  silenceAll,
 } from './kaloSuggestionCache';
 
 const props = defineProps({
@@ -24,6 +26,8 @@ const { t } = useI18n();
 const INCOMING = 0;
 const OUTGOING = 1;
 const HISTORY_LIMIT = 6;
+// 403 plan expired, 429 rate limited, 502 provider down, 503 not configured.
+const ACCOUNT_WIDE_STATUSES = [403, 429, 502, 503];
 
 const suggestions = ref([]);
 let requestId = 0;
@@ -68,6 +72,7 @@ const load = async message => {
     if (cached.reply) suggestions.value = [cached.reply];
     return;
   }
+  if (isSilenced()) return;
   try {
     const { data } = await brandGrowthAPI.chatReply({
       message: message.content,
@@ -75,9 +80,10 @@ const load = async message => {
     });
     if (data.reply) cacheReply(key, data.reply);
     if (mine === requestId && data.reply) suggestions.value = [data.reply];
-  } catch {
-    // 503 ai_not_configured and 403 subscription_expired: stay silent, the strip just stays hidden.
+  } catch (error) {
+    // Any failure stays silent: the strip just stays hidden.
     cacheSilent(key);
+    if (ACCOUNT_WIDE_STATUSES.includes(error?.response?.status)) silenceAll();
   }
 };
 

@@ -19,6 +19,12 @@ const mountDrawer = (order, props = {}) =>
           messages: { vi: viMessages },
         }),
       ],
+      stubs: {
+        RouterLink: {
+          props: ['to'],
+          template: '<a :data-to="JSON.stringify(to)"><slot /></a>',
+        },
+      },
     },
   });
 
@@ -65,6 +71,21 @@ describe('OrderDrawer', () => {
       'Chưa cài đặt tài khoản nhận tiền'
     );
     expect(wrapper.find('img[data-test="drawer-qr"]').exists()).toBe(false);
+    const link = wrapper.find('[data-test="drawer-qr-setup"]');
+    expect(link.text()).toBe('Cài đặt nhận tiền');
+    expect(JSON.parse(link.attributes('data-to'))).toEqual({
+      name: 'kalo_payment_settings',
+    });
+  });
+
+  it('offers no settings link for other QR errors', async () => {
+    OrdersAPI.qr.mockRejectedValue({
+      response: { data: { error: 'invalid_amount' } },
+    });
+    const wrapper = mountDrawer(makeOrder());
+    await flushPromises();
+    expect(wrapper.find('[data-test="drawer-qr-error"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="drawer-qr-setup"]').exists()).toBe(false);
   });
 
   it('shows the not-payable message when the server refuses the QR of a non-pending order', async () => {

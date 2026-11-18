@@ -59,6 +59,26 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
     expect(response).to have_http_status(:service_unavailable)
   end
 
+  describe 'when the AI provider fails' do
+    { 'rejects the key' => 401, 'is down' => 503 }.each do |label, status|
+      it "returns 502 ai_unavailable when the provider #{label}" do
+        stub_request(:post, gateway).to_return(status: status)
+        post "#{base}/chat_reply", params: { message: 'hi' }, headers: agent.create_new_auth_token, as: :json
+
+        expect(response).to have_http_status(:bad_gateway)
+        expect(response.parsed_body).to eq('error' => 'ai_unavailable')
+      end
+    end
+
+    it 'returns 502 ai_unavailable when the provider cannot be reached' do
+      stub_request(:post, gateway).to_timeout
+      post "#{base}/repurpose", params: { topic: 'Da khô' }, headers: agent.create_new_auth_token, as: :json
+
+      expect(response).to have_http_status(:bad_gateway)
+      expect(response.parsed_body).to eq('error' => 'ai_unavailable')
+    end
+  end
+
   it 'creates a pending content job that an admin can approve once' do
     stub_ai({ angles: [{ angle: 'A', hook: 'H', body: 'B', cta: 'C' }] }.to_json)
     post "#{base}/repurpose", params: { topic: 'Da khô mùa đông' }, headers: agent.create_new_auth_token, as: :json

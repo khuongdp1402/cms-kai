@@ -80,6 +80,57 @@ describe('KaloAiSuggestions', () => {
     expect(alertMock).not.toHaveBeenCalled();
   });
 
+  it('shows nothing, no toast and no console error when the provider fails (502 ai_unavailable)', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+    brandGrowthAPI.chatReply.mockRejectedValue({
+      response: { status: 502, data: { error: 'ai_unavailable' } },
+    });
+    const wrapper = mountIt([incoming('Alo')]);
+    await flushPromises();
+    expect(wrapper.find('[data-test="ai-suggestions"]').exists()).toBe(false);
+    expect(alertMock).not.toHaveBeenCalled();
+    expect(consoleError).not.toHaveBeenCalled();
+    consoleError.mockRestore();
+  });
+
+  it.each([
+    [502, 'ai_unavailable'],
+    [503, 'ai_not_configured'],
+    [403, 'subscription_expired'],
+  ])(
+    'after a %s %s stops asking in other conversations for a minute',
+    async (status, error) => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      brandGrowthAPI.chatReply.mockRejectedValue({
+        response: { status, data: { error } },
+      });
+      mountIt([incoming('Alo')]);
+      await flushPromises();
+      mountIt([incoming('Chào shop')], { conversationId: 13 });
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(1);
+      vi.setSystemTime(Date.now() + 61000);
+      mountIt([incoming('Còn hàng không?')], { conversationId: 14 });
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(2);
+      vi.useRealTimers();
+    }
+  );
+
+  it('keeps asking in other conversations after an error tied to one message (422)', async () => {
+    brandGrowthAPI.chatReply.mockRejectedValueOnce({
+      response: { status: 422, data: { error: 'prompt_too_large' } },
+    });
+    mountIt([incoming('Alo')]);
+    await flushPromises();
+    const other = mountIt([incoming('Chào shop')], { conversationId: 13 });
+    await flushPromises();
+    expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(2);
+    expect(other.text()).toContain('Dạ em lên đơn rồi ạ');
+  });
+
   it('shows nothing and no error toast when the subscription expired (403)', async () => {
     brandGrowthAPI.chatReply.mockRejectedValue({
       response: { status: 403, data: { error: 'subscription_expired' } },

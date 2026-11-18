@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
 import { formatVnd } from 'dashboard/helper/formatVnd';
-import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
+import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import OrderForm from './OrderForm.vue';
 import OrderDrawer from './OrderDrawer.vue';
@@ -88,7 +88,7 @@ const run = async work => {
   try {
     await work();
   } catch (error) {
-    useAlert(t(kchatErrorKey(error)));
+    alertKchatError(error, t);
   }
 };
 

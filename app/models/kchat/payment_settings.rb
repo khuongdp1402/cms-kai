@@ -2,6 +2,7 @@ class Kchat::PaymentSettings
   include ActiveModel::Validations
 
   FIELDS = %w[bank_bin bank_name account_number account_name].freeze
+  QR_FIELDS = %w[bank_bin account_number].freeze
   KEY = 'payment'.freeze
 
   attr_reader(*FIELDS)
@@ -24,6 +25,16 @@ class Kchat::PaymentSettings
       account.update!(custom_attributes: (account.custom_attributes || {}).merge(KEY => settings.to_h))
     end
     settings.to_h
+  end
+
+  # Validates only the fields a VietQR payload needs, for previews of unsaved values.
+  def self.qr_preview!(attributes)
+    settings = new(attributes.to_h.stringify_keys.slice(*QR_FIELDS))
+    settings.validate
+    (FIELDS - QR_FIELDS).each { |field| settings.errors.delete(field.to_sym) }
+    raise ActiveModel::ValidationError, settings if settings.errors.any?
+
+    settings
   end
 
   def self.complete?(account)
