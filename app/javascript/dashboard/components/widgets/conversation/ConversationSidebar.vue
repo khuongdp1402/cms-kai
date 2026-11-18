@@ -11,8 +11,11 @@ const props = defineProps({
   },
 });
 
-const { isSmallScreen, isContactPanelOpenFor, closeContactPanel: close } =
-  useContactPanel();
+const {
+  isSmallScreen,
+  isContactPanelOpenFor,
+  closeContactPanel: close,
+} = useContactPanel();
 
 const activeTab = computed(() =>
   isContactPanelOpenFor(props.currentChat.id) ? 0 : null

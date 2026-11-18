@@ -236,6 +236,7 @@ onMounted(() => {
     @closed="onClosed"
   >
     <!-- Replaces the library's English footer (slot "footer"). -->
+    <!-- eslint-disable-next-line vue/no-deprecated-slot-attribute -->
     <div
       slot="footer"
       data-test-id="command-bar-footer"

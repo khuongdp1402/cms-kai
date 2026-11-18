@@ -121,8 +121,7 @@ const releasePreview = () => {
 
 const canPreview = computed(
   () =>
-    BIN_FORMAT.test(bin.value) &&
-    ACCOUNT_NUMBER_FORMAT.test(form.accountNumber)
+    BIN_FORMAT.test(bin.value) && ACCOUNT_NUMBER_FORMAT.test(form.accountNumber)
 );
 
 const loadPreview = async () => {

@@ -12,7 +12,11 @@ const english = flatten(en);
 // [rule name, test(viText, enText)]
 const RULES = [
   // A JSON "\b" escape in upstream renders a stray control character.
-  ['control character', text => /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text)],
+  [
+    'control character',
+    // eslint-disable-next-line no-control-regex
+    text => /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/.test(text),
+  ],
   ['typo "Trờ về"', text => /Trờ về/.test(text)],
   ['unattended as "Không giám sát"', text => /giám sát/i.test(text)],
   ['snooze as "Báo lại"', text => /^Báo lại$/.test(text)],
@@ -20,7 +24,8 @@ const RULES = [
   ['agent as "đại lý"', text => /đại lý/i.test(text)],
   [
     'agent or inbox as "nhà cung cấp"',
-    (text, en) => /nhà cung cấp/i.test(text) && !/provider/i.test(en || ''),
+    (text, enText) =>
+      /nhà cung cấp/i.test(text) && !/provider/i.test(enText || ''),
   ],
 ];
 

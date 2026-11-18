@@ -19,7 +19,9 @@ export function useContactPanel() {
 
   const isContactPanelOpenFor = conversationId => {
     if (isSmallScreen.value) {
-      return !!conversationId && openedOnSmallScreenFor.value === conversationId;
+      return (
+        !!conversationId && openedOnSmallScreenFor.value === conversationId
+      );
     }
     return !!uiSettings.value?.is_contact_sidebar_open;
   };

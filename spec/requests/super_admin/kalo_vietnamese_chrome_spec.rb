@@ -34,7 +34,8 @@ RSpec.describe 'Super admin Vietnamese chrome', type: :request do
       text = visible_text
       expect(text).to include('Tài khoản shop', 'Mã', 'Tên', 'Ngôn ngữ', 'Người dùng', 'Hội thoại', 'Trạng thái', 'Đang hoạt động',
                               'Đã tạm ngưng', 'Tạo trong 30 ngày', 'Chờ xóa')
-      expect(text).not_to match(/\b(Accounts|Locale|Status|Conversations|active|Marked For Deletion)\b/), context_of(text, /\b(Accounts|Locale|Status|Conversations|active|Marked For Deletion)\b/)
+      expect(text).not_to match(/\b(Accounts|Locale|Status|Conversations|active|Marked For Deletion)\b/),
+                          context_of(text, /\b(Accounts|Locale|Status|Conversations|active|Marked For Deletion)\b/)
     end
 
     it 'translates the account page actions' do
@@ -42,7 +43,8 @@ RSpec.describe 'Super admin Vietnamese chrome', type: :request do
       text = visible_text
       expect(text).to include('Sửa', 'Thêm Nhân viên trong shop', 'Tạo dữ liệu mẫu', 'Xóa bộ nhớ đệm giao diện', 'Lịch sử tạm ngưng', 'Vai trò',
                               'Nhân viên')
-      expect(text).not_to match(/\b(Edit|Create Account user|Generate Seed Data|Reset Frontend Cache|Suspension history|agent)\b/), context_of(text, /\b(Edit|Create Account user|Generate Seed Data|Reset Frontend Cache|Suspension history|agent)\b/)
+      expect(text).not_to match(/\b(Edit|Create Account user|Generate Seed Data|Reset Frontend Cache|Suspension history|agent)\b/),
+                          context_of(text, /\b(Edit|Create Account user|Generate Seed Data|Reset Frontend Cache|Suspension history|agent)\b/)
     end
 
     it 'translates the account form' do
@@ -56,21 +58,24 @@ RSpec.describe 'Super admin Vietnamese chrome', type: :request do
       get "/super_admin/users/#{user.id}"
       text = visible_text
       expect(text).to include('Đăng nhập với tư cách người dùng', 'Tên hiển thị')
-      expect(text).not_to match(/\b(Impersonate user|Caution|Display name|Created at)\b/), context_of(text, /\b(Impersonate user|Caution|Display name|Created at)\b/)
+      expect(text).not_to match(/\b(Impersonate user|Caution|Display name|Created at)\b/),
+                          context_of(text, /\b(Impersonate user|Caution|Display name|Created at)\b/)
     end
 
     it 'translates app config pages' do
       get '/super_admin/app_config', params: { config: 'general' }
       text = visible_text
       expect(text).to include('Cấu hình - Chung', 'Lưu', 'Bật', 'Tắt', 'Cho phép tự đăng ký tài khoản')
-      expect(text).not_to match(/\b(Configure Settings|Submit|True|False|Enable Account Signup)\b/), context_of(text, /\b(Configure Settings|Submit|True|False|Enable Account Signup)\b/)
+      expect(text).not_to match(/\b(Configure Settings|Submit|True|False|Enable Account Signup)\b/),
+                          context_of(text, /\b(Configure Settings|Submit|True|False|Enable Account Signup)\b/)
     end
 
     it 'shows only community features on the settings page, in Vietnamese' do
       get '/super_admin/settings'
       text = visible_text
       expect(text).to include('Trung tâm trợ giúp', 'Chat trên website')
-      expect(text).not_to match(/\b(EE|Captain|SAML|Audit Logs|Custom Branding|Voice Calls)\b/), context_of(text, /\b(EE|Captain|SAML|Audit Logs|Custom Branding|Voice Calls)\b/)
+      expect(text).not_to match(/\b(EE|Captain|SAML|Audit Logs|Custom Branding|Voice Calls)\b/),
+                          context_of(text, /\b(EE|Captain|SAML|Audit Logs|Custom Branding|Voice Calls)\b/)
     end
   end
 

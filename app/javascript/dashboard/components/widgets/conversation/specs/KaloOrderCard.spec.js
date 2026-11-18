@@ -105,9 +105,11 @@ describe('KaloOrderCard', () => {
 
   it('links to the payment settings when the shop has no bank account yet', async () => {
     const sendQr = vi.fn(() =>
-      Promise.reject({
-        response: { data: { error: 'payment_settings_missing' } },
-      })
+      Promise.reject(
+        Object.assign(new Error('payment_settings_missing'), {
+          response: { data: { error: 'payment_settings_missing' } },
+        })
+      )
     );
     const wrapper = mountCard(buildStore({ orders: [makeOrder()], sendQr }));
     await wrapper.find('[data-test="send-qr"]').trigger('click');

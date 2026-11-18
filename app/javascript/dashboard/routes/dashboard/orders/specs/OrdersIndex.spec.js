@@ -170,15 +170,12 @@ describe('OrdersIndex', () => {
     await flushPromises();
     await wrapper.find('[data-test="row-action"]').trigger('click');
     await flushPromises();
-    expect(useAlert).toHaveBeenCalledWith(
-      'Chưa cài đặt tài khoản nhận tiền',
-      {
-        type: 'link',
-        to: { name: 'kalo_payment_settings' },
-        message: 'Cài đặt nhận tiền',
-        duration: 6000,
-      }
-    );
+    expect(useAlert).toHaveBeenCalledWith('Chưa cài đặt tài khoản nhận tiền', {
+      type: 'link',
+      to: { name: 'kalo_payment_settings' },
+      message: 'Cài đặt nhận tiền',
+      duration: 6000,
+    });
   });
 
   it('labels the search input', async () => {

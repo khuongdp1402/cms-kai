@@ -129,9 +129,7 @@ describe('PaymentSettingsPage', () => {
   it('writes the account name in uppercase without accents and keeps only digits in the account number', async () => {
     const wrapper = await mountPage();
     await fill(wrapper, 'account-name', 'Nguyễn Văn Đức');
-    expect(input(wrapper, 'account-name').element.value).toBe(
-      'NGUYEN VAN DUC'
-    );
+    expect(input(wrapper, 'account-name').element.value).toBe('NGUYEN VAN DUC');
     await fill(wrapper, 'account-number', '0123 456-789');
     expect(input(wrapper, 'account-number').element.value).toBe('0123456789');
   });
