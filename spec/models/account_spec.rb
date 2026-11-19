@@ -122,7 +122,17 @@ RSpec.describe Account do
         feature_data_import: 1 << 1,
         feature_api_and_webhooks: 1 << 2,
         feature_whatsapp_reconfigure: 1 << 3,
-        feature_whatsapp_embedded_signup_inbox_creation: 1 << 4
+        feature_whatsapp_embedded_signup_inbox_creation: 1 << 4,
+        feature_zalo_personal_native: 1 << 5,
+        feature_kalo_comments: 1 << 6,
+        feature_kalo_campaigns: 1 << 7,
+        feature_kalo_brand: 1 << 8,
+        feature_kalo_ai_assistant: 1 << 9,
+        feature_kalo_pos: 1 << 10,
+        feature_kalo_advanced_automation: 1 << 11,
+        feature_kalo_help_center: 1 << 12,
+        feature_kalo_detailed_reports: 1 << 13,
+        feature_kalo_extra_channels: 1 << 14
       )
       expect(described_class.flag_mapping['feature_flags_ext_1'][:feature_whatsapp_manual_transfer]).to eq(1)
       expect(described_class.flag_mapping['feature_flags_ext_1'][:feature_data_import]).to eq(2)

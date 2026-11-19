@@ -272,3 +272,41 @@
   display_name: Zalo Personal Native
   enabled: false
   column: feature_flags_ext_1
+# Kalo feature groups (ADR-023). Core modules are on for new shops, advanced groups are off;
+# a Super Admin toggles them per shop on /super_admin/accounts/:id. Keep the order: bits are positional.
+- name: kalo_comments
+  display_name: Kalo Social Comments
+  enabled: true
+  column: feature_flags_ext_1
+- name: kalo_campaigns
+  display_name: Kalo Campaigns
+  enabled: true
+  column: feature_flags_ext_1
+- name: kalo_brand
+  display_name: Kalo Brand Studio
+  enabled: true
+  column: feature_flags_ext_1
+- name: kalo_ai_assistant
+  display_name: Kalo AI Assistant
+  enabled: true
+  column: feature_flags_ext_1
+- name: kalo_pos
+  display_name: Kalo POS
+  enabled: true
+  column: feature_flags_ext_1
+- name: kalo_advanced_automation
+  display_name: Kalo Advanced Automation
+  enabled: false
+  column: feature_flags_ext_1
+- name: kalo_help_center
+  display_name: Kalo Help Center
+  enabled: false
+  column: feature_flags_ext_1
+- name: kalo_detailed_reports
+  display_name: Kalo Detailed Reports
+  enabled: false
+  column: feature_flags_ext_1
+- name: kalo_extra_channels
+  display_name: Kalo Extra Channels
+  enabled: false
+  column: feature_flags_ext_1

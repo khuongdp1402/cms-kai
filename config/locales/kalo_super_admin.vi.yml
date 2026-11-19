@@ -109,6 +109,42 @@ vi:
         administrator: Quản trị viên
       type:
         SuperAdmin: Quản trị hệ thống
+    kalo_features:
+      title: Chức năng
+      intro: Bật hoặc tắt từng nhóm chức năng cho shop này. Tắt chỉ ẩn khỏi giao diện, dữ liệu và API vẫn giữ nguyên.
+      submit: Lưu chức năng
+      saved: Đã lưu chức năng của shop.
+      groups:
+        core: Chức năng chính (bật sẵn cho shop mới)
+        advanced: Chức năng nâng cao (ẩn với shop mới)
+      flags:
+        kalo_comments:
+          name: Bình luận
+          description: Gom bình luận Facebook/Instagram, ẩn bình luận xấu và trả lời riêng.
+        kalo_campaigns:
+          name: Chiến dịch
+          description: Gửi chiến dịch nhắn tin theo từng bước và đo doanh thu.
+        kalo_brand:
+          name: Thương hiệu
+          description: Hồ sơ thương hiệu, lịch nội dung và ý tưởng bằng AI.
+        kalo_ai_assistant:
+          name: Trợ lý AI
+          description: Trợ lý trả lời câu hỏi về cách dùng và số liệu của shop.
+        kalo_pos:
+          name: Bán hàng tại quầy (POS)
+          description: Màn bán hàng tại quầy, tạo đơn và thu tiền nhanh.
+        kalo_advanced_automation:
+          name: Thao tác nâng cao
+          description: Tự động hóa, macro, thuộc tính tùy chỉnh, bot, webhook và ứng dụng dashboard.
+        kalo_help_center:
+          name: Trung tâm trợ giúp
+          description: Viết bài hướng dẫn và đăng lên trang trợ giúp của shop.
+        kalo_detailed_reports:
+          name: Báo cáo chi tiết
+          description: Báo cáo theo nhân viên, nhãn, nhóm, hộp thư và khảo sát hài lòng (CSAT).
+        kalo_extra_channels:
+          name: Kênh bổ sung
+          description: SMS, Email, API, Telegram, Line, WhatsApp và Zalo OA bằng token.
     account_actions:
       seed_intro: Tạo dữ liệu mẫu trong tài khoản này để demo.
       seed_warning: "Lưu ý: toàn bộ dữ liệu hiện có của tài khoản sẽ bị xóa."

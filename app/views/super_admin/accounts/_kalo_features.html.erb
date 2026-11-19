@@ -1,0 +1,31 @@
+<%# Kalo feature groups per shop (ADR-023). %>
+<% states = Kchat::Features.states(page.resource) %>
+<section class="main-content__body" id="kalo-features" aria-labelledby="kalo-features-title">
+  <div class="kalo-features">
+    <h2 class="kalo-features__title" id="kalo-features-title"><%= t('kalo_super_admin.kalo_features.title') %></h2>
+    <p class="kalo-features__intro"><%= t('kalo_super_admin.kalo_features.intro') %></p>
+
+    <%= form_with url: kalo_features_super_admin_account_path(page.resource), method: :patch do %>
+      <%= hidden_field_tag 'kalo_features[]', '', id: nil %>
+      <% { core: Kchat::Features::CORE, advanced: Kchat::Features::ADVANCED }.each do |group, names| %>
+        <fieldset class="kalo-features__group">
+          <legend class="kalo-features__legend"><%= t("kalo_super_admin.kalo_features.groups.#{group}") %></legend>
+          <% names.each do |name| %>
+            <label class="kalo-switch" for="kalo_feature_<%= name %>">
+              <%= check_box_tag 'kalo_features[]', name, states[name], id: "kalo_feature_#{name}", class: 'kalo-switch__input',
+                                aria: { describedby: "kalo_feature_#{name}_hint" } %>
+              <span class="kalo-switch__track" aria-hidden="true"></span>
+              <span class="kalo-switch__text">
+                <span class="kalo-switch__name"><%= t("kalo_super_admin.kalo_features.flags.#{name}.name") %></span>
+                <span class="kalo-switch__hint" id="kalo_feature_<%= name %>_hint"><%= t("kalo_super_admin.kalo_features.flags.#{name}.description") %></span>
+              </span>
+            </label>
+          <% end %>
+        </fieldset>
+      <% end %>
+      <div class="form-actions">
+        <%= submit_tag t('kalo_super_admin.kalo_features.submit') %>
+      </div>
+    <% end %>
+  </div>
+</section>
