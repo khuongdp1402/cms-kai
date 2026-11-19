@@ -44,9 +44,11 @@ RSpec.describe Kchat::MarketingReports do
   it 'aggregates channel funnel, UTM campaign attribution, agent leaderboard and cross-brand overview' do
     seed_funnel_data
     funnel = described_class.new(account, 'today').funnel
-    expect(funnel[:totals]).to eq(conversations_count: 3, orders_count: 1, conversion_pct: 33.3, revenue: 500_000, avg_order_value: 500_000)
+    expect(funnel[:totals]).to eq(conversations_count: 3, converted_conversations_count: 1, orders_count: 1, counter_orders_count: 0,
+                                  conversion_pct: 33.3, revenue: 500_000, avg_order_value: 500_000)
     expect(funnel[:channel_funnel].find { |r| r[:channel] == 'facebook_page' }).to eq(
-      channel: 'facebook_page', conversations: 2, orders: 1, conversion_pct: 50.0, revenue: 500_000, avg_order_value: 500_000
+      channel: 'facebook_page', chat: true, conversations: 2, converted_conversations: 1, orders: 1, conversion_pct: 50.0,
+      revenue: 500_000, avg_order_value: 500_000
     )
     expect(funnel[:campaigns].first).to eq(
       campaign: 'tet_2027', source: 'facebook_ads', conversations: 2, orders: 1, conversion_pct: 50.0, revenue: 500_000
@@ -55,5 +57,28 @@ RSpec.describe Kchat::MarketingReports do
 
     overview = described_class.brands_overview(user: user, range: 'today')
     expect(overview[:brands].map { |b| [b[:name], b[:revenue]] }).to include([account.name, 500_000], ['Shop 2', 200_000])
+  end
+
+  it 'reported case: overall close rate matches the rows and the POS sale is a separate row without a rate' do
+    inbox = create(:inbox, account: account)
+    contact = create(:contact, account: account)
+    chat = create(:conversation, account: account, inbox: inbox, contact: contact,
+                                 contact_inbox: create(:contact_inbox, contact: contact, inbox: inbox))
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: chat },
+                                    items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },
+                                    items: [{ name: 'Nến', unit_price: 90_000, quantity: 1 }])
+
+    funnel = described_class.new(account, 'today').funnel
+    expect(funnel[:totals]).to eq(conversations_count: 1, converted_conversations_count: 1, orders_count: 1, counter_orders_count: 1,
+                                  conversion_pct: 100.0, revenue: 90_000, avg_order_value: 90_000)
+    expect(funnel[:channel_funnel]).to eq(
+      [
+        { channel: 'web_widget', chat: true, conversations: 1, converted_conversations: 1, orders: 1, conversion_pct: 100.0,
+          revenue: 0, avg_order_value: 0 },
+        { channel: 'pos', chat: false, conversations: 0, converted_conversations: 0, orders: 1, conversion_pct: nil,
+          revenue: 90_000, avg_order_value: 90_000 }
+      ]
+    )
   end
 end

@@ -1,0 +1,156 @@
+# frozen_string_literal: true
+
+# Single source of truth for the sales and chat numbers shown on Tổng quan (QualityOverviewReport) and Báo cáo
+# (Reports, MarketingReports), so the two pages can never disagree (LESSONS B12).
+#
+# Period: today / last 7 days / this month, cut at midnight in the account's reporting timezone (Asia/Ho_Chi_Minh by default).
+# - revenue, paid_orders_count: orders paid, shipping or completed whose paid_at is in the period, every source.
+# - avg_order_value: revenue / paid_orders_count.
+# - new_orders_count: orders created in the period that are not cancelled, every source and payment state.
+# - chat order: a new order linked to a conversation and not sold at the counter (source != pos).
+# - counter_orders_count: new orders that are not chat orders (POS sales, manual orders without a chat).
+# - chat_conversations_count: conversations created in the period.
+# - converted_conversations_count: those conversations that have at least one non-cancelled chat order.
+# - chat_conversion_pct: converted_conversations_count / chat_conversations_count (never above 100%). Counter orders
+#   never enter it; their channel rows carry conversion_pct nil.
+class Kchat::Metrics
+  RANGES = %w[today 7d month].freeze
+  PAID_STATUSES = %w[paid shipping completed].freeze
+  NON_CHAT_KEYS = Kchat::Order.sources.keys.freeze
+  CONVERTED_SQL = <<~SQL.squish.freeze
+    EXISTS (SELECT 1 FROM kchat_orders converted_orders WHERE converted_orders.conversation_id = conversations.id
+    AND converted_orders.status <> 'cancelled' AND converted_orders.source <> 'pos')
+  SQL
+  CONVERTED_COUNT_SQL = "COUNT(*) FILTER (WHERE #{CONVERTED_SQL})".freeze
+  # Chat orders are grouped under their conversation's inbox channel, every other order under its source.
+  ORDER_CHANNEL_SQL = <<~SQL.squish.freeze
+    CASE WHEN kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source <> 'pos'
+    THEN COALESCE(inboxes.channel_type, 'unknown') ELSE kchat_orders.source END
+  SQL
+  # Aliased on purpose: plucking the bare expression makes Rails cast the value with the `source` enum type, which turns
+  # every channel type into nil.
+  ORDER_CHANNEL_SELECT = "(#{ORDER_CHANNEL_SQL}) AS order_channel".freeze
+
+  attr_reader :zone
+
+  def self.zone_for(account)
+    ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone[Kchat::Reports::DEFAULT_TIMEZONE]
+  end
+
+  def self.percentage(numerator, denominator)
+    denominator.to_i <= 0 ? 0.0 : (numerator.to_f * 100.0 / denominator).round(1)
+  end
+
+  def self.average(total, count)
+    count.to_i <= 0 ? 0 : (total.to_f / count).round
+  end
+
+  def self.normalize_channel(value)
+    raw = value.to_s.strip
+    return 'unknown' if raw.empty?
+
+    raw.start_with?('Channel::') ? raw.demodulize.underscore : raw
+  end
+
+  def initialize(account, range)
+    raise ArgumentError, "unknown range #{range}" unless RANGES.include?(range)
+
+    @account = account
+    @range = range
+    @zone = self.class.zone_for(account)
+  end
+
+  def today
+    @today ||= @zone.now.to_date
+  end
+
+  def first_day
+    { 'today' => today, '7d' => today - 6, 'month' => today.beginning_of_month }.fetch(@range)
+  end
+
+  def window
+    @window ||= @zone.local(first_day.year, first_day.month, first_day.day)..@zone.now.end_of_day
+  end
+
+  def paid_orders
+    Kchat::Order.where(account_id: @account.id, status: PAID_STATUSES, paid_at: window)
+  end
+
+  def new_orders
+    Kchat::Order.where(account_id: @account.id, created_at: window).where.not(status: 'cancelled')
+  end
+
+  def chat_orders
+    new_orders.where.not(conversation_id: nil).where.not(source: 'pos')
+  end
+
+  def conversations
+    Conversation.where(account_id: @account.id, created_at: window)
+  end
+
+  def totals
+    @totals ||= begin
+      revenue, paid_count = paid_orders.pick(Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'), Arel.sql('COUNT(*)'))
+      new_count, chat_count = new_orders.pick(
+        Arel.sql('COUNT(*)'), Arel.sql("COUNT(*) FILTER (WHERE kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source <> 'pos')")
+      )
+      convs, converted = conversations.pick(Arel.sql('COUNT(*)'), Arel.sql(CONVERTED_COUNT_SQL))
+      {
+        revenue: revenue.to_i, paid_orders_count: paid_count.to_i, avg_order_value: self.class.average(revenue, paid_count),
+        new_orders_count: new_count.to_i, chat_orders_count: chat_count.to_i, counter_orders_count: new_count.to_i - chat_count.to_i,
+        chat_conversations_count: convs.to_i, converted_conversations_count: converted.to_i,
+        chat_conversion_pct: self.class.percentage(converted, convs)
+      }
+    end
+  end
+
+  # One row per inbox channel (chat rows) plus one per non-chat order source (pos, manual). Revenue is paid revenue,
+  # so the rows add up to totals[:revenue]; orders are new orders, so they add up to totals[:new_orders_count].
+  def channel_rows
+    @channel_rows ||= begin
+      buckets = Hash.new { |hash, key| hash[key] = { conversations: 0, converted_conversations: 0, orders: 0, paid_orders: 0, revenue: 0 } }
+      merge_leads(buckets)
+      merge_new_orders(buckets)
+      merge_paid_orders(buckets)
+      buckets.map { |channel, row| build_row(channel, row) }
+             .sort_by { |row| [row[:chat] ? 0 : 1, -row[:revenue], -row[:orders], -row[:conversations], row[:channel]] }
+    end
+  end
+
+  private
+
+  def merge_leads(buckets)
+    conversations.joins(:inbox).group('inboxes.channel_type')
+                 .pluck('inboxes.channel_type', Arel.sql('COUNT(*)'), Arel.sql(CONVERTED_COUNT_SQL))
+                 .each do |channel_type, count, converted|
+      row = buckets[self.class.normalize_channel(channel_type)]
+      row[:conversations] += count.to_i
+      row[:converted_conversations] += converted.to_i
+    end
+  end
+
+  def merge_new_orders(buckets)
+    new_orders.left_joins(conversation: :inbox).group(Arel.sql(ORDER_CHANNEL_SQL))
+              .pluck(Arel.sql(ORDER_CHANNEL_SELECT), Arel.sql('COUNT(*)'))
+              .each { |key, count| buckets[self.class.normalize_channel(key)][:orders] += count.to_i }
+  end
+
+  def merge_paid_orders(buckets)
+    paid_orders.left_joins(conversation: :inbox).group(Arel.sql(ORDER_CHANNEL_SQL))
+               .pluck(Arel.sql(ORDER_CHANNEL_SELECT), Arel.sql('COUNT(*)'), Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'))
+               .each do |key, count, revenue|
+      row = buckets[self.class.normalize_channel(key)]
+      row[:paid_orders] += count.to_i
+      row[:revenue] += revenue.to_i
+    end
+  end
+
+  def build_row(channel, row)
+    chat = NON_CHAT_KEYS.exclude?(channel)
+    {
+      channel: channel, chat: chat, conversations: row[:conversations], converted_conversations: row[:converted_conversations],
+      orders: row[:orders], conversion_pct: chat ? self.class.percentage(row[:converted_conversations], row[:conversations]) : nil,
+      revenue: row[:revenue], avg_order_value: self.class.average(row[:revenue], row[:paid_orders])
+    }
+  end
+end

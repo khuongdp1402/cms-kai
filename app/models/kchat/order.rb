@@ -77,6 +77,9 @@ class Kchat::Order < ApplicationRecord
 
   PROTECTED_ATTRIBUTES = %i[status paid_at number subtotal total account account_id].freeze
 
+  # Paid orders that still have to be shipped ("Cần giao"). Counter (POS) sales are handed over at the counter.
+  scope :awaiting_delivery, -> { where(status: 'paid').where.not(source: 'pos') }
+
   class << self
     def create_with_items!(account:, attributes:, items:)
       transaction do
@@ -142,6 +145,16 @@ class Kchat::Order < ApplicationRecord
     self
   end
 
+  # Derived, no column: POS sales never ship, so they are never "Chưa giao" nor counted in delivery KPIs.
+  def delivery_status
+    return 'cancelled' if cancelled?
+    return 'not_applicable' if source_pos?
+    return 'shipping' if shipping?
+    return 'delivered' if completed?
+
+    'pending'
+  end
+
   def apply_totals
     self.subtotal = items.sum { |i| i.unit_price.to_i * i.quantity.to_i }
     self.total = subtotal + shipping_fee.to_i
@@ -171,11 +184,18 @@ class Kchat::Order < ApplicationRecord
   def ensure_allowed!(event)
     return if pos_direct_complete?(event)
 
+    ensure_shippable!(event)
+
     rules = TRANSITIONS.fetch(event) { raise InvalidTransition, "unknown event #{event}" }
     raise InvalidTransition, "cannot #{event} from #{status}" unless rules.key?(status)
 
     required_method = rules[status]
     raise InvalidTransition, "cannot #{event} a #{payment_method} order" if required_method && payment_method != required_method
+  end
+
+  # POS sales are handed over at the counter (delivery_status not_applicable).
+  def ensure_shippable!(event)
+    raise InvalidTransition, 'cannot ship a pos order' if event == :ship && source_pos?
   end
 
   def pos_direct_complete?(event)

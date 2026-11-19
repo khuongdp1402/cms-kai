@@ -1,9 +1,12 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import broadcastsAPI from 'dashboard/api/kchat/broadcasts';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import {
+  RESULTS_POLL_MAX_MS,
+  RESULTS_POLL_MS,
+  SENDING_STATUSES,
   STATUS_TONES,
   channelKey,
   formatVietnamTime,
@@ -20,18 +23,56 @@ const { t, te } = useI18n();
 const broadcast = ref(null);
 const results = ref(null);
 const state = ref('loading');
+let pollTimer = null;
+let isUnmounted = false;
+// Only the latest request may update the view (refresh, campaign change).
+let latestRequest = 0;
+let failedPolls = 0;
 
-const load = async () => {
-  state.value = 'loading';
+const stopPolling = () => {
+  clearTimeout(pollTimer);
+  pollTimer = null;
+};
+
+// While the campaign is sending, refresh every RESULTS_POLL_MS until it is
+// done or the view closes (unmount), so it never stays on "Đang gửi".
+// Failed refreshes wait twice as long each time, up to RESULTS_POLL_MAX_MS.
+const schedulePoll = () => {
+  stopPolling();
+  if (isUnmounted || !SENDING_STATUSES.includes(broadcast.value?.status)) {
+    return;
+  }
+  const delay = Math.min(
+    RESULTS_POLL_MS * 2 ** failedPolls,
+    RESULTS_POLL_MAX_MS
+  );
+  // eslint-disable-next-line no-use-before-define
+  pollTimer = setTimeout(() => load({ silent: true }), delay);
+};
+
+const load = async ({ silent = false } = {}) => {
+  stopPolling();
+  latestRequest += 1;
+  const request = latestRequest;
+  if (!silent) {
+    state.value = 'loading';
+    failedPolls = 0;
+  }
   try {
     const { data } = await broadcastsAPI.results(props.broadcastId);
+    if (isUnmounted || request !== latestRequest) return;
     broadcast.value = data.broadcast;
     results.value = data.results;
     state.value = 'ready';
+    failedPolls = 0;
     emit('loaded', data.broadcast);
   } catch {
-    state.value = 'error';
+    if (isUnmounted || request !== latestRequest) return;
+    // A failed background refresh keeps the last numbers on screen.
+    if (silent) failedPolls += 1;
+    else state.value = 'error';
   }
+  schedulePoll();
 };
 
 const status = computed(() => broadcast.value?.status);
@@ -62,8 +103,15 @@ const tiles = computed(() => {
   ].filter(Boolean);
 });
 
-watch(() => props.broadcastId, load);
-onMounted(load);
+watch(
+  () => props.broadcastId,
+  () => load()
+);
+onMounted(() => load());
+onBeforeUnmount(() => {
+  isUnmounted = true;
+  stopPolling();
+});
 defineExpose({ load });
 </script>
 
@@ -85,7 +133,7 @@ defineExpose({ load });
         data-test="campaign-results-refresh"
         :disabled="state === 'loading'"
         class="px-3 py-1.5 text-xs font-semibold border rounded-[9px] border-n-strong bg-n-solid-1 text-n-slate-12 hover:bg-n-solid-3 disabled:opacity-60"
-        @click="load"
+        @click="load()"
       >
         {{ t('KALO_CAMPAIGN_FLOW.RESULTS.REFRESH') }}
       </button>

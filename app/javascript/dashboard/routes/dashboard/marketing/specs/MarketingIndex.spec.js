@@ -92,7 +92,7 @@ describe('MarketingIndex', () => {
     contentIdeasAPI.overview.mockResolvedValue({
       data: {
         brand_profile: {},
-        ai: { configured: true, default_model: 'gpt-5' },
+        ai: { configured: true, chat_model: 'gpt-5' },
         jobs: [],
         calendar: [],
       },
@@ -317,7 +317,7 @@ describe('MarketingIndex', () => {
           positioning: 'Nến sạch',
           hard_bans: ['rẻ nhất', '100%'],
         },
-        ai: { configured: true, default_model: 'kalo-ai' },
+        ai: { configured: true, chat_model: 'kalo-ai' },
         jobs: [],
       },
     });

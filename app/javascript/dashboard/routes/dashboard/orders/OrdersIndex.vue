@@ -18,6 +18,7 @@ import {
   STATUS_TABS,
   paymentChip,
   deliveryChip,
+  awaitsDelivery,
   rowAction,
 } from './orderStatus';
 
@@ -28,6 +29,7 @@ const store = useStore();
 const route = useRoute();
 
 const status = ref(undefined);
+const delivery = ref(undefined);
 const query = ref('');
 // ?new=1 (setup checklist, "Tạo đơn" links) opens the create form.
 const showForm = ref(route?.query?.new === '1');
@@ -58,9 +60,7 @@ const isBusy = id => busyIds.value.includes(id);
 const summaryKpis = computed(() => {
   const list = orders.value || [];
   const pendingCount = list.filter(o => o.status === 'pending_payment').length;
-  const processingCount = list.filter(o =>
-    ['paid', 'shipping'].includes(o.status)
-  ).length;
+  const processingCount = list.filter(awaitsDelivery).length;
   const visibleValue = list
     .filter(o => o.status !== 'cancelled')
     .reduce((sum, o) => sum + Number(o.total || 0), 0);
@@ -76,6 +76,7 @@ const summaryKpis = computed(() => {
 const load = () =>
   store.dispatch('kchatOrders/fetch', {
     status: status.value,
+    delivery: delivery.value,
     query: query.value || undefined,
     page: 1,
   });
@@ -83,12 +84,14 @@ const load = () =>
 const loadMore = () =>
   store.dispatch('kchatOrders/fetch', {
     status: status.value,
+    delivery: delivery.value,
     query: query.value || undefined,
     page: meta.value.current_page + 1,
   });
 
 const chooseTab = tab => {
   status.value = tab.status;
+  delivery.value = tab.delivery;
   load();
 };
 
@@ -206,6 +209,7 @@ onMounted(load);
         <div
           v-for="kpi in summaryKpis"
           :key="kpi.key"
+          :data-test="`orders-kpi-${kpi.key}`"
           class="flex flex-col gap-1 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <span class="text-xs font-semibold text-n-slate-10">
@@ -328,9 +332,7 @@ onMounted(load);
                     class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
                     :class="deliveryChip(order).tone"
                   >
-                    {{
-                      t(`KALO_ORDERS.DELIVERY_CHIP.${deliveryChip(order).key}`)
-                    }}
+                    {{ t(deliveryChip(order).labelKey) }}
                   </span>
                 </td>
                 <td class="px-4 py-3 text-end">

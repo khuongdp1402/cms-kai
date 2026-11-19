@@ -15,13 +15,16 @@ class Kchat::Reports
 
     @account = account
     @range = range
-    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone[DEFAULT_TIMEZONE]
+    @zone = Kchat::Metrics.zone_for(account)
   end
 
+  # revenue/orders_count: paid orders (the orders behind the revenue); new_orders_count: every non-cancelled order created
+  # in the period ("Đơn mới"). Definitions live in Kchat::Metrics, shared with Tổng quan.
   def summary
-    totals = paid_orders.pick(Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'), Arel.sql('COUNT(*)'))
+    totals = metrics.totals
     {
-      range: @range, today: today.iso8601, revenue: totals[0].to_i, orders_count: totals[1].to_i,
+      range: @range, today: today.iso8601, revenue: totals[:revenue], orders_count: totals[:paid_orders_count],
+      new_orders_count: totals[:new_orders_count],
       new_contacts: Contact.where(account_id: @account.id, created_at: window).count,
       waiting_messages: Conversation.where(account_id: @account.id, status: :open).where.not(waiting_since: nil).count,
       channels: channels, daily: daily, top_products: top_products
@@ -30,21 +33,11 @@ class Kchat::Reports
 
   private
 
-  def today
-    @today ||= @zone.now.to_date
+  def metrics
+    @metrics ||= Kchat::Metrics.new(@account, @range)
   end
 
-  def first_day
-    { 'today' => today, '7d' => today - 6, 'month' => today.beginning_of_month }[@range]
-  end
-
-  def window
-    @window ||= @zone.local(first_day.year, first_day.month, first_day.day)..@zone.now.end_of_day
-  end
-
-  def paid_orders
-    Kchat::Order.where(account_id: @account.id, status: PAID_STATUSES, paid_at: window)
-  end
+  delegate :today, :first_day, :window, :paid_orders, to: :metrics
 
   def daily
     day_sql = Kchat::Order.sanitize_sql_array(["(kchat_orders.paid_at AT TIME ZONE 'UTC' AT TIME ZONE ?)::date", @zone.tzinfo.name])
@@ -52,12 +45,9 @@ class Kchat::Reports
     (first_day..today).map { |day| { date: day.iso8601, revenue: revenue.fetch(day, 0).to_i } }
   end
 
-  # Orders from a conversation count under the inbox channel (e.g. facebook_page); others under their source.
+  # Where the new orders came from: chat orders under their inbox channel (e.g. facebook_page), the rest under their source.
   def channels
-    rows = paid_orders.left_joins(conversation: :inbox).group('kchat_orders.source', 'inboxes.channel_type').count
-    counts = rows.each_with_object(Hash.new(0)) do |((source, channel_type), count), memo|
-      memo[channel_type ? channel_type.demodulize.underscore : source] += count
-    end
+    counts = metrics.channel_rows.select { |row| row[:orders].positive? }.to_h { |row| [row[:channel], row[:orders]] }
     shares = largest_remainder_shares(counts)
     counts.sort_by { |name, count| [-count, name] }.map { |name, count| { channel: name, orders: count, share_pct: shares[name] } }
   end

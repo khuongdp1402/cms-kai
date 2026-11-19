@@ -253,6 +253,20 @@ describe('CampaignWizard', () => {
     expect(find(wrapper, 'campaign-ai-write').exists()).toBe(false);
   });
 
+  it('replaces the AI button with a note while the AI provider is failing', async () => {
+    brandGrowthAPI.aiHealth.mockResolvedValue({
+      data: { configured: true, available: false },
+    });
+    const wrapper = await mountWizard();
+    await fillGoal(wrapper);
+    await next(wrapper);
+    await next(wrapper);
+    expect(find(wrapper, 'campaign-ai-write').exists()).toBe(false);
+    expect(find(wrapper, 'campaign-ai-unavailable').text()).toBe(
+      'AI đang lỗi kết nối nên tạm chưa viết hộ được. Bạn vẫn soạn tay bình thường, vài phút nữa thử lại.'
+    );
+  });
+
   it('builds a UTM link with the campaign tag and inserts it', async () => {
     const wrapper = await mountWizard();
     await fillGoal(wrapper);

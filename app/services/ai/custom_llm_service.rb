@@ -4,9 +4,24 @@
 # Gemini REST is used only when AI_PROVIDER=gemini_api.
 class Ai::CustomLlmService
   class NotConfiguredError < StandardError; end
+
   class PromptTooLargeError < StandardError; end
+
   # The provider was reached but refused (bad key, 5xx, garbage body) or could not be reached at all.
-  class ProviderError < StandardError; end
+  class ProviderError < StandardError
+    # HTTP status of the refused call, nil when the provider could not be reached or answered garbage.
+    attr_reader :status
+
+    def initialize(message = nil, status: nil)
+      @status = status
+      super(message)
+    end
+
+    # 400/413/422/429 are about this request (or the shop's quota), not a broken provider.
+    def provider_down?
+      status.nil? || [401, 403].include?(status) || status >= 500
+    end
+  end
 
   NETWORK_ERRORS = [Timeout::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError, EOFError, HTTParty::Error].freeze
 
@@ -33,8 +48,13 @@ class Ai::CustomLlmService
     gemini? ? ENV.fetch('GEMINI_API_KEY', '').present? : @api_key.present?
   end
 
+  # available is false while a provider call failed within Kchat::AiHealth::FAILURE_TTL (bad key, provider down).
   def health_status
-    { provider: @provider, configured: configured?, chat_model: gemini? ? gemini_model : @model }
+    last_failure_at = configured? ? Kchat::AiHealth.last_failure_at : nil
+    {
+      provider: @provider, configured: configured?, available: configured? && last_failure_at.nil?,
+      last_failure_at: last_failure_at, chat_model: gemini? ? gemini_model : @model
+    }
   end
 
   def endpoint
@@ -46,10 +66,7 @@ class Ai::CustomLlmService
     raise NotConfiguredError, 'AI provider is not configured' unless configured?
     raise PromptTooLargeError, 'AI prompt is too large' if messages.sum { |m| m[:content].to_s.length } > MAX_PROMPT_CHARS
 
-    text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
-    self.class.strip_think(text)
-  rescue *NETWORK_ERRORS, JSON::ParserError => e
-    raise ProviderError, "AI provider failed: #{e.class}"
+    self.class.strip_think(call_provider(messages, model || @model))
   end
 
   def generate_reply_suggestion(conversation_messages, brand_profile: {})
@@ -145,6 +162,19 @@ class Ai::CustomLlmService
     (DEFAULT_HARD_BANS + parsed).map { |b| b.to_s.strip }.reject(&:empty?).uniq
   end
 
+  # Remembers provider-side failures in Kchat::AiHealth so ai_health can report them.
+  def call_provider(messages, model)
+    text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model)
+    Kchat::AiHealth.clear_failure!
+    text
+  rescue ProviderError => e
+    Kchat::AiHealth.record_failure! if e.provider_down?
+    raise
+  rescue *NETWORK_ERRORS, JSON::ParserError => e
+    Kchat::AiHealth.record_failure!
+    raise ProviderError, "AI provider failed: #{e.class}"
+  end
+
   def call_openai_compatible(messages, model)
     response = HTTParty.post(
       endpoint,
@@ -152,7 +182,7 @@ class Ai::CustomLlmService
       body: { model: model, messages: messages, temperature: 0.7 }.to_json,
       timeout: 35
     )
-    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError.new("AI provider error: HTTP #{response.code}", status: response.code) unless response.success?
 
     JSON.parse(response.body).dig('choices', 0, 'message', 'content')
   end
@@ -169,7 +199,7 @@ class Ai::CustomLlmService
       body: { system_instruction: { parts: [{ text: system_text }] }, contents: contents }.to_json,
       timeout: 35
     )
-    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError.new("AI provider error: HTTP #{response.code}", status: response.code) unless response.success?
 
     JSON.parse(response.body).dig('candidates', 0, 'content', 'parts', 0, 'text')
   end

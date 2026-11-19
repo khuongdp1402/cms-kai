@@ -9,6 +9,9 @@ export const HISTORY_TURNS = 6;
 // In-memory only: one session per account, gone on page reload.
 const sessions = reactive({});
 const availability = reactive({});
+// An unavailable AI (no answer from the provider) is asked again after this.
+export const AVAILABILITY_TTL_MS = 5 * 60 * 1000;
+const recheckTimers = {};
 
 const session = accountId => {
   if (!sessions[accountId]) {
@@ -42,6 +45,10 @@ export const errorKey = error => {
 export const resetAssistantState = () => {
   Object.keys(sessions).forEach(key => delete sessions[key]);
   Object.keys(availability).forEach(key => delete availability[key]);
+  Object.keys(recheckTimers).forEach(key => {
+    clearTimeout(recheckTimers[key]);
+    delete recheckTimers[key];
+  });
 };
 
 export function useKaloAssistant() {
@@ -94,22 +101,34 @@ export function useKaloAssistant() {
   };
 }
 
-// Entry-point visibility: AI key configured (ai_health) and the account flag
+// Entry-point visibility: AI key configured and answering (ai_health
+// available is false while recent provider calls failed) and the account flag
 // kalo_ai_assistant on. Health is asked once per account and cached.
 export function useKaloAssistantAvailability() {
   const accountId = useMapGetter('getCurrentAccountId');
   const isFeatureEnabled = useMapGetter('accounts/isFeatureEnabledonAccount');
 
-  const load = async () => {
-    const id = accountId.value;
-    if (!id || availability[id] !== undefined) return;
-    availability[id] = false;
+  // A "no" is only kept for AVAILABILITY_TTL_MS, then asked again, so a
+  // provider that recovers (or a fixed key) brings the button back.
+  const check = async id => {
+    availability[id] = availability[id] ?? false;
     try {
       const { data } = await brandGrowthAPI.aiHealth();
-      availability[id] = !!data?.configured;
+      availability[id] = !!data?.configured && data?.available !== false;
     } catch {
       availability[id] = false;
     }
+    clearTimeout(recheckTimers[id]);
+    delete recheckTimers[id];
+    if (!availability[id]) {
+      recheckTimers[id] = setTimeout(() => check(id), AVAILABILITY_TTL_MS);
+    }
+  };
+
+  const load = async () => {
+    const id = accountId.value;
+    if (!id || availability[id] !== undefined) return;
+    await check(id);
   };
 
   const isAvailable = computed(

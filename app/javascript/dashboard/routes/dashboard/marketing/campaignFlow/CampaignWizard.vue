@@ -55,6 +55,8 @@ const audience = ref(null);
 const audienceState = ref('idle');
 const blockedPhrases = ref([]);
 const aiAvailable = ref(false);
+// Configured, but recent provider calls failed (ai_health available: false).
+const aiUnavailable = ref(false);
 const busy = ref('');
 const actionErrorKey = ref('');
 const actionErrorText = ref('');
@@ -121,6 +123,7 @@ provide(CAMPAIGN_FLOW_KEY, {
   selectedChannel,
   blockedPhrases,
   aiAvailable,
+  aiUnavailable,
 });
 
 let audienceReq = 0;
@@ -335,7 +338,9 @@ const primaryLabel = computed(() => {
 const loadAiHealth = async () => {
   try {
     const { data } = await brandGrowthAPI.aiHealth();
-    aiAvailable.value = data?.configured === true;
+    aiUnavailable.value =
+      data?.configured === true && data?.available === false;
+    aiAvailable.value = data?.configured === true && !aiUnavailable.value;
   } catch {
     aiAvailable.value = false;
   }

@@ -16,6 +16,20 @@
   - Triệu chứng: sau khi đổi policy, POS vẫn hiện nút cho Nhân viên (điền form xong mới nhận 401) và `products_spec`/`entitlements_gating_spec` có sẵn tạo sản phẩm bằng agent nên đỏ.
   - Nguyên nhân: policy đổi ở backend, còn lối vào ở frontend (POS, checklist, trang trống) không đọc vai trò.
   - Quy tắc: đổi policy theo vai trò thì tìm mọi lối vào giao diện của hành động đó (`grep` tên action trong store) và ẩn theo `useShopAdmin`; spec mount phải có getter `getCurrentRole` và có ca cho vai trò bị chặn. Xóa sản phẩm đã có đơn thì lưu trữ (`active: false`), không xóa hẳn.
+- **B105 (2026-11-20): Tổng quan và Báo cáo ra số mâu thuẫn ("0 đơn / 1 hội thoại" dù có đơn từ chat; tỷ lệ chốt chung 100% mà mọi dòng 0%; "Đơn mới 1" khi có 2 đơn).**
+  - Nguyên nhân: ba service (`Reports`, `QualityOverviewReport`, `MarketingReports`) mỗi nơi tự định nghĩa; "đơn" chỉ đếm đơn đã thu tiền nên đơn QR chưa trả bị bỏ; tổng của phễu cộng cả đơn POS (không có hội thoại) vào tử số.
+  - Quy tắc: mọi số bán hàng/chat lấy từ `Kchat::Metrics` (định nghĩa ghi ở đầu file và trong tooltip `KALO_METRICS.*`). Doanh thu = đơn đã nhận tiền theo `paid_at`; Đơn mới = mọi đơn tạo trong kỳ trừ đơn hủy; tỷ lệ chốt = hội thoại có đơn / hội thoại, đơn POS là dòng riêng không có %. Thêm chỉ số mới thì thêm vào `Kchat::Metrics` kèm spec số cụ thể, không tính lại trong service khác.
+- **B106 (2026-11-20): `pluck` một biểu thức `CASE … ELSE kchat_orders.source END` trả `nil` cho mọi kênh.**
+  - Nguyên nhân: Rails ép kiểu cột kết quả theo thuộc tính `source` (enum) nên giá trị `Channel::WebWidget` thành `nil`.
+  - Quy tắc: biểu thức SQL trong `pluck`/`select` có chứa cột enum phải đặt alias (`(… ) AS order_channel`); spec phải kiểm giá trị thật, không chỉ số dòng.
+- **B107 (2026-11-20): Đơn POS đã trả tiền hiện "Chưa giao" và bị đếm vào "Cần giao / Đang giao".**
+  - Nguyên nhân: trạng thái giao hàng suy từ `status` cho mọi nguồn đơn; POS không có bước giao.
+  - Quy tắc: dùng `Kchat::Order#delivery_status` (POS = `not_applicable`, không cần cột mới) và scope `awaiting_delivery`; KPI giao hàng ở frontend dùng `awaitsDelivery`, tab "Cần giao" gửi `delivery=pending`.
+- **B108 (2026-11-20): `ai_health` báo `configured: true` trong khi mọi lần gọi AI đều 502 (key hỏng); huy hiệu ghi "AI đang hoạt động (AI)".**
+  - Nguyên nhân: health chỉ kiểm có key; frontend đọc `default_model` mà backend không trả (backend trả `chat_model`), spec fixture cũng dùng trường giả đó nên vẫn xanh.
+  - Quy tắc: `Kchat::AiHealth` nhớ lỗi gần nhất 5 phút (Rack::Attack cache store, spec dùng MemoryStore) và health trả `available`; chỉ lỗi phía provider (mạng, 401, 403, 5xx) mới tính, 400/413/422/429 là lỗi của yêu cầu nên không. UI ẩn/khóa AI khi `available === false` kèm câu giải thích, và không nhớ "không có AI" suốt phiên: hỏi lại sau 5 phút. Fixture spec frontend phải khớp đúng JSON backend trả (kiểm bằng request spec), không bịa trường.
+- **B109 (2026-11-20): Ngăn kết quả chiến dịch đứng ở "Đang gửi" cho tới khi bấm Làm mới.**
+  - Quy tắc: màn hình trạng thái của việc chạy nền (gửi chiến dịch, import…) phải tự hỏi lại mỗi 3–5 giây khi còn trạng thái trung gian, dừng khi tới trạng thái cuối hoặc khi đóng (unmount), làm mới ngầm không xóa số đang hiện, chỉ nhận phản hồi của yêu cầu mới nhất, lỗi thì giãn dần (gấp đôi, tối đa 30 s); spec dùng fake timers.
 
 - **B58 (2026-11-20): QA trên trình duyệt chạy nhầm bundle cũ.**
   - Triệu chứng: localhost:3005 không có checklist, tour, banner dù code đã gộp; agent QA phải tự build bundle phụ.

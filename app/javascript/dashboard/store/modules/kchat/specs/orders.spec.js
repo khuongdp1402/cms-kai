@@ -18,6 +18,22 @@ const order = (id, status) => ({ id, number: 1000 + id, status, items: [] });
 describe('kchatOrders store', () => {
   beforeEach(() => vi.clearAllMocks());
 
+  it('fetch passes the delivery filter of the Cần giao tab', async () => {
+    OrdersAPI.get.mockResolvedValue({
+      data: { payload: [], meta: { count: 0 } },
+    });
+    const store = makeStore();
+    await store.dispatch('kchatOrders/fetch', {
+      status: 'paid',
+      delivery: 'pending',
+      page: 1,
+    });
+    expect(OrdersAPI.get.mock.calls.at(-1)[0]).toMatchObject({
+      status: 'paid',
+      delivery: 'pending',
+    });
+  });
+
   it('fetch passes status and query', async () => {
     OrdersAPI.get.mockResolvedValue({
       data: { payload: [order(1, 'paid')], meta: { count: 1 } },
