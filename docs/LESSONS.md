@@ -12,6 +12,26 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B75 (2026-11-19): Ẩn chức năng theo cờ làm hỏng hàng loạt spec dựng store tối giản.**
+  - Triệu chứng: sau khi OrdersIndex, ReportsIndex, MarketingIndex, ConversationBox đọc cờ `kalo_*`, các spec cũ báo `isFeatureEnabledonAccount is not a function` hoặc `Cannot read properties of undefined (reading 'params')`.
+  - Nguyên nhân: store của spec không có getter `accounts/*`; bản đầu của `useKaloFeatures` đi qua `useAccount()` nên cần router, mà spec OrdersIndex mount không có router.
+  - Quy tắc: `useKaloFeatures` lấy account id từ getter `getCurrentAccountId` (không cần router). Spec mount code đọc cờ phải thêm `kaloFeatureGetters(features)` (`helper/specs/kaloFeatureGetters.js`); `null` là bật hết, object là chỉ bật cờ có trong đó. Cờ thiếu trong payload nghĩa là tắt.
+- **B76 (2026-11-19): Đổi hướng phụ thuộc người dùng không đặt được trong `redirect` của route.**
+  - Triệu chứng: `/app/console/*` cũ phải dẫn SuperAdmin sang `/app/platform/*` còn chủ shop sang Console của shop, nhưng `redirect` của vue-router chạy trước guard và không biết người dùng.
+  - Nguyên nhân: vue-router giải `redirect` khi resolve, guard `beforeEach` chỉ thấy đích cuối.
+  - Quy tắc: route cũ khai một bản ghi giữ chỗ (`meta.legacyConsole`, component rỗng) và để `validateAuthenticateRoutePermission` gọi `next(legacyConsoleTarget(user, to))`. Spec phải gọi guard với đường dẫn cũ cho cả hai loại người dùng.
+- **B77 (2026-11-19): Đổi thứ tự sidebar làm đổi luôn thứ tự thanh tab dưới trên mobile.**
+  - Triệu chứng: sau khi xếp lại sidebar theo §4 (Khách trước Đơn hàng), spec KaloTabBar thấy tab "Khách" nhảy lên trước "Đơn hàng".
+  - Nguyên nhân: `primaryItems` lọc `items` theo `PRIMARY_KEYS` nên giữ thứ tự sidebar.
+  - Quy tắc: thanh tab xếp theo `PRIMARY_KEYS` (map theo khóa), độc lập với thứ tự sidebar.
+- **B78 (2026-11-19): Ô chọn có cả `v-model` và `:checked` không hiện trạng thái "đã ở trong kênh".**
+  - Triệu chứng: drawer "Thêm vào kênh" hiện ô của kênh nhân viên đã thuộc về là ô trống bị khóa.
+  - Nguyên nhân: `v-model` trên checkbox ghi đè `:checked`; mảng chọn không chứa kênh đã là thành viên.
+  - Quy tắc: ô có trạng thái lấy từ hai nguồn (đã có, đang chọn) thì bỏ `v-model`, dùng `:checked` và `@change` tự cập nhật mảng chọn.
+- **B79 (2026-11-19): Kiểm tra quyền quản trị lẫn lộn `role` và `permissions`.**
+  - Triệu chứng: link Console trong hub Cài đặt biến mất ở spec hub, trong khi sidebar vẫn hiện Console.
+  - Nguyên nhân: fixture của hub chỉ có `accounts[].permissions`, fixture sidebar chỉ có `accounts[].role`; `getUserRole` đọc `role`, `getUserPermissions` đọc `permissions`. Payload thật có cả hai.
+  - Quy tắc: trong một màn hình, kiểm quyền cùng cách với route meta của nó (`getUserPermissions(...).includes('administrator')` ở hub). Fixture người dùng nên có cả `role` và `permissions` cho khớp payload thật.
 - **B94 (2026-11-19): Stack thứ hai (`-p kalo-xx`) trả 500 "Vite Ruby can't find entrypoints" và `up` báo trùng cổng.**
   - Triệu chứng: `docker compose -p kalo-t5b up` lỗi "Bind for 0.0.0.0:1025 failed" (mailhog), rồi `/app/login` trả 500 dù vite đã sẵn sàng.
   - Nguyên nhân: các cổng mailhog/bridge/postgres/redis của stack chính đang chiếm; rails dùng `VITE_RUBY_HOST=localhost` (trong container rails thì `localhost` không có vite).

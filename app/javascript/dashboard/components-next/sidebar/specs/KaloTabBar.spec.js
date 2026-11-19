@@ -31,8 +31,31 @@ describe('KaloTabBar', () => {
     await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
     const sheet = wrapper.find('[data-test-id="kalo-more-sheet"]');
     expect(sheet.exists()).toBe(true);
-    expect(sheet.text()).toContain('Marketing');
+    expect(sheet.text()).toContain('Chiến dịch');
+    expect(sheet.text()).toContain('Console');
     expect(sheet.text()).toContain('Cài đặt');
+    expect(sheet.text()).not.toContain('Nền tảng');
+  });
+
+  it('the Thêm sheet links to Nền tảng for SuperAdmin', async () => {
+    const { router, store, i18n } = createKaloTestEnv({
+      userType: 'SuperAdmin',
+    });
+    await router.push({ name: 'home', params: { accountId: 1 } });
+    const wrapper = mount(KaloTabBar, {
+      global: {
+        plugins: [router, store, i18n],
+        stubs: { ComposeConversation: true },
+      },
+    });
+    await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
+    const link = wrapper.find('[data-test-id="kalo-sheet-platform"]');
+    expect(link.text()).toBe('Nền tảng');
+    // kaloTestHelpers mounts every route under /app/accounts/:accountId/<name>;
+    // the real path (/app/platform/overview) is covered by platform/routes.spec.js.
+    expect(link.attributes('href')).toBe(
+      '/app/accounts/1/kalo_platform_overview'
+    );
   });
 
   it('tab bar sheet contains logout', async () => {

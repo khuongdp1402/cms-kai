@@ -1,5 +1,6 @@
 import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
 import { useRoute, useRouter } from 'vue-router';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 
 export function useSidebarKeyboardShortcuts(
   toggleShortcutModalFn,
@@ -7,6 +8,7 @@ export function useSidebarKeyboardShortcuts(
 ) {
   const route = useRoute();
   const router = useRouter();
+  const { isRouteNameOn } = useKaloFeatures();
 
   const isCurrentRouteSameAsNavigation = routeName => {
     return route.name === routeName;
@@ -38,7 +40,13 @@ export function useSidebarKeyboardShortcuts(
       action: () => navigateToRoute('contacts_dashboard_index'),
     },
     'Alt+KeyR': {
-      action: () => navigateToRoute('account_overview_reports'),
+      // Chatwoot detail reports need kalo_detailed_reports; else Kalo reports.
+      action: () =>
+        navigateToRoute(
+          isRouteNameOn('account_overview_reports')
+            ? 'account_overview_reports'
+            : 'kalo_reports'
+        ),
     },
     'Alt+KeyS': {
       action: () => navigateToRoute('agent_list'),

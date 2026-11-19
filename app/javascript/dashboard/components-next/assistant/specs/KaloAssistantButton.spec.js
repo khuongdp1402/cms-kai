@@ -106,10 +106,11 @@ describe('KaloAssistantButton account switch', () => {
 });
 
 describe('KaloAssistantButton placement', () => {
+  // Spec §4 footer order: Trợ lý AI first, above Console/Cài đặt (KaloRail).
   it('is inserted in the rail footer and the mobile sheet', async () => {
-    const [{ default: KaloRailFooter }, { default: KaloTabBar }, helpers] =
+    const [{ default: KaloRail }, { default: KaloTabBar }, helpers] =
       await Promise.all([
-        import('../../sidebar/KaloRailFooter.vue'),
+        import('../../sidebar/KaloRail.vue'),
         import('../../sidebar/KaloTabBar.vue'),
         import('../../sidebar/specs/kaloTestHelpers'),
       ]);
@@ -120,11 +121,21 @@ describe('KaloAssistantButton placement', () => {
       plugins: [env.router, env.store, env.i18n],
       stubs: { SidebarProfileMenuStatus: true, ComposeConversation: true },
     };
-    const footer = mount(KaloRailFooter, { attachTo: document.body, global });
+    const footer = mount(KaloRail, { attachTo: document.body, global });
     const tabBar = mount(KaloTabBar, { attachTo: document.body, global });
     wrappers.push(footer, tabBar);
     await flushPromises();
     expect(button(footer).exists()).toBe(true);
+    const order = footer
+      .findAll(
+        '[data-test-id="kalo-assistant-button"], [data-test-id^="kalo-nav-"]'
+      )
+      .map(el => el.attributes('data-test-id'));
+    expect(order.slice(-3)).toEqual([
+      'kalo-assistant-button',
+      'kalo-nav-console',
+      'kalo-nav-settings',
+    ]);
     await tabBar.find('[data-test-id="kalo-tab-more"]').trigger('click');
     await flushPromises();
     expect(button(tabBar).exists()).toBe(true);

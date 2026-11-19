@@ -104,6 +104,14 @@ const menuItems = computed(() => {
       target: '_blank',
     },
     {
+      // Kalo "Nền tảng" pages (/app/platform), SuperAdmin only.
+      show: currentUser.value.type === 'SuperAdmin',
+      showOnCustomBrandedInstance: true,
+      label: t('KALO_CONSOLE_SHOP.NAV.PLATFORM'),
+      icon: 'i-lucide-layout-dashboard',
+      link: { name: 'kalo_platform_overview' },
+    },
+    {
       show: currentUser.value.type === 'SuperAdmin',
       showOnCustomBrandedInstance: true,
       label: t('SIDEBAR_ITEMS.SUPER_ADMIN_CONSOLE'),

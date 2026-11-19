@@ -1,6 +1,7 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
 import { createStore } from 'vuex';
+import { kaloFeatureGetters } from 'dashboard/helper/specs/kaloFeatureGetters';
 import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import reportsAPI from 'dashboard/api/kchat/reports';
@@ -45,7 +46,9 @@ const mountOverview = async () => {
     ],
   });
   await router.push({ name: 'kalo_overview', params: { accountId: 1 } });
-  const store = createStore({ getters: { getCurrentAccountId: () => 1 } });
+  const store = createStore({
+    getters: { getCurrentAccountId: () => 1, ...kaloFeatureGetters() },
+  });
   const i18n = createI18n({
     legacy: false,
     locale: 'vi',

@@ -53,6 +53,16 @@ export const FEATURE_FLAGS = {
   CONVERSATION_REQUIRED_ATTRIBUTES: 'conversation_required_attributes',
   CONVERSATION_UNREAD_COUNTS: 'conversation_unread_counts',
   UNREAD_COUNT_FOR_FILTERS: 'unread_count_for_filters',
+  // Kalo per-shop modules (ADR-023), toggled by Super Admin.
+  KALO_COMMENTS: 'kalo_comments',
+  KALO_CAMPAIGNS: 'kalo_campaigns',
+  KALO_BRAND: 'kalo_brand',
+  KALO_AI_ASSISTANT: 'kalo_ai_assistant',
+  KALO_POS: 'kalo_pos',
+  KALO_ADVANCED_AUTOMATION: 'kalo_advanced_automation',
+  KALO_HELP_CENTER: 'kalo_help_center',
+  KALO_DETAILED_REPORTS: 'kalo_detailed_reports',
+  KALO_EXTRA_CHANNELS: 'kalo_extra_channels',
 };
 
 export const PREMIUM_FEATURES = [

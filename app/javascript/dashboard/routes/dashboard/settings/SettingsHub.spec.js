@@ -21,16 +21,14 @@ describe('SettingsHub', () => {
     const targets = wrapper
       .findAllComponents({ name: 'RouterLink' })
       .map(link => link.props('to').name || link.props('to'));
+    // Shop pages (channels, team, payment, plan) are reached through the Console.
     [
-      'campaigns_livechat_index',
-      'settings_inbox_list',
+      'kalo_console',
       'settings_applications',
       'labels_list',
-      'settings_teams_list',
       'canned_list',
       'automation_list',
       'profile_settings_index',
-      'kalo_payment_settings',
     ].forEach(name => expect(targets).toContain(name));
     expect(targets).not.toContain('account_overview_reports');
     expect(wrapper.find('h1').text()).toBe('Cài đặt');

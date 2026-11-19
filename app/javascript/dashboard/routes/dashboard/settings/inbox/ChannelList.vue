@@ -5,6 +5,9 @@ import { useRouter } from 'vue-router';
 import { useMapGetter } from 'dashboard/composables/store';
 
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+import { EXTRA_CHANNEL_KEYS } from 'dashboard/helper/kaloFeatures';
 
 import ChannelItem from 'dashboard/components/widgets/ChannelItem.vue';
 
@@ -13,6 +16,7 @@ const router = useRouter();
 const { accountId, currentAccount } = useAccount();
 
 const globalConfig = useMapGetter('globalConfig/get');
+const { isOn } = useKaloFeatures();
 
 const enabledFeatures = computed(() => currentAccount.value?.features || {});
 
@@ -106,7 +110,11 @@ const channelList = computed(() => {
     }
   );
 
-  return channels;
+  // SMS, email, API, Telegram, Line, WhatsApp and Zalo OA (token) need the
+  // kalo_extra_channels flag (spec §4).
+  return isOn(FEATURE_FLAGS.KALO_EXTRA_CHANNELS)
+    ? channels
+    : channels.filter(channel => !EXTRA_CHANNEL_KEYS.includes(channel.key));
 });
 
 const initChannelAuth = channel => {

@@ -1,40 +1,62 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed, ref, onMounted, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'dashboard/composables/store';
-import { useAccount } from 'dashboard/composables/useAccount';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
-import LiveChatCampaignsPage from 'dashboard/routes/dashboard/campaigns/pages/LiveChatCampaignsPage.vue';
-import BroadcastCampaignsPanel from './BroadcastCampaignsPanel.vue';
+import KaloFeatureOff from '../KaloFeatureOff.vue';
+import MarketingCampaigns from './MarketingCampaigns.vue';
 import ContentIdeas from './ContentIdeas.vue';
 import ContentCalendar from './ContentCalendar.vue';
 import CommentAutomationSettings from './CommentAutomationSettings.vue';
 import BrandProfileForm from './BrandProfileForm.vue';
 
+// Former all-in-one Marketing page, kept for bookmarks. The sidebar now opens
+// Bình luận, Chiến dịch and Thương hiệu as their own pages (spec §4).
 const { t } = useI18n();
 const store = useStore();
-const { accountScopedRoute } = useAccount();
-
-const CAMPAIGN_LINKS = [
-  {
-    labelKey: 'KALO_MARKETING.CAMPAIGN_LINKS.SMS',
-    route: 'campaigns_sms_index',
-  },
-  {
-    labelKey: 'KALO_MARKETING.CAMPAIGN_LINKS.WHATSAPP',
-    route: 'campaigns_whatsapp_index',
-  },
-];
+const { isOn, isLoaded } = useKaloFeatures();
 
 const TABS = [
-  { value: 'campaigns', labelKey: 'KALO_MARKETING.TABS.CAMPAIGNS' },
-  { value: 'ideas', labelKey: 'KALO_MARKETING.TABS.IDEAS' },
-  { value: 'calendar', labelKey: 'KALO_MARKETING.TABS.CALENDAR' },
-  { value: 'comments', labelKey: 'KALO_MARKETING.TABS.COMMENTS' },
-  { value: 'brand', labelKey: 'KALO_MARKETING.TABS.BRAND' },
+  {
+    value: 'campaigns',
+    labelKey: 'KALO_MARKETING.TABS.CAMPAIGNS',
+    feature: FEATURE_FLAGS.KALO_CAMPAIGNS,
+  },
+  {
+    value: 'ideas',
+    labelKey: 'KALO_MARKETING.TABS.IDEAS',
+    feature: FEATURE_FLAGS.KALO_BRAND,
+  },
+  {
+    value: 'calendar',
+    labelKey: 'KALO_MARKETING.TABS.CALENDAR',
+    feature: FEATURE_FLAGS.KALO_BRAND,
+  },
+  {
+    value: 'comments',
+    labelKey: 'KALO_MARKETING.TABS.COMMENTS',
+    feature: FEATURE_FLAGS.KALO_COMMENTS,
+  },
+  {
+    value: 'brand',
+    labelKey: 'KALO_MARKETING.TABS.BRAND',
+    feature: FEATURE_FLAGS.KALO_BRAND,
+  },
 ];
 
+const tabs = computed(() => TABS.filter(tab => isOn(tab.feature)));
 const activeTab = ref('campaigns');
+
+watch(
+  tabs,
+  visible => {
+    if (visible.length && !visible.some(tab => tab.value === activeTab.value))
+      activeTab.value = visible[0].value;
+  },
+  { immediate: true }
+);
 
 onMounted(() => {
   store.dispatch('campaigns/get');
@@ -46,7 +68,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <KaloPage :title="t('KALO_MARKETING.TITLE')">
+  <KaloFeatureOff v-if="isLoaded && !tabs.length" />
+  <KaloPage v-else-if="isLoaded" :title="t('KALO_MARKETING.TITLE')">
     <template #tabs>
       <div
         role="tablist"
@@ -54,7 +77,7 @@ onMounted(() => {
         class="inline-flex flex-wrap gap-1 p-1 border rounded-xl bg-n-solid-2 border-n-weak"
       >
         <button
-          v-for="tab in TABS"
+          v-for="tab in tabs"
           :key="tab.value"
           type="button"
           role="tab"
@@ -72,34 +95,7 @@ onMounted(() => {
       </div>
     </template>
 
-    <template v-if="activeTab === 'campaigns'">
-      <BroadcastCampaignsPanel />
-      <div
-        class="overflow-hidden border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
-      >
-        <div
-          class="flex flex-wrap items-center gap-2 px-5 py-3 border-b bg-n-solid-2 border-n-weak"
-        >
-          <span
-            class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-n-solid-1 text-n-slate-12 shadow-sm border border-n-weak"
-          >
-            {{ t('CAMPAIGN.HEADER') }}
-          </span>
-          <router-link
-            v-for="link in CAMPAIGN_LINKS"
-            :key="link.route"
-            data-test="campaign-link"
-            :to="accountScopedRoute(link.route)"
-            class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg border border-n-strong bg-n-solid-1 text-n-slate-11 hover:text-n-slate-12 hover:bg-n-solid-3 transition-colors"
-          >
-            {{ t(link.labelKey) }}
-          </router-link>
-        </div>
-        <div class="p-4 sm:p-5">
-          <LiveChatCampaignsPage />
-        </div>
-      </div>
-    </template>
+    <MarketingCampaigns v-if="activeTab === 'campaigns'" />
     <ContentIdeas v-else-if="activeTab === 'ideas'" />
     <ContentCalendar v-else-if="activeTab === 'calendar'" />
     <CommentAutomationSettings v-else-if="activeTab === 'comments'" />

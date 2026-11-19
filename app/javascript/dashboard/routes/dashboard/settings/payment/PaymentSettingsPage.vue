@@ -206,14 +206,14 @@ const onSubmit = async () => {
       <router-link
         v-if="route.params.accountId"
         :to="{
-          name: 'kalo_settings_hub',
+          name: 'kalo_console',
           params: { accountId: route.params.accountId },
         }"
         data-test="settings-back-to-hub"
         class="inline-flex items-center gap-1 py-1 -ms-1 text-sm font-medium rounded-lg text-n-slate-11 hover:text-n-slate-12"
       >
         <KaloIcon name="back" class="size-4 rtl:rotate-180" />
-        {{ t('KALO_SETTINGS_UI.BACK_TO_HUB') }}
+        {{ t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE') }}
       </router-link>
       <div class="flex flex-wrap items-center gap-3">
         <h1 class="text-xl font-extrabold text-n-slate-12">

@@ -134,7 +134,7 @@ onMounted(load);
               {{ t('KALO_CONSOLE.OVERVIEW.LATEST') }}
             </b>
             <RouterLink
-              :to="{ name: 'kalo_console_payments' }"
+              :to="{ name: 'kalo_platform_payments' }"
               class="ml-auto text-sm font-semibold text-console-accent hover:underline"
             >
               {{ t('KALO_CONSOLE.OVERVIEW.VIEW_ALL') }}
@@ -207,7 +207,7 @@ onMounted(load);
           <RouterLink
             v-if="data.health.mailhog_enabled"
             data-testid="console-health-mail"
-            :to="{ name: 'kalo_console_emails' }"
+            :to="{ name: 'kalo_platform_emails' }"
             class="text-xs font-semibold text-console-accent hover:underline"
           >
             {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.OPEN_MAIL') }}

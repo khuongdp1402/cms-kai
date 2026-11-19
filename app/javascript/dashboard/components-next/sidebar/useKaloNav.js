@@ -3,11 +3,17 @@ import { useRoute } from 'vue-router';
 import { useAccount } from 'dashboard/composables/useAccount';
 import { useMapGetter, useStore } from 'dashboard/composables/store';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+import { getUserRole } from 'dashboard/helper/permissionsHelper';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { isConsolePage } from 'dashboard/helper/kaloFeatures';
 
 // Route names that keep a nav item highlighted.
 const CONVERSATION_ROUTES =
   /conversation|^home$|^inbox_|^label_conversations$|^team_conversations$|^folder_conversations$/;
 
+// Shop sidebar per guided UX spec §4. `feature` hides an item when its kalo_*
+// flag is off; `adminOnly` items are for shop administrators; `footer` items
+// sit at the bottom of the rail.
 export const KALO_NAV_ITEMS = [
   {
     key: 'overview',
@@ -28,12 +34,13 @@ export const KALO_NAV_ITEMS = [
     isActive: name => CONVERSATION_ROUTES.test(name),
   },
   {
-    key: 'orders',
-    icon: 'bag',
-    labelKey: 'KALO_NAV.ORDERS',
+    key: 'comments',
+    icon: 'quote',
+    labelKey: 'KALO_CONSOLE_SHOP.NAV.COMMENTS',
     sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
-    route: 'kalo_orders',
-    isActive: name => ['kalo_orders', 'kalo_pos'].includes(name),
+    route: 'kalo_comments',
+    feature: FEATURE_FLAGS.KALO_COMMENTS,
+    isActive: name => name === 'kalo_comments',
   },
   {
     key: 'customers',
@@ -44,13 +51,33 @@ export const KALO_NAV_ITEMS = [
     isActive: name => name.startsWith('contacts_'),
   },
   {
-    key: 'marketing',
+    key: 'orders',
+    icon: 'bag',
+    labelKey: 'KALO_NAV.ORDERS',
+    sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
+    route: 'kalo_orders',
+    isActive: name => ['kalo_orders', 'kalo_pos'].includes(name),
+  },
+  {
+    key: 'campaigns',
     icon: 'mega',
-    labelKey: 'KALO_NAV.MARKETING',
+    labelKey: 'KALO_CONSOLE_SHOP.NAV.CAMPAIGNS',
     sectionKey: 'KALO_NAV.SECTIONS.GROWTH',
-    route: 'kalo_marketing',
+    route: 'kalo_campaigns',
+    feature: FEATURE_FLAGS.KALO_CAMPAIGNS,
+    // kalo_marketing is the former all-in-one page, kept for bookmarks.
     isActive: name =>
-      name === 'kalo_marketing' || name.startsWith('campaigns_'),
+      ['kalo_campaigns', 'kalo_marketing'].includes(name) ||
+      name.startsWith('campaigns_'),
+  },
+  {
+    key: 'brand',
+    icon: 'pen',
+    labelKey: 'KALO_CONSOLE_SHOP.NAV.BRAND',
+    sectionKey: 'KALO_NAV.SECTIONS.GROWTH',
+    route: 'kalo_brand',
+    feature: FEATURE_FLAGS.KALO_BRAND,
+    isActive: name => name === 'kalo_brand',
   },
   {
     key: 'reports',
@@ -61,10 +88,20 @@ export const KALO_NAV_ITEMS = [
     isActive: name => name === 'kalo_reports',
   },
   {
+    key: 'console',
+    icon: 'store',
+    labelKey: 'KALO_CONSOLE_SHOP.NAV.CONSOLE',
+    route: 'kalo_console',
+    adminOnly: true,
+    footer: true,
+    isActive: name => name === 'kalo_console' || isConsolePage(name),
+  },
+  {
     key: 'settings',
     icon: 'set',
     labelKey: 'KALO_NAV.SETTINGS',
     route: 'kalo_settings_hub',
+    footer: true,
     isActive: name => name === 'kalo_settings_hub',
   },
 ];
@@ -110,8 +147,18 @@ export function useKaloNav() {
     { immediate: true }
   );
 
+  const { isOn } = useKaloFeatures();
+  const currentUser = useMapGetter('getCurrentUser');
+  const isAdmin = computed(
+    () => getUserRole(currentUser.value, accountId.value) === 'administrator'
+  );
+
   const items = computed(() =>
-    KALO_NAV_ITEMS.map(item => ({
+    KALO_NAV_ITEMS.filter(
+      item =>
+        (!item.feature || isOn(item.feature)) &&
+        (!item.adminOnly || isAdmin.value)
+    ).map(item => ({
       ...item,
       to: accountScopedRoute(item.route),
       active: item.isActive(String(route.name || '')),

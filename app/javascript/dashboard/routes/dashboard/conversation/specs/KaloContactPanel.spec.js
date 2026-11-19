@@ -35,7 +35,11 @@ const AccordionStub = {
   template: '<section><slot v-if="isOpen" /></section>',
 };
 
-const mountPanel = async (uiSettings = {}) => {
+// Account flags that are on; the macros section needs kalo_advanced_automation.
+const mountPanel = async (
+  uiSettings = {},
+  features = ['kalo_advanced_automation']
+) => {
   const updateUISettings = vi.fn();
   const store = createStore({
     getters: {
@@ -46,7 +50,8 @@ const mountPanel = async (uiSettings = {}) => {
       'integrations/getIntegration': () => () => ({ enabled: false }),
       'accounts/getAccount': () => () => ({ features: {} }),
       'globalConfig/isOnChatwootCloud': () => false,
-      'accounts/isFeatureEnabledonAccount': () => () => false,
+      'accounts/isFeatureEnabledonAccount': () => (_id, name) =>
+        features.includes(name),
       getCurrentAccountId: () => 1,
     },
     actions: {
@@ -169,6 +174,12 @@ describe('ContactPanel (Kalo layout)', () => {
     ].forEach(title => expect(shown).toContain(title));
     expect(opened.findComponent(ContactConversations).exists()).toBe(false); // closed by default
     expect(opened.findComponent(SharedFiles).exists()).toBe(false);
+  });
+
+  it('hides the macros section when kalo_advanced_automation is off', async () => {
+    const { wrapper } = await mountPanel({ is_kalo_panel_more_open: true }, []);
+    expect(titles(wrapper)).not.toContain('KALO_CHAT_THREAD.PANEL.MACROS');
+    expect(titles(wrapper)).toContain('KALO_CHAT_THREAD.PANEL.FILES');
   });
 
   it('drag end saves the order including the divider (C-79)', async () => {

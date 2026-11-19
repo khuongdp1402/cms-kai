@@ -10,6 +10,9 @@ class Kchat::QualityOverviewReport
   LOW_STOCK_THRESHOLD = 3
   CANCEL_ATTENTION_PCT = 15.0
   SCHEDULED_STATUSES = %w[scheduled published].freeze
+  # Message#content_attributes is a json column with `coder: JSON`, so the hash
+  # is stored as a JSON string; unwrap it before reading a key.
+  CONTENT_ATTRS = "(content_attributes #>> '{}')::jsonb"
 
   SKU_SELECT = [
     'kchat_products.id AS product_id',
@@ -117,8 +120,8 @@ class Kchat::QualityOverviewReport
     jobs = Array(brand_state['jobs'])
 
     {
-      social_comments_count: msgs.where("content_attributes->>'comment_id' IS NOT NULL").count,
-      phones_protected_count: msgs.where("content_attributes->>'comment_hidden' = 'true'").count,
+      social_comments_count: msgs.where("#{CONTENT_ATTRS}->>'comment_id' IS NOT NULL").count,
+      phones_protected_count: msgs.where("#{CONTENT_ATTRS}->>'comment_hidden' = 'true'").count,
       calendar_scheduled_count: calendar.count { |item| SCHEDULED_STATUSES.include?(item['status']) },
       calendar_total_count: calendar.size,
       ai_jobs_approved_count: jobs.count { |job| job['status'] == 'approved' }
@@ -196,8 +199,8 @@ class Kchat::QualityOverviewReport
     items << { key: 'pending_qr_orders', count: qr_cnt, route: 'kalo_orders', tone: 'warn' } if qr_cnt.positive?
     low_stock = Kchat::Product.where(account_id: @account.id, active: true).where('stock IS NOT NULL AND stock <= ?', LOW_STOCK_THRESHOLD).count
     items << { key: 'low_stock_products', count: low_stock, route: 'kalo_pos', tone: 'err' } if low_stock.positive?
-    hidden_cnt = Message.where(account_id: @account.id, created_at: window).where("content_attributes->>'comment_hidden' = 'true'").count
-    items << { key: 'phones_protected', count: hidden_cnt, route: 'kalo_marketing', tone: 'ok' } if hidden_cnt.positive?
+    hidden_cnt = Message.where(account_id: @account.id, created_at: window).where("#{CONTENT_ATTRS}->>'comment_hidden' = 'true'").count
+    items << { key: 'phones_protected', count: hidden_cnt, route: 'kalo_comments', tone: 'ok' } if hidden_cnt.positive?
     items
   end
 end

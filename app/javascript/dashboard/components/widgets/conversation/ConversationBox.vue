@@ -4,6 +4,7 @@ import ConversationHeader from './ConversationHeader.vue';
 import DashboardAppFrame from '../DashboardApp/Frame.vue';
 import EmptyState from './EmptyState/EmptyState.vue';
 import MessagesView from './MessagesView.vue';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 
 export default {
   components: {
@@ -37,8 +38,19 @@ export default {
   computed: {
     ...mapGetters({
       currentChat: 'getSelectedChat',
-      dashboardApps: 'dashboardApps/getRecords',
+      allDashboardApps: 'dashboardApps/getRecords',
+      accountId: 'getCurrentAccountId',
+      isFeatureEnabledonAccount: 'accounts/isFeatureEnabledonAccount',
     }),
+    // Dashboard app tabs need kalo_advanced_automation (spec §4).
+    dashboardApps() {
+      return this.isFeatureEnabledonAccount(
+        this.accountId,
+        FEATURE_FLAGS.KALO_ADVANCED_AUTOMATION
+      )
+        ? this.allDashboardApps
+        : [];
+    },
     dashboardAppTabs() {
       return [
         {

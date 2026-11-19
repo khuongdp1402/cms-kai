@@ -7,10 +7,10 @@ import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 const { t } = useI18n();
 
 const ITEMS = [
-  { name: 'kalo_console_overview', icon: 'home', label: 'OVERVIEW' },
-  { name: 'kalo_console_shops', icon: 'store', label: 'SHOPS' },
-  { name: 'kalo_console_payments', icon: 'wallet', label: 'PAYMENTS' },
-  { name: 'kalo_console_emails', icon: 'send', label: 'EMAILS' },
+  { name: 'kalo_platform_overview', icon: 'home', label: 'OVERVIEW' },
+  { name: 'kalo_platform_shops', icon: 'store', label: 'SHOPS' },
+  { name: 'kalo_platform_payments', icon: 'wallet', label: 'PAYMENTS' },
+  { name: 'kalo_platform_emails', icon: 'send', label: 'EMAILS' },
 ];
 
 const collapsed = ref(false);
@@ -80,7 +80,9 @@ const collapsed = ref(false);
 
       <div class="hidden flex-1 md:block" />
 
-      <div class="flex items-center gap-1.5 md:flex-col md:items-stretch md:pt-3 md:border-t md:border-white/10">
+      <div
+        class="flex items-center gap-1.5 md:flex-col md:items-stretch md:pt-3 md:border-t md:border-white/10"
+      >
         <a
           data-testid="open-super-admin"
           href="/super_admin"

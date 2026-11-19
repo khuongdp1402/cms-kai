@@ -91,6 +91,10 @@ const isShopifyFeatureEnabled = computed(
 );
 
 const { isCloudFeatureEnabled } = useAccount();
+// The macros section needs kalo_advanced_automation (spec §4).
+const isMacrosOn = computed(() =>
+  isCloudFeatureEnabled(FEATURE_FLAGS.KALO_ADVANCED_AUTOMATION)
+);
 
 const isLinearFeatureEnabled = computed(() =>
   isCloudFeatureEnabled(FEATURE_FLAGS.LINEAR)
@@ -290,7 +294,7 @@ onMounted(() => {
                 />
               </AccordionItem>
               <woot-feature-toggle
-                v-else-if="element.name === 'macros'"
+                v-else-if="element.name === 'macros' && isMacrosOn"
                 feature-key="macros"
               >
                 <AccordionItem

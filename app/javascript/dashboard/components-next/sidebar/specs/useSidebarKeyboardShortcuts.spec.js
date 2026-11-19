@@ -9,6 +9,11 @@ let mockRouteName = 'somewhere';
 vi.mock('dashboard/composables/useKeyboardEvents', () => ({
   useKeyboardEvents: vi.fn(),
 }));
+// Kalo: Alt+R opens the detailed reports only when kalo_detailed_reports is on.
+let mockDetailedReports = true;
+vi.mock('dashboard/composables/useKaloFeatures', () => ({
+  useKaloFeatures: () => ({ isRouteNameOn: () => mockDetailedReports }),
+}));
 vi.mock('vue-router', () => ({
   useRoute: () => ({ name: mockRouteName }),
   useRouter: () => ({ push: mockPush }),
@@ -20,6 +25,8 @@ describe('useSidebarKeyboardShortcuts', () => {
 
   beforeEach(() => {
     mockRouteName = 'somewhere';
+    mockDetailedReports = true;
+    useKeyboardEvents.mockClear();
     useSidebarKeyboardShortcuts(toggle);
     events = useKeyboardEvents.mock.calls[0][0];
   });
@@ -52,6 +59,12 @@ describe('useSidebarKeyboardShortcuts', () => {
   ])('%s navigates to route %s', (key, name) => {
     events[key].action();
     expect(mockPush).toHaveBeenCalledWith({ name });
+  });
+
+  it('Alt+KeyR opens the Kalo reports page when detailed reports are off', () => {
+    mockDetailedReports = false;
+    events['Alt+KeyR'].action();
+    expect(mockPush).toHaveBeenLastCalledWith({ name: 'kalo_reports' });
   });
 
   it('does not navigate when already on the target route', () => {
