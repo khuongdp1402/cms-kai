@@ -23,9 +23,9 @@
   - Quy tắc: dùng `Kchat::Order#delivery_status` (POS = `not_applicable`, không cần cột mới) và scope `awaiting_delivery`; KPI giao hàng ở frontend dùng `awaitsDelivery`, tab "Cần giao" gửi `delivery=pending`.
 - **B108 (2026-11-20): `ai_health` báo `configured: true` trong khi mọi lần gọi AI đều 502 (key hỏng); huy hiệu ghi "AI đang hoạt động (AI)".**
   - Nguyên nhân: health chỉ kiểm có key; frontend đọc `default_model` mà backend không trả (backend trả `chat_model`), spec fixture cũng dùng trường giả đó nên vẫn xanh.
-  - Quy tắc: `Kchat::AiHealth` nhớ lỗi gần nhất 5 phút (Rack::Attack cache store, spec dùng MemoryStore) và health trả `available`; UI ẩn/khóa AI khi `available === false` kèm câu giải thích. Fixture spec frontend phải khớp đúng JSON backend trả (kiểm bằng request spec), không bịa trường.
+  - Quy tắc: `Kchat::AiHealth` nhớ lỗi gần nhất 5 phút (Rack::Attack cache store, spec dùng MemoryStore) và health trả `available`; chỉ lỗi phía provider (mạng, 401, 403, 5xx) mới tính, 400/413/422/429 là lỗi của yêu cầu nên không. UI ẩn/khóa AI khi `available === false` kèm câu giải thích, và không nhớ "không có AI" suốt phiên: hỏi lại sau 5 phút. Fixture spec frontend phải khớp đúng JSON backend trả (kiểm bằng request spec), không bịa trường.
 - **B109 (2026-11-20): Ngăn kết quả chiến dịch đứng ở "Đang gửi" cho tới khi bấm Làm mới.**
-  - Quy tắc: màn hình trạng thái của việc chạy nền (gửi chiến dịch, import…) phải tự hỏi lại mỗi 3–5 giây khi còn trạng thái trung gian, dừng khi tới trạng thái cuối hoặc khi đóng (unmount), làm mới ngầm không xóa số đang hiện; spec dùng fake timers.
+  - Quy tắc: màn hình trạng thái của việc chạy nền (gửi chiến dịch, import…) phải tự hỏi lại mỗi 3–5 giây khi còn trạng thái trung gian, dừng khi tới trạng thái cuối hoặc khi đóng (unmount), làm mới ngầm không xóa số đang hiện, chỉ nhận phản hồi của yêu cầu mới nhất, lỗi thì giãn dần (gấp đôi, tối đa 30 s); spec dùng fake timers.
 
 - **B58 (2026-11-20): QA trên trình duyệt chạy nhầm bundle cũ.**
   - Triệu chứng: localhost:3005 không có checklist, tour, banner dù code đã gộp; agent QA phải tự build bundle phụ.
