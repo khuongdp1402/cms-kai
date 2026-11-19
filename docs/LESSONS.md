@@ -15,7 +15,7 @@
 - **B65 (2026-11-19): Thêm cờ vào `config/features.yml` mà không cập nhật spec và dữ liệu cũ.**
   - Triệu chứng: `spec/models/account_spec.rb` (bảng bit của `feature_flags_ext_1`) đã hỏng sẵn trên `main` vì cờ `zalo_personal_native` được thêm mà không sửa spec. Ngoài ra cờ mới có `enabled: true` chỉ áp cho tài khoản tạo sau đó: tài khoản cũ có bit = 0 nên mất chức năng.
   - Nguyên nhân: bit của FlagShihTzu tính theo thứ tự trong cột; mặc định chỉ chạy ở `before_create` qua `ACCOUNT_LEVEL_FEATURE_DEFAULTS` (ConfigLoader nạp khi `db:migrate`).
-  - Quy tắc: cờ mới luôn thêm vào CUỐI cột, không chèn giữa hay xóa; sửa bảng bit trong `account_spec.rb`; cờ mặc định bật thì kèm migration backfill cho tài khoản cũ (xem `Kchat::Features.backfill!`, ADR-023).
+  - Quy tắc: cờ mới luôn thêm vào CUỐI cột, không chèn giữa hay xóa; sửa bảng bit trong `account_spec.rb`; cờ mặc định bật thì kèm migration backfill cho tài khoản cũ viết bằng SQL thuần, tự chứa vị trí bit (xem `20261119000001_backfill_kalo_feature_flags`, ADR-023), không gọi model hay service.
 - **B66 (2026-11-19): Super Admin bỏ kiểm tra CSRF cho mọi controller.**
   - Triệu chứng: `SuperAdmin::ApplicationController` có `skip_before_action :verify_authenticity_token` (từ upstream), nên form đổi dữ liệu trong `/super_admin` không được bảo vệ CSRF.
   - Quy tắc: action mới đổi dữ liệu trong Super Admin phải tự bật lại `before_action :verify_authenticity_token, only: …` (như `kalo_features`) và dùng form helper của Rails để có token.
