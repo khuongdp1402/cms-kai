@@ -1,7 +1,11 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import { computed, inject, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
+import {
+  isAiHealthy,
+  loadAiHealth,
+} from 'dashboard/components-next/assistant/useKaloAssistant';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import {
   cacheKey,
@@ -87,11 +91,21 @@ const load = async message => {
   }
 };
 
-// Re-request only when a different incoming message arrives (never for private notes).
+// The store is optional here (specs mount without one).
+const store = inject('store', null);
+const healthKey = computed(
+  () => store?.getters?.getCurrentAccountId ?? 'current'
+);
+const aiHealthy = computed(() => isAiHealthy(healthKey.value));
+
+// Re-request only when a different incoming message arrives (never for private
+// notes), and only once ai_health said AI answers: no call while health is
+// unknown or unavailable.
 watch(
-  [() => triggerMessage.value?.id, () => canSuggest.value],
-  () => {
+  [() => triggerMessage.value?.id, () => canSuggest.value, aiHealthy],
+  async () => {
     if (!canSuggest.value) return;
+    if (!aiHealthy.value && !(await loadAiHealth(healthKey.value))) return;
     const message = triggerMessage.value;
     if ((message?.id ?? null) !== requestedFor) load(message);
   },

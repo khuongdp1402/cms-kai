@@ -47,6 +47,14 @@ const isLoading = ref(false);
 const isLoadingHistory = ref(true);
 const notice = ref('');
 const needsRenewal = ref(false);
+// `ai` from the overview (configured/available). Unknown (no answer yet or
+// overview failed) keeps the button usable; a known "no" disables it.
+const aiStatus = ref(null);
+const isAiUnavailable = computed(
+  () =>
+    !!aiStatus.value &&
+    (!aiStatus.value.configured || aiStatus.value.available === false)
+);
 
 const currentJob = computed(
   () =>
@@ -104,6 +112,7 @@ const loadHistory = async () => {
   }
   try {
     const { data } = await contentIdeasAPI.overview();
+    aiStatus.value = data?.ai || null;
     if (Array.isArray(data?.jobs) && data.jobs.length) {
       jobs.value = data.jobs;
       activeJobId.value = data.jobs[0].id;
@@ -116,7 +125,7 @@ const loadHistory = async () => {
 };
 
 const submit = async () => {
-  if (!topic.value.trim()) return;
+  if (!topic.value.trim() || isAiUnavailable.value) return;
   isLoading.value = true;
   notice.value = '';
   needsRenewal.value = false;
@@ -272,10 +281,23 @@ onMounted(loadHistory);
       </label>
       <Button
         type="submit"
+        data-test="ideas-submit"
         :label="t('KALO_MARKETING.IDEAS.SUBMIT')"
         :is-loading="isLoading"
+        :disabled="isAiUnavailable"
       />
     </form>
+    <p
+      v-if="isAiUnavailable"
+      data-test="ideas-ai-unavailable"
+      class="mb-0 text-sm text-n-slate-11"
+    >
+      {{
+        aiStatus.configured
+          ? t('KALO_POLISH4.AI.IDEAS_UNAVAILABLE')
+          : t('KALO_POLISH4.AI.IDEAS_OFF')
+      }}
+    </p>
 
     <div
       v-if="notice"
@@ -357,7 +379,13 @@ onMounted(loadHistory);
     </div>
 
     <div
-      v-if="!currentJob && !isLoading && !isLoadingHistory && !notice"
+      v-if="
+        !currentJob &&
+        !isLoading &&
+        !isLoadingHistory &&
+        !notice &&
+        !isAiUnavailable
+      "
       data-test="ideas-empty"
       class="flex flex-col items-start gap-3"
     >

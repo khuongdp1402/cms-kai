@@ -12,6 +12,8 @@ const availability = reactive({});
 // An unavailable AI (no answer from the provider) is asked again after this.
 export const AVAILABILITY_TTL_MS = 5 * 60 * 1000;
 const recheckTimers = {};
+// In-flight ai_health requests per account (one at a time).
+const pendingChecks = {};
 
 const session = accountId => {
   if (!sessions[accountId]) {
@@ -45,6 +47,7 @@ export const errorKey = error => {
 export const resetAssistantState = () => {
   Object.keys(sessions).forEach(key => delete sessions[key]);
   Object.keys(availability).forEach(key => delete availability[key]);
+  Object.keys(pendingChecks).forEach(key => delete pendingChecks[key]);
   Object.keys(recheckTimers).forEach(key => {
     clearTimeout(recheckTimers[key]);
     delete recheckTimers[key];
@@ -101,6 +104,43 @@ export function useKaloAssistant() {
   };
 }
 
+// AI health per account, shared by every AI entry point (assistant button,
+// chat reply suggestions): true | false | undefined (not asked yet).
+// A "no" is only kept for AVAILABILITY_TTL_MS, then asked again, so a
+// provider that recovers (or a fixed key) brings AI back.
+const checkAiHealth = id => {
+  if (pendingChecks[id]) return pendingChecks[id];
+  availability[id] = availability[id] ?? false;
+  const run = async () => {
+    try {
+      const { data } = await brandGrowthAPI.aiHealth();
+      availability[id] = !!data?.configured && data?.available !== false;
+    } catch {
+      availability[id] = false;
+    }
+    delete pendingChecks[id];
+    clearTimeout(recheckTimers[id]);
+    delete recheckTimers[id];
+    if (!availability[id]) {
+      recheckTimers[id] = setTimeout(
+        () => checkAiHealth(id),
+        AVAILABILITY_TTL_MS
+      );
+    }
+  };
+  pendingChecks[id] = run();
+  return pendingChecks[id];
+};
+
+// Resolves the account's AI health, asking ai_health at most once at a time.
+export const loadAiHealth = async id => {
+  if (pendingChecks[id]) await pendingChecks[id];
+  else if (availability[id] === undefined) await checkAiHealth(id);
+  return !!availability[id];
+};
+
+export const isAiHealthy = id => availability[id] === true;
+
 // Entry-point visibility: AI key configured and answering (ai_health
 // available is false while recent provider calls failed) and the account flag
 // kalo_ai_assistant on. Health is asked once per account and cached.
@@ -108,27 +148,10 @@ export function useKaloAssistantAvailability() {
   const accountId = useMapGetter('getCurrentAccountId');
   const isFeatureEnabled = useMapGetter('accounts/isFeatureEnabledonAccount');
 
-  // A "no" is only kept for AVAILABILITY_TTL_MS, then asked again, so a
-  // provider that recovers (or a fixed key) brings the button back.
-  const check = async id => {
-    availability[id] = availability[id] ?? false;
-    try {
-      const { data } = await brandGrowthAPI.aiHealth();
-      availability[id] = !!data?.configured && data?.available !== false;
-    } catch {
-      availability[id] = false;
-    }
-    clearTimeout(recheckTimers[id]);
-    delete recheckTimers[id];
-    if (!availability[id]) {
-      recheckTimers[id] = setTimeout(() => check(id), AVAILABILITY_TTL_MS);
-    }
-  };
-
   const load = async () => {
     const id = accountId.value;
     if (!id || availability[id] !== undefined) return;
-    await check(id);
+    await checkAiHealth(id);
   };
 
   const isAvailable = computed(

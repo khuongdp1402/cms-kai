@@ -4,11 +4,18 @@ import viMessages from 'dashboard/i18n/ktech/vi.json';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloAiSuggestions from '../KaloAiSuggestions.vue';
 import { clearSuggestionCache } from '../kaloSuggestionCache';
+import {
+  loadAiHealth,
+  resetAssistantState,
+} from 'dashboard/components-next/assistant/useKaloAssistant';
 
 const alertMock = vi.hoisted(() => vi.fn());
 vi.mock('dashboard/composables', () => ({ useAlert: alertMock }));
 vi.mock('dashboard/api/kchat/brandGrowth', () => ({
-  default: { chatReply: vi.fn() },
+  default: { chatReply: vi.fn(), aiHealth: vi.fn() },
+}));
+vi.mock('dashboard/api/kchat/assistant', () => ({
+  default: { send: vi.fn() },
 }));
 
 let nextId = 1;
@@ -25,8 +32,12 @@ const msg = (type, content, extra = {}) => {
 const incoming = (content, extra) => msg(0, content, extra);
 const outgoing = (content, extra) => msg(1, content, extra);
 
-const mountIt = (messages, props = {}) =>
-  mount(KaloAiSuggestions, {
+// Components stay subscribed to the shared AI health: unmount after each case
+// so a later case changing health does not wake earlier ones.
+const mounted = [];
+afterEach(() => mounted.splice(0).forEach(wrapper => wrapper.unmount()));
+const mountIt = (messages, props = {}) => {
+  const wrapper = mount(KaloAiSuggestions, {
     props: { messages, conversationId: 12, contactId: 5, ...props },
     global: {
       plugins: [
@@ -38,13 +49,60 @@ const mountIt = (messages, props = {}) =>
       ],
     },
   });
+  mounted.push(wrapper);
+  return wrapper;
+};
 
 describe('KaloAiSuggestions', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     vi.clearAllMocks();
     clearSuggestionCache();
+    resetAssistantState();
     brandGrowthAPI.chatReply.mockResolvedValue({
       data: { reply: 'Dạ em lên đơn rồi ạ', guardrail_triggered: false },
+    });
+    // Precondition for the cases below: ai_health already said AI answers.
+    brandGrowthAPI.aiHealth.mockResolvedValue({
+      data: { configured: true, available: true },
+    });
+    await loadAiHealth('current');
+  });
+
+  describe('AI health gate', () => {
+    beforeEach(() => resetAssistantState());
+
+    it.each([
+      [{ configured: false, available: false }],
+      [{ configured: true, available: false }],
+    ])('never calls chat_reply when ai_health says %o', async health => {
+      brandGrowthAPI.aiHealth.mockResolvedValue({ data: health });
+      const wrapper = mountIt([incoming('Alo')]);
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).not.toHaveBeenCalled();
+      expect(wrapper.find('[data-test="ai-suggestions"]').exists()).toBe(false);
+    });
+
+    it('waits for ai_health before the first chat_reply', async () => {
+      let resolveHealth;
+      brandGrowthAPI.aiHealth.mockReturnValue(
+        new Promise(r => {
+          resolveHealth = r;
+        })
+      );
+      const wrapper = mountIt([incoming('Alo')]);
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).not.toHaveBeenCalled();
+      resolveHealth({ data: { configured: true, available: true } });
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).toHaveBeenCalledTimes(1);
+      expect(wrapper.text()).toContain('Dạ em lên đơn rồi ạ');
+    });
+
+    it('treats a failing ai_health as unavailable', async () => {
+      brandGrowthAPI.aiHealth.mockRejectedValue(new Error('network'));
+      mountIt([incoming('Alo')]);
+      await flushPromises();
+      expect(brandGrowthAPI.chatReply).not.toHaveBeenCalled();
     });
   });
 

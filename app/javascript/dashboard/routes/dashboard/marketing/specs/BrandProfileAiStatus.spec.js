@@ -21,13 +21,14 @@ const mountForm = async ai => {
 
 // The badge reads GET brand_growth overview `ai` (Ai::CustomLlmService#health_status).
 describe('BrandProfileForm AI badge', () => {
-  it('names the model once, without "(AI)" duplication', async () => {
+  it('never shows the provider model name to the shop owner', async () => {
     const badge = await mountForm({
       configured: true,
       available: true,
       chat_model: 'agentgw-gpt-5.5',
     });
-    expect(badge.text()).toBe('AI đang hoạt động · agentgw-gpt-5.5');
+    expect(badge.text()).toBe('AI đang hoạt động');
+    expect(badge.text()).not.toContain('agentgw');
     expect(
       (await mountForm({ configured: true, available: true })).text()
     ).toBe('AI đang hoạt động');
