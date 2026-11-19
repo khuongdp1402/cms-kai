@@ -86,7 +86,10 @@ const loadBroadcasts = async () => {
   if (typeof broadcastsAPI.list !== 'function') return;
   try {
     const { data } = await broadcastsAPI.list();
-    broadcasts.value = Array.isArray(data?.broadcasts) ? data.broadcasts : [];
+    // Drafts belong to the Chiến dịch wizard; this older panel lists sent and scheduled ones.
+    broadcasts.value = (
+      Array.isArray(data?.broadcasts) ? data.broadcasts : []
+    ).filter(item => item.status !== 'draft');
   } catch {
     // Stay quiet if list fails on initial load.
   }
@@ -182,6 +185,13 @@ onMounted(() => {
       />
     </div>
 
+    <router-link
+      data-test="broadcast-open-campaigns"
+      :to="accountScopedRoute('kalo_campaigns')"
+      class="inline-block mt-2 text-xs font-semibold underline text-n-brand"
+    >
+      {{ t('KALO_MARKETING.BROADCASTS.OPEN_CAMPAIGNS') }}
+    </router-link>
     <p v-if="!isAdmin" class="mt-2 text-xs text-n-slate-11">
       {{ t('KALO_MARKETING.BROADCASTS.READONLY_NOTE') }}
     </p>

@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import {
   CAMPAIGN_FLOW_KEY,
   AUDIENCE_MODES,
+  MAX_RECIPIENTS_PER_RUN,
   channelKey,
 } from './campaignFlowHelpers';
 
@@ -20,6 +21,10 @@ const metaSkipped = computed(() =>
   channels.value
     .filter(row => row.requires_24h_window)
     .reduce((sum, row) => sum + (row.skipped_24h_count || 0), 0)
+);
+
+const overCap = computed(() =>
+  channels.value.some(row => row.eligible_count > MAX_RECIPIENTS_PER_RUN)
 );
 
 const toggleLabel = title => {
@@ -183,6 +188,17 @@ const toggleLabel = title => {
           </ul>
           <p class="text-xs text-n-slate-11">
             {{ t('KALO_CAMPAIGN_FLOW.AUDIENCE_STEP.REACH_NOTE') }}
+          </p>
+          <p
+            v-if="overCap"
+            data-test="campaign-cap-note"
+            class="text-xs font-medium text-n-amber-11"
+          >
+            {{
+              t('KALO_CAMPAIGN_FLOW.AUDIENCE_STEP.CAP_NOTE', {
+                max: MAX_RECIPIENTS_PER_RUN,
+              })
+            }}
           </p>
           <p
             v-if="metaSkipped"

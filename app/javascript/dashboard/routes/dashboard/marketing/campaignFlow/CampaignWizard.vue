@@ -20,6 +20,7 @@ import {
   STEPS,
   buildPayload,
   campaignFromRecord,
+  effectiveTag,
   emptyCampaign,
   stepError,
 } from './campaignFlowHelpers';
@@ -28,10 +29,12 @@ import {
 // and every step fits a 720px panel; on phones the drawer is full screen).
 const props = defineProps({
   draft: { type: Object, default: null },
+  // Saved campaigns ({id, campaign_tag}) so the tag stays unique (server does the same).
+  existingCampaigns: { type: Array, default: () => [] },
 });
 const emit = defineEmits(['close', 'saved']);
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const store = useStore();
 const { currentAccount, accountScopedRoute } = useAccount();
 
@@ -67,9 +70,36 @@ const labels = computed(() =>
   (store.getters['labels/getLabels'] || []).map(l => l.title).filter(Boolean)
 );
 const shopName = computed(() => currentAccount.value?.name || '');
+const takenTags = computed(() =>
+  props.existingCampaigns
+    .filter(item => item.id !== campaign.id)
+    .map(item => item.campaign_tag)
+    .filter(Boolean)
+);
+const campaignTag = computed(() => effectiveTag(campaign, takenTags.value));
+
+// "Chỉ khách nhắn trong 24 giờ" on a non-Meta channel: counts come from preview.
+const only24hStats = ref(null);
+const effectiveAudience = computed(() => {
+  if (!audience.value) return null;
+  const stats = only24hStats.value;
+  if (!stats) return audience.value;
+  return {
+    ...audience.value,
+    channels: audience.value.channels.map(row =>
+      row.inbox_id === stats.inbox_id
+        ? {
+            ...row,
+            eligible_count: stats.eligible_count,
+            skipped_24h_count: stats.skipped_24h_count,
+          }
+        : row
+    ),
+  };
+});
 const selectedChannel = computed(
   () =>
-    (audience.value?.channels || []).find(
+    (effectiveAudience.value?.channels || []).find(
       row => row.inbox_id === campaign.inboxId
     ) || null
 );
@@ -77,13 +107,14 @@ const recipients = computed(() =>
   Math.min(selectedChannel.value?.eligible_count || 0, MAX_RECIPIENTS_PER_RUN)
 );
 const currentError = computed(() =>
-  stepError(step.value, campaign, { audience: audience.value })
+  stepError(step.value, campaign, { audience: effectiveAudience.value })
 );
 
 provide(CAMPAIGN_FLOW_KEY, {
   campaign,
-  audience,
+  audience: effectiveAudience,
   audienceState,
+  campaignTag,
   segments,
   labels,
   shopName,
@@ -141,6 +172,37 @@ watch(
   }
 );
 
+let only24hReq = 0;
+watch(
+  () => [campaign.only24h, campaign.inboxId, audience.value],
+  async ([only24h, inboxId, data]) => {
+    only24hReq += 1;
+    const mine = only24hReq;
+    const row = (data?.channels || []).find(r => r.inbox_id === inboxId);
+    if (!only24h || !row || row.requires_24h_window) {
+      only24hStats.value = null;
+      return;
+    }
+    try {
+      const { data: stats } = await broadcastsAPI.preview({
+        inbox_id: inboxId,
+        labels:
+          campaign.audienceMode === 'labels'
+            ? campaign.labels.join(',')
+            : undefined,
+        segment_id:
+          campaign.audienceMode === 'segment'
+            ? campaign.segmentId || undefined
+            : undefined,
+        only_24h: true,
+      });
+      if (mine === only24hReq) only24hStats.value = stats;
+    } catch {
+      if (mine === only24hReq) only24hStats.value = null;
+    }
+  }
+);
+
 watch(step, () => {
   showError.value = false;
   actionErrorKey.value = '';
@@ -160,7 +222,9 @@ const applyApiError = (error, fallbackKey) => {
     needsRenewal.value = true;
     actionErrorKey.value = 'KALO_CAMPAIGN_FLOW.REVIEW_STEP.EXPIRED';
   } else if (status === 422 && code) {
-    actionErrorText.value = code;
+    const key = `KALO_CAMPAIGN_FLOW.API_ERRORS.${code}`;
+    if (te(key)) actionErrorKey.value = key;
+    else actionErrorText.value = code;
   } else {
     actionErrorKey.value = fallbackKey;
   }
@@ -184,7 +248,10 @@ const send = async () => {
   busy.value = 'send';
   clearActionError();
   try {
-    const payload = buildPayload(campaign, { draft: false });
+    const payload = buildPayload(campaign, {
+      draft: false,
+      takenTags: takenTags.value,
+    });
     const { data } = campaign.id
       ? await broadcastsAPI.updateDraft(campaign.id, payload)
       : await broadcastsAPI.create(payload);
@@ -236,11 +303,15 @@ const saveDraft = async () => {
   }
   busy.value = 'draft';
   try {
-    const payload = buildPayload(campaign, { draft: true });
+    const payload = buildPayload(campaign, {
+      draft: true,
+      takenTags: takenTags.value,
+    });
     const { data } = campaign.id
       ? await broadcastsAPI.updateDraft(campaign.id, payload)
       : await broadcastsAPI.create(payload);
     campaign.id = data.broadcast.id;
+    campaign.campaignTag = data.broadcast.campaign_tag || campaign.campaignTag;
     emit('saved', data.broadcast);
     useAlert(t('KALO_CAMPAIGN_FLOW.WIZARD.DRAFT_SAVED'));
   } catch (error) {

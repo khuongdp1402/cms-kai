@@ -100,6 +100,21 @@ const chooseLater = () => {
           })
         }}
       </p>
+      <label
+        v-if="selected && !selected.requires_24h_window"
+        data-test="campaign-only-24h"
+        class="flex items-start gap-2 p-3 text-sm border rounded-xl border-n-weak bg-n-solid-1 text-n-slate-12"
+      >
+        <input v-model="campaign.only24h" type="checkbox" class="mt-0.5 mb-0" />
+        <span class="flex flex-col gap-0.5">
+          <span class="font-semibold">
+            {{ t('KALO_CAMPAIGN_FLOW.CHANNEL_STEP.ONLY_24H') }}
+          </span>
+          <span class="text-xs text-n-slate-11">
+            {{ t('KALO_CAMPAIGN_FLOW.CHANNEL_STEP.ONLY_24H_HINT') }}
+          </span>
+        </span>
+      </label>
     </fieldset>
 
     <fieldset class="flex flex-col gap-2">

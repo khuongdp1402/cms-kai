@@ -8,7 +8,6 @@ import {
   MAX_MESSAGE_CHARS,
   aiPrompt,
   buildUtmLink,
-  campaignTagFrom,
   channelKey,
   personalize,
 } from './campaignFlowHelpers';
@@ -47,14 +46,14 @@ const previewChannels = computed(() => {
 });
 
 const BUBBLE_TONES = {
-  zalo_personal: 'bg-[#0068FF] text-white',
-  facebook_page: 'bg-[#0084FF] text-white',
-  instagram: 'bg-[#8a3ab9] text-white',
+  zalo_personal: 'bg-n-blue-9 text-white',
+  facebook_page: 'bg-n-blue-10 text-white',
+  instagram: 'bg-n-iris-10 text-white',
 };
 const bubbleTone = key => BUBBLE_TONES[key] || 'bg-n-slate-12 text-n-solid-1';
 
 const utmLink = computed(() =>
-  buildUtmLink(utmUrl.value, campaignTagFrom(campaign.title))
+  buildUtmLink(utmUrl.value, flow.campaignTag.value)
 );
 
 const insertAtCursor = text => {
@@ -74,6 +73,9 @@ const insertLink = () => {
   if (!utmLink.value) return;
   const sep = campaign.message && !/\s$/.test(campaign.message) ? '\n' : '';
   campaign.message = `${campaign.message}${sep}${utmLink.value}`;
+  // The link now carries this tag: renaming the campaign must not change it.
+  campaign.campaignTag = flow.campaignTag.value;
+  campaign.tagLocked = true;
 };
 
 const AI_ERRORS = {
@@ -261,6 +263,17 @@ const onInput = () => {
             </button>
           </div>
         </div>
+        <p
+          v-if="campaign.tagLocked"
+          data-test="campaign-tag-locked"
+          class="mt-2 text-xs font-medium text-n-amber-11"
+        >
+          {{
+            t('KALO_CAMPAIGN_FLOW.CONTENT_STEP.TAG_LOCKED', {
+              tag: flow.campaignTag.value,
+            })
+          }}
+        </p>
       </details>
     </div>
 

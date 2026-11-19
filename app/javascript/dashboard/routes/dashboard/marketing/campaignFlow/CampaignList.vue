@@ -132,8 +132,17 @@ const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
               })
             }}
           </span>
-          <span v-if="item.status === 'processing'">
+          <span v-if="['processing', 'sending'].includes(item.status)">
             {{ t('KALO_CAMPAIGN_FLOW.LIST.PROCESSING') }}
+          </span>
+          <span
+            v-if="
+              item.status === 'failed' && item.error === 'subscription_expired'
+            "
+            data-test="campaign-row-error"
+            class="font-semibold text-n-ruby-11"
+          >
+            {{ t('KALO_CAMPAIGN_FLOW.API_ERRORS.subscription_expired') }}
           </span>
           <span v-if="item.status === 'draft'">
             {{ t('KALO_CAMPAIGN_FLOW.LIST.DRAFT_HINT') }}

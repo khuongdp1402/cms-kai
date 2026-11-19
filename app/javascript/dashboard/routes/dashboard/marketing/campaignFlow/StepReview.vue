@@ -62,6 +62,7 @@ const rows = computed(() =>
         ? `${channel.value.inbox_name} · ${t(`KALO_CAMPAIGN_FLOW.CHANNELS.${channelKey(channel.value.channel_type)}`)}`
         : '',
     },
+    { key: 'TAG', value: flow.campaignTag.value, test: 'tag' },
     { key: 'RECIPIENTS', value: String(recipients.value), test: 'recipients' },
     { key: 'WHEN', value: whenText.value },
     minutes.value === null

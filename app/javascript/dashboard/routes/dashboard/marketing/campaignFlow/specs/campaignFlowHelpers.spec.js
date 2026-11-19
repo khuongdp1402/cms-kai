@@ -4,11 +4,13 @@ import {
   buildUtmLink,
   campaignFromRecord,
   campaignTagFrom,
+  effectiveTag,
   emptyCampaign,
   estimateSendMinutes,
   isoToVietnamLocal,
   personalize,
   stepError,
+  uniqueTag,
   vietnamLocalToIso,
 } from '../campaignFlowHelpers';
 
@@ -187,6 +189,7 @@ describe('campaignFlowHelpers', () => {
         message: 'Chào {{name}}',
         inbox_id: 3,
         scheduled_at: '2026-12-01T09:30:00+07:00',
+        only_24h: false,
         draft: false,
       });
     });
@@ -211,6 +214,43 @@ describe('campaignFlowHelpers', () => {
     });
   });
 
+  describe('campaign tag', () => {
+    it('adds a suffix like the backend when the tag is taken', () => {
+      expect(uniqueTag('tet', [])).toBe('tet');
+      expect(uniqueTag('tet', ['tet', 'tet-2'])).toBe('tet-3');
+    });
+
+    it('follows the title until a UTM link locks it', () => {
+      const draft = campaign({ title: 'Tết', campaignTag: 'tet' });
+      expect(effectiveTag(draft, ['tet'])).toBe('tet-2');
+      expect(effectiveTag({ ...draft, title: 'Hè' }, [])).toBe('he');
+      expect(
+        effectiveTag({ ...draft, title: 'Hè', tagLocked: true }, ['tet'])
+      ).toBe('tet');
+      expect(
+        buildPayload(
+          { ...draft, title: 'Hè', tagLocked: true, only24h: true },
+          { draft: true }
+        )
+      ).toMatchObject({ campaign_tag: 'tet', only_24h: true });
+    });
+  });
+
+  it('checks the schedule again on the review step', () => {
+    const now = Date.parse('2026-12-01T09:00:00+07:00');
+    expect(
+      stepError(
+        'REVIEW',
+        campaign({
+          confirmed: true,
+          scheduleMode: 'later',
+          scheduledLocal: '2026-12-01T08:59',
+        }),
+        { now }
+      )
+    ).toBe('SCHEDULE_PAST');
+  });
+
   it('restores a saved draft into the wizard state', () => {
     expect(
       campaignFromRecord({
@@ -218,11 +258,16 @@ describe('campaignFlowHelpers', () => {
         title: 'Nháp',
         goal: 'launch',
         labels: ['vip'],
-        message: 'Hi',
+        message: 'Xem https://a.vn/?utm_campaign=nhap',
         inbox_id: 2,
+        campaign_tag: 'nhap',
+        only_24h: true,
         scheduled_at: '2026-12-01T02:30:00Z',
       })
     ).toMatchObject({
+      campaignTag: 'nhap',
+      tagLocked: true,
+      only24h: true,
       id: 'b1',
       audienceMode: 'labels',
       scheduleMode: 'later',

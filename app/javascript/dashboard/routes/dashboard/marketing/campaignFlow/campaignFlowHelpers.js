@@ -15,15 +15,15 @@ export const STATUSES = [
   'draft',
   'scheduled',
   'processing',
+  'sending',
   'completed',
   'failed',
 ];
 // provide/inject key shared by the wizard and its step components.
 export const CAMPAIGN_FLOW_KEY = Symbol('kaloCampaignFlow');
 
-const OK = 'bg-[#E3F4E8] text-[#1B6B3A] dark:bg-n-teal-3 dark:text-n-teal-11';
-const WARN =
-  'bg-[#FFF1D6] text-[#8A5300] dark:bg-n-amber-3 dark:text-n-amber-11';
+const OK = 'bg-n-teal-3 text-n-teal-11';
+const WARN = 'bg-n-amber-3 text-n-amber-11';
 const GRAY = 'bg-n-alpha-2 text-n-slate-11';
 const NEW = 'bg-woot-50 text-woot-600 dark:bg-n-blue-3 dark:text-n-blue-11';
 const BAD = 'bg-n-ruby-3 text-n-ruby-11';
@@ -32,6 +32,7 @@ export const STATUS_TONES = {
   draft: GRAY,
   scheduled: WARN,
   processing: NEW,
+  sending: NEW,
   completed: OK,
   failed: BAD,
 };
@@ -62,7 +63,7 @@ export const MAX_RECIPIENTS_PER_RUN = 500;
 export const VIETNAM_OFFSET = '+07:00';
 export const MESSAGE_VARIABLES = ['{{name}}', '{{shop_name}}'];
 
-// Same slug as Kchat::BroadcastsService#normalize_campaign_tag, so the UTM
+// Same slug as Kchat::Broadcasts::RecordBuilder.normalize_tag, so the UTM
 // link built in the browser carries the tag the backend stores.
 export const campaignTagFrom = title => {
   const slug = String(title || '')
@@ -75,6 +76,22 @@ export const campaignTagFrom = title => {
     .slice(0, 50);
   return slug || 'broadcast';
 };
+
+// Same as Kchat::Broadcasts::RecordBuilder#unique_tag: -2, -3… when taken.
+export const uniqueTag = (base, taken = []) => {
+  if (!taken.includes(base)) return base;
+  for (let n = 2; ; n += 1) {
+    const candidate = `${base.slice(0, 46)}-${n}`;
+    if (!taken.includes(candidate)) return candidate;
+  }
+};
+
+// Tag sent with the campaign: locked once a UTM link carrying it is in the
+// message, otherwise derived from the title and unique among other campaigns.
+export const effectiveTag = (campaign, taken = []) =>
+  campaign.tagLocked && campaign.campaignTag
+    ? campaign.campaignTag
+    : uniqueTag(campaignTagFrom(campaign.title), taken);
 
 // Appends utm_source/utm_medium/utm_campaign (Kchat::AttributionExtractor reads
 // them from the web widget referer). Returns '' for anything not http(s).
@@ -144,6 +161,9 @@ export const emptyCampaign = () => ({
   inboxId: null,
   scheduleMode: 'now',
   scheduledLocal: '',
+  only24h: false,
+  campaignTag: '',
+  tagLocked: false,
   confirmed: false,
 });
 
@@ -163,14 +183,17 @@ export const campaignFromRecord = record => ({
   inboxId: record.inbox_id || null,
   scheduleMode: record.scheduled_at ? 'later' : 'now',
   scheduledLocal: isoToVietnamLocal(record.scheduled_at),
+  only24h: Boolean(record.only_24h),
+  campaignTag: record.campaign_tag || '',
+  tagLocked: String(record.message || '').includes('utm_campaign='),
 });
 
 // Body for POST/PATCH kchat/broadcasts. Every field is sent so that editing a
 // draft can also clear a choice (labels -> all, later -> now).
-export const buildPayload = (campaign, { draft }) => ({
+export const buildPayload = (campaign, { draft, takenTags = [] }) => ({
   title: campaign.title.trim(),
   goal: campaign.goal || null,
-  campaign_tag: campaignTagFrom(campaign.title),
+  campaign_tag: effectiveTag(campaign, takenTags),
   labels: campaign.audienceMode === 'labels' ? campaign.labels : [],
   segment_id:
     campaign.audienceMode === 'segment' ? campaign.segmentId || null : null,
@@ -180,6 +203,7 @@ export const buildPayload = (campaign, { draft }) => ({
     campaign.scheduleMode === 'later'
       ? vietnamLocalToIso(campaign.scheduledLocal)
       : null,
+  only_24h: Boolean(campaign.only24h),
   draft,
 });
 
@@ -188,6 +212,14 @@ export const reachableCount = audience =>
     (sum, row) => sum + (row.eligible_count || 0),
     0
   );
+
+const scheduleProblem = (campaign, now) => {
+  if (campaign.scheduleMode !== 'later') return '';
+  const at = Date.parse(vietnamLocalToIso(campaign.scheduledLocal) || '');
+  if (Number.isNaN(at)) return 'SCHEDULE_REQUIRED';
+  if (at <= now) return 'SCHEDULE_PAST';
+  return '';
+};
 
 // Returns the i18n key (under KALO_CAMPAIGN_FLOW.ERRORS) of the first problem
 // blocking "Tiếp tục" on a step, or '' when the step is complete.
@@ -220,13 +252,15 @@ export const stepError = (
     );
     if (!row) return 'CHANNEL_REQUIRED';
     if (!row.eligible_count) return 'CHANNEL_EMPTY';
-    if (campaign.scheduleMode === 'later') {
-      const at = Date.parse(vietnamLocalToIso(campaign.scheduledLocal) || '');
-      if (Number.isNaN(at)) return 'SCHEDULE_REQUIRED';
-      if (at <= now) return 'SCHEDULE_PAST';
-    }
+    const scheduleError = scheduleProblem(campaign, now);
+    if (scheduleError) return scheduleError;
   }
-  if (step === 'REVIEW' && !campaign.confirmed) return 'CONFIRM_REQUIRED';
+  if (step === 'REVIEW') {
+    // Time passes while the shop reads the summary: check the schedule again.
+    const scheduleError = scheduleProblem(campaign, now);
+    if (scheduleError) return scheduleError;
+    if (!campaign.confirmed) return 'CONFIRM_REQUIRED';
+  }
   return '';
 };
 

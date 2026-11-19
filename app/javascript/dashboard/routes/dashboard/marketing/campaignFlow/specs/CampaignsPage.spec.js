@@ -44,6 +44,13 @@ const ROWS = [
     delivery_failed_count: 1,
   },
   { id: 'f', title: 'Kênh mất', status: 'failed' },
+  { id: 'g', title: 'Đang chạy job', status: 'sending' },
+  {
+    id: 'e',
+    title: 'Hết hạn',
+    status: 'failed',
+    error: 'subscription_expired',
+  },
 ];
 
 const mountPage = async ({
@@ -120,6 +127,7 @@ const RESULTS = (overrides = {}) => ({
       replied_count: 3,
       orders_count: 1,
       revenue: 250000,
+      attribution_days: 7,
       ...overrides.results,
     },
   },
@@ -144,8 +152,17 @@ describe('Chiến dịch page', () => {
     const chips = wrapper
       .findAll('[data-test="campaign-status"]')
       .map(chip => chip.text());
-    expect(chips).toEqual(['Nháp', 'Đã hẹn', 'Đang gửi', 'Đã gửi', 'Lỗi']);
+    expect(chips).toEqual([
+      'Nháp',
+      'Đã hẹn',
+      'Đang gửi',
+      'Đã gửi',
+      'Lỗi',
+      'Đang gửi',
+      'Lỗi',
+    ]);
     const rows = wrapper.findAll('[data-test="campaign-row"]');
+    expect(rows[6].text()).toContain('gói dùng thử đã hết hạn');
     expect(rows[3].text()).toContain('Đã gửi 7/10 khách');
     expect(rows[3].text()).toContain('3 lỗi');
     expect(rows[1].text()).toContain('Gửi lúc');
@@ -207,7 +224,7 @@ describe('Chiến dịch page', () => {
     await del.trigger('click');
     await flushPromises();
     expect(broadcastsAPI.destroyDraft).toHaveBeenCalledWith('d');
-    expect(wrapper.findAll('[data-test="campaign-row"]')).toHaveLength(4);
+    expect(wrapper.findAll('[data-test="campaign-row"]')).toHaveLength(6);
   });
 
   it('shows the empty state with a create button', async () => {
@@ -264,6 +281,7 @@ describe('CampaignResults', () => {
       wrapper.find('[data-test="campaign-results-no-read"]').exists()
     ).toBe(false);
     expect(wrapper.find('[data-tour="campaign-results"]').exists()).toBe(true);
+    expect(wrapper.text()).toContain('Đơn tạo trong 7 ngày sau khi gửi');
   });
 
   it('omits "Đã xem" and explains why on Zalo', async () => {

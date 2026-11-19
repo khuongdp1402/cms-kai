@@ -5,14 +5,13 @@ import {
   CAMPAIGN_FLOW_KEY,
   GOALS,
   MAX_TITLE_CHARS,
-  campaignTagFrom,
 } from './campaignFlowHelpers';
 
 const { t } = useI18n();
 const flow = inject(CAMPAIGN_FLOW_KEY);
 const campaign = flow.campaign;
 
-const tag = computed(() => campaignTagFrom(campaign.title));
+const tag = computed(() => flow.campaignTag.value);
 </script>
 
 <template>

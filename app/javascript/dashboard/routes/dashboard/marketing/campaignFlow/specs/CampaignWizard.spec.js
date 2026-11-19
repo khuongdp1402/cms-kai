@@ -10,6 +10,7 @@ import CampaignWizard from '../CampaignWizard.vue';
 vi.mock('dashboard/api/kchat/broadcasts', () => ({
   default: {
     audience: vi.fn(),
+    preview: vi.fn(),
     checkContent: vi.fn(),
     create: vi.fn(),
     updateDraft: vi.fn(),
@@ -305,6 +306,7 @@ describe('CampaignWizard', () => {
       message: 'Chào {{name}}',
       inbox_id: 7,
       scheduled_at: null,
+      only_24h: false,
       draft: false,
     });
     expect(wrapper.emitted('saved')[0][0]).toEqual(SENT);
@@ -415,5 +417,86 @@ describe('CampaignWizard', () => {
       'Gói dùng thử đã hết hạn'
     );
     expect(stepTitle(wrapper)).toBe('Xem lại và gửi');
+  });
+
+  const toReview = async wrapper => {
+    await fillGoal(wrapper);
+    await next(wrapper);
+    await next(wrapper);
+    await find(wrapper, 'campaign-message').setValue('Chào {{name}}');
+    await next(wrapper);
+  };
+
+  it('keeps the tag unique among saved campaigns and shows it on review', async () => {
+    const wrapper = await mountWizard({
+      existingCampaigns: [{ id: 'x', campaign_tag: 'uu_dai_tet' }],
+    });
+    await toReview(wrapper);
+    await next(wrapper);
+    expect(find(wrapper, 'campaign-review-tag').text()).toBe('uu_dai_tet-2');
+    await find(wrapper, 'campaign-confirm').setValue(true);
+    await next(wrapper);
+    expect(broadcastsAPI.create).toHaveBeenCalledWith(
+      expect.objectContaining({ campaign_tag: 'uu_dai_tet-2' })
+    );
+  });
+
+  it('locks the tag once a UTM link is in the message', async () => {
+    const wrapper = await mountWizard();
+    await fillGoal(wrapper);
+    await next(wrapper);
+    await next(wrapper);
+    await find(wrapper, 'campaign-utm-url').setValue('hoamai.vn');
+    await find(wrapper, 'campaign-utm-insert').trigger('click');
+    expect(find(wrapper, 'campaign-tag-locked').text()).toContain('uu_dai_tet');
+    await find(wrapper, 'campaign-back').trigger('click');
+    await find(wrapper, 'campaign-back').trigger('click');
+    await find(wrapper, 'campaign-title').setValue('Tên khác hẳn');
+    await find(wrapper, 'campaign-save-draft').trigger('click');
+    await flushPromises();
+    expect(broadcastsAPI.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Tên khác hẳn',
+        campaign_tag: 'uu_dai_tet',
+      })
+    );
+  });
+
+  it('offers the 24h option on Zalo and counts recipients with it', async () => {
+    broadcastsAPI.preview.mockResolvedValue({
+      data: { inbox_id: 7, eligible_count: 12, skipped_24h_count: 58 },
+    });
+    const wrapper = await mountWizard();
+    await fillGoal(wrapper);
+    await next(wrapper);
+    await next(wrapper);
+    await find(wrapper, 'campaign-message').setValue('Hi');
+    await next(wrapper);
+    await find(wrapper, 'campaign-only-24h').find('input').setValue(true);
+    await flushPromises();
+    expect(broadcastsAPI.preview).toHaveBeenCalledWith(
+      expect.objectContaining({ inbox_id: 7, only_24h: true })
+    );
+    await next(wrapper);
+    expect(find(wrapper, 'campaign-review-recipients').text()).toBe('12');
+    await find(wrapper, 'campaign-confirm').setValue(true);
+    await next(wrapper);
+    expect(broadcastsAPI.create).toHaveBeenCalledWith(
+      expect.objectContaining({ only_24h: true, inbox_id: 7 })
+    );
+  });
+
+  it('translates backend error codes', async () => {
+    broadcastsAPI.create.mockRejectedValue({
+      response: { status: 422, data: { error: 'broadcast_limit_reached' } },
+    });
+    const wrapper = await mountWizard();
+    await toReview(wrapper);
+    await next(wrapper);
+    await find(wrapper, 'campaign-confirm').setValue(true);
+    await next(wrapper);
+    expect(find(wrapper, 'campaign-action-error').text()).toContain(
+      'Đã đủ 30 chiến dịch'
+    );
   });
 });

@@ -138,6 +138,7 @@ onMounted(() => {
     <CampaignWizard
       v-if="wizardOpen"
       :draft="editingDraft"
+      :existing-campaigns="broadcasts"
       @saved="onSaved"
       @close="closeWizard"
     />

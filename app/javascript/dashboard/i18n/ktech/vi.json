@@ -3849,8 +3849,10 @@
         "completed": "Hoàn tất",
         "failed": "Lỗi",
         "processing": "Đang gửi",
-        "scheduled": "Đã hẹn giờ"
+        "scheduled": "Đã hẹn giờ",
+        "sending": "Đang gửi"
       },
+      "OPEN_CAMPAIGNS": "Nháp và kết quả chi tiết ở trang Chiến dịch",
       "STATS": "Đã gửi {sent}/{eligible} · Bỏ qua ngoài 24h: {skipped}",
       "SUBMIT": "Gửi chiến dịch",
       "SUBMITTING": "Đang tạo…",
@@ -5518,6 +5520,11 @@
   "KALO_CAMPAIGN_FLOW": {
     "CREATE": "Tạo chiến dịch",
     "WEBSITE_CAMPAIGNS": "Lời chào tự động trên website",
+    "API_ERRORS": {
+      "schedule_in_past": "Giờ hẹn đã qua. Chọn lại giờ gửi.",
+      "broadcast_limit_reached": "Đã đủ 30 chiến dịch đang chờ hoặc nháp. Xóa bớt nháp hoặc chờ chiến dịch gửi xong.",
+      "subscription_expired": "Chưa gửi vì gói dùng thử đã hết hạn."
+    },
     "READONLY": "Chỉ quản trị viên tạo và gửi được chiến dịch. Bạn vẫn xem được kết quả.",
     "LIST": {
       "TITLE": "Chiến dịch nhắn tin",
@@ -5540,6 +5547,7 @@
       "draft": "Nháp",
       "scheduled": "Đã hẹn",
       "processing": "Đang gửi",
+      "sending": "Đang gửi",
       "completed": "Đã gửi",
       "failed": "Lỗi"
     },
@@ -5598,6 +5606,7 @@
       "REACH_TITLE": "Số khách nhận được theo từng kênh",
       "REACH_ROW": "{count} khách",
       "REACH_NOTE": "Kalo chỉ nhắn được khách đã từng nhắn shop qua đúng kênh đó.",
+      "CAP_NOTE": "Mỗi lần gửi chỉ gửi cho {max} khách đầu tiên của mỗi kênh.",
       "META_24H": "Facebook và Instagram chỉ cho nhắn khách đã nhắn shop trong 24 giờ qua: {skipped} khách bị bỏ qua.",
       "NO_CHANNELS": "Shop chưa nối kênh nhắn tin nào.",
       "CONNECT": "Nối kênh"
@@ -5623,7 +5632,8 @@
       "UTM_URL_PLACEHOLDER": "shopcuaban.vn/san-pham",
       "UTM_RESULT": "Link đã gắn mã",
       "UTM_INVALID": "Link chưa đúng, cần dạng shopcuaban.vn/trang",
-      "UTM_INSERT": "Chèn vào tin nhắn"
+      "UTM_INSERT": "Chèn vào tin nhắn",
+      "TAG_LOCKED": "Mã theo dõi giữ là {tag} vì tin đã có link gắn mã này."
     },
     "CHANNEL_STEP": {
       "PICK": "Gửi qua kênh",
@@ -5632,6 +5642,8 @@
       "ZALO_RATE": "Zalo cá nhân gửi tối đa {perMinute} tin mỗi phút để tránh bị khóa tài khoản.",
       "META_24H": "Chỉ gửi được cho khách nhắn shop trong 24 giờ qua (quy định của Meta).",
       "CAP": "Mỗi chiến dịch gửi tối đa {max} khách. {rest} khách còn lại cần chiến dịch khác.",
+      "ONLY_24H": "Chỉ khách nhắn shop trong 24 giờ qua",
+      "ONLY_24H_HINT": "Tùy chọn nâng cao: bỏ qua khách lâu không nhắn để tránh bị coi là tin rác.",
       "WHEN": "Thời điểm gửi",
       "NOW": "Gửi ngay",
       "LATER": "Hẹn giờ",
@@ -5645,6 +5657,7 @@
       "AUDIENCE_SEGMENT": "Nhóm khách: {name}",
       "AUDIENCE_LABELS": "Nhãn: {labels}",
       "CHANNEL": "Kênh",
+      "TAG": "Mã theo dõi",
       "RECIPIENTS": "Số khách sẽ nhận",
       "WHEN": "Thời điểm",
       "WHEN_NOW": "Ngay sau khi bấm gửi",
@@ -5675,7 +5688,7 @@
       "REVENUE": "Doanh thu đã thanh toán",
       "NO_READ": "{channel} không báo trạng thái đã xem nên Kalo không hiện số này.",
       "SENT_NOTE": "Đã gửi là tin Kalo đã chuyển cho kênh và kênh không báo lỗi. Tin kênh từ chối được tính vào Gửi lỗi.",
-      "ORDERS_NOTE": "Đơn tạo sau khi gửi, trong cuộc trò chuyện của chiến dịch hoặc đến từ link có mã {tag}.",
+      "ORDERS_NOTE": "Đơn tạo trong {days} ngày sau khi gửi, trong cuộc trò chuyện của chiến dịch hoặc đến từ link có mã {tag}.",
       "REPLIED_NOTE": "Khách nhắn lại trong cuộc trò chuyện nhận tin, sau khi gửi."
     },
     "CHANNELS": {

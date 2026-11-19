@@ -36,7 +36,7 @@ const load = async () => {
 
 const status = computed(() => broadcast.value?.status);
 const showNumbers = computed(() =>
-  ['processing', 'completed', 'failed'].includes(status.value)
+  ['processing', 'sending', 'completed', 'failed'].includes(status.value)
 );
 const channelName = computed(() =>
   t(`KALO_CAMPAIGN_FLOW.CHANNELS.${channelKey(broadcast.value?.channel_type)}`)
@@ -111,16 +111,21 @@ defineExpose({ load });
         }}
       </p>
       <p
-        v-if="status === 'processing'"
+        v-if="status === 'processing' || status === 'sending'"
         class="px-3 py-2 text-sm rounded-lg bg-n-alpha-2 text-n-slate-12"
       >
         {{ t('KALO_CAMPAIGN_FLOW.RESULTS.PROCESSING') }}
       </p>
       <p
         v-if="status === 'failed'"
+        data-test="campaign-results-failed"
         class="px-3 py-2 text-sm rounded-lg bg-n-ruby-3 text-n-ruby-11"
       >
-        {{ t('KALO_CAMPAIGN_FLOW.RESULTS.FAILED') }}
+        {{
+          broadcast.error === 'subscription_expired'
+            ? t('KALO_CAMPAIGN_FLOW.API_ERRORS.subscription_expired')
+            : t('KALO_CAMPAIGN_FLOW.RESULTS.FAILED')
+        }}
       </p>
 
       <dl
@@ -158,6 +163,7 @@ defineExpose({ load });
           {{
             t('KALO_CAMPAIGN_FLOW.RESULTS.ORDERS_NOTE', {
               tag: broadcast.campaign_tag,
+              days: results.attribution_days,
             })
           }}
         </li>
