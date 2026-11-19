@@ -74,24 +74,30 @@ export const dateFormat = (time, df = 'MMM d, yyyy') => {
   return format(unixTime, df);
 };
 
-const VI_UNIT_BY_EN = {
-  minute: 'phút',
-  hour: 'giờ',
-  day: 'ngày',
-  month: 'tháng',
-  year: 'năm',
-};
-
-// Vietnamese short form of an English date-fns distance string:
-// "vừa xong", "5 phút", "2 giờ", "3 ngày", "1 tháng", "4 năm".
-const shortTimestampVi = (time, withAgo) => {
-  if (/less than a minute/.test(time)) return 'vừa xong';
+// Localized short form of an English date-fns distance string, built with Intl
+// so no translated words live here: vi gives "bây giờ", "5 phút", "2 giờ",
+// "3 ngày", and "5 phút trước" with `withAgo`.
+const shortTimestampIntl = (time, withAgo, localeCode) => {
+  if (/less than a minute/.test(time)) {
+    return new Intl.RelativeTimeFormat(localeCode, { numeric: 'auto' }).format(
+      0,
+      'second'
+    );
+  }
   const match = time.match(
     /(?:(\d+)|an?)\s(minute|hour|day|month|year)s?(?: ago)?$/
   );
   if (!match) return time;
-  const [, count = '1', unit] = match;
-  return `${count} ${VI_UNIT_BY_EN[unit]}${withAgo ? ' trước' : ''}`;
+  const count = Number(match[1] || 1);
+  const unit = match[2];
+  if (withAgo) {
+    return new Intl.RelativeTimeFormat(localeCode).format(-count, unit);
+  }
+  return new Intl.NumberFormat(localeCode, {
+    style: 'unit',
+    unit,
+    unitDisplay: 'long',
+  }).format(count);
 };
 
 /**
@@ -101,7 +107,10 @@ const shortTimestampVi = (time, withAgo) => {
  * @returns {string} Shortened time description.
  */
 export const shortTimestamp = (time, withAgo = false) => {
-  if (getDateLocaleCode() === 'vi') return shortTimestampVi(time, withAgo);
+  const localeCode = getDateLocaleCode();
+  if (localeCode !== 'default') {
+    return shortTimestampIntl(time, withAgo, localeCode);
+  }
   // This function takes a time string and converts it to a short time string
   // with the following format: 1m, 1h, 1d, 1mo, 1y
   // The function also takes an optional boolean parameter withAgo

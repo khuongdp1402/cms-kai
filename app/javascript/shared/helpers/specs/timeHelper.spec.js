@@ -128,7 +128,7 @@ describe('#shortTimestamp in Vietnamese', () => {
   afterEach(() => setDateLocale('en'));
 
   it('returns Vietnamese short forms', () => {
-    expect(shortTimestamp('less than a minute ago')).toEqual('vừa xong');
+    expect(shortTimestamp('less than a minute ago')).toEqual('bây giờ');
     expect(shortTimestamp('a minute ago')).toEqual('1 phút');
     expect(shortTimestamp('12 minutes ago')).toEqual('12 phút');
     expect(shortTimestamp('about 1 hour ago')).toEqual('1 giờ');
@@ -139,7 +139,7 @@ describe('#shortTimestamp in Vietnamese', () => {
     expect(shortTimestamp('almost 2 years ago')).toEqual('2 năm');
   });
 
-  it('appends trước when withAgo is true', () => {
+  it('appends trước when withAgo is true (Intl, no hard-coded words)', () => {
     expect(shortTimestamp('5 minutes ago', true)).toEqual('5 phút trước');
   });
 });
