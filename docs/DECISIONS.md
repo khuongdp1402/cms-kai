@@ -256,7 +256,7 @@
   4. Sidebar theo §4: Bình luận (`kalo_comments`), Chiến dịch (`kalo_campaigns`), Thương hiệu (`kalo_brand`) là route riêng (`/marketing/{comments,campaigns,brand}`) bọc component cũ trong KaloPage. Trang Marketing cũ giữ lại cho bookmark, tab ẩn theo cờ. Hub Cài đặt chỉ còn Console (quản trị), nhãn và mẫu câu, tài khoản của tôi, nhóm nâng cao theo cờ.
 - **Đánh đổi:** chỉ ẩn ở giao diện, API của nhóm bị tắt vẫn chạy (như ADR-023). Tên file component của Nền tảng vẫn là `Console*.vue` trong `routes/dashboard/platform/` để diff nhỏ.
 
-## ADR-025 — Hướng dẫn người mới: danh sách thiết lập, tour driver.js, banner dùng thử · `accepted` (2026-11-20)
+## ADR-026 — Hướng dẫn người mới: danh sách thiết lập, tour driver.js, banner dùng thử · `accepted` (2026-11-20)
 - **Bối cảnh:** đặc tả guided UX §3 cần danh sách 5 bước tự đánh dấu từ dữ liệu thật, tour khoanh vùng theo từng chức năng, trang trống không dữ liệu giả và banner dùng thử ngay cả khi chưa cấu hình ngân hàng Casso.
 - **Quyết định:**
   1. Mọi phần nằm ở `components-next/guide/`. Lối vào trên rail và sheet "Thêm" là một component tự chứa `KaloGuideNav` (banner dùng thử, huy hiệu số bước còn lại, menu "Hướng dẫn"), mỗi file nav chỉ thêm một thẻ (LESSONS B93). `KaloTourHost` gắn một lần trong `Dashboard.vue`.
