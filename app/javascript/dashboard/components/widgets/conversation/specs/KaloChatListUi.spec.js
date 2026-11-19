@@ -38,6 +38,7 @@ const ROUTES = [
   'conversation_participating',
   'settings_inbox_new',
   'kalo_pos',
+  'kalo_products',
   'kalo_orders',
   'kalo_payment_settings',
   'kalo_console',
