@@ -84,10 +84,9 @@ RSpec.describe Kchat::Metrics do
     web_row = funnel[:channel_funnel].find { |row| row[:channel] == 'web_widget' }
     expect(web_row).to include(conversations: 1, converted_conversations: 1, orders: 1, conversion_pct: 100.0)
     expect(funnel[:agents]).to eq([{ agent_id: agent.id, name: 'Minh Anh', conversations: 1, orders: 1, conversion_pct: 100.0, revenue: 0 }])
-    # The order came before the campaign: neither the UTM table nor the campaign results credit it.
-    expect(funnel[:campaigns]).to eq([{ campaign: broadcast['campaign_tag'], source: 'broadcast', conversations: 1, orders: 0,
-                                        conversion_pct: 0.0, revenue: 0 }])
-    expect(Kchat::BroadcastsService.new(account).results(broadcast['id'])[:results]).to include(orders_count: 0, revenue: 0)
+    # Lan has not written since the campaign and her order came before it: no campaign row, and the results agree.
+    expect(funnel[:campaigns]).to eq([])
+    expect(Kchat::BroadcastsService.new(account).results(broadcast['id'])[:results]).to include(replied_count: 0, orders_count: 0, revenue: 0)
   end
 
   it 'credits an order placed after the campaign in both the UTM table and the campaign results, not after 7 days' do
@@ -98,7 +97,8 @@ RSpec.describe Kchat::Metrics do
     campaign = Kchat::MarketingReports.new(account, 'today').funnel[:campaigns].first
     expect(campaign).to eq(campaign: broadcast['campaign_tag'], source: 'broadcast', conversations: 1, orders: 1, conversion_pct: 100.0,
                            revenue: 200_000)
-    expect(Kchat::BroadcastsService.new(account).results(broadcast['id'])[:results]).to include(orders_count: 1, revenue: 200_000)
+    expect(Kchat::BroadcastsService.new(account).results(broadcast['id'])[:results]).to include(replied_count: 1, orders_count: 1,
+                                                                                                revenue: 200_000)
 
     travel 8.days do
       order(source: 'chat', method: 'cash', conversation: chat, price: 50_000)

@@ -10,11 +10,15 @@ class Kchat::Broadcasts::Dispatcher
   # ContactInboxWithContactBuilder names anonymous visitors with Haikunator.haikunate(1000), e.g. "lingering-grass-348".
   GENERATED_NAME = /\A[a-z]+-[a-z]+-\d{1,4}\z/
   SOCIAL_COMMENT_SQL = "COALESCE(conversations.additional_attributes->>'source_type', '') = 'social_comment'"
+  # The conversation has at least one message from the customer.
+  CUSTOMER_WROTE_SQL = <<~SQL.squish.freeze
+    EXISTS (SELECT 1 FROM messages customer_messages WHERE customer_messages.conversation_id = conversations.id
+    AND customer_messages.message_type = #{Message.message_types[:incoming]})
+  SQL
   # The contact inbox has a (non comment) conversation in which the customer wrote at least once.
   CHATTED_SQL = <<~SQL.squish.freeze
-    EXISTS (SELECT 1 FROM conversations JOIN messages ON messages.conversation_id = conversations.id
-    WHERE conversations.contact_inbox_id = contact_inboxes.id AND messages.message_type = #{Message.message_types[:incoming]}
-    AND NOT (#{SOCIAL_COMMENT_SQL}))
+    EXISTS (SELECT 1 FROM conversations WHERE conversations.contact_inbox_id = contact_inboxes.id
+    AND #{CUSTOMER_WROTE_SQL} AND NOT (#{SOCIAL_COMMENT_SQL}))
   SQL
 
   # What {{name}} becomes for this contact; the wizard preview uses the same rule. A name the widget generated is not
@@ -117,14 +121,16 @@ class Kchat::Broadcasts::Dispatcher
     message.update_columns(additional_attributes: attrs) # rubocop:disable Rails/SkipsModelValidations
   end
 
+  # The latest conversation the customer wrote in (CHATTED_SQL guarantees there is one).
   def last_conversation(contact_inbox)
-    contact_inbox.conversations.where.not(SOCIAL_COMMENT_SQL).order(created_at: :desc, id: :desc).first
+    contact_inbox.conversations.where.not(SOCIAL_COMMENT_SQL).where(CUSTOMER_WROTE_SQL).order(created_at: :desc, id: :desc).first
   end
 
-  # kchat_campaign_at: orders count for the campaign only from this moment (Kchat::MarketingReports, like Results).
+  # The campaign gets its own keys so an ad's utm_source/utm_campaign on the same conversation stays intact.
+  # kchat_campaign_at: replies and orders count for the campaign only from this moment (Kchat::MarketingReports, like Results).
   def tag_conversation(conversation, record)
     campaign_tag = record['campaign_tag']
-    attrs = conversation.additional_attributes.to_h.merge('utm_source' => 'broadcast', 'utm_campaign' => campaign_tag,
+    attrs = conversation.additional_attributes.to_h.merge('kchat_broadcast_tag' => campaign_tag,
                                                           'kchat_campaign_at' => record['started_at'].presence || Time.current.iso8601)
     conversation.update!(additional_attributes: attrs)
     conversation.add_labels([campaign_tag]) unless conversation.label_list.include?(campaign_tag)

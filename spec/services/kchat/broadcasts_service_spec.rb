@@ -66,7 +66,8 @@ RSpec.describe Kchat::BroadcastsService do
     expect(updated).to include('status' => 'completed', 'sent_count' => 2, 'failed_count' => 0)
     expect(ci1.conversations.last.messages.outgoing.last.content).to eq('Chào Minh Thư, Kalo Candles tặng bạn mã giảm 20%!')
     expect(ci2.conversations.last.messages.outgoing.last.content).to eq('Chào Quốc Bảo, Kalo Candles tặng bạn mã giảm 20%!')
-    expect(ci1.conversations.last.additional_attributes).to include('utm_source' => 'broadcast', 'utm_campaign' => 'uu_dai_tet_2027')
+    expect(ci1.conversations.last.additional_attributes).to include('kchat_broadcast_tag' => 'uu_dai_tet_2027')
+    expect(ci1.conversations.last.additional_attributes['kchat_campaign_at']).to be_present
     expect(ci1.conversations.last.label_list).to include('uu_dai_tet_2027')
   end
 end
