@@ -2,9 +2,8 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStoreGetters } from 'dashboard/composables/store';
-import { useAdmin } from 'dashboard/composables/useAdmin';
-import { useAccount } from 'dashboard/composables/useAccount';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloSetupChecklist from 'next/guide/KaloSetupChecklist.vue';
 
 defineProps({
   // Line under the greeting, e.g. "pick a conversation"; the default explains the steps.
@@ -13,13 +12,8 @@ defineProps({
 
 const getters = useStoreGetters();
 const { t } = useI18n();
-const { isAdmin } = useAdmin();
-const { accountScopedRoute } = useAccount();
 
 const currentUser = computed(() => getters.getCurrentUser.value);
-const hasInboxes = computed(
-  () => getters['inboxes/getInboxes'].value.length > 0
-);
 
 const greetingMessage = computed(() => {
   const hours = new Date().getHours();
@@ -30,19 +24,6 @@ const greetingMessage = computed(() => {
     name: currentUser.value.name,
   });
 });
-
-const steps = computed(() =>
-  [
-    isAdmin.value && {
-      key: 'CHANNEL',
-      icon: 'plug',
-      to: accountScopedRoute('settings_inbox_new'),
-      done: hasInboxes.value,
-    },
-    { key: 'PRODUCT', icon: 'tag', to: accountScopedRoute('kalo_pos') },
-    { key: 'ORDER', icon: 'bag', to: accountScopedRoute('kalo_orders') },
-  ].filter(Boolean)
-);
 </script>
 
 <template>
@@ -75,41 +56,7 @@ const steps = computed(() =>
         {{ message || t('KALO_CHAT_LIST.WELCOME.SUBTITLE') }}
       </p>
     </div>
-    <ol class="grid w-full gap-2.5 p-0 m-0 list-none text-start">
-      <li v-for="step in steps" :key="step.key" class="m-0">
-        <router-link
-          :to="step.to"
-          :data-test-id="`kalo-welcome-step-${step.key.toLowerCase()}`"
-          class="flex items-center gap-3 p-3.5 border rounded-2xl border-n-weak bg-n-surface-1 transition duration-150 motion-reduce:transition-none hover:border-n-blue-6 hover:shadow-md group"
-        >
-          <span
-            class="grid rounded-xl size-10 shrink-0 place-items-center"
-            :class="
-              step.done
-                ? 'bg-n-teal-3 text-n-teal-11'
-                : 'bg-n-blue-3 text-n-blue-11'
-            "
-          >
-            <KaloIcon :name="step.done ? 'check' : step.icon" class="size-5" />
-          </span>
-          <span class="flex flex-col flex-1 min-w-0">
-            <span class="text-sm font-semibold text-n-slate-12">
-              {{ t(`KALO_CHAT_LIST.WELCOME.STEPS.${step.key}.TITLE`) }}
-            </span>
-            <span class="text-xs text-n-slate-11">
-              {{
-                step.done
-                  ? t('KALO_CHAT_LIST.WELCOME.STEPS.DONE')
-                  : t(`KALO_CHAT_LIST.WELCOME.STEPS.${step.key}.DESC`)
-              }}
-            </span>
-          </span>
-          <KaloIcon
-            name="arrow"
-            class="size-4 text-n-slate-10 transition-transform duration-150 motion-reduce:transition-none group-hover:translate-x-0.5 rtl:rotate-180"
-          />
-        </router-link>
-      </li>
-    </ol>
+    <!-- The one setup checklist (spec §3.1); hidden for staff and once dismissed. -->
+    <KaloSetupChecklist variant="compact" />
   </div>
 </template>

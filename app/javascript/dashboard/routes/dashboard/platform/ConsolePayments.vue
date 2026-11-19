@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { refreshKaloTrial } from 'dashboard/components-next/guide/useKaloTrial';
 import { useAlert } from 'dashboard/composables';
 import consoleAPI from 'dashboard/api/kchat/console';
 import ConsoleChip from './ConsoleChip.vue';
@@ -76,6 +77,7 @@ const assign = async event => {
     );
     const index = events.value.findIndex(e => e.id === event.id);
     events.value.splice(index, 1, data);
+    refreshKaloTrial(selected.value);
     assigning.value = null;
     useAlert(t('KALO_CONSOLE.PAYMENTS.ASSIGN_DONE'));
   } catch (error) {

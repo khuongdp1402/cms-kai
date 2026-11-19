@@ -7,6 +7,7 @@ import subscriptionAPI from 'dashboard/api/kchat/subscription';
 import paymentSettingsAPI from 'dashboard/api/kchat/paymentSettings';
 import InboxMembersAPI from 'dashboard/api/inboxMembers';
 import ShopConsole from '../ShopConsole.vue';
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
 
 const alertMock = vi.hoisted(() => vi.fn());
 vi.mock('dashboard/composables', () => ({ useAlert: alertMock }));
@@ -63,6 +64,7 @@ const mountConsole = async ({
   ],
   teams = [{ id: 3, name: 'Bán hàng' }],
   inboxes = INBOXES,
+  query = {},
 } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -79,7 +81,7 @@ const mountConsole = async ({
       },
     ],
   });
-  await router.push({ name: 'kalo_console', params: { accountId: 1 } });
+  await router.push({ name: 'kalo_console', params: { accountId: 1 }, query });
 
   const agentList = [...agents];
   const actions = {
@@ -354,6 +356,18 @@ describe('ShopConsole', () => {
       'Kalo chưa sẵn sàng nhận phí gói'
     );
     expect(wrapper.find('[data-test="console-channels-empty"]').exists()).toBe(
+      true
+    );
+  });
+
+  it('renders every target of the Console tour', async () => {
+    const { wrapper } = await setup();
+    expectTourTargets(wrapper, 'console');
+  });
+
+  it('opens the invite drawer from ?invite=1 (setup checklist link)', async () => {
+    const { wrapper } = await setup({ query: { invite: '1' } });
+    expect(wrapper.find('[data-test="console-invite-drawer"]').exists()).toBe(
       true
     );
   });

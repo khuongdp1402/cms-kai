@@ -29,6 +29,7 @@ const activeTab = ref('profile');
   >
     <template #tabs>
       <div
+        data-tour="brand-tabs"
         role="tablist"
         :aria-label="t('KALO_CONSOLE_SHOP.PAGES.BRAND.TABS_LABEL')"
         class="inline-flex flex-wrap gap-1 p-1 border rounded-xl bg-n-solid-2 border-n-weak"
@@ -52,8 +53,10 @@ const activeTab = ref('profile');
       </div>
     </template>
 
-    <BrandProfileForm v-if="activeTab === 'profile'" />
-    <ContentCalendar v-else-if="activeTab === 'calendar'" />
-    <ContentIdeas v-else />
+    <div data-tour="brand-content" class="flex flex-col min-w-0 gap-4">
+      <BrandProfileForm v-if="activeTab === 'profile'" />
+      <ContentCalendar v-else-if="activeTab === 'calendar'" />
+      <ContentIdeas v-else />
+    </div>
   </KaloPage>
 </template>

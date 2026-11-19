@@ -8,6 +8,8 @@ import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
 import KaloDrawer from 'next/layout/KaloDrawer.vue';
 import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
+import KaloGuideNav from 'next/guide/KaloGuideNav.vue';
+import KaloGuideTabDot from 'next/guide/KaloGuideTabDot.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
@@ -96,6 +98,7 @@ watch(
       @close="isSheetOpen = false"
     >
       <div class="flex flex-col -mx-2 -my-2">
+        <KaloGuideNav variant="sheet" />
         <router-link
           v-for="item in sheetItems"
           :key="item.key"
@@ -187,12 +190,13 @@ watch(
       type="button"
       data-test-id="kalo-tab-more"
       :aria-expanded="isSheetOpen"
-      class="flex flex-col items-center w-16 gap-0.5 text-xs font-medium"
+      class="relative flex flex-col items-center w-16 gap-0.5 text-xs font-medium"
       :class="isMoreActive ? 'text-n-blue-11' : 'text-n-slate-10'"
       @click="isSheetOpen = !isSheetOpen"
     >
       <KaloIcon name="more" class="size-6" />
       {{ t('KALO_NAV.MORE') }}
+      <KaloGuideTabDot />
     </button>
   </nav>
 </template>

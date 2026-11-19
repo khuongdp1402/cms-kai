@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import subscriptionAPI from 'dashboard/api/kchat/subscription';
+import { setKaloTrialSubscription } from 'dashboard/components-next/guide/useKaloTrial';
 import Button from 'dashboard/components-next/button/Button.vue';
 import { formatMoney } from 'dashboard/routes/dashboard/reports/formatMoney';
 
@@ -19,10 +20,15 @@ const STATUS_STYLES = {
 
 const subscription = ref(null);
 const hasError = ref(false);
-const isNotConfigured = ref(false);
 const copied = ref(false);
 
 const isExpired = computed(() => subscription.value?.status === 'expired');
+// Trial state always comes back; bank/memo/prices only when Casso is configured.
+const hasPayment = computed(
+  () =>
+    subscription.value?.billing_configured !== false &&
+    !!subscription.value?.bank
+);
 const planName = computed(() =>
   subscription.value?.plan
     ? t(`KALO_BILLING.PLANS.${subscription.value.plan}`)
@@ -48,12 +54,10 @@ onMounted(async () => {
   try {
     const { data } = await subscriptionAPI.get();
     subscription.value = data;
-  } catch (error) {
-    if (error?.response?.data?.error === 'billing_not_configured') {
-      isNotConfigured.value = true;
-    } else {
-      hasError.value = true;
-    }
+    // The rail trial banner shows the same fresh state (e.g. after paying).
+    setKaloTrialSubscription(Number(route.params.accountId), data);
+  } catch {
+    hasError.value = true;
   }
 });
 </script>
@@ -81,19 +85,7 @@ onMounted(async () => {
       <p class="mb-0 text-sm text-n-slate-11">
         {{ t('KALO_SETTINGS_UI.PAGES.PLAN.DESC') }}
       </p>
-      <p
-        v-if="isNotConfigured"
-        data-test="billing-not-configured"
-        role="status"
-        class="p-4 mt-6 text-sm font-medium border rounded-2xl bg-n-amber-3 text-n-amber-11 border-n-amber-5"
-      >
-        {{ t('KALO_PAYMENT.BILLING_NOT_CONFIGURED') }}
-      </p>
-      <p
-        v-else-if="hasError"
-        data-test="error"
-        class="mt-6 text-sm text-n-slate-11"
-      >
+      <p v-if="hasError" data-test="error" class="mt-6 text-sm text-n-slate-11">
         {{ t('KALO_BILLING.ERROR') }}
       </p>
       <p v-else-if="!subscription" class="mt-6 text-sm text-n-slate-11">
@@ -137,7 +129,16 @@ onMounted(async () => {
           </div>
         </div>
 
+        <p
+          v-if="!hasPayment"
+          data-test="billing-not-configured"
+          role="status"
+          class="p-4 text-sm font-medium border rounded-2xl bg-n-amber-3 text-n-amber-11 border-n-amber-5"
+        >
+          {{ t('KALO_PAYMENT.BILLING_NOT_CONFIGURED') }}
+        </p>
         <div
+          v-if="hasPayment"
           data-test="renew"
           :data-primary="isExpired"
           class="flex flex-col gap-3 p-5 border rounded-2xl"
@@ -185,7 +186,10 @@ onMounted(async () => {
           </dl>
         </div>
 
-        <div class="p-5 border rounded-2xl bg-n-solid-1 border-n-weak">
+        <div
+          v-if="hasPayment"
+          class="p-5 border rounded-2xl bg-n-solid-1 border-n-weak"
+        >
           <h2 class="mb-3 text-base font-bold text-n-slate-12">
             {{ t('KALO_BILLING.PRICES_TITLE') }}
           </h2>

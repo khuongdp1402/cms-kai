@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ChannelSelector from '../ChannelSelector.vue';
 
 const props = defineProps({
@@ -14,6 +15,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['channelItemClick']);
+
+const { t } = useI18n();
 
 const hasFbConfigured = computed(() => {
   return window.chatwootConfig?.fbAppId;
@@ -77,6 +80,13 @@ const isActive = computed(() => {
 
 const isComingSoon = computed(() => false);
 
+// Facebook needs a Meta app id; without it the card is disabled, so say why.
+const unavailableHint = computed(() =>
+  props.channel.key === 'facebook' && !isActive.value
+    ? t('KALO_GUIDE.FIXES.FACEBOOK_SOON')
+    : ''
+);
+
 const isBeta = computed(() => false);
 
 const hasVoiceBadge = computed(() => {
@@ -101,6 +111,7 @@ const onItemClick = () => {
     :is-coming-soon="isComingSoon"
     :is-beta="isBeta"
     :has-voice-badge="hasVoiceBadge"
+    :unavailable-hint="unavailableHint"
     :disabled="!isActive"
     @click="onItemClick"
   />

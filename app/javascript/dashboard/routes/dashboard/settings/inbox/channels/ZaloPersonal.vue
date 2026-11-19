@@ -18,7 +18,16 @@ const route = useRoute();
 const router = useRouter();
 
 const accountId = computed(() => route.params.accountId || 1);
-const inboxName = ref('Zalo Personal');
+// Default name "Zalo cá nhân", translated at render time (LESSONS B52) until edited.
+const typedInboxName = ref(null);
+const inboxName = computed({
+  get: () =>
+    typedInboxName.value ??
+    t('INBOX_MGMT.ADD.AUTH.CHANNEL.ZALO_PERSONAL.TITLE'),
+  set: value => {
+    typedInboxName.value = value;
+  },
+});
 const isSubmitting = ref(false);
 const isInitializing = ref(true);
 const attemptId = ref(null);

@@ -28,6 +28,10 @@ defineProps({
     type: Boolean,
     default: false,
   },
+  unavailableHint: {
+    type: String,
+    default: '',
+  },
 });
 
 const { t } = useI18n();
@@ -71,6 +75,13 @@ const { t } = useI18n();
       </div>
       <p class="text-n-slate-11 text-start text-sm">
         {{ description }}
+      </p>
+      <p
+        v-if="unavailableHint"
+        data-test="channel-unavailable-hint"
+        class="text-n-amber-11 text-start text-xs font-medium"
+      >
+        {{ unavailableHint }}
       </p>
     </div>
 

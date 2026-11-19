@@ -6,14 +6,16 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import OrdersIndex from '../OrdersIndex.vue';
 import { useAlert } from 'dashboard/composables';
+import { routeLocationKey } from 'vue-router';
 import { makeOrder } from './kaloOrdersFixtures';
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
 
 vi.mock('dashboard/composables', () => ({ useAlert: vi.fn() }));
 vi.mock('dashboard/api/kchat/orders', () => ({ default: { qr: vi.fn() } }));
 
 const mountIndex = (
   orders,
-  { fetch = vi.fn(), transition = vi.fn(), meta, sendQr = vi.fn() } = {}
+  { fetch = vi.fn(), transition = vi.fn(), meta, sendQr = vi.fn(), route } = {}
 ) => {
   const list = ref(orders);
   const store = createStore({
@@ -44,6 +46,7 @@ const mountIndex = (
   const wrapper = mount(OrdersIndex, {
     global: {
       plugins: [store, i18n],
+      provide: route ? { [routeLocationKey]: route } : {},
       stubs: { RouterLink: { template: '<a><slot /></a>' }, OrderForm: true },
     },
   });
@@ -234,5 +237,25 @@ describe('OrdersIndex', () => {
     expect(wrapper.find('[data-test="order-form-drawer"]').exists()).toBe(
       false
     );
+  });
+
+  it('renders every target of the Đơn hàng tour', async () => {
+    const { wrapper } = mountIndex([makeOrder()]);
+    await flushPromises();
+    expectTourTargets(wrapper, 'orders');
+  });
+
+  it('keeps the create target when the shop has no orders yet', async () => {
+    const { wrapper } = mountIndex([]);
+    await flushPromises();
+    expectTourTargets(wrapper, 'orders', ['orders-create']);
+  });
+
+  it('opens the create form from ?new=1 (setup checklist link)', async () => {
+    const { wrapper } = mountIndex([makeOrder()], {
+      route: { query: { new: '1' } },
+    });
+    await flushPromises();
+    expect(wrapper.find('[data-test="order-form-drawer"]').exists()).toBe(true);
   });
 });

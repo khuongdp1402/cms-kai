@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { refreshKaloTrial } from 'dashboard/components-next/guide/useKaloTrial';
 import { useAlert } from 'dashboard/composables';
 import consoleAPI from 'dashboard/api/kchat/console';
 import ConsoleChip from './ConsoleChip.vue';
@@ -83,6 +84,8 @@ const patch = async (shop, payload, doneKey) => {
     const { data } = await consoleAPI.updateAccount(shop.id, payload);
     const index = shops.value.findIndex(s => s.id === shop.id);
     shops.value.splice(index, 1, data);
+    // A plan change on the shop the admin is in updates its trial banner.
+    refreshKaloTrial(shop.id);
     useAlert(t(doneKey));
   } catch (error) {
     useAlert(t('KALO_CONSOLE.SHOPS.UPDATE_ERROR'));

@@ -116,7 +116,9 @@ const isConvListCollapsed = computed(() =>
   Boolean(store.getters.getUISettings?.is_conv_list_collapsed)
 );
 const isContactPanelOpen = computed(() =>
-  contactPanel ? contactPanel.isContactPanelOpenFor(currentChat.value?.id) : false
+  contactPanel
+    ? contactPanel.isContactPanelOpenFor(currentChat.value?.id)
+    : false
 );
 
 const toggleConvList = () => {
@@ -247,6 +249,7 @@ const toggleContactSidebar = () => {
       <Button
         v-if="hasUISettings"
         data-test="toggle-contact-panel"
+        data-tour="chat-contact"
         variant="outline"
         color="slate"
         size="sm"

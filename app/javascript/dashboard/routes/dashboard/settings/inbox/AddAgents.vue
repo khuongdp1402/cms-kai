@@ -35,6 +35,7 @@ export default {
   computed: {
     ...mapGetters({
       agentList: 'agents/getAgents',
+      currentUserID: 'getCurrentUserID',
     }),
     selectedAgentNames() {
       return this.selectedAgentIds.map(
@@ -52,8 +53,13 @@ export default {
         }));
     },
   },
-  mounted() {
-    this.$store.dispatch('agents/get');
+  async mounted() {
+    await this.$store.dispatch('agents/get');
+    // The person creating the channel is the first agent by default.
+    const isAgent = this.agentList.some(({ id }) => id === this.currentUserID);
+    if (isAgent && !this.selectedAgentIds.includes(this.currentUserID)) {
+      this.selectedAgentIds.push(this.currentUserID);
+    }
   },
   methods: {
     handleAgentAdd({ value }) {
@@ -111,6 +117,7 @@ export default {
                 :placeholder="$t('INBOX_MGMT.ADD.AGENTS.PICK_AGENTS')"
                 :menu-items="agentMenuItems"
                 show-dropdown
+                :auto-open-dropdown="false"
                 skip-label-dedup
                 @add="handleAgentAdd"
                 @remove="handleAgentRemove"

@@ -71,6 +71,8 @@ const buildChat = (inboxKey, overrides = {}) => ({
   ...overrides,
 });
 
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
+
 const mountReplyBox = ({
   inbox = 'web',
   chat = {},
@@ -126,6 +128,11 @@ describe('ReplyBox', () => {
   afterEach(() => {
     wrapper?.unmount();
     emitter.emit(BUS_EVENTS.NEW_CONVERSATION_MODAL, false);
+  });
+
+  it('renders the composer target of the Tin nhắn tour', () => {
+    ({ wrapper } = mountReplyBox());
+    expectTourTargets(wrapper, 'messages', ['chat-composer']);
   });
 
   describe('send hotkeys', () => {

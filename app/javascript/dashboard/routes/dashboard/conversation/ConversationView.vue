@@ -203,6 +203,7 @@ export default {
 <template>
   <section class="flex w-full h-full min-w-0">
     <ChatList
+      data-tour="chat-list"
       :show-conversation-list="showConversationList"
       :conversation-inbox="inboxId"
       :label="label"

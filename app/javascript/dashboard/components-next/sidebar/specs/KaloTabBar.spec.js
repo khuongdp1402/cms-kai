@@ -2,6 +2,7 @@ import { mount } from '@vue/test-utils';
 import Auth from 'dashboard/api/auth';
 import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
 import KaloTabBar from '../KaloTabBar.vue';
+import KaloGuideTabDot from 'next/guide/KaloGuideTabDot.vue';
 import { createKaloTestEnv } from './kaloTestHelpers';
 
 vi.mock('dashboard/composables/useKeyboardEvents', () => ({
@@ -128,5 +129,22 @@ describe('KaloTabBar', () => {
     );
     expect(useKeyboardEvents).toHaveBeenCalled();
     wrapper.unmount();
+  });
+
+  it('carries the guide dot inside the Thêm tab', async () => {
+    const { router, store, i18n } = createKaloTestEnv();
+    await router.push({ name: 'home', params: { accountId: 1 } });
+    const wrapper = mount(KaloTabBar, {
+      global: {
+        plugins: [router, store, i18n],
+        stubs: { ComposeConversation: true },
+      },
+    });
+    expect(
+      wrapper
+        .find('[data-test-id="kalo-tab-more"]')
+        .findComponent(KaloGuideTabDot)
+        .exists()
+    ).toBe(true);
   });
 });

@@ -362,8 +362,25 @@ onMounted(loadCalendar);
       </article>
     </div>
 
-    <p v-else data-test="calendar-empty" class="text-sm text-n-slate-11">
-      {{ t('KALO_MARKETING.CALENDAR.EMPTY') }}
-    </p>
+    <div
+      v-else
+      data-test="calendar-empty"
+      class="flex flex-col items-start gap-3"
+    >
+      <p class="mb-0 text-sm text-n-slate-11">
+        {{
+          items.length
+            ? t('KALO_GUIDE.EMPTY.CALENDAR_FILTERED')
+            : t('KALO_GUIDE.EMPTY.CALENDAR')
+        }}
+      </p>
+      <Button
+        v-if="!items.length && !showAddForm"
+        data-test="calendar-empty-action"
+        size="sm"
+        :label="t('KALO_GUIDE.EMPTY.CALENDAR_ACTION')"
+        @click="showAddForm = true"
+      />
+    </div>
   </div>
 </template>

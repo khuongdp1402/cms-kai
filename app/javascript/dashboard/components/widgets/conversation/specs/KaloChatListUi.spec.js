@@ -2,7 +2,7 @@
 //  - KaloChatQuickViews: entry points for mentions / unattended / participating (C-07)
 //  - KaloChatListEmpty: per-list empty state with "clear filters" (C-19)
 //  - KaloChannelBadge: channel mark on avatars (C-11)
-//  - OnboardingView: Kalo welcome with greeting + next steps to real routes (C-103)
+//  - OnboardingView: Kalo welcome with greeting + the one setup checklist (C-103, guided UX §3.1)
 //  - ConversationBasicFilter popover: advanced filter + layout toggle entries (C-04, C-18)
 import { mount, flushPromises } from '@vue/test-utils';
 import { createRouter, createMemoryHistory } from 'vue-router';
@@ -14,6 +14,18 @@ import KaloChatListEmpty from '../KaloChatListEmpty.vue';
 import OnboardingView from '../OnboardingView.vue';
 import ConversationBasicFilter from '../ConversationBasicFilter.vue';
 import KaloChannelBadge from 'dashboard/components-next/icon/KaloChannelBadge.vue';
+
+vi.mock('dashboard/api/kchat/products', () => ({
+  default: { get: vi.fn(() => Promise.resolve({ data: { payload: [] } })) },
+}));
+vi.mock('dashboard/api/kchat/orders', () => ({
+  default: {
+    get: vi.fn(() => Promise.resolve({ data: { meta: { count: 0 } } })),
+  },
+}));
+vi.mock('dashboard/api/kchat/paymentSettings', () => ({
+  default: { get: vi.fn(() => Promise.resolve({ data: {} })) },
+}));
 
 vi.mock('dashboard/composables/useUISettings', () => ({
   useUISettings: () => ({ updateUISettings: vi.fn() }),
@@ -27,6 +39,8 @@ const ROUTES = [
   'settings_inbox_new',
   'kalo_pos',
   'kalo_orders',
+  'kalo_payment_settings',
+  'kalo_console',
 ];
 
 const createEnv = ({ role = 'administrator', inboxes = [] } = {}) => {
@@ -105,6 +119,31 @@ describe('KaloChatListEmpty', () => {
     );
   });
 
+  it('carries the setup checklist on mobile only (not when filtered)', async () => {
+    const originalWidth = window.innerWidth;
+    window.innerWidth = 400;
+    const wrapper = await mountWith(KaloChatListEmpty);
+    await flushPromises();
+    expect(wrapper.find('[data-test-id="kalo-setup-checklist"]').exists()).toBe(
+      true
+    );
+    const filtered = await mountWith(KaloChatListEmpty, {
+      props: { isFiltered: true },
+    });
+    await flushPromises();
+    expect(
+      filtered.find('[data-test-id="kalo-setup-checklist"]').exists()
+    ).toBe(false);
+    // Desktop: not mounted at all (OnboardingView shows it beside the list).
+    window.innerWidth = 1280;
+    const desktop = await mountWith(KaloChatListEmpty);
+    await flushPromises();
+    expect(desktop.findComponent({ name: 'KaloSetupChecklist' }).exists()).toBe(
+      false
+    );
+    window.innerWidth = originalWidth;
+  });
+
   it('offers to clear the filters when the list is filtered', async () => {
     const wrapper = await mountWith(KaloChatListEmpty, {
       props: { isFiltered: true },
@@ -145,31 +184,36 @@ describe('KaloChannelBadge', () => {
 });
 
 describe('OnboardingView (Kalo welcome)', () => {
-  it('greets the user by name in Vietnamese and lists 3 steps to real routes', async () => {
+  it('greets the user by name in Vietnamese and shows the setup checklist to admins', async () => {
     const wrapper = await mountWith(OnboardingView);
+    await flushPromises();
     expect(wrapper.text()).toMatch(/Chào buổi (sáng|chiều|tối), Lan!/);
     expect(wrapper.text()).not.toMatch(/Welcome|Chatwoot|KTech/);
-    expect(linkTargets(wrapper)).toEqual([
-      '/app/accounts/1/settings_inbox_new',
-      '/app/accounts/1/kalo_pos',
-      '/app/accounts/1/kalo_orders',
-    ]);
+    const checklist = wrapper.find('[data-test-id="kalo-setup-checklist"]');
+    expect(checklist.text()).toContain('Bắt đầu với Kalo');
+    expect(checklist.findAll('li')).toHaveLength(5);
+    expect(linkTargets(wrapper)).toContain(
+      '/app/accounts/1/settings_inbox_new'
+    );
     expect(wrapper.find('img').exists()).toBe(false);
   });
 
-  it('hides the channel step from agents and marks it done once a channel exists', async () => {
+  it('hides the checklist from agents and marks Nối kênh done once a channel exists', async () => {
     const agent = await mountWith(OnboardingView, {
       env: createEnv({ role: 'agent' }),
     });
-    expect(
-      agent.find('[data-test-id="kalo-welcome-step-channel"]').exists()
-    ).toBe(false);
+    await flushPromises();
+    expect(agent.text()).toMatch(/Lan!/);
+    expect(agent.find('[data-test-id="kalo-setup-checklist"]').exists()).toBe(
+      false
+    );
     const admin = await mountWith(OnboardingView, {
       env: createEnv({ inboxes: [{ id: 1 }] }),
       props: { message: 'Chọn một cuộc trò chuyện' },
     });
+    await flushPromises();
     expect(
-      admin.find('[data-test-id="kalo-welcome-step-channel"]').text()
+      admin.find('[data-test-id="kalo-setup-step-channel"]').text()
     ).toContain('Đã xong');
     expect(admin.text()).toContain('Chọn một cuộc trò chuyện');
   });

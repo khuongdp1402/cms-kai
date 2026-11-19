@@ -95,14 +95,23 @@ describe('BillingPage', () => {
     expect(wrapper.find('[data-test="valid-until"]').exists()).toBe(false);
   });
 
-  it('explains that billing is not configured when the server answers 503 billing_not_configured', async () => {
-    subscriptionAPI.get.mockRejectedValue({
-      response: { status: 503, data: { error: 'billing_not_configured' } },
+  it('still shows the trial when the payment block is omitted (billing_configured false)', async () => {
+    subscriptionAPI.get.mockResolvedValue({
+      data: {
+        plan: null,
+        status: 'trial',
+        valid_until: '2026-12-01T00:00:00Z',
+        days_left: 9,
+        billing_configured: false,
+      },
     });
     const wrapper = await mountPage();
+    expect(wrapper.find('[data-test="plan"]').text()).toBe('Dùng thử');
+    expect(wrapper.find('[data-test="days-left"]').text()).toContain('9');
     expect(wrapper.find('[data-test="billing-not-configured"]').text()).toBe(
       'Chưa cấu hình thanh toán gói cước, bạn liên hệ quản trị Kalo để được hỗ trợ.'
     );
+    expect(wrapper.find('[data-test="renew"]').exists()).toBe(false);
     expect(wrapper.find('[data-test="error"]').exists()).toBe(false);
   });
 

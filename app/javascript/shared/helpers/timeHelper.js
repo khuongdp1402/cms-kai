@@ -8,6 +8,7 @@ import {
   formatDistanceToNow,
   differenceInDays,
 } from 'date-fns';
+import { getDateLocaleCode } from 'shared/helpers/dateLocale';
 
 /**
  * Formats a Unix timestamp into a human-readable time format.
@@ -73,6 +74,32 @@ export const dateFormat = (time, df = 'MMM d, yyyy') => {
   return format(unixTime, df);
 };
 
+// Localized short form of an English date-fns distance string, built with Intl
+// so no translated words live here: vi gives "bây giờ", "5 phút", "2 giờ",
+// "3 ngày", and "5 phút trước" with `withAgo`.
+const shortTimestampIntl = (time, withAgo, localeCode) => {
+  if (/less than a minute/.test(time)) {
+    return new Intl.RelativeTimeFormat(localeCode, { numeric: 'auto' }).format(
+      0,
+      'second'
+    );
+  }
+  const match = time.match(
+    /(?:(\d+)|an?)\s(minute|hour|day|month|year)s?(?: ago)?$/
+  );
+  if (!match) return time;
+  const count = Number(match[1] || 1);
+  const unit = match[2];
+  if (withAgo) {
+    return new Intl.RelativeTimeFormat(localeCode).format(-count, unit);
+  }
+  return new Intl.NumberFormat(localeCode, {
+    style: 'unit',
+    unit,
+    unitDisplay: 'long',
+  }).format(count);
+};
+
 /**
  * Converts a detailed time description into a shorter format, optionally appending 'ago'.
  * @param {string} time - Detailed time description (e.g., 'a minute ago').
@@ -80,6 +107,10 @@ export const dateFormat = (time, df = 'MMM d, yyyy') => {
  * @returns {string} Shortened time description.
  */
 export const shortTimestamp = (time, withAgo = false) => {
+  const localeCode = getDateLocaleCode();
+  if (localeCode !== 'default') {
+    return shortTimestampIntl(time, withAgo, localeCode);
+  }
   // This function takes a time string and converts it to a short time string
   // with the following format: 1m, 1h, 1d, 1mo, 1y
   // The function also takes an optional boolean parameter withAgo

@@ -8,6 +8,7 @@ import WootKeyShortcutModal from 'dashboard/components/widgets/modal/WootKeyShor
 import AddAccountModal from 'dashboard/components/app/AddAccountModal.vue';
 import UpgradePage from 'dashboard/routes/dashboard/upgrade/UpgradePage.vue';
 import KaloFeatureGate from './KaloFeatureGate.vue';
+import KaloTourHost from 'next/guide/KaloTourHost.vue';
 
 import { useUISettings } from 'dashboard/composables/useUISettings';
 import { useAccount } from 'dashboard/composables/useAccount';
@@ -38,6 +39,7 @@ export default {
     AddAccountModal,
     UpgradePage,
     KaloFeatureGate,
+    KaloTourHost,
     CopilotLauncher,
     CopilotContainer,
     FloatingCallWidget,
@@ -143,6 +145,7 @@ export default {
     />
     <template v-if="!showUpgradePage">
       <KaloFeatureGate />
+      <KaloTourHost />
       <CommandBar />
       <CopilotLauncher />
       <CopilotContainer />

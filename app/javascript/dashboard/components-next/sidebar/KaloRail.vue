@@ -11,6 +11,7 @@ import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import KaloRailFooter from './KaloRailFooter.vue';
 import KaloRailTooltip from './KaloRailTooltip.vue';
 import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
+import KaloGuideNav from 'next/guide/KaloGuideNav.vue';
 import { useKaloNav } from './useKaloNav';
 
 const emit = defineEmits([
@@ -162,6 +163,7 @@ const shouldRenderSectionHeading = (item, index) => {
       <template v-for="(item, index) in items" :key="item.key">
         <template v-if="item.footer && !items[index - 1]?.footer">
           <div class="flex-1" />
+          <KaloGuideNav :is-expanded="isExpanded" />
           <!-- Spec §4 footer order: Trợ lý AI, Console/Cài đặt, Thông báo, Hồ sơ. -->
           <KaloAssistantButton :is-expanded="isExpanded" />
         </template>

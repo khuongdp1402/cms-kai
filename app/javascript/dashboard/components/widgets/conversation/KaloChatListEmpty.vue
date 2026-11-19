@@ -1,6 +1,9 @@
 <script setup>
+import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useWindowSize } from '@vueuse/core';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloSetupChecklist from 'next/guide/KaloSetupChecklist.vue';
 
 defineProps({
   isFiltered: { type: Boolean, default: false },
@@ -9,6 +12,9 @@ defineProps({
 const emit = defineEmits(['clearFilters']);
 
 const { t } = useI18n();
+const { width } = useWindowSize();
+// Desktop shows the checklist beside the list (OnboardingView): mount it here only on mobile.
+const isMobile = computed(() => width.value < 768);
 </script>
 
 <template>
@@ -44,5 +50,9 @@ const { t } = useI18n();
     >
       {{ t('KALO_CHAT_LIST.EMPTY.CLEAR') }}
     </button>
+    <!-- Mobile shows only this list, so the setup list lives here too (spec §3.1). -->
+    <div v-if="!isFiltered && isMobile" class="w-full pt-2">
+      <KaloSetupChecklist variant="compact" />
+    </div>
   </div>
 </template>
