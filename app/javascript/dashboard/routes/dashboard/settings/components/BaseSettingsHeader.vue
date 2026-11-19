@@ -95,7 +95,7 @@ const hubRoute = computed(() => ({
       <p
         v-if="description || $slots.description"
         :title="description || undefined"
-        class="max-w-3xl mb-0 text-sm line-clamp-3 sm:line-clamp-none"
+        class="max-w-3xl mb-0 text-sm line-clamp-2"
       >
         <slot name="description">{{ description }}</slot>
       </p>
@@ -118,7 +118,7 @@ const hubRoute = computed(() => ({
   </div>
   <div
     v-if="searchPlaceholder || slots.tabs || slots.count"
-    class="flex flex-wrap items-center justify-between min-w-0 gap-3 mt-4"
+    class="flex flex-wrap items-center justify-between min-w-0 gap-3 mt-3"
   >
     <div
       v-if="slots.tabs || searchPlaceholder"

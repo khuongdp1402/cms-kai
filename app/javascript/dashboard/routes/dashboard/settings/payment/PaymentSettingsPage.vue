@@ -12,6 +12,7 @@ import { useRoute } from 'vue-router';
 import { useAlert } from 'dashboard/composables';
 import paymentSettingsAPI from 'dashboard/api/kchat/paymentSettings';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 import Input from 'dashboard/components-next/input/Input.vue';
 import ComboBox from 'dashboard/components-next/combobox/ComboBox.vue';
@@ -199,62 +200,58 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <section
-    class="flex-1 px-4 py-4 overflow-auto sm:px-6 sm:py-6 bg-n-surface-1"
+  <KaloPage
+    :title="t('KALO_PAYMENT.TITLE')"
+    :description="t('KALO_PAYMENT.DESC')"
+    max-width-class="max-w-5xl"
   >
-    <div class="w-full max-w-5xl mx-auto">
+    <template v-if="route.params.accountId" #leading>
       <router-link
-        v-if="route.params.accountId"
         :to="{
           name: 'kalo_console',
           params: { accountId: route.params.accountId },
         }"
         data-test="settings-back-to-hub"
-        class="inline-flex items-center gap-1 py-1 -ms-1 text-sm font-medium rounded-lg text-n-slate-11 hover:text-n-slate-12"
+        :aria-label="t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE')"
+        :title="t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE')"
+        class="grid rounded-xl size-9 place-items-center shrink-0 text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12"
       >
-        <KaloIcon name="back" class="size-4 rtl:rotate-180" />
-        {{ t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE') }}
+        <KaloIcon name="back" class="size-5 rtl:rotate-180" />
       </router-link>
-      <div class="flex flex-wrap items-center gap-3">
-        <h1 class="text-xl font-extrabold text-n-slate-12">
-          {{ t('KALO_PAYMENT.TITLE') }}
-        </h1>
-        <span
-          v-if="!isLoading && !hasLoadError"
-          data-test="payment-status"
-          class="px-3 py-1 text-xs font-semibold rounded-full"
-          :class="
-            isConfigured
-              ? 'bg-n-teal-3 text-n-teal-11'
-              : 'bg-n-amber-3 text-n-amber-11'
-          "
-        >
-          {{
-            isConfigured
-              ? t('KALO_PAYMENT.STATUS.CONFIGURED')
-              : t('KALO_PAYMENT.STATUS.MISSING')
-          }}
-        </span>
-      </div>
-      <p class="mb-0 text-sm text-n-slate-11">
-        {{ t('KALO_PAYMENT.DESC') }}
-      </p>
-
+    </template>
+    <template v-if="!isLoading && !hasLoadError" #actions>
+      <span
+        data-test="payment-status"
+        class="px-3 py-1 text-xs font-semibold rounded-full"
+        :class="
+          isConfigured
+            ? 'bg-n-teal-3 text-n-teal-11'
+            : 'bg-n-amber-3 text-n-amber-11'
+        "
+      >
+        {{
+          isConfigured
+            ? t('KALO_PAYMENT.STATUS.CONFIGURED')
+            : t('KALO_PAYMENT.STATUS.MISSING')
+        }}
+      </span>
+    </template>
+    <div class="w-full">
       <p
         v-if="hasLoadError"
         data-test="payment-load-error"
         role="alert"
-        class="mt-6 text-sm text-n-slate-11"
+        class="text-sm text-n-slate-11"
       >
         {{ t('KALO_PAYMENT.ERRORS.LOAD') }}
       </p>
-      <p v-else-if="isLoading" class="mt-6 text-sm text-n-slate-11">
+      <p v-else-if="isLoading" class="text-sm text-n-slate-11">
         {{ t('KALO_PAYMENT.LOADING') }}
       </p>
 
       <div
         v-else
-        class="grid gap-4 mt-5 lg:grid-cols-[minmax(0,1fr)_18rem] items-start"
+        class="grid gap-4 lg:grid-cols-[minmax(0,1fr)_18rem] items-start"
       >
         <form
           novalidate
@@ -397,5 +394,5 @@ const onSubmit = async () => {
         </aside>
       </div>
     </div>
-  </section>
+  </KaloPage>
 </template>

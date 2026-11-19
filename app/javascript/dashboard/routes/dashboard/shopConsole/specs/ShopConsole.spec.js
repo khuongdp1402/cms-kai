@@ -342,8 +342,16 @@ describe('ShopConsole', () => {
     paymentSettingsAPI.get.mockResolvedValue({
       data: { account_number: null },
     });
-    subscriptionAPI.get.mockRejectedValue({
-      response: { data: { error: 'billing_not_configured' } },
+    // The API always returns the trial state; billing_configured says
+    // whether Kalo can take plan payments yet.
+    subscriptionAPI.get.mockResolvedValue({
+      data: {
+        plan: null,
+        status: 'trial',
+        valid_until: null,
+        days_left: 14,
+        billing_configured: false,
+      },
     });
     const { wrapper } = await setup({ inboxes: [] });
     expect(wrapper.find('[data-test="console-payment-empty"]').exists()).toBe(
@@ -358,6 +366,16 @@ describe('ShopConsole', () => {
     expect(wrapper.find('[data-test="console-channels-empty"]').exists()).toBe(
       true
     );
+  });
+
+  it('shows the generic error when the plan request fails', async () => {
+    subscriptionAPI.get.mockRejectedValue({
+      response: { status: 503, data: { error: 'billing_not_configured' } },
+    });
+    const { wrapper } = await setup();
+    const card = wrapper.find('[data-test="console-plan"]');
+    expect(card.text()).not.toContain('Kalo chưa sẵn sàng nhận phí gói');
+    expect(card.text()).toContain(viMessages.KALO_CONSOLE_SHOP.PLAN.ERROR);
   });
 
   it('renders every target of the Console tour', async () => {

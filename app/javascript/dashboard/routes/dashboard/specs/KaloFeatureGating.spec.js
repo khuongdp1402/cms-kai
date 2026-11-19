@@ -92,6 +92,8 @@ const mountWith = async (
 
 const MARKETING_STUBS = {
   MarketingCampaigns: { template: '<div data-test="campaigns-body" />' },
+  // The Chiến dịch page embeds the website greetings section directly.
+  WebsiteCampaignsCard: { template: '<div data-test="campaigns-body" />' },
   ContentIdeas: { template: '<div data-test="ideas-body" />' },
   ContentCalendar: { template: '<div data-test="calendar-body" />' },
   CommentAutomationSettings: { template: '<div data-test="comments-body" />' },

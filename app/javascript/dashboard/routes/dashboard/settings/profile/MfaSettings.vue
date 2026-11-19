@@ -9,6 +9,7 @@ import MfaStatusCard from './MfaStatusCard.vue';
 import MfaSetupWizard from './MfaSetupWizard.vue';
 import MfaManagementActions from './MfaManagementActions.vue';
 import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
+import SettingsLayout from '../SettingsLayout.vue';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -131,43 +132,46 @@ const regenerateBackupCodes = async ({ otpCode }) => {
 </script>
 
 <template>
-  <div class="grid w-full">
-    <BaseSettingsHeader
-      :title="$t('MFA_SETTINGS.TITLE')"
-      :description="$t('MFA_SETTINGS.SUBTITLE')"
-      :back-button-label="$t('PROFILE_SETTINGS.TITLE')"
-    />
-
-    <div class="grid gap-4 w-full mt-4">
-      <!-- MFA Status Card -->
-      <MfaStatusCard
-        :mfa-enabled="mfaEnabled"
-        :show-setup="showSetup"
-        @enable-mfa="startMfaSetup"
+  <SettingsLayout>
+    <template #header>
+      <BaseSettingsHeader
+        :title="$t('MFA_SETTINGS.TITLE')"
+        :description="$t('MFA_SETTINGS.SUBTITLE')"
+        :back-button-label="$t('PROFILE_SETTINGS.TITLE')"
       />
+    </template>
+    <div class="grid w-full">
+      <div class="grid gap-4 w-full mt-4">
+        <!-- MFA Status Card -->
+        <MfaStatusCard
+          :mfa-enabled="mfaEnabled"
+          :show-setup="showSetup"
+          @enable-mfa="startMfaSetup"
+        />
 
-      <!-- MFA Setup Wizard -->
-      <MfaSetupWizard
-        ref="setupWizardRef"
-        :show-setup="showSetup"
-        :mfa-enabled="mfaEnabled"
-        :provisioning-uri="provisioningUri"
-        :secret-key="secretKey"
-        :backup-codes="backupCodes"
-        :qr-code-url-prop="qrCodeUrl"
-        @cancel="cancelSetup"
-        @verify="verifyCode"
-        @complete="completeMfaSetup"
-      />
+        <!-- MFA Setup Wizard -->
+        <MfaSetupWizard
+          ref="setupWizardRef"
+          :show-setup="showSetup"
+          :mfa-enabled="mfaEnabled"
+          :provisioning-uri="provisioningUri"
+          :secret-key="secretKey"
+          :backup-codes="backupCodes"
+          :qr-code-url-prop="qrCodeUrl"
+          @cancel="cancelSetup"
+          @verify="verifyCode"
+          @complete="completeMfaSetup"
+        />
 
-      <!-- MFA Management Actions -->
-      <MfaManagementActions
-        ref="managementActionsRef"
-        :mfa-enabled="mfaEnabled"
-        :backup-codes="backupCodes"
-        @disable-mfa="disableMfa"
-        @regenerate-backup-codes="regenerateBackupCodes"
-      />
+        <!-- MFA Management Actions -->
+        <MfaManagementActions
+          ref="managementActionsRef"
+          :mfa-enabled="mfaEnabled"
+          :backup-codes="backupCodes"
+          @disable-mfa="disableMfa"
+          @regenerate-backup-codes="regenerateBackupCodes"
+        />
+      </div>
     </div>
-  </div>
+  </SettingsLayout>
 </template>

@@ -2,6 +2,9 @@
 import { mapGetters } from 'vuex';
 import { useTrack } from 'dashboard/composables';
 import TableFooter from 'dashboard/components/widgets/TableFooter.vue';
+import NextButton from 'dashboard/components-next/button/Button.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
+import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 
 import NotificationTable from './NotificationTable.vue';
 
@@ -10,6 +13,9 @@ export default {
   components: {
     NotificationTable,
     TableFooter,
+    NextButton,
+    KaloPage,
+    KaloCard,
   },
   computed: {
     ...mapGetters({
@@ -58,22 +64,35 @@ export default {
 </script>
 
 <template>
-  <div class="h-full overflow-y-auto">
-    <div class="flex flex-col h-full">
+  <KaloPage
+    :title="$t('NOTIFICATIONS_PAGE.HEADER')"
+    :description="$t('KALO_SHELL2.NOTIFICATIONS.DESC')"
+    max-width-class="max-w-5xl"
+  >
+    <template v-if="meta.unreadCount" #actions>
+      <NextButton
+        data-test="notifications-mark-all-done"
+        type="submit"
+        sm
+        :label="$t('NOTIFICATIONS_PAGE.MARK_ALL_DONE')"
+        :is-loading="uiFlags.isUpdating"
+        @click="onMarkAllDoneClick"
+      />
+    </template>
+    <KaloCard flush>
       <NotificationTable
         :notifications="records"
         :is-loading="uiFlags.isFetching"
-        :is-updating="uiFlags.isUpdating"
         :on-click-notification="openConversation"
-        :on-mark-all-done-click="onMarkAllDoneClick"
       />
-      <TableFooter
-        class="border-t border-n-weak"
-        :current-page="Number(meta.currentPage)"
-        :total-count="meta.count"
-        :page-size="15"
-        @page-change="onPageChange"
-      />
-    </div>
-  </div>
+      <template v-if="Number(meta.count) > 15" #footer>
+        <TableFooter
+          :current-page="Number(meta.currentPage)"
+          :total-count="meta.count"
+          :page-size="15"
+          @page-change="onPageChange"
+        />
+      </template>
+    </KaloCard>
+  </KaloPage>
 </template>

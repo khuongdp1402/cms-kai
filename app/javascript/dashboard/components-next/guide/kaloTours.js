@@ -9,7 +9,6 @@ import { FEATURE_FLAGS } from 'dashboard/featureFlags';
  * - `mobileSteps`: the short version used below 768px (multi-column steps are
  *   left out); an empty list means the tour is desktop only.
  * - Texts: KALO_GUIDE.TOUR.<TOUR>.<STEP>.{TITLE,BODY}.
- * - The Chiến dịch tour belongs to the campaign flow task (T4).
  */
 export const TOUR_UI_KEY = 'kalo_tours_seen';
 export const MOBILE_BREAKPOINT = 768;
@@ -83,6 +82,21 @@ export const KALO_TOURS = [
     matches: route => route.name === 'kalo_comments',
     steps: [{ target: 'comments-rules', key: 'RULES', side: 'top' }],
     mobileSteps: ['RULES'],
+  },
+  {
+    key: 'campaigns',
+    icon: 'mega',
+    route: 'kalo_campaigns',
+    flag: FEATURE_FLAGS.KALO_CAMPAIGNS,
+    matches: route => route.name === 'kalo_campaigns',
+    // The wizard steps (`campaign-steps`) and results (`campaign-results`)
+    // live in drawers, so the page tour points at what is on the page.
+    steps: [
+      { target: 'campaign-create', key: 'CREATE', side: 'bottom' },
+      { target: 'campaign-list', key: 'LIST', side: 'top' },
+      { target: 'campaign-website', key: 'WEBSITE', side: 'top' },
+    ],
+    mobileSteps: ['CREATE', 'LIST'],
   },
   {
     key: 'brand',

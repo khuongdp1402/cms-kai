@@ -111,6 +111,8 @@ kc exec rails bundle exec rails runner '
 
 Ai làm: OPS. Cách kiểm: lệnh in 4 dòng đúng giá trị; tiêu đề tab đăng nhập là "Kalo"; email đặt lại mật khẩu ghi "Kalo". `kc restart rails sidekiq` nếu giao diện còn chữ cũ. Màu widget/portal cũ đã lưu (`#1e5eff`) trong DB cũ không tự đổi; shop mới dùng màu coral.
 
+- [ ] **Ngôn ngữ của shop cũ.** Dòng hệ thống trong hội thoại (phân công, đóng/mở, nhãn, tắt tiếng, CSAT/tự đóng chưa gửi) giờ theo `account.locale` (LESSONS B95). Trước khi deploy, chạy `kc exec rails bundle exec rails runner 'puts Account.where(locale: "en").pluck(:id, :name).inspect'` trên prod; shop nào là shop Việt thì đặt `locale` thành `vi` (`Account.where(id: [...]).update_all(locale: Account.locales["vi"])`), nếu không các dòng đó vẫn ra tiếng Anh.
+
 ### 8b. Điều khoản và chính sách riêng tư (bắt buộc trước khi mở đăng ký)
 
 `TERMS_URL`, `PRIVACY_URL` (và `BRAND_URL`, `WIDGET_BRAND_URL` ở trên) trong `config/installation_config.yml` nay để **trống** (trước đây trỏ tên miền cũ `ktech.vn`). Khi một trong hai URL pháp lý trống, trang đăng ký **ẩn** dòng "Tạo tài khoản nghĩa là bạn đồng ý…". **Repo này chưa có trang điều khoản dịch vụ hay chính sách riêng tư nào**: chủ dự án phải cung cấp nội dung pháp lý và đăng lên tên miền landing (ví dụ `https://<tên miền>/terms`, `https://<tên miền>/privacy`) TRƯỚC khi mở đăng ký (mục 10). DB đã có thì giá trị cũ vẫn còn, phải đặt tay:

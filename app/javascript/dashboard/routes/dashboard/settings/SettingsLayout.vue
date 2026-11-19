@@ -1,5 +1,6 @@
 <script setup>
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
 
 defineProps({
   isLoading: {
@@ -22,14 +23,27 @@ defineProps({
     type: String,
     default: 'more',
   },
+  maxWidthClass: {
+    type: String,
+    default: 'max-w-5xl',
+  },
 });
 </script>
 
+<!-- Body of every settings page inside the KaloPage frame (spec §2): the
+     `header` slot becomes the sticky KaloPageHeader band and the body sits
+     on the canvas at the page width. -->
 <template>
-  <div class="flex flex-col w-full h-full gap-5 font-inter">
-    <slot name="header" />
-    <!-- Added to render any templates that should be rendered before body -->
-    <main class="min-w-0">
+  <div class="flex flex-col w-full min-h-full font-inter">
+    <KaloPageHeader v-if="$slots.header" :max-width-class="maxWidthClass">
+      <slot name="header" />
+    </KaloPageHeader>
+    <main
+      data-test-id="kalo-page-main"
+      class="w-full min-w-0 px-4 py-6 mx-auto sm:px-6 lg:px-8"
+      :class="maxWidthClass"
+    >
+      <!-- Added to render any templates that should be rendered before body -->
       <slot name="preBody" />
       <slot v-if="isLoading" name="loading">
         <woot-loading-state :message="loadingMessage" />

@@ -3,6 +3,7 @@ import { computed, ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import subscriptionAPI from 'dashboard/api/kchat/subscription';
 import { setKaloTrialSubscription } from 'dashboard/components-next/guide/useKaloTrial';
 import Button from 'dashboard/components-next/button/Button.vue';
@@ -63,36 +64,34 @@ onMounted(async () => {
 </script>
 
 <template>
-  <section
-    class="flex-1 px-4 py-4 overflow-auto sm:px-6 sm:py-6 bg-n-surface-1"
+  <KaloPage
+    :title="t('KALO_BILLING.TITLE')"
+    :description="t('KALO_SETTINGS_UI.PAGES.PLAN.DESC')"
+    max-width-class="max-w-5xl"
   >
-    <div class="w-full max-w-5xl mx-auto">
+    <template v-if="route.params.accountId" #leading>
       <router-link
-        v-if="route.params.accountId"
         :to="{
           name: 'kalo_console',
           params: { accountId: route.params.accountId },
         }"
         data-test="settings-back-to-hub"
-        class="inline-flex items-center gap-1 py-1 -ms-1 text-sm font-medium rounded-lg text-n-slate-11 hover:text-n-slate-12"
+        :aria-label="t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE')"
+        :title="t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE')"
+        class="grid rounded-xl size-9 place-items-center shrink-0 text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12"
       >
-        <KaloIcon name="back" class="size-4 rtl:rotate-180" />
-        {{ t('KALO_CONSOLE_SHOP.BACK_TO_CONSOLE') }}
+        <KaloIcon name="back" class="size-5 rtl:rotate-180" />
       </router-link>
-      <h1 class="text-xl font-extrabold text-n-slate-12">
-        {{ t('KALO_BILLING.TITLE') }}
-      </h1>
-      <p class="mb-0 text-sm text-n-slate-11">
-        {{ t('KALO_SETTINGS_UI.PAGES.PLAN.DESC') }}
-      </p>
-      <p v-if="hasError" data-test="error" class="mt-6 text-sm text-n-slate-11">
+    </template>
+    <div class="w-full">
+      <p v-if="hasError" data-test="error" class="text-sm text-n-slate-11">
         {{ t('KALO_BILLING.ERROR') }}
       </p>
-      <p v-else-if="!subscription" class="mt-6 text-sm text-n-slate-11">
+      <p v-else-if="!subscription" class="text-sm text-n-slate-11">
         {{ t('KALO_BILLING.LOADING') }}
       </p>
 
-      <div v-else class="flex flex-col max-w-3xl gap-4 mt-5">
+      <div v-else class="flex flex-col max-w-3xl gap-4">
         <div
           class="flex flex-wrap items-center justify-between gap-3 p-5 border rounded-2xl bg-n-solid-1 border-n-weak"
         >
@@ -210,5 +209,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-  </section>
+  </KaloPage>
 </template>

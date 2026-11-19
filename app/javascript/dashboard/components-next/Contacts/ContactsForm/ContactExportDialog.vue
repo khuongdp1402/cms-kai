@@ -5,14 +5,25 @@ import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import filterQueryGenerator from 'dashboard/helper/filterQueryGenerator';
 
-import Dialog from 'dashboard/components-next/dialog/Dialog.vue';
+import Button from 'dashboard/components-next/button/Button.vue';
+import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 
 const emit = defineEmits(['export']);
 
 const { t } = useI18n();
 const route = useRoute();
 
-const dialogRef = ref(null);
+// Kalo: export opens in the standard right drawer (guided UX spec §2);
+// `dialogRef.open()` / `dialogRef.close()` keep the old Dialog contract.
+const isOpen = ref(false);
+const dialogRef = {
+  open: () => {
+    isOpen.value = true;
+  },
+  close: () => {
+    isOpen.value = false;
+  },
+};
 
 const segments = useMapGetter('customViews/getContactCustomViews');
 const appliedFilters = useMapGetter('contacts/getAppliedContactFilters');
@@ -43,24 +54,40 @@ const exportContacts = async () => {
 
 const handleDialogConfirm = async () => {
   await exportContacts();
-  dialogRef.value?.close();
+  dialogRef.close();
 };
 
 defineExpose({ dialogRef });
 </script>
 
 <template>
-  <Dialog
-    ref="dialogRef"
+  <KaloDrawer
+    v-if="isOpen"
+    data-test-id="contact-export-drawer"
     :title="t('CONTACTS_LAYOUT.HEADER.ACTIONS.EXPORT_CONTACT.TITLE')"
-    :description="
-      t('CONTACTS_LAYOUT.HEADER.ACTIONS.EXPORT_CONTACT.DESCRIPTION')
-    "
-    :confirm-button-label="
-      t('CONTACTS_LAYOUT.HEADER.ACTIONS.EXPORT_CONTACT.CONFIRM')
-    "
-    :is-loading="isExportingContact"
-    :disable-confirm-button="isExportingContact"
-    @confirm="handleDialogConfirm"
-  />
+    @close="dialogRef.close()"
+  >
+    <p class="mb-0 text-sm text-n-slate-11">
+      {{ t('CONTACTS_LAYOUT.HEADER.ACTIONS.EXPORT_CONTACT.DESCRIPTION') }}
+    </p>
+    <template #footer>
+      <div class="flex items-center justify-end w-full gap-3">
+        <Button
+          :label="t('DIALOG.BUTTONS.CANCEL')"
+          variant="outline"
+          color="slate"
+          type="button"
+          @click="dialogRef.close()"
+        />
+        <Button
+          data-test-id="contact-export-confirm"
+          :label="t('CONTACTS_LAYOUT.HEADER.ACTIONS.EXPORT_CONTACT.CONFIRM')"
+          color="blue"
+          :is-loading="isExportingContact"
+          :disabled="isExportingContact"
+          @click="handleDialogConfirm"
+        />
+      </div>
+    </template>
+  </KaloDrawer>
 </template>

@@ -36,11 +36,9 @@ onMounted(async () => {
     const { data } = await subscriptionAPI.get();
     subscription.value = data;
     state.value = 'ready';
-  } catch (error) {
-    state.value =
-      error?.response?.data?.error === 'billing_not_configured'
-        ? 'not_configured'
-        : 'error';
+  } catch {
+    // The API always answers with the trial state (T3); any failure is an error.
+    state.value = 'error';
   }
 });
 </script>
@@ -73,13 +71,14 @@ onMounted(async () => {
           }}
         </template>
       </p>
+      <p
+        v-if="subscription.billing_configured === false"
+        data-test="console-plan-not-configured"
+        class="mb-0 text-sm text-n-slate-11"
+      >
+        {{ t('KALO_CONSOLE_SHOP.PLAN.NOT_CONFIGURED') }}
+      </p>
     </div>
-    <p
-      v-else-if="state === 'not_configured'"
-      class="mb-0 text-sm text-n-slate-11"
-    >
-      {{ t('KALO_CONSOLE_SHOP.PLAN.NOT_CONFIGURED') }}
-    </p>
     <p v-else-if="state === 'error'" class="mb-0 text-sm text-n-ruby-11">
       {{ t('KALO_CONSOLE_SHOP.PLAN.ERROR') }}
     </p>
