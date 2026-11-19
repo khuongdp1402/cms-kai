@@ -11,13 +11,7 @@ const { t } = useI18n();
 const { accountScopedRoute } = useAccount();
 const { isAdmin } = useAdmin();
 
-const CALENDAR_CHANNELS = [
-  'tiktok',
-  'facebook',
-  'instagram',
-  'zalo',
-  'website',
-];
+const CALENDAR_CHANNELS = ['tiktok', 'facebook', 'instagram', 'zalo', 'website'];
 const INPUT_CLASS =
   'px-3 py-2 mb-0 text-sm font-normal border rounded-lg outline-none bg-n-solid-1 border-n-weak text-n-slate-12 focus:border-woot-500';
 const SELECT_CLASS =
@@ -400,9 +394,7 @@ onMounted(loadHistory);
           data-test="edit-angle-form"
           class="flex flex-col gap-2 p-3 border rounded-xl bg-n-alpha-1 border-n-weak"
         >
-          <label
-            class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12"
-          >
+          <label class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12">
             {{ t('KALO_MARKETING.IDEAS.HOOK_LABEL') }}
             <input
               v-model="editForm.hook"
@@ -411,9 +403,7 @@ onMounted(loadHistory);
               :class="INPUT_CLASS"
             />
           </label>
-          <label
-            class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12"
-          >
+          <label class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12">
             {{ t('KALO_MARKETING.IDEAS.BODY_LABEL') }}
             <textarea
               v-model="editForm.body"
@@ -422,9 +412,7 @@ onMounted(loadHistory);
               :class="INPUT_CLASS"
             />
           </label>
-          <label
-            class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12"
-          >
+          <label class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12">
             {{ t('KALO_MARKETING.IDEAS.CTA_LABEL') }}
             <input
               v-model="editForm.cta"
@@ -468,9 +456,7 @@ onMounted(loadHistory);
           data-test="schedule-angle-form"
           class="flex flex-wrap items-end gap-2 p-3 border rounded-xl bg-n-alpha-1 border-n-weak"
         >
-          <label
-            class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12"
-          >
+          <label class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12">
             {{ t('KALO_MARKETING.IDEAS.SCHEDULE_DATE') }}
             <input
               v-model="scheduleForm.scheduled_for"
@@ -479,9 +465,7 @@ onMounted(loadHistory);
               :class="INPUT_CLASS"
             />
           </label>
-          <label
-            class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12"
-          >
+          <label class="flex flex-col gap-1 text-xs font-semibold text-n-slate-12">
             {{ t('KALO_MARKETING.CALENDAR.CHANNEL') }}
             <select
               v-model="scheduleForm.channel"
@@ -493,16 +477,12 @@ onMounted(loadHistory);
               </option>
             </select>
           </label>
-          <label
-            class="flex flex-col flex-1 gap-1 text-xs font-semibold text-n-slate-12 min-w-36"
-          >
+          <label class="flex flex-col flex-1 gap-1 text-xs font-semibold text-n-slate-12 min-w-36">
             {{ t('KALO_MARKETING.CALENDAR.CAMPAIGN_TAG') }}
             <input
               v-model="scheduleForm.campaign_tag"
               type="text"
-              :placeholder="
-                t('KALO_MARKETING.CALENDAR.CAMPAIGN_TAG_PLACEHOLDER')
-              "
+              :placeholder="t('KALO_MARKETING.CALENDAR.CAMPAIGN_TAG_PLACEHOLDER')"
               :class="INPUT_CLASS"
             />
           </label>
