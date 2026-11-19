@@ -59,6 +59,28 @@ RSpec.describe Kchat::Metrics do
                               converted_conversations_count: 1, chat_conversion_pct: 50.0, paid_orders_count: 2, revenue: 300_000)
   end
 
+  it 'counts an order on a conversation from before the period as a chat order, not as a converted conversation' do
+    old_chat = conversation(created_at: now - 3.days)
+    order(source: 'chat', method: 'cash', conversation: old_chat)
+
+    totals = described_class.new(account, 'today').totals
+    expect(totals).to include(chat_orders_count: 1, new_orders_count: 1, chat_conversations_count: 0,
+                              converted_conversations_count: 0, chat_conversion_pct: 0.0)
+    expect(described_class.new(account, '7d').totals).to include(chat_conversations_count: 1, converted_conversations_count: 1,
+                                                                 chat_conversion_pct: 100.0)
+  end
+
+  it 'counts two orders on one conversation as 2 chat orders but 1 converted conversation (rate stays 100%)' do
+    chat = conversation
+    order(source: 'chat', method: 'transfer_qr', conversation: chat)
+    order(source: 'chat', method: 'cash', conversation: chat)
+
+    metrics = described_class.new(account, 'today')
+    expect(metrics.totals).to include(chat_orders_count: 2, chat_conversations_count: 1, converted_conversations_count: 1,
+                                      chat_conversion_pct: 100.0)
+    expect(metrics.channel_rows.first).to include(channel: 'web_widget', orders: 2, converted_conversations: 1, conversion_pct: 100.0)
+  end
+
   it 'keeps POS and manual orders without a chat out of the chat conversion' do
     conversation
     order(source: 'pos', method: 'card')

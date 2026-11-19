@@ -225,7 +225,7 @@ onMounted(load);
           <span class="text-xs text-n-slate-10 tabular-nums">
             {{
               t('KALO_OVERVIEW.KPI.CHAT_SUB', {
-                orders: kpis.chat_orders_count ?? 0,
+                orders: kpis.conversations_with_orders ?? 0,
                 convs: kpis.conversations_count ?? 0,
                 pending: kpis.pending_qr_count ?? 0,
               })

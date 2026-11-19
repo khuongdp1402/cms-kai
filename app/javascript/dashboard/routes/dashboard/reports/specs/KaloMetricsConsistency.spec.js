@@ -85,7 +85,7 @@ const QUALITY = {
     cancelled_orders_count: 0,
     conversations_count: 1,
     conversations_with_orders: 1,
-    chat_orders_count: 1,
+    chat_orders_count: 2, // a second order on the same conversation
     chat_to_order_cvr_pct: 100.0,
     avg_first_response_seconds: null,
     sla_under_5m_pct: null,
