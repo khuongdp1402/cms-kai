@@ -128,7 +128,7 @@ describe('OverviewIndex', () => {
       '2p 5s'
     );
     expect(wrapper.find('[data-test="overview-kpi-content"]').text()).toContain(
-      '3 SĐT bình luận đã ẩn'
+      'Đã ẩn 3 số điện thoại'
     );
     expect(wrapper.text()).toContain('Nến trầm');
     expect(wrapper.text()).toContain('Cần rà soát');
