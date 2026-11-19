@@ -9,10 +9,15 @@
 # - new_orders_count: orders created in the period that are not cancelled, every source and payment state.
 # - chat order: a new order linked to a conversation and not sold at the counter (source != pos).
 # - counter_orders_count: new orders that are not chat orders (POS sales, manual orders without a chat).
-# - chat_conversations_count: conversations created in the period.
+# - chat_conversations_count ("Khách nhắn"): conversations created in the period in which the customer wrote at least one
+#   message. Conversations only the shop wrote in (a campaign, an outbound chat) are not leads.
 # - converted_conversations_count: those conversations that have at least one non-cancelled chat order.
 # - chat_conversion_pct: converted_conversations_count / chat_conversations_count (never above 100%). Counter orders
 #   never enter it; their channel rows carry conversion_pct nil.
+# - new_customers_count ("Khách mới"): contacts created in the period that wrote at least one message or have at least one
+#   non-cancelled order. Contacts the website widget creates for anonymous visitors are not customers.
+# - first response: in those conversations, time from the customer's first message to the first public reply written by
+#   a staff member after it. Campaign/broadcast messages, bots and automations are not replies.
 class Kchat::Metrics
   RANGES = %w[today 7d month].freeze
   PAID_STATUSES = %w[paid shipping completed].freeze
@@ -22,6 +27,33 @@ class Kchat::Metrics
     AND converted_orders.status <> 'cancelled' AND converted_orders.source <> 'pos')
   SQL
   CONVERTED_COUNT_SQL = "COUNT(*) FILTER (WHERE #{CONVERTED_SQL})".freeze
+  INCOMING = Message.message_types[:incoming]
+  OUTGOING = Message.message_types[:outgoing]
+  INCOMING_SQL = <<~SQL.squish.freeze
+    EXISTS (SELECT 1 FROM messages incoming_messages WHERE incoming_messages.conversation_id = conversations.id
+    AND incoming_messages.message_type = #{INCOMING})
+  SQL
+  CUSTOMER_SQL = <<~SQL.squish.freeze
+    EXISTS (SELECT 1 FROM conversations customer_conversations JOIN messages customer_messages
+    ON customer_messages.conversation_id = customer_conversations.id
+    WHERE customer_conversations.contact_id = contacts.id AND customer_messages.message_type = #{INCOMING})
+    OR EXISTS (SELECT 1 FROM kchat_orders customer_orders
+    LEFT JOIN conversations order_conversations ON order_conversations.id = customer_orders.conversation_id
+    WHERE customer_orders.status <> 'cancelled'
+    AND (customer_orders.contact_id = contacts.id OR order_conversations.contact_id = contacts.id))
+  SQL
+  FIRST_INCOMING_JOIN = <<~SQL.squish.freeze
+    CROSS JOIN LATERAL (SELECT MIN(first_messages.created_at) AS asked_at FROM messages first_messages
+    WHERE first_messages.conversation_id = conversations.id AND first_messages.message_type = #{INCOMING}) first_incoming
+  SQL
+  FIRST_REPLY_SELECT = <<~SQL.squish.freeze
+    first_incoming.asked_at AS asked_at,
+    (SELECT MIN(replies.created_at) FROM messages replies WHERE replies.conversation_id = conversations.id
+    AND replies.message_type = #{OUTGOING} AND replies.private = FALSE AND replies.sender_type = 'User'
+    AND replies.created_at >= first_incoming.asked_at
+    AND replies.additional_attributes->'campaign_id' IS NULL AND replies.additional_attributes->'kchat_broadcast_id' IS NULL
+    AND COALESCE((replies.content_attributes #>> '{}')::jsonb->>'automation_rule_id', '') = '') AS replied_at
+  SQL
   # Chat orders are grouped under their conversation's inbox channel, every other order under its source.
   ORDER_CHANNEL_SQL = <<~SQL.squish.freeze
     CASE WHEN kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source <> 'pos'
@@ -85,7 +117,28 @@ class Kchat::Metrics
   end
 
   def conversations
-    Conversation.where(account_id: @account.id, created_at: window)
+    Conversation.where(account_id: @account.id, created_at: window).where(INCOMING_SQL)
+  end
+
+  def new_customers
+    Contact.where(account_id: @account.id, created_at: window).where(CUSTOMER_SQL)
+  end
+
+  def new_customers_count
+    @new_customers_count ||= new_customers.count
+  end
+
+  # [average seconds, % answered within target_seconds] over the conversations that got a reply; [nil, nil] if none did.
+  def first_response_stats(target_seconds)
+    pairs = conversations.joins(FIRST_INCOMING_JOIN).select(Arel.sql(FIRST_REPLY_SELECT)).to_sql
+    seconds = 'EXTRACT(EPOCH FROM (replied_at - asked_at))'
+    avg, within, replied = ActiveRecord::Base.connection.select_rows(<<~SQL.squish).first
+      SELECT AVG(GREATEST(#{seconds}, 0)), COUNT(*) FILTER (WHERE #{seconds} <= #{target_seconds.to_i}), COUNT(*)
+      FROM (#{pairs}) first_replies WHERE replied_at IS NOT NULL
+    SQL
+    return [nil, nil] unless replied.to_i.positive?
+
+    [avg.to_f.round, (within.to_i * 100.0 / replied.to_i).round(1)]
   end
 
   def totals

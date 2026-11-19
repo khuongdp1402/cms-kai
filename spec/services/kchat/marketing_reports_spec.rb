@@ -16,6 +16,12 @@ RSpec.describe Kchat::MarketingReports do
     stub_request(:post, /graph\.facebook\.com/).to_return(status: 200, body: '{}')
   end
 
+  def customer_wrote(conversation)
+    create(:message, account: account, inbox: conversation.inbox, conversation: conversation, sender: conversation.contact,
+                     message_type: :incoming)
+    conversation
+  end
+
   def seed_conversations
     fb_inbox = create(:channel_facebook_page, account: account).inbox.tap { |inbox| inbox.update!(account: account) }
     zalo_inbox = create(:inbox, account: account, channel: create(:channel_zalo_personal, account: account))
@@ -24,12 +30,12 @@ RSpec.describe Kchat::MarketingReports do
     conv1 = create(:conversation, account: account, inbox: fb_inbox, contact: contact,
                                   contact_inbox: create(:contact_inbox, contact: contact, inbox: fb_inbox), assignee: agent,
                                   additional_attributes: { 'referer' => 'https://shop.vn/nen?utm_source=facebook_ads&utm_campaign=tet_2027' })
-    create(:conversation, account: account, inbox: fb_inbox, contact: contact,
-                          contact_inbox: create(:contact_inbox, contact: contact, inbox: fb_inbox),
-                          additional_attributes: { 'utm_source' => 'facebook_ads', 'utm_campaign' => 'tet_2027' })
-    create(:conversation, account: account, inbox: zalo_inbox, contact: contact,
-                          contact_inbox: create(:contact_inbox, contact: contact, inbox: zalo_inbox))
-    [contact, conv1]
+    customer_wrote(create(:conversation, account: account, inbox: fb_inbox, contact: contact,
+                                         contact_inbox: create(:contact_inbox, contact: contact, inbox: fb_inbox),
+                                         additional_attributes: { 'utm_source' => 'facebook_ads', 'utm_campaign' => 'tet_2027' }))
+    customer_wrote(create(:conversation, account: account, inbox: zalo_inbox, contact: contact,
+                                         contact_inbox: create(:contact_inbox, contact: contact, inbox: zalo_inbox)))
+    [contact, customer_wrote(conv1)]
   end
 
   def seed_funnel_data
@@ -62,8 +68,8 @@ RSpec.describe Kchat::MarketingReports do
   it 'reported case: overall close rate matches the rows and the POS sale is a separate row without a rate' do
     inbox = create(:inbox, account: account)
     contact = create(:contact, account: account)
-    chat = create(:conversation, account: account, inbox: inbox, contact: contact,
-                                 contact_inbox: create(:contact_inbox, contact: contact, inbox: inbox))
+    chat = customer_wrote(create(:conversation, account: account, inbox: inbox, contact: contact,
+                                                contact_inbox: create(:contact_inbox, contact: contact, inbox: inbox)))
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: chat },
                                     items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },

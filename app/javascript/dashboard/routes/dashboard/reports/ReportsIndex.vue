@@ -106,7 +106,11 @@ const kpis = computed(() => [
     hintKey: 'KALO_METRICS.NEW_ORDERS',
   },
   { key: 'WAITING', value: summary.value?.waiting_messages ?? 0 },
-  { key: 'CONTACTS', value: summary.value?.new_contacts ?? 0 },
+  {
+    key: 'CONTACTS',
+    value: summary.value?.new_contacts ?? 0,
+    hintKey: 'KALO_METRICS.NEW_CUSTOMERS',
+  },
 ]);
 
 const isEmpty = computed(

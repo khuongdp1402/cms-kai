@@ -42,7 +42,7 @@ RSpec.describe Kchat::BroadcastsService do
     zalo_inbox = create(:inbox, account: account, channel: zalo_channel)
 
     make_contact_with_inbox(inbox: zalo_inbox, name: 'Minh Thư', label: 'vip', incoming_at: 10.days.ago)
-    make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: nil)
+    make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: 30.days.ago)
 
     preview = service.preview(inbox_id: zalo_inbox.id, labels: ['vip'])
     expect(preview[:requires_24h_window]).to be(false)
@@ -53,7 +53,7 @@ RSpec.describe Kchat::BroadcastsService do
     zalo_channel = create(:channel_zalo_personal, account: account)
     zalo_inbox = create(:inbox, account: account, channel: zalo_channel)
     ci1 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Minh Thư', label: 'vip', incoming_at: 10.days.ago)
-    ci2 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: nil)
+    ci2 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: 30.days.ago)
 
     record = service.create_broadcast!(
       user: admin,

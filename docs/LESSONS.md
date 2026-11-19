@@ -12,6 +12,19 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B115 (2026-11-20): Chiến dịch "Mọi khách đã nhắn shop" gửi cho khách vãng lai website ("Chào lingering-grass-348 ơi") và mở hội thoại mới cho họ.**
+  - Triệu chứng: số người nhận gồm cả contact mà widget tự tạo khi khách mở trang (tên Haikunator, chưa nhắn tin nào); dispatcher tạo hội thoại mới cho người chưa từng có hội thoại.
+  - Nguyên nhân: người nhận = mọi `contact_inbox` của hộp thư; `{{name}}` lấy nguyên `contact.name`; không có hội thoại mở thì `ConversationBuilder` tạo mới.
+  - Quy tắc: người nhận chiến dịch phải có ít nhất một tin **incoming** trong hộp thư đó (`Dispatcher::CHATTED_SQL`; nhãn và nhóm khách giao với tập này). Tên dạng `chữ-chữ-số` (Haikunator) coi như không có tên → "bạn". Chiến dịch không bao giờ tạo hội thoại: gửi vào hội thoại gần nhất, không có thì bỏ qua.
+- **B116 (2026-11-20): "Khách mới 4" trong Báo cáo trong khi danh sách khách chỉ có 1; "Khách nhắn" đếm cả hội thoại chỉ có tin chiến dịch.**
+  - Nguyên nhân: Khách mới = mọi contact tạo trong kỳ (gồm khách vãng lai widget); hội thoại = mọi hội thoại tạo trong kỳ, kể cả hội thoại shop tự mở.
+  - Quy tắc: định nghĩa nằm ở `Kchat::Metrics`: Khách mới = contact tạo trong kỳ có ≥1 tin incoming hoặc ≥1 đơn chưa hủy (`new_customers_count`); Khách nhắn = hội thoại tạo trong kỳ có ≥1 tin incoming (`conversations`, dùng chung cho kênh, nhân viên, chiến dịch, Tổng quan). Fixture spec tạo hội thoại "khách đã nhắn" phải có tin incoming.
+- **B117 (2026-11-20): Bảng UTM tính đơn đặt trước khi gửi chiến dịch, trong khi kết quả chiến dịch thì không.**
+  - Nguyên nhân: dispatcher gắn `utm_campaign` vào hội thoại cũ của khách; `MarketingReports` gom mọi đơn của hội thoại đó theo tag, không xét thời điểm.
+  - Quy tắc: đơn chỉ được tính cho chiến dịch khi tạo trong `[thời điểm gửi, +7 ngày]` (`Results::ATTRIBUTION_DAYS`). Dispatcher ghi `kchat_campaign_at` vào hội thoại; hội thoại gắn trước đó lấy `started_at` của chiến dịch trong store; hội thoại đến từ link UTM lấy giờ tạo hội thoại.
+- **B118 (2026-11-20): Tin chiến dịch được tính là "phản hồi đầu tiên" nên thời gian phản hồi đẹp giả và khách đang chờ bị xóa trạng thái chờ.**
+  - Nguyên nhân: tin chiến dịch là tin outgoing do User gửi nên `Message#human_response?` coi là trả lời người thật, đặt `first_reply_created_at` và xóa `waiting_since`.
+  - Quy tắc: tin chiến dịch gửi kèm `campaign_id` (Chatwoot không coi là trả lời người thật). Thời gian phản hồi (`Metrics#first_response_stats`) đo từ tin đầu tiên của khách tới tin trả lời công khai đầu tiên của nhân viên sau đó, bỏ tin có `campaign_id`/`kchat_broadcast_id`, bot và automation; không dùng `conversations.first_reply_created_at` (dữ liệu cũ đã bị chiến dịch làm bẩn).
 - **B110 (2026-11-20): Siết quyền sản phẩm (chỉ Quản trị viên tạo/sửa) nhưng nút "Thêm sản phẩm" ở POS vẫn hiện cho Nhân viên.**
   - Triệu chứng: sau khi đổi policy, POS vẫn hiện nút cho Nhân viên (điền form xong mới nhận 401) và `products_spec`/`entitlements_gating_spec` có sẵn tạo sản phẩm bằng agent nên đỏ.
   - Nguyên nhân: policy đổi ở backend, còn lối vào ở frontend (POS, checklist, trang trống) không đọc vai trò.

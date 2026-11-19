@@ -1,13 +1,27 @@
 # frozen_string_literal: true
 
+# Recipients are contacts who wrote to the shop in the inbox (at least one incoming message in one of their conversations
+# there). Website visitors the widget only created a contact for are never messaged, and a broadcast never opens a new
+# conversation: it goes into the contact's last conversation in the inbox.
 class Kchat::Broadcasts::Dispatcher
   MAX_RECIPIENTS_PER_RUN = 500
   META_24H_CHANNELS = Kchat::Broadcasts::Channels::META_24H_CHANNELS
   FALLBACK_NAME = 'bạn'
+  # ContactInboxWithContactBuilder names anonymous visitors with Haikunator.haikunate(1000), e.g. "lingering-grass-348".
+  GENERATED_NAME = /\A[a-z]+-[a-z]+-\d{1,4}\z/
+  SOCIAL_COMMENT_SQL = "COALESCE(conversations.additional_attributes->>'source_type', '') = 'social_comment'"
+  # The contact inbox has a (non comment) conversation in which the customer wrote at least once.
+  CHATTED_SQL = <<~SQL.squish.freeze
+    EXISTS (SELECT 1 FROM conversations JOIN messages ON messages.conversation_id = conversations.id
+    WHERE conversations.contact_inbox_id = contact_inboxes.id AND messages.message_type = #{Message.message_types[:incoming]}
+    AND NOT (#{SOCIAL_COMMENT_SQL}))
+  SQL
 
-  # What {{name}} becomes for this contact; the wizard preview uses the same rule.
+  # What {{name}} becomes for this contact; the wizard preview uses the same rule. A name the widget generated is not
+  # the customer's name, so it gets the neutral greeting too.
   def self.recipient_name(contact)
-    contact&.name.presence || FALLBACK_NAME
+    name = contact&.name.to_s.strip
+    name.empty? || GENERATED_NAME.match?(name) ? FALLBACK_NAME : name
   end
 
   def initialize(account)
@@ -50,6 +64,7 @@ class Kchat::Broadcasts::Dispatcher
     ContactInbox.joins(:contact)
                 .where(inbox_id: inbox.id, contacts: { account_id: @account.id })
                 .where("contact_inboxes.source_id NOT LIKE 'comment:%'")
+                .where(CHATTED_SQL)
   end
 
   def split_by_24h_window(candidates, inbox_id, enforce_24h)
@@ -79,10 +94,14 @@ class Kchat::Broadcasts::Dispatcher
   end
 
   def deliver_to_recipient(contact_inbox, sender, record, hard_bans)
-    conversation = find_or_create_conversation(contact_inbox)
-    tag_conversation(conversation, record['campaign_tag'])
+    conversation = last_conversation(contact_inbox)
+    return false if conversation.nil?
+
+    tag_conversation(conversation, record)
     text = personalize_message(record['message'], contact_inbox.contact, hard_bans)
-    msg_params = ActionController::Parameters.new(content: text, message_type: 'outgoing', private: false)
+    # campaign_id: Chatwoot does not count a campaign message as a human reply, so a broadcast neither sets the first reply
+    # time nor clears waiting_since.
+    msg_params = ActionController::Parameters.new(content: text, message_type: 'outgoing', private: false, campaign_id: record['id'])
     message = Messages::MessageBuilder.new(sender, conversation, msg_params).perform
     mark_broadcast_message(message, record['id'])
     true
@@ -98,13 +117,15 @@ class Kchat::Broadcasts::Dispatcher
     message.update_columns(additional_attributes: attrs) # rubocop:disable Rails/SkipsModelValidations
   end
 
-  def find_or_create_conversation(contact_inbox)
-    contact_inbox.conversations.where.not(status: :resolved).order(created_at: :desc).first ||
-      ConversationBuilder.new(params: { status: :open }, contact_inbox: contact_inbox).perform
+  def last_conversation(contact_inbox)
+    contact_inbox.conversations.where.not(SOCIAL_COMMENT_SQL).order(created_at: :desc, id: :desc).first
   end
 
-  def tag_conversation(conversation, campaign_tag)
-    attrs = conversation.additional_attributes.to_h.merge('utm_source' => 'broadcast', 'utm_campaign' => campaign_tag)
+  # kchat_campaign_at: orders count for the campaign only from this moment (Kchat::MarketingReports, like Results).
+  def tag_conversation(conversation, record)
+    campaign_tag = record['campaign_tag']
+    attrs = conversation.additional_attributes.to_h.merge('utm_source' => 'broadcast', 'utm_campaign' => campaign_tag,
+                                                          'kchat_campaign_at' => record['started_at'].presence || Time.current.iso8601)
     conversation.update!(additional_attributes: attrs)
     conversation.add_labels([campaign_tag]) unless conversation.label_list.include?(campaign_tag)
   end

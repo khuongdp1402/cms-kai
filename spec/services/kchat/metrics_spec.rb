@@ -11,9 +11,12 @@ RSpec.describe Kchat::Metrics do
 
   around { |ex| travel_to(now) { ex.run } }
 
+  # A chat the customer started: "Khách nhắn" only counts conversations with at least one incoming message.
   def conversation(created_at: now - 1.hour, in_inbox: inbox)
     create(:conversation, account: account, inbox: in_inbox, contact: contact, created_at: created_at,
-                          contact_inbox: create(:contact_inbox, contact: contact, inbox: in_inbox))
+                          contact_inbox: create(:contact_inbox, contact: contact, inbox: in_inbox)).tap do |chat|
+      create(:message, account: account, inbox: in_inbox, conversation: chat, sender: contact, message_type: :incoming)
+    end
   end
 
   def order(source:, method:, conversation: nil, price: 150_000)

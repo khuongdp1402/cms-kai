@@ -11,7 +11,10 @@ RSpec.describe 'Kchat broadcasts API (campaign wizard)', type: :request do
 
   it 'saves, edits, sends and reports a draft campaign' do
     contact = create(:contact, account: account, name: 'Lan')
-    create(:contact_inbox, contact: contact, inbox: inbox, source_id: 'zalo_lan')
+    contact_inbox = create(:contact_inbox, contact: contact, inbox: inbox, source_id: 'zalo_lan')
+    # Lan wrote to the shop before: only such contacts receive a campaign.
+    chat = create(:conversation, account: account, inbox: inbox, contact: contact, contact_inbox: contact_inbox)
+    create(:message, account: account, inbox: inbox, conversation: chat, sender: contact, message_type: :incoming, created_at: 1.day.ago)
 
     post base, params: { title: 'Ra mắt', goal: 'launch', draft: true }, headers: admin.create_new_auth_token, as: :json
     expect(response).to have_http_status(:created)

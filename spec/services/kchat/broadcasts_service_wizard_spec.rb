@@ -9,12 +9,17 @@ RSpec.describe Kchat::BroadcastsService do
   let(:zalo_inbox) { create(:inbox, account: account, channel: create(:channel_zalo_personal, account: account)) }
   let(:widget_inbox) { create(:inbox, account: account, channel: create(:channel_widget, account: account)) }
 
+  # A customer who wrote to the shop in this inbox: only they can receive a campaign (broadcasts_audience_spec).
   def contact_in(inbox, name:, label: nil, city: nil)
     # Segments use Contacts::FilterService, which only matches contacts with an email, phone or identifier.
     contact = create(:contact, account: account, name: name, email: "#{SecureRandom.hex(4)}@example.com",
                                additional_attributes: { city: city }.compact)
     contact.add_labels([label]) if label
-    create(:contact_inbox, contact: contact, inbox: inbox, source_id: "src_#{contact.id}_#{inbox.id}")
+    create(:contact_inbox, contact: contact, inbox: inbox, source_id: "src_#{contact.id}_#{inbox.id}").tap do |ci|
+      conversation = create(:conversation, account: account, inbox: inbox, contact: contact, contact_inbox: ci)
+      create(:message, account: account, inbox: inbox, conversation: conversation, sender: contact, message_type: :incoming,
+                       content: 'Chào shop', created_at: 1.day.ago)
+    end
   end
 
   def segment_for(city)
@@ -82,7 +87,7 @@ RSpec.describe Kchat::BroadcastsService do
       contact_in(zalo_inbox, name: 'D', label: 'regular')
 
       summary = service.audience_summary(labels: ['vip'])
-      expect(summary[:audience_count]).to eq(3)
+      expect(summary[:audience_count]).to eq(2) # C never wrote to the shop, so a campaign cannot reach them
       zalo = summary[:channels].find { |row| row[:inbox_id] == zalo_inbox.id }
       widget = summary[:channels].find { |row| row[:inbox_id] == widget_inbox.id }
       expect(zalo).to include(eligible_count: 1, read_status: false, rate_limit: { per_minute: 30, burst: 10 })
@@ -227,7 +232,8 @@ RSpec.describe Kchat::BroadcastsService do
       service.execute_broadcast!(record['id'])
 
       expect(service.list.first).to include('status' => 'failed', 'error' => 'subscription_expired', 'sent_count' => 0)
-      expect(ci.conversations.count).to eq(0)
+      expect(ci.conversations.count).to eq(1)
+      expect(ci.conversations.first.messages.outgoing.count).to eq(0)
     end
 
     it 'rejects sending with a schedule in the past' do

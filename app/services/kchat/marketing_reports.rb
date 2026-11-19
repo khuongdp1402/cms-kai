@@ -20,6 +20,8 @@ class Kchat::MarketingReports
     )
   SQL
 
+  ATTRIBUTION_DAYS = Kchat::Broadcasts::Results::ATTRIBUTION_DAYS
+
   def self.brands_overview(user:, range: 'today')
     Kchat::BrandsOverviewReport.new(user: user, range: range).summary
   end
@@ -33,8 +35,12 @@ class Kchat::MarketingReports
   end
 
   # Channel funnel and totals come from Kchat::Metrics (same definitions as Tổng quan). Campaign and agent rows follow them:
-  # orders = non-cancelled chat orders created in the period, conversion = conversations with an order / conversations,
-  # revenue = paid revenue in the period.
+  # conversations = Metrics#conversations ("Khách nhắn"), orders = non-cancelled chat orders created in the period,
+  # conversion = conversations with an order / conversations, revenue = paid revenue in the period.
+  # A campaign row only credits orders created from the campaign start to ATTRIBUTION_DAYS later, the window
+  # Kchat::Broadcasts::Results uses, so the UTM table and the campaign results agree. The start is when the broadcast was
+  # sent to that conversation (kchat_campaign_at, or the broadcast's started_at for conversations tagged before that
+  # attribute existed); for a conversation that came in through a UTM link or a label, its creation.
   def funnel
     {
       range: @range,
@@ -78,16 +84,18 @@ class Kchat::MarketingReports
   end
 
   def merge_campaign_leads(buckets)
-    rel = Conversation.joins(:inbox).where(account_id: @account.id, created_at: window)
-                      .where("#{CAMPAIGN_SQL} IS NOT NULL").group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
-                      .select(Arel.sql("#{CAMPAIGN_SQL} AS campaign_key, #{SOURCE_SQL} AS source_key, COUNT(*) AS cnt, " \
-                                       "#{Kchat::Metrics::CONVERTED_COUNT_SQL} AS converted"))
-    ActiveRecord::Base.connection.select_rows(rel.to_sql).each do |campaign, source, count, converted|
+    converted = 'COUNT(*) FILTER (WHERE EXISTS (SELECT 1 FROM kchat_orders converted_orders WHERE ' \
+                "converted_orders.conversation_id = conversations.id AND converted_orders.status <> 'cancelled' " \
+                "AND converted_orders.source <> 'pos' AND #{attributed_sql('converted_orders')}))"
+    rel = metrics.conversations.joins(:inbox)
+                 .where("#{CAMPAIGN_SQL} IS NOT NULL").group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
+                 .select(Arel.sql("#{CAMPAIGN_SQL} AS campaign_key, #{SOURCE_SQL} AS source_key, COUNT(*) AS cnt, #{converted} AS converted"))
+    ActiveRecord::Base.connection.select_rows(rel.to_sql).each do |campaign, source, count, converted_count|
       row = campaign_bucket(buckets, campaign, source)
       next unless row
 
       row[:conversations] += count.to_i
-      row[:converted] += converted.to_i
+      row[:converted] += converted_count.to_i
     end
   end
 
@@ -101,10 +109,32 @@ class Kchat::MarketingReports
   end
 
   def campaign_order_rows(scope, aggregate)
-    rel = scope.joins(conversation: :inbox).where("#{CAMPAIGN_SQL} IS NOT NULL")
+    rel = scope.joins(conversation: :inbox).where("#{CAMPAIGN_SQL} IS NOT NULL").where(attributed_sql('kchat_orders'))
                .group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
                .select(Arel.sql("#{CAMPAIGN_SQL} AS c_key, #{SOURCE_SQL} AS s_key, #{aggregate} AS value"))
     ActiveRecord::Base.connection.select_rows(rel.to_sql)
+  end
+
+  # The order (table alias) was created inside the campaign window of its conversation.
+  def attributed_sql(orders_table)
+    "#{orders_table}.created_at >= #{campaign_start_sql} AND " \
+      "#{orders_table}.created_at <= #{campaign_start_sql} + INTERVAL '#{ATTRIBUTION_DAYS} days'"
+  end
+
+  def campaign_start_sql
+    @campaign_start_sql ||= begin
+      sent = broadcast_starts.map do |tag, started_at|
+        Conversation.sanitize_sql_array(['WHEN ? THEN ?::timestamptz', tag, started_at])
+      end
+      by_tag = sent.empty? ? 'NULL' : "CASE conversations.additional_attributes->>'utm_campaign' #{sent.join(' ')} END"
+      "COALESCE(NULLIF(conversations.additional_attributes->>'kchat_campaign_at', '')::timestamptz, #{by_tag}, conversations.created_at)"
+    end
+  end
+
+  def broadcast_starts
+    Array(@account.custom_attributes.to_h['kchat_broadcasts']).filter_map do |item|
+      [item['campaign_tag'], item['started_at']] if item['campaign_tag'].present? && item['started_at'].present?
+    end.uniq(&:first)
   end
 
   def campaign_bucket(buckets, campaign, source)
