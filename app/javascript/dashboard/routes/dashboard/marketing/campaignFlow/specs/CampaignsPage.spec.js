@@ -227,6 +227,20 @@ describe('Chiến dịch page', () => {
     expect(wrapper.findAll('[data-test="campaign-row"]')).toHaveLength(6);
   });
 
+  it('explains a stalled run in the list', async () => {
+    broadcastsAPI.list.mockResolvedValue({
+      data: {
+        broadcasts: [
+          { id: 'x', title: 'Treo', status: 'failed', error: 'stalled' },
+        ],
+      },
+    });
+    const wrapper = await mountPage();
+    expect(wrapper.find('[data-test="campaign-row-error"]').text()).toContain(
+      'Lần gửi bị gián đoạn'
+    );
+  });
+
   it('shows the empty state with a create button', async () => {
     broadcastsAPI.list.mockResolvedValue({ data: { broadcasts: [] } });
     const wrapper = await mountPage();
@@ -303,6 +317,19 @@ describe('CampaignResults', () => {
     expect(
       wrapper.find('[data-test="campaign-results-no-read"]').text()
     ).toContain('Zalo cá nhân không báo trạng thái đã xem');
+  });
+
+  it('explains a stalled run in the results', async () => {
+    broadcastsAPI.results.mockResolvedValue(
+      RESULTS({ broadcast: { status: 'failed', error: 'stalled' } })
+    );
+    const wrapper = await mountPage({
+      component: CampaignResults,
+      props: { broadcastId: 'c' },
+    });
+    expect(
+      wrapper.find('[data-test="campaign-results-failed"]').text()
+    ).toContain('Lần gửi bị gián đoạn');
   });
 
   it('shows no numbers for a scheduled campaign', async () => {

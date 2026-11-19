@@ -16,7 +16,7 @@ const props = defineProps({
 });
 const emit = defineEmits(['loaded']);
 
-const { t } = useI18n();
+const { t, te } = useI18n();
 const broadcast = ref(null);
 const results = ref(null);
 const state = ref('loading');
@@ -122,8 +122,9 @@ defineExpose({ load });
         class="px-3 py-2 text-sm rounded-lg bg-n-ruby-3 text-n-ruby-11"
       >
         {{
-          broadcast.error === 'subscription_expired'
-            ? t('KALO_CAMPAIGN_FLOW.API_ERRORS.subscription_expired')
+          broadcast.error &&
+          te(`KALO_CAMPAIGN_FLOW.API_ERRORS.${broadcast.error}`)
+            ? t(`KALO_CAMPAIGN_FLOW.API_ERRORS.${broadcast.error}`)
             : t('KALO_CAMPAIGN_FLOW.RESULTS.FAILED')
         }}
       </p>

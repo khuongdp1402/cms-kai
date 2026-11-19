@@ -5523,7 +5523,8 @@
     "API_ERRORS": {
       "schedule_in_past": "Giờ hẹn đã qua. Chọn lại giờ gửi.",
       "broadcast_limit_reached": "Đã đủ 30 chiến dịch đang chờ hoặc nháp. Xóa bớt nháp hoặc chờ chiến dịch gửi xong.",
-      "subscription_expired": "Chưa gửi vì gói dùng thử đã hết hạn."
+      "subscription_expired": "Chưa gửi vì gói dùng thử đã hết hạn.",
+      "stalled": "Lần gửi bị gián đoạn quá lâu nên Kalo đã dừng. Kiểm tra kết quả rồi tạo lại chiến dịch cho khách chưa nhận."
     },
     "READONLY": "Chỉ quản trị viên tạo và gửi được chiến dịch. Bạn vẫn xem được kết quả.",
     "LIST": {

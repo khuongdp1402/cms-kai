@@ -6,6 +6,8 @@ class Kchat::Broadcasts::Store
   MAX_BROADCASTS = 30
   EVICTABLE_STATUSES = %w[completed failed].freeze
   RUNNABLE_STATUSES = %w[processing scheduled].freeze
+  # A run that never finished (worker killed mid-send, or the job was never enqueued) after this long is failed.
+  STALL_AFTER = { 'sending' => 2.hours, 'processing' => 30.minutes }.freeze
 
   def initialize(account)
     @account = account
@@ -18,7 +20,10 @@ class Kchat::Broadcasts::Store
   # New record in front. When the list is full the oldest finished campaign makes room; drafts and
   # campaigns still to be sent are never dropped.
   def add!(record)
-    mutate { |items| [record] + make_room(items) }
+    mutate do |items|
+      record['campaign_tag'] = self.class.unique_tag(record['campaign_tag'], items.filter_map { |item| item['campaign_tag'] })
+      [record] + make_room(items)
+    end
     record
   end
 
@@ -27,10 +32,11 @@ class Kchat::Broadcasts::Store
   def update!(broadcast_id, to_front: false)
     updated = nil
     mutate do |items|
-      current = items.find { |item| item['id'] == broadcast_id } || raise(ActiveRecord::RecordNotFound, "Broadcast #{broadcast_id} not found")
-      updated = yield(current)
-      rest = items.map { |item| item['id'] == broadcast_id ? updated : item }
-      to_front ? [updated] + rest.reject { |item| item['id'] == broadcast_id } : rest
+      others = items.reject { |item| item['id'] == broadcast_id }
+      updated = with_unique_tag(yield(find_in(items, broadcast_id)), others)
+      next [updated] + others if to_front
+
+      items.map { |item| item['id'] == broadcast_id ? updated : item }
     end
     updated
   end
@@ -52,15 +58,50 @@ class Kchat::Broadcasts::Store
     claimed
   end
 
+  # Cheap when nothing is stalled: only takes the lock when a record needs failing.
+  def reap_stalled!
+    return unless list.any? { |item| stalled?(item) }
+
+    mutate do |items|
+      items.map { |item| stalled?(item) ? item.merge('status' => 'failed', 'error' => 'stalled', 'completed_at' => Time.current.iso8601) : item }
+    end
+  end
+
+  # Attribution groups by tag, so two campaigns never share one: suffix -2, -3… when taken.
+  def self.unique_tag(base, taken)
+    return base unless taken.include?(base)
+
+    (2..).each do |n|
+      candidate = "#{base.first(46)}-#{n}"
+      return candidate unless taken.include?(candidate)
+    end
+  end
+
   def delete!(broadcast_id)
     mutate do |items|
-      current = items.find { |item| item['id'] == broadcast_id } || raise(ActiveRecord::RecordNotFound, "Broadcast #{broadcast_id} not found")
+      current = find_in(items, broadcast_id)
       yield(current) if block_given?
       items.reject { |item| item['id'] == broadcast_id }
     end
   end
 
   private
+
+  def find_in(items, broadcast_id)
+    items.find { |item| item['id'] == broadcast_id } || raise(ActiveRecord::RecordNotFound, "Broadcast #{broadcast_id} not found")
+  end
+
+  def with_unique_tag(record, others)
+    return record if record['campaign_tag'].blank?
+
+    record.merge('campaign_tag' => self.class.unique_tag(record['campaign_tag'], others.filter_map { |item| item['campaign_tag'] }))
+  end
+
+  def stalled?(item)
+    limit = STALL_AFTER[item['status']]
+    since = item['status'] == 'sending' ? item['started_at'] : item['queued_at'] || item['created_at']
+    limit.present? && since.present? && Time.zone.parse(since) < limit.ago
+  end
 
   def make_room(items)
     return items if items.size < MAX_BROADCASTS

@@ -15,7 +15,9 @@ class Kchat::BroadcastsService
     @store = Kchat::Broadcasts::Store.new(account)
   end
 
+  # Reaps stalled runs first so a lost job never leaves a campaign "Đang gửi" forever.
   def list
+    @store.reap_stalled!
     @store.list
   end
 
@@ -49,7 +51,7 @@ class Kchat::BroadcastsService
 
   def create_broadcast!(user:, params:)
     attrs = params.to_h.with_indifferent_access
-    record = build(user, attrs, keep_draft: boolean_cast(attrs[:draft]), except_id: nil)
+    record = build(user, attrs, keep_draft: boolean_cast(attrs[:draft]))
     @store.add!(record)
     enqueue_for(record)
     record
@@ -65,7 +67,7 @@ class Kchat::BroadcastsService
     attrs = current.slice('title', 'message', 'inbox_id', 'labels', 'segment_id', 'goal', 'campaign_tag', 'only_24h', 'scheduled_at')
                    .merge(params.to_h.stringify_keys).with_indifferent_access
     keep_draft = !attrs.key?(:draft) || attrs[:draft].nil? || boolean_cast(attrs[:draft])
-    built = build(user, attrs, keep_draft: keep_draft, except_id: broadcast_id)
+    built = build(user, attrs, keep_draft: keep_draft)
     record = @store.update!(broadcast_id, to_front: !keep_draft) do |locked|
       raise ValidationError, 'Chỉ sửa được chiến dịch nháp' unless locked['status'] == 'draft'
 
@@ -119,13 +121,12 @@ class Kchat::BroadcastsService
     FAILED_RUN
   end
 
-  def build(user, attrs, keep_draft:, except_id:)
+  def build(user, attrs, keep_draft:)
     builder = Kchat::Broadcasts::RecordBuilder.new(
       @account,
       stats: lambda { |a|
         preview(inbox_id: a[:inbox_id], labels: a[:labels], only_24h: a[:only_24h], segment_id: a[:segment_id])
-      },
-      taken_tags: list.reject { |item| item['id'] == except_id }.filter_map { |item| item['campaign_tag'] }
+      }
     )
     keep_draft ? builder.draft(user, attrs) : builder.ready(user, attrs)
   end

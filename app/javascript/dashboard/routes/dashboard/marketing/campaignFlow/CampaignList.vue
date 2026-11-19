@@ -15,7 +15,13 @@ defineProps({
 });
 const emit = defineEmits(['open', 'delete', 'create']);
 
-const { t } = useI18n();
+const { t, te } = useI18n();
+
+// Known backend reasons (subscription_expired, stalled) have their own sentence.
+const errorKey = code => {
+  const key = `KALO_CAMPAIGN_FLOW.API_ERRORS.${code}`;
+  return code && te(key) ? key : '';
+};
 const armedDelete = ref(null);
 
 const onDelete = item => {
@@ -136,13 +142,11 @@ const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
             {{ t('KALO_CAMPAIGN_FLOW.LIST.PROCESSING') }}
           </span>
           <span
-            v-if="
-              item.status === 'failed' && item.error === 'subscription_expired'
-            "
+            v-if="item.status === 'failed' && errorKey(item.error)"
             data-test="campaign-row-error"
             class="font-semibold text-n-ruby-11"
           >
-            {{ t('KALO_CAMPAIGN_FLOW.API_ERRORS.subscription_expired') }}
+            {{ t(errorKey(item.error)) }}
           </span>
           <span v-if="item.status === 'draft'">
             {{ t('KALO_CAMPAIGN_FLOW.LIST.DRAFT_HINT') }}

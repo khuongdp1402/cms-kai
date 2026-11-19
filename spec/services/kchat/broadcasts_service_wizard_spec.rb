@@ -235,6 +235,46 @@ RSpec.describe Kchat::BroadcastsService do
     end
   end
 
+  describe 'store' do
+    let(:store) { Kchat::Broadcasts::Store.new(account) }
+
+    it 'makes tags unique under the lock even when two records were built with the same tag' do
+      store.add!({ 'id' => 'a', 'status' => 'draft', 'campaign_tag' => 'tet' })
+      second = store.add!({ 'id' => 'b', 'status' => 'draft', 'campaign_tag' => 'tet' })
+      updated = store.update!('a') { |item| item.merge('campaign_tag' => 'tet-2') }
+
+      expect(second['campaign_tag']).to eq('tet-2')
+      expect(updated['campaign_tag']).to eq('tet-2-2')
+      expect(store.list.pluck('campaign_tag')).to contain_exactly('tet-2', 'tet-2-2')
+    end
+
+    it 'fails runs that stalled and leaves fresh ones alone' do
+      now = Time.current
+      account.update!(custom_attributes: { 'kchat_broadcasts' => [
+                        { 'id' => 'old-send', 'status' => 'sending', 'started_at' => (now - 3.hours).iso8601 },
+                        { 'id' => 'new-send', 'status' => 'sending', 'started_at' => (now - 10.minutes).iso8601 },
+                        { 'id' => 'lost', 'status' => 'processing', 'created_at' => (now - 2.days).iso8601,
+                          'queued_at' => (now - 1.hour).iso8601 },
+                        { 'id' => 'queued', 'status' => 'processing', 'created_at' => (now - 2.days).iso8601,
+                          'queued_at' => (now - 5.minutes).iso8601 },
+                        { 'id' => 'later', 'status' => 'scheduled', 'created_at' => (now - 2.days).iso8601 }
+                      ] })
+
+      statuses = service.list.to_h { |item| [item['id'], [item['status'], item['error']]] }
+      expect(statuses).to eq('old-send' => %w[failed stalled], 'new-send' => ['sending', nil], 'lost' => %w[failed stalled],
+                             'queued' => ['processing', nil], 'later' => ['scheduled', nil])
+    end
+
+    it 'does not reap a draft that was sent long after it was created' do
+      contact_in(zalo_inbox, name: 'Nháp cũ')
+      draft = travel_to(3.days.ago) do
+        service.create_broadcast!(user: admin, params: { title: 'Cũ', message: 'Hi', inbox_id: zalo_inbox.id, draft: true })
+      end
+      service.update_draft!(draft['id'], user: admin, params: { draft: false })
+      expect(service.list.first).to include('status' => 'processing')
+    end
+  end
+
   describe 'list cap' do
     def fill_with(status, count)
       items = Array.new(count) { |i| { 'id' => "#{status}-#{i}", 'title' => status, 'status' => status, 'campaign_tag' => "#{status}_#{i}" } }

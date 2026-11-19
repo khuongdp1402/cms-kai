@@ -7,11 +7,10 @@ class Kchat::Broadcasts::RecordBuilder
   GOALS = %w[sales retention launch].freeze
   ValidationError = Kchat::BroadcastsService::ValidationError
 
-  # stats: ->(attrs) { inbox preview hash }; taken_tags: campaign tags of the other broadcasts.
-  def initialize(account, stats:, taken_tags:)
+  # stats: ->(attrs) { inbox preview hash }. Tag uniqueness is applied by Kchat::Broadcasts::Store under the lock.
+  def initialize(account, stats:)
     @account = account
     @stats = stats
-    @taken_tags = taken_tags
   end
 
   def draft(user, attrs)
@@ -40,7 +39,8 @@ class Kchat::Broadcasts::RecordBuilder
       'message' => message, 'inbox_id' => stats[:inbox_id], 'inbox_name' => stats[:inbox_name],
       'channel_type' => stats[:channel_type], 'requires_24h_window' => stats[:requires_24h_window],
       'status' => scheduled_at ? 'scheduled' : 'processing', 'scheduled_at' => scheduled_at&.iso8601,
-      'eligible_count' => stats[:eligible_count], 'skipped_24h_count' => stats[:skipped_24h_count]
+      'eligible_count' => stats[:eligible_count], 'skipped_24h_count' => stats[:skipped_24h_count],
+      'queued_at' => Time.current.iso8601
     )
   end
 
@@ -72,19 +72,9 @@ class Kchat::Broadcasts::RecordBuilder
     {
       'id' => SecureRandom.uuid, 'title' => title, 'goal' => goal, 'labels' => self.class.normalize_labels(attrs[:labels]),
       'segment_id' => attrs[:segment_id].presence&.to_i, 'only_24h' => ActiveModel::Type::Boolean.new.cast(attrs[:only_24h]) == true,
-      'campaign_tag' => unique_tag(self.class.normalize_tag(attrs[:campaign_tag].presence || title)),
+      'campaign_tag' => self.class.normalize_tag(attrs[:campaign_tag].presence || title),
       'sent_count' => 0, 'failed_count' => 0, 'sender_id' => user.id, 'created_at' => Time.current.iso8601
     }
-  end
-
-  # Attribution groups by tag, so two campaigns never share one: suffix -2, -3… when taken.
-  def unique_tag(base)
-    return base unless @taken_tags.include?(base)
-
-    (2..).each do |n|
-      candidate = "#{base.first(46)}-#{n}"
-      return candidate unless @taken_tags.include?(candidate)
-    end
   end
 
   def presence_and_length!(value, field_label, max_length)
