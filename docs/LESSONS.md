@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B58 (2026-11-20): QA trên trình duyệt chạy nhầm bundle cũ.**
+  - Triệu chứng: localhost:3005 không có checklist, tour, banner dù code đã gộp; agent QA phải tự build bundle phụ.
+  - Nguyên nhân: rails chạy với `KCHAT_VITE_HOST=localhost` (mặc định compose) và không có container `vite`, nên phục vụ `public/vite-dev` build từ hôm trước.
+  - Quy tắc: stack dev đặt `KCHAT_VITE_HOST=vite` trong `.env` và luôn bật container `vite`. Trước khi QA, kiểm trang tải `vite-dev/@vite/client` (không phải `vite-dev/assets/*.js` có hash) hoặc so thời điểm build với HEAD.
 - **B95 (2026-11-20): Dòng hệ thống trong chat hiện "Assigned to … by Default Policy" dù shop dùng tiếng Việt.**
   - Nguyên nhân: nội dung activity được dịch lúc callback của `Conversation` chạy; phân công tự động và các job chạy ở locale mặc định (en), không theo `account.locale`. Thêm vào đó `vi.yml` (Crowdin) để nguyên tiếng Anh nhiều khóa (`auto_assignment.*`, `automation.system_name`, `conversations.activity.captain.*`…).
   - Quy tắc: `Kchat::ActivityLocale` (prepend vào `Conversation`) bọc `create_activity` và `process_assignment_activities` bằng `I18n.with_locale(account.locale)`; bản dịch bổ sung đặt ở `config/locales/vi_kalo_activity.yml` (tên file phải xếp sau `vi.yml`), không sửa `vi.yml`. Dòng activity mới phải có spec chạy dưới `I18n.with_locale(:en)` cho shop `vi`.
