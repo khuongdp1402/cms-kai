@@ -62,6 +62,22 @@ describe('KaloAssistantButton visibility', () => {
     expect(drawer(wrapper).exists()).toBe(false);
   });
 
+  it('uses the rail item box and icon size (44px box, 24px icon when collapsed)', async () => {
+    const collapsed = await mountButton({ configured: true });
+    expect(button(collapsed).classes()).toEqual(
+      expect.arrayContaining(['size-11', 'rounded-xl'])
+    );
+    expect(button(collapsed).find('svg').classes()).toContain('size-6');
+    const expanded = await mountButton({
+      configured: true,
+      props: { isExpanded: true },
+    });
+    expect(button(expanded).classes()).toEqual(
+      expect.arrayContaining(['px-3', 'py-2', 'text-sm', 'font-semibold'])
+    );
+    expect(button(expanded).text()).toBe('Trợ lý AI');
+  });
+
   it('renders a labelled row for the mobile sheet', async () => {
     const wrapper = await mountButton({
       configured: true,

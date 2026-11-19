@@ -54,15 +54,20 @@ watch(accountId, load, { immediate: true });
         type="button"
         data-test-id="kalo-assistant-button"
         :aria-label="t('KALO_ASSISTANT.BUTTON')"
-        class="grid rounded-lg place-content-center hover:bg-n-alpha-1 text-n-slate-11"
+        class="grid transition-colors duration-150 rounded-xl place-content-center text-n-slate-10 hover:bg-n-alpha-2 hover:text-n-slate-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
         :class="
           isExpanded
-            ? 'w-full h-8 px-2 !flex items-center justify-start gap-2 text-xs font-medium'
-            : 'size-8'
+            ? 'w-full px-3 py-2 !flex items-center justify-start gap-2.5 text-sm font-semibold'
+            : 'size-11'
         "
         @click="isOpen = true"
       >
-        <KaloIcon name="spark" class="size-5 shrink-0" />
+        <!-- Same box and icon size as the rail items (KaloRail). -->
+        <KaloIcon
+          name="spark"
+          class="shrink-0"
+          :class="isExpanded ? 'size-5' : 'size-6'"
+        />
         <span v-if="isExpanded" class="truncate">
           {{ t('KALO_ASSISTANT.BUTTON') }}
         </span>

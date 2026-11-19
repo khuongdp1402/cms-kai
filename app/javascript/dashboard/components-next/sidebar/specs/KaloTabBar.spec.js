@@ -38,6 +38,35 @@ describe('KaloTabBar', () => {
     expect(sheet.text()).not.toContain('Nền tảng');
   });
 
+  it('orders the Thêm sheet by spec §4: Vận hành, Tăng trưởng, then Console and Cài đặt', async () => {
+    const { router, store, i18n } = createKaloTestEnv();
+    await router.push({ name: 'home', params: { accountId: 1 } });
+    const wrapper = mount(KaloTabBar, {
+      global: {
+        plugins: [router, store, i18n],
+        stubs: { ComposeConversation: true },
+      },
+    });
+    await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
+    const sheet = wrapper.find('[data-test-id="kalo-more-sheet"]');
+    expect(
+      sheet.findAll('[data-test-id="kalo-sheet-section"]').map(s => s.text())
+    ).toEqual(['Vận hành', 'Tăng trưởng']);
+    const order = sheet
+      .findAll('[data-test-id^="kalo-sheet-"]')
+      .map(el => el.attributes('data-test-id'))
+      .filter(id => id !== 'kalo-sheet-section');
+    expect(order.slice(0, 7)).toEqual([
+      'kalo-sheet-item-overview',
+      'kalo-sheet-item-comments',
+      'kalo-sheet-item-campaigns',
+      'kalo-sheet-item-brand',
+      'kalo-sheet-item-console',
+      'kalo-sheet-item-settings',
+      'kalo-sheet-notifications',
+    ]);
+  });
+
   it('the Thêm sheet links to Nền tảng for SuperAdmin', async () => {
     const { router, store, i18n } = createKaloTestEnv({
       userType: 'SuperAdmin',

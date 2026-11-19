@@ -42,8 +42,8 @@ const showAccountMenu = computed(
 const currentUser = useMapGetter('getCurrentUser');
 const accountLinks = computed(() => [
   { key: 'notifications', icon: 'bell', name: 'notifications_index' },
-  { key: 'search', icon: 'search', name: 'search' },
   { key: 'profile', icon: 'user', name: 'profile_settings_index' },
+  { key: 'search', icon: 'search', name: 'search' },
   // Platform pages (/app/platform) for the platform owner only.
   ...(currentUser.value?.type === 'SuperAdmin'
     ? [
@@ -69,6 +69,22 @@ const primaryItems = computed(() =>
 );
 const sheetItems = computed(() =>
   items.value.filter(item => !PRIMARY_KEYS.includes(item.key))
+);
+// Sheet order follows spec §4: Vận hành, Tăng trưởng (with their section
+// titles), then the footer group (Trợ lý AI, Console, Cài đặt) before the
+// personal links (Thông báo, Tìm kiếm, Hồ sơ).
+const sheetGroups = computed(() =>
+  ['KALO_NAV.SECTIONS.OPERATIONS', 'KALO_NAV.SECTIONS.GROWTH']
+    .map(labelKey => ({
+      labelKey,
+      items: sheetItems.value.filter(
+        item => !item.footer && item.sectionKey === labelKey
+      ),
+    }))
+    .filter(group => group.items.length)
+);
+const sheetFooterItems = computed(() =>
+  sheetItems.value.filter(item => item.footer)
 );
 const isMoreActive = computed(() => sheetItems.value.some(i => i.active));
 
@@ -99,10 +115,39 @@ watch(
     >
       <div class="flex flex-col -mx-2 -my-2">
         <KaloGuideNav variant="sheet" />
+        <template v-for="group in sheetGroups" :key="group.labelKey">
+          <p
+            data-test-id="kalo-sheet-section"
+            class="px-3 pt-3 pb-1 mb-0 text-[11px] font-bold tracking-wide uppercase text-n-slate-10"
+          >
+            {{ t(group.labelKey) }}
+          </p>
+          <router-link
+            v-for="item in group.items"
+            :key="item.key"
+            :to="item.to"
+            :data-test-id="`kalo-sheet-item-${item.key}`"
+            :aria-current="item.active ? 'page' : undefined"
+            :class="[
+              sheetRowClass,
+              item.active
+                ? 'bg-n-blue-3 text-n-blue-11'
+                : 'text-n-slate-12 hover:bg-n-alpha-2',
+            ]"
+          >
+            <span :class="sheetIconClass">
+              <KaloIcon :name="item.icon" class="size-5" />
+            </span>
+            {{ t(item.labelKey) }}
+          </router-link>
+        </template>
+        <div class="mt-2 border-t border-n-weak" />
+        <KaloAssistantButton variant="sheet" />
         <router-link
-          v-for="item in sheetItems"
+          v-for="item in sheetFooterItems"
           :key="item.key"
           :to="item.to"
+          :data-test-id="`kalo-sheet-item-${item.key}`"
           :aria-current="item.active ? 'page' : undefined"
           :class="[
             sheetRowClass,
@@ -116,7 +161,6 @@ watch(
           </span>
           {{ t(item.labelKey) }}
         </router-link>
-        <KaloAssistantButton variant="sheet" />
         <router-link
           v-for="link in accountLinks"
           :key="link.key"
