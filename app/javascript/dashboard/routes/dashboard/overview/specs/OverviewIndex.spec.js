@@ -133,6 +133,34 @@ describe('OverviewIndex', () => {
     ).toBe(true);
   });
 
+  // Guided UX §2: KaloPage header (one primary action) and KaloCard groups.
+  it('sits in the shared page frame with cards and one primary action', async () => {
+    reportsAPI.qualityOverview.mockResolvedValue({
+      data: {
+        kpis: {},
+        sku_quality: [],
+        channel_quality: [],
+        action_queue: [],
+      },
+    });
+    reportsAPI.brandsOverview.mockResolvedValue({ data: { brands: [] } });
+    const wrapper = await mountOverview();
+    await flushPromises();
+    expect(wrapper.find('[data-test-id="kalo-page-header"] h1').exists()).toBe(
+      true
+    );
+    expect(
+      wrapper.find('[data-test-id="kalo-page-description"]').text()
+    ).toBeTruthy();
+    expect(
+      wrapper.findAll('[data-test-id="kalo-card"]').length
+    ).toBeGreaterThanOrEqual(3);
+    const primaries = wrapper
+      .find('[data-test-id="kalo-page-actions"]')
+      .findAll('.bg-n-brand');
+    expect(primaries).toHaveLength(1);
+  });
+
   it('reloads data when range tab is changed and shows error state on failure', async () => {
     reportsAPI.qualityOverview
       .mockResolvedValueOnce({

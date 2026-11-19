@@ -92,10 +92,12 @@ const sections = computed(() =>
           <button
             type="button"
             data-test-id="kalo-new-conversation"
-            class="flex items-center gap-2 w-full px-2 py-1.5 text-sm font-medium rounded-lg text-n-blue-11 hover:bg-n-alpha-2"
+            class="flex items-center gap-1.5 w-full px-2 py-1.5 text-[13px] font-semibold rounded-lg text-n-blue-11 hover:bg-n-alpha-2"
           >
             <KaloIcon name="plus" class="size-4" />
-            {{ t('KALO_NAV.FILTERS.NEW_CONVERSATION') }}
+            <span class="truncate">
+              {{ t('KALO_NAV.FILTERS.NEW_CONVERSATION') }}
+            </span>
           </button>
         </template>
       </ComposeConversation>

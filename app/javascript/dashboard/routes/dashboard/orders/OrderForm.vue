@@ -89,14 +89,18 @@ const submit = async () => {
 onMounted(() => store.dispatch('kchatProducts/fetch', { active: true }));
 
 const inputClass =
-  'w-full px-3 py-2 mb-0 text-sm border rounded-lg outline-none border-n-weak bg-n-solid-1 text-n-slate-12 focus:border-woot-500';
+  'w-full px-3 py-2 mb-0 text-sm border rounded-lg outline-none border-n-strong bg-n-solid-1 text-n-slate-12 focus:border-woot-500';
 // The global select arrow (_base.scss) is positioned only under [dir] and
 // relative to the content box, which px-3 shrinks: pin it to the right here.
 const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.75rem_center]`;
 </script>
 
 <template>
-  <form class="flex flex-col gap-4" @submit.prevent="submit">
+  <form
+    class="flex flex-col gap-4"
+    :class="{ 'flex-1': inDrawer }"
+    @submit.prevent="submit"
+  >
     <h2 v-if="!inDrawer" class="text-lg font-extrabold text-n-slate-12">
       {{ t('KALO_ORDERS.FORM.TITLE') }}
     </h2>
