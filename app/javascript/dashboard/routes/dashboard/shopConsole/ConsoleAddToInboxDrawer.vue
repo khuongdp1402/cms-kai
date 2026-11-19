@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useAlert } from 'dashboard/composables';
@@ -31,22 +31,35 @@ const toggle = inboxId => {
 };
 const canSave = computed(() => selected.value.length > 0 && !isSaving.value);
 
-onMounted(async () => {
+// Memberships are read per inbox; re-read when the inbox list (re)loads so a
+// drawer opened before inboxes/get finished still marks existing channels.
+let latestLoad = 0;
+const loadMemberships = async list => {
+  latestLoad += 1;
+  const request = latestLoad;
+  state.value = 'loading';
   try {
     const results = await Promise.all(
-      inboxes.value.map(inbox => InboxMembersAPI.show(inbox.id))
+      list.map(inbox => InboxMembersAPI.show(inbox.id))
     );
+    if (request !== latestLoad) return;
     const ids = new Set();
     results.forEach(({ data }, index) => {
       if ((data?.payload || []).some(member => member.id === props.agent.id))
-        ids.add(inboxes.value[index].id);
+        ids.add(list[index].id);
     });
     memberOf.value = ids;
     state.value = 'ready';
   } catch {
-    state.value = 'error';
+    if (request === latestLoad) state.value = 'error';
   }
-});
+};
+
+watch(
+  () => inboxes.value.map(inbox => inbox.id).join(','),
+  () => loadMemberships(inboxes.value),
+  { immediate: true }
+);
 
 const save = async () => {
   if (!canSave.value) return;
