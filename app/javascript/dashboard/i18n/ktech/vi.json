@@ -6131,5 +6131,29 @@
         "EMPTY": "Chưa có lời chào nào. Thêm một lời chào để chào khách khi họ mở website."
       }
     }
+  },
+  "MFA_VERIFICATION": {
+    "TITLE": "Xác thực hai lớp",
+    "DESCRIPTION": "Nhập mã xác thực để tiếp tục",
+    "AUTHENTICATOR_APP": "Ứng dụng xác thực",
+    "BACKUP_CODE": "Mã dự phòng",
+    "ENTER_OTP_CODE": "Nhập mã 6 số trong ứng dụng xác thực",
+    "ENTER_BACKUP_CODE": "Nhập một mã dự phòng của bạn",
+    "VERIFY_BUTTON": "Xác thực",
+    "TRY_ANOTHER_METHOD": "Dùng cách xác thực khác",
+    "CANCEL_LOGIN": "Hủy và quay lại đăng nhập",
+    "HELP_TEXT": "Không đăng nhập được?",
+    "LEARN_MORE": "Tìm hiểu về xác thực hai lớp",
+    "VERIFICATION_FAILED": "Xác thực chưa đúng, bạn thử lại nhé.",
+    "HELP_MODAL": {
+      "TITLE": "Trợ giúp xác thực hai lớp",
+      "AUTHENTICATOR_TITLE": "Dùng ứng dụng xác thực",
+      "AUTHENTICATOR_DESC": "Mở ứng dụng xác thực (Google Authenticator, Authy…) và nhập mã 6 số đang hiện cho tài khoản của bạn.",
+      "BACKUP_TITLE": "Dùng mã dự phòng",
+      "BACKUP_DESC": "Nếu không mở được ứng dụng xác thực, hãy dùng một mã dự phòng bạn đã lưu khi bật xác thực hai lớp. Mỗi mã chỉ dùng được một lần.",
+      "CONTACT_TITLE": "Cần thêm trợ giúp?",
+      "CONTACT_DESC_CLOUD": "Nếu mất cả ứng dụng xác thực lẫn mã dự phòng, hãy liên hệ bộ phận hỗ trợ Kalo.",
+      "CONTACT_DESC_SELF_HOSTED": "Nếu mất cả ứng dụng xác thực lẫn mã dự phòng, hãy liên hệ quản trị viên để được hỗ trợ."
+    }
   }
 }

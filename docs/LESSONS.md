@@ -12,6 +12,19 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B95 (2026-11-20): Dòng hệ thống trong chat hiện "Assigned to … by Default Policy" dù shop dùng tiếng Việt.**
+  - Nguyên nhân: nội dung activity được dịch lúc callback của `Conversation` chạy; phân công tự động và các job chạy ở locale mặc định (en), không theo `account.locale`. Thêm vào đó `vi.yml` (Crowdin) để nguyên tiếng Anh nhiều khóa (`auto_assignment.*`, `automation.system_name`, `conversations.activity.captain.*`…).
+  - Quy tắc: `Kchat::ActivityLocale` (prepend vào `Conversation`) bọc `create_activity` và `process_assignment_activities` bằng `I18n.with_locale(account.locale)`; bản dịch bổ sung đặt ở `config/locales/vi_kalo_activity.yml` (tên file phải xếp sau `vi.yml`), không sửa `vi.yml`. Dòng activity mới phải có spec chạy dưới `I18n.with_locale(:en)` cho shop `vi`.
+- **B96 (2026-11-20): Chụp màn hình stack dev bằng `page.goto` cho từng trang làm hàng loạt asset `/vite-dev/*` trả 500 và trang trắng.**
+  - Nguyên nhân: mỗi lần tải lại cả trang, trình duyệt xin lại toàn bộ module dev qua proxy của rails; vite chưa biên dịch kịp nên proxy hết giờ.
+  - Quy tắc: đăng nhập một lần rồi chuyển trang bằng router của app (`document.querySelector('#app').__vue_app__.config.globalProperties.$router.push(url)`), như `tmp/t6/shoot.mjs`. Lỗi `/vite-dev` 500 lúc lượt đầu là lỗi dev, không phải lỗi code.
+- **B97 (2026-11-20): Bọc trang cài đặt vào `SettingsLayout` làm spec `shallowMount` mất nội dung trang.**
+  - Nguyên nhân: `shallowMount` thay `SettingsLayout` bằng stub không render slot, nên các card trong trang (ví dụ phím gửi tin ở Hồ sơ) biến mất khỏi spec.
+  - Quy tắc: khi đổi khung của trang, stub khung bằng template có slot (`<div><slot name="header" /><slot /></div>`). Dải header dính chỉ trải hết chiều ngang khi nằm ngoài vùng có padding: `SettingsWrapper` không còn padding, `SettingsLayout` tự căn giữa thân trang.
+- **B98 (2026-11-20): Trang trống của upstream (chiến dịch website) hiện thẻ mẫu tiếng Anh mờ ("Chatbot Assistance") và thêm một nút "Tạo chiến dịch" thứ hai.**
+  - Nguyên nhân: `LiveChatCampaignEmptyState` vẽ dữ liệu mẫu cố định trong component; dịch khóa i18n không gỡ được.
+  - Quy tắc: không nhúng trang upstream có trang trống dạng mẫu vào màn Kalo; viết section Kalo (`WebsiteCampaignsCard`) dùng lại list/form của upstream, một câu tiếng Việt và một nút phụ. Mỗi màn chỉ một nút chính.
+
 - **B80 (2026-11-20): Component tự chứa gắn vào rail làm vỡ 40 spec sidebar có sẵn.**
   - Triệu chứng: thêm `KaloGuideNav` vào `KaloRail`/`KaloTabBar` thì mọi spec rail báo `Cannot read properties of undefined (reading 'value')` ở `useAdmin`.
   - Nguyên nhân: `useAdmin` dùng `useStoreGetters()`, chỉ map các getter có trong store; store tối giản của spec nav không có `getCurrentRole` nên `getters.getCurrentRole` là `undefined`.
