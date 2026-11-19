@@ -160,7 +160,9 @@ const allowedMenuItems = computed(() => {
         </div>
       </button>
     </template>
-    <DropdownBody class="bottom-12 z-50 mb-2 w-80 ltr:left-0 rtl:right-0">
+    <DropdownBody
+      class="bottom-12 z-50 mb-2 w-72 sm:w-80 max-w-[calc(100vw-2rem)] ltr:left-0 rtl:right-0"
+    >
       <SidebarProfileMenuStatus />
       <DropdownSeparator />
       <template v-for="item in allowedMenuItems" :key="item.label">

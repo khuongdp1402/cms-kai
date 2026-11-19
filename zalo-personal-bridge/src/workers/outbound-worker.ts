@@ -4,6 +4,9 @@ import { TempWorkspace } from '../media/temp-workspace.js';
 import { MediaFetcher } from '../media/media-fetcher.js';
 import { OutboundCommandV1 } from '../contracts/outbound-command-v1.js';
 import { logger } from '../telemetry/logger.js';
+import { SendRateLimiter } from './rate-limiter.js';
+
+const QUEUE_BATCH_LIMIT = 25;
 
 export class OutboundWorker {
   private isRunning = false;
@@ -12,7 +15,8 @@ export class OutboundWorker {
   constructor(
     private db: Database,
     private sessionManager: SessionManager,
-    private podId: string
+    private podId: string,
+    private rateLimiter: SendRateLimiter = new SendRateLimiter()
   ) {}
 
   start(): void {
@@ -25,6 +29,11 @@ export class OutboundWorker {
   }
 
   async processQueue(): Promise<void> {
+    if (!this.rateLimiter.canSendGlobal()) {
+      logger.warn({ pod_id: this.podId }, 'Global Zalo outbound rate limit reached; deferring poll');
+      return;
+    }
+
     try {
       // Find queued outbound deliveries belonging to integrations owned by this pod
       const res = await this.db.query(`
@@ -35,13 +44,26 @@ export class OutboundWorker {
           AND l.pod_id = $1
           AND l.lease_until > NOW()
         ORDER BY d.created_at ASC
-        LIMIT 5
+        LIMIT $2
         FOR UPDATE OF d SKIP LOCKED
-      `, [this.podId]);
+      `, [this.podId, QUEUE_BATCH_LIMIT]);
 
       for (const row of res.rows) {
+        if (!this.rateLimiter.canSendGlobal()) {
+          logger.warn({ pod_id: this.podId }, 'Global Zalo outbound rate limit reached mid-batch');
+          break;
+        }
+        if (!this.rateLimiter.tryAcquire(row.integration_id)) {
+          logger.debug(
+            { integration_id: row.integration_id, delivery_id: row.delivery_id },
+            'Per-account Zalo outbound rate limit reached; leaving delivery queued'
+          );
+          continue;
+        }
         await this.executeDelivery(row);
       }
+
+      this.rateLimiter.prune();
     } catch {
       // Queue processing error
     }

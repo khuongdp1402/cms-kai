@@ -21,8 +21,17 @@ vi:
       instance_status: Tình trạng hệ thống
       push_diagnostics: Chẩn đoán thông báo đẩy
       sidekiq: Tác vụ nền (Sidekiq)
+      console: Bảng điều hành gói cước
+      mail_inspector: Hộp thư kiểm thử
       agent_dashboard: Về ứng dụng Kalo
       logout: Đăng xuất
+    kpi:
+      total_accounts: Tổng tài khoản shop
+      active_accounts: Đang hoạt động
+      total_users: Tổng người dùng
+      total_conversations: Tổng hội thoại
+      total_records: Tổng bản ghi
+      shown_records: Đang hiển thị trang này
     actions:
       new: Thêm mới
       edit: Sửa
@@ -305,3 +314,10 @@ vi:
     captain_model_overrides:
       features:
         conversation_faq_matching: Đối chiếu FAQ hội thoại
+  views:
+    pagination:
+      first: "« Đầu"
+      last: "Cuối »"
+      previous: "‹ Trước"
+      next: "Sau ›"
+      truncate: "…"

@@ -293,7 +293,7 @@ defineExpose({
   >
     <template #filter>
       <div
-        class="absolute mt-1 ltr:-right-52 rtl:-left-52 sm:ltr:right-0 sm:rtl:left-0 top-full"
+        class="absolute z-40 mt-1 max-sm:ltr:-right-2 max-sm:rtl:-left-2 sm:ltr:right-0 sm:rtl:left-0 top-full"
       >
         <ContactsFilter
           v-if="showFiltersModal"

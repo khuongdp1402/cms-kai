@@ -1,10 +1,35 @@
 import { mount, flushPromises } from '@vue/test-utils';
 import MarketingIndex from '../MarketingIndex.vue';
 import contentIdeasAPI from 'dashboard/api/kchat/contentIdeas';
+import broadcastsAPI from 'dashboard/api/kchat/broadcasts';
+import commentRulesAPI from 'dashboard/api/kchat/commentRules';
 import { createPageTestEnv } from '../../reports/specs/kaloPageTestEnv';
 
+const alertMock = vi.hoisted(() => vi.fn());
+vi.mock('dashboard/composables', () => ({ useAlert: alertMock }));
 vi.mock('dashboard/api/kchat/contentIdeas', () => ({
-  default: { repurpose: vi.fn(), decide: vi.fn() },
+  default: {
+    overview: vi.fn(),
+    saveProfile: vi.fn(),
+    repurpose: vi.fn(),
+    decide: vi.fn(),
+    updateAngle: vi.fn(),
+    saveCalendarItem: vi.fn(),
+    deleteCalendarItem: vi.fn(),
+  },
+}));
+vi.mock('dashboard/api/kchat/broadcasts', () => ({
+  default: {
+    list: vi.fn(),
+    preview: vi.fn(),
+    create: vi.fn(),
+  },
+}));
+vi.mock('dashboard/api/kchat/commentRules', () => ({
+  default: {
+    get: vi.fn(),
+    update: vi.fn(),
+  },
 }));
 
 const job = {
@@ -24,7 +49,24 @@ const mountPage = async (role = 'administrator') => {
     role,
     modules: {
       campaigns: { namespaced: true, actions: { get } },
-      labels: { namespaced: true, actions: { get: vi.fn() } },
+      labels: {
+        namespaced: true,
+        getters: { getLabels: () => [{ title: 'vip' }] },
+        actions: { get: vi.fn() },
+      },
+      inboxes: {
+        namespaced: true,
+        getters: {
+          getInboxes: () => [
+            {
+              id: 10,
+              name: 'Zalo Shop',
+              channel_type: 'Channel::ZaloPersonal',
+            },
+          ],
+        },
+        actions: { get: vi.fn() },
+      },
     },
   });
   await router.push({ name: 'kalo_orders', params: { accountId: 1 } });
@@ -45,8 +87,46 @@ const tab = (wrapper, label) =>
 
 describe('MarketingIndex', () => {
   beforeEach(() => {
+    alertMock.mockReset();
+    contentIdeasAPI.overview.mockReset();
+    contentIdeasAPI.overview.mockResolvedValue({
+      data: {
+        brand_profile: {},
+        ai: { configured: true, default_model: 'gpt-5' },
+        jobs: [],
+        calendar: [],
+      },
+    });
+    contentIdeasAPI.saveProfile.mockReset();
     contentIdeasAPI.repurpose.mockReset();
     contentIdeasAPI.decide.mockReset();
+    contentIdeasAPI.updateAngle.mockReset();
+    contentIdeasAPI.saveCalendarItem.mockReset();
+    contentIdeasAPI.deleteCalendarItem.mockReset();
+    broadcastsAPI.list.mockReset();
+    broadcastsAPI.list.mockResolvedValue({ data: { broadcasts: [] } });
+    broadcastsAPI.preview.mockReset();
+    broadcastsAPI.preview.mockResolvedValue({
+      data: {
+        eligible_count: 5,
+        skipped_24h_count: 0,
+        requires_24h_window: false,
+      },
+    });
+    broadcastsAPI.create.mockReset();
+    commentRulesAPI.get.mockReset();
+    commentRulesAPI.get.mockResolvedValue({
+      data: {
+        rules: {
+          enabled: true,
+          auto_hide_phone: true,
+          hide_keywords: ['sỉ'],
+          auto_private_reply: false,
+          private_reply_template: 'Chào {{name}}',
+        },
+      },
+    });
+    commentRulesAPI.update.mockReset();
   });
 
   it('tab Chiến dịch renders the existing campaigns list; tab Ý tưởng nội dung submits the topic and lists three angles with Duyệt and Bỏ qua buttons', async () => {
@@ -73,10 +153,10 @@ describe('MarketingIndex', () => {
 
     await approve.trigger('click');
     await flushPromises();
-    expect(contentIdeasAPI.decide).toHaveBeenCalledWith(11, 'approve');
+    expect(contentIdeasAPI.decide).toHaveBeenCalledWith(11, 'approve', 0);
     await skip.trigger('click');
     await flushPromises();
-    expect(contentIdeasAPI.decide).toHaveBeenCalledWith(11, 'reject');
+    expect(contentIdeasAPI.decide).toHaveBeenCalledWith(11, 'reject', 1);
   });
 
   it('AI not configured shows one sentence, not an error trace', async () => {
@@ -188,6 +268,221 @@ describe('MarketingIndex', () => {
     expect(wrapper.find('[data-test="renew-link"]').exists()).toBe(false);
     expect(wrapper.find('[data-test="renew-ask-admin"]').text()).toBe(
       'Hãy nhờ quản trị viên gia hạn.'
+    );
+  });
+
+  it('loads saved idea history from overview and lets the user switch topics', async () => {
+    contentIdeasAPI.overview.mockResolvedValue({
+      data: {
+        brand_profile: {},
+        ai: { configured: false },
+        jobs: [
+          job,
+          {
+            id: 12,
+            topic: 'quà 20/10',
+            status: 'pending',
+            angles: [
+              {
+                angle: 'Tặng mẹ',
+                hook: 'Hook Q1',
+                body: 'Body Q1',
+                cta: 'Inbox',
+                status: 'approved',
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const { wrapper } = await mountPage();
+    await tab(wrapper, 'Ý tưởng nội dung').trigger('click');
+    await flushPromises();
+
+    const historyBtns = wrapper.findAll('[data-test="history-topic"]');
+    expect(historyBtns).toHaveLength(2);
+    expect(wrapper.text()).toContain('Hook A');
+
+    await historyBtns[1].trigger('click');
+    await flushPromises();
+    expect(wrapper.text()).toContain('Hook Q1');
+    expect(wrapper.text()).toContain('Đã duyệt');
+  });
+
+  it('brand profile tab loads existing profile, saves for admin, and locks inputs for agent', async () => {
+    contentIdeasAPI.overview.mockResolvedValue({
+      data: {
+        brand_profile: {
+          brand_name: 'Kalo Candles',
+          positioning: 'Nến sạch',
+          hard_bans: ['rẻ nhất', '100%'],
+        },
+        ai: { configured: true, default_model: 'kalo-ai' },
+        jobs: [],
+      },
+    });
+    contentIdeasAPI.saveProfile.mockResolvedValue({ data: {} });
+
+    const { wrapper } = await mountPage('administrator');
+    await tab(wrapper, 'Hồ sơ thương hiệu').trigger('click');
+    await flushPromises();
+
+    expect(wrapper.find('[data-test="brand-ai-status"]').text()).toContain(
+      'kalo-ai'
+    );
+    expect(wrapper.find('[data-test="brand-name"]').element.value).toBe(
+      'Kalo Candles'
+    );
+    expect(wrapper.find('[data-test="brand-hard-bans"]').element.value).toBe(
+      'rẻ nhất, 100%'
+    );
+
+    await wrapper.find('[data-test="brand-name"]').setValue('Kalo Studio');
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+    expect(contentIdeasAPI.saveProfile).toHaveBeenCalledWith(
+      expect.objectContaining({ brand_name: 'Kalo Studio' })
+    );
+    expect(alertMock).toHaveBeenCalledWith('Đã lưu hồ sơ thương hiệu');
+
+    const agentView = await mountPage('agent');
+    await tab(agentView.wrapper, 'Hồ sơ thương hiệu').trigger('click');
+    await flushPromises();
+    expect(
+      agentView.wrapper.find('[data-test="brand-name"]').attributes('disabled')
+    ).toBeDefined();
+    expect(agentView.wrapper.find('[data-test="brand-save"]').exists()).toBe(
+      false
+    );
+  });
+
+  it('edits an angle script inline and schedules it onto Content Calendar', async () => {
+    const updatedJob = {
+      ...job,
+      angles: [
+        { ...job.angles[0], hook: 'Hook Mới' },
+        job.angles[1],
+        job.angles[2],
+      ],
+    };
+    contentIdeasAPI.overview.mockResolvedValue({
+      data: {
+        brand_profile: {},
+        ai: { configured: true },
+        jobs: [job],
+        calendar: [],
+      },
+    });
+    contentIdeasAPI.updateAngle.mockResolvedValue({ data: updatedJob });
+    contentIdeasAPI.saveCalendarItem.mockResolvedValue({
+      data: { item: { id: 'cal-1', title: 'nến thơm — Câu chuyện' } },
+    });
+
+    const { wrapper } = await mountPage();
+    await tab(wrapper, 'Ý tưởng nội dung').trigger('click');
+    await flushPromises();
+
+    await wrapper.find('[data-test="edit-angle"]').trigger('click');
+    await wrapper.find('[data-test="edit-hook-input"]').setValue('Hook Mới');
+    await wrapper.find('[data-test="save-angle-edit"]').trigger('click');
+    await flushPromises();
+    expect(contentIdeasAPI.updateAngle).toHaveBeenCalledWith(11, 0, {
+      hook: 'Hook Mới',
+      body: 'Body A',
+      cta: 'Nhắn Zalo',
+    });
+
+    await wrapper.find('[data-test="schedule-angle"]').trigger('click');
+    await wrapper.find('[data-test="confirm-schedule-angle"]').trigger('click');
+    await flushPromises();
+    expect(contentIdeasAPI.saveCalendarItem).toHaveBeenCalledWith(
+      expect.objectContaining({
+        channel: 'tiktok',
+        status: 'scheduled',
+        source_job_id: 11,
+      })
+    );
+  });
+
+  it('manages Content Calendar items and Comment Automation rules', async () => {
+    contentIdeasAPI.overview.mockResolvedValue({
+      data: {
+        brand_profile: {},
+        ai: { configured: true },
+        jobs: [],
+        calendar: [
+          {
+            id: 'c1',
+            title: 'Bài Tết 2027',
+            channel: 'facebook',
+            status: 'scheduled',
+            scheduled_for: '2026-12-01',
+          },
+        ],
+      },
+    });
+    contentIdeasAPI.deleteCalendarItem.mockResolvedValue({
+      data: { deleted: 'c1' },
+    });
+    commentRulesAPI.update.mockResolvedValue({ data: {} });
+
+    const { wrapper } = await mountPage();
+    await tab(wrapper, 'Lịch nội dung').trigger('click');
+    await flushPromises();
+    expect(wrapper.findAll('[data-test="calendar-item"]')).toHaveLength(1);
+    expect(wrapper.text()).toContain('Bài Tết 2027');
+
+    await wrapper.find('[data-test="calendar-delete"]').trigger('click');
+    await flushPromises();
+    expect(contentIdeasAPI.deleteCalendarItem).toHaveBeenCalledWith('c1');
+
+    await tab(wrapper, 'Bình luận FB/IG').trigger('click');
+    await flushPromises();
+    await wrapper.find('[data-test="rules-private-reply"]').setValue(true);
+    await wrapper.find('[data-test="comment-rules-form"]').trigger('submit');
+    await flushPromises();
+    expect(commentRulesAPI.update).toHaveBeenCalledWith(
+      expect.objectContaining({ auto_private_reply: true })
+    );
+  });
+
+  it('creates an omnichannel broadcast with audience preview on Chiến dịch tab', async () => {
+    broadcastsAPI.create.mockResolvedValue({
+      data: {
+        broadcast: {
+          id: 'b1',
+          title: 'Sale Tết',
+          inbox_name: 'Zalo Shop',
+          status: 'processing',
+          eligible_count: 5,
+          sent_count: 0,
+          skipped_24h_count: 0,
+        },
+      },
+    });
+
+    const { wrapper } = await mountPage();
+    await wrapper.find('[data-test="broadcast-toggle"]').trigger('click');
+    await flushPromises();
+    expect(broadcastsAPI.preview).toHaveBeenCalled();
+
+    await wrapper.find('[data-test="broadcast-label"]').trigger('click');
+    await wrapper.find('[data-test="broadcast-title"]').setValue('Sale Tết');
+    await wrapper
+      .find('[data-test="broadcast-message"]')
+      .setValue('Chào {{name}}, ưu đãi 20%');
+    await wrapper.find('[data-test="broadcast-form"]').trigger('submit');
+    await flushPromises();
+
+    expect(broadcastsAPI.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        title: 'Sale Tết',
+        inbox_id: 10,
+        labels: ['vip'],
+      })
+    );
+    expect(wrapper.find('[data-test="broadcast-item"]').text()).toContain(
+      'Sale Tết'
     );
   });
 });

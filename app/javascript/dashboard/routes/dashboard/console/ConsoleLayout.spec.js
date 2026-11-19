@@ -34,4 +34,22 @@ describe('ConsoleLayout', () => {
     await button.trigger('click');
     expect(Auth.logout).toHaveBeenCalledTimes(1);
   });
+
+  it('includes the Mail Inspector navigation link and Super Admin shortcut', () => {
+    const wrapper = mountLayout();
+    expect(wrapper.text()).toContain('Hộp thư hệ thống');
+    const superAdminLink = wrapper.find('[data-testid="open-super-admin"]');
+    expect(superAdminLink.text()).toBe('Quản trị hệ thống');
+    expect(superAdminLink.attributes('href')).toBe('/super_admin');
+  });
+
+  it('toggles sidebar collapsed state on desktop toggle click', async () => {
+    const wrapper = mountLayout();
+    const aside = wrapper.find('[data-testid="console-sidebar"]');
+    expect(aside.attributes('data-collapsed')).toBe('false');
+    await wrapper
+      .find('[data-testid="console-sidebar-toggle"]')
+      .trigger('click');
+    expect(aside.attributes('data-collapsed')).toBe('true');
+  });
 });

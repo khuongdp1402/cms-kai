@@ -234,11 +234,14 @@ describe('PaymentSettingsPage', () => {
       'blob:preview'
     );
 
+    // Two quick edits collapse into one request (counted from here, because a
+    // slow mount can settle the initial load in one or two watcher runs).
+    const callsBefore = paymentSettingsAPI.previewQr.mock.calls.length;
     await fill(wrapper, 'account-number', '0987654321');
     await fill(wrapper, 'account-number', '0987654322');
     vi.advanceTimersByTime(500);
     await flushPromises();
-    expect(paymentSettingsAPI.previewQr).toHaveBeenCalledTimes(2);
+    expect(paymentSettingsAPI.previewQr).toHaveBeenCalledTimes(callsBefore + 1);
     expect(paymentSettingsAPI.previewQr).toHaveBeenLastCalledWith({
       bankBin: '970436',
       accountNumber: '0987654322',

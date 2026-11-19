@@ -4,7 +4,11 @@ import reportsAPI from 'dashboard/api/kchat/reports';
 import { createPageTestEnv } from './kaloPageTestEnv';
 
 vi.mock('dashboard/api/kchat/reports', () => ({
-  default: { summary: vi.fn() },
+  default: {
+    summary: vi.fn(),
+    funnel: vi.fn(),
+    brandsOverview: vi.fn(),
+  },
 }));
 
 const summary = (overrides = {}) => ({
@@ -40,6 +44,10 @@ describe('ReportsIndex', () => {
   beforeEach(() => {
     reportsAPI.summary.mockReset();
     reportsAPI.summary.mockResolvedValue(summary());
+    reportsAPI.funnel.mockReset();
+    reportsAPI.funnel.mockResolvedValue({ data: null });
+    reportsAPI.brandsOverview.mockReset();
+    reportsAPI.brandsOverview.mockResolvedValue({ data: { brands: [] } });
   });
 
   it('switching Hôm nay, 7 ngày, Tháng này refetches with range today, 7d, month', async () => {
@@ -107,5 +115,82 @@ describe('ReportsIndex', () => {
     await flushPromises();
     expect(wrapper.text()).toContain('9.000.000đ');
     expect(wrapper.text()).not.toContain('1.234đ');
+  });
+
+  it('renders marketing funnel tables and cross-brand switcher when available', async () => {
+    reportsAPI.funnel.mockResolvedValue({
+      data: {
+        range: 'today',
+        totals: {
+          conversations_count: 10,
+          orders_count: 3,
+          conversion_pct: 30.0,
+          revenue: 1500000,
+          avg_order_value: 500000,
+        },
+        channel_funnel: [
+          {
+            channel: 'facebook_page',
+            conversations: 10,
+            orders: 3,
+            conversion_pct: 30.0,
+            revenue: 1500000,
+            avg_order_value: 500000,
+          },
+        ],
+        campaigns: [
+          {
+            campaign: 'tet_2027',
+            source: 'facebook_ads',
+            conversations: 6,
+            orders: 2,
+            conversion_pct: 33.3,
+            revenue: 1000000,
+          },
+        ],
+        agents: [
+          {
+            agent_id: 7,
+            name: 'Ngọc Mai',
+            conversations: 5,
+            orders: 2,
+            conversion_pct: 40.0,
+            revenue: 1000000,
+          },
+        ],
+      },
+    });
+    reportsAPI.brandsOverview.mockResolvedValue({
+      data: {
+        brands: [
+          {
+            id: 1,
+            name: 'Nến An Nhiên',
+            revenue: 1500000,
+            orders_count: 3,
+            waiting_messages: 2,
+          },
+          {
+            id: 2,
+            name: 'Gốm Xinh',
+            revenue: 400000,
+            orders_count: 1,
+            waiting_messages: 0,
+          },
+        ],
+      },
+    });
+
+    const wrapper = await mountPage();
+    expect(wrapper.find('[data-test="multi-brand-bar"]').exists()).toBe(true);
+    expect(wrapper.findAll('[data-test="brand-card"]')).toHaveLength(2);
+    expect(wrapper.find('[data-test="marketing-funnel"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="funnel-campaign"]').text()).toContain(
+      'tet_2027'
+    );
+    expect(wrapper.find('[data-test="funnel-agent"]').text()).toContain(
+      'Ngọc Mai'
+    );
+    expect(wrapper.text()).not.toMatch(/ROAS|MER|CAC/);
   });
 });

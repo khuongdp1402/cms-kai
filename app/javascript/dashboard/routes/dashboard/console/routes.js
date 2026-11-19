@@ -3,6 +3,7 @@ import ConsoleLayout from './ConsoleLayout.vue';
 import ConsoleOverview from './ConsoleOverview.vue';
 import ConsoleShops from './ConsoleShops.vue';
 import ConsolePayments from './ConsolePayments.vue';
+import ConsoleMailInspector from './ConsoleMailInspector.vue';
 
 const meta = { console: true };
 
@@ -30,6 +31,12 @@ export const routes = [
         name: 'kalo_console_payments',
         meta,
         component: ConsolePayments,
+      },
+      {
+        path: frontendURL('console/emails'),
+        name: 'kalo_console_emails',
+        meta,
+        component: ConsoleMailInspector,
       },
     ],
   },

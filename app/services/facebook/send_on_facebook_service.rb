@@ -6,6 +6,11 @@ class Facebook::SendOnFacebookService < Base::SendOnChannelService
   end
 
   def perform_reply
+    if social_comment_id.present?
+      send_comment_reply if message.content.present?
+      return
+    end
+
     send_message_to_facebook fb_text_message_params if message.content.present?
 
     if message.attachments.present?
@@ -17,6 +22,27 @@ class Facebook::SendOnFacebookService < Base::SendOnChannelService
     # TODO : handle specific errors or else page will get disconnected
     handle_facebook_error(e)
     Messages::StatusUpdateService.new(message, 'failed', e.message).perform
+  end
+
+  def social_comment_id
+    return nil unless conversation.additional_attributes&.dig('source_type') == 'social_comment'
+
+    conversation.additional_attributes['comment_id'].presence
+  end
+
+  def send_comment_reply
+    response = HTTParty.post(
+      "https://graph.facebook.com/v22.0/#{social_comment_id}/comments",
+      body: { message: message.outgoing_content },
+      query: { access_token: channel.page_access_token }
+    )
+    parsed = response.parsed_response.is_a?(Hash) ? response.parsed_response : {}
+    if response.success? && parsed['error'].blank?
+      message.update!(source_id: parsed['id']) if parsed['id'].present?
+    else
+      err = parsed['error'].present? ? external_error(parsed) : "HTTP #{response.code}"
+      Messages::StatusUpdateService.new(message, 'failed', err).perform
+    end
   end
 
   def send_message_to_facebook(delivery_params)

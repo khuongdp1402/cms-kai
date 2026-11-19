@@ -124,42 +124,48 @@ onMounted(() => load(1));
 </script>
 
 <template>
-  <section class="flex flex-col gap-4 p-6">
-    <div class="flex flex-wrap items-center gap-3">
-      <h1 class="text-xl font-extrabold text-console-ink">
-        {{ t('KALO_CONSOLE.SHOPS.TITLE') }}
-      </h1>
+  <section class="flex flex-col w-full gap-4 p-6 mx-auto max-w-[1360px]">
+    <header class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h1 class="text-xl font-extrabold text-console-ink">
+          {{ t('KALO_CONSOLE.SHOPS.TITLE') }}
+        </h1>
+        <p class="mt-0.5 text-sm text-console-muted">
+          {{ t('KALO_CONSOLE.SHOPS.SUBTITLE') }}
+        </p>
+      </div>
       <form
         data-testid="search-form"
-        class="flex gap-2 ml-auto"
+        class="flex gap-2"
         @submit.prevent="load(1)"
       >
         <input
           v-model="query"
           data-testid="search"
           type="search"
-          class="w-64 px-3 py-2 text-sm !bg-white !text-console-ink placeholder:!text-console-muted border rounded-xl !border-console-muted"
+          class="w-64 px-3 py-2 text-sm border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
           :placeholder="t('KALO_CONSOLE.SHOPS.SEARCH_PLACEHOLDER')"
         />
         <button
           type="submit"
-          class="px-4 py-2 text-sm font-semibold text-white rounded-xl bg-console-accent"
+          class="px-4 py-2 text-sm font-semibold text-white rounded-xl bg-console-accent hover:bg-console-sidebar"
         >
           {{ t('KALO_CONSOLE.COMMON.SEARCH') }}
         </button>
       </form>
-    </div>
+    </header>
 
     <div class="flex flex-wrap gap-2">
       <button
         v-for="tab in FILTERS"
         :key="tab.key"
+        type="button"
         data-testid="filter-tab"
-        class="px-3 py-1.5 text-sm font-semibold rounded-full"
+        class="px-3.5 py-1.5 text-sm font-semibold rounded-full transition-colors"
         :class="
           filter === tab.key
             ? 'bg-console-sidebar text-white'
-            : 'bg-white text-console-muted border border-console-line'
+            : 'bg-white text-console-muted border border-console-line hover:text-console-ink'
         "
         @click="setFilter(tab.key)"
       >
@@ -170,6 +176,7 @@ onMounted(() => load(1));
     <div v-if="failed" class="flex items-center gap-3 text-sm">
       {{ t('KALO_CONSOLE.COMMON.ERROR') }}
       <button
+        type="button"
         class="font-semibold text-console-accent"
         @click="load(meta.current_page)"
       >
@@ -181,11 +188,13 @@ onMounted(() => load(1));
       v-else
       class="overflow-x-auto bg-white border rounded-2xl border-console-line"
     >
-      <p v-if="!shops.length" class="p-4 text-sm text-console-muted">
+      <p v-if="!shops.length" class="p-5 text-sm text-console-muted">
         {{ t('KALO_CONSOLE.SHOPS.EMPTY') }}
       </p>
       <table v-else class="w-full text-sm text-left">
-        <thead class="text-console-muted">
+        <thead
+          class="text-xs font-semibold tracking-wider uppercase bg-console-bg/70 text-console-muted"
+        >
           <tr>
             <th class="px-4 py-3">
               {{ t('KALO_CONSOLE.SHOPS.COLUMNS.SHOP') }}
@@ -208,16 +217,20 @@ onMounted(() => load(1));
           <tr
             v-for="shop in shops"
             :key="shop.id"
-            class="border-t border-console-line"
+            class="transition-colors border-t border-console-line hover:bg-console-bg/50"
           >
             <td class="px-4 py-3">
-              <b>{{ shop.name }}</b>
-              <div class="text-xs text-console-muted">
+              <b class="text-console-ink">{{ shop.name }}</b>
+              <div class="text-xs text-console-muted tabular-nums">
                 {{ t('KALO_CONSOLE.SHOPS.CODE', { id: shop.id }) }}
               </div>
             </td>
-            <td class="px-4 py-3">{{ planLabel(shop.plan) }}</td>
-            <td class="px-4 py-3">{{ formatDate(shop.valid_until) }}</td>
+            <td class="px-4 py-3 text-console-ink">
+              {{ planLabel(shop.plan) }}
+            </td>
+            <td class="px-4 py-3 text-console-ink tabular-nums">
+              {{ formatDate(shop.valid_until) }}
+            </td>
             <td class="px-4 py-3">
               <ConsoleChip :tone="statusOf(shop).tone">
                 {{ statusOf(shop).text }}
@@ -228,8 +241,9 @@ onMounted(() => load(1));
                 v-if="confirming === shop.id"
                 class="flex flex-wrap items-center gap-2"
               >
-                <span>{{ confirmText(shop) }}</span>
+                <span class="text-console-ink">{{ confirmText(shop) }}</span>
                 <button
+                  type="button"
                   data-testid="confirm-lock"
                   class="px-3 py-1 font-semibold text-white rounded-lg bg-console-accent disabled:opacity-40"
                   :disabled="busy === shop.id"
@@ -238,7 +252,8 @@ onMounted(() => load(1));
                   {{ t('KALO_CONSOLE.SHOPS.CONFIRM') }}
                 </button>
                 <button
-                  class="px-3 py-1 font-semibold text-console-muted"
+                  type="button"
+                  class="px-3 py-1 font-semibold text-console-muted hover:text-console-ink"
                   @click="confirming = null"
                 >
                   {{ t('KALO_CONSOLE.COMMON.CANCEL') }}
@@ -252,17 +267,19 @@ onMounted(() => load(1));
                   :min="MIN_DAYS"
                   :max="MAX_DAYS"
                   :aria-label="t('KALO_CONSOLE.SHOPS.EXTEND_DAYS')"
-                  class="w-16 px-2 py-1 border rounded-lg !bg-white !text-console-ink !border-console-muted"
+                  class="w-16 px-2 py-1 text-center border rounded-lg !bg-white !text-console-ink border-console-line focus:border-console-soft focus:outline-none tabular-nums"
                 />
                 <button
-                  class="px-3 py-1 font-semibold border rounded-lg border-console-line text-console-accent disabled:opacity-40"
+                  type="button"
+                  class="px-3 py-1 font-semibold border rounded-lg border-console-line text-console-accent hover:bg-console-bg disabled:opacity-40"
                   :disabled="!daysValid(shop) || busy === shop.id"
                   @click="extend(shop)"
                 >
                   {{ t('KALO_CONSOLE.SHOPS.EXTEND') }}
                 </button>
                 <button
-                  class="px-3 py-1 font-semibold text-console-muted"
+                  type="button"
+                  class="px-3 py-1 font-semibold text-console-muted hover:text-console-ink"
                   @click="confirming = shop.id"
                 >
                   {{

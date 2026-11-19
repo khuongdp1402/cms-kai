@@ -22,6 +22,34 @@ class Instagram::BaseSendService < Base::SendOnChannelService
     send_message(message_params)
   end
 
+  def comment_reply_id
+    return nil unless conversation.additional_attributes&.dig('source_type') == 'social_comment'
+
+    conversation.additional_attributes['comment_id'].presence
+  end
+
+  def reply_to_comment(url:, query:)
+    response = HTTParty.post(
+      url,
+      body: { message: message.outgoing_content },
+      query: query
+    )
+    process_comment_reply_response(response)
+  end
+
+  def process_comment_reply_response(response)
+    parsed_response = response.parsed_response.is_a?(Hash) ? response.parsed_response : {}
+    if response.success? && parsed_response['error'].blank?
+      message.update!(source_id: parsed_response['id']) if parsed_response['id'].present?
+      parsed_response
+    else
+      err = parsed_response['error'].present? ? external_error(parsed_response) : "HTTP #{response.code}"
+      Rails.logger.error("Instagram comment reply error: #{err}")
+      Messages::StatusUpdateService.new(message, 'failed', err).perform
+      nil
+    end
+  end
+
   def handle_error(error)
     ChatwootExceptionTracker.new(error, account: message.account, user: message.sender).capture_exception
   end

@@ -223,7 +223,7 @@ const handleSortChange = value => {
             id="kalo-chat-sort"
             data-test-id="kalo-sort-select"
             :value="currentSortBy"
-            class="w-full h-9 px-2.5 mb-0 text-sm border rounded-lg border-n-weak bg-n-surface-1 text-n-slate-12"
+            class="w-full h-9 ltr:pl-2.5 ltr:pr-8 rtl:pr-2.5 rtl:pl-8 mb-0 text-sm border rounded-lg border-n-weak bg-n-surface-1 text-n-slate-12"
             @change="handleSortChange($event.target.value)"
           >
             <option

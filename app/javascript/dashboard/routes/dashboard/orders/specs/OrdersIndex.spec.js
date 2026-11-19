@@ -74,6 +74,22 @@ describe('OrdersIndex', () => {
     expect(transition.mock.calls[0][1]).toEqual({ id: 2, event: 'ship' });
   });
 
+  it('offers Hoàn tất directly for a paid POS order and runs complete', async () => {
+    const { wrapper, transition } = mountIndex([
+      makeOrder({
+        id: 9,
+        source: 'pos',
+        status: 'paid',
+        payment_method: 'cash',
+      }),
+    ]);
+    await flushPromises();
+    const action = wrapper.find('[data-test="row-action"]');
+    expect(action.text()).toBe('Hoàn tất');
+    await action.trigger('click');
+    expect(transition.mock.calls[0][1]).toEqual({ id: 9, event: 'complete' });
+  });
+
   it('fetches by status when a tab is chosen', async () => {
     const { wrapper, fetch } = mountIndex([makeOrder()]);
     await flushPromises();

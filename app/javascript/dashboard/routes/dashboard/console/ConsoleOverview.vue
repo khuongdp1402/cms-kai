@@ -46,7 +46,7 @@ const WIDTHS = [
 ];
 
 const paidShops = computed(() =>
-  Object.values(data.value.shops_by_plan).reduce((sum, n) => sum + n, 0)
+  Object.values(data.value?.shops_by_plan || {}).reduce((sum, n) => sum + n, 0)
 );
 const kpis = computed(() => [
   { key: 'SHOPS', value: data.value.shops },
@@ -58,9 +58,16 @@ const kpis = computed(() => [
 const bars = computed(() => {
   const total = Math.max(paidShops.value, 1);
   return PLAN_BARS.map(plan => {
-    const count = data.value.shops_by_plan[plan.key];
+    const count = data.value.shops_by_plan[plan.key] ?? 0;
     return { ...plan, count, width: WIDTHS[Math.round((count / total) * 12)] };
   });
+});
+
+const cassoRateLabel = computed(() => {
+  const rate = data.value?.health?.matched_rate_pct;
+  return rate === null || rate === undefined
+    ? t('KALO_CONSOLE.OVERVIEW.HEALTH.NO_DATA')
+    : `${rate}%`;
 });
 
 const load = async () => {
@@ -76,14 +83,23 @@ onMounted(load);
 </script>
 
 <template>
-  <section class="flex flex-col gap-5 p-6">
-    <h1 class="text-xl font-extrabold text-console-ink">
-      {{ t('KALO_CONSOLE.OVERVIEW.TITLE') }}
-    </h1>
+  <section class="flex flex-col w-full gap-5 p-6 mx-auto max-w-[1360px]">
+    <header>
+      <h1 class="text-xl font-extrabold text-console-ink">
+        {{ t('KALO_CONSOLE.OVERVIEW.TITLE') }}
+      </h1>
+      <p class="mt-0.5 text-sm text-console-muted">
+        {{ t('KALO_CONSOLE.OVERVIEW.SUBTITLE') }}
+      </p>
+    </header>
 
     <div v-if="failed" class="flex items-center gap-3 text-sm">
       {{ t('KALO_CONSOLE.COMMON.ERROR') }}
-      <button class="font-semibold text-console-accent" @click="load">
+      <button
+        type="button"
+        class="font-semibold text-console-accent"
+        @click="load"
+      >
         {{ t('KALO_CONSOLE.COMMON.RETRY') }}
       </button>
     </div>
@@ -103,24 +119,30 @@ onMounted(load);
           <p class="text-sm text-console-muted">
             {{ t(`KALO_CONSOLE.OVERVIEW.KPI.${kpi.key}`) }}
           </p>
-          <b class="text-2xl">{{ kpi.value }}</b>
+          <b class="block mt-1 text-2xl tabular-nums text-console-ink">
+            {{ kpi.value }}
+          </b>
         </div>
       </div>
 
       <div class="grid grid-cols-1 gap-4 lg:grid-cols-[1.3fr_1fr]">
-        <div class="min-w-0 bg-white border rounded-2xl border-console-line">
-          <div class="flex items-center px-4 pt-4 pb-1">
-            <b>{{ t('KALO_CONSOLE.OVERVIEW.LATEST') }}</b>
+        <div
+          class="min-w-0 overflow-hidden bg-white border rounded-2xl border-console-line"
+        >
+          <div class="flex items-center px-4 py-3.5">
+            <b class="text-console-ink">
+              {{ t('KALO_CONSOLE.OVERVIEW.LATEST') }}
+            </b>
             <RouterLink
               :to="{ name: 'kalo_console_payments' }"
-              class="ml-auto font-semibold text-console-accent"
+              class="ml-auto text-sm font-semibold text-console-accent hover:underline"
             >
               {{ t('KALO_CONSOLE.OVERVIEW.VIEW_ALL') }}
             </RouterLink>
           </div>
           <p
             v-if="!data.recent_payments.length"
-            class="p-4 text-sm text-console-muted"
+            class="px-4 py-5 text-sm border-t border-console-line text-console-muted"
           >
             {{ t('KALO_CONSOLE.OVERVIEW.EMPTY_PAYMENTS') }}
           </p>
@@ -128,20 +150,22 @@ onMounted(load);
             <li
               v-for="payment in data.recent_payments"
               :key="payment.id"
-              class="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 border-t border-console-line"
+              class="flex flex-wrap items-center px-4 py-3 transition-colors border-t gap-x-3 gap-y-1 border-console-line hover:bg-console-bg/50"
             >
               <div class="flex-1 min-w-0">
-                <b class="block truncate">
+                <b class="block truncate text-console-ink">
                   {{
                     payment.account_name ||
                     t('KALO_CONSOLE.OVERVIEW.UNKNOWN_SHOP')
                   }}
                 </b>
-                <span class="text-xs text-console-muted">
+                <span class="text-xs text-console-muted tabular-nums">
                   {{ formatTime(payment.received_at) }}
                 </span>
               </div>
-              <b>{{ formatMoney(payment.amount) }}</b>
+              <b class="tabular-nums text-console-ink">
+                {{ formatMoney(payment.amount) }}
+              </b>
               <ConsoleChip :tone="statusOf(payment.status).tone">
                 {{ statusOf(payment.status).text }}
               </ConsoleChip>
@@ -152,14 +176,81 @@ onMounted(load);
         <div
           class="flex flex-col gap-4 p-4 bg-white border rounded-2xl border-console-line"
         >
-          <b>{{ t('KALO_CONSOLE.OVERVIEW.BY_PLAN') }}</b>
+          <b class="text-console-ink">{{
+            t('KALO_CONSOLE.OVERVIEW.BY_PLAN')
+          }}</b>
           <div v-for="bar in bars" :key="bar.key" data-testid="plan-row">
-            <div class="flex mb-1 text-sm">
-              {{ t(`KALO_CONSOLE.PLANS.${bar.label}`) }}
-              <span class="ml-auto font-semibold">{{ bar.count }}</span>
+            <div class="flex mb-1.5 text-sm">
+              <span class="text-console-ink">
+                {{ t(`KALO_CONSOLE.PLANS.${bar.label}`) }}
+              </span>
+              <span class="ml-auto font-semibold tabular-nums text-console-ink">
+                {{ bar.count }}
+              </span>
             </div>
-            <div class="h-2 rounded-full bg-console-bg">
-              <div class="h-2 rounded-full" :class="[bar.bar, bar.width]" />
+            <div class="h-2.5 rounded-full bg-console-bg">
+              <div class="h-2.5 rounded-full" :class="[bar.bar, bar.width]" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        v-if="data.health"
+        data-testid="console-health"
+        class="p-4 bg-white border rounded-2xl border-console-line"
+      >
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <b class="text-console-ink">
+            {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.TITLE') }}
+          </b>
+          <RouterLink
+            v-if="data.health.mailhog_enabled"
+            data-testid="console-health-mail"
+            :to="{ name: 'kalo_console_emails' }"
+            class="text-xs font-semibold text-console-accent hover:underline"
+          >
+            {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.OPEN_MAIL') }}
+          </RouterLink>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <div class="p-3 rounded-xl bg-console-bg/70">
+            <p class="text-xs text-console-muted">
+              {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.ACTIVE_SHOPS') }}
+            </p>
+            <b class="block mt-1 text-lg tabular-nums text-console-ink">
+              {{ data.health.active_shops }}
+            </b>
+          </div>
+          <div class="p-3 rounded-xl bg-console-bg/70">
+            <p class="text-xs text-console-muted">
+              {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.CASSO_RATE') }}
+            </p>
+            <b class="block mt-1 text-lg tabular-nums text-console-ink">
+              {{ cassoRateLabel }}
+            </b>
+          </div>
+          <div class="p-3 rounded-xl bg-console-bg/70">
+            <p class="text-xs text-console-muted">
+              {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.ZALO_CHANNELS') }}
+            </p>
+            <b class="block mt-1 text-lg tabular-nums text-console-ink">
+              {{ data.health.zalo_channels }}
+            </b>
+          </div>
+          <div class="p-3 rounded-xl bg-console-bg/70">
+            <p class="text-xs text-console-muted">
+              {{ t('KALO_CONSOLE.OVERVIEW.HEALTH.AI_GATEWAY') }}
+            </p>
+            <div class="mt-1">
+              <ConsoleChip :tone="data.health.ai_ready ? 'ok' : 'gray'">
+                {{
+                  data.health.ai_ready
+                    ? t('KALO_CONSOLE.OVERVIEW.HEALTH.READY')
+                    : t('KALO_CONSOLE.OVERVIEW.HEALTH.NOT_SET')
+                }}
+              </ConsoleChip>
             </div>
           </div>
         </div>

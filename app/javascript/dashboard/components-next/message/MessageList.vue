@@ -1,6 +1,7 @@
 <script setup>
 import { computed, reactive } from 'vue';
 import Message from './Message.vue';
+import KaloActivityGroup from './KaloActivityGroup.vue';
 import { isRenderableMessage } from './messageVisibility.js';
 import { MESSAGE_TYPES } from './constants.js';
 import { useCamelCase } from 'dashboard/composables/useTransformKeys';
@@ -195,36 +196,116 @@ const getInReplyToMessage = parentMessage => {
 
   return replyMessage ? useCamelCase(replyMessage) : null;
 };
+
+const isCollapsibleActivity = message =>
+  message?.messageType === MESSAGE_TYPES.ACTIVITY &&
+  isRenderableMessage(message);
+
+// Group 2+ consecutive system activity messages into a compact expandable pill,
+// stopping before any day boundary or the first unread marker.
+const renderEntries = computed(() => {
+  const list = allMessages.value;
+  const seps = daySeparators.value;
+  const entries = [];
+  let i = 0;
+
+  while (i < list.length) {
+    const current = list[i];
+    if (
+      isCollapsibleActivity(current) &&
+      !(props.firstUnreadId && current.id === props.firstUnreadId)
+    ) {
+      const group = [current];
+      let j = i + 1;
+      while (j < list.length) {
+        const next = list[j];
+        if (
+          seps[j] ||
+          (props.firstUnreadId && next.id === props.firstUnreadId) ||
+          !isCollapsibleActivity(next)
+        ) {
+          break;
+        }
+        group.push(next);
+        j += 1;
+      }
+
+      if (group.length >= 2) {
+        entries.push({
+          type: 'activity-group',
+          key: `act-group-${current.id}`,
+          firstIndex: i,
+          firstId: current.id,
+          messages: group,
+        });
+        i = j;
+      } else {
+        entries.push({
+          type: 'message',
+          key: current.id,
+          index: i,
+          message: current,
+        });
+        i += 1;
+      }
+    } else {
+      entries.push({
+        type: 'message',
+        key: current.id,
+        index: i,
+        message: current,
+      });
+      i += 1;
+    }
+  }
+
+  return entries;
+});
 </script>
 
 <template>
   <ul class="px-3 sm:px-6 bg-n-background">
     <slot name="beforeAll" />
-    <template v-for="(message, index) in allMessages" :key="message.id">
+    <template v-for="entry in renderEntries" :key="entry.key">
       <li
-        v-if="daySeparators[index]"
+        v-if="
+          daySeparators[entry.type === 'message' ? entry.index : entry.firstIndex]
+        "
         data-test="day-separator"
         class="flex justify-center my-3 list-none"
       >
         <span
-          class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-n-alpha-2 text-n-slate-11"
+          class="px-2.5 py-0.5 text-xs font-medium rounded-full bg-n-surface-1 border border-n-weak text-n-slate-11"
         >
-          {{ daySeparators[index] }}
+          {{
+            daySeparators[
+              entry.type === 'message' ? entry.index : entry.firstIndex
+            ]
+          }}
         </span>
       </li>
       <slot
-        v-if="firstUnreadId && message.id === firstUnreadId"
+        v-if="
+          entry.type === 'message' &&
+          firstUnreadId &&
+          entry.message.id === firstUnreadId
+        "
         name="unreadBadge"
       />
+      <KaloActivityGroup
+        v-if="entry.type === 'activity-group'"
+        :messages="entry.messages"
+      />
       <Message
-        v-bind="message"
+        v-else
+        v-bind="entry.message"
         :is-email-inbox="isAnEmailChannel"
-        :in-reply-to="getInReplyToMessage(message)"
-        :group-with-next="shouldGroupWithNext(index, allMessages)"
+        :in-reply-to="getInReplyToMessage(entry.message)"
+        :group-with-next="shouldGroupWithNext(entry.index, allMessages)"
         :inbox-supports-reply-to="inboxSupportsReplyTo"
         :current-user-id="currentUserId"
         data-clarity-mask="True"
-        @retry="emit('retry', message)"
+        @retry="emit('retry', entry.message)"
       />
     </template>
     <slot name="after" />

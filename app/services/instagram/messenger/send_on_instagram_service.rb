@@ -5,6 +5,22 @@ class Instagram::Messenger::SendOnInstagramService < Instagram::BaseSendService
     Channel::FacebookPage
   end
 
+  def send_content
+    if comment_reply_id.present?
+      access_token = channel.page_access_token
+      app_secret_proof = calculate_app_secret_proof(GlobalConfigService.load('FB_APP_SECRET', ''), access_token)
+      query = { access_token: access_token }
+      query[:appsecret_proof] = app_secret_proof if app_secret_proof
+      reply_to_comment(
+        url: "https://graph.facebook.com/v22.0/#{comment_reply_id}/replies",
+        query: query
+      )
+      return
+    end
+
+    send_message(message_params)
+  end
+
   # Deliver a message with the given payload.
   # @see https://developers.facebook.com/docs/messenger-platform/instagram/features/send-message
   def send_message(message_content)

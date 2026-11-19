@@ -5,7 +5,7 @@ import { useMapGetter } from 'dashboard/composables/store';
 import { useI18n } from 'vue-i18n';
 import ButtonNext from 'next/button/Button.vue';
 import Icon from 'next/icon/Icon.vue';
-import Logo from 'next/icon/Logo.vue';
+import KaloIcon from 'next/icon/KaloIcon.vue';
 
 import {
   DropdownContainer,
@@ -53,15 +53,15 @@ const emitNewAccount = () => {
 <template>
   <DropdownContainer>
     <template #trigger="{ toggle, isOpen }">
-      <!-- Collapsed view: Logo trigger -->
+      <!-- Collapsed view: Store switcher trigger -->
       <button
         v-if="isCollapsed"
-        class="grid flex-shrink-0 place-content-center p-2 rounded-lg cursor-pointer hover:bg-n-alpha-1"
+        class="grid flex-shrink-0 place-content-center size-8 rounded-lg cursor-pointer hover:bg-n-alpha-1 text-n-slate-11"
         :class="{ 'bg-n-alpha-1': isOpen }"
         :title="currentAccount.name"
         @click="toggle"
       >
-        <Logo class="size-7" />
+        <KaloIcon name="store" class="size-5" />
       </button>
       <!-- Expanded view: Account name trigger -->
       <button
@@ -95,7 +95,11 @@ const emitNewAccount = () => {
     </template>
     <DropdownBody
       v-if="showAccountSwitcher || isCollapsed"
-      class="min-w-80 z-50"
+      :class="
+        isCollapsed
+          ? 'bottom-0 z-50 w-72 sm:min-w-80 max-w-[calc(100vw-2rem)] ltr:left-12 rtl:right-12 max-sm:ltr:left-0 max-sm:rtl:right-0 max-sm:bottom-11'
+          : 'w-72 sm:min-w-80 max-w-[calc(100vw-2rem)] z-50'
+      "
     >
       <DropdownSection :title="t('SIDEBAR_ITEMS.SWITCH_ACCOUNT')">
         <DropdownItem

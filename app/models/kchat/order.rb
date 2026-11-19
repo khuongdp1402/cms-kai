@@ -169,11 +169,17 @@ class Kchat::Order < ApplicationRecord
   private
 
   def ensure_allowed!(event)
+    return if pos_direct_complete?(event)
+
     rules = TRANSITIONS.fetch(event) { raise InvalidTransition, "unknown event #{event}" }
     raise InvalidTransition, "cannot #{event} from #{status}" unless rules.key?(status)
 
     required_method = rules[status]
     raise InvalidTransition, "cannot #{event} a #{payment_method} order" if required_method && payment_method != required_method
+  end
+
+  def pos_direct_complete?(event)
+    event == :complete && paid? && source_pos?
   end
 
   def sets_paid_at?(event)

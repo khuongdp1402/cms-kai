@@ -1,7 +1,10 @@
 import { useKeyboardEvents } from 'dashboard/composables/useKeyboardEvents';
 import { useRoute, useRouter } from 'vue-router';
 
-export function useSidebarKeyboardShortcuts(toggleShortcutModalFn) {
+export function useSidebarKeyboardShortcuts(
+  toggleShortcutModalFn,
+  toggleRailFn
+) {
   const route = useRoute();
   const router = useRouter();
 
@@ -21,6 +24,13 @@ export function useSidebarKeyboardShortcuts(toggleShortcutModalFn) {
     '$mod+Escape': {
       action: () => toggleShortcutModalFn(false),
     },
+    ...(toggleRailFn
+      ? {
+          '$mod+Backslash': {
+            action: () => toggleRailFn(),
+          },
+        }
+      : {}),
     'Alt+KeyC': {
       action: () => navigateToRoute('home'),
     },

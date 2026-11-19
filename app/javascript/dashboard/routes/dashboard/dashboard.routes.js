@@ -10,6 +10,7 @@ import { routes as orderRoutes } from './orders/routes';
 import { routes as posRoutes } from './pos/routes';
 import { routes as marketingRoutes } from './marketing/routes';
 import { routes as reportRoutes } from './reports/routes';
+import { routes as overviewRoutes } from './overview/routes';
 import { routes as consoleRoutes } from './console/routes';
 import { frontendURL } from '../../helper/URLHelper';
 import helpcenterRoutes from './helpcenter/helpcenter.routes';
@@ -29,6 +30,7 @@ export default {
       path: frontendURL('accounts/:accountId'),
       component: AppContainer,
       children: [
+        ...overviewRoutes,
         ...captainRoutes,
         ...orderRoutes,
         ...posRoutes,

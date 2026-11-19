@@ -43,12 +43,13 @@ const mountRail = async ({ route = 'home', ...envOptions } = {}) => {
 };
 
 describe('KaloRail', () => {
-  it('renders exactly six items in order Tin nhắn, Đơn hàng, Khách, Marketing, Báo cáo, Cài đặt', async () => {
+  it('renders seven items in order Tổng quan, Tin nhắn, Đơn hàng, Khách, Marketing, Báo cáo, Cài đặt', async () => {
     const wrapper = await mountRail();
     const labels = wrapper
       .findAll('[data-test-id^="kalo-nav-"]')
       .map(item => item.text().replace(/\d+$/, '').trim());
     expect(labels).toEqual([
+      'Tổng quan',
       'Tin nhắn',
       'Đơn hàng',
       'Khách',
@@ -56,6 +57,17 @@ describe('KaloRail', () => {
       'Báo cáo',
       'Cài đặt',
     ]);
+  });
+
+  it('toggles between compact (76px) and expanded (224px) mode via toggle button', async () => {
+    const wrapper = await mountRail();
+    const nav = wrapper.find('nav');
+    expect(nav.attributes('data-expanded')).toBe('false');
+    await wrapper.find('[data-test-id="kalo-rail-toggle"]').trigger('click');
+    expect(nav.attributes('data-expanded')).toBe('true');
+    expect(nav.classes()).toContain('w-[224px]');
+    expect(nav.text()).toContain('Vận hành');
+    expect(nav.text()).toContain('Tăng trưởng');
   });
 
   it('marks the item matching the current route as active', async () => {

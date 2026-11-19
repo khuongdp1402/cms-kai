@@ -39,4 +39,28 @@ RSpec.describe 'Kchat reports API', type: :request do
     get url, headers: agent.create_new_auth_token, as: :json
     expect(response).to have_http_status(:ok)
   end
+
+  it 'returns marketing funnel and multi-brand overview endpoints cleanly' do
+    base_url = "/api/v1/accounts/#{account.id}/kchat/reports"
+    get "#{base_url}/funnel", params: { range: '7d' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.keys).to contain_exactly('range', 'totals', 'channel_funnel', 'campaigns', 'agents')
+
+    get "#{base_url}/brands_overview", params: { range: 'today' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body['brands'].first).to include('id' => account.id, 'name' => account.name)
+
+    get "#{base_url}/funnel", params: { range: 'bad' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
+
+  it 'returns quality_overview endpoint and validates range' do
+    base_url = "/api/v1/accounts/#{account.id}/kchat/reports"
+    get "#{base_url}/quality_overview", params: { range: '7d' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.keys).to contain_exactly('range', 'kpis', 'sku_quality', 'channel_quality', 'action_queue')
+
+    get "#{base_url}/quality_overview", params: { range: 'bad' }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
 end

@@ -7,10 +7,11 @@ export const STATUS_TABS = [
   { key: 'COMPLETED', status: 'completed' },
 ];
 
-const OK = 'bg-[#E3F4E8] text-[#1B6B3A]';
-const WARN = 'bg-[#FFF1D6] text-[#8A5300]';
+const OK = 'bg-[#E3F4E8] text-[#1B6B3A] dark:bg-n-teal-3 dark:text-n-teal-11';
+const WARN =
+  'bg-[#FFF1D6] text-[#8A5300] dark:bg-n-amber-3 dark:text-n-amber-11';
 const GRAY = 'bg-n-alpha-2 text-n-slate-11';
-const NEW = 'bg-woot-50 text-woot-600';
+const NEW = 'bg-woot-50 text-woot-600 dark:bg-n-blue-3 dark:text-n-blue-11';
 
 export const paymentChip = order => {
   const { status, payment_method: method } = order;
@@ -40,7 +41,11 @@ export const rowAction = order => {
     if (order.conversation_id) return { key: 'SEND_QR', sendQr: true };
     return { key: 'MARK_PAID', event: 'mark_paid' };
   }
-  if (status === 'paid') return { key: 'SHIP', event: 'ship', icon: 'truck' };
+  if (status === 'paid') {
+    return order.source === 'pos'
+      ? { key: 'COMPLETE', event: 'complete' }
+      : { key: 'SHIP', event: 'ship', icon: 'truck' };
+  }
   if (status === 'shipping') return { key: 'COMPLETE', event: 'complete' };
   return null;
 };

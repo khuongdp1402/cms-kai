@@ -210,7 +210,7 @@ export default {
             v-for="(type, typeIndex) in ['email', 'push']"
             :key="typeIndex"
             class="flex items-start gap-2 px-0 text-sm tracking-[0.5] text-left rtl:text-right"
-            :class="`col-span-${type === 'push' ? 3 : 2}`"
+            :class="type === 'push' ? 'col-span-3' : 'col-span-2'"
           >
             <CheckBox
               :value="`${type}_${notification.value}`"

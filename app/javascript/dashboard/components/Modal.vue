@@ -76,9 +76,10 @@ onMounted(() => {
       @mousedown="handleMouseDown"
     >
       <div
-        class="relative max-h-full overflow-auto bg-n-alpha-3 shadow-md modal-container rtl:text-right skip-context-menu"
+        class="relative max-h-full overflow-auto bg-n-solid-1 border border-n-strong text-n-slate-12 shadow-2xl modal-container rtl:text-right skip-context-menu"
         :class="{
-          'rounded-xl w-[37.5rem]': !fullWidth,
+          'rounded-2xl w-[37.5rem] max-w-[calc(100vw-1.5rem)] max-h-[calc(100vh-2rem)]':
+            !fullWidth,
           'items-center rounded-none flex h-full justify-center w-full':
             fullWidth,
           [size]: true,
@@ -118,11 +119,7 @@ onMounted(() => {
 
     form,
     .modal-content {
-      @apply pt-4 pb-8 px-8 self-center;
-
-      a {
-        @apply p-4;
-      }
+      @apply pt-4 pb-8 px-5 sm:px-8 self-center;
 
       .ProseMirror a {
         @apply p-0;
@@ -139,7 +136,7 @@ onMounted(() => {
   @apply justify-end;
 
   .modal-container {
-    @apply rounded-none h-full w-[30rem];
+    @apply rounded-none h-full w-full max-w-[30rem];
   }
 }
 

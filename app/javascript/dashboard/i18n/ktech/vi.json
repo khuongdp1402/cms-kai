@@ -3445,6 +3445,23 @@
     "AI": {
       "LABEL": "Gợi ý trả lời"
     },
+    "ATTRIBUTION": {
+      "CAMPAIGN": "Chiến dịch",
+      "CAMPAIGN_PLACEHOLDER": "Ví dụ: tet_2027",
+      "CANCEL": "Hủy",
+      "EDIT": "Gắn nguồn / chiến dịch",
+      "EMPTY": "Chưa gắn nguồn chiến dịch",
+      "OPEN_POST": "Xem bài viết gốc",
+      "PRIVATE_REPLY_SENT": "Đã nhắn riêng tự động",
+      "SAVE": "Lưu nguồn",
+      "SAVED": "Đã lưu nguồn khách hàng",
+      "SAVE_ERROR": "Chưa lưu được nguồn chiến dịch.",
+      "SOCIAL_COMMENT": "Từ bình luận {platform}",
+      "SOURCE": "Nguồn (UTM)",
+      "SOURCE_PLACEHOLDER": "Ví dụ: facebook_ads, tiktok",
+      "SYNC_LABEL": "Gắn luôn nhãn chiến dịch cho hội thoại",
+      "TITLE": "Nguồn chiến dịch"
+    },
     "CARD": {
       "LINE": "{quantity} × {price}",
       "SENDING": "Đang gửi…",
@@ -3554,6 +3571,11 @@
     }
   },
   "KALO_CHAT_THREAD": {
+    "ACTIVITY_GROUP": {
+      "COLLAPSE": "Thu gọn",
+      "EXPAND": "Xem chi tiết",
+      "SUMMARY": "{count} cập nhật hệ thống"
+    },
     "COMPOSER": {
       "AI": "Viết lại bằng AI",
       "ARTICLE": "Chèn bài hướng dẫn",
@@ -3576,6 +3598,12 @@
       "VOICE": "Ghi âm",
       "VOICE_STOP": "Dừng ghi âm",
       "WHATSAPP_TEMPLATE": "Mẫu tin WhatsApp"
+    },
+    "HEADER_TOGGLES": {
+      "HIDE_CHAT_LIST": "Thu gọn danh sách chat",
+      "HIDE_CONTACT": "Ẩn hồ sơ khách",
+      "SHOW_CHAT_LIST": "Hiện danh sách chat",
+      "SHOW_CONTACT": "Hồ sơ khách"
     },
     "PANEL": {
       "ASSIGN": "Giao việc",
@@ -3601,6 +3629,7 @@
   },
   "KALO_CONSOLE": {
     "BRAND": "Console",
+    "BRAND_MARK": "K",
     "BRAND_NAME": "kalo",
     "COMMON": {
       "CANCEL": "Hủy",
@@ -3614,14 +3643,65 @@
     },
     "NAV": {
       "BACK_TO_APP": "Về ứng dụng",
+      "EMAILS": "Hộp thư hệ thống",
       "LOGOUT": "Đăng xuất",
       "OVERVIEW": "Tổng quan",
       "PAYMENTS": "Thanh toán",
-      "SHOPS": "Shop"
+      "SHOPS": "Shop",
+      "SUPER_ADMIN": "Quản trị hệ thống",
+      "TOGGLE": "Thu gọn / Mở rộng menu"
+    },
+    "MAIL": {
+      "ACTION_ERROR": "Không thực hiện được thao tác. Thử lại.",
+      "ACTION_LINKS": "Liên kết thao tác nhanh trong email",
+      "CATEGORIES": {
+        "AUTH": "Xác thực",
+        "BILLING": "Thanh toán",
+        "SYSTEM": "Hệ thống"
+      },
+      "CLEARED": "Đã dọn sạch hộp thư kiểm thử",
+      "CLEAR_ALL": "Xóa tất cả",
+      "CONFIRM_CLEAR": "Xóa toàn bộ email kiểm thử?",
+      "CONFIRM_YES": "Xóa hết",
+      "COPIED": "Đã sao chép liên kết",
+      "COPY_LINK": "Sao chép link",
+      "COUNT": "{count} thư",
+      "DELETE": "Xóa email",
+      "DELETED": "Đã xóa email",
+      "DISABLED": "Hộp thư kiểm thử chỉ bật ở môi trường phát triển hoặc khi cấu hình MAILHOG_API_URL.",
+      "EMPTY": "Chưa có email nào trong hộp thư kiểm thử.",
+      "EMPTY_SELECT": "Chọn một email bên trái để xem chi tiết nội dung và liên kết xác thực.",
+      "FROM": "Người gửi",
+      "NO_HTML": "Email này chỉ có nội dung văn bản thuần.",
+      "OPEN_LINK": "Mở liên kết",
+      "REFRESH": "Làm mới",
+      "SEARCH_PLACEHOLDER": "Tìm theo tiêu đề, người nhận, nội dung…",
+      "SUBTITLE": "Kiểm tra email xác thực, đặt lại mật khẩu và thông báo hệ thống qua MailHog nội bộ",
+      "TABS": {
+        "HEADERS": "SMTP Headers",
+        "HTML": "Xem giao diện HTML",
+        "TEXT": "Văn bản thuần"
+      },
+      "TIME": "Thời gian",
+      "TITLE": "Hộp thư kiểm thử hệ thống",
+      "TO": "Người nhận",
+      "UNREACHABLE": "Không kết nối được dịch vụ MailHog nội bộ (:8025). Hãy kiểm tra container mailhog."
     },
     "OVERVIEW": {
       "BY_PLAN": "Shop theo gói",
       "EMPTY_PAYMENTS": "Chưa có thanh toán nào.",
+      "HEALTH": {
+        "ACTIVE_SHOPS": "Shop đang hoạt động",
+        "AI_GATEWAY": "Cổng AI thông minh",
+        "CASSO_RATE": "Tỷ lệ khớp Casso tự động",
+        "MAILHOG": "Hộp thư kiểm thử",
+        "NOT_SET": "Chưa cấu hình",
+        "NO_DATA": "Chưa phát sinh",
+        "OPEN_MAIL": "Mở hộp thư",
+        "READY": "Sẵn sàng",
+        "TITLE": "Sức khỏe hạ tầng & đối soát",
+        "ZALO_CHANNELS": "Kênh Zalo cá nhân"
+      },
       "KPI": {
         "EXPIRING": "Sắp hết hạn (7 ngày)",
         "PAID": "Shop đang trả phí",
@@ -3630,6 +3710,7 @@
         "UNMATCHED": "Chuyển khoản cần ghép"
       },
       "LATEST": "Thanh toán mới nhất",
+      "SUBTITLE": "Theo dõi doanh thu gói cước, đối soát Casso và sức khỏe hạ tầng toàn sàn",
       "TITLE": "Tổng quan",
       "UNKNOWN_SHOP": "Không rõ shop",
       "VIEW_ALL": "Xem tất cả"
@@ -3658,6 +3739,7 @@
         "UNDERPAID": "Chuyển thiếu",
         "UNMATCHED": "Cần ghép shop"
       },
+      "SUBTITLE": "Theo dõi đối soát Casso VietQR và gán thủ công giao dịch chưa khớp shop",
       "TITLE": "Thanh toán",
       "UNDERPAID_NOTE": "Shop chuyển thiếu tiền nên gói chưa được kích hoạt.",
       "UNKNOWN_SHOP": "Không rõ shop"
@@ -3700,41 +3782,184 @@
         "LOCKED": "Đã khóa",
         "TRIAL": "Dùng thử"
       },
+      "SUBTITLE": "Quản lý trạng thái gói cước, gia hạn ngày sử dụng và khóa/mở quyền truy cập từng shop",
       "TITLE": "Shop",
       "UNLOCK": "Mở khóa",
       "UNLOCK_DONE": "Đã mở khóa shop",
       "UPDATE_ERROR": "Không cập nhật được. Thử lại."
     }
   },
+  "KALO_CONTACTS": {
+    "ACTIVE": "Đang hoạt động",
+    "ALL": "Tất cả khách",
+    "LABELS": "Nhãn",
+    "LABELS_ALL": "Chọn nhãn…",
+    "QUICK_BAR_LABEL": "Bộ lọc khách hàng nhanh",
+    "SEGMENTS": "Tệp đã lưu"
+  },
   "KALO_MARKETING": {
+    "BRAND_PROFILE": {
+      "AI_OFF": "AI chưa được cấu hình cho cửa hàng này",
+      "AI_READY": "AI đang hoạt động ({model})",
+      "BRAND_NAME": "Tên thương hiệu",
+      "BRAND_NAME_PLACEHOLDER": "Ví dụ: Nến Thơm An Nhiên",
+      "DESC": "AI dùng thông tin này khi gợi ý trả lời khách và viết kịch bản nội dung đúng chất thương hiệu.",
+      "HARD_BANS": "Từ ngữ cấm (ngăn bởi dấu phẩy hoặc xuống dòng)",
+      "HARD_BANS_PLACEHOLDER": "Ví dụ: trị khỏi 100%, rẻ nhất thị trường, cam kết tuyệt đối",
+      "LOAD_ERROR": "Chưa tải được hồ sơ thương hiệu.",
+      "PERSONA": "Khách hàng mục tiêu",
+      "PERSONA_PLACEHOLDER": "Ví dụ: Nữ 22–35 tuổi sống tại thành phố, thích decor và quà tặng tinh tế",
+      "POSITIONING": "Định vị thương hiệu",
+      "POSITIONING_PLACEHOLDER": "Ví dụ: Nến thơm thiên nhiên thủ công cho người trẻ yêu không gian tối giản",
+      "READONLY_NOTE": "Chỉ quản trị viên mới chỉnh sửa được hồ sơ thương hiệu.",
+      "SAVE": "Lưu hồ sơ thương hiệu",
+      "SAVED": "Đã lưu hồ sơ thương hiệu",
+      "SAVE_ERROR": "Chưa lưu được hồ sơ. Thử lại sau ít phút.",
+      "TITLE": "Hồ sơ thương hiệu",
+      "TONE": "Giọng văn giao tiếp",
+      "TONE_PLACEHOLDER": "Ví dụ: Ấm áp, tinh tế, xưng mình - bạn, không dùng slang quá đà",
+      "USP": "Điểm khác biệt (USP)",
+      "USP_PLACEHOLDER": "Ví dụ: Sáp đậu nành 100%, tinh dầu nguyên chất, cháy lâu 45 giờ"
+    },
+    "BROADCASTS": {
+      "CAMPAIGN_TAG": "Mã chiến dịch / nhãn gắn theo dõi doanh thu",
+      "CAMPAIGN_TAG_PLACEHOLDER": "Ví dụ: uu_dai_tet_2027 (tự tạo nếu để trống)",
+      "CANCEL": "Đóng",
+      "CREATE": "+ Gửi tin hàng loạt đa kênh",
+      "DESC": "Nhắn tin chăm sóc / remarketing theo nhãn khách hàng qua Zalo cá nhân, Facebook, Instagram, Telegram.",
+      "ELIGIBLE": "Khách đủ điều kiện nhận tin: {count}",
+      "EMPTY": "Chưa có chiến dịch gửi tin hàng loạt nào.",
+      "ERROR": "Chưa gửi được chiến dịch. Thử lại sau.",
+      "EXPIRED": "Gói đã hết hạn. Gia hạn để tiếp tục gửi tin hàng loạt.",
+      "INBOX": "Chọn kênh / hộp thư gửi",
+      "LABELS": "Lọc theo nhãn khách hàng (tùy chọn)",
+      "LABELS_HINT": "Để trống nếu muốn gửi toàn bộ khách đủ điều kiện của kênh này.",
+      "MESSAGE": "Nội dung tin nhắn",
+      "MESSAGE_PLACEHOLDER": "Chào khách, shop đang có ưu đãi cuối tuần giảm 15%...",
+      "META_24H_WARNING": "Kênh Facebook/Instagram chỉ gửi cho khách có tương tác trong 24 giờ gần nhất ({skipped} khách ngoài 24h sẽ tự động bỏ qua).",
+      "ONLY_24H": "Chỉ gửi khách tương tác trong 24 giờ gần nhất",
+      "PREVIEW_LOADING": "Đang ước tính tệp nhận tin…",
+      "READONLY_NOTE": "Chỉ quản trị viên mới gửi được chiến dịch hàng loạt.",
+      "SCHEDULED_AT": "Hẹn giờ gửi (để trống nếu gửi ngay)",
+      "SENT_OK": "Đã lên lịch gửi chiến dịch!",
+      "STATUS": {
+        "completed": "Hoàn tất",
+        "failed": "Lỗi",
+        "processing": "Đang gửi",
+        "scheduled": "Đã hẹn giờ"
+      },
+      "STATS": "Đã gửi {sent}/{eligible} · Bỏ qua ngoài 24h: {skipped}",
+      "SUBMIT": "Gửi chiến dịch",
+      "SUBMITTING": "Đang tạo…",
+      "TITLE": "Chiến dịch gửi tin hàng loạt (Zalo · FB · IG)",
+      "TITLE_FIELD": "Tên chiến dịch",
+      "TITLE_PLACEHOLDER": "Ví dụ: Nhắc đơn cuối tuần tháng 11",
+      "VARS_HINT": "Mẹo cá nhân hóa: gõ {vars} để chèn tự động"
+    },
+    "CALENDAR": {
+      "ADD": "+ Thêm lịch đăng",
+      "ALL": "Tất cả",
+      "BODY": "Nội dung chính",
+      "CAMPAIGN_TAG": "Chiến dịch gắn kèm",
+      "CAMPAIGN_TAG_PLACEHOLDER": "Ví dụ: tet_2027",
+      "CANCEL": "Hủy",
+      "CHANNEL": "Kênh đăng",
+      "CHANNELS": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "tiktok": "TikTok",
+        "website": "Website",
+        "zalo": "Zalo"
+      },
+      "COPIED": "Đã chép",
+      "COPY": "Sao chép",
+      "CTA": "Lời kêu gọi (CTA)",
+      "DATE": "Ngày dự kiến đăng",
+      "DELETE": "Xóa",
+      "DELETED": "Đã xóa khỏi lịch đăng",
+      "DESC": "Quản lý lịch sản xuất và xuất bản nội dung theo từng kênh và chiến dịch.",
+      "EMPTY": "Chưa có bài viết nào trong lịch. Hãy đưa kịch bản từ tab Ý tưởng nội dung hoặc thêm mới.",
+      "HOOK": "Câu mở đầu (Hook 3s)",
+      "LOAD_ERROR": "Chưa tải được lịch nội dung.",
+      "SAVE": "Lưu vào lịch",
+      "SAVED": "Đã lưu lịch đăng",
+      "SAVE_ERROR": "Chưa lưu được lịch đăng. Kiểm tra lại ngày và tiêu đề.",
+      "STATUS": {
+        "draft": "Nháp",
+        "published": "Đã đăng",
+        "scheduled": "Đã lên lịch"
+      },
+      "TITLE": "Lịch nội dung đa kênh",
+      "TITLE_FIELD": "Tiêu đề bài / video",
+      "TITLE_PLACEHOLDER": "Ví dụ: Video unboxing nến thơm mùa Tết"
+    },
     "CAMPAIGN_LINKS": {
+      "BACK": "Quay lại Marketing",
+      "LIVECHAT": "Website",
       "SMS": "Tin nhắn SMS",
       "WHATSAPP": "WhatsApp"
     },
+    "COMMENTS": {
+      "AUTO_HIDE_PHONE": "Tự động ẩn bình luận chứa số điện thoại (chống đối thủ cướp khách)",
+      "AUTO_PRIVATE_REPLY": "Tự động gửi tin nhắn riêng (Private Reply) khi khách bình luận",
+      "DESC": "Tự động kéo bình luận Facebook Page & Instagram về Hộp thư, ẩn SĐT và nhắn riêng tư vấn ngay.",
+      "ENABLED": "Bật tự động thu thập bình luận Facebook & Instagram về Hộp thư",
+      "KEYWORDS": "Từ khóa nhạy cảm cần tự động ẩn (ngăn bởi dấu phẩy hoặc xuống dòng)",
+      "KEYWORDS_PLACEHOLDER": "Ví dụ: giá sỉ, ctv, lừa đảo, hoàn tiền",
+      "LOAD_ERROR": "Chưa tải được cấu hình bình luận.",
+      "PRIVATE_TEMPLATE": "Mẫu tin nhắn riêng gửi tự động",
+      "PRIVATE_TEMPLATE_PLACEHOLDER": "Chào bạn, shop đã nhận được bình luận và gửi báo giá chi tiết tại đây nhé!",
+      "READONLY_NOTE": "Chỉ quản trị viên mới chỉnh sửa được quy tắc bình luận.",
+      "SAVE": "Lưu quy tắc bình luận",
+      "SAVED": "Đã lưu quy tắc tự động xử lý bình luận",
+      "SAVE_ERROR": "Chưa lưu được quy tắc bình luận.",
+      "TITLE": "Tự động xử lý bình luận Facebook & Instagram",
+      "VARS_HINT": "Biến tự động: {vars}"
+    },
     "IDEAS": {
       "AI_OFF": "Gợi ý nội dung chưa được bật cho cửa hàng của bạn.",
+      "ANGLE_SAVED": "Đã cập nhật kịch bản.",
       "ANGLE_TITLE": "Hướng {index}: {angle}",
       "APPROVE": "Duyệt",
       "APPROVED": "Đã duyệt",
       "ASK_ADMIN": "Hãy nhờ quản trị viên gia hạn.",
+      "BODY_LABEL": "Nội dung chính",
+      "CANCEL_EDIT": "Hủy",
+      "COPIED": "Đã sao chép",
+      "COPY": "Sao chép kịch bản",
+      "CTA_LABEL": "Lời kêu gọi (CTA)",
       "DECIDE_ERROR": "Chưa lưu được lựa chọn. Thử lại sau ít phút.",
+      "EDIT": "Sửa kịch bản",
       "ERROR": "Chưa tạo được ý tưởng. Thử lại sau ít phút.",
       "EXPIRED": "Gói của bạn đã hết hạn. Gia hạn để tiếp tục dùng gợi ý nội dung.",
+      "FILTER_ALL": "Tất cả ({n})",
+      "FILTER_APPROVED": "Đã duyệt ({n})",
+      "HISTORY_TITLE": "Lịch sử ý tưởng gần đây",
+      "HOOK_LABEL": "Câu mở đầu (3s)",
       "REJECT": "Bỏ qua",
       "REJECTED": "Đã bỏ qua",
       "RENEW": "Gia hạn",
+      "SAVE_EDIT": "Lưu chỉnh sửa",
+      "SCHEDULE": "Đưa vào lịch",
+      "SCHEDULED_OK": "Đã đưa kịch bản vào Lịch nội dung",
+      "SCHEDULE_DATE": "Ngày đăng",
+      "SCHEDULE_SUBMIT": "Xác nhận lên lịch",
       "SUBMIT": "Tạo ý tưởng",
       "TOPIC_LABEL": "Bạn muốn viết về gì?",
       "TOPIC_PLACEHOLDER": "Ví dụ: nến thơm mùa Tết"
     },
     "TABS": {
+      "BRAND": "Hồ sơ thương hiệu",
+      "CALENDAR": "Lịch nội dung",
       "CAMPAIGNS": "Chiến dịch",
+      "COMMENTS": "Bình luận FB/IG",
       "IDEAS": "Ý tưởng nội dung"
     },
     "TABS_LABEL": "Marketing",
     "TITLE": "Marketing"
   },
   "KALO_NAV": {
+    "BRAND_NAME": "Kalo",
     "CUSTOMERS": "Khách",
     "FILTERS": {
       "FOLDERS": "Thư mục đã lưu",
@@ -3786,6 +4011,7 @@
     "NEW_ACCOUNT": "Tạo cửa hàng mới",
     "NOTIFICATIONS": "Thông báo",
     "ORDERS": "Đơn hàng",
+    "OVERVIEW": "Tổng quan",
     "PAGES": {
       "MARKETING": "Marketing",
       "ORDERS": "Đơn hàng",
@@ -3795,8 +4021,14 @@
     "PROFILE": "Hồ sơ",
     "REPORTS": "Báo cáo",
     "SEARCH": "Tìm kiếm",
+    "SECTIONS": {
+      "GROWTH": "Tăng trưởng",
+      "OPERATIONS": "Vận hành"
+    },
     "SETTINGS": "Cài đặt",
-    "SWITCH_ACCOUNT": "Đổi tài khoản"
+    "SWITCH_ACCOUNT": "Đổi tài khoản",
+    "TOGGLE_COLLAPSE": "Thu gọn thanh điều hướng (⌘\\)",
+    "TOGGLE_EXPAND": "Mở rộng thanh điều hướng (⌘\\)"
   },
   "KALO_ONBOARDING": {
     "WEBSITE_REQUIRED": "Vui lòng nhập website hoặc trang bán hàng của bạn (ví dụ: shop.vn)"
@@ -3832,10 +4064,19 @@
       "CONTACT": "Khách",
       "ITEMS": "Sản phẩm",
       "LABEL": "Chi tiết đơn",
+      "PAYMENT_SECTION": "Thanh toán VietQR",
       "QR_ALT": "Mã QR thanh toán",
+      "QR_HINT": "Khách quét mã bằng app ngân hàng để thanh toán tự động.",
       "QR_LOADING": "Đang tạo mã QR…",
       "SHIPPING_FEE": "Phí giao",
       "SUBTOTAL": "Tạm tính",
+      "TIMELINE": {
+        "CANCELLED": "Đơn đã hủy",
+        "COMPLETE": "Hoàn tất",
+        "CREATED": "Tạo đơn",
+        "PAID": "Thanh toán",
+        "SHIP": "Giao hàng"
+      },
       "TOTAL": "Tổng"
     },
     "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
@@ -3867,6 +4108,12 @@
       "TITLE": "Tạo đơn",
       "TOTAL": "Tổng"
     },
+    "KPI": {
+      "COUNT": "Tổng đơn",
+      "PENDING_PAYMENT": "Chờ thanh toán",
+      "PROCESSING": "Cần giao / Đang giao",
+      "VALUE": "Giá trị đang hiển thị"
+    },
     "LOAD_MORE": "Xem thêm",
     "NONE": "Không có đơn nào",
     "OPEN_POS": "Mở POS",
@@ -3894,6 +4141,97 @@
     },
     "TITLE": "Đơn hàng",
     "WALK_IN": "Khách lẻ"
+  },
+  "KALO_OVERVIEW": {
+    "ACTIONS": {
+      "NEW_ORDER": "Tạo đơn nhanh",
+      "OPEN_POS": "Mở Kalo POS",
+      "RETRY": "Thử lại",
+      "VIEW_ORDERS": "Xem đơn hàng"
+    },
+    "CHANNEL_CHATS": "{count} chat",
+    "CHANNEL_CVR": "CVR {pct}%",
+    "CHANNEL_ORDERS": "{count} đơn",
+    "CHANNEL_TITLE": "Chất lượng phục vụ & chốt đơn theo kênh",
+    "CHANNELS": {
+      "API": "Kênh API",
+      "EMAIL": "Email",
+      "FACEBOOK_PAGE": "Facebook",
+      "INSTAGRAM": "Instagram",
+      "LINE": "LINE",
+      "MANUAL": "Đơn thủ công",
+      "POS": "Tại quầy POS",
+      "SMS": "SMS",
+      "TELEGRAM": "Telegram",
+      "TIKTOK": "TikTok",
+      "TWILIO_SMS": "Twilio SMS",
+      "WEB_WIDGET": "Website",
+      "WHATSAPP": "WhatsApp",
+      "ZALO_PERSONAL": "Zalo cá nhân"
+    },
+    "EMPTY_CHANNEL": "Chưa phát sinh hội thoại hoặc đơn hàng theo kênh trong kỳ này.",
+    "EMPTY_QUEUE": "Mọi hội thoại và đơn hàng đang vận hành ổn định, không có tồn đọng.",
+    "EMPTY_SKU": "Chưa có dữ liệu đơn sản phẩm trong kỳ này.",
+    "ERROR": "Chưa tải được dữ liệu tổng quan chất lượng.",
+    "KPI": {
+      "AOV": "TB {amount}/đơn",
+      "CALENDAR": "{scheduled}/{total} lịch bài · {approved} kịch bản AI duyệt",
+      "CHAT_CVR": "Chuyển đổi Chat → Đơn",
+      "CHAT_SUB": "{orders} đơn / {convs} hội thoại · {pending} chờ QR",
+      "CONTENT_TITLE": "Đầu ra Nội dung & Bảo vệ SĐT",
+      "CSKH_SLA": "Chất lượng CSKH (FRT)",
+      "NO_REPLY_YET": "Chưa có phản hồi",
+      "ORDERS_COUNT": "{count} đơn thành công",
+      "PHONES_HIDDEN": "{count} SĐT bình luận đã ẩn",
+      "REVENUE": "Doanh thu thực thu",
+      "SLA_ALERT_BADGE": "{count} >15p",
+      "SLA_SUB": "{sla}% đạt < 5p · {waiting} chờ > 15p"
+    },
+    "LOADING": "Đang tổng hợp chỉ số chất lượng…",
+    "QUEUE": {
+      "ITEMS": {
+        "low_stock_products": {
+          "CTA": "Kiểm kho POS",
+          "DESC": "Sản phẩm có tồn kho từ 3 trở xuống cần bổ sung",
+          "TITLE": "{count} sản phẩm sắp hết kho"
+        },
+        "pending_qr_orders": {
+          "CTA": "Đối soát đơn",
+          "DESC": "Đơn chuyển khoản VietQR chưa xác nhận nhận tiền",
+          "TITLE": "{count} đơn đang chờ quét VietQR"
+        },
+        "phones_protected": {
+          "CTA": "Xem bình luận",
+          "DESC": "Bình luận chứa SĐT/từ khóa đã ẩn & gửi tin riêng tự động",
+          "TITLE": "{count} bình luận đã bảo vệ"
+        },
+        "waiting_over_15m": {
+          "CTA": "Mở hộp chat",
+          "DESC": "Hội thoại đang mở chờ nhân viên phản hồi quá 15 phút",
+          "TITLE": "{count} khách đang chờ > 15 phút"
+        }
+      },
+      "TITLE": "Việc cần xử lý ngay"
+    },
+    "RANGES": {
+      "MONTH": "Tháng này",
+      "SEVEN_DAYS": "7 ngày",
+      "TODAY": "Hôm nay"
+    },
+    "SKU": {
+      "CANCEL_RATE": "Tỷ lệ hủy",
+      "NEED_CHECK": "Cần rà soát",
+      "OK": "Đạt chuẩn",
+      "PRODUCT": "Sản phẩm",
+      "REVENUE": "Doanh thu",
+      "SOLD": "Đã bán",
+      "STATUS": "Đánh giá",
+      "STOCK": "Tồn {count}",
+      "SUBTITLE": "Phát hiện sớm sản phẩm có tỷ lệ hủy cao (>=15%) hoặc sắp hết hàng",
+      "TITLE": "Chất lượng sản phẩm & hoàn hủy theo SKU"
+    },
+    "SUBTITLE": "Đo lường doanh thu thực, tốc độ phục vụ CSKH và đầu ra nội dung thương hiệu",
+    "TITLE": "Tổng quan & Chất lượng Đầu ra"
   },
   "KALO_PAYMENT": {
     "BILLING_NOT_CONFIGURED": "Chưa cấu hình thanh toán gói cước, bạn liên hệ quản trị Kalo để được hỗ trợ.",
@@ -3964,15 +4302,25 @@
     "EMPTY": "Chưa có sản phẩm nào để bán.",
     "EXIT": "Thoát POS",
     "PRODUCT_FORM": {
+      "CANCEL": "Đóng",
       "NAME": "Tên sản phẩm",
       "PRICE": "Giá",
+      "SAVED": "Đã thêm sản phẩm mới",
       "STOCK": "Số lượng trong kho",
-      "SUBMIT": "Lưu sản phẩm"
+      "SUBMIT": "Lưu sản phẩm",
+      "TITLE": "Thêm sản phẩm mới"
     },
     "SEARCH": "Tìm sản phẩm",
     "TITLE": "Bán tại quầy"
   },
   "KALO_REPORTS": {
+    "DETAIL_LINKS_TITLE": "Báo cáo chi tiết theo bộ phận",
+    "BRANDS": {
+      "ACTIVE": "Đang xem",
+      "ORDERS": "{count} đơn",
+      "TITLE": "Tổng quan tất cả thương hiệu / shop",
+      "WAITING": "{count} tin chờ"
+    },
     "CHANNELS": {
       "OTHER": "Khác",
       "TITLE": "Đơn đến từ đâu",
@@ -3999,6 +4347,23 @@
     "EMPTY": "Chưa có đơn nào trong khoảng này. Tạo đơn đầu tiên để thấy báo cáo.",
     "EMPTY_ACTION": "Tạo đơn",
     "ERROR": "Chưa tải được báo cáo. Thử lại sau ít phút.",
+    "FUNNEL": {
+      "AGENTS_EMPTY": "Chưa có nhân viên được phân công hội thoại trong khoảng thời gian này.",
+      "AGENTS_TITLE": "Hiệu suất nhân viên chốt đơn",
+      "CAMPAIGNS_EMPTY": "Chưa có hội thoại gắn chiến dịch hoặc UTM trong khoảng này.",
+      "CAMPAIGNS_TITLE": "Hiệu quả chiến dịch & nguồn UTM",
+      "CHANNEL_TITLE": "Phễu chuyển đổi theo kênh",
+      "COL_AGENT": "Nhân viên",
+      "COL_AOV": "Giá trị đơn TB",
+      "COL_CAMPAIGN": "Chiến dịch / Nhãn",
+      "COL_CHANNEL": "Kênh",
+      "COL_LEADS": "Khách nhắn",
+      "COL_ORDERS": "Đơn chốt",
+      "COL_RATE": "Tỷ lệ chốt",
+      "COL_REVENUE": "Doanh thu",
+      "COL_SOURCE": "Nguồn",
+      "OVERVIEW_RATE": "Tỷ lệ chốt chung: {rate}% · Đơn TB: {aov}"
+    },
     "KPI": {
       "CONTACTS": "Khách mới",
       "ORDERS": "Đơn mới",
@@ -4170,6 +4535,8 @@
         }
       },
       "SUBTITLE": "Kênh bán, nhân viên và thông tin cửa hàng",
+      "NO_MATCH": "Không tìm thấy mục cài đặt phù hợp.",
+      "SEARCH": "Tìm nhanh cài đặt…",
       "TITLE": "Cài đặt"
     },
     "PAGES": {

@@ -9,6 +9,18 @@ class KchatReportsAPI extends ApiClient {
   summary(range) {
     return axios.get(`${this.url}/summary`, { params: { range } });
   }
+
+  funnel(range) {
+    return axios.get(`${this.url}/funnel`, { params: { range } });
+  }
+
+  brandsOverview(range) {
+    return axios.get(`${this.url}/brands_overview`, { params: { range } });
+  }
+
+  qualityOverview(range) {
+    return axios.get(`${this.url}/quality_overview`, { params: { range } });
+  }
 }
 
 export default new KchatReportsAPI();

@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B53 (2026-11-19): Popup, dropdown và màn hình nhỏ lẻ lệch màu, mất viền ở Dark mode, hoặc bị CSS toàn cục đè lên Tailwind.**
+  - Triệu chứng: Một số popup/dropdown ở chế độ tối dùng nền xám lạnh lệch tông espresso, mất viền (`--border-container` alpha `0`), thẻ `<dialog>` native bị viền/nền trắng mặc định; `<select>` ngoài `#app[dir]` hoặc khác padding bị mũi tên lệch góc trên trái; `<input>` bị cộng dồn `mb-4` và double-border; ảnh trong `.group` bị bóp thành `158x200`; `<body>` dùng `text-slate-600` và thiếu `dir="ltr"` trên `<html>` làm popup `<Teleport to="body">` mất màu chữ hoặc sai hướng `ltr:`.
+  - Nguyên nhân: `_ktech-theme.scss` thiếu override `--alpha-1..3`, `--border-container`, `--button-color` (đang đặt cam đậm), `--solid-purple`/`--text-purple`; `_base.scss` import sau `@import 'tailwindcss/utilities'` mà không bọc `@layer base` và selector input có specificity `(0,13,1)`; `_woot.scss` đặt rule `.group img` với `!important`; `vueapp.html.erb` thiếu `dir="ltr"` trên `<html>`.
+  - Quy tắc: Mọi CSS biến thể từ `_next-colors.scss` (gồm `--alpha-*`, `--border-container` dạng r,g,b,a, `--solid-*`, `--button-color`) phải được override đủ cho `:root`, `.dark` và `.ktech-sidebar`; rule thẻ HTML nền trong `_base.scss` phải nằm trong `@layer base` (dùng `:where()` cho input selector), không dùng `.group img` toàn cục với `!important`, đặt `dir="ltr"` trên `<html>` và đồng bộ `dir` từ `App.vue`.
 - **B45 (2026-11-17): Mũi tên của ô chọn (select) hiện ở góc trên bên trái, đè lên chữ.**
   - Triệu chứng: ô "Sản phẩm" và "Thanh toán" của form đơn hàng có mũi tên ở góc trên trái, đè chữ "Hàng khác"/"Mã QR".
   - Nguyên nhân: `_base.scss` chỉ đặt vị trí mũi tên trong biến thể `ltr:`/`rtl:` (cần thuộc tính `dir`) và tính theo content box; thiếu `dir` thì vị trí về `0 0`.

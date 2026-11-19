@@ -40,6 +40,12 @@ class Webhooks::InstagramEventsJob < MutexApplicationJob
   private
 
   def process_single_entry(entry)
+    if comment_event?(entry)
+      process_comment_changes(entry)
+      process_messages(entry) if entry[:messaging].present? || entry[:standby].present?
+      return
+    end
+
     if test_event?(entry)
       process_test_event(entry)
       return
@@ -69,6 +75,14 @@ class Webhooks::InstagramEventsJob < MutexApplicationJob
 
   def test_event?(entry)
     entry[:changes].present?
+  end
+
+  def comment_event?(entry)
+    Array(entry[:changes]).any? { |change| change[:field].to_s == 'comments' }
+  end
+
+  def process_comment_changes(entry)
+    Kchat::SocialComments::IngestService.from_instagram_entry(entry)
   end
 
   def process_test_event(entry)

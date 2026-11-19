@@ -56,7 +56,27 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
   end
 
   def approve_job
-    render json: service.transition_job(job_id: params.require(:job_id), action: params.require(:job_action))
+    render json: service.transition_job(
+      job_id: params.require(:job_id),
+      action: params.require(:job_action),
+      angle_index: params[:angle_index].presence
+    )
+  end
+
+  def update_angle
+    render json: service.update_angle(
+      job_id: params.require(:job_id),
+      angle_index: params.require(:angle_index),
+      attrs: angle_params
+    )
+  end
+
+  def save_calendar_item
+    render json: { item: service.save_calendar_item(calendar_item_params) }
+  end
+
+  def delete_calendar_item
+    render json: service.delete_calendar_item(params.require(:id))
   end
 
   private
@@ -90,5 +110,13 @@ class Api::V1::Accounts::BrandGrowthController < Api::V1::Accounts::BaseControll
     permitted = params.permit(:brand_name, :positioning, :usp, :persona, :tone, :hard_bans, hard_bans: []).to_h
     permitted['hard_bans'] = permitted['hard_bans'].split(/[,;\n]/).map(&:strip).reject(&:empty?) if permitted['hard_bans'].is_a?(String)
     permitted
+  end
+
+  def angle_params
+    params.permit(:angle, :hook, :body, :cta)
+  end
+
+  def calendar_item_params
+    params.permit(:id, :title, :channel, :status, :scheduled_for, :campaign_tag, :hook, :body, :cta, :source_job_id)
   end
 end

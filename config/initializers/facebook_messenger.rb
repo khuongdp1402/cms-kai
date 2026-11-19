@@ -47,6 +47,10 @@ Rails.application.reloader.to_prepare do
     config.provider = ChatwootFbProvider.new
   end
 
+  unless Facebook::Messenger::Server < Kchat::SocialComments::FacebookServerExtension
+    Facebook::Messenger::Server.prepend(Kchat::SocialComments::FacebookServerExtension)
+  end
+
   Facebook::Messenger::Bot.on :message do |message|
     Webhooks::FacebookEventsJob.perform_later(message.to_json)
   end

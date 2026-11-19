@@ -368,18 +368,18 @@ onUnmounted(() => {
 
 <template>
   <div class="flex flex-col w-full h-full bg-n-surface-1">
-    <div class="flex w-full p-4">
+    <div class="w-full max-w-5xl mx-auto px-4 pt-4 pb-2">
       <NextButton
         :label="t('GENERAL_SETTINGS.BACK')"
         icon="i-lucide-chevron-left"
         faded
-        primary
+        slate
         sm
         @click="onBack"
       />
     </div>
     <section class="flex flex-col flex-grow w-full h-full overflow-hidden">
-      <div class="w-full max-w-5xl mx-auto z-30">
+      <div class="w-full max-w-5xl mx-auto z-30 relative">
         <div class="flex flex-col w-full px-4">
           <SearchHeader
             v-model:filters="filters"

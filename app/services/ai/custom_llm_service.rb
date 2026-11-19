@@ -108,12 +108,19 @@ class Ai::CustomLlmService
     { sanitized_text: sanitized, triggered: blocked.any?, blocked_phrases: blocked }
   end
 
+  BRAND_PROMPT_FIELDS = [
+    ['positioning', 'Định vị thương hiệu'],
+    ['usp', 'Điểm khác biệt (USP)'],
+    ['persona', 'Khách hàng mục tiêu'],
+    ['tone', 'Giọng văn']
+  ].freeze
+
   def build_system_prompt(brand_profile = {})
     profile = brand_profile.to_h.stringify_keys
     lines = ["Bạn là nhân viên tư vấn của thương hiệu #{profile['brand_name'].presence || 'này'}."]
-    lines << "- Định vị & điểm khác biệt: #{profile['usp']}" if profile['usp'].present?
-    lines << "- Khách hàng mục tiêu: #{profile['persona']}" if profile['persona'].present?
-    lines << "- Giọng văn: #{profile['tone']}" if profile['tone'].present?
+    BRAND_PROMPT_FIELDS.each do |key, label|
+      lines << "- #{label}: #{profile[key]}" if profile[key].present?
+    end
     lines << "- Tuyệt đối không dùng các cụm từ: #{normalize_hard_bans(profile['hard_bans']).join(', ')}."
     lines << '- Trả lời ngắn gọn (2-4 câu), đúng trọng tâm, không bịa thông tin sản phẩm hay khuyến mãi.'
     lines.join("\n")

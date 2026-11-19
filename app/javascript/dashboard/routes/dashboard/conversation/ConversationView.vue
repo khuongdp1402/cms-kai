@@ -9,7 +9,6 @@ import wootConstants from 'dashboard/constants/globals';
 import { BUS_EVENTS } from 'shared/constants/busEvents';
 import CmdBarConversationSnooze from 'dashboard/routes/dashboard/commands/CmdBarConversationSnooze.vue';
 import { emitter } from 'shared/helpers/mitt';
-import SidepanelSwitch from 'dashboard/components-next/Conversation/SidepanelSwitch.vue';
 import ConversationSidebar from 'dashboard/components/widgets/conversation/ConversationSidebar.vue';
 
 export default {
@@ -17,7 +16,6 @@ export default {
     ChatList,
     ConversationBox,
     CmdBarConversationSnooze,
-    SidepanelSwitch,
     ConversationSidebar,
   },
   beforeRouteLeave(to, from, next) {
@@ -77,7 +75,13 @@ export default {
       currentChat: 'getSelectedChat',
     }),
     showConversationList() {
-      return this.isOnExpandedLayout ? !this.conversationId : true;
+      if (this.isOnExpandedLayout) {
+        return !this.conversationId;
+      }
+      if (this.conversationId && this.uiSettings?.is_conv_list_collapsed) {
+        return false;
+      }
+      return true;
     },
     showMessageView() {
       return this.conversationId ? true : !this.isOnExpandedLayout;
@@ -212,9 +216,7 @@ export default {
       v-if="showMessageView"
       :inbox-id="inboxId"
       :is-on-expanded-layout="isOnExpandedLayout"
-    >
-      <SidepanelSwitch v-if="currentChat.id" />
-    </ConversationBox>
+    />
     <ConversationSidebar v-if="shouldShowSidebar" :current-chat="currentChat" />
     <CmdBarConversationSnooze />
   </section>

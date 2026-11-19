@@ -1277,8 +1277,8 @@ export default {
     :class="[
       replyBoxClass,
       isPrivate
-        ? 'bg-n-solid-amber border-n-amber-7/50'
-        : 'bg-n-solid-1 border-n-weak focus-within:border-n-brand/40',
+        ? 'bg-[#FFFBEB] dark:bg-[#2B2312] border-[#F59E0B]/60 focus-within:border-[#D97706]'
+        : 'bg-n-solid-1 border-n-strong focus-within:border-n-brand focus-within:ring-2 focus-within:ring-n-brand/15',
     ]"
   >
     <ReplyTopPanel

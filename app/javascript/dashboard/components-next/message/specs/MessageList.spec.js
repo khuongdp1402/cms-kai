@@ -129,4 +129,38 @@ describe('MessageList day separators', () => {
       ]);
     });
   });
+
+  it('collapses 2+ consecutive activity messages into a single expandable group', async () => {
+    const activity = (id, text) => ({
+      id,
+      message_type: 2,
+      status: 'sent',
+      content: text,
+      conversation_id: 1,
+      created_at: at('2026-11-17T08:05:00') + id,
+      sender: null,
+    });
+    const wrapper = mountList([
+      message(1, '2026-11-17T08:00:00'),
+      activity(2, 'John phân công chính mình'),
+      activity(3, 'John thêm nhãn vip'),
+      activity(4, 'John đổi mức ưu tiên'),
+      message(5, '2026-11-17T08:10:00'),
+    ]);
+
+    expect(wrapper.findAll('.message-stub')).toHaveLength(2);
+    const group = wrapper.find('[data-test="kalo-activity-group"]');
+    expect(group.exists()).toBe(true);
+    expect(group.text()).toContain('3 cập nhật hệ thống');
+    expect(
+      wrapper.find('[data-test="kalo-activity-group-list"]').exists()
+    ).toBe(false);
+
+    await wrapper
+      .find('[data-test="kalo-activity-group-toggle"]')
+      .trigger('click');
+    const list = wrapper.find('[data-test="kalo-activity-group-list"]');
+    expect(list.exists()).toBe(true);
+    expect(list.text()).toContain('John thêm nhãn vip');
+  });
 });

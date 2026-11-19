@@ -18,6 +18,7 @@
 html,
 body {
   font-family:
+    'Be Vietnam Pro',
     'Inter',
     -apple-system,
     system-ui,
@@ -151,8 +152,7 @@ body {
 [data-bubble-name="image"] img,
 [data-bubble-name="image"] video,
 .message-bubble-container img,
-.message-bubble-container video,
-.group img {
+.message-bubble-container video {
   max-width: 158px !important;
   max-height: 200px !important;
   width: auto !important;

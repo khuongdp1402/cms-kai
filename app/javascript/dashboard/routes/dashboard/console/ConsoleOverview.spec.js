@@ -109,4 +109,30 @@ describe('ConsoleOverview', () => {
     expect(chip.text()).toBe('refunded');
     expect(chip.classes()).toContain('bg-n-slate-3');
   });
+
+  it('renders infrastructure health strip when health metrics are returned', async () => {
+    consoleAPI.overview.mockResolvedValue({
+      data: {
+        ...overview,
+        health: {
+          active_shops: 118,
+          matched_rate_pct: 94.5,
+          zalo_channels: 14,
+          ai_ready: true,
+          mailhog_enabled: true,
+        },
+      },
+    });
+    const wrapper = mountPage();
+    await flushPromises();
+    const health = wrapper.find('[data-testid="console-health"]');
+    expect(health.exists()).toBe(true);
+    expect(health.text()).toContain('118');
+    expect(health.text()).toContain('94.5%');
+    expect(health.text()).toContain('14');
+    expect(health.text()).toContain('Sẵn sàng');
+    expect(wrapper.find('[data-testid="console-health-mail"]').exists()).toBe(
+      true
+    );
+  });
 });

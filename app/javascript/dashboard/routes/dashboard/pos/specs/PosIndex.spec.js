@@ -108,4 +108,27 @@ describe('PosIndex', () => {
       .findAll('form input')
       .forEach(input => expect(input.attributes('aria-label')).toBeTruthy());
   });
+
+  it('allows opening the add-product modal from the header even when products already exist', async () => {
+    const create = vi.fn().mockResolvedValue({});
+    const wrapper = mountPos([makeProduct()], create);
+    await flushPromises();
+
+    await wrapper.find('[data-test="pos-open-product-modal"]').trigger('click');
+    const modal = wrapper.find('[data-test="pos-product-modal"]');
+    expect(modal.exists()).toBe(true);
+
+    await modal.find('[data-test="product-name"]').setValue('Tinh dầu quế');
+    await modal.find('[data-test="product-price"]').setValue('120000');
+    await modal.find('form').trigger('submit');
+    await flushPromises();
+
+    expect(create.mock.calls[0][1]).toEqual({
+      name: 'Tinh dầu quế',
+      price: 120000,
+    });
+    expect(wrapper.find('[data-test="pos-product-modal"]').exists()).toBe(
+      false
+    );
+  });
 });

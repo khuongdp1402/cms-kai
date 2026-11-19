@@ -77,6 +77,12 @@ export default {
         }
       },
     },
+    isRTL: {
+      immediate: true,
+      handler(val) {
+        document.documentElement.setAttribute('dir', val ? 'rtl' : 'ltr');
+      },
+    },
   },
   mounted() {
     this.initializeColorTheme();
@@ -163,7 +169,8 @@ export default {
 @import './assets/scss/app';
 
 .v-popper--theme-tooltip .v-popper__inner {
-  background: black !important;
+  background: rgb(var(--slate-12)) !important;
+  color: rgb(var(--slate-1)) !important;
   font-size: 0.75rem;
   padding: 4px 8px !important;
   border-radius: 6px;

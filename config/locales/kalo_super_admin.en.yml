@@ -21,8 +21,17 @@ en:
       instance_status: System status
       push_diagnostics: Push diagnostics
       sidekiq: Background jobs (Sidekiq)
+      console: Kalo Console
+      mail_inspector: Mail Inspector
       agent_dashboard: Back to Kalo app
       logout: Log out
+    kpi:
+      total_accounts: Total shop accounts
+      active_accounts: Active shops
+      total_users: Total users
+      total_conversations: Total conversations
+      total_records: Total records
+      shown_records: Shown on this page
     actions:
       new: Add new
       edit: Edit

@@ -13,6 +13,7 @@ const CONSOLE_ROUTES = [
   ['kalo_console_overview', '/app/console/overview'],
   ['kalo_console_shops', '/app/console/shops'],
   ['kalo_console_payments', '/app/console/payments'],
+  ['kalo_console_emails', '/app/console/emails'],
 ];
 
 describe('Kalo console routes', () => {

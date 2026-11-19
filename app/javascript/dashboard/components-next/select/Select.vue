@@ -46,12 +46,13 @@ const modelValue = defineModel({
     <select
       v-model="modelValue"
       :disabled="disabled"
-      class="appearance-none bg-none rounded-lg border-0 outline-1 outline -outline-offset-1 transition-all duration-200 bg-n-surface-1 !mb-0 py-2 px-3 pr-10 text-sm"
+      class="appearance-none bg-none rounded-[10px] border-0 outline-1 outline -outline-offset-1 transition-all duration-150 bg-n-solid-1 !mb-0 py-2 px-3 pr-10 text-sm text-n-slate-12"
       :class="{
-        'outline-n-weak hover:outline-n-slate-6 focus:outline-n-blue-9':
+        'outline-n-strong hover:outline-n-slate-6 focus:outline-n-blue-9 focus:ring-2 focus:ring-n-brand/15':
           !error && !disabled,
-        'outline-n-red-9 focus:outline-n-red-9': error && !disabled,
-        'outline-n-weak bg-n-slate-2 cursor-not-allowed opacity-60': disabled,
+        'outline-n-red-9 focus:outline-n-red-9 focus:ring-2 focus:ring-n-ruby-8/15':
+          error && !disabled,
+        'outline-n-weak bg-n-solid-2 cursor-not-allowed opacity-60': disabled,
       }"
     >
       <option v-if="placeholder" value="" disabled>

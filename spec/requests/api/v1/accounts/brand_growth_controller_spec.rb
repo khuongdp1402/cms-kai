@@ -93,6 +93,28 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
     expect(response).to have_http_status(:unprocessable_entity)
   end
 
+  it 'transitions individual angles independently when angle_index is provided' do
+    stub_ai({ angles: [{ angle: 'A', hook: 'H1', body: 'B1', cta: 'C1' },
+                       { angle: 'B', hook: 'H2', body: 'B2', cta: 'C2' }] }.to_json)
+    post "#{base}/repurpose", params: { topic: 'Nến thơm' }, headers: admin.create_new_auth_token, as: :json
+    job = response.parsed_body
+
+    post "#{base}/approve_job", params: { job_id: job['id'], job_action: 'approve', angle_index: 0 },
+                                headers: admin.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig('angles', 0, 'status')).to eq('approved')
+
+    post "#{base}/approve_job", params: { job_id: job['id'], job_action: 'reject', angle_index: 1 },
+                                headers: admin.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig('angles', 1, 'status')).to eq('rejected')
+    expect(response.parsed_body['status']).to eq('approved')
+
+    post "#{base}/approve_job", params: { job_id: job['id'], job_action: 'approve', angle_index: 9 },
+                                headers: admin.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+  end
+
   describe 'input size limits' do
     let(:headers) { agent.create_new_auth_token }
 
@@ -174,5 +196,49 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
 
       expect(response).to have_http_status(:ok)
     end
+  end
+
+  it 'updates an angle with hard_bans sanitization and injects positioning into prompt' do
+    account.update!(
+      custom_attributes: {
+        'brand_growth' => {
+          'profile' => { 'brand_name' => 'Hana', 'positioning' => 'Nến sạch 100%', 'hard_bans' => ['rẻ nhất'] },
+          'jobs' => []
+        }
+      }
+    )
+    stub_ai({ angles: [{ angle: 'A', hook: 'H1', body: 'B1', cta: 'C1' }] }.to_json)
+    post "#{base}/repurpose", params: { topic: 'Nến mới' }, headers: admin.create_new_auth_token, as: :json
+    expect(a_request(:post, gateway).with { |req| req.body.include?('Nến sạch 100%') }).to have_been_made.once
+    job = response.parsed_body
+
+    patch "#{base}/update_angle",
+          params: { job_id: job['id'], angle_index: 0, hook: 'Hàng rẻ nhất quả đất', body: 'Sáp ong tự nhiên' },
+          headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    expect(response.parsed_body.dig('angles', 0, 'hook')).not_to include('rẻ nhất')
+    expect(response.parsed_body.dig('angles', 0, 'body')).to eq('Sáp ong tự nhiên')
+  end
+
+  it 'manages content calendar items with hard_bans sanitization' do
+    account.update!(
+      custom_attributes: {
+        'brand_growth' => { 'profile' => { 'hard_bans' => ['rẻ nhất'] }, 'jobs' => [] }
+      }
+    )
+    post "#{base}/save_calendar_item",
+         params: { title: 'Bài Tết', channel: 'tiktok', status: 'scheduled', scheduled_for: '2026-12-01', hook: 'Rẻ nhất' },
+         headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    item_id = response.parsed_body.dig('item', 'id')
+    expect(response.parsed_body.dig('item', 'hook')).not_to include('Rẻ nhất')
+
+    get "#{base}/overview", headers: agent.create_new_auth_token, as: :json
+    expect(response.parsed_body['calendar'].size).to eq(1)
+
+    delete "#{base}/delete_calendar_item", params: { id: item_id }, headers: agent.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:ok)
+    get "#{base}/overview", headers: agent.create_new_auth_token, as: :json
+    expect(response.parsed_body['calendar']).to eq([])
   end
 end

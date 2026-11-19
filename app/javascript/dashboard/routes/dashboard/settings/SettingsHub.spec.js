@@ -30,8 +30,9 @@ describe('SettingsHub', () => {
       'canned_list',
       'automation_list',
       'profile_settings_index',
-      'account_overview_reports',
+      'kalo_payment_settings',
     ].forEach(name => expect(targets).toContain(name));
+    expect(targets).not.toContain('account_overview_reports');
     expect(wrapper.find('h1').text()).toBe('Cài đặt');
   });
 });

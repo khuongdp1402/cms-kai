@@ -5,6 +5,18 @@ class Instagram::SendOnInstagramService < Instagram::BaseSendService
     Channel::Instagram
   end
 
+  def send_content
+    if comment_reply_id.present?
+      reply_to_comment(
+        url: "https://graph.instagram.com/v22.0/#{comment_reply_id}/replies",
+        query: { access_token: channel.access_token }
+      )
+      return
+    end
+
+    send_message(message_params)
+  end
+
   # Deliver a message with the given payload.
   # https://developers.facebook.com/docs/instagram-platform/instagram-api-with-instagram-login/messaging-api
   def send_message(message_content)

@@ -1,11 +1,12 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
 import OrderForm from './OrderForm.vue';
 import OrderDrawer from './OrderDrawer.vue';
 import {
@@ -44,6 +45,24 @@ const hasMore = computed(
   () => meta.value.current_page * meta.value.per_page < meta.value.count
 );
 const isBusy = id => busyIds.value.includes(id);
+
+const summaryKpis = computed(() => {
+  const list = orders.value || [];
+  const pendingCount = list.filter(o => o.status === 'pending_payment').length;
+  const processingCount = list.filter(o =>
+    ['paid', 'shipping'].includes(o.status)
+  ).length;
+  const visibleValue = list
+    .filter(o => o.status !== 'cancelled')
+    .reduce((sum, o) => sum + Number(o.total || 0), 0);
+
+  return [
+    { key: 'COUNT', value: meta.value?.count ?? list.length },
+    { key: 'PENDING_PAYMENT', value: pendingCount },
+    { key: 'PROCESSING', value: processingCount },
+    { key: 'VALUE', value: formatVnd(visibleValue) },
+  ];
+});
 
 const load = () =>
   store.dispatch('kchatOrders/fetch', {
@@ -117,39 +136,42 @@ const onCreated = () => {
   load();
 };
 
-onMounted(load);
+const onKeydown = event => {
+  if (event.key === 'Escape' && showForm.value) showForm.value = false;
+};
+
+onMounted(() => {
+  document.addEventListener('keydown', onKeydown);
+  load();
+});
+onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
 </script>
 
 <template>
-  <section class="flex flex-col flex-1 gap-4 p-6 overflow-auto">
-    <header class="flex flex-wrap items-center gap-3">
-      <h1 class="text-xl font-extrabold text-n-slate-12">
-        {{ t('KALO_ORDERS.TITLE') }}
-      </h1>
-      <div class="flex gap-2 ltr:ml-auto rtl:mr-auto">
-        <router-link
-          :to="{ name: 'kalo_pos' }"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2"
-        >
-          <KaloIcon name="store" class="size-4" />
-          {{ t('KALO_ORDERS.OPEN_POS') }}
-        </router-link>
-        <button
-          v-if="!isEmpty"
-          type="button"
-          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
-          @click="showForm = true"
-        >
-          <KaloIcon name="plus" class="size-4" />
-          {{ t('KALO_ORDERS.CREATE') }}
-        </button>
-      </div>
-    </header>
+  <KaloPageShell :title="t('KALO_ORDERS.TITLE')">
+    <template #actions>
+      <router-link
+        :to="{ name: 'kalo_pos' }"
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2"
+      >
+        <KaloIcon name="store" class="size-4" />
+        {{ t('KALO_ORDERS.OPEN_POS') }}
+      </router-link>
+      <button
+        v-if="!isEmpty"
+        type="button"
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
+        @click="showForm = true"
+      >
+        <KaloIcon name="plus" class="size-4" />
+        {{ t('KALO_ORDERS.CREATE') }}
+      </button>
+    </template>
 
     <div
       v-if="isEmpty"
       data-test="orders-empty"
-      class="flex flex-col items-center gap-4 py-20"
+      class="flex flex-col items-center gap-4 py-20 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
     >
       <p class="text-sm text-n-slate-11">{{ t('KALO_ORDERS.EMPTY') }}</p>
       <button
@@ -162,124 +184,155 @@ onMounted(load);
     </div>
 
     <template v-else>
-      <div class="flex flex-wrap items-center gap-3">
-        <div class="flex flex-wrap gap-1">
-          <button
-            v-for="tab in STATUS_TABS"
-            :key="tab.key"
-            type="button"
-            :data-test="`tab-${tab.status || 'all'}`"
-            class="px-3 py-1.5 text-sm font-medium rounded-full whitespace-nowrap"
-            :class="
-              status === tab.status
-                ? 'bg-n-slate-12 text-n-solid-1'
-                : 'text-n-slate-11 hover:bg-n-alpha-2'
-            "
-            @click="chooseTab(tab)"
-          >
-            {{ t(`KALO_ORDERS.TABS.${tab.key}`) }}
-          </button>
+      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div
+          v-for="kpi in summaryKpis"
+          :key="kpi.key"
+          class="flex flex-col gap-1 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
+        >
+          <span class="text-xs font-semibold text-n-slate-10">
+            {{ t(`KALO_ORDERS.KPI.${kpi.key}`) }}
+          </span>
+          <b class="text-2xl font-extrabold text-n-slate-12 tabular-nums">
+            {{ kpi.value }}
+          </b>
         </div>
-        <input
-          v-model="query"
-          type="search"
-          :aria-label="t('KALO_ORDERS.SEARCH')"
-          :placeholder="t('KALO_ORDERS.SEARCH')"
-          class="w-full px-3 py-2 text-sm border rounded-lg sm:w-72 ltr:sm:ml-auto rtl:sm:mr-auto border-n-weak bg-n-solid-1 text-n-slate-12"
-          @input="onSearch"
-        />
       </div>
 
-      <div class="overflow-x-auto border rounded-xl border-n-weak bg-n-solid-1">
-        <table class="w-full text-sm text-n-slate-12">
-          <thead>
-            <tr class="text-xs text-start text-n-slate-11">
-              <th class="px-4 py-3 font-semibold text-start">
-                {{ t('KALO_ORDERS.COLUMNS.ORDER') }}
-              </th>
-              <th class="px-4 py-3 font-semibold text-start">
-                {{ t('KALO_ORDERS.COLUMNS.CUSTOMER') }}
-              </th>
-              <th class="px-4 py-3 font-semibold text-start">
-                {{ t('KALO_ORDERS.COLUMNS.PRODUCTS') }}
-              </th>
-              <th class="px-4 py-3 font-semibold text-end">
-                {{ t('KALO_ORDERS.COLUMNS.TOTAL') }}
-              </th>
-              <th class="px-4 py-3 font-semibold text-start">
-                {{ t('KALO_ORDERS.COLUMNS.PAYMENT') }}
-              </th>
-              <th class="px-4 py-3 font-semibold text-start">
-                {{ t('KALO_ORDERS.COLUMNS.DELIVERY') }}
-              </th>
-              <th class="px-4 py-3" />
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="order in orders"
-              :key="order.id"
-              data-test="order-row"
-              class="border-t cursor-pointer border-n-weak hover:bg-n-alpha-1"
-              @click="openOrderId = order.id"
+      <div
+        class="overflow-hidden border shadow-sm rounded-2xl border-n-weak bg-n-solid-1"
+      >
+        <div
+          class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b bg-n-solid-2 border-n-weak"
+        >
+          <div class="inline-flex flex-wrap gap-1 p-1 rounded-xl bg-n-solid-3">
+            <button
+              v-for="tab in STATUS_TABS"
+              :key="tab.key"
+              type="button"
+              :data-test="`tab-${tab.status || 'all'}`"
+              class="px-3 py-1.5 text-sm font-semibold rounded-lg whitespace-nowrap transition-colors"
+              :class="
+                status === tab.status
+                  ? 'bg-n-solid-1 text-n-slate-12 shadow-sm'
+                  : 'text-n-slate-10 hover:text-n-slate-12'
+              "
+              @click="chooseTab(tab)"
             >
-              <td class="px-4 py-3 whitespace-nowrap">
-                <b>#{{ order.number }}</b>
-                <div class="text-xs text-n-slate-11">
-                  {{ timeLabel(order) }}
-                </div>
-              </td>
-              <td class="px-4 py-3 whitespace-nowrap">
-                {{
-                  order.contact?.name ||
-                  t(`KALO_ORDERS.SOURCE.${order.source.toUpperCase()}`)
-                }}
-              </td>
-              <td class="px-4 py-3 max-w-64 truncate">
-                {{ itemsSummary(order) }}
-              </td>
-              <td class="px-4 py-3 font-bold text-end whitespace-nowrap">
-                {{ formatVnd(order.total) }}
-              </td>
-              <td class="px-4 py-3 whitespace-nowrap">
-                <span
-                  class="px-2 py-0.5 text-xs font-semibold rounded-full"
-                  :class="paymentChip(order).tone"
-                >
-                  {{ t(`KALO_ORDERS.PAYMENT_CHIP.${paymentChip(order).key}`) }}
-                </span>
-              </td>
-              <td class="px-4 py-3 whitespace-nowrap">
-                <span
-                  class="px-2 py-0.5 text-xs font-semibold rounded-full"
-                  :class="deliveryChip(order).tone"
-                >
+              {{ t(`KALO_ORDERS.TABS.${tab.key}`) }}
+            </button>
+          </div>
+          <input
+            v-model="query"
+            type="search"
+            :aria-label="t('KALO_ORDERS.SEARCH')"
+            :placeholder="t('KALO_ORDERS.SEARCH')"
+            class="w-full h-9 px-3 py-1.5 mb-0 text-sm border rounded-[10px] outline-none sm:w-72 border-n-strong bg-n-solid-1 text-n-slate-12 hover:border-n-slate-6 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15"
+            @input="onSearch"
+          />
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-n-slate-12">
+            <thead>
+              <tr
+                class="text-xs uppercase border-b bg-n-solid-2 border-n-weak text-n-slate-10"
+              >
+                <th class="px-4 py-3 font-semibold text-start">
+                  {{ t('KALO_ORDERS.COLUMNS.ORDER') }}
+                </th>
+                <th class="px-4 py-3 font-semibold text-start">
+                  {{ t('KALO_ORDERS.COLUMNS.CUSTOMER') }}
+                </th>
+                <th class="px-4 py-3 font-semibold text-start">
+                  {{ t('KALO_ORDERS.COLUMNS.PRODUCTS') }}
+                </th>
+                <th class="px-4 py-3 font-semibold text-end">
+                  {{ t('KALO_ORDERS.COLUMNS.TOTAL') }}
+                </th>
+                <th class="px-4 py-3 font-semibold text-start">
+                  {{ t('KALO_ORDERS.COLUMNS.PAYMENT') }}
+                </th>
+                <th class="px-4 py-3 font-semibold text-start">
+                  {{ t('KALO_ORDERS.COLUMNS.DELIVERY') }}
+                </th>
+                <th class="px-4 py-3" />
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="order in orders"
+                :key="order.id"
+                data-test="order-row"
+                class="border-t cursor-pointer border-n-weak hover:bg-n-solid-2"
+                @click="openOrderId = order.id"
+              >
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <b class="tabular-nums">#{{ order.number }}</b>
+                  <div class="text-xs text-n-slate-10 tabular-nums">
+                    {{ timeLabel(order) }}
+                  </div>
+                </td>
+                <td class="px-4 py-3 font-medium whitespace-nowrap">
                   {{
-                    t(`KALO_ORDERS.DELIVERY_CHIP.${deliveryChip(order).key}`)
+                    order.contact?.name ||
+                    t(`KALO_ORDERS.SOURCE.${order.source.toUpperCase()}`)
                   }}
-                </span>
-              </td>
-              <td class="px-4 py-3 text-end">
-                <button
-                  v-if="rowAction(order)"
-                  type="button"
-                  data-test="row-action"
-                  :disabled="isBusy(order.id)"
-                  class="inline-flex items-center gap-1.5 px-2.5 py-1.5 text-sm font-semibold rounded-[10px] bg-woot-50 text-woot-600 hover:bg-woot-75 disabled:opacity-50"
-                  @click.stop="runAction(order, rowAction(order))"
-                >
-                  <KaloIcon
-                    v-if="rowAction(order).icon"
-                    :name="rowAction(order).icon"
-                    class="size-4"
-                  />
-                  {{ t(`KALO_ORDERS.ACTIONS.${rowAction(order).key}`) }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="px-4 py-3 max-w-64 truncate text-n-slate-11">
+                  {{ itemsSummary(order) }}
+                </td>
+                <td class="px-4 py-3 font-bold text-end whitespace-nowrap tabular-nums">
+                  {{ formatVnd(order.total) }}
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <span
+                    class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                    :class="paymentChip(order).tone"
+                  >
+                    {{ t(`KALO_ORDERS.PAYMENT_CHIP.${paymentChip(order).key}`) }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 whitespace-nowrap">
+                  <span
+                    v-if="order.status === 'cancelled'"
+                    class="text-xs text-n-slate-10"
+                  >
+                    —
+                  </span>
+                  <span
+                    v-else
+                    class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
+                    :class="deliveryChip(order).tone"
+                  >
+                    {{
+                      t(`KALO_ORDERS.DELIVERY_CHIP.${deliveryChip(order).key}`)
+                    }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-end">
+                  <button
+                    v-if="rowAction(order)"
+                    type="button"
+                    data-test="row-action"
+                    :disabled="isBusy(order.id)"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-[9px] bg-woot-50 text-woot-600 hover:bg-woot-75 disabled:opacity-50"
+                    @click.stop="runAction(order, rowAction(order))"
+                  >
+                    <KaloIcon
+                      v-if="rowAction(order).icon"
+                      :name="rowAction(order).icon"
+                      class="size-3.5"
+                    />
+                    {{ t(`KALO_ORDERS.ACTIONS.${rowAction(order).key}`) }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <p
         v-if="!orders.length && !uiFlags.isFetching"
         data-test="orders-none"
@@ -292,7 +345,7 @@ onMounted(load);
         type="button"
         data-test="load-more"
         :disabled="uiFlags.isFetching"
-        class="self-center px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 disabled:opacity-50"
+        class="self-center px-4 py-2 text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2 disabled:opacity-50"
         @click="loadMore"
       >
         {{ t('KALO_ORDERS.LOAD_MORE') }}
@@ -301,9 +354,15 @@ onMounted(load);
 
     <div
       v-if="showForm"
-      class="fixed inset-0 z-50 grid p-4 overflow-auto bg-black/40 place-items-center"
+      class="fixed inset-0 z-50 grid p-4 overflow-auto bg-black/50 backdrop-blur-sm place-items-center"
+      @click.self="showForm = false"
     >
-      <div class="w-full max-w-lg p-6 rounded-2xl bg-n-solid-1">
+      <div
+        role="dialog"
+        aria-modal="true"
+        :aria-label="t('KALO_ORDERS.FORM.TITLE')"
+        class="w-full max-w-lg p-6 border shadow-2xl rounded-2xl border-n-strong bg-n-solid-1"
+      >
         <OrderForm @created="onCreated" @cancel="showForm = false" />
       </div>
     </div>
@@ -315,5 +374,5 @@ onMounted(load);
       @close="openOrderId = null"
       @action="runAction(openOrder, $event)"
     />
-  </section>
+  </KaloPageShell>
 </template>

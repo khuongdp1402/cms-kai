@@ -4,6 +4,7 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 
 const names = [
+  'kalo_overview',
   'home',
   'kalo_orders',
   'kalo_pos',

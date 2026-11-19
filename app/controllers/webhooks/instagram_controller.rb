@@ -67,7 +67,9 @@ class Webhooks::InstagramController < ActionController::API
 
   def instagram_ids_from_entry(entry)
     messages = entry[:messaging].presence || entry[:standby] || []
-    messages.filter_map { |messaging| instagram_id_from_messaging(messaging.with_indifferent_access) }
+    ids = messages.filter_map { |messaging| instagram_id_from_messaging(messaging.with_indifferent_access) }
+    ids << entry[:id] if entry[:changes].present? && entry[:id].present?
+    ids
   end
 
   def instagram_id_from_messaging(messaging)

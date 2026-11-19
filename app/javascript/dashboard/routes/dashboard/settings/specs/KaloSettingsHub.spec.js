@@ -86,7 +86,7 @@ const mountHub = async ({
 };
 
 describe('SettingsHub (Kalo groups)', () => {
-  it('shows the shop-owner groups in order', async () => {
+  it('shows the six storefront Bento groups in order (reports moved to ReportsIndex)', async () => {
     const { wrapper } = await mountHub();
     const headings = wrapper.findAll('h2').map(h => h.text());
     expect(headings).toEqual([
@@ -96,8 +96,18 @@ describe('SettingsHub (Kalo groups)', () => {
       'Cửa hàng',
       'Tài khoản của tôi',
       'Nâng cao',
-      'Báo cáo chi tiết',
     ]);
+  });
+
+  it('filters setting rows in real time via quick search', async () => {
+    const { wrapper } = await mountHub();
+    const input = wrapper.find('[data-test="settings-search"]');
+    await input.setValue('ngân hàng');
+    expect(wrapper.text()).toContain('Nhận tiền');
+    expect(wrapper.text()).not.toContain('Bot trả lời');
+
+    await input.setValue('zzzz_khong_ton_tai');
+    expect(wrapper.find('[data-test="settings-no-match"]').exists()).toBe(true);
   });
 
   it('restores bots and conversation workflow and drops the dead Chatwoot billing link', async () => {

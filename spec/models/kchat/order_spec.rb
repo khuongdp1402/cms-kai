@@ -230,6 +230,13 @@ RSpec.describe Kchat::Order do
       expect { order_in('pending_payment', method: 'transfer_qr').transition!(:ship) }.to raise_error(described_class::InvalidTransition)
     end
 
+    it 'allows completing a paid pos order directly without shipping' do
+      pos_order = build_order(attributes: base.merge(source: 'pos', payment_method: 'cash'))
+      expect(pos_order.status).to eq('paid')
+      expect(pos_order.transition!(:complete).status).to eq('completed')
+      expect { order_in('paid').transition!(:complete) }.to raise_error(described_class::InvalidTransition)
+    end
+
     it 'rejects unknown events' do
       expect { build_order.transition!(:explode) }.to raise_error(described_class::InvalidTransition)
     end

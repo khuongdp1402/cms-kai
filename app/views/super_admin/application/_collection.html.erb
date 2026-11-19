@@ -67,7 +67,13 @@ to display a collection of resources in an HTML table.
               <a href="<%= polymorphic_path([namespace, resource]) -%>"
                  class="action-show"
                  >
-                <%= render_field attribute %>
+                <% if attribute.attribute.to_s == 'status' %>
+                  <span class="kalo-status-pill <%= attribute.data.to_s == 'suspended' ? 'kalo-status-pill--warn' : '' %>">
+                    <%= render_field attribute %>
+                  </span>
+                <% else %>
+                  <%= render_field attribute %>
+                <% end %>
               </a>
             <% end -%>
           </td>

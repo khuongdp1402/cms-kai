@@ -64,7 +64,19 @@ Rails.application.routes.draw do
               get :preview_qr
             end
             resources :reports, only: [] do
-              get :summary, on: :collection
+              collection do
+                get :summary
+                get :funnel
+                get :brands_overview
+                get :quality_overview
+              end
+            end
+            resource :comment_rules, only: [:show, :update]
+            resources :broadcasts, only: [:index, :create] do
+              get :preview, on: :collection
+            end
+            resources :conversations, only: [] do
+              patch :attribution, on: :member
             end
             resource :subscription, only: [:show]
           end
@@ -597,6 +609,9 @@ Rails.application.routes.draw do
         resources :payment_events, only: [:index] do
           post :assign, on: :member
         end
+        resources :mail_inspector, only: [:index, :destroy] do
+          delete :clear, on: :collection
+        end
       end
     end
   end
@@ -609,6 +624,9 @@ Rails.application.routes.draw do
     post :save_profile
     post :repurpose
     post :approve_job
+    patch :update_angle
+    post :save_calendar_item
+    delete :delete_calendar_item
   end
 
   if ChatwootApp.enterprise? && File.exist?(Rails.root.join('enterprise/app/controllers/enterprise/api/v1/accounts_controller.rb'))

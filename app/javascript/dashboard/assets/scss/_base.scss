@@ -2,54 +2,61 @@
 
 // Base typography
 // -------------------------
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-medium text-n-slate-12;
-}
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-medium text-n-slate-12;
+  }
 
-p {
-  text-rendering: optimizeLegibility;
-  @apply mb-2 leading-[1.65] text-sm;
+  p {
+    text-rendering: optimizeLegibility;
+    @apply mb-2 leading-[1.65] text-sm;
+
+    a {
+      @apply text-n-brand dark:text-n-brand cursor-pointer;
+    }
+  }
 
   a {
-    @apply text-n-brand dark:text-n-brand cursor-pointer;
+    @apply text-sm;
   }
-}
 
-a {
-  @apply text-sm;
-}
+  hr {
+    @apply clear-both max-w-full h-0 my-5 mx-0 border-slate-300 dark:border-slate-600;
+  }
 
-hr {
-  @apply clear-both max-w-full h-0 my-5 mx-0 border-slate-300 dark:border-slate-600;
-}
+  ul,
+  ol,
+  dl {
+    @apply list-disc list-outside leading-[1.65];
+  }
 
-ul,
-ol,
-dl {
-  @apply list-disc list-outside leading-[1.65];
-}
+  ul:not(.reset-base),
+  ol:not(.reset-base),
+  dl:not(.reset-base) {
+    @apply mb-0;
+  }
 
-ul:not(.reset-base),
-ol:not(.reset-base),
-dl:not(.reset-base) {
-  @apply mb-0;
-}
+  // Button base
+  button {
+    font-family: inherit;
+    @apply inline-block text-center align-middle cursor-pointer text-sm m-0 py-1 px-2.5 transition-all duration-200 ease-in-out border-0 border-none rounded-lg disabled:opacity-50;
+  }
 
-// Button base
-button {
-  font-family: inherit;
-  @apply inline-block text-center align-middle cursor-pointer text-sm m-0 py-1 px-2.5 transition-all duration-200 ease-in-out border-0 border-none rounded-lg disabled:opacity-50;
-}
+  // Form elements
+  // -------------------------
+  label {
+    @apply text-n-slate-12 block m-0 leading-7 text-sm font-medium;
+  }
 
-// Form elements
-// -------------------------
-label {
-  @apply text-n-slate-12 block m-0 leading-7 text-sm font-medium;
+  // Focus outline removal
+  textarea {
+    outline: none;
+  }
 }
 
 .input-wrap,
@@ -57,20 +64,18 @@ label {
   @apply text-n-slate-11 text-sm font-medium;
 }
 
-// Focus outline removal
-.button,
-textarea {
+.button {
   outline: none;
 }
 
 // Field base styles (Input, TextArea, Select)
 @layer components {
   .field-base {
-    @apply block box-border w-full transition-colors duration-[0.25s] ease-[ease-in-out] focus:outline-n-brand dark:focus:outline-n-brand appearance-none mx-0 mt-0 mb-4 py-2 px-3 rounded-lg text-sm font-normal bg-n-alpha-black2 placeholder:text-n-slate-10 dark:placeholder:text-n-slate-10 text-n-slate-12 border-none outline outline-1 outline-n-weak dark:outline-n-weak hover:outline-n-slate-6 dark:hover:outline-n-slate-6;
+    @apply block box-border w-full transition-colors duration-150 ease-in-out focus:outline-n-brand dark:focus:outline-n-brand focus:ring-2 focus:ring-n-brand/15 appearance-none mx-0 mt-0 mb-4 py-2 px-3 rounded-[10px] text-sm font-normal bg-n-solid-1 placeholder:text-n-slate-10 dark:placeholder:text-n-slate-10 text-n-slate-12 border-none outline outline-1 outline-n-strong dark:outline-n-strong hover:outline-n-slate-6 dark:hover:outline-n-slate-6;
   }
 
   .field-disabled {
-    @apply opacity-50 outline-n-weak dark:outline-n-weak cursor-not-allowed;
+    @apply bg-n-solid-2 opacity-60 outline-n-weak dark:outline-n-weak cursor-not-allowed;
   }
 
   .field-error {
@@ -80,44 +85,72 @@ textarea {
 
 $form-input-selector: "input[type]:not([type='file']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='button']):not([type='submit']):not([type='reset']):not([type='color']):not([type='image']):not([type='hidden']):not(.reset-base):not(.no-margin)";
 
-#{$form-input-selector} {
-  @apply field-base h-10;
+@layer base {
+  :where(#{$form-input-selector}) {
+    @apply field-base h-10;
 
-  &[disabled] {
-    @apply field-disabled;
+    &[disabled] {
+      @apply field-disabled;
+    }
+
+    &.error {
+      @apply field-error mb-1;
+    }
   }
 
-  &.error {
-    @apply field-error mb-1;
-  }
-}
-
-input[type='file'] {
-  @apply leading-[1.15] mb-4 border-0 bg-transparent text-sm;
-}
-
-// Select
-select {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28110, 111, 115%29'></polygon></svg>");
-  background-size: 9px 6px;
-
-  @apply field-base h-10 bg-origin-content bg-no-repeat py-2 ltr:bg-[right_-1rem_center] rtl:bg-[left_-1rem_center] ltr:pr-6 rtl:pl-6 rtl:pr-3 ltr:pl-3;
-
-  &[disabled] {
-    @apply field-disabled;
+  input[type='file'] {
+    @apply leading-[1.15] mb-4 border-0 bg-transparent text-sm;
   }
 
-  option:not(:disabled) {
-    @apply bg-n-solid-2 text-n-slate-12;
+  // Select
+  select {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='32' height='24' viewBox='0 0 32 24'><polygon points='0,0 32,0 16,24' style='fill: rgb%28110, 111, 115%29'></polygon></svg>");
+    background-size: 9px 6px;
+
+    @apply field-base h-10 bg-origin-padding bg-no-repeat py-2 bg-[position:right_0.75rem_center] rtl:bg-[position:left_0.75rem_center] pr-8 pl-3 rtl:pl-8 rtl:pr-3;
+
+    &[disabled] {
+      @apply field-disabled;
+    }
+
+    option:not(:disabled) {
+      @apply bg-n-solid-2 text-n-slate-12;
+    }
   }
-}
 
-// Textarea
-textarea {
-  @apply field-base h-16;
+  // Textarea
+  textarea {
+    @apply field-base h-16;
 
-  &[disabled] {
-    @apply field-disabled;
+    &[disabled] {
+      @apply field-disabled;
+    }
+  }
+
+  // Code styling
+  code {
+    font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas',
+      '"Liberation Mono"', '"Courier New"', 'monospace';
+    @apply text-xs border-0;
+
+    &.hljs {
+      @apply bg-n-slate-3 dark:bg-n-solid-3 text-n-slate-12 rounded-lg p-5;
+
+      .hljs-number,
+      .hljs-string {
+        @apply text-n-ruby-9 dark:text-n-ruby-9;
+      }
+
+      .hljs-name,
+      .hljs-tag {
+        @apply text-n-slate-11;
+      }
+    }
+  }
+
+  // Table
+  table {
+    @apply border-spacing-0 text-sm w-full;
   }
 }
 
@@ -176,28 +209,23 @@ label:has(.help-text) {
   }
 }
 
-// Code styling
-code {
-  font-family: 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas',
-    '"Liberation Mono"', '"Courier New"', 'monospace';
-  @apply text-xs border-0;
-
-  &.hljs {
-    @apply bg-n-slate-3 dark:bg-n-solid-3 text-n-slate-12 rounded-lg p-5;
-
-    .hljs-number,
-    .hljs-string {
-      @apply text-n-ruby-9 dark:text-n-ruby-9;
-    }
-
-    .hljs-name,
-    .hljs-tag {
-      @apply text-n-slate-11;
-    }
+// Kalo v3 subtle slim scrollbars
+@layer base {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
-}
 
-// Table
-table {
-  @apply border-spacing-0 text-sm w-full;
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(120, 105, 95, 0.28);
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(120, 105, 95, 0.45);
+  }
 }

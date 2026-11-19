@@ -6,6 +6,7 @@ import { useElementSize } from '@vueuse/core';
 import InboxName from '../InboxName.vue';
 import MoreActions from './MoreActions.vue';
 import Avatar from 'next/avatar/Avatar.vue';
+import Button from 'dashboard/components-next/button/Button.vue';
 import SLACardLabel from './components/SLACardLabel.vue';
 import ConversationCallButton from './ConversationCallButton.vue';
 import KaloIcon from 'next/icon/KaloIcon.vue';
@@ -14,6 +15,7 @@ import wootConstants from 'dashboard/constants/globals';
 import { conversationListPageURL } from 'dashboard/helper/URLHelper';
 import { snoozedReopenTime } from 'dashboard/helper/snoozeHelpers';
 import { useInbox } from 'dashboard/composables/useInbox';
+import { useContactPanel } from 'dashboard/composables/useContactPanel';
 import { useAlert } from 'dashboard/composables';
 import { useI18n } from 'vue-i18n';
 import { copyTextToClipboard } from 'shared/helpers/clipboard';
@@ -107,14 +109,61 @@ const copyConversationId = async () => {
     // error
   }
 };
+
+const hasUISettings = computed(() => 'getUISettings' in store.getters);
+const contactPanel = hasUISettings.value ? useContactPanel() : null;
+const isConvListCollapsed = computed(() =>
+  Boolean(store.getters.getUISettings?.is_conv_list_collapsed)
+);
+const isContactPanelOpen = computed(() =>
+  contactPanel ? contactPanel.isContactPanelOpenFor(currentChat.value?.id) : false
+);
+
+const toggleConvList = () => {
+  if (!hasUISettings.value) return;
+  const currentUi = store.getters.getUISettings || {};
+  store.dispatch('updateUISettings', {
+    uiSettings: {
+      ...currentUi,
+      is_conv_list_collapsed: !isConvListCollapsed.value,
+    },
+  });
+};
+
+const toggleContactSidebar = () => {
+  contactPanel?.toggleContactPanel(currentChat.value?.id);
+};
 </script>
 
 <template>
   <div
     ref="conversationHeader"
-    class="flex items-center justify-between flex-1 w-full min-w-0 gap-3 px-4 py-2.5 min-h-[3.75rem]"
+    class="flex items-center justify-between flex-1 w-full min-w-0 gap-3 px-4 py-2.5 min-h-[3.75rem] bg-n-surface-1"
   >
     <div class="flex items-center flex-1 min-w-0 gap-2.5">
+      <Button
+        v-if="!showBackButton && hasUISettings"
+        data-test="toggle-conv-list"
+        ghost
+        slate
+        sm
+        :icon="
+          isConvListCollapsed
+            ? 'i-lucide-panel-left-open'
+            : 'i-lucide-panel-left-close'
+        "
+        :title="
+          isConvListCollapsed
+            ? t('KALO_CHAT_THREAD.HEADER_TOGGLES.SHOW_CHAT_LIST')
+            : t('KALO_CHAT_THREAD.HEADER_TOGGLES.HIDE_CHAT_LIST')
+        "
+        :aria-label="
+          isConvListCollapsed
+            ? t('KALO_CHAT_THREAD.HEADER_TOGGLES.SHOW_CHAT_LIST')
+            : t('KALO_CHAT_THREAD.HEADER_TOGGLES.HIDE_CHAT_LIST')
+        "
+        @click="toggleConvList"
+      />
       <button
         v-if="showBackButton"
         type="button"
@@ -195,6 +244,22 @@ const copyConversationId = async () => {
       />
       <ConversationCallButton :inbox="inbox" :chat="currentChat" />
       <MoreActions :conversation-id="currentChat.id" />
+      <Button
+        v-if="hasUISettings"
+        data-test="toggle-contact-panel"
+        variant="outline"
+        color="slate"
+        size="sm"
+        :icon="
+          isContactPanelOpen
+            ? 'i-lucide-panel-right-close'
+            : 'i-lucide-panel-right-open'
+        "
+        :label="t('KALO_CHAT_THREAD.PANEL.TITLE')"
+        :aria-pressed="isContactPanelOpen"
+        class="hidden md:inline-flex"
+        @click="toggleContactSidebar"
+      />
     </div>
   </div>
 </template>

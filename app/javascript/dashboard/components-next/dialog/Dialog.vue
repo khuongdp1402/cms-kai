@@ -118,58 +118,77 @@ defineExpose({ open, close });
   <TeleportWithDirection to="body">
     <dialog
       ref="dialogRef"
-      class="w-full transition-all duration-300 ease-in-out shadow-xl rounded-xl"
-      :class="[
-        maxWidthClass,
-        positionClass,
-        overflowYAuto ? 'overflow-y-auto' : 'overflow-visible',
-      ]"
+      class="bg-transparent p-0 border-0 text-n-slate-12 max-h-[calc(100dvh-2rem)] w-[calc(100vw-1.5rem)] sm:w-full transition-all duration-300 ease-in-out shadow-2xl rounded-2xl overflow-hidden"
+      :class="[maxWidthClass, positionClass]"
       @close.prevent="handleDialogClose"
     >
       <OnClickOutside @trigger="handleClickOutside">
         <form
           ref="dialogContentRef"
-          class="flex flex-col w-full h-auto gap-6 p-6 overflow-visible text-start align-middle transition-all duration-300 ease-in-out transform bg-n-alpha-3 backdrop-blur-[100px] shadow-xl rounded-xl"
+          class="flex flex-col w-full max-h-[calc(100dvh-2rem)] overflow-hidden text-start align-middle transition-all duration-200 ease-out transform bg-n-solid-1 border border-n-strong shadow-2xl rounded-2xl"
           @submit.prevent="confirm"
           @click.stop
         >
-          <div v-if="title || description" class="flex flex-col gap-2">
-            <h3 class="text-base font-medium leading-6 text-n-slate-12">
-              {{ title }}
-            </h3>
-            <slot name="description">
-              <p v-if="description" class="mb-0 text-sm text-n-slate-11">
-                {{ description }}
-              </p>
+          <header
+            v-if="title || description || $slots.description"
+            class="flex items-start justify-between gap-4 px-6 py-4 border-b shrink-0 border-n-weak bg-n-solid-1"
+          >
+            <div class="flex flex-col min-w-0 gap-1">
+              <h3 class="text-base font-bold leading-6 text-n-slate-12">
+                {{ title }}
+              </h3>
+              <slot name="description">
+                <p v-if="description" class="mb-0 text-sm text-n-slate-10">
+                  {{ description }}
+                </p>
+              </slot>
+            </div>
+            <Button
+              ghost
+              slate
+              sm
+              icon="i-lucide-x"
+              type="button"
+              :aria-label="cancelButtonLabel || t('DIALOG.BUTTONS.CANCEL')"
+              class="shrink-0 -mr-1.5 -mt-0.5"
+              @click="close"
+            />
+          </header>
+          <div
+            class="flex flex-col flex-1 min-h-0 gap-5 px-6 py-5"
+            :class="overflowYAuto ? 'overflow-y-auto' : 'overflow-y-auto'"
+          >
+            <slot v-if="isOpen" />
+          </div>
+          <!-- Dialog content footer -->
+          <div
+            v-if="$slots.footer || showCancelButton || showConfirmButton"
+            class="px-6 py-3.5 border-t shrink-0 border-n-weak bg-n-solid-2"
+          >
+            <slot name="footer">
+              <div
+                v-if="showCancelButton || showConfirmButton"
+                class="flex items-center justify-end w-full gap-2.5"
+              >
+                <Button
+                  v-if="showCancelButton"
+                  variant="outline"
+                  color="slate"
+                  :label="cancelButtonLabel || t('DIALOG.BUTTONS.CANCEL')"
+                  type="button"
+                  @click="close"
+                />
+                <Button
+                  v-if="showConfirmButton"
+                  :color="type === 'edit' ? 'blue' : 'ruby'"
+                  :label="confirmButtonLabel || t('DIALOG.BUTTONS.CONFIRM')"
+                  :is-loading="isLoading"
+                  :disabled="disableConfirmButton || isLoading"
+                  type="submit"
+                />
+              </div>
             </slot>
           </div>
-          <slot v-if="isOpen" />
-          <!-- Dialog content will be injected here -->
-          <slot name="footer">
-            <div
-              v-if="showCancelButton || showConfirmButton"
-              class="flex items-center justify-between w-full gap-3"
-            >
-              <Button
-                v-if="showCancelButton"
-                variant="faded"
-                color="slate"
-                :label="cancelButtonLabel || t('DIALOG.BUTTONS.CANCEL')"
-                class="w-full"
-                type="button"
-                @click="close"
-              />
-              <Button
-                v-if="showConfirmButton"
-                :color="type === 'edit' ? 'blue' : 'ruby'"
-                :label="confirmButtonLabel || t('DIALOG.BUTTONS.CONFIRM')"
-                class="w-full"
-                :is-loading="isLoading"
-                :disabled="disableConfirmButton || isLoading"
-                type="submit"
-              />
-            </div>
-          </slot>
         </form>
       </OnClickOutside>
     </dialog>

@@ -62,6 +62,38 @@ It renders the `_table` partial to display details about the resources.
 </header>
 
 <section class="main-content__body main-content__body--flush">
+  <% if page.resource_name.to_s == 'account' %>
+    <div class="kalo-kpi-strip">
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.total_accounts') %></span>
+        <b class="kalo-kpi-card__value"><%= Account.count %></b>
+      </div>
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.active_accounts') %></span>
+        <b class="kalo-kpi-card__value"><%= Account.active.count %></b>
+      </div>
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.total_users') %></span>
+        <b class="kalo-kpi-card__value"><%= User.count %></b>
+      </div>
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.total_conversations') %></span>
+        <b class="kalo-kpi-card__value"><%= Conversation.count %></b>
+      </div>
+    </div>
+  <% else %>
+    <div class="kalo-kpi-strip">
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.total_records') %></span>
+        <b class="kalo-kpi-card__value"><%= resources.respond_to?(:total_count) ? resources.total_count : resources.size %></b>
+      </div>
+      <div class="kalo-kpi-card">
+        <span class="kalo-kpi-card__label"><%= t('kalo_super_admin.kpi.shown_records') %></span>
+        <b class="kalo-kpi-card__value"><%= resources.size %></b>
+      </div>
+    </div>
+  <% end %>
+
   <%= render(
     "collection",
     collection_presenter: page,

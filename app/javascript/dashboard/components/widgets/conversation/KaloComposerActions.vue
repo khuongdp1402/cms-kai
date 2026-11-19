@@ -7,6 +7,7 @@ import OrdersAPI from 'dashboard/api/kchat/orders';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import TeleportWithDirection from 'dashboard/components-next/TeleportWithDirection.vue';
 import OrderForm from 'dashboard/routes/dashboard/orders/OrderForm.vue';
 
 const props = defineProps({
@@ -152,7 +153,7 @@ const dialogClass =
       <span class="hidden sm:inline">{{ t('KALO_CHAT.ACTIONS.QR') }}</span>
     </button>
 
-    <Teleport to="body">
+    <TeleportWithDirection to="body">
       <div v-if="showForm" :class="overlayClass" @click.self="closeDialogs">
         <div
           ref="dialogEl"
@@ -254,6 +255,6 @@ const dialogClass =
           </button>
         </div>
       </div>
-    </Teleport>
+    </TeleportWithDirection>
   </div>
 </template>

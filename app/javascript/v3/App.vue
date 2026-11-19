@@ -44,7 +44,11 @@ export default {
 </script>
 
 <template>
-  <div class="h-full min-h-screen w-full antialiased" :class="theme">
+  <div
+    class="h-full min-h-screen w-full antialiased text-n-slate-12 bg-n-background"
+    :class="theme"
+    dir="ltr"
+  >
     <router-view />
     <SnackbarContainer />
   </div>
@@ -59,8 +63,8 @@ export default {
 
 html,
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-    Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
   @apply h-full w-full;
 
   input,
@@ -74,7 +78,8 @@ body {
 }
 
 .v-popper--theme-tooltip .v-popper__inner {
-  background: black !important;
+  background: rgb(var(--slate-12)) !important;
+  color: rgb(var(--slate-1)) !important;
   font-size: 0.75rem;
   padding: 4px 8px !important;
   border-radius: 6px;

@@ -20,53 +20,68 @@
     --blue-11: 163 54 29;  // #A3361D — action ink
     --blue-12: 58 19 10;   // #3A130A
 
-    --slate-1: 255 252 250;
-    --slate-2: 255 248 245;
-    --slate-3: 247 239 235;
-    --slate-4: 240 228 221; // #F0E4DD — line
-    --slate-5: 230 214 205; // #E6D6CD — line 2
-    --slate-6: 217 198 187;
-    --slate-7: 184 165 155;
-    --slate-8: 150 131 120;
-    --slate-9: 122 107 99;
-    --slate-10: 110 98 91;  // #6E625B — muted
-    --slate-11: 74 63 57;
-    --slate-12: 31 23 20;   // #1F1714 — ink
+    // Kalo v3 warm-neutral 3-tier surfaces: 80% neutral alabaster canvas + crisp white cards + 5% coral
+    --slate-1: 255 255 255;  // #FFFFFF — Tier 1 surface
+    --slate-2: 250 248 246;  // #FAF8F6 — Tier 1.5 sub-surface
+    --slate-3: 242 238 235;  // #F2EEEB — subtle hover/fill
+    --slate-4: 230 224 220;  // #E6E0DC — card border weak
+    --slate-5: 212 201 194;  // #D4C9C2 — input & strong border
+    --slate-6: 184 172 164;  // #B8ACA4 — hover border
+    --slate-7: 152 139 131;
+    --slate-8: 128 115 107;
+    --slate-9: 115 103 96;
+    --slate-10: 107 95 88;   // #6B5F58 — muted text (>= 5.4:1)
+    --slate-11: 61 50 45;    // #3D322D — secondary text
+    --slate-12: 24 19 17;    // #181311 — primary ink
 
-    --gray-1: 255 252 250;
-    --gray-2: 255 248 245;
-    --gray-3: 247 239 235;
-    --gray-4: 240 228 221;
-    --gray-5: 230 214 205;
-    --gray-6: 217 198 187;
-    --gray-7: 184 165 155;
-    --gray-8: 150 131 120;
-    --gray-9: 122 107 99;
-    --gray-10: 110 98 91;
-    --gray-11: 74 63 57;
-    --gray-12: 31 23 20;
+    --gray-1: 255 255 255;
+    --gray-2: 250 248 246;
+    --gray-3: 242 238 235;
+    --gray-4: 230 224 220;
+    --gray-5: 212 201 194;
+    --gray-6: 184 172 164;
+    --gray-7: 152 139 131;
+    --gray-8: 128 115 107;
+    --gray-9: 115 103 96;
+    --gray-10: 107 95 88;
+    --gray-11: 61 50 45;
+    --gray-12: 24 19 17;
 
-    --background-color: 255 248 245; // #FFF8F5
-    --surface-1: 255 255 255;
-    --surface-2: 255 244 239;
+    --background-color: 246 245 243; // #F6F5F3 — Tier 0 canvas
+    --surface-1: 255 255 255;        // #FFFFFF
+    --surface-2: 250 248 246;        // #FAF8F6
+    --surface-active: 255 241 236;
+    --solid-1: 255 255 255;
+    --solid-2: 250 248 246;
+    --solid-3: 242 238 235;
+    --solid-active: 255 233 225;
+    --card-color: 255 255 255;
     --text-blue: 163 54 29;
-    --border-container: 240 228 221; // #F0E4DD
-    --border-strong: 230 214 205;
-    --border-weak: 246 237 232;
+    --border-container: 212, 201, 194, 0.92;
+    --border-strong: 212 201 194;    // #D4C9C2
+    --border-weak: 230 224 220;      // #E6E0DC
     --border-blue-strong: 201 63 36;
-    --solid-blue: 255 233 225; // #FFE9E1 bubbles
+    --solid-blue: 255 232 224;       // #FFE8E0 bubbles
     --solid-blue-2: 255 241 236;
     --label-background: 255 241 236;
     --border-blue: 201, 63, 36, 0.38;
-    --solid-iris: 255 233 225; // Bot/AI bubble harmonised with action soft
+    --solid-iris: 255 233 225;       // Bot/AI bubble harmonised with action soft
+    --solid-purple: 255 233 225;
+    --text-purple: 163 54 29;
+    --alpha-1: 24, 19, 17, 0.05;
+    --alpha-2: 24, 19, 17, 0.08;
+    --alpha-3: 255, 255, 255, 0.98;
+    --background-input-box: 255, 255, 255, 1;
+    --black-alpha-1: 24, 19, 17, 0.14;
+    --black-alpha-2: 24, 19, 17, 0.04;
   }
 
   .dark {
     --ia: rgb(255 107 74 / 0.38);
-    --ibg: #2A1F1A;
-    --blue-1: 23 17 15;
-    --blue-2: 38 26 21;
-    --blue-3: 58 31 23;
+    --ibg: #1B1816;
+    --blue-1: 17 15 14;
+    --blue-2: 35 26 23;
+    --blue-3: 58 32 25;
     --blue-4: 80 38 26;
     --blue-5: 110 48 31;
     --blue-6: 163 54 29;
@@ -77,51 +92,61 @@
     --blue-11: 255 176 154;
     --blue-12: 255 233 225;
 
-    --slate-1: 23 17 15;
-    --slate-2: 31 23 20;
-    --slate-3: 42 32 28;
-    --slate-4: 54 42 37;
-    --slate-5: 67 52 46;
-    --slate-6: 85 67 59;
-    --slate-7: 115 90 78;
-    --slate-8: 154 123 107;
-    --slate-9: 184 165 155;
-    --slate-10: 217 198 187;
-    --slate-11: 232 220 213;
-    --slate-12: 251 245 242;
+    --slate-1: 27 24 22;
+    --slate-2: 35 31 29;
+    --slate-3: 46 40 37;
+    --slate-4: 58 51 47;
+    --slate-5: 65 56 52;
+    --slate-6: 88 76 70;
+    --slate-7: 118 102 94;
+    --slate-8: 152 136 127;
+    --slate-9: 176 162 154;
+    --slate-10: 206 194 187;
+    --slate-11: 232 223 217;
+    --slate-12: 245 242 239;
 
-    --gray-1: 23 17 15;
-    --gray-2: 31 23 20;
-    --gray-3: 42 32 28;
-    --gray-4: 54 42 37;
-    --gray-5: 67 52 46;
-    --gray-6: 85 67 59;
-    --gray-7: 115 90 78;
-    --gray-8: 154 123 107;
-    --gray-9: 184 165 155;
-    --gray-10: 217 198 187;
-    --gray-11: 232 220 213;
-    --gray-12: 251 245 242;
+    --gray-1: 27 24 22;
+    --gray-2: 35 31 29;
+    --gray-3: 46 40 37;
+    --gray-4: 58 51 47;
+    --gray-5: 65 56 52;
+    --gray-6: 88 76 70;
+    --gray-7: 118 102 94;
+    --gray-8: 152 136 127;
+    --gray-9: 176 162 154;
+    --gray-10: 206 194 187;
+    --gray-11: 232 223 217;
+    --gray-12: 245 242 239;
 
-    --background-color: 23 17 15;
-    --surface-1: 31 23 20;
-    --surface-2: 42 32 28;
+    --background-color: 17 15 14;   // #110F0E
+    --surface-1: 27 24 22;          // #1B1816
+    --surface-2: 35 31 29;          // #231F1D
     --text-blue: 255 233 225;
-    --border-strong: 67 52 46;
-    --border-weak: 54 42 37;
+    --border-container: 65, 56, 52, 0.9;
+    --border-strong: 65 56 52;      // #413834
+    --border-weak: 46 40 37;        // #2E2825
     --border-blue-strong: 255 148 120;
-    --solid-blue: 58 31 23;
-    --solid-blue-2: 38 26 21;
-    --label-background: 54 42 37;
+    --solid-blue: 69 36 27;
+    --solid-blue-2: 46 28 22;
+    --label-background: 46 40 37;
     --border-blue: 255, 107, 74, 0.5;
     --solid-iris: 67 52 46;
-    --surface-active: 85 67 59;
-    --solid-1: 31 23 20;
-    --solid-2: 42 32 28;
-    --solid-3: 54 42 37;
+    --solid-purple: 67 52 46;
+    --text-purple: 255 233 225;
+    --surface-active: 69 36 27;
+    --solid-1: 27 24 22;
+    --solid-2: 35 31 29;
+    --solid-3: 46 40 37;
     --solid-active: 85 67 59;
-    --card-color: 31 23 20;
-    --button-color: 201 63 36;
+    --card-color: 27 24 22;
+    --button-color: 46 40 37;
+    --alpha-1: 255, 255, 255, 0.06;
+    --alpha-2: 255, 255, 255, 0.1;
+    --alpha-3: 29, 25, 23, 0.98;
+    --overlay: 12, 8, 7, 0.65;
+    --black-alpha-1: 0, 0, 0, 0.44;
+    --black-alpha-2: 255, 248, 245, 0.06;
+    --background-input-box: 27, 24, 22, 1;
   }
 
   // Sidebar: warm dark ink gradient with coral accents
@@ -134,15 +159,23 @@
     );
     box-shadow: inset -1px 0 0 rgba(255, 233, 225, 0.14);
     --background-color: 31 23 20;
+    --surface-1: 31 23 20;
+    --surface-2: 42 32 28;
+    --solid-1: 42 32 28;
+    --solid-2: 54 42 37;
+    --solid-3: 67 52 46;
+    --card-color: 42 32 28;
     --slate-10: 255 233 225;
     --slate-11: 255 248 245; // #FFF8F5
     --slate-12: 255 255 255;
     --blue-9: 255 248 245;
     --blue-11: 255 215 202;
+    --border-container: 110, 48, 31, 0.7;
     --border-weak: 80 38 26;
     --button-color: 201 63 36;
     --alpha-1: 255, 233, 225, 0.08;
     --alpha-2: 255, 233, 225, 0.15;
+    --alpha-3: 42, 32, 28, 0.97;
   }
 }
 

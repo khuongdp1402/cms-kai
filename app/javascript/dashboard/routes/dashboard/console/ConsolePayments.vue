@@ -98,14 +98,20 @@ onMounted(() => load(1));
 </script>
 
 <template>
-  <section class="flex flex-col gap-4 p-6">
-    <h1 class="text-xl font-extrabold text-console-ink">
-      {{ t('KALO_CONSOLE.PAYMENTS.TITLE') }}
-    </h1>
+  <section class="flex flex-col w-full gap-4 p-6 mx-auto max-w-[1360px]">
+    <header>
+      <h1 class="text-xl font-extrabold text-console-ink">
+        {{ t('KALO_CONSOLE.PAYMENTS.TITLE') }}
+      </h1>
+      <p class="mt-0.5 text-sm text-console-muted">
+        {{ t('KALO_CONSOLE.PAYMENTS.SUBTITLE') }}
+      </p>
+    </header>
 
     <div v-if="failed" class="flex items-center gap-3 text-sm">
       {{ t('KALO_CONSOLE.COMMON.ERROR') }}
       <button
+        type="button"
         class="font-semibold text-console-accent"
         @click="load(meta.current_page)"
       >
@@ -117,11 +123,13 @@ onMounted(() => load(1));
       v-else
       class="overflow-x-auto bg-white border rounded-2xl border-console-line"
     >
-      <p v-if="!events.length" class="p-4 text-sm text-console-muted">
+      <p v-if="!events.length" class="p-5 text-sm text-console-muted">
         {{ t('KALO_CONSOLE.PAYMENTS.EMPTY') }}
       </p>
       <table v-else class="w-full text-sm text-left">
-        <thead class="text-console-muted">
+        <thead
+          class="text-xs font-semibold tracking-wider uppercase bg-console-bg/70 text-console-muted"
+        >
           <tr>
             <th class="px-4 py-3">
               {{ t('KALO_CONSOLE.PAYMENTS.COLUMNS.SHOP') }}
@@ -142,19 +150,23 @@ onMounted(() => load(1));
         </thead>
         <tbody>
           <template v-for="event in events" :key="event.id">
-            <tr class="border-t border-console-line">
+            <tr
+              class="transition-colors border-t border-console-line hover:bg-console-bg/50"
+            >
               <td class="px-4 py-3">
-                <b>{{
+                <b class="text-console-ink">{{
                   event.account_name || t('KALO_CONSOLE.PAYMENTS.UNKNOWN_SHOP')
                 }}</b>
                 <div class="text-xs text-console-muted">
                   {{ event.description }}
                 </div>
               </td>
-              <td class="px-4 py-3 font-semibold">
+              <td class="px-4 py-3 font-semibold tabular-nums text-console-ink">
                 {{ formatMoney(event.amount) }}
               </td>
-              <td class="px-4 py-3">{{ formatTime(event.received_at) }}</td>
+              <td class="px-4 py-3 text-console-ink tabular-nums">
+                {{ formatTime(event.received_at) }}
+              </td>
               <td class="px-4 py-3">
                 <ConsoleChip :tone="statusOf(event.status).tone">
                   {{ statusOf(event.status).text }}
@@ -169,8 +181,9 @@ onMounted(() => load(1));
               <td class="px-4 py-3">
                 <button
                   v-if="event.status === 'unmatched'"
+                  type="button"
                   data-testid="open-assign"
-                  class="px-3 py-1 font-semibold text-white rounded-lg bg-console-accent"
+                  class="px-3 py-1 font-semibold text-white rounded-lg bg-console-accent hover:bg-console-sidebar"
                   @click="openAssign(event)"
                 >
                   {{ t('KALO_CONSOLE.PAYMENTS.ASSIGN') }}
@@ -178,7 +191,7 @@ onMounted(() => load(1));
               </td>
             </tr>
             <tr v-if="assigning === event.id" class="bg-console-bg">
-              <td colspan="5" class="px-4 py-3">
+              <td colspan="5" class="px-4 py-3.5">
                 <form
                   data-testid="account-search-form"
                   class="flex gap-2"
@@ -188,12 +201,12 @@ onMounted(() => load(1));
                     v-model="search"
                     data-testid="account-search"
                     type="search"
-                    class="w-64 px-3 py-2 !bg-white !text-console-ink placeholder:!text-console-muted border rounded-xl !border-console-muted"
+                    class="w-64 px-3 py-2 border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
                     :placeholder="t('KALO_CONSOLE.PAYMENTS.ASSIGN_SEARCH')"
                   />
                   <button
                     type="submit"
-                    class="px-4 py-2 font-semibold border rounded-xl border-console-line text-console-accent"
+                    class="px-4 py-2 font-semibold bg-white border rounded-xl border-console-line text-console-accent hover:bg-console-bg/60"
                   >
                     {{ t('KALO_CONSOLE.COMMON.SEARCH') }}
                   </button>
@@ -207,12 +220,13 @@ onMounted(() => load(1));
                 <ul class="flex flex-wrap gap-2 mt-2 list-none">
                   <li v-for="account in options" :key="account.id">
                     <button
+                      type="button"
                       data-testid="account-option"
                       class="px-3 py-1 border rounded-lg"
                       :class="
                         selected === account.id
                           ? 'bg-console-accent text-white border-console-accent'
-                          : 'bg-white border-console-line'
+                          : 'bg-white border-console-line text-console-ink hover:bg-console-bg/50'
                       "
                       @click="selected = account.id"
                     >
@@ -221,6 +235,7 @@ onMounted(() => load(1));
                   </li>
                 </ul>
                 <button
+                  type="button"
                   data-testid="assign"
                   class="px-4 py-2 mt-3 font-semibold text-white rounded-xl bg-console-accent disabled:opacity-40"
                   :disabled="!selected || busy"

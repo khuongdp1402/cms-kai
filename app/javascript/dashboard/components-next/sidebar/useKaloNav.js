@@ -10,9 +10,18 @@ const CONVERSATION_ROUTES =
 
 export const KALO_NAV_ITEMS = [
   {
+    key: 'overview',
+    icon: 'home',
+    labelKey: 'KALO_NAV.OVERVIEW',
+    sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
+    route: 'kalo_overview',
+    isActive: name => name === 'kalo_overview',
+  },
+  {
     key: 'messages',
     icon: 'msg',
     labelKey: 'KALO_NAV.MESSAGES',
+    sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
     route: 'home',
     isActive: name => CONVERSATION_ROUTES.test(name),
   },
@@ -20,6 +29,7 @@ export const KALO_NAV_ITEMS = [
     key: 'orders',
     icon: 'bag',
     labelKey: 'KALO_NAV.ORDERS',
+    sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
     route: 'kalo_orders',
     isActive: name => ['kalo_orders', 'kalo_pos'].includes(name),
   },
@@ -27,6 +37,7 @@ export const KALO_NAV_ITEMS = [
     key: 'customers',
     icon: 'users',
     labelKey: 'KALO_NAV.CUSTOMERS',
+    sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
     route: 'contacts_dashboard_index',
     isActive: name => name.startsWith('contacts_'),
   },
@@ -34,6 +45,7 @@ export const KALO_NAV_ITEMS = [
     key: 'marketing',
     icon: 'mega',
     labelKey: 'KALO_NAV.MARKETING',
+    sectionKey: 'KALO_NAV.SECTIONS.GROWTH',
     route: 'kalo_marketing',
     isActive: name =>
       name === 'kalo_marketing' || name.startsWith('campaigns_'),
@@ -42,6 +54,7 @@ export const KALO_NAV_ITEMS = [
     key: 'reports',
     icon: 'chart',
     labelKey: 'KALO_NAV.REPORTS',
+    sectionKey: 'KALO_NAV.SECTIONS.GROWTH',
     route: 'kalo_reports',
     isActive: name => name === 'kalo_reports',
   },

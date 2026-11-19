@@ -43,8 +43,19 @@ describe('OrderDrawer', () => {
     expect(wrapper.find('img[data-test="drawer-qr"]').attributes('src')).toBe(
       'blob:drawer'
     );
+    expect(wrapper.find('[data-test="drawer-qr-loading"]').exists()).toBe(
+      false
+    );
     wrapper.unmount();
     expect(URL.revokeObjectURL).toHaveBeenCalledWith('blob:drawer');
+  });
+
+  it('shows a single cancelled badge instead of repeating Đã hủy twice', () => {
+    const wrapper = mountDrawer(makeOrder({ status: 'cancelled' }));
+    expect(wrapper.find('[data-test="drawer-cancelled-chip"]').text()).toBe(
+      'Đã hủy'
+    );
+    expect(wrapper.text().match(/Đã hủy/g)).toHaveLength(1);
   });
 
   it('does not create the object URL when unmounted before the PNG arrives', async () => {

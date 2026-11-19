@@ -31,6 +31,20 @@ class ConsoleAPI extends ApiClient {
       account_id: accountId,
     });
   }
+
+  emails({ query } = {}) {
+    return axios.get(`${this.url}/mail_inspector`, {
+      params: { query },
+    });
+  }
+
+  deleteEmail(id) {
+    return axios.delete(`${this.url}/mail_inspector/${encodeURIComponent(id)}`);
+  }
+
+  clearEmails() {
+    return axios.delete(`${this.url}/mail_inspector/clear`);
+  }
 }
 
 export default new ConsoleAPI();

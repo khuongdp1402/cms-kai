@@ -28,6 +28,7 @@ import SidebarActionsHeader from 'dashboard/components-next/SidebarActionsHeader
 import LinearIssuesList from 'dashboard/components/widgets/conversation/linear/IssuesList.vue';
 import LinearSetupCTA from 'dashboard/components/widgets/conversation/linear/LinearSetupCTA.vue';
 import KaloContactOrders from './contact/KaloContactOrders.vue';
+import KaloConversationAttribution from './contact/KaloConversationAttribution.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import {
   KALO_MORE_DIVIDER,
@@ -163,7 +164,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="w-full">
+  <div class="w-full min-h-full bg-n-surface-1">
     <SidebarActionsHeader
       :title="t('KALO_CHAT_THREAD.PANEL.TITLE')"
       @close="closeContactPanel"
@@ -173,7 +174,12 @@ onMounted(() => {
       :contact-id="contactId"
       class="mx-3 border-b border-n-weak"
     />
-    <div class="px-3 pb-8 list-group">
+    <KaloConversationAttribution
+      v-if="currentChat?.id"
+      :conversation="currentChat"
+      class="mx-3 border-b border-n-weak"
+    />
+    <div class="px-3 pb-10 list-group">
       <Draggable
         :list="conversationSidebarItems"
         animation="200"

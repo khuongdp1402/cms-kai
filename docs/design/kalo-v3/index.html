@@ -1,0 +1,1737 @@
+<!doctype html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="fonts/fonts.css" />
+<title>Kalo UI/UX v3 · Bản Thiết Kế Tổng Thể Tương Tác</title>
+<style>
+:root {
+  --k-canvas: #F6F5F3;
+  --k-surface: #FFFFFF;
+  --k-surface-sub: #FAF8F6;
+  --k-surface-hover: #F2EEEB;
+  --k-border-weak: #E6E0DC;
+  --k-border-strong: #D4C9C2;
+  --k-ink: #181311;
+  --k-ink-soft: #3D322D;
+  --k-muted: #6B5F58;
+  --k-brand: #C93F24;
+  --k-brand-hover: #B0351D;
+  --k-coral: #FF6B4A;
+  --k-brand-soft: #FFF0EB;
+  --k-brand-ink: #A3361D;
+  --k-bubble-me: #FFE8E0;
+  --k-bubble-me-border: #FAD4C7;
+  --k-note-bg: #FFFBEB;
+  --k-note-border: #FDE68A;
+  --k-note-ink: #92400E;
+  --k-ok: #0E7C61;
+  --k-ok-soft: #E6F5EE;
+  --k-warn: #B45309;
+  --k-warn-soft: #FEF3DC;
+  --k-err: #B42318;
+  --k-err-soft: #FEECEB;
+  --k-err-border: #F4C7C3;
+  --k-info: #1D4ED8;
+  --k-info-soft: #EBF2FE;
+  --k-console-bg: #F5F5FA;
+  --k-console-side: #231C40;
+  --k-console-accent: #3B2F6B;
+  --k-console-line: #E4E3EE;
+  --k-shadow-sm: 0 1px 2px rgba(24, 19, 17, 0.04);
+  --k-shadow-md: 0 8px 24px -8px rgba(24, 19, 17, 0.10);
+  --k-shadow-lg: 0 24px 48px -12px rgba(24, 19, 17, 0.22);
+  --k-focus: 0 0 0 3px rgba(201, 63, 36, 0.16);
+  --ia: #FFD7CA;
+  --ibg: #FFFFFF;
+}
+
+html[data-theme="dark"] {
+  --k-canvas: #110F0E;
+  --k-surface: #1B1816;
+  --k-surface-sub: #231F1D;
+  --k-surface-hover: #2A2522;
+  --k-border-weak: #2E2825;
+  --k-border-strong: #413834;
+  --k-ink: #F5F2EF;
+  --k-ink-soft: #DDD5CF;
+  --k-muted: #A69B95;
+  --k-brand: #FF6B4A;
+  --k-brand-hover: #FF8266;
+  --k-coral: #FF6B4A;
+  --k-brand-soft: #3A2019;
+  --k-brand-ink: #FFA590;
+  --k-bubble-me: #45241B;
+  --k-bubble-me-border: #6E3627;
+  --k-note-bg: #2B2312;
+  --k-note-border: #6B5118;
+  --k-note-ink: #FCD34D;
+  --k-ok: #34D399;
+  --k-ok-soft: #103227;
+  --k-warn: #FBBF24;
+  --k-warn-soft: #362710;
+  --k-err: #FDA29B;
+  --k-err-soft: #3B1816;
+  --k-err-border: #6D2924;
+  --k-info: #93C5FD;
+  --k-info-soft: #172747;
+  --k-console-bg: #13111C;
+  --k-console-side: #1A1432;
+  --k-console-accent: #4E3E8C;
+  --k-console-line: #2C2742;
+  --k-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
+  --k-shadow-md: 0 12px 28px -8px rgba(0, 0, 0, 0.45);
+  --k-shadow-lg: 0 24px 48px -12px rgba(0, 0, 0, 0.65);
+  --k-focus: 0 0 0 3px rgba(255, 107, 74, 0.25);
+  --ia: rgba(255, 107, 74, 0.34);
+  --ibg: #1B1816;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body {
+  font-family: 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: var(--k-canvas);
+  color: var(--k-ink);
+  font-size: 13.5px;
+  line-height: 1.48;
+  -webkit-font-smoothing: antialiased;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.mono, .num { font-variant-numeric: tabular-nums; font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace; }
+.num-ui { font-variant-numeric: tabular-nums; }
+h1, h2, h3, h4, p { margin: 0; }
+button, input, select, textarea { font: inherit; color: inherit; }
+svg.i { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+svg.i.sm { width: 15px; height: 15px; }
+svg.i.lg { width: 22px; height: 22px; }
+
+/* Custom slim scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(120, 105, 95, 0.28); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(120, 105, 95, 0.45); }
+
+/* ---------- Studio Top Showcase Bar ---------- */
+.studio-bar {
+  height: 52px;
+  flex: none;
+  background: #181311;
+  color: #F5F2EF;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  z-index: 40;
+}
+.studio-brand { display: flex; align-items: center; gap: 8px; flex: none; padding-right: 10px; border-right: 1px solid rgba(255,255,255,0.12); }
+.studio-brand span { font-weight: 700; font-size: 13px; letter-spacing: -0.01em; }
+.studio-tag { font-size: 10.5px; font-weight: 700; background: rgba(255,107,74,0.2); color: #FF9F89; padding: 2px 7px; border-radius: 99px; }
+.studio-tabs { display: flex; gap: 4px; overflow-x: auto; padding: 2px 0; flex: 1; }
+.studio-tab {
+  background: transparent;
+  border: 0;
+  color: #C3B8B2;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background .15s, color .15s;
+}
+.studio-tab:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.studio-tab.on { background: #C93F24; color: #fff; }
+.studio-actions { display: flex; align-items: center; gap: 8px; flex: none; }
+.studio-btn {
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  color: #F5F2EF;
+  border-radius: 8px;
+  padding: 5px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.studio-btn:hover { background: rgba(255,255,255,0.14); }
+
+/* ---------- Viewport Stage ---------- */
+.stage { flex: 1; min-height: 0; display: flex; position: relative; overflow: hidden; }
+.screen-pane { display: none; width: 100%; height: 100%; min-height: 0; }
+.screen-pane.active { display: flex; }
+
+/* ---------- Design System Controls & Components ---------- */
+.k-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border-weak);
+  border-radius: 14px;
+  box-shadow: var(--k-shadow-sm);
+}
+.k-subcard {
+  background: var(--k-surface-sub);
+  border: 1px solid var(--k-border-weak);
+  border-radius: 12px;
+}
+.k-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 38px;
+  padding: 0 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .14s ease;
+}
+.k-btn.sm { height: 32px; padding: 0 11px; font-size: 12.5px; border-radius: 8px; }
+.k-btn.icon { width: 32px; height: 32px; padding: 0; border-radius: 8px; }
+.k-btn.primary { background: var(--k-brand); color: #fff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.18); }
+.k-btn.primary:hover { background: var(--k-brand-hover); }
+.k-btn.secondary { background: var(--k-surface); border-color: var(--k-border-strong); color: var(--k-ink); }
+.k-btn.secondary:hover { background: var(--k-surface-sub); }
+.k-btn.soft { background: var(--k-brand-soft); color: var(--k-brand-ink); }
+.k-btn.soft:hover { filter: brightness(0.97); }
+.k-btn.ghost { background: transparent; color: var(--k-muted); }
+.k-btn.ghost:hover { background: var(--k-surface-hover); color: var(--k-ink); }
+.k-btn.danger-outline { background: var(--k-surface); border-color: var(--k-err-border); color: var(--k-err); }
+.k-btn.danger-outline:hover { background: var(--k-err-soft); }
+.k-btn.danger-solid { background: #C92A2A; color: #fff; }
+
+.k-field { display: flex; flex-direction: column; gap: 6px; }
+.k-label { font-size: 12.5px; font-weight: 600; color: var(--k-ink-soft); display: flex; align-items: center; gap: 4px; }
+.k-req { color: var(--k-err); }
+.k-help { font-size: 11.5px; color: var(--k-muted); }
+.k-input, .k-select, .k-textarea {
+  width: 100%;
+  background: var(--k-surface);
+  border: 1px solid var(--k-border-strong);
+  border-radius: 10px;
+  padding: 0 12px;
+  height: 40px;
+  font-size: 13.5px;
+  color: var(--k-ink);
+  outline: none;
+  transition: border-color .15s, box-shadow .15s;
+}
+.k-input.sm, .k-select.sm { height: 34px; font-size: 13px; border-radius: 9px; }
+.k-textarea { height: auto; padding: 10px 12px; min-height: 84px; resize: vertical; line-height: 1.5; }
+.k-input:hover, .k-select:hover, .k-textarea:hover { border-color: #B4A59C; }
+.k-input:focus, .k-select:focus, .k-textarea:focus, .k-input.is-focus { border-color: var(--k-brand); box-shadow: var(--k-focus); }
+.k-input.is-err { border-color: var(--k-err); background: var(--k-err-soft); }
+.k-input:disabled, .k-input.is-disabled { background: var(--k-surface-sub); border-color: var(--k-border-weak); color: var(--k-muted); cursor: not-allowed; }
+.k-input-wrap { position: relative; display: flex; align-items: center; }
+.k-input-wrap .icon-l { position: absolute; left: 11px; color: var(--k-muted); pointer-events: none; display: flex; }
+.k-input-wrap input { padding-left: 34px; }
+
+.k-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.k-chip.ok { background: var(--k-ok-soft); color: var(--k-ok); }
+.k-chip.warn { background: var(--k-warn-soft); color: var(--k-warn); }
+.k-chip.err { background: var(--k-err-soft); color: var(--k-err); }
+.k-chip.brand { background: var(--k-brand-soft); color: var(--k-brand-ink); }
+.k-chip.info { background: var(--k-info-soft); color: var(--k-info); }
+.k-chip.gray { background: var(--k-surface-hover); color: var(--k-muted); }
+
+/* ---------- KaloRail Collapsible Sidebar ---------- */
+.app-shell { display: flex; width: 100%; height: 100%; min-height: 0; background: var(--k-canvas); }
+.k-rail {
+  width: 224px;
+  flex: none;
+  background: var(--k-surface);
+  border-right: 1px solid var(--k-border-weak);
+  display: flex;
+  flex-direction: column;
+  padding: 12px 10px;
+  gap: 6px;
+  transition: width 0.2s cubic-bezier(.2,.8,.2,1);
+  overflow: hidden;
+  z-index: 20;
+}
+.app-shell.rail-collapsed .k-rail { width: 68px; padding: 12px 8px; align-items: center; }
+.rail-top { display: flex; align-items: center; gap: 8px; padding: 2px 4px 8px; width: 100%; }
+.app-shell.rail-collapsed .rail-top { flex-direction: column; gap: 6px; padding: 2px 0 8px; }
+.shop-pill {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 8px;
+  border-radius: 9px;
+  background: var(--k-surface-sub);
+  border: 1px solid var(--k-border-weak);
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.shop-pill span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.app-shell.rail-collapsed .shop-pill,
+.app-shell.rail-collapsed .rail-label,
+.app-shell.rail-collapsed .rail-sec,
+.app-shell.rail-collapsed .rail-user-meta { display: none; }
+.rail-sec { font-size: 10.5px; font-weight: 700; color: var(--k-muted); letter-spacing: .06em; text-transform: uppercase; padding: 8px 10px 2px; }
+.rail-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 0;
+  background: transparent;
+  color: var(--k-ink-soft);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  position: relative;
+  text-align: left;
+  transition: background .12s, color .12s;
+}
+.rail-item:hover { background: var(--k-surface-sub); color: var(--k-ink); }
+.rail-item.on { background: var(--k-brand-soft); color: var(--k-brand-ink); font-weight: 600; }
+.rail-badge {
+  margin-left: auto;
+  background: var(--k-brand);
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 99px;
+  line-height: 15px;
+}
+.app-shell.rail-collapsed .rail-item {
+  width: 48px;
+  height: 44px;
+  padding: 0;
+  justify-content: center;
+  flex-direction: column;
+}
+.app-shell.rail-collapsed .rail-badge { position: absolute; top: 3px; right: 3px; padding: 0 5px; font-size: 9.5px; }
+.rail-spacer { flex: 1; }
+.rail-footer { border-top: 1px solid var(--k-border-weak); padding-top: 8px; display: flex; flex-direction: column; gap: 3px; width: 100%; }
+.rail-user { display: flex; align-items: center; gap: 9px; padding: 6px 8px; border-radius: 10px; cursor: pointer; }
+.rail-user:hover { background: var(--k-surface-sub); }
+.av { width: 32px; height: 32px; border-radius: 999px; display: grid; place-items: center; font-weight: 700; font-size: 12px; color: #fff; flex: none; position: relative; }
+.av .dot-on { position: absolute; right: -1px; bottom: -1px; width: 9px; height: 9px; border-radius: 9px; background: #12B76A; border: 2px solid var(--k-surface); }
+
+/* ---------- PageShell Standard (1360px) ---------- */
+.page-viewport { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow-y: auto; background: var(--k-canvas); }
+.page-header {
+  position: sticky;
+  top: 0;
+  z-index: 15;
+  background: var(--k-surface);
+  border-bottom: 1px solid var(--k-border-weak);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.page-header-left { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.page-title { font-size: 18px; font-weight: 800; letter-spacing: -0.02em; }
+.page-sub { font-size: 12.5px; color: var(--k-muted); }
+.page-container {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 20px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Segmented tabs & underline tabs */
+.seg-tabs {
+  display: inline-flex;
+  gap: 3px;
+  background: var(--k-surface-sub);
+  border: 1px solid var(--k-border-weak);
+  padding: 3px;
+  border-radius: 11px;
+  flex-wrap: wrap;
+}
+.seg-tab {
+  border: 0;
+  background: transparent;
+  color: var(--k-muted);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.seg-tab:hover { color: var(--k-ink); }
+.seg-tab.on { background: var(--k-surface); color: var(--k-ink); box-shadow: 0 1px 2px rgba(24,19,17,0.08); }
+.seg-count { background: var(--k-surface-hover); color: var(--k-muted); font-size: 11px; padding: 0 6px; border-radius: 99px; font-weight: 700; }
+.seg-tab.on .seg-count { background: var(--k-brand-soft); color: var(--k-brand-ink); }
+
+/* Grids & KPI */
+.grid-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.grid-7-5 { display: grid; grid-template-columns: 7fr 5fr; gap: 16px; }
+.kpi-card { padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.kpi-top { display: flex; align-items: center; justify-content: space-between; font-size: 12.5px; color: var(--k-muted); font-weight: 600; }
+.kpi-val { font-size: 24px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.15; }
+.kpi-foot { font-size: 12px; color: var(--k-muted); display: flex; align-items: center; gap: 6px; }
+
+/* Tables */
+.k-table-wrap { overflow-x: auto; }
+table.k-table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+table.k-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--k-muted);
+  background: var(--k-surface-sub);
+  border-bottom: 1px solid var(--k-border-weak);
+  white-space: nowrap;
+}
+table.k-table td { padding: 12px 16px; border-bottom: 1px solid var(--k-border-weak); vertical-align: middle; }
+table.k-table tbody tr { transition: background .12s; cursor: pointer; }
+table.k-table tbody tr:hover { background: var(--k-surface-sub); }
+table.k-table tbody tr:last-child td { border-bottom: 0; }
+table.k-table tbody tr.selected { background: var(--k-brand-soft); }
+
+/* ---------- Chat Split-Pane Screen ---------- */
+.chat-split { flex: 1; min-width: 0; display: flex; height: 100%; overflow: hidden; }
+.conv-list-col {
+  width: 312px;
+  flex: none;
+  background: var(--k-surface);
+  border-right: 1px solid var(--k-border-weak);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  transition: width .2s ease;
+}
+.chat-split.hide-convlist .conv-list-col { width: 0; border-right: 0; overflow: hidden; }
+.pane-head {
+  height: 54px;
+  flex: none;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--k-border-weak);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--k-surface);
+}
+.conv-item {
+  display: flex;
+  gap: 10px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--k-border-weak);
+  cursor: pointer;
+  position: relative;
+}
+.conv-item:hover { background: var(--k-surface-sub); }
+.conv-item.on { background: var(--k-brand-soft); }
+.conv-item.on::before { content: ""; position: absolute; left: 0; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: var(--k-brand); }
+.ch-badge { position: absolute; right: -3px; bottom: -3px; width: 16px; height: 16px; border-radius: 5px; display: grid; place-items: center; font-size: 9px; font-weight: 800; color: #fff; border: 2px solid var(--k-surface); }
+
+.chat-thread-col { flex: 1; min-width: 380px; display: flex; flex-direction: column; min-height: 0; background: var(--k-canvas); }
+.msg-stream { flex: 1; min-height: 0; overflow-y: auto; padding: 16px 22px; display: flex; flex-direction: column; gap: 10px; }
+.day-pill { align-self: center; font-size: 11.5px; font-weight: 600; color: var(--k-muted); background: var(--k-surface); border: 1px solid var(--k-border-weak); padding: 3px 11px; border-radius: 99px; }
+.bubble { max-width: 68%; padding: 10px 14px; border-radius: 14px; font-size: 13.5px; line-height: 1.48; box-shadow: var(--k-shadow-sm); }
+.bubble.in { align-self: flex-start; background: var(--k-surface); border: 1px solid var(--k-border-weak); border-bottom-left-radius: 4px; }
+.bubble.out { align-self: flex-end; background: var(--k-bubble-me); border: 1px solid var(--k-bubble-me-border); border-bottom-right-radius: 4px; }
+.bubble-time { font-size: 11px; color: var(--k-muted); margin-top: 4px; display: flex; justify-content: space-between; gap: 12px; }
+
+/* Activity Group Pill */
+.act-group { align-self: center; max-width: 540px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 4px 0; }
+.act-toggle {
+  border: 1px solid var(--k-border-weak);
+  background: var(--k-surface);
+  color: var(--k-muted);
+  border-radius: 99px;
+  padding: 5px 13px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: var(--k-shadow-sm);
+}
+.act-toggle:hover { border-color: var(--k-border-strong); color: var(--k-ink); }
+.act-list {
+  width: 100%;
+  background: var(--k-surface);
+  border: 1px solid var(--k-border-weak);
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 12px;
+  color: var(--k-muted);
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+}
+.act-group.open .act-list { display: flex; }
+.act-row { display: flex; justify-content: space-between; gap: 12px; padding: 2px 0; border-bottom: 1px dashed var(--k-border-weak); }
+.act-row:last-child { border-bottom: 0; }
+
+/* Composer */
+.composer-wrap { flex: none; padding: 10px 18px 14px; background: var(--k-canvas); }
+.composer-box {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border-strong);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: var(--k-shadow-sm);
+  transition: background .15s, border-color .15s;
+}
+.composer-box.note-mode { background: var(--k-note-bg); border-color: var(--k-note-border); }
+.composer-tabs { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 0; border-bottom: 1px solid var(--k-border-weak); }
+.composer-tab { padding: 6px 12px 8px; border: 0; background: transparent; font-size: 12.5px; font-weight: 600; color: var(--k-muted); cursor: pointer; border-bottom: 2px solid transparent; }
+.composer-tab.on { color: var(--k-brand); border-bottom-color: var(--k-brand); }
+.composer-box.note-mode .composer-tab.on { color: var(--k-note-ink); border-bottom-color: var(--k-warn); }
+.composer-input { width: 100%; border: 0; outline: 0; background: transparent; padding: 10px 14px; min-height: 58px; resize: none; font-size: 13.5px; }
+.composer-foot { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-top: 1px solid var(--k-border-weak); gap: 8px; }
+
+/* Right Contact Panel */
+.contact-col {
+  width: 336px;
+  flex: none;
+  background: var(--k-surface);
+  border-left: 1px solid var(--k-border-weak);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  transition: width .2s ease;
+}
+.chat-split.hide-contact .contact-col { width: 0; border-left: 0; overflow: hidden; }
+.contact-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 12px; }
+.acc-card { border: 1px solid var(--k-border-weak); border-radius: 12px; background: var(--k-surface-sub); overflow: hidden; }
+.acc-head { padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 700; color: var(--k-ink-soft); cursor: pointer; background: var(--k-surface); border-bottom: 1px solid var(--k-border-weak); }
+.acc-body { padding: 10px 12px; font-size: 12.5px; display: flex; flex-direction: column; gap: 7px; }
+
+/* ---------- Overlays: Drawer & Modal 3-Zone ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 15, 13, 0.44);
+  backdrop-filter: blur(3px);
+  z-index: 60;
+  display: none;
+}
+.backdrop.open { display: flex; }
+.drawer-wrap { justify-content: flex-end; }
+.k-drawer {
+  width: 460px;
+  max-width: 100vw;
+  height: 100%;
+  background: var(--k-surface);
+  border-left: 1px solid var(--k-border-strong);
+  box-shadow: var(--k-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.modal-wrap { align-items: center; justify-content: center; padding: 20px; }
+.k-modal {
+  width: 580px;
+  max-width: 100%;
+  max-height: 86vh;
+  background: var(--k-surface);
+  border: 1px solid var(--k-border-strong);
+  border-radius: 16px;
+  box-shadow: var(--k-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.ov-head {
+  flex: none;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--k-border-weak);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--k-surface);
+}
+.ov-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.ov-foot {
+  flex: none;
+  padding: 12px 20px;
+  border-top: 1px solid var(--k-border-weak);
+  background: var(--k-surface-sub);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Order Timeline */
+.timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 12px; background: var(--k-surface-sub); border: 1px solid var(--k-border-weak); border-radius: 12px; }
+.tl-step { display: flex; flex-direction: column; align-items: center; gap: 4px; text-align: center; font-size: 11px; color: var(--k-muted); }
+.tl-dot { width: 22px; height: 22px; border-radius: 99px; border: 2px solid var(--k-border-strong); background: var(--k-surface); display: grid; place-items: center; font-size: 11px; font-weight: 700; }
+.tl-step.done .tl-dot { background: var(--k-ok); border-color: var(--k-ok); color: #fff; }
+.tl-step.done { color: var(--k-ink); font-weight: 600; }
+.tl-step.cancel .tl-dot { background: var(--k-err); border-color: var(--k-err); color: #fff; }
+
+/* Console Theme Overrides */
+.console-shell { display: flex; width: 100%; height: 100%; background: var(--k-console-bg); }
+.console-rail { width: 228px; flex: none; background: var(--k-console-side); color: #E2DFF0; padding: 16px 12px; display: flex; flex-direction: column; gap: 5px; transition: width .2s; }
+.console-shell.collapsed .console-rail { width: 68px; align-items: center; padding: 16px 8px; }
+.console-shell.collapsed .c-lbl { display: none; }
+.c-nav { display: flex; align-items: center; gap: 10px; padding: 9px 11px; border-radius: 10px; color: #C7C1DE; border: 0; background: transparent; cursor: pointer; font-weight: 500; font-size: 13.5px; text-align: left; }
+.c-nav:hover { background: rgba(255,255,255,0.08); color: #fff; }
+.c-nav.on { background: var(--k-console-accent); color: #fff; font-weight: 600; }
+
+/* Progress bars */
+.bar-bg { height: 7px; border-radius: 99px; background: var(--k-surface-hover); overflow: hidden; }
+.bar-fill { height: 100%; border-radius: 99px; }
+
+/* Responsive fallbacks inside prototype */
+@media (max-width: 1080px) {
+  .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grid-3, .grid-7-5, .contact-layout-grid { grid-template-columns: 1fr !important; }
+}
+</style>
+</head>
+<body>
+
+<!-- Kalo Shared SVG Icon Sprite (Chính xác từ public/kalo-icons.svg + #mark) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mark" viewBox="0 0 64 64">
+      <path fill="#FF6B4A" d="M14 6h36a10 10 0 0 1 10 10v26a10 10 0 0 1-10 10H27l-12 8.5V52h-1A10 10 0 0 1 4 42V16A10 10 0 0 1 14 6z"/>
+      <rect x="18" y="15" width="7" height="29" rx="3.5" fill="#fff"/>
+      <path fill="#fff" d="M25 31.5C29 22 36.5 15 47.5 12.5c-1.6 3.6-3.6 5.8-6.6 7.3 2.4.2 4.4-.1 6.4-.9C42.6 26.3 34 30.5 25 34z"/>
+      <path stroke="#fff" stroke-width="7" stroke-linecap="round" d="M28 34.5 43 44"/>
+    </symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M3.6 11.2 11.2 4.4a1.2 1.2 0 0 1 1.6 0l7.6 6.8c.4.4.6.8.6 1.3V19a1.2 1.2 0 0 1-1.2 1.2H15v-5.4H9v5.4H4.2A1.2 1.2 0 0 1 3 19v-6.5c0-.5.2-.9.6-1.3z"/></symbol>
+    <symbol id="i-msg" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M5.5 4h13A2.5 2.5 0 0 1 21 6.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.2 3.6c-.5.4-1.3.1-1.3-.6V17A2.5 2.5 0 0 1 3 14.5v-8A2.5 2.5 0 0 1 5.5 4z"/><path d="M8 9h8M8 12.5h5"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M4.8 8h14.4l1 11.2a1.5 1.5 0 0 1-1.5 1.6H5.3a1.5 1.5 0 0 1-1.5-1.6z"/><path d="M8.7 8V7a3.3 3.3 0 0 1 6.6 0v1"/><path d="M9.5 12.5a2.5 2.5 0 0 0 5 0"/></symbol>
+    <symbol id="i-store" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="m3.4 9.6 1.4-4.7a1 1 0 0 1 1-.7h12.4a1 1 0 0 1 1 .7l1.4 4.7z"/><path d="M3.4 9.6a2.75 2.75 0 0 0 5.5 0 3 3 0 0 0 6.2 0 2.75 2.75 0 0 0 5.5 0M5 12.2V19a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-6.8M10 20v-4.4h4V20"/></symbol>
+    <symbol id="i-users" viewBox="0 0 24 24"><circle style="fill:var(--ia)" cx="9" cy="8" r="3.3"/><path d="M3.2 19.5a5.8 5.8 0 0 1 11.6 0"/><path d="M15.6 4.9a3.2 3.2 0 0 1 0 6.2M17.6 14.2a5.2 5.2 0 0 1 3.2 5.3"/></symbol>
+    <symbol id="i-mega" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M4 10.3v3.4c0 .6.4 1 1 1h2.2l8 4V5.3l-8 4H5c-.6 0-1 .4-1 1z"/><path d="M18.6 9a4.2 4.2 0 0 1 0 6M7.2 14.8l1.3 4.7h2.6"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><rect style="fill:var(--ia)" x="3.8" y="12" width="4.4" height="8" rx="1.2"/><rect style="fill:var(--ia)" x="9.8" y="7.5" width="4.4" height="12.5" rx="1.2"/><rect style="fill:var(--ia)" x="15.8" y="3.5" width="4.4" height="16.5" rx="1.2"/></symbol>
+    <symbol id="i-set" viewBox="0 0 24 24"><path d="M4 7h8.5M17.5 7H20M4 12h2.5M11.5 12H20M4 17h8M17 17h3"/><circle style="fill:var(--ia)" cx="15" cy="7" r="2.4"/><circle style="fill:var(--ia)" cx="9" cy="12" r="2.4"/><circle style="fill:var(--ia)" cx="14.5" cy="17" r="2.4"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle style="fill:var(--ia)" cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4.6 4.6M8.3 9.6a3 3 0 0 1 2.3-1.6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-send" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M3.6 11.6 20.4 4.2c.6-.3 1.2.3.9.9l-7.4 16.2c-.3.6-1.1.5-1.3-.1l-2-6.1-6.1-2c-.6-.2-.7-1-.1-1.3z"/><path d="m20.8 4.4-9.9 9.6"/></symbol>
+    <symbol id="i-qr" viewBox="0 0 24 24"><rect style="fill:var(--ia)" x="3.2" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect style="fill:var(--ia)" x="13.6" y="3.2" width="7.2" height="7.2" rx="1.8"/><rect style="fill:var(--ia)" x="3.2" y="13.6" width="7.2" height="7.2" rx="1.8"/><path d="M14 14h2.4M20.8 14v.01M14 17.4v3.4M17.4 17.4h3.4M20.8 20.8v.01M17.4 20.8v.01"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M10.8 3c.7 4.5 2.5 6.4 7 7.1-4.5.7-6.3 2.6-7 7.1-.7-4.5-2.5-6.4-7-7.1 4.5-.7 6.3-2.6 7-7.1z"/><path d="M18.4 15.6v4.2M16.3 17.7h4.2"/></symbol>
+    <symbol id="i-truck" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M2.8 7.4a1 1 0 0 1 1-1h8.8a1 1 0 0 1 1 1v9H2.8z"/><path style="fill:var(--ia)" d="M13.6 9.8h3.9l3 3.1v3.5h-6.9z"/><circle style="fill:var(--ibg)" cx="7" cy="17.4" r="2.1"/><circle style="fill:var(--ibg)" cx="17" cy="17.4" r="2.1"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M6 16.3V11a6 6 0 0 1 12 0v5.3l1.6 2.1c.3.4 0 .9-.5.9H4.9c-.5 0-.8-.5-.5-.9z"/><path d="M10 21.2a2.2 2.2 0 0 0 4 0"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.5 4.4L19 7.4"/></symbol>
+    <symbol id="i-tag" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M3.5 5.5a2 2 0 0 1 2-2h6l9 9a2 2 0 0 1 0 2.8l-5.9 5.9a2 2 0 0 1-2.8 0l-8.3-8.3z"/><circle style="fill:var(--ibg)" cx="8" cy="8" r="1.4"/></symbol>
+    <symbol id="i-wallet" viewBox="0 0 24 24"><rect style="fill:var(--ia)" x="3" y="6" width="18" height="14" rx="3.2"/><path d="M6.5 6V5.4A2.4 2.4 0 0 1 8.9 3H16.5M16.2 12H21v4.2h-4.8a2.1 2.1 0 0 1 0-4.2z"/></symbol>
+    <symbol id="i-plug" viewBox="0 0 24 24"><path d="M10 14.2a4 4 0 0 0 5.6 0l3.1-3.1a4 4 0 0 0-5.6-5.7l-1 1M14 9.8a4 4 0 0 0-5.6 0l-3.1 3.1a4 4 0 0 0 5.6 5.7l1-1"/><circle style="fill:var(--ia)" cx="12" cy="12" r="1.6"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect style="fill:var(--ia)" x="4.5" y="10.5" width="15" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3M12 14.5v2"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path style="fill:var(--ia)" d="M13.2 2.6 4.6 13.4c-.3.4 0 .9.5.9H11l-.9 6.9c-.1.7.7 1 1.1.5l8.2-10.6c.3-.4 0-.9-.5-.9H13l.7-6.8c.1-.7-.8-1-1.2-.5z"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect style="fill:var(--ia)" x="3" y="5" width="18" height="14" rx="2.8"/><path d="m4 7 8 6 8-6"/></symbol>
+    <symbol id="i-sidebar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M9 4v16"/></symbol>
+    <symbol id="i-panel-r" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M15 4v16"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  </defs>
+</svg>
+
+<!-- STUDIO CONTROL BAR -->
+<header class="studio-bar">
+  <div class="studio-brand">
+    <svg width="24" height="24"><use href="#mark"/></svg>
+    <span>Kalo UI/UX v3</span>
+    <span class="studio-tag">Blueprint Chờ Duyệt</span>
+  </div>
+  <nav class="studio-tabs" id="studioNav">
+    <button class="studio-tab" data-go="ds">01 · Hệ chuẩn &amp; Input</button>
+    <button class="studio-tab on" data-go="overview">02 · Tổng quan Chất lượng</button>
+    <button class="studio-tab" data-go="chat">03 · Tin nhắn 3 cột</button>
+    <button class="studio-tab" data-go="orders">04 · Đơn hàng + Drawer</button>
+    <button class="studio-tab" data-go="contact">05 · Khách hàng 2 cột</button>
+    <button class="studio-tab" data-go="marketing">06 · Marketing + Popup</button>
+    <button class="studio-tab" data-go="settings">07 · Cài đặt Bento</button>
+    <button class="studio-tab" data-go="admin">08 · Console &amp; Super Admin</button>
+    <button class="studio-tab" data-go="mail">09 · MailHog Inspector</button>
+  </nav>
+  <div class="studio-actions">
+    <button class="studio-btn" id="btnTheme" title="Đổi giao diện Sáng / Tối">☀ Sáng / Tối</button>
+  </div>
+</header>
+
+<main class="stage">
+
+  <!-- ==================== 01. DESIGN SYSTEM ==================== -->
+  <section class="screen-pane" id="pane-ds">
+    <div class="page-viewport">
+      <div class="page-header">
+        <div class="page-header-left">
+          <h1 class="page-title">01 · Hệ chuẩn Nền 3 Tầng, Ô nhập liệu &amp; Nút bấm</h1>
+          <span class="page-sub">Quy tắc vàng 80% Trung tính ấm (#F6F5F3) · 15% Viền/Chữ sắc nét · 5% Coral (#C93F24)</span>
+        </div>
+        <button class="k-btn primary" onclick="openCampaignModal()">Xem thử Popup 3 vùng</button>
+      </div>
+      <div class="page-container">
+        <div class="grid-2">
+          <div class="k-card" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <h2 style="font-size:15px; font-weight:700;">1. Phân tầng bề mặt giải quyết lỗi "lơ lửng"</h2>
+              <span class="k-chip ok">Đủ tương phản ≥ 4.5:1</span>
+            </div>
+            <div class="k-subcard" style="padding:16px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:12px; color:var(--k-muted); font-weight:600;">Tầng 0 (Canvas #F6F5F3) → Tầng 1 (Card #FFFFFF, viền #E6E0DC) → Tầng 1.5 (#FAF8F6)</div>
+              <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px;">
+                <div style="padding:10px; border-radius:10px; background:var(--k-canvas); border:1px solid var(--k-border-weak); font-size:12px;"><b>Canvas</b><div class="mono" style="color:var(--k-muted);">#F6F5F3</div></div>
+                <div style="padding:10px; border-radius:10px; background:var(--k-surface); border:1px solid var(--k-border-weak); font-size:12px;"><b>Surface 1</b><div class="mono" style="color:var(--k-muted);">#FFFFFF</div></div>
+                <div style="padding:10px; border-radius:10px; background:var(--k-brand); color:#fff; font-size:12px;"><b>Brand 5%</b><div class="mono" style="opacity:.9;">#C93F24</div></div>
+                <div style="padding:10px; border-radius:10px; background:var(--k-brand-soft); color:var(--k-brand-ink); font-size:12px;"><b>Active</b><div class="mono">#FFF0EB</div></div>
+              </div>
+            </div>
+            <h3 style="font-size:14px; font-weight:700; margin-top:4px;">2. Hệ thống 5 cấp Nút bấm</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; align-items:center;">
+              <button class="k-btn primary"><svg class="i sm"><use href="#i-plus"/></svg>Primary CTA</button>
+              <button class="k-btn secondary">Secondary Outline</button>
+              <button class="k-btn soft"><svg class="i sm"><use href="#i-spark"/></svg>Tonal AI</button>
+              <button class="k-btn ghost">Ghost Utility</button>
+              <button class="k-btn danger-outline">Xóa an toàn</button>
+            </div>
+          </div>
+
+          <div class="k-card" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+            <h2 style="font-size:15px; font-weight:700;">3. Chuẩn Ô Nhập Liệu Sắc Nét (Crisp White Input)</h2>
+            <div class="grid-2">
+              <div class="k-field">
+                <label class="k-label">Trạng thái mặc định <span class="k-req">*</span></label>
+                <input class="k-input" value="Nến gỗ đàn hương 200g" />
+              </div>
+              <div class="k-field">
+                <label class="k-label">Trạng thái đang nhập (Focus)</label>
+                <input class="k-input is-focus" value="189.000đ" />
+              </div>
+              <div class="k-field">
+                <label class="k-label">Lỗi xác thực</label>
+                <input class="k-input is-err" value="09012" />
+                <span class="k-help" style="color:var(--k-err);">Số điện thoại chưa đủ 10 số</span>
+              </div>
+              <div class="k-field">
+                <label class="k-label">Khóa / Chỉ đọc (Disabled)</label>
+                <input class="k-input is-disabled" disabled value="Mã shop: ACME-01" />
+              </div>
+            </div>
+            <div class="k-field">
+              <label class="k-label">Select hộp thư &amp; tìm kiếm</label>
+              <select class="k-select">
+                <option>Zalo Cá Nhân · Thu Hà Shop</option>
+                <option>Facebook Page · Kalo Official</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 02. QUALITY OVERVIEW DASHBOARD ==================== -->
+  <section class="screen-pane active" id="pane-overview">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="page-viewport">
+        <header class="page-header">
+          <div class="page-header-left">
+            <div>
+              <h1 class="page-title">Tổng quan &amp; Đo lường Chất lượng Đầu ra</h1>
+              <div class="page-sub">Theo dõi doanh thu thực, tốc độ phục vụ CSKH và hiệu quả nội dung AI toàn thương hiệu</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+            <select class="k-select sm" style="width:170px;">
+              <option>7 ngày gần nhất</option>
+              <option>30 ngày gần nhất</option>
+              <option>Hôm nay</option>
+            </select>
+            <select class="k-select sm" style="width:170px;">
+              <option>Tất cả thương hiệu (2)</option>
+              <option>Acme Inc · Việt Nam</option>
+              <option>Kalo Candle Studio</option>
+            </select>
+            <button class="k-btn primary sm" onclick="goScreen('orders')"><svg class="i sm"><use href="#i-plus"/></svg>Tạo đơn nhanh</button>
+          </div>
+        </header>
+
+        <div class="page-container">
+          <!-- 4 KPI cards -->
+          <div class="grid-4">
+            <div class="k-card kpi-card">
+              <div class="kpi-top"><span>Doanh thu thực thu</span><span class="k-chip ok">+18.4%</span></div>
+              <div class="kpi-val num-ui">42.850.000đ</div>
+              <div class="kpi-foot"><span>68 đơn hoàn tất</span> · <span>AOV 630k</span></div>
+            </div>
+            <div class="k-card kpi-card">
+              <div class="kpi-top"><span>Chuyển đổi Chat → Đơn</span><span class="k-chip ok">Tốt</span></div>
+              <div class="kpi-val num-ui">24.6%</div>
+              <div class="kpi-foot"><span>14 đơn chờ quét VietQR</span></div>
+            </div>
+            <div class="k-card kpi-card">
+              <div class="kpi-top"><span>Chất lượng CSKH (FRT)</span><span class="k-chip warn">3 chờ &gt;15p</span></div>
+              <div class="kpi-val num-ui">3p 42s</div>
+              <div class="kpi-foot"><span>91% đạt SLA &lt; 5 phút</span></div>
+            </div>
+            <div class="k-card kpi-card">
+              <div class="kpi-top"><span>Đầu ra AI &amp; Bảo vệ SĐT</span><span class="k-chip brand">AI Active</span></div>
+              <div class="kpi-val num-ui">74%</div>
+              <div class="kpi-foot"><span>19 bình luận SĐT đã ẩn tự động</span></div>
+            </div>
+          </div>
+
+          <!-- 2 Column Quality Scorecard & Action Queue -->
+          <div class="grid-7-5">
+            <div class="k-card" style="overflow:hidden;">
+              <div style="padding:16px 18px; border-bottom:1px solid var(--k-border-weak); display:flex; justify-content:space-between; align-items:center;">
+                <div>
+                  <h2 style="font-size:15px; font-weight:700;">Chất lượng Sản phẩm &amp; Tỷ lệ hoàn hủy theo SKU</h2>
+                  <p style="font-size:12px; color:var(--k-muted);">Phát hiện sớm sản phẩm có tỷ lệ hủy hoặc khách hỏi lỗi cao để cải thiện mô tả &amp; đóng gói</p>
+                </div>
+                <button class="k-btn secondary sm" onclick="goScreen('orders')">Xem tất cả đơn</button>
+              </div>
+              <div class="k-table-wrap">
+                <table class="k-table">
+                  <thead>
+                    <tr><th>Sản phẩm</th><th style="text-align:right;">Đã bán</th><th style="text-align:right;">Tỷ lệ hủy</th><th>Đánh giá chất lượng</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><b>Nến gỗ đàn hương 200g</b><div style="font-size:11.5px; color:var(--k-muted);">Kênh chính: Zalo, Facebook</div></td>
+                      <td style="text-align:right;" class="num-ui"><b>142</b></td>
+                      <td style="text-align:right;" class="num-ui">1.4%</td>
+                      <td><span class="k-chip ok">Đạt chuẩn · 4.9★</span></td>
+                    </tr>
+                    <tr>
+                      <td><b>Cốc gốm men lam thủ công</b><div style="font-size:11.5px; color:var(--k-muted);">Khách hay hỏi vỡ khi ship</div></td>
+                      <td style="text-align:right;" class="num-ui"><b>88</b></td>
+                      <td style="text-align:right;" class="num-ui" style="color:var(--k-warn); font-weight:700;">8.2%</td>
+                      <td><span class="k-chip warn">Cần kiểm tra bọc chống sốc</span></td>
+                    </tr>
+                    <tr>
+                      <td><b>Tinh dầu sả chanh 50ml</b><div style="font-size:11.5px; color:var(--k-muted);">Tạo nhiều từ Góc nội dung #2</div></td>
+                      <td style="text-align:right;" class="num-ui"><b>64</b></td>
+                      <td style="text-align:right;" class="num-ui">2.1%</td>
+                      <td><span class="k-chip ok">Tỷ lệ mua lại 31%</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="k-card" style="padding:18px; display:flex; flex-direction:column; gap:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <h2 style="font-size:15px; font-weight:700;">Việc Cần Xử Lý Ngay</h2>
+                <span class="k-chip err">4 ưu tiên</span>
+              </div>
+              <div class="k-subcard" style="padding:11px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div><b style="font-size:13px;">3 khách chờ phản hồi &gt; 15 phút</b><div style="font-size:12px; color:var(--k-muted);">Zalo Cá Nhân &amp; Instagram DM</div></div>
+                <button class="k-btn soft sm" onclick="goScreen('chat')">Mở Chat</button>
+              </div>
+              <div class="k-subcard" style="padding:11px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div><b style="font-size:13px;">Đơn #1042 chờ đối soát VietQR</b><div style="font-size:12px; color:var(--k-muted);">Thu Hà · 403.000đ · Gửi QR 2 giờ trước</div></div>
+                <button class="k-btn secondary sm" onclick="openOrderDrawer('1042')">Kiểm tra</button>
+              </div>
+              <div class="k-subcard" style="padding:11px 13px; display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                <div><b style="font-size:13px;">6 bình luận FB có SĐT vừa ẩn</b><div style="font-size:12px; color:var(--k-muted);">Đã tự động nhắn tin riêng báo giá</div></div>
+                <button class="k-btn secondary sm" onclick="goScreen('marketing')">Xem luật</button>
+              </div>
+              <div style="margin-top:auto; padding-top:6px; border-top:1px solid var(--k-border-weak);">
+                <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:5px;">
+                  <span>Chất lượng bài nội dung đã duyệt tuần này</span><b class="num-ui">11 / 14 bài</b>
+                </div>
+                <div class="bar-bg"><div class="bar-fill" style="width:78%; background:var(--k-brand);"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 03. MESSAGES 3-PANE ==================== -->
+  <section class="screen-pane" id="pane-chat">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="chat-split" id="chatSplit">
+        <!-- Col 1: Conversation List -->
+        <div class="conv-list-col">
+          <div class="pane-head">
+            <div style="display:flex; align-items:center; gap:8px;">
+              <b style="font-size:15px;">Tin nhắn</b>
+              <span class="k-chip brand">5 mở</span>
+            </div>
+            <button class="k-btn secondary sm">Lọc</button>
+          </div>
+          <div style="padding:10px 12px; border-bottom:1px solid var(--k-border-weak); display:flex; flex-direction:column; gap:8px;">
+            <div class="k-input-wrap">
+              <span class="icon-l"><svg class="i sm"><use href="#i-search"/></svg></span>
+              <input class="k-input sm" placeholder="Tìm khách, SĐT, nội dung…" />
+            </div>
+            <div class="seg-tabs" style="width:100%;">
+              <button class="seg-tab on" style="flex:1; justify-content:center;">Của tôi <span class="seg-count">5</span></button>
+              <button class="seg-tab" style="flex:1; justify-content:center;">Chưa nhận <span class="seg-count">2</span></button>
+              <button class="seg-tab" style="flex:1; justify-content:center;">Tất cả</button>
+            </div>
+          </div>
+          <div style="flex:1; overflow-y:auto;">
+            <div class="conv-item on">
+              <div class="av" style="width:38px; height:38px; background:#0E7C61;">QD<span class="ch-badge" style="background:#0068FF;">Z</span></div>
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; font-size:13px;"><b>QA Dung</b><span style="font-size:11px; color:var(--k-muted);">2p</span></div>
+                <div style="font-size:11.5px; color:var(--k-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Khach Dung hoi RT-66025 · Shopee Live</div>
+              </div>
+            </div>
+            <div class="conv-item">
+              <div class="av" style="width:38px; height:38px; background:#C93F24;">QC<span class="ch-badge" style="background:#1877F2;">f</span></div>
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; font-size:13px;"><b>QA Chi</b><span style="font-size:11px; color:var(--k-muted);">12p</span></div>
+                <div style="font-size:11.5px; color:var(--k-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Quý khách vui lòng quét mã QR…</div>
+              </div>
+            </div>
+            <div class="conv-item">
+              <div class="av" style="width:38px; height:38px; background:#7C3AED;">NA<span class="ch-badge" style="background:#D62976;">IG</span></div>
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; font-size:13px;"><b>Ngọc Anh</b><span style="font-size:11px; color:var(--k-muted);">25p</span></div>
+                <div style="font-size:11.5px; color:var(--k-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">Set quà Tết còn hộp gỗ không ạ?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 2: Main Chat Thread -->
+        <div class="chat-thread-col">
+          <div class="pane-head">
+            <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+              <button class="k-btn ghost icon" title="Thu/mở danh sách hội thoại" onclick="document.getElementById('chatSplit').classList.toggle('hide-convlist')">
+                <svg class="i"><use href="#i-sidebar"/></svg>
+              </button>
+              <div class="av" style="width:32px; height:32px; background:#0E7C61;">QD</div>
+              <div style="min-width:0;">
+                <div style="font-weight:700; font-size:14px;">QA Dung <span class="k-chip gray" style="margin-left:4px;">#5</span></div>
+                <div style="font-size:11.5px; color:var(--k-muted);">Zalo Cá Nhân · Trực bởi John</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <button class="k-btn soft sm" onclick="openOrderDrawer('1042')"><svg class="i sm"><use href="#i-bag"/></svg>Tạo đơn</button>
+              <button class="k-btn primary sm"><svg class="i sm"><use href="#i-check"/></svg>Xong</button>
+              <button class="k-btn secondary sm" title="Đóng/mở bảng Hồ sơ khách" onclick="document.getElementById('chatSplit').classList.toggle('hide-contact')">
+                <svg class="i sm"><use href="#i-panel-r"/></svg>Hồ sơ
+              </button>
+            </div>
+          </div>
+
+          <div class="msg-stream">
+            <span class="day-pill">Hôm nay · 17/11</span>
+            <div class="bubble in">
+              Xin chào shop, tôi là QA Dung cần tư vấn set nến gỗ đàn hương ạ.
+              <div class="bubble-time"><span>14:01</span></div>
+            </div>
+
+            <!-- KEY FIX FOR SCREENSHOT 7: Collapsible Activity Group -->
+            <div class="act-group" id="actGroup">
+              <button class="act-toggle" onclick="document.getElementById('actGroup').classList.toggle('open')">
+                <span>⟳ <b>18 cập nhật hệ thống</b> (đổi trạng thái, gắn nhãn, gán John)</span>
+                <span style="color:var(--k-brand); font-weight:700;">Xem / Ẩn ▾</span>
+              </button>
+              <div class="act-list">
+                <div class="act-row"><span>John được chỉ định bởi Default Policy</span><span>14:01</span></div>
+                <div class="act-row"><span>John gắn nhãn qa-chat-label</span><span>14:02</span></div>
+                <div class="act-row"><span>John đặt ưu tiên Cao → Khẩn cấp</span><span>14:03</span></div>
+                <div class="act-row"><span>+15 thao tác đóng/mở nội bộ khác…</span><span>14:05</span></div>
+              </div>
+            </div>
+
+            <div class="bubble in">
+              Khách Dung hỏi mã RT-66025 có giao nhanh trong chiều nay không?
+              <div class="bubble-time"><span>14:06</span></div>
+            </div>
+
+            <div class="bubble out">
+              Dạ có ạ! Shop gửi chị đơn mẫu và mã VietQR bên dưới, nội thành giao trong 2 tiếng chị nhé.
+              <div class="bubble-time"><span>14:07 · John</span><span>✓ Đã gửi</span></div>
+            </div>
+          </div>
+
+          <!-- Composer with clear Reply vs Internal Note mode -->
+          <div class="composer-wrap">
+            <div class="composer-box" id="composerBox">
+              <div class="composer-tabs">
+                <div style="display:flex; gap:6px;">
+                  <button class="composer-tab on" id="tabReply" onclick="setComposerMode('reply')">Trả lời khách</button>
+                  <button class="composer-tab" id="tabNote" onclick="setComposerMode('note')">Ghi chú nội bộ (chỉ nhân viên xem)</button>
+                </div>
+                <span style="font-size:11.5px; color:var(--k-muted);">Nhấn / để chèn mẫu câu</span>
+              </div>
+              <textarea class="composer-input" id="composerInput" placeholder="Nhập tin nhắn gửi QA Dung…"></textarea>
+              <div class="composer-foot">
+                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                  <button class="k-btn ghost sm"><svg class="i sm"><use href="#i-tag"/></svg>Mẫu câu</button>
+                  <button class="k-btn ghost sm" onclick="openOrderDrawer('1042')"><svg class="i sm"><use href="#i-bag"/></svg>Tạo đơn</button>
+                  <button class="k-btn ghost sm"><svg class="i sm"><use href="#i-qr"/></svg>Mã QR</button>
+                  <button class="k-btn soft sm"><svg class="i sm"><use href="#i-spark"/></svg>Gợi ý AI</button>
+                </div>
+                <button class="k-btn primary sm" id="btnSendMsg"><svg class="i sm"><use href="#i-send"/></svg>Gửi (⌘↵)</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Col 3: Structured Contact Panel (no gradient cutoff!) -->
+        <div class="contact-col">
+          <div class="pane-head">
+            <b style="font-size:14px;">Khách hàng &amp; Đơn</b>
+            <button class="k-btn ghost icon" title="Thu gọn panel" onclick="document.getElementById('chatSplit').classList.add('hide-contact')"><svg class="i sm"><use href="#i-x"/></svg></button>
+          </div>
+          <div class="contact-scroll">
+            <div class="k-subcard" style="padding:14px; display:flex; align-items:center; gap:12px;">
+              <div class="av" style="width:44px; height:44px; background:#0E7C61; font-size:15px;">QD</div>
+              <div style="flex:1; min-width:0;">
+                <b style="font-size:14.5px;">QA Dung</b>
+                <div style="font-size:12px; color:var(--k-muted);">qadung@qa.test · 0909 123 456</div>
+              </div>
+              <button class="k-btn secondary sm" onclick="goScreen('contact')">Hồ sơ</button>
+            </div>
+
+            <div class="acc-card">
+              <div class="acc-head"><span>MUA HÀNG &amp; ĐƠN GẦN ĐÂY (1)</span><span class="k-chip ok">150.000đ</span></div>
+              <div class="acc-body">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                  <span><b>#1042</b> · 403.000đ</span>
+                  <span class="k-chip warn">Chờ QR</span>
+                </div>
+                <button class="k-btn secondary sm" style="width:100%;" onclick="openOrderDrawer('1042')">Mở nhanh Drawer #1042</button>
+              </div>
+            </div>
+
+            <div class="acc-card">
+              <div class="acc-head"><span>NGUỒN / CHIẾN DỊCH UTM</span><span class="k-chip info">FB Ads</span></div>
+              <div class="acc-body">
+                <div style="display:flex; justify-content:space-between;"><span style="color:var(--k-muted);">Chiến dịch</span><b>Tết An Nhiên 2026</b></div>
+                <div style="display:flex; justify-content:space-between;"><span style="color:var(--k-muted);">Góc nội dung</span><b>Bằng chứng khách</b></div>
+              </div>
+            </div>
+
+            <div class="acc-card">
+              <div class="acc-head"><span>NHÃN HỘI THOẠI (2)</span><span style="color:var(--k-brand); cursor:pointer;">+ Gắn</span></div>
+              <div class="acc-body" style="flex-direction:row; flex-wrap:wrap; gap:6px;">
+                <span class="k-chip brand">Khách hỏi sỉ</span>
+                <span class="k-chip gray">Giao gấp HN</span>
+              </div>
+            </div>
+
+            <div class="acc-card">
+              <div class="acc-head"><span>GHI CHÚ NỘI BỘ (1)</span></div>
+              <div class="acc-body">
+                <div style="background:var(--k-note-bg); border:1px solid var(--k-note-border); border-radius:8px; padding:8px; font-size:12px;">
+                  Khách thích mùi gỗ trầm, nhắc shipper gọi trước 15 phút.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 04. ORDERS & DRAWER ==================== -->
+  <section class="screen-pane" id="pane-orders">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="page-viewport">
+        <header class="page-header">
+          <div class="page-header-left">
+            <div>
+              <h1 class="page-title">Đơn hàng</h1>
+              <div class="page-sub">Bấm vào một dòng để mở Drawer chi tiết chuẩn 3 vùng bên phải</div>
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="k-btn secondary sm"><svg class="i sm"><use href="#i-store"/></svg>Mở Kalo POS</button>
+            <button class="k-btn primary sm" onclick="openOrderDrawer('1042')"><svg class="i sm"><use href="#i-plus"/></svg>Tạo đơn</button>
+          </div>
+        </header>
+        <div class="page-container">
+          <div class="grid-4">
+            <div class="k-card kpi-card"><div class="kpi-top"><span>Đơn hôm nay</span></div><div class="kpi-val num-ui">18</div><div class="kpi-foot">+4 so với hôm qua</div></div>
+            <div class="k-card kpi-card"><div class="kpi-top"><span>Chờ thanh toán QR</span></div><div class="kpi-val num-ui" style="color:var(--k-warn);">5</div><div class="kpi-foot">2.150.000đ chờ khớp</div></div>
+            <div class="k-card kpi-card"><div class="kpi-top"><span>Cần đóng &amp; giao</span></div><div class="kpi-val num-ui" style="color:var(--k-info);">7</div><div class="kpi-foot">Đã nhận tiền đủ</div></div>
+            <div class="k-card kpi-card"><div class="kpi-top"><span>Đã thu hôm nay</span></div><div class="kpi-val num-ui" style="color:var(--k-ok);">6.420.000đ</div><div class="kpi-foot">0 đơn hoàn tiền</div></div>
+          </div>
+
+          <div class="k-card" style="overflow:hidden;">
+            <div style="padding:12px 16px; border-bottom:1px solid var(--k-border-weak); display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap;">
+              <div class="seg-tabs">
+                <button class="seg-tab on">Tất cả <span class="seg-count">24</span></button>
+                <button class="seg-tab">Chờ thanh toán <span class="seg-count">5</span></button>
+                <button class="seg-tab">Cần giao <span class="seg-count">7</span></button>
+                <button class="seg-tab">Hoàn tất <span class="seg-count">11</span></button>
+                <button class="seg-tab">Đã hủy <span class="seg-count">1</span></button>
+              </div>
+              <div class="k-input-wrap" style="width:260px;">
+                <span class="icon-l"><svg class="i sm"><use href="#i-search"/></svg></span>
+                <input class="k-input sm" placeholder="Tìm mã đơn, tên khách…" />
+              </div>
+            </div>
+            <div class="k-table-wrap">
+              <table class="k-table">
+                <thead>
+                  <tr><th>Mã đơn</th><th>Khách hàng</th><th>Sản phẩm</th><th style="text-align:right;">Tổng tiền</th><th>Thanh toán</th><th>Giao hàng</th><th></th></tr>
+                </thead>
+                <tbody>
+                  <tr onclick="openOrderDrawer('1042')">
+                    <td><b class="mono">#1042</b><div style="font-size:11.5px; color:var(--k-muted);">14:07 · Hôm nay</div></td>
+                    <td><b>Thu Hà</b><div style="font-size:11.5px; color:var(--k-muted);">Zalo</div></td>
+                    <td>Nến gỗ đàn hương ×2</td>
+                    <td style="text-align:right;" class="num-ui"><b>403.000đ</b></td>
+                    <td><span class="k-chip warn">Chờ QR</span></td>
+                    <td><span class="k-chip gray">Chờ đóng gói</span></td>
+                    <td style="text-align:right;"><button class="k-btn secondary sm">Chi tiết</button></td>
+                  </tr>
+                  <tr onclick="openOrderDrawer('1001')">
+                    <td><b class="mono">#1001</b><div style="font-size:11.5px; color:var(--k-muted);">18:38 · 17/11</div></td>
+                    <td><b>QA Chi</b><div style="font-size:11.5px; color:var(--k-muted);">Web Chat</div></td>
+                    <td>QA áo thun ×1</td>
+                    <td style="text-align:right;" class="num-ui"><b>150.000đ</b></td>
+                    <td colspan="2"><span class="k-chip err">Đã hủy (không lặp 2 pill)</span></td>
+                    <td style="text-align:right;"><button class="k-btn secondary sm">Chi tiết</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 05. CONTACT DETAIL (2 COLUMNS) ==================== -->
+  <section class="screen-pane" id="pane-contact">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="page-viewport">
+        <header class="page-header">
+          <div class="page-header-left">
+            <button class="k-btn secondary sm" onclick="goScreen('overview')">← Liên hệ</button>
+            <h1 class="page-title">jane</h1>
+            <span class="k-chip brand">Khách quen</span>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="k-btn secondary sm">Chặn liên hệ</button>
+            <button class="k-btn primary sm" onclick="goScreen('chat')"><svg class="i sm"><use href="#i-send"/></svg>Gửi tin nhắn</button>
+          </div>
+        </header>
+
+        <div class="page-container">
+          <div class="contact-layout-grid" style="display:grid; grid-template-columns:350px 1fr; gap:18px; align-items:start;">
+            <!-- Left Summary Card -->
+            <div class="k-card" style="padding:20px; display:flex; flex-direction:column; gap:16px;">
+              <div style="display:flex; align-items:center; gap:14px;">
+                <div class="av" style="width:58px; height:58px; background:#C93F24; font-size:20px;">J</div>
+                <div>
+                  <h2 style="font-size:17px; font-weight:800;">jane</h2>
+                  <div style="font-size:12px; color:var(--k-muted);">Tạo 2 tháng trước · Hoạt động 2 ngày</div>
+                </div>
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                <div class="k-subcard" style="padding:10px 12px;"><div style="font-size:11.5px; color:var(--k-muted);">Tổng đơn</div><b style="font-size:16px;" class="num-ui">3 đơn</b></div>
+                <div class="k-subcard" style="padding:10px 12px;"><div style="font-size:11.5px; color:var(--k-muted);">Tổng chi tiêu</div><b style="font-size:16px; color:var(--k-ok);" class="num-ui">1.240k</b></div>
+              </div>
+              <div>
+                <div style="font-size:12px; font-weight:700; color:var(--k-muted); margin-bottom:8px;">NHÃN KHÁCH HÀNG</div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <span class="k-chip brand">VIP 2026</span>
+                  <span class="k-chip gray">+ Gắn nhãn</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Tabbed Workspace (Full Text Tabs — NO truncation!) -->
+            <div style="display:flex; flex-direction:column; gap:16px;">
+              <div class="k-card" style="overflow:hidden;">
+                <div style="padding:12px 18px; border-bottom:1px solid var(--k-border-weak); background:var(--k-surface-sub);">
+                  <div class="seg-tabs" id="contactTabs">
+                    <button class="seg-tab on" onclick="switchContactTab(this,'info')">Thông tin chi tiết</button>
+                    <button class="seg-tab" onclick="switchContactTab(this,'attrs')">Thuộc tính tùy chỉnh</button>
+                    <button class="seg-tab" onclick="switchContactTab(this,'hist')">Lịch sử mua &amp; chat <span class="seg-count">3</span></button>
+                    <button class="seg-tab" onclick="switchContactTab(this,'notes')">Ghi chú <span class="seg-count">2</span></button>
+                    <button class="seg-tab" onclick="switchContactTab(this,'merge')">Gộp liên hệ</button>
+                  </div>
+                </div>
+
+                <div style="padding:20px;" id="contactTabBody">
+                  <div class="grid-2">
+                    <div class="k-field"><label class="k-label">Tên</label><input class="k-input" value="jane" /></div>
+                    <div class="k-field"><label class="k-label">Họ</label><input class="k-input" placeholder="Nhập họ" /></div>
+                    <div class="k-field"><label class="k-label">Email</label><input class="k-input" value="jane@example.com" /></div>
+                    <div class="k-field"><label class="k-label">Số điện thoại</label><input class="k-input" value="+84 909 123 456" /></div>
+                    <div class="k-field"><label class="k-label">Thành phố</label><input class="k-input" value="TP. Hồ Chí Minh" /></div>
+                    <div class="k-field"><label class="k-label">Công ty</label><input class="k-input" placeholder="Nhập tên công ty" /></div>
+                  </div>
+                  <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; padding-top:14px; border-top:1px solid var(--k-border-weak);">
+                    <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                      <button class="k-btn secondary sm">+ Facebook</button>
+                      <button class="k-btn secondary sm">+ Zalo</button>
+                      <button class="k-btn secondary sm">+ TikTok</button>
+                    </div>
+                    <button class="k-btn primary">Lưu thay đổi</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Isolated Danger Zone -->
+              <div class="k-card" style="padding:16px 20px; border-color:var(--k-err-border); display:flex; justify-content:space-between; align-items:center; gap:12px;">
+                <div>
+                  <b style="font-size:13.5px; color:var(--k-err);">Vùng nguy hiểm · Xóa vĩnh viễn liên hệ</b>
+                  <div style="font-size:12px; color:var(--k-muted);">Toàn bộ lịch sử ghi chú sẽ không thể khôi phục sau khi xác nhận.</div>
+                </div>
+                <button class="k-btn danger-outline sm">Xoá liên hệ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 06. MARKETING (UNIFIED 1360PX) + MODAL ==================== -->
+  <section class="screen-pane" id="pane-marketing">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="page-viewport">
+        <header class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Marketing</h1>
+            <div class="seg-tabs">
+              <button class="seg-tab on">Chiến dịch</button>
+              <button class="seg-tab">Ý tưởng nội dung</button>
+              <button class="seg-tab">Lịch nội dung</button>
+              <button class="seg-tab">Bình luận FB/IG</button>
+              <button class="seg-tab">Hồ sơ thương hiệu</button>
+            </div>
+          </div>
+          <button class="k-btn primary sm" onclick="openCampaignModal()"><svg class="i sm"><use href="#i-plus"/></svg>Gửi tin hàng loạt đa kênh</button>
+        </header>
+        <div class="page-container">
+          <!-- Aligned 1360px Card 1 -->
+          <div class="k-card" style="padding:20px; display:flex; justify-content:space-between; align-items:center; gap:16px;">
+            <div>
+              <h2 style="font-size:15.5px; font-weight:700;">Chiến dịch gửi tin hàng loạt (Zalo · FB · IG · Telegram)</h2>
+              <p style="font-size:13px; color:var(--k-muted); margin-top:3px;">Gửi tin chăm sóc / remarketing theo tệp nhãn khách hàng, tự giãn nhịp an toàn chống khóa nick.</p>
+            </div>
+            <button class="k-btn soft">+ Tạo đợt gửi mới</button>
+          </div>
+
+          <!-- Aligned 1360px Card 2: Unified Channel Campaigns (No stray bare links!) -->
+          <div class="k-card" style="padding:20px; display:flex; flex-direction:column; gap:14px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+              <div class="seg-tabs">
+                <button class="seg-tab on">Live chat Website <span class="seg-count">1</span></button>
+                <button class="seg-tab">Tin nhắn SMS <span class="seg-count">0</span></button>
+                <button class="seg-tab">WhatsApp <span class="seg-count">0</span></button>
+              </div>
+              <button class="k-btn primary sm" onclick="openCampaignModal()"><svg class="i sm"><use href="#i-plus"/></svg>Tạo chiến dịch Live chat</button>
+            </div>
+            <div class="k-subcard" style="padding:14px 16px; display:flex; justify-content:space-between; align-items:center; gap:14px;">
+              <div>
+                <div style="display:flex; align-items:center; gap:8px;"><b>Chiến Dịch MKT 24/11</b><span class="k-chip ok">Đang bật</span></div>
+                <div style="font-size:12.5px; color:var(--k-muted); margin-top:3px;">Gửi bởi John · Kênh Acme Support · Hiển thị sau 10s trên trang</div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button class="k-btn secondary sm" onclick="openCampaignModal()">Chỉnh sửa (Xem Popup)</button>
+                <button class="k-btn danger-outline sm">Xóa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 07. SETTINGS BENTO 3-COL ==================== -->
+  <section class="screen-pane" id="pane-settings">
+    <div class="app-shell" data-shell>
+      <aside class="k-rail" data-rail></aside>
+      <div class="page-viewport">
+        <header class="page-header">
+          <div class="page-header-left">
+            <div>
+              <h1 class="page-title">Cài đặt cửa hàng</h1>
+              <div class="page-sub">Nhóm "Báo cáo chi tiết" đã đưa về đúng phân hệ Báo cáo — 6 nhóm cài đặt cân đối 3 cột</div>
+            </div>
+          </div>
+          <div class="k-input-wrap" style="width:280px;">
+            <span class="icon-l"><svg class="i sm"><use href="#i-search"/></svg></span>
+            <input class="k-input sm" id="settingsFilter" placeholder="Tìm nhanh cài đặt (vd: QR, Zalo, AI)…" oninput="filterSettings(this.value)" />
+          </div>
+        </header>
+        <div class="page-container">
+          <div class="grid-3" id="settingsBento">
+            <div class="k-card bento-item" data-kw="kênh nhắn tin zalo facebook livechat faq" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">KÊNH BÁN HÀNG</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Kênh nhắn tin</b><div style="font-size:12px; color:var(--k-muted);">Zalo, Facebook, website và các kênh</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Lời chào trên website</b><div style="font-size:12px; color:var(--k-muted);">Tin nhắn tự gửi cho khách đang xem</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Trang hỏi đáp</b><div style="font-size:12px; color:var(--k-muted);">Bài viết trả lời câu hỏi thường gặp</div></div>
+            </div>
+            <div class="k-card bento-item" data-kw="nhân viên phân quyền nhóm ca trực" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">NHÂN VIÊN &amp; NHÓM</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Nhân viên</b><div style="font-size:12px; color:var(--k-muted);">Mời và phân quyền người cùng bán</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Nhóm trực chat</b><div style="font-size:12px; color:var(--k-muted);">Chia nhân viên theo ca hoặc bộ phận</div></div>
+            </div>
+            <div class="k-card bento-item" data-kw="cửa hàng nhận tiền vietqr ngân hàng gói cước" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">CỬA HÀNG &amp; THANH TOÁN</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Thông tin cửa hàng</b><div style="font-size:12px; color:var(--k-muted);">Tên shop, ngôn ngữ, email hỗ trợ</div></div>
+              <div class="k-subcard" style="padding:10px 12px; border-color:var(--k-brand); background:var(--k-brand-soft);"><b>Nhận tiền (VietQR)</b><div style="font-size:12px; color:var(--k-brand-ink);">Cấu hình ngân hàng để gửi QR tự động</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Gói cước</b><div style="font-size:12px; color:var(--k-muted);">Hạn dùng và lịch sử gia hạn Casso</div></div>
+            </div>
+            <div class="k-card bento-item" data-kw="nhãn trả lời nhanh mẫu câu" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">NHÃN &amp; TRẢ LỜI NHANH</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Nhãn phân loại</b><div style="font-size:12px; color:var(--k-muted);">Đánh dấu tin nhắn và tệp khách</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Mẫu câu trả lời nhanh</b><div style="font-size:12px; color:var(--k-muted);">Gõ / khi chat để chèn nhanh</div></div>
+            </div>
+            <div class="k-card bento-item" data-kw="tài khoản hồ sơ bảo mật 2fa thông báo" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">TÀI KHOẢN CỦA TÔI</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Hồ sơ &amp; Chữ ký</b><div style="font-size:12px; color:var(--k-muted);">Ảnh đại diện, tên, phím gửi tin</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Bảo mật &amp; 2FA</b><div style="font-size:12px; color:var(--k-muted);">Mật khẩu, phiên đăng nhập</div></div>
+            </div>
+            <div class="k-card bento-item" data-kw="nâng cao tự động hóa bot ai tích hợp webhook" style="padding:18px; display:flex; flex-direction:column; gap:10px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--k-muted); letter-spacing:.05em;">NÂNG CAO &amp; TỰ ĐỘNG HÓA</div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Quy tắc tự động &amp; Macros</b><div style="font-size:12px; color:var(--k-muted);">Tự gán nhãn, giao việc theo điều kiện</div></div>
+              <div class="k-subcard" style="padding:10px 12px;"><b>Bot trả lời &amp; Webhook</b><div style="font-size:12px; color:var(--k-muted);">Kết nối ứng dụng ngoài &amp; AI</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 08. CONSOLE & SUPER ADMIN ==================== -->
+  <section class="screen-pane" id="pane-admin">
+    <div class="console-shell" id="consoleShell">
+      <aside class="console-rail">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:0 6px 14px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <svg width="24" height="24"><use href="#mark"/></svg>
+            <b class="c-lbl" style="color:#fff; font-size:15px;">Kalo Admin</b>
+          </div>
+          <button class="k-btn ghost icon" style="color:#C7C1DE;" title="Thu gọn Console Sidebar" onclick="document.getElementById('consoleShell').classList.toggle('collapsed')">
+            <svg class="i sm"><use href="#i-sidebar"/></svg>
+          </button>
+        </div>
+        <button class="c-nav on" id="navSuper" onclick="toggleAdminView('super')"><svg class="i sm"><use href="#i-store"/></svg><span class="c-lbl">Super Admin · Shop</span></button>
+        <button class="c-nav" id="navConsole" onclick="toggleAdminView('console')"><svg class="i sm"><use href="#i-chart"/></svg><span class="c-lbl">Kalo Console · Health</span></button>
+        <button class="c-nav" onclick="goScreen('mail')"><svg class="i sm"><use href="#i-mail"/></svg><span class="c-lbl">MailHog Inspector</span></button>
+        <div style="flex:1;"></div>
+        <button class="c-nav" onclick="goScreen('overview')"><svg class="i sm"><use href="#i-home"/></svg><span class="c-lbl">Về Kalo Shop App</span></button>
+      </aside>
+
+      <div class="page-viewport" style="background:var(--k-console-bg);">
+        <!-- Subview A: Super Admin FIXED (no red table!) -->
+        <div id="adminSuperView">
+          <header class="page-header">
+            <div class="page-header-left">
+              <div>
+                <h1 class="page-title">/super_admin · Tài khoản shop</h1>
+                <div class="page-sub">Đã sửa lỗi CSS khiến mọi ô trong bảng bị chữ đỏ &amp; bỏ nền đào đơn điệu</div>
+              </div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <input class="k-input sm" style="width:220px;" placeholder="Tìm trong Tài khoản shop…" />
+              <button class="k-btn primary sm">+ Thêm tài khoản</button>
+            </div>
+          </header>
+          <div class="page-container">
+            <div class="grid-4">
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Tổng tài khoản shop</span></div><div class="kpi-val num-ui">24</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Đang hoạt động</span></div><div class="kpi-val num-ui" style="color:var(--k-ok);">22</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Đang dùng thử 14d</span></div><div class="kpi-val num-ui" style="color:var(--k-warn);">9</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Tổng hội thoại hôm nay</span></div><div class="kpi-val num-ui">1.428</div></div>
+            </div>
+            <div class="k-card" style="overflow:hidden;">
+              <div class="k-table-wrap">
+                <table class="k-table">
+                  <thead>
+                    <tr><th>Mã</th><th>Tên cửa hàng</th><th>Ngôn ngữ</th><th style="text-align:right;">Người dùng</th><th style="text-align:right;">Hội thoại</th><th>Trạng thái</th><th style="text-align:right;">Thao tác</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="mono">2</td>
+                      <td><b>Acme Org</b></td>
+                      <td>Tiếng Anh (en)</td>
+                      <td style="text-align:right;" class="num-ui">1</td>
+                      <td style="text-align:right;" class="num-ui">0</td>
+                      <td><span class="k-chip ok">Đang hoạt động</span></td>
+                      <td style="text-align:right;"><button class="k-btn secondary sm">Sửa</button> <button class="k-btn danger-outline sm">Xóa</button></td>
+                    </tr>
+                    <tr>
+                      <td class="mono">1</td>
+                      <td><b>Acme Inc</b></td>
+                      <td>Tiếng Việt (vi)</td>
+                      <td style="text-align:right;" class="num-ui">4</td>
+                      <td style="text-align:right;" class="num-ui">128</td>
+                      <td><span class="k-chip ok">Đang hoạt động</span></td>
+                      <td style="text-align:right;"><button class="k-btn secondary sm">Sửa</button> <button class="k-btn danger-outline sm">Xóa</button></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Subview B: Kalo Console Health -->
+        <div id="adminConsoleView" style="display:none;">
+          <header class="page-header">
+            <div class="page-header-left">
+              <div>
+                <h1 class="page-title">Kalo Console · Sức khỏe Hạ tầng &amp; Doanh thu SaaS</h1>
+                <div class="page-sub">Giám sát đối soát tự động Casso, Zalo Bridge và AI Gateway</div>
+              </div>
+            </div>
+            <button class="k-btn primary sm" onclick="goScreen('mail')">Kiểm tra Mail Inspector</button>
+          </header>
+          <div class="page-container">
+            <div class="grid-4">
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Shop trả phí / Tổng</span></div><div class="kpi-val num-ui">15 / 24</div><div class="kpi-foot">62.5% tỷ lệ chuyển đổi</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Casso đối soát tự động</span></div><div class="kpi-val num-ui" style="color:var(--k-ok);">96.4%</div><div class="kpi-foot">1 giao dịch chờ gán tay</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>Zalo Personal Bridge</span></div><div class="kpi-val num-ui" style="color:var(--k-ok);">Online</div><div class="kpi-foot">11/12 phiên QR đang chạy</div></div>
+              <div class="k-card kpi-card"><div class="kpi-top"><span>AI Gateway Latency</span></div><div class="kpi-val num-ui">840ms</div><div class="kpi-foot">0 lỗi 503 trong 24h</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 09. MAILHOG INSPECTOR ==================== -->
+  <section class="screen-pane" id="pane-mail">
+    <div class="console-shell">
+      <aside class="console-rail">
+        <div style="display:flex; align-items:center; gap:8px; padding:0 6px 14px;">
+          <svg width="24" height="24"><use href="#mark"/></svg>
+          <b style="color:#fff; font-size:15px;">Kalo Mail</b>
+        </div>
+        <button class="c-nav" onclick="goScreen('admin')"><svg class="i sm"><use href="#i-store"/></svg><span>Console &amp; Admin</span></button>
+        <button class="c-nav on"><svg class="i sm"><use href="#i-mail"/></svg><span>Mail Inspector</span></button>
+        <div style="flex:1;"></div>
+        <button class="c-nav" onclick="goScreen('overview')"><svg class="i sm"><use href="#i-home"/></svg><span>Về Kalo Shop App</span></button>
+      </aside>
+      <div style="flex:1; min-width:0; display:flex; height:100%; overflow:hidden;">
+        <!-- Mail List -->
+        <div style="width:360px; flex:none; background:var(--k-surface); border-right:1px solid var(--k-border-weak); display:flex; flex-direction:column;">
+          <div class="pane-head">
+            <div><b style="font-size:14.5px;">Hộp thư Kiểm thử (MailHog)</b><div style="font-size:11px; color:var(--k-muted);">SMTP_ADDRESS=mailhog · Cổng :8025</div></div>
+            <span class="k-chip ok">Đang bắt mail</span>
+          </div>
+          <div style="padding:10px 12px; border-bottom:1px solid var(--k-border-weak);">
+            <input class="k-input sm" placeholder="Tìm theo email người nhận hoặc tiêu đề…" />
+          </div>
+          <div style="flex:1; overflow-y:auto;">
+            <div class="conv-item on" onclick="selectMail(0)">
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; font-size:12.5px;"><b>Xác thực tài khoản Kalo</b><span style="color:var(--k-muted);">15:52</span></div>
+                <div style="font-size:12px; color:var(--k-ink-soft);">Tới: john@acme.test</div>
+                <span class="k-chip brand" style="margin-top:4px;">Xác thực Email</span>
+              </div>
+            </div>
+            <div class="conv-item" onclick="selectMail(1)">
+              <div style="flex:1; min-width:0;">
+                <div style="display:flex; justify-content:space-between; font-size:12.5px;"><b>Gia hạn gói Tăng trưởng thành công</b><span style="color:var(--k-muted);">14:18</span></div>
+                <div style="font-size:12px; color:var(--k-ink-soft);">Tới: owner@kalocandle.vn</div>
+                <span class="k-chip ok" style="margin-top:4px;">Casso Webhook</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Mail Viewer -->
+        <div style="flex:1; min-width:0; display:flex; flex-direction:column; background:var(--k-canvas);">
+          <div class="pane-head" style="justify-content:space-between;">
+            <div>
+              <b id="mailSubj" style="font-size:15px;">[Kalo] Xác thực địa chỉ email của bạn</b>
+              <div id="mailMeta" style="font-size:12px; color:var(--k-muted);">Từ: noreply@kalo.vn → Tới: john@acme.test</div>
+            </div>
+            <div style="display:flex; gap:8px;">
+              <button class="k-btn soft sm" onclick="alert('Đã sao chép link xác thực từ email!')">Sao chép Link kích hoạt</button>
+              <button class="k-btn secondary sm">Mở MailHog gốc (:8025)</button>
+            </div>
+          </div>
+          <div style="flex:1; overflow-y:auto; padding:22px;">
+            <div class="k-card" style="max-width:680px; margin:0 auto; overflow:hidden;">
+              <div style="background:linear-gradient(135deg,#FF6B4A,#C93F24); padding:20px 24px; color:#fff; display:flex; align-items:center; gap:10px;">
+                <svg width="28" height="28"><use href="#mark"/></svg>
+                <b style="font-size:16px;">Kalo · Mọi tin nhắn. Một chỗ.</b>
+              </div>
+              <div style="padding:24px; display:flex; flex-direction:column; gap:12px;" id="mailBody">
+                <h3 style="font-size:17px;">Chào mừng John đến với Acme Inc</h3>
+                <p style="color:var(--k-ink-soft);">Nhấn nút bên dưới để hoàn tất xác thực email và bắt đầu kết nối Zalo, Facebook và VietQR.</p>
+                <div><button class="k-btn primary">Xác thực tài khoản ngay</button></div>
+                <div class="k-subcard" style="padding:10px 12px; font-size:12px;" class="mono">Token trích xuất: <b class="mono">confirmation_token=kalo_9a82bc71e</b></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ==================== INTERACTIVE DRAWER: ORDER #1042 / #1001 ==================== -->
+<div class="backdrop drawer-wrap" id="orderDrawerBackdrop" onclick="if(event.target===this) closeOrderDrawer()">
+  <aside class="k-drawer" role="dialog" aria-modal="true">
+    <header class="ov-head">
+      <div style="display:flex; align-items:center; gap:8px;">
+        <h2 class="mono" style="font-size:17px; font-weight:800;" id="drwNum">#1042</h2>
+        <span class="k-chip warn" id="drwBadge">TT: Chờ QR · GH: Chờ đóng</span>
+      </div>
+      <button class="k-btn ghost icon" onclick="closeOrderDrawer()"><svg class="i"><use href="#i-x"/></svg></button>
+    </header>
+    <div class="ov-body">
+      <div class="timeline" id="drwTimeline">
+        <div class="tl-step done"><div class="tl-dot">✓</div><span>Tạo đơn</span></div>
+        <div class="tl-step"><div class="tl-dot">2</div><span>Đã thu QR</span></div>
+        <div class="tl-step"><div class="tl-dot">3</div><span>Đang giao</span></div>
+        <div class="tl-step"><div class="tl-dot">4</div><span>Hoàn tất</span></div>
+      </div>
+      <div class="k-subcard" style="padding:12px 14px; display:flex; flex-direction:column; gap:6px;">
+        <div style="font-size:11.5px; font-weight:700; color:var(--k-muted);">KHÁCH HÀNG &amp; GIAO NHẬN</div>
+        <div style="display:flex; justify-content:space-between;"><span>Khách hàng</span><b id="drwCust">Thu Hà (Zalo)</b></div>
+        <div style="display:flex; justify-content:space-between;"><span>Địa chỉ</span><span>142 Nguyễn Đình Chiểu, Q.3</span></div>
+      </div>
+      <div class="k-card" style="padding:14px; display:flex; flex-direction:column; gap:8px;">
+        <div style="font-size:11.5px; font-weight:700; color:var(--k-muted);">SẢN PHẨM TRONG ĐƠN</div>
+        <div style="display:flex; justify-content:space-between;" id="drwItems"><span>Nến gỗ đàn hương ×2</span><b class="num-ui">378.000đ</b></div>
+        <div style="display:flex; justify-content:space-between; color:var(--k-muted);"><span>Phí giao hàng</span><span class="num-ui">25.000đ</span></div>
+        <div style="display:flex; justify-content:space-between; padding-top:8px; border-top:1px solid var(--k-border-weak); font-size:15.5px;"><b>Tổng thanh toán</b><b class="num-ui" id="drwTotal">403.000đ</b></div>
+      </div>
+      <div class="k-subcard" style="padding:14px; text-align:center; display:flex; flex-direction:column; align-items:center; gap:8px;" id="drwQrBox">
+        <div style="width:136px; height:136px; background:#fff; border:1px solid var(--k-border-strong); border-radius:12px; display:grid; place-items:center; color:#181311;">
+          <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><use href="#i-qr"/></svg>
+        </div>
+        <div style="font-size:12px; color:var(--k-muted);">Quét VietQR · Nội dung tự động: <b class="mono">KALO 1042</b> (không còn dòng "Đang tải…" lỗi)</div>
+      </div>
+    </div>
+    <footer class="ov-foot" style="justify-content:space-between;">
+      <button class="k-btn danger-outline sm" onclick="closeOrderDrawer()">Hủy đơn</button>
+      <button class="k-btn primary" onclick="closeOrderDrawer()"><svg class="i sm"><use href="#i-check"/></svg>Đánh dấu đã nhận tiền</button>
+    </footer>
+  </aside>
+</div>
+
+<!-- ==================== INTERACTIVE MODAL: CAMPAIGN 3-ZONE ==================== -->
+<div class="backdrop modal-wrap" id="campaignModalBackdrop" onclick="if(event.target===this) closeCampaignModal()">
+  <div class="k-modal" role="dialog" aria-modal="true">
+    <header class="ov-head">
+      <div>
+        <h2 style="font-size:16px; font-weight:800;">Chỉnh sửa chiến dịch live chat</h2>
+        <div style="font-size:12px; color:var(--k-muted);">Thanh cuộn lùi gọn vào thân hộp thoại, Header &amp; Footer cố định không trôi</div>
+      </div>
+      <button class="k-btn ghost icon" onclick="closeCampaignModal()"><svg class="i"><use href="#i-x"/></svg></button>
+    </header>
+    <div class="ov-body">
+      <div class="k-field"><label class="k-label">Tiêu đề chiến dịch <span class="k-req">*</span></label><input class="k-input" value="Chiến Dịch MKT 24/11" /></div>
+      <div class="k-field"><label class="k-label">Tin nhắn chào khách</label><textarea class="k-textarea">Chào bạn! Hôm nay Kalo tặng mã FREESHIP đơn từ 299k, bạn cần tư vấn mùi nến nào ạ?</textarea></div>
+      <div class="grid-2">
+        <div class="k-field"><label class="k-label">Hộp thư đến</label><select class="k-select"><option>Acme Support</option></select></div>
+        <div class="k-field"><label class="k-label">Gửi bởi nhân viên</label><select class="k-select"><option>John</option></select></div>
+      </div>
+      <div class="grid-2">
+        <div class="k-field"><label class="k-label">URL kích hoạt</label><input class="k-input" value="https://kinetic.phukhuong.io.vn/" /></div>
+        <div class="k-field"><label class="k-label">Thời gian chờ (giây)</label><input class="k-input" type="number" value="10" /></div>
+      </div>
+      <div class="k-subcard" style="padding:12px 14px; display:flex; flex-direction:column; gap:8px;">
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" checked /> <span>Kích hoạt chiến dịch ngay sau khi lưu</span></label>
+        <label style="display:flex; align-items:center; gap:8px; cursor:pointer;"><input type="checkbox" /> <span>Chỉ hiển thị trong giờ làm việc (08:00 – 21:00)</span></label>
+      </div>
+    </div>
+    <footer class="ov-foot">
+      <button class="k-btn secondary" onclick="closeCampaignModal()">Huỷ</button>
+      <button class="k-btn primary" onclick="closeCampaignModal()">Lưu thay đổi</button>
+    </footer>
+  </div>
+</div>
+
+<script>
+const RAIL_ITEMS = [
+  { id: 'overview', icon: 'home', label: 'Tổng quan', sec: 'VẬN HÀNH' },
+  { id: 'chat', icon: 'msg', label: 'Tin nhắn', badge: 5 },
+  { id: 'orders', icon: 'bag', label: 'Đơn hàng', badge: 2 },
+  { id: 'contact', icon: 'users', label: 'Khách hàng' },
+  { id: 'marketing', icon: 'mega', label: 'Marketing', sec: 'TĂNG TRƯỞNG' },
+  { id: 'admin', icon: 'chart', label: 'Console' },
+  { id: 'settings', icon: 'set', label: 'Cài đặt', footer: true }
+];
+
+let railCollapsed = false;
+
+function renderRails(activeId) {
+  document.querySelectorAll('[data-rail]').forEach(el => {
+    let html = `
+      <div class="rail-top">
+        <svg width="34" height="34" style="flex:none;"><use href="#mark"/></svg>
+        <div class="shop-pill" title="Đổi cửa hàng"><span>Acme Inc</span><span style="margin-left:auto;color:var(--k-muted);">▾</span></div>
+        <button class="k-btn ghost icon" title="Thu gọn / Mở rộng Sidebar" onclick="toggleRail()">
+          <svg class="i sm"><use href="#i-sidebar"/></svg>
+        </button>
+      </div>`;
+    let currentSec = '';
+    RAIL_ITEMS.filter(x => !x.footer).forEach(item => {
+      if (item.sec && item.sec !== currentSec) {
+        currentSec = item.sec;
+        html += `<div class="rail-sec">${item.sec}</div>`;
+      }
+      const on = item.id === activeId ? 'on' : '';
+      const badge = item.badge ? `<span class="rail-badge">${item.badge}</span>` : '';
+      html += `<button class="rail-item ${on}" title="${item.label}" onclick="goScreen('${item.id}')">
+        <svg class="i"><use href="#i-${item.icon}"/></svg>
+        <span class="rail-label">${item.label}</span>${badge}
+      </button>`;
+    });
+    html += `<div class="rail-spacer"></div>
+      <div class="rail-footer">
+        <button class="rail-item ${activeId === 'settings' ? 'on' : ''}" title="Cài đặt" onclick="goScreen('settings')">
+          <svg class="i"><use href="#i-set"/></svg><span class="rail-label">Cài đặt</span>
+        </button>
+        <div class="rail-user" title="John · Đang trực">
+          <div class="av" style="background:#C93F24;">J<span class="dot-on"></span></div>
+          <div class="rail-user-meta" style="min-width:0;">
+            <div style="font-size:13px; font-weight:700;">John</div>
+            <div style="font-size:11px; color:var(--k-ok);">● Đang trực</div>
+          </div>
+        </div>
+      </div>`;
+    el.innerHTML = html;
+  });
+}
+
+function toggleRail() {
+  railCollapsed = !railCollapsed;
+  document.querySelectorAll('[data-shell]').forEach(s => s.classList.toggle('rail-collapsed', railCollapsed));
+}
+
+function goScreen(id) {
+  document.querySelectorAll('.screen-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('pane-' + id).classList.add('active');
+  document.querySelectorAll('.studio-tab').forEach(t => t.classList.toggle('on', t.dataset.go === id));
+  renderRails(id);
+}
+
+document.getElementById('studioNav').addEventListener('click', e => {
+  const btn = e.target.closest('[data-go]');
+  if (btn) goScreen(btn.dataset.go);
+});
+
+document.getElementById('btnTheme').addEventListener('click', () => {
+  const root = document.documentElement;
+  root.setAttribute('data-theme', root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+});
+
+function setComposerMode(mode) {
+  const box = document.getElementById('composerBox');
+  const inp = document.getElementById('composerInput');
+  const btn = document.getElementById('btnSendMsg');
+  document.getElementById('tabReply').classList.toggle('on', mode === 'reply');
+  document.getElementById('tabNote').classList.toggle('on', mode === 'note');
+  box.classList.toggle('note-mode', mode === 'note');
+  inp.placeholder = mode === 'note' ? 'Viết ghi chú nội bộ (nền vàng bảo vệ không gửi nhầm ra khách)…' : 'Nhập tin nhắn gửi QA Dung…';
+  btn.innerHTML = mode === 'note' ? 'Lưu ghi chú nội bộ' : '<svg class="i sm"><use href="#i-send"/></svg>Gửi (⌘↵)';
+}
+
+function openOrderDrawer(num) {
+  document.getElementById('drwNum').textContent = '#' + num;
+  if (num === '1001') {
+    document.getElementById('drwBadge').className = 'k-chip err';
+    document.getElementById('drwBadge').textContent = 'Đã hủy';
+    document.getElementById('drwCust').textContent = 'QA Chi (Web Chat)';
+    document.getElementById('drwItems').innerHTML = '<span>QA áo thun ×1</span><b class="num-ui">150.000đ</b>';
+    document.getElementById('drwTotal').textContent = '150.000đ';
+    document.getElementById('drwQrBox').style.display = 'none';
+  } else {
+    document.getElementById('drwBadge').className = 'k-chip warn';
+    document.getElementById('drwBadge').textContent = 'TT: Chờ QR · GH: Chờ đóng';
+    document.getElementById('drwCust').textContent = 'Thu Hà (Zalo)';
+    document.getElementById('drwItems').innerHTML = '<span>Nến gỗ đàn hương ×2</span><b class="num-ui">378.000đ</b>';
+    document.getElementById('drwTotal').textContent = '403.000đ';
+    document.getElementById('drwQrBox').style.display = 'flex';
+  }
+  document.getElementById('orderDrawerBackdrop').classList.add('open');
+}
+function closeOrderDrawer() { document.getElementById('orderDrawerBackdrop').classList.remove('open'); }
+function openCampaignModal() { document.getElementById('campaignModalBackdrop').classList.add('open'); }
+function closeCampaignModal() { document.getElementById('campaignModalBackdrop').classList.remove('open'); }
+
+function switchContactTab(el, tab) {
+  el.parentElement.querySelectorAll('.seg-tab').forEach(b => b.classList.remove('on'));
+  el.classList.add('on');
+  const body = document.getElementById('contactTabBody');
+  if (tab === 'info') {
+    body.innerHTML = `<div class="grid-2"><div class="k-field"><label class="k-label">Tên</label><input class="k-input" value="jane" /></div><div class="k-field"><label class="k-label">Email</label><input class="k-input" value="jane@example.com" /></div></div>`;
+  } else if (tab === 'hist') {
+    body.innerHTML = `<div class="k-subcard" style="padding:12px;"><b>Đơn #1038 · 640.000đ</b> · <span class="k-chip ok">Hoàn tất</span></div>`;
+  } else {
+    body.innerHTML = `<div class="k-subcard" style="padding:14px; color:var(--k-muted);">Nội dung tab "${el.textContent.trim()}" hiển thị sạch sẽ trên bề mặt thẻ trắng, không còn bị cắt chữ.</div>`;
+  }
+}
+
+function filterSettings(q) {
+  const s = q.trim().toLowerCase();
+  document.querySelectorAll('.bento-item').forEach(c => {
+    c.style.display = (!s || c.dataset.kw.includes(s) || c.textContent.toLowerCase().includes(s)) ? 'flex' : 'none';
+  });
+}
+
+function toggleAdminView(which) {
+  document.getElementById('adminSuperView').style.display = which === 'super' ? 'block' : 'none';
+  document.getElementById('adminConsoleView').style.display = which === 'console' ? 'block' : 'none';
+  document.getElementById('navSuper').classList.toggle('on', which === 'super');
+  document.getElementById('navConsole').classList.toggle('on', which === 'console');
+}
+
+function selectMail(idx) {
+  const mails = [
+    ['[Kalo] Xác thực địa chỉ email của bạn', 'Từ: noreply@kalo.vn → Tới: john@acme.test', '<h3 style="font-size:17px;">Chào mừng John đến với Acme Inc</h3><p style="color:var(--k-ink-soft);">Nhấn nút bên dưới để hoàn tất xác thực email.</p><div class="k-subcard" style="padding:10px 12px;font-size:12px;">Token trích xuất: <b class="mono">confirmation_token=kalo_9a82bc71e</b></div>'],
+    ['[Kalo] Gia hạn gói Tăng trưởng thành công', 'Từ: billing@kalo.vn → Tới: owner@kalocandle.vn', '<h3 style="font-size:17px;">Casso đã tự động đối soát 699.000đ</h3><p style="color:var(--k-ink-soft);">Gói Tăng trưởng của shop được gia hạn thêm 30 ngày.</p>']
+  ];
+  document.getElementById('mailSubj').textContent = mails[idx][0];
+  document.getElementById('mailMeta').textContent = mails[idx][1];
+  document.getElementById('mailBody').innerHTML = mails[idx][2];
+}
+
+renderRails('overview');
+</script>
+</body>
+</html>

@@ -122,75 +122,87 @@ const handleAvatarDelete = async () => {
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-8 pb-6">
-    <div class="flex flex-col items-start gap-3">
-      <Avatar
-        :src="avatarSrc || ''"
-        :name="selectedContact?.name || ''"
-        :size="72"
-        allow-upload
-        @upload="handleAvatarUpload"
-        @delete="handleAvatarDelete"
-      />
-      <div class="flex flex-col gap-1">
-        <h3 class="text-base font-medium text-n-slate-12">
-          {{ selectedContact?.name }}
-        </h3>
-        <div class="flex flex-col gap-1.5">
-          <span
-            v-if="selectedContact?.identifier"
-            class="inline-flex items-center gap-1 text-sm text-n-slate-11"
-          >
-            <span class="i-ph-user-gear text-n-slate-10 size-4" />
-            {{ selectedContact?.identifier }}
-          </span>
-          <span class="inline-flex items-center gap-1 text-sm text-n-slate-11">
+  <div class="flex flex-col w-full gap-5">
+    <div
+      class="flex flex-col w-full gap-6 p-6 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
+    >
+      <div class="flex flex-col items-start gap-3">
+        <Avatar
+          :src="avatarSrc || ''"
+          :name="selectedContact?.name || ''"
+          :size="68"
+          allow-upload
+          @upload="handleAvatarUpload"
+          @delete="handleAvatarDelete"
+        />
+        <div class="flex flex-col gap-1">
+          <h3 class="text-lg font-extrabold text-n-slate-12">
+            {{ selectedContact?.name }}
+          </h3>
+          <div class="flex flex-col gap-1.5">
             <span
               v-if="selectedContact?.identifier"
-              class="i-ph-activity text-n-slate-10 size-4"
-            />
-            {{ $t('CONTACTS_LAYOUT.DETAILS.CREATED_AT', { date: createdAt }) }}
-            •
-            {{
-              $t('CONTACTS_LAYOUT.DETAILS.LAST_ACTIVITY', {
-                date: lastActivityAt,
-              })
-            }}
-          </span>
+              class="inline-flex items-center gap-1 text-sm text-n-slate-11"
+            >
+              <span class="i-ph-user-gear text-n-slate-10 size-4" />
+              {{ selectedContact?.identifier }}
+            </span>
+            <span
+              class="inline-flex items-center gap-1 text-xs text-n-slate-10"
+            >
+              <span
+                v-if="selectedContact?.identifier"
+                class="i-ph-activity text-n-slate-10 size-4"
+              />
+              {{ $t('CONTACTS_LAYOUT.DETAILS.CREATED_AT', { date: createdAt }) }}
+              •
+              {{
+                $t('CONTACTS_LAYOUT.DETAILS.LAST_ACTIVITY', {
+                  date: lastActivityAt,
+                })
+              }}
+            </span>
+          </div>
+        </div>
+        <ContactLabels :contact-id="selectedContact?.id" />
+      </div>
+
+      <div class="flex flex-col w-full gap-5 pt-5 border-t border-n-weak">
+        <ContactsForm
+          ref="contactsFormRef"
+          :contact-data="contactData"
+          is-details-view
+          @update="handleFormUpdate"
+        />
+        <div class="flex justify-end">
+          <Button
+            :label="t('CONTACTS_LAYOUT.CARD.EDIT_DETAILS_FORM.UPDATE_BUTTON')"
+            size="sm"
+            :is-loading="isUpdating"
+            :disabled="isUpdating || isFormInvalid"
+            @click="updateContact"
+          />
         </div>
       </div>
-      <ContactLabels :contact-id="selectedContact?.id" />
     </div>
-    <div class="flex flex-col items-start gap-6">
-      <ContactsForm
-        ref="contactsFormRef"
-        :contact-data="contactData"
-        is-details-view
-        @update="handleFormUpdate"
-      />
-      <Button
-        :label="t('CONTACTS_LAYOUT.CARD.EDIT_DETAILS_FORM.UPDATE_BUTTON')"
-        size="sm"
-        :is-loading="isUpdating"
-        :disabled="isUpdating || isFormInvalid"
-        @click="updateContact"
-      />
-    </div>
+
     <Policy :permissions="['administrator']">
       <div
-        class="flex flex-col items-start w-full gap-4 pt-6 border-t border-n-strong"
+        class="flex flex-wrap items-center justify-between w-full gap-4 p-5 border shadow-sm rounded-2xl bg-n-solid-1 border-n-ruby-6/50"
       >
-        <div class="flex flex-col gap-2">
-          <h6 class="text-base font-medium text-n-slate-12">
+        <div class="flex flex-col min-w-0 gap-1">
+          <h6 class="text-sm font-bold text-n-ruby-11">
             {{ t('CONTACTS_LAYOUT.DETAILS.DELETE_CONTACT') }}
           </h6>
-          <span class="text-sm text-n-slate-11">
+          <span class="text-xs text-n-slate-10">
             {{ t('CONTACTS_LAYOUT.DETAILS.DELETE_CONTACT_DESCRIPTION') }}
           </span>
         </div>
         <Button
           :label="t('CONTACTS_LAYOUT.DETAILS.DELETE_CONTACT')"
+          variant="outline"
           color="ruby"
+          size="sm"
           @click="openConfirmDeleteContactDialog"
         />
       </div>
