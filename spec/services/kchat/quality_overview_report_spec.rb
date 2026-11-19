@@ -61,4 +61,15 @@ RSpec.describe Kchat::QualityOverviewReport do
     )
     expect(report[:action_queue].pluck(:key)).to include('waiting_over_15m', 'low_stock_products')
   end
+
+  it 'sends hidden comments to the Bình luận page (kalo_comments)' do
+    conversation = create(:conversation, account: account, inbox: inbox, contact: contact)
+    message = create(:message, account: account, inbox: inbox, conversation: conversation)
+    # Same write as Kchat::SocialComments::IngestService#hide_comment.
+    message.update!(content_attributes: message.content_attributes.merge('comment_hidden' => true))
+
+    item = described_class.new(account, '7d').summary[:action_queue].find { |entry| entry[:key] == 'phones_protected' }
+
+    expect(item).to include(count: 1, route: 'kalo_comments', tone: 'ok')
+  end
 end
