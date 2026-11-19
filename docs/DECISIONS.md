@@ -280,3 +280,11 @@
   4. `GET kchat/subscription` luôn trả `plan/status/valid_until/days_left` và `billing_configured`; thiếu env ngân hàng Casso thì chỉ bỏ khối thanh toán (`bank`, `memo`, `prices`) và vẫn ghi log lỗi. Trang gói hiện trạng thái kèm thông báo chưa cấu hình thanh toán.
 - **Đánh đổi:** 4 request nhỏ mỗi lần tải app cho quản trị viên (một lần cho mỗi tài khoản, dùng chung giữa card, rail và sheet). Tour dựa vào DOM nên trang render chậm có thể bị rút gọn: host chờ tối đa 4 giây cho đủ target rồi chạy các bước đang có.
 
+
+## ADR-027 — Một bộ định nghĩa chỉ số bán hàng/chat cho Tổng quan và Báo cáo · `accepted` (2026-11-20)
+- **Bối cảnh:** `Kchat::Reports`, `Kchat::QualityOverviewReport` và `Kchat::MarketingReports` mỗi nơi tự tính đơn, doanh thu và tỷ lệ chốt nên hai trang ra số mâu thuẫn (LESSONS B105). Đơn POS bị coi như đơn chat và đơn cần giao (B107). Health AI chỉ kiểm có key (B108).
+- **Quyết định:**
+  1. `Kchat::Metrics` là nguồn duy nhất: kỳ cắt lúc 0 giờ theo múi giờ báo cáo của shop (mặc định Asia/Ho_Chi_Minh). Doanh thu và "đơn thành công" = đơn `paid|shipping|completed` theo `paid_at`; "Đơn mới" = đơn tạo trong kỳ trừ `cancelled`; đơn từ chat = đơn mới có `conversation_id` và `source <> pos`; tỷ lệ chốt = hội thoại tạo trong kỳ có ít nhất một đơn từ chat không hủy / hội thoại tạo trong kỳ (không vượt 100%). Dòng kênh của đơn không qua chat (`pos`, `manual`) có `conversion_pct: nil`. Ba service trên chỉ gọi `Kchat::Metrics`; định nghĩa hiện ở tooltip (khóa `KALO_METRICS.*`).
+  2. Trạng thái giao hàng suy ra, không thêm cột: `Kchat::Order#delivery_status` (`not_applicable` cho POS), scope `awaiting_delivery`, tham số `delivery=pending` cho tab "Cần giao".
+  3. `Kchat::AiHealth` nhớ lỗi gọi AI gần nhất 5 phút cho cả bản cài đặt (Rack::Attack cache store = Redis dùng chung); `health_status` thêm `available` và `last_failure_at`. Không thêm lệnh gọi thử (probe) để không tốn tiền: trạng thái chỉ đổi sau lần gọi thật đầu tiên bị lỗi.
+- **Đánh đổi:** trang Báo cáo thêm 3 truy vấn gộp (số truy vấn vẫn cố định). Thanh nhiều thương hiệu (`BrandsOverviewReport`) vẫn đếm đơn đã thu tiền, đúng nghĩa "đơn thành công" cạnh doanh thu. Sau khi sửa key AI, trợ lý vẫn ẩn tối đa 5 phút hoặc đến khi có một lần gọi thành công từ nơi khác (chiến dịch/ý tưởng), vì nút trợ lý chỉ hỏi health một lần mỗi lần tải trang.
