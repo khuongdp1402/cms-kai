@@ -29,15 +29,20 @@ const blankEntry = () => ({
   hasPayment: false,
 });
 
+// In-flight loads per account: concurrent refreshes share one set of requests.
+const inFlight = {};
+
 export const resetKaloSetupCache = () => {
   Object.keys(cache).forEach(key => delete cache[key]);
+  Object.keys(inFlight).forEach(key => delete inFlight[key]);
 };
 
-const loadEntry = async (accountId, store) => {
+const fetchEntry = async (accountId, store) => {
   if (!cache[accountId]) cache[accountId] = blankEntry();
   // Mutate through the reactive proxy so every user re-renders.
   const entry = cache[accountId];
-  entry.status = 'loading';
+  // A refresh keeps showing the last data (no flicker); only the first load is 'loading'.
+  if (entry.status === 'idle') entry.status = 'loading';
   const attempt = fn => Promise.resolve().then(fn);
   const [products, orders, payment] = await Promise.allSettled([
     attempt(() => productsAPI.get()),
@@ -56,6 +61,15 @@ const loadEntry = async (accountId, store) => {
     entry.hasPayment = Boolean(data.bank_bin && data.account_number);
   }
   entry.status = 'ready';
+};
+
+const loadEntry = (accountId, store) => {
+  if (!inFlight[accountId]) {
+    inFlight[accountId] = fetchEntry(accountId, store).finally(() => {
+      delete inFlight[accountId];
+    });
+  }
+  return inFlight[accountId];
 };
 
 export function useKaloSetup() {
@@ -142,15 +156,22 @@ export function useKaloSetup() {
   const show = () => saveState({ hidden: false });
 
   const refresh = () => {
-    if (!isAdmin.value || !accountId.value) return Promise.resolve();
+    if (!isAdmin.value || !accountId.value || isHidden.value) {
+      return Promise.resolve();
+    }
     return loadEntry(accountId.value, store);
   };
 
   // First user of the composable for an account triggers the load.
   watch(
-    [accountId, isAdmin],
+    [accountId, isAdmin, isHidden],
     () => {
-      if (isAdmin.value && accountId.value && !cache[accountId.value]) {
+      if (
+        isAdmin.value &&
+        accountId.value &&
+        !isHidden.value &&
+        !cache[accountId.value]
+      ) {
         refresh();
       }
     },

@@ -73,11 +73,16 @@ const openSetup = () => {
               {{ t('KALO_GUIDE.SETUP.TITLE') }}
             </span>
             <span class="text-xs text-n-slate-11">
-              {{
-                remaining > 0
-                  ? t('KALO_GUIDE.MENU.SETUP_LEFT', { count: remaining })
-                  : t('KALO_GUIDE.MENU.SETUP_DONE')
-              }}
+              <template v-if="isHidden">
+                {{ t('KALO_GUIDE.MENU.SETUP_SHOW') }}
+              </template>
+              <template v-else>
+                {{
+                  remaining > 0
+                    ? t('KALO_GUIDE.MENU.SETUP_LEFT', { count: remaining })
+                    : t('KALO_GUIDE.MENU.SETUP_DONE')
+                }}
+              </template>
             </span>
           </span>
           <KaloIcon

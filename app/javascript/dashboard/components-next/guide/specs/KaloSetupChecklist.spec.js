@@ -136,4 +136,44 @@ describe('KaloSetupChecklist', () => {
     );
     expect(productsAPI.get).not.toHaveBeenCalled();
   });
+
+  it('shares one set of requests between concurrent refreshes', async () => {
+    const env = createGuideEnv();
+    await env.router.push({ name: 'kalo_overview', params: { accountId: 1 } });
+    // Two users of the cache mount together (card + rail badge).
+    const Two = {
+      components: { KaloSetupChecklist },
+      template: '<div><KaloSetupChecklist /><KaloSetupChecklist /></div>',
+    };
+    mount(Two, { global: { plugins: [env.router, env.store, env.i18n] } });
+    await flushPromises();
+    expect(productsAPI.get).toHaveBeenCalledTimes(1);
+    expect(ordersAPI.get).toHaveBeenCalledTimes(1);
+    expect(paymentSettingsAPI.get).toHaveBeenCalledTimes(1);
+  });
+
+  it('stays visible with its last data while refreshing', async () => {
+    await mountChecklist();
+    let release;
+    productsAPI.get.mockReturnValue(
+      new Promise(resolve => {
+        release = resolve;
+      })
+    );
+    // Remounting the card triggers a refresh; the card must not disappear.
+    const { wrapper: second } = await mountChecklist();
+    expect(
+      second.find('[data-test-id="kalo-setup-checklist"]').exists()
+    ).toBe(true);
+    release({ data: { payload: [{ id: 1 }] } });
+    await flushPromises();
+    expect(
+      second.find('[data-test-id="kalo-setup-step-product"]').attributes('data-state')
+    ).toBe('done');
+  });
+
+  it('does not fetch while the list is hidden', async () => {
+    await mountChecklist({ uiSettings: { kalo_setup: { 1: { hidden: true } } } });
+    expect(productsAPI.get).not.toHaveBeenCalled();
+  });
 });

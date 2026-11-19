@@ -5726,6 +5726,7 @@
       "DESC": "Xem lại hướng dẫn từng phần. Mỗi hướng dẫn chỉ mất chưa tới một phút.",
       "SETUP_LEFT": "Còn {count} bước thiết lập",
       "SETUP_DONE": "Đã thiết lập xong",
+      "SETUP_SHOW": "Đang ẩn, bấm để hiện lại",
       "NEW": "Chưa xem",
       "SEEN": "Đã xem",
       "PLAY": "Xem",

@@ -119,12 +119,14 @@ describe('KaloChatListEmpty', () => {
     );
   });
 
-  it('carries the setup checklist for the mobile list (not when filtered)', async () => {
+  it('carries the setup checklist on mobile only (not when filtered)', async () => {
+    const originalWidth = window.innerWidth;
+    window.innerWidth = 400;
     const wrapper = await mountWith(KaloChatListEmpty);
     await flushPromises();
-    const checklist = wrapper.find('[data-test-id="kalo-setup-checklist"]');
-    expect(checklist.exists()).toBe(true);
-    expect(checklist.element.parentElement.className).toContain('md:hidden');
+    expect(
+      wrapper.find('[data-test-id="kalo-setup-checklist"]').exists()
+    ).toBe(true);
     const filtered = await mountWith(KaloChatListEmpty, {
       props: { isFiltered: true },
     });
@@ -132,6 +134,14 @@ describe('KaloChatListEmpty', () => {
     expect(
       filtered.find('[data-test-id="kalo-setup-checklist"]').exists()
     ).toBe(false);
+    // Desktop: not mounted at all (OnboardingView shows it beside the list).
+    window.innerWidth = 1280;
+    const desktop = await mountWith(KaloChatListEmpty);
+    await flushPromises();
+    expect(
+      desktop.findComponent({ name: 'KaloSetupChecklist' }).exists()
+    ).toBe(false);
+    window.innerWidth = originalWidth;
   });
 
   it('offers to clear the filters when the list is filtered', async () => {
