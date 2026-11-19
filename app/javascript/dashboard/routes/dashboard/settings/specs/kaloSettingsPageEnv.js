@@ -12,7 +12,12 @@ export const mountSettingsPage = async (
 ) => {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: ['kalo_settings_hub', 'settings_page', ...routes].map(name => ({
+    routes: [
+      'kalo_settings_hub',
+      'kalo_console',
+      'settings_page',
+      ...routes,
+    ].map(name => ({
       name,
       path: `/app/accounts/:accountId/${name}/:inboxId?/:teamId?`,
       component: { template: '<div />' },

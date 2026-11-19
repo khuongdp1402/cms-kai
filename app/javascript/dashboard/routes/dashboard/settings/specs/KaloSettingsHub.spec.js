@@ -11,6 +11,7 @@ const ALL = ['administrator', 'agent'];
 // Route names the hub links to, with the meta the real routes declare.
 const ROUTES = {
   kalo_settings_hub: {},
+  kalo_console: { permissions: ALL },
   settings_inbox_list: { permissions: ADMIN, featureFlag: 'inbox_management' },
   campaigns_livechat_index: { permissions: ADMIN },
   portals_index: { permissions: ADMIN },
@@ -86,14 +87,13 @@ const mountHub = async ({
 };
 
 describe('SettingsHub (Kalo groups)', () => {
-  it('shows the six storefront Bento groups in order (reports moved to ReportsIndex)', async () => {
+  // Guided UX §7: shop items moved to the Console, Chiến dịch to the sidebar.
+  it('shows the Cửa hàng, replies, own account and advanced groups in order', async () => {
     const { wrapper } = await mountHub();
     const headings = wrapper.findAll('h2').map(h => h.text());
     expect(headings).toEqual([
-      'Kênh bán hàng',
-      'Nhân viên & nhóm',
-      'Nhãn & trả lời nhanh',
       'Cửa hàng',
+      'Nhãn & trả lời nhanh',
       'Tài khoản của tôi',
       'Nâng cao',
     ]);
@@ -102,8 +102,8 @@ describe('SettingsHub (Kalo groups)', () => {
   it('filters setting rows in real time via quick search', async () => {
     const { wrapper } = await mountHub();
     const input = wrapper.find('[data-test="settings-search"]');
-    await input.setValue('ngân hàng');
-    expect(wrapper.text()).toContain('Nhận tiền');
+    await input.setValue('nhận tiền');
+    expect(wrapper.text()).toContain('Console');
     expect(wrapper.text()).not.toContain('Bot trả lời');
 
     await input.setValue('zzzz_khong_ton_tai');
@@ -114,24 +114,49 @@ describe('SettingsHub (Kalo groups)', () => {
     const { names } = await mountHub();
     expect(names).toContain('agent_bots');
     expect(names).toContain('conversation_workflow_index');
-    expect(names).toContain('kalo_billing');
     expect(names).not.toContain('billing_settings_index');
   });
 
-  it('lists Nhận tiền in the Cửa hàng group, after the shop info and before the plan', async () => {
-    const { wrapper } = await mountHub();
+  it('the Cửa hàng group links only to the Console (no duplicate shop pages)', async () => {
+    const { wrapper, names } = await mountHub();
     const shop = wrapper.find('[data-test="hub-group-SHOP"]');
-    const titles = shop.findAll('li').map(li => li.text());
-    expect(titles).toHaveLength(3);
-    expect(titles[1]).toContain('Nhận tiền');
     const shopLinks = shop
       .findAllComponents({ name: 'RouterLink' })
       .map(link => link.props('to').name);
-    expect(shopLinks).toEqual([
+    expect(shopLinks).toEqual(['kalo_console']);
+    [
       'general_settings_index',
       'kalo_payment_settings',
       'kalo_billing',
-    ]);
+      'agent_list',
+      'settings_teams_list',
+      'settings_inbox_list',
+      'campaigns_livechat_index',
+    ].forEach(name => expect(names).not.toContain(name));
+  });
+
+  it('hides advanced links whose kalo flag is off and shows them when on', async () => {
+    const off = await mountHub({
+      disabledFeatures: [
+        'data_import',
+        'kalo_advanced_automation',
+        'kalo_help_center',
+      ],
+    });
+    [
+      'attributes_list',
+      'automation_list',
+      'macros_wrapper',
+      'conversation_workflow_index',
+      'agent_bots',
+      'portals_index',
+    ].forEach(name => expect(off.names).not.toContain(name));
+    expect(off.names).toContain('settings_applications');
+
+    const on = await mountHub();
+    ['automation_list', 'macros_wrapper', 'portals_index'].forEach(name =>
+      expect(on.names).toContain(name)
+    );
   });
 
   it('links data import only when the account has the feature', async () => {

@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import reportsAPI from 'dashboard/api/kchat/reports';
 import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
@@ -11,6 +13,8 @@ import { formatMoney } from '../reports/formatMoney';
 
 const { t, te } = useI18n();
 const { accountId, accountScopedRoute } = useAccount();
+const { isOn } = useKaloFeatures();
+const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 
 const RANGES = [
   { value: 'today', labelKey: 'KALO_OVERVIEW.RANGES.TODAY' },
@@ -119,6 +123,7 @@ onMounted(load);
         </button>
       </div>
       <router-link
+        v-if="isPosOn"
         :to="accountScopedRoute('kalo_pos')"
         class="inline-flex items-center gap-1.5 px-3 py-2 text-xs sm:text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2"
       >

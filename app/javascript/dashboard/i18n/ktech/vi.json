@@ -3631,7 +3631,7 @@
     "YESTERDAY": "Hôm qua"
   },
   "KALO_CONSOLE": {
-    "BRAND": "Console",
+    "BRAND": "Nền tảng",
     "BRAND_MARK": "K",
     "BRAND_NAME": "kalo",
     "COMMON": {
@@ -4537,7 +4537,7 @@
           "TITLE": "Quy trình hội thoại"
         }
       },
-      "SUBTITLE": "Kênh bán, nhân viên và thông tin cửa hàng",
+      "SUBTITLE": "Nhãn, mẫu câu, tài khoản của bạn và công cụ nâng cao",
       "NO_MATCH": "Không tìm thấy mục cài đặt phù hợp.",
       "SEARCH": "Tìm nhanh cài đặt…",
       "TITLE": "Cài đặt"
@@ -5518,5 +5518,144 @@
   "PAGINATION_FOOTER": {
     "SHOWING": "Đang xem {startItem} - {endItem} trên {totalItems} mục | Đang xem {startItem} - {endItem} trên {totalItems} mục",
     "CURRENT_PAGE_INFO": "{currentPage} / {totalPages} trang | {currentPage} / {totalPages} trang"
+  },
+  "KALO_CONSOLE_SHOP": {
+    "NAV": {
+      "COMMENTS": "Bình luận",
+      "CAMPAIGNS": "Chiến dịch",
+      "BRAND": "Thương hiệu",
+      "CONSOLE": "Console",
+      "PLATFORM": "Nền tảng"
+    },
+    "PAGES": {
+      "COMMENTS": {
+        "TITLE": "Bình luận",
+        "DESC": "Tự ẩn bình luận xấu và nhắn riêng cho khách bình luận"
+      },
+      "CAMPAIGNS": {
+        "TITLE": "Chiến dịch",
+        "DESC": "Gửi tin cho nhóm khách và theo dõi kết quả",
+        "BACK": "Quay lại Chiến dịch"
+      },
+      "BRAND": {
+        "TITLE": "Thương hiệu",
+        "DESC": "Hồ sơ thương hiệu, lịch nội dung và ý tưởng bài đăng",
+        "TABS_LABEL": "Phần của trang Thương hiệu",
+        "TABS": {
+          "PROFILE": "Hồ sơ thương hiệu",
+          "CALENDAR": "Lịch nội dung",
+          "IDEAS": "Ý tưởng nội dung"
+        }
+      }
+    },
+    "FEATURE_OFF": {
+      "TITLE": "Chức năng chưa bật",
+      "DESC": "Cửa hàng của bạn chưa dùng chức năng này",
+      "BODY": "Chức năng này chưa được bật cho cửa hàng của bạn. Liên hệ quản trị Kalo để bật.",
+      "HOME": "Về Tổng quan"
+    },
+    "TITLE": "Console",
+    "DESC": "Cửa hàng, nhân viên, gói, nhận tiền và kênh ở một chỗ",
+    "BACK_TO_CONSOLE": "Về Console",
+    "AGENT_ONLY": {
+      "TITLE": "Hồ sơ của bạn",
+      "TEXT": "Phần quản lý cửa hàng chỉ dành cho quản trị viên. Bạn vẫn sửa được hồ sơ và thông báo của mình.",
+      "PROFILE": "Mở hồ sơ của tôi"
+    },
+    "SHOP": {
+      "TITLE": "Cửa hàng",
+      "DESC": "Tên và ngôn ngữ của cửa hàng",
+      "NAME": "Tên cửa hàng",
+      "NAME_REQUIRED": "Nhập tên cửa hàng",
+      "LOCALE": "Ngôn ngữ",
+      "SAVE": "Lưu",
+      "SAVED": "Đã lưu thông tin cửa hàng",
+      "ERROR": "Chưa lưu được, thử lại sau",
+      "MORE": "Cài đặt khác của cửa hàng"
+    },
+    "TEAM": {
+      "TITLE": "Nhân viên và nhóm",
+      "DESC": "Ai được vào cửa hàng và trả lời ở kênh nào",
+      "INVITE": "Mời nhân viên",
+      "ADD_TO_INBOX": "Thêm vào kênh",
+      "ADD_TO_INBOX_FOR": "Thêm {name} vào kênh",
+      "AGENTS": "Nhân viên",
+      "TEAMS": "Nhóm",
+      "NO_AGENTS": "Chưa có nhân viên nào.",
+      "NO_TEAMS": "Chưa có nhóm nào.",
+      "MANAGE_AGENTS": "Quản lý nhân viên",
+      "MANAGE_TEAMS": "Quản lý nhóm",
+      "PENDING": "Chờ xác nhận",
+      "ROLES": {
+        "ADMINISTRATOR": "Quản trị",
+        "AGENT": "Nhân viên"
+      }
+    },
+    "INVITE": {
+      "TITLE": "Mời nhân viên",
+      "DESC": "Nhân viên nhận email để đặt mật khẩu",
+      "NAME": "Tên nhân viên",
+      "NAME_PLACEHOLDER": "Ví dụ: Lan",
+      "NAME_REQUIRED": "Nhập tên nhân viên",
+      "EMAIL": "Email",
+      "EMAIL_PLACEHOLDER": "lan.shop{'@'}gmail.com",
+      "EMAIL_INVALID": "Email chưa đúng",
+      "ROLE": "Vai trò",
+      "SUBMIT": "Gửi lời mời",
+      "CANCEL": "Hủy",
+      "SUCCESS": "Đã gửi lời mời",
+      "EXISTS": "Email này đã có trong cửa hàng",
+      "ERROR": "Chưa mời được, thử lại sau"
+    },
+    "INBOXES": {
+      "DESC": "Chọn kênh nhân viên được xem và trả lời tin nhắn",
+      "ALREADY": "Đã ở trong kênh",
+      "EMPTY": "Chưa có kênh nào. Nối một kênh trước.",
+      "LOADING": "Đang tải kênh…",
+      "SAVE": "Thêm vào kênh",
+      "SKIP": "Để sau",
+      "SUCCESS": "Đã thêm vào {count} kênh",
+      "ERROR": "Chưa thêm được, thử lại sau",
+      "LOAD_ERROR": "Chưa tải được danh sách kênh"
+    },
+    "PLAN": {
+      "TITLE": "Gói và dùng thử",
+      "DESC": "Gói đang dùng và hạn sử dụng",
+      "STATUS": {
+        "trial": "Dùng thử",
+        "active": "Đang dùng",
+        "expired": "Hết hạn"
+      },
+      "VALID_UNTIL": "Hạn đến {date}",
+      "DAYS_LEFT": "· Còn {count} ngày",
+      "NOT_CONFIGURED": "Kalo chưa sẵn sàng nhận phí gói. Xem trang gói để biết thêm.",
+      "ERROR": "Chưa tải được thông tin gói.",
+      "VIEW": "Xem gói"
+    },
+    "PAYMENT": {
+      "TITLE": "Nhận tiền",
+      "DESC": "Tài khoản ngân hàng in trên mã QR gửi khách",
+      "NOT_SET": "Chưa cài tài khoản nhận tiền. Cài để gửi mã QR cho khách.",
+      "SETUP": "Cài nhận tiền",
+      "EDIT": "Sửa",
+      "ERROR": "Chưa tải được thông tin nhận tiền.",
+      "ACCOUNT_LINE": "{bank} · {number}"
+    },
+    "CHANNELS": {
+      "TITLE": "Kênh đã nối",
+      "DESC": "Nơi khách nhắn tin cho cửa hàng",
+      "EMPTY": "Chưa nối kênh nào.",
+      "ADD": "Nối kênh",
+      "MANAGE": "Quản lý kênh",
+      "STATUS": {
+        "OK": "Đang hoạt động",
+        "REAUTH": "Cần kết nối lại"
+      }
+    },
+    "HUB": {
+      "GROUP": "Cửa hàng",
+      "CONSOLE_TITLE": "Console",
+      "CONSOLE_DESC": "Cửa hàng, nhân viên, gói, nhận tiền và kênh"
+    }
   }
 }

@@ -7,6 +7,7 @@ import BackButton from '../../../../components/widgets/BackButton.vue';
 import Icon from 'dashboard/components-next/icon/Icon.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import Input from 'dashboard/components-next/input/Input.vue';
+import { isConsolePage } from 'dashboard/helper/kaloFeatures';
 
 const props = defineProps({
   title: {
@@ -42,9 +43,11 @@ const searchQuery = defineModel('searchQuery', { type: String, default: '' });
 
 const helpURL = getHelpUrlForFeature(props.featureName);
 
-// Pages without their own back target return to the settings hub.
+// Pages without their own back target return to the settings hub, or to the
+// shop Console for the pages that belong to it (spec §7).
+const backToConsole = computed(() => isConsolePage(route?.name));
 const hubRoute = computed(() => ({
-  name: 'kalo_settings_hub',
+  name: backToConsole.value ? 'kalo_console' : 'kalo_settings_hub',
   params: { accountId: route?.params?.accountId },
 }));
 </script>
@@ -64,7 +67,13 @@ const hubRoute = computed(() => ({
       class="inline-flex items-center gap-1 py-1 -ms-1 text-sm font-medium rounded-lg text-n-slate-11 hover:text-n-slate-12"
     >
       <KaloIcon name="back" class="size-4 rtl:rotate-180" />
-      {{ $t('KALO_SETTINGS_UI.BACK_TO_HUB') }}
+      {{
+        $t(
+          backToConsole
+            ? 'KALO_CONSOLE_SHOP.BACK_TO_CONSOLE'
+            : 'KALO_SETTINGS_UI.BACK_TO_HUB'
+        )
+      }}
     </router-link>
     <div
       v-if="title"

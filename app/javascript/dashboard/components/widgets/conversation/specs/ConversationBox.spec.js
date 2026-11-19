@@ -7,6 +7,7 @@
 //  - back button only in expanded layout outside the inbox view                   :116
 import { shallowMount } from '@vue/test-utils';
 import { createStore } from 'vuex';
+import { kaloFeatureGetters } from 'dashboard/helper/specs/kaloFeatureGetters';
 import ConversationBox from '../ConversationBox.vue';
 import ConversationHeader from '../ConversationHeader.vue';
 import MessagesView from '../MessagesView.vue';
@@ -22,6 +23,7 @@ const actions = {
 const mountBox = ({
   chat = { id: 5, inbox_id: 2 },
   apps = [],
+  features = null,
   props = {},
 } = {}) =>
   shallowMount(ConversationBox, {
@@ -32,6 +34,8 @@ const mountBox = ({
           getters: {
             getSelectedChat: () => chat,
             'dashboardApps/getRecords': () => apps,
+            getCurrentAccountId: () => 1,
+            ...kaloFeatureGetters(features),
           },
           actions,
         }),
@@ -96,6 +100,15 @@ describe('ConversationBox', () => {
       ['dashboard-2', 'ERP'],
     ]);
     expect(wrapper.findAllComponents(DashboardAppFrame)).toHaveLength(2);
+  });
+
+  it('hides dashboard app tabs when kalo_advanced_automation is off', () => {
+    const wrapper = mountBox({
+      apps: [{ id: 1, title: 'CRM', content: [] }],
+      features: {},
+    });
+    expect(wrapper.vm.dashboardAppTabs.map(t => t.key)).toEqual(['messages']);
+    expect(wrapper.findAllComponents(DashboardAppFrame)).toHaveLength(0);
   });
 
   it('switching tab changes the active index', async () => {

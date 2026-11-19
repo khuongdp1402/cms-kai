@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { useAccount } from 'dashboard/composables/useAccount';
 import { useMapGetter } from 'dashboard/composables/store';
 import { getUserPermissions } from 'dashboard/helper/permissionsHelper';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
@@ -18,28 +19,29 @@ const isFeatureEnabledonAccount = useMapGetter(
   'accounts/isFeatureEnabledonAccount'
 );
 
+const { isRouteNameOn } = useKaloFeatures();
+
 const searchQuery = ref('');
 
-// Six balanced storefront groups rendered as a 3-column Bento grid; reports live in ReportsIndex.
+// Shop items (cửa hàng, nhân viên, nhóm, gói, nhận tiền, kênh) live in the
+// Console now (spec §7) and Chiến dịch has its own sidebar item; the hub keeps
+// replies, the user's own settings and the advanced tools. Advanced links
+// appear only when their kalo_* flag is on (route mapping in kaloFeatures.js).
 const GROUPS = [
   {
-    key: 'CHANNELS',
+    key: 'SHOP',
+    titleKey: 'KALO_CONSOLE_SHOP.HUB.GROUP',
     links: [
-      ['INBOXES', 'msg', 'settings_inbox_list'],
-      ['CAMPAIGNS', 'mega', 'campaigns_livechat_index'],
       [
-        'HELP_CENTER',
-        'search',
-        'portals_index',
-        { params: { navigationPath: 'portals_articles_index' } },
+        'CONSOLE',
+        'store',
+        'kalo_console',
+        {
+          adminOnly: true,
+          titleKey: 'KALO_CONSOLE_SHOP.HUB.CONSOLE_TITLE',
+          descKey: 'KALO_CONSOLE_SHOP.HUB.CONSOLE_DESC',
+        },
       ],
-    ],
-  },
-  {
-    key: 'TEAM',
-    links: [
-      ['AGENTS', 'users', 'agent_list'],
-      ['TEAMS', 'home', 'settings_teams_list'],
     ],
   },
   {
@@ -47,14 +49,6 @@ const GROUPS = [
     links: [
       ['LABELS', 'tag', 'labels_list'],
       ['CANNED', 'send', 'canned_list'],
-    ],
-  },
-  {
-    key: 'SHOP',
-    links: [
-      ['ACCOUNT', 'store', 'general_settings_index'],
-      ['PAYMENT', 'qr', 'kalo_payment_settings'],
-      ['PLAN', 'wallet', 'kalo_billing'],
     ],
   },
   {
@@ -77,8 +71,14 @@ const GROUPS = [
       ['AUTOMATION', 'spark', 'automation_list'],
       ['MACROS', 'zap', 'macros_wrapper'],
       ['WORKFLOW', 'check', 'conversation_workflow_index'],
-      ['INTEGRATIONS', 'plug', 'settings_applications'],
       ['BOTS', 'msg', 'agent_bots'],
+      [
+        'HELP_CENTER',
+        'search',
+        'portals_index',
+        { params: { navigationPath: 'portals_articles_index' } },
+      ],
+      ['INTEGRATIONS', 'plug', 'settings_applications'],
       ['DATA_IMPORT', 'arrow', 'settings_data_imports'],
     ],
   },
@@ -92,7 +92,14 @@ const routeMeta = (name, params) =>
       }).meta
     : {};
 
-const isVisible = (name, params) => {
+const isAdmin = () =>
+  getUserPermissions(currentUser.value, accountId.value).includes(
+    'administrator'
+  );
+
+const isVisible = (name, { params, adminOnly } = {}) => {
+  if (adminOnly && !isAdmin()) return false;
+  if (!isRouteNameOn(name)) return false;
   const { permissions, featureFlag } = routeMeta(name, params);
   if (permissions) {
     const userPermissions = getUserPermissions(
@@ -111,13 +118,16 @@ const groups = computed(() => {
   const q = searchQuery.value.trim().toLowerCase();
   return GROUPS.map(group => ({
     key: group.key,
+    titleKey: group.titleKey,
     links: group.links
-      .filter(([, , name, extra = {}]) => isVisible(name, extra.params))
+      .filter(([, , name, extra = {}]) => isVisible(name, extra))
       .map(([key, icon, name, extra = {}]) => ({
         key,
         icon,
-        title: t(`KALO_SETTINGS_UI.HUB.LINKS.${key}.TITLE`),
-        description: t(`KALO_SETTINGS_UI.HUB.LINKS.${key}.DESC`),
+        title: t(extra.titleKey || `KALO_SETTINGS_UI.HUB.LINKS.${key}.TITLE`),
+        description: t(
+          extra.descKey || `KALO_SETTINGS_UI.HUB.LINKS.${key}.DESC`
+        ),
         to: {
           ...accountScopedRoute(name, extra.params),
           ...(extra.hash ? { hash: extra.hash } : {}),
@@ -174,7 +184,7 @@ const groups = computed(() => {
         v-for="group in groups"
         :key="group.key"
         :data-test="`hub-group-${group.key}`"
-        :title="t(`KALO_SETTINGS_UI.HUB.GROUPS.${group.key}`)"
+        :title="t(group.titleKey || `KALO_SETTINGS_UI.HUB.GROUPS.${group.key}`)"
         flush
       >
         <ul class="flex flex-col list-none divide-y divide-n-weak bg-n-solid-1">

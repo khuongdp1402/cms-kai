@@ -42,8 +42,8 @@ Collapses into a top bar with a menu button on narrow screens.
 
       <div class="kalo-nav__group kalo-nav__group--footer">
         <ul class="kalo-nav__list">
-          <%= render partial: "nav_item", locals: { icon: 'icon-apps-2-line', url: '/app/console/overview', label: t('kalo_super_admin.nav.console') } %>
-          <%= render partial: "nav_item", locals: { icon: 'icon-mail-send-fill', url: '/app/console/emails', label: t('kalo_super_admin.nav.mail_inspector') } %>
+          <%= render partial: "nav_item", locals: { icon: 'icon-apps-2-line', url: '/app/platform/overview', label: t('kalo_super_admin.nav.console') } %>
+          <%= render partial: "nav_item", locals: { icon: 'icon-mail-send-fill', url: '/app/platform/emails', label: t('kalo_super_admin.nav.mail_inspector') } %>
           <%= render partial: "nav_item", locals: { icon: 'icon-mist-fill', url: sidekiq_web_url, label: t('kalo_super_admin.nav.sidekiq') } %>
           <%= render partial: "nav_item", locals: { icon: 'icon-dashboard-line', url: '/', label: t('kalo_super_admin.nav.agent_dashboard') } %>
           <%= render partial: "nav_item", locals: { icon: 'icon-logout-circle-r-line', url: super_admin_logout_path, label: t('kalo_super_admin.nav.logout') } %>

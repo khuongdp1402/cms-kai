@@ -44,12 +44,12 @@ onMounted(() => {
       class="flex flex-wrap items-center gap-3 px-6 pt-4 pb-2 border-b border-n-weak bg-n-surface-1"
     >
       <router-link
-        :to="accountScopedRoute('kalo_marketing')"
+        :to="accountScopedRoute('kalo_campaigns')"
         data-test="campaigns-back-marketing"
         class="inline-flex items-center gap-1 text-sm font-medium text-n-slate-11 hover:text-n-slate-12"
       >
         <KaloIcon name="back" class="size-4 rtl:rotate-180" />
-        {{ t('KALO_MARKETING.CAMPAIGN_LINKS.BACK') }}
+        {{ t('KALO_CONSOLE_SHOP.PAGES.CAMPAIGNS.BACK') }}
       </router-link>
       <div class="flex flex-wrap items-center gap-1.5 ltr:ml-auto rtl:mr-auto">
         <router-link

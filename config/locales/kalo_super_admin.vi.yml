@@ -21,7 +21,7 @@ vi:
       instance_status: Tình trạng hệ thống
       push_diagnostics: Chẩn đoán thông báo đẩy
       sidekiq: Tác vụ nền (Sidekiq)
-      console: Bảng điều hành gói cước
+      console: Nền tảng
       mail_inspector: Hộp thư kiểm thử
       agent_dashboard: Về ứng dụng Kalo
       logout: Đăng xuất

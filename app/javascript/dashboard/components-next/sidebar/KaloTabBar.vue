@@ -36,18 +36,33 @@ const showAccountMenu = computed(
   () =>
     hasManyAccounts.value || !!globalConfig.value.createNewAccountFromDashboard
 );
-const accountLinks = [
+const currentUser = useMapGetter('getCurrentUser');
+const accountLinks = computed(() => [
   { key: 'notifications', icon: 'bell', name: 'notifications_index' },
   { key: 'search', icon: 'search', name: 'search' },
   { key: 'profile', icon: 'user', name: 'profile_settings_index' },
-];
+  // Platform pages (/app/platform) for the platform owner only.
+  ...(currentUser.value?.type === 'SuperAdmin'
+    ? [
+        {
+          key: 'platform',
+          icon: 'lock',
+          name: 'kalo_platform_overview',
+          labelKey: 'KALO_CONSOLE_SHOP.NAV.PLATFORM',
+        },
+      ]
+    : []),
+]);
 
 const isSheetOpen = ref(false);
 const sheetRowClass =
   'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl';
 const sheetIconClass = 'grid size-8 shrink-0 place-content-center';
+// Tab order follows PRIMARY_KEYS, not the sidebar order.
 const primaryItems = computed(() =>
-  items.value.filter(item => PRIMARY_KEYS.includes(item.key))
+  PRIMARY_KEYS.map(key => items.value.find(item => item.key === key)).filter(
+    Boolean
+  )
 );
 const sheetItems = computed(() =>
   items.value.filter(item => !PRIMARY_KEYS.includes(item.key))
@@ -108,7 +123,7 @@ watch(
           <span :class="sheetIconClass">
             <KaloIcon :name="link.icon" class="size-5" />
           </span>
-          {{ t(`KALO_NAV.${link.key.toUpperCase()}`) }}
+          {{ t(link.labelKey || `KALO_NAV.${link.key.toUpperCase()}`) }}
         </router-link>
         <div
           v-if="showAccountMenu"

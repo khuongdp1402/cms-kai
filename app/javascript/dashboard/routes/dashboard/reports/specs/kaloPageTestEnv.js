@@ -7,6 +7,8 @@ import viMessages from 'dashboard/i18n/ktech/vi.json';
 export const createPageTestEnv = ({
   modules = {},
   role = 'administrator',
+  // Account `features` payload; null means every flag is on.
+  features = null,
 } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -22,7 +24,13 @@ export const createPageTestEnv = ({
     })),
   });
   const store = createStore({
-    getters: { getCurrentAccountId: () => 1, getCurrentRole: () => role },
+    getters: {
+      getCurrentAccountId: () => 1,
+      getCurrentRole: () => role,
+      'accounts/getAccount': () => () => ({ id: 1, features: features || {} }),
+      'accounts/isFeatureEnabledonAccount': () => (_id, name) =>
+        features ? Boolean(features[name]) : true,
+    },
     modules,
   });
   const i18n = createI18n({

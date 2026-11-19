@@ -10,6 +10,11 @@ const names = [
   'kalo_pos',
   'contacts_dashboard_index',
   'kalo_marketing',
+  'kalo_comments',
+  'kalo_campaigns',
+  'kalo_brand',
+  'kalo_console',
+  'kalo_platform_overview',
   'kalo_reports',
   'kalo_settings_hub',
   'labels_list',
@@ -34,7 +39,14 @@ const extraParams = {
 
 export const createKaloTestEnv = ({
   unread = 0,
-  accounts = [{ id: 1, name: 'Shop', role: 'administrator' }],
+  accounts = [
+    {
+      id: 1,
+      name: 'Shop',
+      role: 'administrator',
+      permissions: ['administrator'],
+    },
+  ],
   notificationUnread = 0,
   createNewAccount = false,
   inboxes = [],
@@ -43,7 +55,11 @@ export const createKaloTestEnv = ({
   folders = [],
   // When given, the store has the real uiSettings getter/action pair.
   uiSettings,
+  // Account `features` payload; null means every flag is on.
+  features = null,
+  userType = 'User',
 } = {}) => {
+  const isOn = name => (features ? Boolean(features[name]) : true);
   const router = createRouter({
     history: createMemoryHistory(),
     routes: names.map(name => ({
@@ -67,15 +83,16 @@ export const createKaloTestEnv = ({
       getCurrentUser: () => ({
         available_name: 'Lan',
         email: 'lan@example.com',
+        type: userType,
         accounts,
       }),
       getCurrentUserAvailability: () => 'online',
       getCurrentAccountId: () => 1,
       getCurrentUserAutoOffline: () => false,
       'notifications/getMeta': () => ({ unreadCount: notificationUnread }),
-      'accounts/getAccount': () => () => ({}),
+      'accounts/getAccount': () => () => ({ id: 1, features: features || {} }),
       'globalConfig/isOnChatwootCloud': () => false,
-      'accounts/isFeatureEnabledonAccount': () => () => true,
+      'accounts/isFeatureEnabledonAccount': () => (_id, name) => isOn(name),
       'conversationUnreadCounts/getAllUnreadCount': () => unread,
       ...(uiSettings ? { getUISettings: state => state.uiSettings } : {}),
     },

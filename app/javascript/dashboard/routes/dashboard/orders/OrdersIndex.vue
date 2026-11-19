@@ -2,6 +2,8 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useAlert } from 'dashboard/composables';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { alertKchatError } from 'dashboard/helper/kchatErrors';
@@ -19,6 +21,8 @@ import {
 } from './orderStatus';
 
 const { t } = useI18n();
+const { isOn } = useKaloFeatures();
+const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 const store = useStore();
 
 const status = ref(undefined);
@@ -148,6 +152,7 @@ onMounted(load);
   >
     <template #actions>
       <router-link
+        v-if="isPosOn"
         :to="{ name: 'kalo_pos' }"
         class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2"
       >

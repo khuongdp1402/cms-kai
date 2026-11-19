@@ -43,7 +43,8 @@ const mountRail = async ({ route = 'home', ...envOptions } = {}) => {
 };
 
 describe('KaloRail', () => {
-  it('renders seven items in order Tổng quan, Tin nhắn, Đơn hàng, Khách, Marketing, Báo cáo, Cài đặt', async () => {
+  // Guided UX spec §4: Vận hành, Tăng trưởng, then the footer items.
+  it('renders the spec §4 order: Tổng quan, Tin nhắn, Bình luận, Khách, Đơn hàng, Chiến dịch, Thương hiệu, Báo cáo, Console, Cài đặt', async () => {
     const wrapper = await mountRail();
     const labels = wrapper
       .findAll('[data-test-id^="kalo-nav-"]')
@@ -51,12 +52,43 @@ describe('KaloRail', () => {
     expect(labels).toEqual([
       'Tổng quan',
       'Tin nhắn',
-      'Đơn hàng',
+      'Bình luận',
       'Khách',
-      'Marketing',
+      'Đơn hàng',
+      'Chiến dịch',
+      'Thương hiệu',
       'Báo cáo',
+      'Console',
       'Cài đặt',
     ]);
+  });
+
+  it('hides Bình luận, Chiến dịch and Thương hiệu when their kalo flags are off', async () => {
+    const wrapper = await mountRail({
+      features: { kalo_campaigns: true },
+    });
+    const keys = wrapper
+      .findAll('[data-test-id^="kalo-nav-"]')
+      .map(item => item.attributes('data-test-id'));
+    expect(keys).toContain('kalo-nav-campaigns');
+    expect(keys).not.toContain('kalo-nav-comments');
+    expect(keys).not.toContain('kalo-nav-brand');
+  });
+
+  it('shows Console to shop administrators only', async () => {
+    const admin = await mountRail();
+    expect(admin.find('[data-test-id="kalo-nav-console"]').exists()).toBe(true);
+    const agent = await mountRail({
+      accounts: [
+        { id: 1, name: 'Shop', role: 'agent', permissions: ['agent'] },
+      ],
+    });
+    expect(agent.find('[data-test-id="kalo-nav-console"]').exists()).toBe(
+      false
+    );
+    expect(agent.find('[data-test-id="kalo-nav-settings"]').exists()).toBe(
+      true
+    );
   });
 
   it('toggles between compact (68px, icons only) and expanded (224px) mode via toggle button', async () => {
@@ -92,12 +124,19 @@ describe('KaloRail', () => {
     expect(wrapper.text()).not.toContain('Bán tại quầy');
   });
 
-  it('marks Marketing active on a campaigns route', async () => {
+  it('marks Chiến dịch active on a campaigns route', async () => {
     const wrapper = await mountRail({ route: 'campaigns_livechat_index' });
     await flushPromises();
     const active = wrapper.findAll('[aria-current="page"]');
     expect(active).toHaveLength(1);
-    expect(active[0].attributes('data-test-id')).toBe('kalo-nav-marketing');
+    expect(active[0].attributes('data-test-id')).toBe('kalo-nav-campaigns');
+  });
+
+  it('profile menu links to Nền tảng for SuperAdmin only', async () => {
+    const admin = await mountRail({ userType: 'SuperAdmin' });
+    expect(admin.text()).toContain('Nền tảng');
+    const shop = await mountRail();
+    expect(shop.text()).not.toContain('Nền tảng');
   });
 
   it('shows bell with unread badge', async () => {

@@ -5,6 +5,9 @@ import { picoSearch } from '@scmmishra/pico-search';
 import IntegrationItem from './IntegrationItem.vue';
 import SettingsLayout from '../SettingsLayout.vue';
 import BaseSettingsHeader from '../components/BaseSettingsHeader.vue';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+import { ADVANCED_INTEGRATION_IDS } from 'dashboard/helper/kaloFeatures';
 
 const store = useStore();
 const getters = useStoreGetters();
@@ -12,9 +15,15 @@ const getters = useStoreGetters();
 const searchQuery = ref('');
 const uiFlags = getters['integrations/getUIFlags'];
 
-const integrationList = computed(
-  () => getters['integrations/getAppIntegrations'].value
-);
+const { isOn } = useKaloFeatures();
+
+// Webhook and dashboard apps need kalo_advanced_automation (spec §4).
+const integrationList = computed(() => {
+  const list = getters['integrations/getAppIntegrations'].value;
+  return isOn(FEATURE_FLAGS.KALO_ADVANCED_AUTOMATION)
+    ? list
+    : list.filter(item => !ADVANCED_INTEGRATION_IDS.includes(item.id));
+});
 
 const filteredIntegrationList = computed(() => {
   const query = searchQuery.value.trim();

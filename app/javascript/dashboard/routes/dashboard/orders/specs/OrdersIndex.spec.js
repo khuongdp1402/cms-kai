@@ -1,6 +1,7 @@
 import { ref } from 'vue';
 import { mount, flushPromises } from '@vue/test-utils';
 import { createStore } from 'vuex';
+import { kaloFeatureGetters } from 'dashboard/helper/specs/kaloFeatureGetters';
 import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import OrdersIndex from '../OrdersIndex.vue';
@@ -16,6 +17,7 @@ const mountIndex = (
 ) => {
   const list = ref(orders);
   const store = createStore({
+    getters: kaloFeatureGetters(),
     modules: {
       kchatOrders: {
         namespaced: true,

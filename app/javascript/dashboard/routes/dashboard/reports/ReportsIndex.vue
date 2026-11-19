@@ -3,6 +3,7 @@ import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRouter } from 'vue-router';
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import reportsAPI from 'dashboard/api/kchat/reports';
 import Button from 'dashboard/components-next/button/Button.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
@@ -17,6 +18,8 @@ import MarketingFunnelSection from './MarketingFunnelSection.vue';
 const { t } = useI18n();
 const router = useRouter();
 const { accountId, accountScopedRoute } = useAccount();
+// Chatwoot detail reports need kalo_detailed_reports.
+const { isRouteNameOn } = useKaloFeatures();
 
 const RANGES = [
   { value: 'today', labelKey: 'KALO_REPORTS.RANGES.TODAY' },
@@ -104,7 +107,9 @@ const isEmpty = computed(
 );
 
 const detailReportLinks = computed(() =>
-  DETAIL_LINKS.filter(item => router.hasRoute(item.route)).map(item => ({
+  DETAIL_LINKS.filter(
+    item => router.hasRoute(item.route) && isRouteNameOn(item.route)
+  ).map(item => ({
     ...item,
     to: accountScopedRoute(item.route),
   }))

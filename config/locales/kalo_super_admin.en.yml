@@ -21,7 +21,7 @@ en:
       instance_status: System status
       push_diagnostics: Push diagnostics
       sidekiq: Background jobs (Sidekiq)
-      console: Kalo Console
+      console: Platform
       mail_inspector: Mail Inspector
       agent_dashboard: Back to Kalo app
       logout: Log out

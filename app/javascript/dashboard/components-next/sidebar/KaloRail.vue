@@ -159,7 +159,7 @@ const shouldRenderSectionHeading = (item, index) => {
       :class="isExpanded ? 'overflow-y-auto' : 'items-center'"
     >
       <template v-for="(item, index) in items" :key="item.key">
-        <div v-if="item.key === 'settings'" class="flex-1" />
+        <div v-if="item.footer && !items[index - 1]?.footer" class="flex-1" />
         <p
           v-if="shouldRenderSectionHeading(item, index)"
           class="px-2.5 pt-2 pb-0.5 mb-0 text-[10.5px] font-bold tracking-wider uppercase text-n-slate-10"

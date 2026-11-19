@@ -30,7 +30,7 @@ const SAVED = {
 const mountPage = async () => {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: ['kalo_settings_hub', 'kalo_payment_settings'].map(name => ({
+    routes: ['kalo_console', 'kalo_payment_settings'].map(name => ({
       name,
       path: `/app/accounts/:accountId/${name}`,
       component: { template: '<div />' },
