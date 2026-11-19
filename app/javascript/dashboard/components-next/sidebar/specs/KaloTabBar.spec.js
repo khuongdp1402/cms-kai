@@ -51,6 +51,8 @@ describe('KaloTabBar', () => {
     await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
     const link = wrapper.find('[data-test-id="kalo-sheet-platform"]');
     expect(link.text()).toBe('Nền tảng');
+    // kaloTestHelpers mounts every route under /app/accounts/:accountId/<name>;
+    // the real path (/app/platform/overview) is covered by platform/routes.spec.js.
     expect(link.attributes('href')).toBe(
       '/app/accounts/1/kalo_platform_overview'
     );

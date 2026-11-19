@@ -10,6 +10,7 @@ import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import KaloRailFooter from './KaloRailFooter.vue';
 import KaloRailTooltip from './KaloRailTooltip.vue';
+import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
 import { useKaloNav } from './useKaloNav';
 
 const emit = defineEmits([
@@ -159,7 +160,11 @@ const shouldRenderSectionHeading = (item, index) => {
       :class="isExpanded ? 'overflow-y-auto' : 'items-center'"
     >
       <template v-for="(item, index) in items" :key="item.key">
-        <div v-if="item.footer && !items[index - 1]?.footer" class="flex-1" />
+        <template v-if="item.footer && !items[index - 1]?.footer">
+          <div class="flex-1" />
+          <!-- Spec §4 footer order: Trợ lý AI, Console/Cài đặt, Thông báo, Hồ sơ. -->
+          <KaloAssistantButton :is-expanded="isExpanded" />
+        </template>
         <p
           v-if="shouldRenderSectionHeading(item, index)"
           class="px-2.5 pt-2 pb-0.5 mb-0 text-[10.5px] font-bold tracking-wider uppercase text-n-slate-10"

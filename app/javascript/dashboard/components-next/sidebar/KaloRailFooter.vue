@@ -8,7 +8,6 @@ import SidebarNotificationBell from './SidebarNotificationBell.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import SidebarProfileMenu from './SidebarProfileMenu.vue';
 import KaloRailTooltip from './KaloRailTooltip.vue';
-import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
 
 defineProps({
   isExpanded: {
@@ -75,7 +74,6 @@ const showAccountMenu = computed(
         </button>
       </KaloRailTooltip>
     </div>
-    <KaloAssistantButton :is-expanded="isExpanded" />
     <KaloRailTooltip
       v-if="showAccountMenu"
       :label="
