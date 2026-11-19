@@ -8,6 +8,12 @@ import BroadcastCampaignsPanel from './BroadcastCampaignsPanel.vue';
 
 // Broadcasts plus the existing Chatwoot campaign lists; shared by the
 // Chiến dịch page and the Chiến dịch tab of the former Marketing page.
+// The Chiến dịch page has its own broadcast list and wizard, so it hides the
+// old broadcast panel with :show-broadcasts="false".
+defineProps({
+  showBroadcasts: { type: Boolean, default: true },
+});
+
 const { t } = useI18n();
 const { accountScopedRoute } = useAccount();
 const { isRouteNameOn } = useKaloFeatures();
@@ -29,7 +35,7 @@ const campaignLinks = computed(() =>
 </script>
 
 <template>
-  <BroadcastCampaignsPanel />
+  <BroadcastCampaignsPanel v-if="showBroadcasts" />
   <div
     class="overflow-hidden border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
   >
