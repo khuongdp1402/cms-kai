@@ -77,6 +77,28 @@ const handleTabChange = tab => {
   activeTab.value = tab.value;
 };
 
+const TAB_PANEL_ID = 'contact-tabpanel';
+const tabsRef = ref(null);
+
+// Roving focus for the tablist (WAI-ARIA tabs): ←/→ move and select,
+// Home/End jump to the first/last tab.
+const onTabKeydown = event => {
+  const current = CONTACT_TABS_OPTIONS.findIndex(
+    tab => tab.value === activeTab.value
+  );
+  const last = CONTACT_TABS_OPTIONS.length - 1;
+  const next = {
+    ArrowRight: current === last ? 0 : current + 1,
+    ArrowLeft: current === 0 ? last : current - 1,
+    Home: 0,
+    End: last,
+  }[event.key];
+  if (next === undefined) return;
+  event.preventDefault();
+  handleTabChange(CONTACT_TABS_OPTIONS[next]);
+  tabsRef.value?.querySelectorAll('[role="tab"]')[next]?.focus();
+};
+
 const fetchContactNotes = () => {
   const { contactId } = route.params;
   if (contactId) store.dispatch('contactNotes/get', { contactId });
@@ -153,17 +175,21 @@ onMounted(() => {
       <template #sidebarHeader>
         <div class="px-3 py-3 border-b sm:px-5 bg-n-solid-2 border-n-weak">
           <div
+            ref="tabsRef"
             role="tablist"
             data-test-id="contact-tabs"
             class="grid grid-cols-5 gap-1 p-1 rounded-xl bg-n-alpha-1 dark:bg-n-solid-1"
           >
             <button
               v-for="tab in tabs"
+              :id="`contact-tab-${tab.value}`"
               :key="tab.value"
               type="button"
               role="tab"
               :data-test-id="`contact-tab-${tab.value}`"
               :aria-selected="activeTab === tab.value"
+              :aria-controls="TAB_PANEL_ID"
+              :tabindex="activeTab === tab.value ? 0 : -1"
               class="flex flex-col items-center min-w-0 gap-0.5 px-1 py-1.5 text-[11px] font-semibold leading-tight rounded-lg"
               :class="
                 activeTab === tab.value
@@ -171,6 +197,7 @@ onMounted(() => {
                   : 'text-n-slate-11 hover:text-n-slate-12'
               "
               @click="handleTabChange(tab)"
+              @keydown="onTabKeydown"
             >
               <KaloIcon :name="tab.icon" class="size-4 shrink-0" />
               <span class="w-full text-center truncate">{{ tab.label }}</span>
@@ -185,7 +212,13 @@ onMounted(() => {
         >
           <Spinner />
         </div>
-        <template v-else>
+        <div
+          v-else
+          :id="TAB_PANEL_ID"
+          role="tabpanel"
+          class="contents"
+          :aria-labelledby="`contact-tab-${activeTab}`"
+        >
           <ContactCustomAttributes
             v-if="activeTab === 'attributes'"
             :selected-contact="selectedContact"
@@ -200,7 +233,7 @@ onMounted(() => {
             @go-to-contacts-list="goToContactsList"
             @reset-tab="handleTabChange(CONTACT_TABS_OPTIONS[0])"
           />
-        </template>
+        </div>
       </template>
     </ContactsDetailsLayout>
   </div>

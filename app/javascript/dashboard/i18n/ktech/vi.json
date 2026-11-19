@@ -756,7 +756,7 @@
         "MESSAGE": "Thao tác này là vĩnh viễn và không thể hoàn tác."
       },
       "EDIT_DETAILS_FORM": {
-        "ERROR_MESSAGE": "Không cập nhật được khách, vui lòng thử lại sau.",
+        "ERROR_MESSAGE": "Không cập nhật được thông tin khách, vui lòng thử lại sau.",
         "FORM": {
           "BIO": {
             "PLACEHOLDER": "Nhập giới thiệu"
@@ -782,8 +782,8 @@
             "DUPLICATE": "Số điện thoại này đang dùng cho một khách khác."
           }
         },
-        "SUCCESS_MESSAGE": "Đã cập nhật khách",
-        "UPDATE_BUTTON": "Cập nhật khách",
+        "SUCCESS_MESSAGE": "Đã cập nhật thông tin khách",
+        "UPDATE_BUTTON": "Cập nhật thông tin khách",
         "TITLE": "Thông tin khách"
       },
       "SOCIAL_MEDIA": {

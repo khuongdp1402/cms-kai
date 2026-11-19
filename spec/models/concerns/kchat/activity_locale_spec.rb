@@ -36,6 +36,32 @@ RSpec.describe Kchat::ActivityLocale do
     expect(enqueued_contents).to include('Cuộc trò chuyện được đánh dấu là đã giải quyết bởi Lan', 'Lan thêm vip')
   end
 
+  it 'writes the mute line in the shop language' do
+    conversation
+    Current.user = agent
+    I18n.with_locale(:en) { conversation.mute! }
+
+    expect(enqueued_contents).to include('Lan đã tắt tiếng hội thoại')
+  end
+
+  it 'writes the auto-resolve "not sent" line from the template service in the shop language' do
+    conversation
+    I18n.with_locale(:en) do
+      MessageTemplates::Template::AutoResolve.new(conversation: conversation).send(:create_auto_resolve_not_sent_activity_message)
+    end
+
+    expect(enqueued_contents).to include('Chưa gửi tin đóng hội thoại vì kênh đang giới hạn tin gửi đi')
+  end
+
+  it 'writes the CSAT "not sent" line in the shop language' do
+    conversation
+    I18n.with_locale(:en) do
+      CsatSurveyService.new(conversation: conversation).send(:create_csat_not_sent_activity_message)
+    end
+
+    expect(enqueued_contents).to include('Chưa gửi khảo sát hài lòng vì kênh đang giới hạn tin gửi đi')
+  end
+
   it 'keeps English for an English shop' do
     account.update!(locale: 'en')
     conversation

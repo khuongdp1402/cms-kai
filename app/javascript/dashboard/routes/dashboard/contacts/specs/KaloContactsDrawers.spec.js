@@ -182,4 +182,45 @@ describe('Contact details tabs', () => {
     ).toBe('true');
     expect(wrapper.find('[data-test="panel-notes"]').exists()).toBe(true);
   });
+
+  it('links tabs to the panel and moves with the arrow keys', async () => {
+    const wrapper = mount(ContactManageView, {
+      attachTo: document.body,
+      global: {
+        plugins: [await makeRouter(), makeStore(), makeI18n()],
+        stubs: {
+          ContactsDetailsLayout: {
+            template:
+              '<div><slot name="sidebarHeader" /><slot name="sidebar" /></div>',
+          },
+          ContactDetails: true,
+          ContactCustomAttributes: true,
+          ContactNotes: true,
+          ContactHistory: { template: '<p data-test="panel-history" />' },
+          ContactMedia: true,
+          ContactMerge: { template: '<p data-test="panel-merge" />' },
+        },
+      },
+    });
+    wrappers.push(wrapper);
+    await flushPromises();
+    const tab = value => wrapper.find(`[data-test-id="contact-tab-${value}"]`);
+    const panel = wrapper.find('[role="tabpanel"]');
+    expect(tab('attributes').attributes('aria-controls')).toBe(
+      panel.attributes('id')
+    );
+    expect(panel.attributes('aria-labelledby')).toBe('contact-tab-attributes');
+    expect(tab('attributes').attributes('tabindex')).toBe('0');
+    expect(tab('notes').attributes('tabindex')).toBe('-1');
+
+    await tab('attributes').trigger('keydown', { key: 'ArrowRight' });
+    expect(tab('history').attributes('aria-selected')).toBe('true');
+    expect(document.activeElement).toBe(tab('history').element);
+    expect(wrapper.find('[data-test="panel-history"]').exists()).toBe(true);
+
+    await tab('history').trigger('keydown', { key: 'ArrowLeft' });
+    await tab('attributes').trigger('keydown', { key: 'ArrowLeft' });
+    expect(tab('merge').attributes('aria-selected')).toBe('true');
+    expect(wrapper.find('[data-test="panel-merge"]').exists()).toBe(true);
+  });
 });

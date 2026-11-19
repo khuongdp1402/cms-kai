@@ -2,7 +2,10 @@
 # Upstream vi.yml is synced from Crowdin and keeps these in English, so they
 # are overridden here. The file name must sort after vi.yml: Rails loads
 # config/locales in name order and the last file wins.
-# Kchat::ActivityLocale renders them in the shop's language (account.locale).
+# Kchat::ActivityLocale renders them in the shop language (account.locale):
+# Conversation callbacks (assignment, team, status, priority, labels, mute) and,
+# through config/initializers/kalo_activity_locale.rb, the CSAT and auto-resolve
+# "not sent" notices.
 vi:
   conversations:
     activity:
