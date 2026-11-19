@@ -5,7 +5,11 @@ import {
   REFERRAL_SOURCE_OPTIONS,
   USER_ROLE_OPTIONS,
 } from '../../shared/constants';
-import { translateOptions } from '../../shared/kaloOptionLabels';
+import {
+  kaloIndustryOptions,
+  kaloReferralOptions,
+  translateOptions,
+} from '../../shared/kaloOptionLabels';
 
 const { t } = createI18n({
   legacy: false,
@@ -28,6 +32,37 @@ describe('onboarding option labels', () => {
       });
     }
   );
+
+  it('puts the options Vietnamese shops pick first and keeps "Khác" last', () => {
+    const industries = translateOptions(
+      kaloIndustryOptions(INDUSTRY_OPTIONS),
+      'INDUSTRY',
+      t
+    );
+    expect(industries.slice(0, 3).map(o => o.label)).toEqual([
+      'Thời trang, phụ kiện',
+      'Mỹ phẩm, làm đẹp',
+      'Ăn uống',
+    ]);
+    expect(industries.at(-1).value).toBe('Other');
+    expect(industries).toHaveLength(INDUSTRY_OPTIONS.length + 2);
+
+    const referrals = translateOptions(
+      kaloReferralOptions(REFERRAL_SOURCE_OPTIONS),
+      'REFERRAL',
+      t
+    );
+    expect(referrals.slice(0, 4).map(o => o.label)).toEqual([
+      'Facebook',
+      'Zalo',
+      'TikTok',
+      'Bạn bè, đồng nghiệp',
+    ]);
+    expect(referrals.at(-1).value).toBe('other');
+    referrals.concat(industries).forEach(option => {
+      expect(option.label).not.toMatch(/^KALO_POLISH[34]\./);
+    });
+  });
 
   it('shows plain shop words', () => {
     const roles = translateOptions(USER_ROLE_OPTIONS, 'ROLE', t);

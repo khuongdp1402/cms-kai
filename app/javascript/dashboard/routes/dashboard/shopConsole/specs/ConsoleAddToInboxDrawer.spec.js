@@ -56,4 +56,53 @@ describe('ConsoleAddToInboxDrawer', () => {
     ).toBe(false);
     wrapper.unmount();
   });
+
+  const mountWithInboxes = async inboxes => {
+    const store = createStore({
+      getters: { 'inboxes/getInboxes': () => inboxes },
+    });
+    const i18n = createI18n({
+      legacy: false,
+      locale: 'vi',
+      messages: { vi: viMessages },
+    });
+    const wrapper = mount(ConsoleAddToInboxDrawer, {
+      attachTo: document.body,
+      props: { agent: { id: 5, name: 'Lan' } },
+      global: { plugins: [store, i18n], stubs: { ChannelIcon: true } },
+    });
+    await flushPromises();
+    return wrapper;
+  };
+
+  it('preselects the only channel of the shop', async () => {
+    InboxMembersAPI.show.mockResolvedValue({ data: { payload: [] } });
+    const wrapper = await mountWithInboxes([{ id: 10, name: 'Website' }]);
+    expect(wrapper.find('[data-test="console-inbox-10"]').element.checked).toBe(
+      true
+    );
+    expect(
+      wrapper.find('[data-test="console-inbox-save"]').element.disabled
+    ).toBe(false);
+    wrapper.unmount();
+  });
+
+  it('does not preselect when the agent is already in the only channel, or when there are several', async () => {
+    InboxMembersAPI.show.mockResolvedValue({ data: { payload: [{ id: 5 }] } });
+    const member = await mountWithInboxes([{ id: 10, name: 'Website' }]);
+    expect(
+      member.find('[data-test="console-inbox-save"]').element.disabled
+    ).toBe(true);
+    member.unmount();
+
+    InboxMembersAPI.show.mockResolvedValue({ data: { payload: [] } });
+    const several = await mountWithInboxes([
+      { id: 10, name: 'Website' },
+      { id: 11, name: 'Fanpage' },
+    ]);
+    expect(several.find('[data-test="console-inbox-10"]').element.checked).toBe(
+      false
+    );
+    several.unmount();
+  });
 });

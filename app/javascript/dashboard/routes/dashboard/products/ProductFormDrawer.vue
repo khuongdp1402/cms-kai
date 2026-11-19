@@ -75,7 +75,7 @@ const save = async () => {
 };
 
 const inputClass =
-  'w-full px-3 py-2 mt-1 mb-0 text-sm border border-solid rounded-[10px] outline-none bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
+  'w-full px-3 py-2 mt-1 mb-0 text-sm border border-solid rounded-[10px] outline-none dark:focus:outline-none bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
 const fieldClass = field =>
   `${inputClass} ${shownErrors.value[field] ? 'border-n-ruby-9' : 'border-n-strong'}`;
 const labelClass = 'block text-sm font-semibold text-n-slate-12';

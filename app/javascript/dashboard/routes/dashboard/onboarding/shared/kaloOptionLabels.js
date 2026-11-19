@@ -28,6 +28,8 @@ const OPTION_KEYS = {
     'Lifestyle & Leisure': 'LIFESTYLE',
     'Logistics & Supply Chain': 'LOGISTICS',
     'Luxury & Fashion': 'FASHION',
+    'Beauty & Cosmetics': 'KALO_POLISH4.ONBOARDING.INDUSTRY.BEAUTY',
+    'Food & Beverage': 'KALO_POLISH4.ONBOARDING.INDUSTRY.FOOD',
     'News & Media': 'MEDIA',
     'Professional Services & Agencies': 'SERVICES',
     'Real Estate & PropTech': 'REAL_ESTATE',
@@ -39,6 +41,9 @@ const OPTION_KEYS = {
   },
   REFERRAL: {
     google: 'GOOGLE',
+    facebook: 'KALO_POLISH4.ONBOARDING.REFERRAL.FACEBOOK',
+    zalo: 'KALO_POLISH4.ONBOARDING.REFERRAL.ZALO',
+    tiktok: 'KALO_POLISH4.ONBOARDING.REFERRAL.TIKTOK',
     reddit: 'REDDIT',
     twitter: 'TWITTER',
     linkedin: 'LINKEDIN',
@@ -49,11 +54,55 @@ const OPTION_KEYS = {
   },
 };
 
+// Full i18n path for an option (Kalo-only options carry their own path).
+const labelKey = (group, key) =>
+  key.includes('.') ? key : `KALO_POLISH3.ONBOARDING.${group}.${key}`;
+
 export const translateOptions = (options, group, t) =>
   options.map(option => {
     const key = OPTION_KEYS[group][option.value];
     return {
       value: option.value,
-      label: key ? t(`KALO_POLISH3.ONBOARDING.${group}.${key}`) : option.label,
+      label: key ? t(labelKey(group, key)) : option.label,
     };
   });
+
+// Kalo order: what Vietnamese online shops pick most comes first, the rest
+// keeps the upstream order and "Khác" stays last. Stored values stay plain
+// strings (the API accepts any value).
+const putFirst = (options, firstValues) => {
+  const byValue = Object.fromEntries(options.map(o => [o.value, o]));
+  const rest = options.filter(
+    o => !firstValues.includes(o.value) && o.value.toLowerCase() !== 'other'
+  );
+  const other = options.filter(o => o.value.toLowerCase() === 'other');
+  return [...firstValues.map(value => byValue[value]), ...rest, ...other];
+};
+
+export const kaloIndustryOptions = upstream =>
+  putFirst(
+    [
+      ...upstream,
+      { value: 'Beauty & Cosmetics', label: 'Beauty & Cosmetics' },
+      { value: 'Food & Beverage', label: 'Food & Beverage' },
+    ],
+    [
+      'Luxury & Fashion',
+      'Beauty & Cosmetics',
+      'Food & Beverage',
+      'Retail & E-commerce',
+      'Healthcare',
+      'Lifestyle & Leisure',
+    ]
+  );
+
+export const kaloReferralOptions = upstream =>
+  putFirst(
+    [
+      ...upstream,
+      { value: 'facebook', label: 'Facebook' },
+      { value: 'zalo', label: 'Zalo' },
+      { value: 'tiktok', label: 'TikTok' },
+    ],
+    ['facebook', 'zalo', 'tiktok', 'friend', 'google']
+  );

@@ -3,6 +3,7 @@ import { ref, computed, watch } from 'vue';
 import parsePhoneNumber from 'libphonenumber-js';
 import { useI18n } from 'vue-i18n';
 import countries from 'shared/constants/countries.js';
+import { localCountryName } from 'shared/helpers/countryNames';
 import { useVuelidate } from '@vuelidate/core';
 import { required, minLength, numeric } from '@vuelidate/validators';
 import {
@@ -34,7 +35,7 @@ const modelValue = defineModel({
   default: '',
 });
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const showDropdown = ref(false);
 const searchQuery = ref('');
@@ -62,21 +63,28 @@ const v$ = useVuelidate(rules, {
 
 const hasError = computed(() => v$.value.$invalid);
 
+// Country names in the UI language ("Việt Nam", "Hoa Kỳ"), sorted the same
+// way; the English name still matches in search.
 const countryList = computed(() => {
-  return countries.map(country => ({
-    value: country.id,
-    label: country.name,
-    dialCode: country.dial_code,
-    emoji: country.emoji,
-    isSelected: String(activeCountryCode.value) === String(country.id),
-    action: 'phoneNumberInput',
-  }));
+  return countries
+    .map(country => ({
+      value: country.id,
+      label: localCountryName(country, locale.value),
+      englishName: country.name,
+      dialCode: country.dial_code,
+      emoji: country.emoji,
+      isSelected: String(activeCountryCode.value) === String(country.id),
+      action: 'phoneNumberInput',
+    }))
+    .sort((a, b) => a.label.localeCompare(b.label, locale.value));
 });
 
 const filteredCountries = computed(() => {
   const query = searchQuery.value.toLowerCase();
-  return countryList.value.filter(({ label, dialCode, value }) =>
-    [label, dialCode, value].some(field => field.toLowerCase().includes(query))
+  return countryList.value.filter(({ label, englishName, dialCode, value }) =>
+    [label, englishName, dialCode, value].some(field =>
+      field.toLowerCase().includes(query)
+    )
   );
 });
 

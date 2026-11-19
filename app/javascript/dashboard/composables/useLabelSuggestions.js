@@ -25,8 +25,13 @@ export function useLabelSuggestions() {
   const currentChat = useMapGetter('getSelectedChat');
   const conversationId = computed(() => currentChat.value?.id);
 
+  const globalConfig = useMapGetter('globalConfig/get');
+  // Kalo: same rule as useCaptain, the installation OpenAI key is required.
   const captainTasksEnabled = computed(() => {
-    return isCloudFeatureEnabled(FEATURE_FLAGS.CAPTAIN_TASKS);
+    return (
+      isCloudFeatureEnabled(FEATURE_FLAGS.CAPTAIN_TASKS) &&
+      !!globalConfig.value?.kaloCaptainTasksReady
+    );
   });
 
   const aiIntegration = computed(

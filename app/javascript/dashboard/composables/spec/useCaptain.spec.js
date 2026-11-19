@@ -8,12 +8,14 @@ import { useAccount } from 'dashboard/composables/useAccount';
 import { useConfig } from 'dashboard/composables/useConfig';
 import { useI18n } from 'vue-i18n';
 import TasksAPI from 'dashboard/api/captain/tasks';
+import { useAlert } from 'dashboard/composables';
 
 vi.mock('dashboard/composables/store');
 vi.mock('dashboard/composables/useAccount');
 vi.mock('dashboard/composables/useConfig');
 vi.mock('vue-i18n');
 vi.mock('dashboard/api/captain/tasks');
+vi.mock('dashboard/composables', () => ({ useAlert: vi.fn() }));
 vi.mock('dashboard/helper/AnalyticsHelper/index', async importOriginal => {
   const actual = await importOriginal();
   return {
@@ -43,6 +45,7 @@ describe('useCaptain', () => {
         'accounts/getUIFlags': { isFetchingLimits: false },
         getSelectedChat: { id: '123' },
         'draftMessages/getReplyEditorMode': 'reply',
+        'globalConfig/get': { kaloCaptainTasksReady: true },
       };
       return { value: mockValues[getter] };
     });
@@ -64,6 +67,33 @@ describe('useCaptain', () => {
     expect(captainTasksEnabled.value).toBe(true);
     expect(currentChat.value).toEqual({ id: '123' });
     expect(draftMessage.value).toBe('Draft message');
+  });
+
+  it('disables Captain tasks when the installation has no OpenAI key', () => {
+    useMapGetter.mockImplementation(getter => ({
+      value:
+        getter === 'globalConfig/get'
+          ? { kaloCaptainTasksReady: false }
+          : undefined,
+    }));
+
+    const { captainTasksEnabled } = useCaptain();
+
+    expect(captainTasksEnabled.value).toBe(false);
+  });
+
+  it('shows one Vietnamese toast when a task fails', async () => {
+    const t = vi.fn(key => key);
+    useI18n.mockReturnValue({ t });
+    TasksAPI.rewrite.mockRejectedValue({
+      response: { status: 422, data: { error: 'Captain is disabled' } },
+    });
+
+    const { rewriteContent } = useCaptain();
+    const result = await rewriteContent('Hi', 'improve', {});
+
+    expect(result.errorType).toBe('http_422');
+    expect(useAlert).toHaveBeenCalledWith('KALO_POLISH4.AI.TASK_FAILED');
   });
 
   it('rewrites content', async () => {

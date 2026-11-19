@@ -207,3 +207,48 @@ describe('KaloRail shell behaviour', () => {
     );
   });
 });
+
+describe('KaloRail scroll affordance at short heights', () => {
+  // jsdom has no layout: fake the main group's scroll metrics.
+  const fakeScroll = (el, { scrollHeight, clientHeight, scrollTop = 0 }) => {
+    Object.defineProperty(el, 'scrollHeight', {
+      configurable: true,
+      value: scrollHeight,
+    });
+    Object.defineProperty(el, 'clientHeight', {
+      configurable: true,
+      value: clientHeight,
+    });
+    el.scrollTop = scrollTop;
+    el.scrollBy = vi.fn();
+  };
+  const more = wrapper => wrapper.find('[data-test-id="kalo-rail-more"]');
+
+  it('shows nothing when every item fits', async () => {
+    const { wrapper } = await mountRail();
+    expect(more(wrapper).exists()).toBe(false);
+  });
+
+  it('shows a fade with a chevron while items are hidden below, and scrolls on click', async () => {
+    const { wrapper } = await mountRail();
+    const main = wrapper.find('[data-test-id="kalo-rail-main"]');
+    fakeScroll(main.element, { scrollHeight: 600, clientHeight: 300 });
+    await main.trigger('scroll');
+    expect(more(wrapper).exists()).toBe(true);
+    await wrapper
+      .find('[data-test-id="kalo-rail-more-button"]')
+      .trigger('click');
+    expect(main.element.scrollBy).toHaveBeenCalledWith({
+      top: 240,
+      behavior: 'smooth',
+    });
+
+    fakeScroll(main.element, {
+      scrollHeight: 600,
+      clientHeight: 300,
+      scrollTop: 300,
+    });
+    await main.trigger('scroll');
+    expect(more(wrapper).exists()).toBe(false);
+  });
+});

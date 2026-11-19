@@ -57,8 +57,8 @@ watch(accountId, load, { immediate: true });
         class="grid transition-colors duration-150 rounded-xl place-content-center text-n-slate-10 hover:bg-n-alpha-2 hover:text-n-slate-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
         :class="
           isExpanded
-            ? 'w-full px-3 py-2 !flex items-center justify-start gap-2.5 text-sm font-semibold'
-            : 'size-11 [@media(max-height:800px)]:size-10'
+            ? 'w-full px-3 py-2 [@media(max-height:900px)]:py-1.5 !flex items-center justify-start gap-2.5 text-sm font-semibold'
+            : 'size-11 [@media(min-height:761px)_and_(max-height:800px)]:size-10 [@media(max-height:760px)]:size-9'
         "
         @click="isOpen = true"
       >

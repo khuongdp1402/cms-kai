@@ -12,7 +12,7 @@ vi.mock('dashboard/api/kchat/commentRules', () => ({
 }));
 vi.mock('dashboard/composables', () => ({ useAlert: vi.fn() }));
 
-const mountWith = async (component, inboxes) => {
+const mountWith = async (component, inboxes, features = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes: ['kalo_comments', 'settings_inbox_new'].map(name => ({
@@ -30,7 +30,7 @@ const mountWith = async (component, inboxes) => {
         id: 1,
         accounts: [{ id: 1, role: 'administrator' }],
       }),
-      'accounts/getAccount': () => () => ({ id: 1 }),
+      'accounts/getAccount': () => () => ({ id: 1, features }),
       'inboxes/getInboxes': () => inboxes,
     },
   });
@@ -53,10 +53,17 @@ describe('Bình luận page and Facebook/Instagram inboxes', () => {
     });
   });
 
+  afterEach(() => {
+    delete window.chatwootConfig;
+  });
+
   it('explains and links to connecting a channel when none is connected', async () => {
-    const wrapper = await mountWith(CommentsPage, [
-      { id: 1, channel_type: 'Channel::ZaloPersonal' },
-    ]);
+    window.chatwootConfig = { fbAppId: '123' };
+    const wrapper = await mountWith(
+      CommentsPage,
+      [{ id: 1, channel_type: 'Channel::ZaloPersonal' }],
+      { channel_facebook: true }
+    );
     const notice = wrapper.find('[data-test="comments-no-channel"]');
     expect(notice.text()).toContain('Chưa nối Facebook hoặc Instagram');
     expect(notice.attributes('data-tour')).toBe('comments-rules');
@@ -67,6 +74,31 @@ describe('Bình luận page and Facebook/Instagram inboxes', () => {
       false
     );
   });
+
+  it.each([
+    ['the Meta app is not configured', { channel_facebook: true }, {}],
+    [
+      'the channel features are off',
+      {},
+      { fbAppId: '123', instagramAppId: '456' },
+    ],
+  ])(
+    'explains without a link to a locked screen when %s',
+    async (_, features, config) => {
+      window.chatwootConfig = config;
+      const wrapper = await mountWith(
+        CommentsPage,
+        [{ id: 1, channel_type: 'Channel::ZaloPersonal' }],
+        features
+      );
+      expect(
+        wrapper.find('[data-test="comments-no-channel-body"]').text()
+      ).toBe(viMessages.KALO_POLISH4.COMMENTS.SOCIAL_SOON_BODY);
+      expect(
+        wrapper.find('[data-test="comments-connect-channel"]').exists()
+      ).toBe(false);
+    }
+  );
 
   it('shows the rules once a Facebook page is connected', async () => {
     const wrapper = await mountWith(CommentsPage, [

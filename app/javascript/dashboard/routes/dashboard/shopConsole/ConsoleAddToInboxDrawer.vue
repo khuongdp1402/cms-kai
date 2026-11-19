@@ -49,6 +49,10 @@ const loadMemberships = async list => {
         ids.add(list[index].id);
     });
     memberOf.value = ids;
+    // A shop with a single channel: preselect it (nothing else to choose).
+    if (list.length === 1 && !ids.has(list[0].id)) {
+      selected.value = [list[0].id];
+    }
     state.value = 'ready';
   } catch {
     if (request === latestLoad) state.value = 'error';

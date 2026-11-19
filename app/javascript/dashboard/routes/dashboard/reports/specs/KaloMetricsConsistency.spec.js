@@ -214,9 +214,9 @@ describe('Kalo metrics are consistent across Báo cáo and Tổng quan', () => {
     ).toBe(viMessages.KALO_METRICS.REVENUE);
     const channelRows = wrapper.findAll('[data-test="overview-channel-row"]');
     expect(channelRows).toHaveLength(2);
-    expect(channelRows[0].text()).toContain('CVR 100%');
+    expect(channelRows[0].text()).toContain('Tỷ lệ chốt 100%');
     expect(channelRows[1].text()).toContain('1 đơn');
-    expect(channelRows[1].text()).not.toContain('CVR');
+    expect(channelRows[1].text()).not.toContain('Tỷ lệ chốt');
   });
 
   it('labels chat orders whose conversation was deleted the same way everywhere', () => {

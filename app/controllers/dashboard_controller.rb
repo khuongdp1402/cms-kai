@@ -1,6 +1,7 @@
 class DashboardController < ActionController::Base
   include SwitchLocale
   include PortalHomeData
+  prepend Kchat::DashboardConfig
 
   GLOBAL_CONFIG_KEYS = %w[
     LOGO

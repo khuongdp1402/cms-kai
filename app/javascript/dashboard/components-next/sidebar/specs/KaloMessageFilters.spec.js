@@ -38,12 +38,15 @@ describe('KaloMessageFilters', () => {
       ['Chốt đơn', 'team_conversations'],
       ['Chưa trả lời', 'folder_conversations'],
     ]);
+    // Shop owners say "kênh", not "hộp thư".
+    expect(wrapper.text()).toContain('Kênh');
+    expect(wrapper.text()).not.toContain('Hộp thư');
   });
 
   it('hides empty sections', async () => {
     const wrapper = await mountFilters({ labels: [{ id: 4, title: 'vip' }] });
     expect(wrapper.text()).toContain('Nhãn');
-    expect(wrapper.text()).not.toContain('Hộp thư');
+    expect(wrapper.text()).not.toContain('Kênh');
     expect(wrapper.text()).not.toContain('Nhóm');
   });
 

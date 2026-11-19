@@ -227,6 +227,26 @@ describe('ShopConsole', () => {
     );
   });
 
+  it('shows which channels each agent answers', async () => {
+    InboxMembersAPI.show.mockImplementation(inboxId =>
+      Promise.resolve({
+        data: { payload: inboxId === 11 ? [{ id: 5 }] : [{ id: 2 }] },
+      })
+    );
+    const { wrapper } = await setup({
+      agents: [
+        { id: 5, name: 'Lan', email: 'lan@shop.vn', role: 'agent' },
+        { id: 6, name: 'Huy', email: 'huy@shop.vn', role: 'agent' },
+      ],
+    });
+    expect(wrapper.find('[data-test="console-agent-channels-5"]').text()).toBe(
+      'Kênh: Fanpage'
+    );
+    expect(wrapper.find('[data-test="console-agent-channels-6"]').text()).toBe(
+      'Chưa ở kênh nào'
+    );
+  });
+
   it('"Thêm vào kênh" adds the agent to the chosen inboxes through the inbox members API', async () => {
     // Lan is already a member of inbox 11.
     InboxMembersAPI.show.mockImplementation(inboxId =>

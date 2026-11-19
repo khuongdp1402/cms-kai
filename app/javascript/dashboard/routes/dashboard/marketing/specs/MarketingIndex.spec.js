@@ -327,8 +327,9 @@ describe('MarketingIndex', () => {
     await tab(wrapper, 'Hồ sơ thương hiệu').trigger('click');
     await flushPromises();
 
-    expect(wrapper.find('[data-test="brand-ai-status"]').text()).toContain(
-      'kalo-ai'
+    // The model name is never shown to shop owners.
+    expect(wrapper.find('[data-test="brand-ai-status"]').text()).toBe(
+      'AI đang hoạt động'
     );
     expect(wrapper.find('[data-test="brand-name"]').element.value).toBe(
       'Kalo Candles'

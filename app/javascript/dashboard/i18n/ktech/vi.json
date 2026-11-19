@@ -2544,7 +2544,10 @@
       },
       "FB": {
         "HELP": "Lưu ý: khi đăng nhập, chúng tôi chỉ xem được tin nhắn trên Trang của bạn và không bao giờ truy cập được tin nhắn riêng tư.",
-        "PICK_NAME": "Đặt tên cho kênh"
+        "PICK_NAME": "Đặt tên cho kênh",
+        "INBOX_NAME": "Tên kênh",
+        "ADD_NAME": "Đặt tên cho kênh",
+        "CREATE_INBOX": "Tạo kênh"
       },
       "FINISH": {
         "DESC": "Bạn đã kết nối thành công Trang Facebook. Lần tới khi khách nhắn tin cho Trang, hội thoại sẽ tự động hiện trong hộp thư.<br>Chúng tôi cũng cho bạn đoạn mã khung chat để dán vào website. Khi đó khách có thể nhắn tin ngay trên website và hội thoại sẽ hiện ngay tại đây.<br>Tiện đúng không? :)"
@@ -2582,6 +2585,9 @@
           },
           "API_SECRET": {
             "PLACEHOLDER": "Nhập API Secret Bandwidth"
+          },
+          "INBOX_NAME": {
+            "LABEL": "Tên kênh"
           }
         },
         "PROVIDERS": {
@@ -2611,6 +2617,10 @@
         "API_KEY_SECRET": {
           "LABEL": "API Key Secret",
           "PLACEHOLDER": "Nhập API Key Secret"
+        },
+        "CHANNEL_NAME": {
+          "LABEL": "Tên kênh",
+          "PLACEHOLDER": "Nhập tên kênh"
         }
       },
       "VOICE": {
@@ -2665,10 +2675,27 @@
           "PLACEHOLDER": "Nhập đường dẫn webhook"
         },
         "CHANNEL_DOMAIN": {
-          "PLACEHOLDER": "Tên miền trang web (ví dụ: shopcuaban.vn)"
+          "PLACEHOLDER": "Tên miền trang web (ví dụ: shopcuaban.vn)",
+          "LABEL": "Tên miền"
         },
         "CHANNEL_GREETING_MESSAGE": {
           "PLACEHOLDER": "Shop thường trả lời trong vài phút."
+        },
+        "DESC": "Tạo khung chat trên website của shop để khách nhắn tin trực tiếp cho bạn.",
+        "LOADING_MESSAGE": "Đang tạo kênh website",
+        "CHANNEL_WELCOME_TAGLINE": {
+          "PLACEHOLDER": "Shop luôn sẵn sàng tư vấn, bạn cứ nhắn nhé!"
+        },
+        "REPLY_TIME": {
+          "HELP_TEXT": "Thời gian trả lời này sẽ hiện trên khung chat"
+        },
+        "WIDGET_COLOR": {
+          "LABEL": "Màu khung chat",
+          "PLACEHOLDER": "Chọn màu cho khung chat"
+        },
+        "SUBMIT_BUTTON": "Tạo kênh",
+        "API": {
+          "ERROR_MESSAGE": "Chưa tạo được kênh website, bạn thử lại nhé"
         }
       },
       "WHATSAPP": {
@@ -2718,6 +2745,9 @@
         },
         "WEBHOOK_VERIFY_TOKEN": {
           "PLACEHOLDER": "Nhập mã xác minh bạn muốn dùng cho webhook Facebook."
+        },
+        "INBOX_NAME": {
+          "LABEL": "Tên kênh"
         }
       },
       "ZALO_CHANNEL": {
@@ -2751,13 +2781,28 @@
           "LABEL": "Mã làm mới Zalo",
           "PLACEHOLDER": "Nhập mã làm mới Zalo",
           "SUBTITLE": "Mã làm mới lấy từ API Explorer, dùng để tự gia hạn mã truy cập trước khi hết hạn."
+        },
+        "CHANNEL_NAME": {
+          "LABEL": "Tên kênh Zalo",
+          "ERROR": "Vui lòng nhập tên kênh"
         }
       },
       "ZALO_PERSONAL": {
-        "DESC": "Kết nối Zalo cá nhân để gửi và nhận tin nhắn ngay trong ứng dụng."
+        "DESC": "Kết nối Zalo cá nhân để gửi và nhận tin nhắn ngay trong ứng dụng.",
+        "CHANNEL_NAME": {
+          "LABEL": "Tên kênh",
+          "PLACEHOLDER": "Nhập tên kênh (ví dụ: Zalo cá nhân)",
+          "ERROR": "Tên kênh không được để trống"
+        },
+        "SUBMIT_BUTTON": "Tạo kênh Zalo cá nhân",
+        "SUCCESS_ALERT": "Đã kết nối kênh Zalo cá nhân!",
+        "CONSUME_ERROR": "Chưa tạo được kênh Zalo cá nhân"
       },
       "WEBSITE_NAME": {
         "PLACEHOLDER": "Tên cửa hàng"
+      },
+      "CHANNEL_NAME": {
+        "LABEL": "Tên kênh"
       }
     },
     "AGENTS": {
@@ -2810,7 +2855,8 @@
       "DAY": {
         "HOURS": "Giờ"
       },
-      "TOGGLE_HELP": "Bật giờ làm việc sẽ hiển thị khung giờ hoạt động trên widget chat ngay cả khi tất cả nhân viên đều vắng mặt. Ngoài giờ làm việc, khách có thể nhận thông báo cảnh báo và biểu mẫu trước khi chat."
+      "TOGGLE_HELP": "Bật giờ làm việc sẽ hiển thị khung giờ hoạt động trên widget chat ngay cả khi tất cả nhân viên đều vắng mặt. Ngoài giờ làm việc, khách có thể nhận thông báo cảnh báo và biểu mẫu trước khi chat.",
+      "SUBTITLE": "Đặt giờ làm việc hiện trên khung chat"
     },
     "CHANNELS": {
       "EMAIL": "Email",
@@ -2912,7 +2958,8 @@
     "DETAILS": {
       "ERROR_FB_LOADING": "Không tải được Facebook SDK. Hãy tắt trình chặn quảng cáo hoặc thử trình duyệt khác.",
       "ERROR_FB_UNAUTHORIZED": "Bạn không có quyền thực hiện thao tác này. ",
-      "ERROR_FB_UNAUTHORIZED_HELP": "Hãy chắc chắn bạn có toàn quyền với trang Facebook. Xem thêm về vai trò Facebook <a href=\" https://www.facebook.com/help/187316341316631\">tại đây</a>."
+      "ERROR_FB_UNAUTHORIZED_HELP": "Hãy chắc chắn bạn có toàn quyền với trang Facebook. Xem thêm về vai trò Facebook <a href=\" https://www.facebook.com/help/187316341316631\">tại đây</a>.",
+      "CREATING_CHANNEL": "Đang tạo kênh..."
     },
     "EDIT": {
       "LOCK_TO_SINGLE_CONVERSATION": {
@@ -2955,14 +3002,19 @@
       }
     },
     "FEATURES": {
-      "USE_INBOX_AVATAR_FOR_BOT": "Dùng tên và ảnh của kênh cho bot"
+      "USE_INBOX_AVATAR_FOR_BOT": "Dùng tên và ảnh của kênh cho bot",
+      "DISPLAY_FILE_PICKER": "Hiện nút gửi tệp trên khung chat",
+      "DISPLAY_EMOJI_PICKER": "Hiện nút biểu tượng cảm xúc trên khung chat"
     },
     "FINISH": {
       "MESSENGER_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Messenger",
       "TELEGRAM_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Telegram",
       "WHATSAPP_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh WhatsApp",
       "BUTTON_TEXT": "Đến kênh",
-      "MORE_SETTINGS": "Cài đặt thêm"
+      "MORE_SETTINGS": "Cài đặt thêm",
+      "TITLE": "Kênh đã sẵn sàng!",
+      "MESSAGE": "Giờ bạn có thể trò chuyện với khách qua kênh mới.",
+      "WEBSITE_SUCCESS": "Đã tạo kênh website. Sao chép đoạn mã bên dưới và dán vào website của shop. Khi khách nhắn qua khung chat, hội thoại sẽ tự hiện trong mục Tin nhắn."
     },
     "HELP_CENTER": {
       "LABEL": "Trung tâm trợ giúp",
@@ -3165,6 +3217,10 @@
         "WIDGET_BUBBLE_POSITION_LABEL": "Vị trí:",
         "WEBSITE_NAME": {
           "PLACE_HOLDER": "Tên cửa hàng"
+        },
+        "WIDGET_COLOR_LABEL": "Màu khung chat",
+        "WELCOME_TAGLINE": {
+          "PLACE_HOLDER": "Shop luôn sẵn sàng tư vấn, bạn cứ nhắn nhé!"
         }
       },
       "WIDGET_SCREEN": {
@@ -3517,7 +3573,7 @@
       "SAVED": "Đã lưu nguồn khách hàng",
       "SAVE_ERROR": "Chưa lưu được nguồn chiến dịch.",
       "SOCIAL_COMMENT": "Từ bình luận {platform}",
-      "SOURCE": "Nguồn (UTM)",
+      "SOURCE": "Nguồn chiến dịch",
       "SOURCE_PLACEHOLDER": "Ví dụ: facebook_ads, tiktok",
       "SYNC_LABEL": "Gắn luôn nhãn chiến dịch cho hội thoại",
       "TITLE": "Nguồn chiến dịch"
@@ -4042,7 +4098,7 @@
     "CUSTOMERS": "Khách",
     "FILTERS": {
       "FOLDERS": "Thư mục đã lưu",
-      "INBOXES": "Hộp thư",
+      "INBOXES": "Kênh",
       "LABELS": "Nhãn",
       "NEW_CONVERSATION": "Tạo cuộc trò chuyện",
       "OPEN": "Lọc tin nhắn",
@@ -4143,7 +4199,7 @@
       "CONTACT": "Khách",
       "ITEMS": "Sản phẩm",
       "LABEL": "Chi tiết đơn",
-      "PAYMENT_SECTION": "Thanh toán VietQR",
+      "PAYMENT_SECTION": "Thanh toán bằng mã QR chuyển khoản",
       "QR_ALT": "Mã QR thanh toán",
       "QR_HINT": "Khách quét mã bằng app ngân hàng để thanh toán tự động.",
       "QR_LOADING": "Đang tạo mã QR…",
@@ -4229,7 +4285,7 @@
       "VIEW_ORDERS": "Xem đơn hàng"
     },
     "CHANNEL_CHATS": "{count} chat",
-    "CHANNEL_CVR": "CVR {pct}%",
+    "CHANNEL_CVR": "Tỷ lệ chốt {pct}%",
     "CHANNEL_ORDERS": "{count} đơn",
     "CHANNEL_TITLE": "Chất lượng phục vụ & chốt đơn theo kênh",
     "CHANNELS": {
@@ -4261,7 +4317,7 @@
       "CSKH_SLA": "Tốc độ trả lời khách",
       "NO_REPLY_YET": "Chưa có phản hồi",
       "ORDERS_COUNT": "{count} đơn thành công",
-      "PHONES_HIDDEN": "{count} SĐT bình luận đã ẩn",
+      "PHONES_HIDDEN": "Đã ẩn {count} số điện thoại",
       "REVENUE": "Doanh thu đã nhận",
       "SLA_ALERT_BADGE": "{count} chờ lâu",
       "SLA_SUB": "{sla}% trả lời dưới 5 phút · {waiting} khách chờ quá 15 phút",
@@ -4279,9 +4335,9 @@
           "TITLE": "{count} sản phẩm sắp hết kho"
         },
         "pending_qr_orders": {
-          "CTA": "Đối soát đơn",
-          "DESC": "Đơn chuyển khoản VietQR chưa xác nhận nhận tiền",
-          "TITLE": "{count} đơn đang chờ quét VietQR"
+          "CTA": "Khớp tiền đơn",
+          "DESC": "Đơn khách trả bằng mã QR chuyển khoản, shop chưa xác nhận đã nhận tiền",
+          "TITLE": "{count} đơn chờ khách chuyển khoản qua mã QR"
         },
         "phones_protected": {
           "CTA": "Xem bình luận",
@@ -4516,7 +4572,8 @@
       "twitter_profile": "Twitter",
       "web_widget": "Website",
       "whatsapp": "WhatsApp",
-      "zalo_personal": "Zalo"
+      "zalo_personal": "Zalo",
+      "broadcast": "Tin gửi hàng loạt"
     },
     "CHART": {
       "TITLE": "Doanh thu theo ngày",
@@ -4528,8 +4585,8 @@
     "FUNNEL": {
       "AGENTS_EMPTY": "Chưa có nhân viên được phân công hội thoại trong khoảng thời gian này.",
       "AGENTS_TITLE": "Hiệu suất nhân viên chốt đơn",
-      "CAMPAIGNS_EMPTY": "Chưa có hội thoại gắn chiến dịch hoặc UTM trong khoảng này.",
-      "CAMPAIGNS_TITLE": "Hiệu quả chiến dịch & nguồn UTM",
+      "CAMPAIGNS_EMPTY": "Chưa có hội thoại nào đến từ chiến dịch trong khoảng này.",
+      "CAMPAIGNS_TITLE": "Hiệu quả theo chiến dịch và nguồn chiến dịch",
       "CHANNEL_TITLE": "Phễu chuyển đổi theo kênh",
       "COL_AGENT": "Nhân viên",
       "COL_AOV": "Giá trị đơn TB",
@@ -6427,6 +6484,41 @@
     "DOCUMENTS": {
       "DETAILS": {
         "COPY_CONTENT": "Sao chép"
+      }
+    }
+  },
+  "KALO_POLISH4": {
+    "AI": {
+      "TASK_FAILED": "AI chưa viết lại được lúc này. Bạn thử lại sau ít phút nhé.",
+      "IDEAS_OFF": "Cửa hàng chưa bật AI nên chưa tạo được ý tưởng. Liên hệ Kalo để bật AI.",
+      "IDEAS_UNAVAILABLE": "AI tạm thời không phản hồi. Bạn thử lại sau ít phút nhé."
+    },
+    "COMPOSER": {
+      "ENTER_HINT": "Enter để gửi, Shift+Enter xuống dòng",
+      "CMD_ENTER_HINT": "{key} để gửi"
+    },
+    "RAIL": {
+      "MORE": "Xem thêm mục bên dưới"
+    },
+    "COMMENTS": {
+      "SOCIAL_SOON_BODY": "Kalo chưa mở kết nối Facebook và Instagram cho shop. Khi mở, bạn nối Trang của shop rồi quay lại đây để bật tự ẩn số điện thoại và tự nhắn riêng cho khách. Hiện bạn vẫn trả lời khách qua Zalo cá nhân và khung chat website."
+    },
+    "CHAT": {
+      "QR_SEND_ONE": "Gửi mã QR · #{number} · {amount}"
+    },
+    "CONSOLE": {
+      "AGENT_CHANNELS": "Kênh: {names}",
+      "AGENT_NO_CHANNELS": "Chưa ở kênh nào"
+    },
+    "ONBOARDING": {
+      "INDUSTRY": {
+        "BEAUTY": "Mỹ phẩm, làm đẹp",
+        "FOOD": "Ăn uống"
+      },
+      "REFERRAL": {
+        "FACEBOOK": "Facebook",
+        "ZALO": "Zalo",
+        "TIKTOK": "TikTok"
       }
     }
   }

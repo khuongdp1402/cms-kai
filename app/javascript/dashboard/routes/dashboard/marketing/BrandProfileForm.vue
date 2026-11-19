@@ -32,10 +32,8 @@ const AI_BADGE_TONES = {
 const aiBadgeLabel = computed(() => {
   if (aiState.value === 'off') return t('KALO_MARKETING.BRAND_PROFILE.AI_OFF');
   if (aiState.value === 'unavailable') return t('KALO_METRICS.AI_UNAVAILABLE');
-  const model = aiStatus.value.chat_model;
-  return model
-    ? t('KALO_METRICS.AI_READY_MODEL', { model })
-    : t('KALO_METRICS.AI_READY');
+  // The provider model name means nothing to a shop owner: never show it.
+  return t('KALO_METRICS.AI_READY');
 });
 const isLoading = ref(false);
 const isSaving = ref(false);

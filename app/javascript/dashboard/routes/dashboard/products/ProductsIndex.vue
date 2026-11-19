@@ -2,8 +2,8 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
 import { useAlert } from 'dashboard/composables';
+import { useOneShotQueryFlag } from 'dashboard/composables/useOneShotQueryFlag';
 import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { formatVnd } from 'dashboard/helper/formatVnd';
@@ -28,7 +28,6 @@ const LOW_STOCK = 3;
 
 const { t } = useI18n();
 const store = useStore();
-const route = useRoute();
 const { isOn } = useKaloFeatures();
 const { isAdmin } = useShopAdmin();
 const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
@@ -36,7 +35,7 @@ const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 const filter = ref(FILTERS[0]);
 const query = ref('');
 // ?new=1 (setup checklist, POS) opens the create drawer.
-const editing = ref(route?.query?.new === '1' ? { product: null } : null);
+const editing = ref(useOneShotQueryFlag('new') ? { product: null } : null);
 const adjusting = ref(null);
 const archiving = ref(null);
 let searchTimer = null;

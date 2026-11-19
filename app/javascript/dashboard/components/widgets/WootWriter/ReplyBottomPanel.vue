@@ -36,6 +36,11 @@ export default {
       type: String,
       default: '',
     },
+    // Visible "Enter để gửi, Shift+Enter xuống dòng" hint next to the button.
+    sendKeyHint: {
+      type: String,
+      default: '',
+    },
     recordingAudioDurationText: {
       type: String,
       default: '00:00',
@@ -511,6 +516,13 @@ export default {
         </div>
       </transition>
     </div>
+    <span
+      v-if="sendKeyHint"
+      data-test="send-key-hint"
+      class="hidden text-xs lg:inline shrink-0 text-n-slate-11 ltr:ml-auto rtl:mr-auto"
+    >
+      {{ sendKeyHint }}
+    </span>
     <button
       type="submit"
       data-test="send"

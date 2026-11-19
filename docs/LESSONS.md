@@ -25,6 +25,22 @@
 - **B118 (2026-11-20): Tin chiến dịch được tính là "phản hồi đầu tiên" nên thời gian phản hồi đẹp giả và khách đang chờ bị xóa trạng thái chờ.**
   - Nguyên nhân: tin chiến dịch là tin outgoing do User gửi nên `Message#human_response?` coi là trả lời người thật, đặt `first_reply_created_at` và xóa `waiting_since`.
   - Quy tắc: tin chiến dịch gửi kèm `campaign_id` (Chatwoot không coi là trả lời người thật). Thời gian phản hồi (`Metrics#first_response_stats`) đo từ tin đầu tiên của khách tới tin trả lời công khai đầu tiên của nhân viên sau đó, bỏ tin có `campaign_id`/`kchat_broadcast_id`, bot và automation; không dùng `conversations.first_reply_created_at` (dữ liệu cũ đã bị chiến dịch làm bẩn).
+- **B120 (2026-11-20): Nút "Viết lại bằng AI" (Captain tasks) luôn hiện, bấm vào trả 422 không có thông báo.**
+  - Nguyên nhân: giao diện chỉ đọc cờ `captain_tasks` (mặc định bật cho mọi tài khoản), còn backend cần thêm `InstallationConfig CAPTAIN_OPEN_AI_API_KEY`; thiếu key thì mọi lệnh trả 422.
+  - Quy tắc: chức năng phụ thuộc cấu hình của bản cài đặt phải có cờ "sẵn sàng" thật từ backend (`KALO_CAPTAIN_TASKS_READY` trong `globalConfig`, ADR-028) và mọi lối vào đọc cùng một computed (`useCaptain().captainTasksEnabled`, `useLabelSuggestions`). Cờ tài khoản không đủ để coi là "chạy được" (cùng ý B4, B14). Lỗi hiện cho chủ shop là một câu tiếng Việt, không chuyển tiếp thông báo của backend.
+- **B121 (2026-11-20): Mở hội thoại là gọi `brand_growth/chat_reply` ngay, cả khi `ai_health` báo AI không chạy hoặc chưa trả lời.**
+  - Nguyên nhân: gợi ý trả lời (`KaloAiSuggestions`) không đọc health; chỉ nút trợ lý đọc, và cache health nằm riêng trong composable của trợ lý.
+  - Quy tắc: mọi lối vào AI của Kalo dùng chung `loadAiHealth`/`isAiHealthy` trong `useKaloAssistant.js` (một request đang chạy cho mỗi tài khoản, "không" nhớ 5 phút); không gọi AI khi health chưa biết. Không hiện tên model cho chủ shop. Spec của component nghe trạng thái dùng chung phải unmount sau mỗi ca, nếu không ca sau đổi trạng thái sẽ đánh thức component của ca trước.
+- **B122 (2026-11-20): Ô nhập của form sản phẩm có vòng focus đôi ở chế độ tối (viền 1px + outline 2px + ring).**
+  - Nguyên nhân: biến thể `dark:focus:` của `field-base` trong `_base.scss` có selector `.dark …:focus` (độ ưu tiên cao hơn utility `outline-none`), nên chỉ ở chế độ tối outline của base thắng.
+  - Quy tắc: ô nhập Kalo tự vẽ viền (`border` + `focus:ring`) phải có cả `outline-none dark:focus:outline-none`. Kiểm bằng `getComputedStyle` khi focus ở cả sáng và tối (`tmp/t6da/focus.mjs`), jsdom không bắt được. Các form Kalo khác dùng `border` + `outline-none` (Thương hiệu, Ý tưởng…) cần rà lại theo quy tắc này.
+- **B123 (2026-11-20): Thêm `[@media(max-height:760px)]:size-9` sau `[@media(max-height:800px)]:size-10` mà nút rail vẫn 40px ở màn 720px.**
+  - Nguyên nhân: Tailwind không bảo đảm thứ tự sinh CSS giữa các biến thể arbitrary; hai media query cùng độ ưu tiên nên rule sinh sau thắng.
+  - Quy tắc: các mức theo chiều cao/chiều rộng viết bằng khoảng rời nhau (`[@media(min-height:761px)_and_(max-height:800px)]:size-10` + `[@media(max-height:760px)]:size-9`), không dựa vào thứ tự. Rail có mũi tên "xem thêm" (`kalo-rail-more`) khi mục chính tràn; kiểm bằng `railOverflow` trong `tmp/t6da/shoot.mjs` ở 1280×720 và 1280×860.
+- **B124 (2026-11-20): Đổi mặc định phím gửi sang Enter làm hỏng ca spec upstream "editor_message_key chưa đặt" và rò trạng thái giữa các ca.**
+  - Nguyên nhân: mock `getUISettings` là một `ref` dùng chung trong file spec; ca trước đặt `enter_to_send_enabled = false` nên ca sau không còn là "chưa từng chọn".
+  - Quy tắc: mặc định Kalo là Enter khi người dùng chưa chọn (`editor_message_key` trống và `enter_to_send_enabled` không phải `false`); lựa chọn cũ `enter_to_send_enabled: false` vẫn giữ Cmd/Ctrl+Enter. Ca spec về mặc định phải tự đặt đủ các trường liên quan. Cờ một lần trên URL (`?new=1`, `?invite=1`) đọc bằng `useOneShotQueryFlag` để xóa khỏi URL sau khi mở form.
+
 - **B110 (2026-11-20): Siết quyền sản phẩm (chỉ Quản trị viên tạo/sửa) nhưng nút "Thêm sản phẩm" ở POS vẫn hiện cho Nhân viên.**
   - Triệu chứng: sau khi đổi policy, POS vẫn hiện nút cho Nhân viên (điền form xong mới nhận 401) và `products_spec`/`entitlements_gating_spec` có sẵn tạo sản phẩm bằng agent nên đỏ.
   - Nguyên nhân: policy đổi ở backend, còn lối vào ở frontend (POS, checklist, trang trống) không đọc vai trò.

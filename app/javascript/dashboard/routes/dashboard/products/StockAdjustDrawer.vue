@@ -74,7 +74,7 @@ const save = async () => {
           data-test="stock-delta"
           :placeholder="t('KALO_PRODUCTS.STOCK_FORM.DELTA_PLACEHOLDER')"
           :aria-invalid="submitted && Boolean(error)"
-          class="w-full px-3 py-2 mt-1 mb-0 text-sm border border-solid rounded-[10px] outline-none bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15"
+          class="w-full px-3 py-2 mt-1 mb-0 text-sm border border-solid rounded-[10px] outline-none dark:focus:outline-none bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15"
           :class="submitted && error ? 'border-n-ruby-9' : 'border-n-strong'"
         />
         <span
