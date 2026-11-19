@@ -1,6 +1,21 @@
 import { useMapGetter } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
+
+// Kalo (spec §4): channels behind the per-shop kalo_extra_channels flag. With
+// the flag off onboarding offers only Website, Facebook, Instagram and TikTok.
+const KALO_EXTRA_CHANNEL_TYPES = [
+  'whatsapp',
+  'telegram',
+  'line',
+  'gmail',
+  'outlook',
+  'email',
+  'sms',
+  'api',
+  'voice',
+];
 
 // OAuth/SDK channels need installation-level app credentials to be usable. When
 // the credential is missing the channel is "not configured" and is hidden from
@@ -31,7 +46,13 @@ export function useChannelConfig() {
     outlook: () => Boolean(globalConfig.value.azureAppId),
   };
 
-  const isConfigured = type => CHANNEL_CONFIGURED[type]?.() ?? true;
+  const { isOn } = useKaloFeatures();
+  const isAllowed = type =>
+    !KALO_EXTRA_CHANNEL_TYPES.includes(type) ||
+    isOn(FEATURE_FLAGS.KALO_EXTRA_CHANNELS);
 
-  return { isConfigured };
+  const isConfigured = type =>
+    isAllowed(type) && (CHANNEL_CONFIGURED[type]?.() ?? true);
+
+  return { isConfigured, isAllowed };
 }

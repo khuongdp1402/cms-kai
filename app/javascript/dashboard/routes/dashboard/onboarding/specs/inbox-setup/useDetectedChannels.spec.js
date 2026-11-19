@@ -13,11 +13,12 @@ vi.mock('vue-router');
 // channel_type, social ordering) derived from CHANNEL_LIST.
 const mountComposable = ({
   brandInfo,
-  features = { channel_instagram: true },
+  features = { channel_instagram: true, kalo_extra_channels: true },
   inboxes = [],
   isOnChatwootCloud = false,
 } = {}) => {
   const store = createStore({
+    getters: { getCurrentAccountId: () => 1 },
     modules: {
       globalConfig: {
         namespaced: true,
@@ -180,6 +181,17 @@ describe('useDetectedChannels', () => {
           labelKey: 'INBOX_MGMT.ADD.AUTH.CHANNEL.INSTAGRAM.TITLE',
           inbox: { channel_type: 'Channel::Instagram' },
         },
+      ]);
+    });
+
+    it('drops WhatsApp, Telegram and Line when kalo_extra_channels is off', () => {
+      const { displayedChannels } = mountComposable({
+        brandInfo: undefined,
+        features: { channel_instagram: true },
+      });
+      expect(displayedChannels.value.map(channel => channel.type)).toEqual([
+        'facebook',
+        'instagram',
       ]);
     });
 

@@ -20,7 +20,7 @@ const emit = defineEmits(['connected']);
 
 const { t } = useI18n();
 const { connectViaOAuth, connectWhatsapp } = useChannelConnect();
-const { isConfigured } = useChannelConfig();
+const { isConfigured, isAllowed } = useChannelConfig();
 
 // Maps the dialog's display types to the OAuth client key the flow expects.
 // Types without an entry (manual-setup channels) are no-ops for now.
@@ -52,7 +52,9 @@ const CARD_CLASS = {
 // (setupLater) channels stay since they aren't a configuration problem.
 const channelCards = computed(() =>
   CHANNEL_LIST.filter(
-    channel => channel.setupLater || isConfigured(channel.type)
+    channel =>
+      isAllowed(channel.type) &&
+      (channel.setupLater || isConfigured(channel.type))
   ).map(channel => {
     const connected = isChannelConnected(props.inboxes, channel.inbox);
     // Website inboxes are only auto-created during onboarding — there is no
