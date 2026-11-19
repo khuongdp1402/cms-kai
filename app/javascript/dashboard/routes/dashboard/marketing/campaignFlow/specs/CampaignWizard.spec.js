@@ -34,6 +34,7 @@ const AUDIENCE = {
       rate_limit: { per_minute: 30, burst: 10 },
       eligible_count: 70,
       skipped_24h_count: 0,
+      sample_name: 'Lan',
     },
     {
       inbox_id: 8,
@@ -284,6 +285,9 @@ describe('CampaignWizard', () => {
     await next(wrapper);
 
     expect(stepTitle(wrapper)).toBe('Xem lại và gửi');
+    // {{name}} is filled like the backend does for the first recipient.
+    expect(find(wrapper, 'campaign-review-message').text()).toBe('Chào Lan');
+    expect(find(wrapper, 'campaign-review-sample').text()).toContain('Lan');
     expect(find(wrapper, 'campaign-review-recipients').text()).toBe('70');
     expect(find(wrapper, 'campaign-review-duration').text()).toBe(
       'Khoảng 2 phút'

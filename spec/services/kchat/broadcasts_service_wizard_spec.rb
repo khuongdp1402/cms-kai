@@ -89,6 +89,17 @@ RSpec.describe Kchat::BroadcastsService do
       expect(widget).to include(eligible_count: 1, read_status: true, rate_limit: nil)
     end
 
+    it 'names the first recipient the way {{name}} is filled at send time' do
+      contact_in(zalo_inbox, name: 'Chị Lan', label: 'vip')
+      contact_in(zalo_inbox, name: 'Anh Tú', label: 'vip')
+      widget_inbox # an inbox nobody in the audience reached
+
+      rows = service.audience_summary(labels: ['vip'])[:channels]
+      expect(rows.find { |row| row[:inbox_id] == zalo_inbox.id }[:sample_name]).to eq('Chị Lan')
+      expect(rows.find { |row| row[:inbox_id] == widget_inbox.id }[:sample_name]).to eq('bạn')
+      expect(service.preview(inbox_id: zalo_inbox.id, labels: ['vip'])[:sample_name]).to eq('Chị Lan')
+    end
+
     it 'restricts the audience and the recipients to a saved contact segment' do
       contact_in(zalo_inbox, name: 'Hà Nội 1', city: 'hanoi')
       contact_in(zalo_inbox, name: 'Sài Gòn', city: 'saigon')

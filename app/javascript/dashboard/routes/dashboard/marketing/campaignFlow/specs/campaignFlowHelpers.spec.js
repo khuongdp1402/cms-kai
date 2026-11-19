@@ -9,6 +9,7 @@ import {
   estimateSendMinutes,
   isoToVietnamLocal,
   personalize,
+  sampleRecipientName,
   stepError,
   uniqueTag,
   vietnamLocalToIso,
@@ -290,5 +291,17 @@ describe('campaignFlowHelpers', () => {
         shopName: 'Hoa Mai',
       })
     ).toBe('Chào Lan, Hoa Mai gửi bạn');
+  });
+
+  it('previews {{name}} with the first recipient the API reports', () => {
+    const channels = [
+      { inbox_id: 1, eligible_count: 0, sample_name: 'bạn' },
+      { inbox_id: 2, eligible_count: 3, sample_name: 'Chị Lan' },
+      { inbox_id: 3, eligible_count: 2, sample_name: 'Anh Tú' },
+    ];
+    expect(sampleRecipientName(channels, 3, 'bạn')).toBe('Anh Tú');
+    expect(sampleRecipientName(channels, null, 'bạn')).toBe('Chị Lan');
+    expect(sampleRecipientName(channels, 1, 'bạn')).toBe('Chị Lan');
+    expect(sampleRecipientName([], null, 'bạn')).toBe('bạn');
   });
 });

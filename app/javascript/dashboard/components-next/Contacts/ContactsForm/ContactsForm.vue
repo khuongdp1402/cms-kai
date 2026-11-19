@@ -5,6 +5,7 @@ import { required, email } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import { splitName } from '@chatwoot/utils';
 import countries from 'shared/constants/countries.js';
+import { localCountryOptions } from 'shared/helpers/countryNames';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useAccount } from 'dashboard/composables/useAccount';
 import Input from 'dashboard/components-next/input/Input.vue';
@@ -30,7 +31,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update']);
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const { currentAccount, isCloudFeatureEnabled } = useAccount();
 
 const FORM_CONFIG = {
@@ -158,7 +159,7 @@ const prepareStateBasedOnProps = () => {
 };
 
 const countryOptions = computed(() =>
-  countries.map(({ name, id }) => ({ label: name, value: id }))
+  localCountryOptions(countries, locale.value)
 );
 
 const editDetailsForm = computed(() =>

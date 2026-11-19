@@ -10,6 +10,7 @@ import {
   buildUtmLink,
   channelKey,
   personalize,
+  sampleRecipientName,
 } from './campaignFlowHelpers';
 
 const { t } = useI18n();
@@ -32,7 +33,11 @@ const VARIABLES = [
 
 const previewText = computed(() =>
   personalize(campaign.message.trim(), {
-    name: t('KALO_CAMPAIGN_FLOW.CONTENT_STEP.PREVIEW_NAME'),
+    name: sampleRecipientName(
+      flow.audience.value?.channels,
+      campaign.inboxId,
+      t('KALO_POLISH3.CAMPAIGN.FALLBACK_NAME')
+    ),
     shopName: flow.shopName.value,
   })
 );

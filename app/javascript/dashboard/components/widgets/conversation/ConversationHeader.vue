@@ -192,13 +192,22 @@ const toggleContactSidebar = () => {
           >
             {{ currentContact.name }}
           </span>
-          <fluent-icon
+          <!-- Focusable so the explanation also shows on keyboard focus and tap. -->
+          <span
             v-if="!isHMACVerified"
-            v-tooltip="$t('CONVERSATION.UNVERIFIED_SESSION')"
-            size="14"
-            class="text-n-amber-10 my-0 mx-0 min-w-[14px] flex-shrink-0"
-            icon="warning"
-          />
+            v-tooltip.bottom="$t('CONVERSATION.UNVERIFIED_SESSION')"
+            tabindex="0"
+            role="img"
+            data-test-id="kalo-unverified-contact"
+            :aria-label="$t('CONVERSATION.UNVERIFIED_SESSION')"
+            class="inline-flex rounded flex-shrink-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
+          >
+            <fluent-icon
+              size="14"
+              class="text-n-amber-10 my-0 mx-0 min-w-[14px] flex-shrink-0"
+              icon="warning"
+            />
+          </span>
         </div>
         <div
           class="flex items-center max-w-full gap-1.5 overflow-hidden text-xs conversation--header--actions text-n-slate-11 whitespace-nowrap"

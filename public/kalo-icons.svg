@@ -39,6 +39,7 @@
 <symbol id="i-user" viewBox="0 0 24 24"><circle class="a" style="fill:var(--ia,#FFD7CA)" cx="12" cy="8.2" r="3.7"/><path d="M5 20a7 7 0 0 1 14 0"/></symbol>
 <symbol id="i-logout" viewBox="0 0 24 24"><path class="a" style="fill:var(--ia,#FFD7CA)" d="M6.5 4h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><path d="M11 12h9.5M17.5 8.5 21 12l-3.5 3.5"/></symbol>
 <symbol id="i-panel" viewBox="0 0 24 24"><rect class="a" style="fill:var(--ia,#FFD7CA)" x="3.5" y="4.5" width="17" height="15" rx="2.5"/><path d="M9.5 4.5v15"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.6v.1"/></symbol>
 <symbol id="p-candle" viewBox="0 0 24 24"><path d="M12 2.8c1.8 2.1 2.2 3.5 0 5.3-2.2-1.8-1.8-3.2 0-5.3z" fill="rgba(255,255,255,.55)"/><rect x="6.8" y="10.2" width="10.4" height="10.4" rx="2.8" fill="rgba(255,255,255,.35)"/><path d="M12 8.2v2M6.8 14h10.4"/></symbol>
 <symbol id="p-cup" viewBox="0 0 24 24"><path d="M5.2 9.5h11.4v5a5.7 5.7 0 0 1-11.4 0z" fill="rgba(255,255,255,.35)"/><path d="M16.6 10.8h1.2a2.6 2.6 0 0 1 0 5.2h-1.4M8.6 4v2.6M12.4 4v2.6"/></symbol>
 <symbol id="p-plate" viewBox="0 0 24 24"><ellipse cx="12" cy="13" rx="9.3" ry="5.4" fill="rgba(255,255,255,.35)"/><ellipse cx="12" cy="13" rx="5.2" ry="2.6"/></symbol>

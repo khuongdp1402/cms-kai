@@ -22,6 +22,11 @@ const RULES = [
   ['snooze as "Báo lại"', text => /^Báo lại$/.test(text)],
   // "agent" is a shop employee, not a dealer or a vendor.
   ['agent as "đại lý"', text => /đại lý/i.test(text)],
+  // Literal machine translations the new-shop QA flagged (T6a).
+  ['"Sao Chép" with a capital C', text => /Sao Chép/.test(text)],
+  ['"sẵn sàng để đi"', text => /sẵn sàng để đi/i.test(text)],
+  ['"Đưa cho tôi"', text => /Đưa cho tôi/.test(text)],
+  ['sample company "Acme"', text => /Acme/.test(text)],
   [
     'agent or inbox as "nhà cung cấp"',
     (text, enText) =>

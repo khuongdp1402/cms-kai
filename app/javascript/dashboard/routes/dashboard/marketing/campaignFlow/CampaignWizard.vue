@@ -92,6 +92,7 @@ const effectiveAudience = computed(() => {
             ...row,
             eligible_count: stats.eligible_count,
             skipped_24h_count: stats.skipped_24h_count,
+            sample_name: stats.sample_name,
           }
         : row
     ),

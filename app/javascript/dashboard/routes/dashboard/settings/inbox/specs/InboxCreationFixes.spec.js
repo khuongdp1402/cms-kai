@@ -91,6 +91,15 @@ describe('Channel picker: Facebook card', () => {
     expect(wrapper.find('button').attributes('disabled')).toBeDefined();
   });
 
+  it('gives the disabled Instagram card the same reason', () => {
+    window.chatwootConfig = {};
+    const wrapper = mountItem('instagram', { channel_instagram: true });
+    expect(wrapper.find('[data-test="channel-unavailable-hint"]').text()).toBe(
+      'Sắp có — hiện dùng Zalo cá nhân'
+    );
+    expect(wrapper.find('button').attributes('disabled')).toBeDefined();
+  });
+
   it('shows no hint when Facebook is configured or for other channels', () => {
     window.chatwootConfig = { fbAppId: '123' };
     expect(

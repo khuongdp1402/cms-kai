@@ -3,6 +3,12 @@
 class Kchat::Broadcasts::Dispatcher
   MAX_RECIPIENTS_PER_RUN = 500
   META_24H_CHANNELS = Kchat::Broadcasts::Channels::META_24H_CHANNELS
+  FALLBACK_NAME = 'bạn'
+
+  # What {{name}} becomes for this contact; the wizard preview uses the same rule.
+  def self.recipient_name(contact)
+    contact&.name.presence || FALLBACK_NAME
+  end
 
   def initialize(account)
     @account = account
@@ -104,7 +110,7 @@ class Kchat::Broadcasts::Dispatcher
   end
 
   def personalize_message(template, contact, hard_bans)
-    body = template.to_s.gsub('{{name}}', contact.name.presence || 'bạn').gsub('{{shop_name}}', @account.name.to_s)
+    body = template.to_s.gsub('{{name}}', self.class.recipient_name(contact)).gsub('{{shop_name}}', @account.name.to_s)
     Ai::CustomLlmService.new.enforce_brand_guardrails(body, hard_bans)[:sanitized_text]
   end
 

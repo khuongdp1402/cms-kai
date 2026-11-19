@@ -66,6 +66,13 @@ export default {
             'CHAT_LIST.CHAT_TIME_STAMP.LAST_ACTIVITY.NOT_ACTIVE'
           )} ${dateFormat(this.lastActivityTimestamp)}`;
     },
+    // One time when both read the same ("bây giờ • bây giờ" on a new chat).
+    displayText() {
+      if (this.createdAtTime === this.lastActivityTime) {
+        return this.lastActivityTime;
+      }
+      return `${this.createdAtTime} • ${this.lastActivityTime}`;
+    },
     tooltipText() {
       return `${this.createdAt}
               ${this.lastActivity}`;
@@ -127,6 +134,6 @@ export default {
     }"
     class="ml-auto leading-4 text-xxs text-n-slate-10 hover:text-n-slate-11"
   >
-    <span>{{ `${createdAtTime} • ${lastActivityTime}` }}</span>
+    <span>{{ displayText }}</span>
   </div>
 </template>

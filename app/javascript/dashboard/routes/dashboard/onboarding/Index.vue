@@ -25,6 +25,7 @@ import {
   REFERRAL_SOURCE_OPTIONS,
   USER_ROLE_OPTIONS,
 } from './shared/constants';
+import { translateOptions } from './shared/kaloOptionLabels';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -49,18 +50,32 @@ const isEditingWebsite = ref(false);
 const websiteInput = ref(null);
 const showErrorOnFields = ref(false);
 
-const validationRules = {
+// Kalo is self-hosted: the backend finishes onboarding right after this step
+// and a blank website only skips the auto-created website inbox. On Chatwoot
+// Cloud the inbox_setup step needs that inbox (Channel::WebWidget validates the
+// URL), so the website stays required there.
+const isOnCloud = useMapGetter('globalConfig/isOnChatwootCloud');
+const isWebsiteRequired = computed(() => Boolean(isOnCloud.value));
+
+const validationRules = computed(() => ({
   userRole: {},
-  // Website is required: the onboarding web-widget inbox can't be created
-  // without a URL (Channel::WebWidget validates presence), so a blank value
-  // would leave the "Live Chat widget" status polling forever.
-  website: { required },
+  website: isWebsiteRequired.value ? { required } : {},
   locale: {},
   timezone: {},
   companySize: {},
   industry: {},
   referralSource: {},
-};
+}));
+
+const roleOptions = computed(() =>
+  translateOptions(USER_ROLE_OPTIONS, 'ROLE', t)
+);
+const industryOptions = computed(() =>
+  translateOptions(INDUSTRY_OPTIONS, 'INDUSTRY', t)
+);
+const referralOptions = computed(() =>
+  translateOptions(REFERRAL_SOURCE_OPTIONS, 'REFERRAL', t)
+);
 
 const v$ = useVuelidate(validationRules, {
   userRole,
@@ -243,7 +258,7 @@ const handleSubmit = async () => {
           <OnboardingFormSelect
             v-model="userRole"
             :has-error="showErrorOnFields && v$.userRole.$error"
-            :options="USER_ROLE_OPTIONS"
+            :options="roleOptions"
             :placeholder="t('ONBOARDING_NEXT.PLACEHOLDERS.SELECT_ROLE')"
           />
         </OnboardingFormRow>
@@ -276,7 +291,7 @@ const handleSubmit = async () => {
           </div>
           <OnboardingFormRow
             :title="t('ONBOARDING_NEXT.FIELDS.WEBSITE')"
-            required
+            :required="isWebsiteRequired"
             icon="i-lucide-globe"
           >
             <div>
@@ -341,7 +356,7 @@ const handleSubmit = async () => {
             <OnboardingFormSelect
               v-model="industry"
               :has-error="showErrorOnFields && v$.industry.$error"
-              :options="INDUSTRY_OPTIONS"
+              :options="industryOptions"
               :placeholder="t('ONBOARDING_NEXT.PLACEHOLDERS.SELECT_INDUSTRY')"
             />
           </OnboardingFormRow>
@@ -365,7 +380,7 @@ const handleSubmit = async () => {
             <OnboardingFormSelect
               v-model="referralSource"
               :has-error="showErrorOnFields && v$.referralSource.$error"
-              :options="REFERRAL_SOURCE_OPTIONS"
+              :options="referralOptions"
               :placeholder="
                 t('ONBOARDING_NEXT.PLACEHOLDERS.SELECT_REFERRAL_SOURCE')
               "

@@ -7,6 +7,7 @@ import {
 import { required, email } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
 import countries from 'shared/constants/countries.js';
+import { localCountryOptions } from 'shared/helpers/countryNames';
 import { isPhoneNumberValid } from 'shared/helpers/Validators';
 import parsePhoneNumber from 'libphonenumber-js';
 import NextButton from 'dashboard/components-next/button/Button.vue';
@@ -83,6 +84,13 @@ export default {
     bio: {},
   },
   computed: {
+    countryOptions() {
+      return localCountryOptions(
+        this.countries,
+        this.$i18n.locale,
+        (label, c) => this.countryNameWithCode({ name: label, id: c.id })
+      );
+    },
     parsePhoneNumber() {
       return parsePhoneNumber(this.phoneNumber);
     },
@@ -381,12 +389,7 @@ export default {
       </label>
       <ComboBox
         :model-value="country.id"
-        :options="
-          countries.map(c => ({
-            value: c.id,
-            label: countryNameWithCode(c),
-          }))
-        "
+        :options="countryOptions"
         class="[&>div>button]:!bg-n-alpha-black2"
         :placeholder="$t('CONTACT_FORM.FORM.COUNTRY.PLACEHOLDER')"
         :search-placeholder="$t('CONTACT_FORM.FORM.COUNTRY.SELECT_PLACEHOLDER')"

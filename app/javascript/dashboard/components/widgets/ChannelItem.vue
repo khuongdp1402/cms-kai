@@ -80,9 +80,11 @@ const isActive = computed(() => {
 
 const isComingSoon = computed(() => false);
 
-// Facebook needs a Meta app id; without it the card is disabled, so say why.
+// Facebook and Instagram need a Meta app id; without it the card is
+// disabled, so say why.
+const META_CHANNELS = ['facebook', 'instagram'];
 const unavailableHint = computed(() =>
-  props.channel.key === 'facebook' && !isActive.value
+  META_CHANNELS.includes(props.channel.key) && !isActive.value
     ? t('KALO_GUIDE.FIXES.FACEBOOK_SOON')
     : ''
 );

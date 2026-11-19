@@ -119,6 +119,20 @@ describe('KaloChatListEmpty', () => {
     );
   });
 
+  it('points to "Chưa ai nhận" when this tab is empty but someone is waiting', async () => {
+    const wrapper = await mountWith(KaloChatListEmpty, {
+      props: { unassignedCount: 1 },
+    });
+    expect(
+      wrapper.find('[data-test-id="kalo-chat-list-unassigned"]').text()
+    ).toBe('Có 1 tin chưa ai nhận');
+    await wrapper
+      .find('[data-test-id="kalo-chat-list-open-unassigned"]')
+      .trigger('click');
+    expect(wrapper.emitted('openUnassigned')).toHaveLength(1);
+    expect(wrapper.text()).not.toContain('Chưa có tin nhắn nào');
+  });
+
   it('carries the setup checklist on mobile only (not when filtered)', async () => {
     const originalWidth = window.innerWidth;
     window.innerWidth = 400;
