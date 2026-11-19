@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, reactive, ref } from 'vue';
+import { computed, onMounted, reactive, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAlert } from 'dashboard/composables';
 import { useAdmin } from 'dashboard/composables/useAdmin';
@@ -18,7 +18,25 @@ const form = reactive({
   hard_bans: '',
 });
 
-const aiStatus = ref({ configured: false, default_model: '' });
+const aiStatus = ref({ configured: false });
+// ready | unavailable (configured, recent provider calls failed) | off
+const aiState = computed(() => {
+  if (!aiStatus.value.configured) return 'off';
+  return aiStatus.value.available === false ? 'unavailable' : 'ready';
+});
+const AI_BADGE_TONES = {
+  ready: 'bg-n-teal-3 text-n-teal-11',
+  unavailable: 'bg-n-amber-3 text-n-amber-11',
+  off: 'bg-n-alpha-2 text-n-slate-11',
+};
+const aiBadgeLabel = computed(() => {
+  if (aiState.value === 'off') return t('KALO_MARKETING.BRAND_PROFILE.AI_OFF');
+  if (aiState.value === 'unavailable') return t('KALO_METRICS.AI_UNAVAILABLE');
+  const model = aiStatus.value.chat_model;
+  return model
+    ? t('KALO_METRICS.AI_READY_MODEL', { model })
+    : t('KALO_METRICS.AI_READY');
+});
 const isLoading = ref(false);
 const isSaving = ref(false);
 const errorMessage = ref('');
@@ -38,7 +56,7 @@ const loadProfile = async () => {
     form.hard_bans = Array.isArray(profile.hard_bans)
       ? profile.hard_bans.join(', ')
       : profile.hard_bans || '';
-    aiStatus.value = data?.ai || { configured: false, default_model: '' };
+    aiStatus.value = data?.ai || { configured: false };
   } catch {
     errorMessage.value = t('KALO_MARKETING.BRAND_PROFILE.LOAD_ERROR');
   } finally {
@@ -82,19 +100,9 @@ const fieldClass =
       <span
         data-test="brand-ai-status"
         class="px-3 py-1 text-xs font-semibold rounded-full shrink-0"
-        :class="
-          aiStatus.configured
-            ? 'bg-n-teal-3 text-n-teal-11'
-            : 'bg-n-alpha-2 text-n-slate-11'
-        "
+        :class="AI_BADGE_TONES[aiState]"
       >
-        {{
-          aiStatus.configured
-            ? t('KALO_MARKETING.BRAND_PROFILE.AI_READY', {
-                model: aiStatus.default_model || 'AI',
-              })
-            : t('KALO_MARKETING.BRAND_PROFILE.AI_OFF')
-        }}
+        {{ aiBadgeLabel }}
       </span>
     </div>
 

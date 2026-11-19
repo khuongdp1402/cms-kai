@@ -185,6 +185,13 @@ const onInput = () => {
           {{ t('KALO_CAMPAIGN_FLOW.CONTENT_STEP.AI_HINT') }}
         </p>
         <p
+          v-else-if="flow.aiUnavailable?.value"
+          data-test="campaign-ai-unavailable"
+          class="text-xs font-medium text-n-amber-11"
+        >
+          {{ t('KALO_METRICS.AI_UNAVAILABLE_NOTE') }}
+        </p>
+        <p
           v-if="aiErrorKey"
           data-test="campaign-ai-error"
           class="text-xs font-medium text-n-ruby-11"

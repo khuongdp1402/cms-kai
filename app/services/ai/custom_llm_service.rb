@@ -33,8 +33,13 @@ class Ai::CustomLlmService
     gemini? ? ENV.fetch('GEMINI_API_KEY', '').present? : @api_key.present?
   end
 
+  # available is false while a provider call failed within Kchat::AiHealth::FAILURE_TTL (bad key, provider down).
   def health_status
-    { provider: @provider, configured: configured?, chat_model: gemini? ? gemini_model : @model }
+    last_failure_at = configured? ? Kchat::AiHealth.last_failure_at : nil
+    {
+      provider: @provider, configured: configured?, available: configured? && last_failure_at.nil?,
+      last_failure_at: last_failure_at, chat_model: gemini? ? gemini_model : @model
+    }
   end
 
   def endpoint
@@ -47,8 +52,13 @@ class Ai::CustomLlmService
     raise PromptTooLargeError, 'AI prompt is too large' if messages.sum { |m| m[:content].to_s.length } > MAX_PROMPT_CHARS
 
     text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
+    Kchat::AiHealth.clear_failure!
     self.class.strip_think(text)
+  rescue ProviderError
+    Kchat::AiHealth.record_failure!
+    raise
   rescue *NETWORK_ERRORS, JSON::ParserError => e
+    Kchat::AiHealth.record_failure!
     raise ProviderError, "AI provider failed: #{e.class}"
   end
 

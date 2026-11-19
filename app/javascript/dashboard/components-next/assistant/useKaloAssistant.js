@@ -94,7 +94,8 @@ export function useKaloAssistant() {
   };
 }
 
-// Entry-point visibility: AI key configured (ai_health) and the account flag
+// Entry-point visibility: AI key configured and answering (ai_health
+// available is false while recent provider calls failed) and the account flag
 // kalo_ai_assistant on. Health is asked once per account and cached.
 export function useKaloAssistantAvailability() {
   const accountId = useMapGetter('getCurrentAccountId');
@@ -106,7 +107,7 @@ export function useKaloAssistantAvailability() {
     availability[id] = false;
     try {
       const { data } = await brandGrowthAPI.aiHealth();
-      availability[id] = !!data?.configured;
+      availability[id] = !!data?.configured && data?.available !== false;
     } catch {
       availability[id] = false;
     }

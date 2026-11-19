@@ -70,6 +70,20 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
       end
     end
 
+    it 'ai_health says configured but not available after a 502, for the assistant as well' do
+      get "#{base}/ai_health", headers: agent.create_new_auth_token, as: :json
+      expect(response.parsed_body).to include('configured' => true, 'available' => true)
+
+      stub_request(:post, gateway).to_return(status: 401)
+      post "/api/v1/accounts/#{account.id}/kchat/assistant", params: { message: 'hi', mode: 'help' },
+                                                              headers: agent.create_new_auth_token, as: :json
+      expect(response).to have_http_status(:bad_gateway)
+
+      get "#{base}/ai_health", headers: agent.create_new_auth_token, as: :json
+      expect(response.parsed_body).to include('configured' => true, 'available' => false)
+      expect(response.parsed_body['last_failure_at']).to be_present
+    end
+
     it 'returns 502 ai_unavailable when the provider cannot be reached' do
       stub_request(:post, gateway).to_timeout
       post "#{base}/repurpose", params: { topic: 'Da khô' }, headers: agent.create_new_auth_token, as: :json

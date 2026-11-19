@@ -48,6 +48,19 @@ describe('KaloAssistantButton visibility', () => {
     expect(button(wrapper).exists()).toBe(false);
   });
 
+  it('is hidden when AI is configured but the provider is failing (available: false)', async () => {
+    brandGrowthAPI.aiHealth.mockResolvedValue({
+      data: { configured: true, available: false },
+    });
+    const wrapper = mount(KaloAssistantButton, {
+      attachTo: document.body,
+      global: { plugins: createAssistantEnv({ flagOn: true }).plugins },
+    });
+    wrappers.push(wrapper);
+    await flushPromises();
+    expect(button(wrapper).exists()).toBe(false);
+  });
+
   it('is hidden when the health check fails', async () => {
     const wrapper = await mountButton({ configured: new Error('500') });
     expect(button(wrapper).exists()).toBe(false);

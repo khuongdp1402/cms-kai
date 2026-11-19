@@ -73,4 +73,39 @@ RSpec.describe Ai::CustomLlmService do
 
     expect(service.complete([{ role: 'user', content: 'a' * described_class::MAX_PROMPT_CHARS }])).to eq('ok')
   end
+
+  describe 'health_status reflects recent provider failures' do
+    let(:url) { 'https://agentgw.cloud/v1/chat/completions' }
+    let(:ok_body) { { choices: [{ message: { content: 'ok' } }] }.to_json }
+
+    it 'is available when configured and no call failed recently' do
+      expect(service.health_status).to include(configured: true, available: true, last_failure_at: nil)
+    end
+
+    it 'turns unavailable for 5 minutes after a refused call (bad key) and recovers after a success' do
+      stub_request(:post, url).to_return(status: 401)
+      expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)
+      expect(service.health_status).to include(configured: true, available: false)
+      expect(described_class.new(api_key: 'other').health_status[:available]).to be(false) # per installation, not per instance
+
+      travel(Kchat::AiHealth::FAILURE_TTL + 1.second) do
+        expect(service.health_status[:available]).to be(true)
+      end
+
+      Kchat::AiHealth.record_failure!
+      stub_request(:post, url).to_return(status: 200, body: ok_body)
+      service.complete([{ role: 'user', content: 'hi' }])
+      expect(service.health_status[:available]).to be(true)
+    end
+
+    it 'records network failures too' do
+      stub_request(:post, url).to_raise(SocketError)
+      expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)
+      expect(service.health_status[:available]).to be(false)
+    end
+
+    it 'is never available when not configured' do
+      expect(described_class.new(api_key: '', provider: 'agentgw').health_status).to include(configured: false, available: false)
+    end
+  end
 end
