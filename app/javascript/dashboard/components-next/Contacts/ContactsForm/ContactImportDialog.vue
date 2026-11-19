@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { useMapGetter } from 'dashboard/composables/store';
 import { useI18n } from 'vue-i18n';
 
-import Dialog from 'dashboard/components-next/dialog/Dialog.vue';
+import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
 
 const emit = defineEmits(['import']);
@@ -12,7 +12,17 @@ const { t } = useI18n();
 const uiFlags = useMapGetter('contacts/getUIFlags');
 const isImportingContact = computed(() => uiFlags.value.isImporting);
 
-const dialogRef = ref(null);
+// Kalo: import opens in the standard right drawer (guided UX spec §2);
+// `dialogRef.open()` / `dialogRef.close()` keep the old Dialog contract.
+const isOpen = ref(false);
+const dialogRef = {
+  open: () => {
+    isOpen.value = true;
+  },
+  close: () => {
+    isOpen.value = false;
+  },
+};
 const fileInput = ref(null);
 
 const hasSelectedFile = ref(null);
@@ -55,32 +65,24 @@ defineExpose({ dialogRef });
 </script>
 
 <template>
-  <Dialog
-    ref="dialogRef"
+  <KaloDrawer
+    v-if="isOpen"
+    data-test-id="contact-import-drawer"
     :title="t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.TITLE')"
-    :confirm-button-label="
-      t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.IMPORT')
-    "
-    :is-loading="isImportingContact"
-    :disable-confirm-button="isImportingContact"
-    @confirm="uploadFile"
+    @close="dialogRef.close()"
   >
-    <template #description>
-      <p class="mb-0 text-sm text-n-slate-11">
-        {{ t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.DESCRIPTION') }}
-        <a
-          :href="csvUrl"
-          target="_blank"
-          rel="noopener noreferrer"
-          download="import-contacts-sample.csv"
-          class="text-n-blue-11"
-        >
-          {{
-            t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.DOWNLOAD_LABEL')
-          }}
-        </a>
-      </p>
-    </template>
+    <p class="mb-0 text-sm text-n-slate-11">
+      {{ t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.DESCRIPTION') }}
+      <a
+        :href="csvUrl"
+        target="_blank"
+        rel="noopener noreferrer"
+        download="import-contacts-sample.csv"
+        class="text-n-blue-11"
+      >
+        {{ t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.DOWNLOAD_LABEL') }}
+      </a>
+    </p>
 
     <div class="flex flex-col gap-2">
       <div class="flex items-center gap-2">
@@ -130,5 +132,24 @@ defineExpose({ dialogRef });
       class="hidden"
       @change="handleFileChange"
     />
-  </Dialog>
+    <template #footer>
+      <div class="flex items-center justify-end w-full gap-3">
+        <Button
+          :label="t('DIALOG.BUTTONS.CANCEL')"
+          variant="outline"
+          color="slate"
+          type="button"
+          @click="dialogRef.close()"
+        />
+        <Button
+          data-test-id="contact-import-confirm"
+          :label="t('CONTACTS_LAYOUT.HEADER.ACTIONS.IMPORT_CONTACT.IMPORT')"
+          color="blue"
+          :is-loading="isImportingContact"
+          :disabled="isImportingContact || !hasSelectedFile"
+          @click="uploadFile"
+        />
+      </div>
+    </template>
+  </KaloDrawer>
 </template>

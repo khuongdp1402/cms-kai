@@ -71,10 +71,16 @@ const pageInfo = computed(() => {
 
 <template>
   <div
-    class="flex justify-between h-[3.375rem] w-full border-t border-n-weak mx-auto bg-n-surface-1 py-3 px-6 items-center before:absolute before:inset-x-0 before:-top-4 before:bg-gradient-to-t before:from-n-surface-1 before:from-0% before:to-transparent before:h-4 before:pointer-events-none"
+    class="flex flex-wrap justify-center sm:justify-between sm:h-[3.375rem] w-full border-t border-n-weak mx-auto bg-n-surface-1 gap-x-3 gap-y-1 py-2 sm:py-3 px-4 sm:px-6 items-center before:absolute before:inset-x-0 before:-top-4 before:bg-gradient-to-t before:from-n-surface-1 before:from-0% before:to-transparent before:h-4 before:pointer-events-none"
   >
-    <div class="flex items-center gap-3">
-      <span class="min-w-0 text-body-main line-clamp-1 text-n-slate-11">
+    <!-- Kalo: under 640px the "Đang xem …" line takes its own row instead of
+         being cut off next to the page buttons. -->
+    <div
+      class="flex items-center min-w-0 gap-3 max-sm:w-full max-sm:justify-center"
+    >
+      <span
+        class="min-w-0 text-xs sm:text-body-main sm:line-clamp-1 text-n-slate-11 max-sm:text-center"
+      >
         {{ currentPageInformation }}
       </span>
     </div>

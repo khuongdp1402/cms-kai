@@ -60,8 +60,10 @@ const emit = defineEmits([
             </template>
           </Input>
         </div>
-        <div class="flex items-center flex-shrink-0 gap-4">
-          <div class="flex items-center gap-2">
+        <!-- Wraps and tightens under 640px so "Thêm khách" keeps the 16px
+             page gutter at 400px. -->
+        <div class="flex flex-wrap items-center min-w-0 gap-2 sm:gap-4">
+          <div class="flex items-center gap-1 sm:gap-2">
             <div v-if="!isLabelView && !isActiveView" class="relative">
               <Button
                 id="toggleContactsFilterButton"

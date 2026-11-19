@@ -58,9 +58,12 @@ defineExpose({ dialogRef, contactsFormRef, onSuccess });
       class="contents"
       @submit.prevent="handleDialogConfirm"
     >
+      <!-- is-details-view: bordered fields; the drawer background would
+           hide the borderless inline-edit style. -->
       <ContactsForm
         ref="contactsFormRef"
         is-new-contact
+        is-details-view
         @update="createNewContact"
       />
     </form>

@@ -8,7 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
 import ContactsDetailsLayout from 'dashboard/components-next/Contacts/ContactsDetailsLayout.vue';
 import Spinner from 'dashboard/components-next/spinner/Spinner.vue';
 import ContactDetails from 'dashboard/components-next/Contacts/Pages/ContactDetails.vue';
-import TabBar from 'dashboard/components-next/tabbar/TabBar.vue';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import ContactNotes from 'dashboard/components-next/Contacts/ContactsSidebar/ContactNotes.vue';
 import ContactHistory from 'dashboard/components-next/Contacts/ContactsSidebar/ContactHistory.vue';
 import ContactMedia from 'dashboard/components-next/Contacts/ContactsSidebar/ContactMedia.vue';
@@ -37,23 +37,22 @@ const showSpinner = computed(
 
 const { t } = useI18n();
 
+// Kalo: five equal icon + label tabs fit the 440px column and the 400px
+// drawer without horizontal scrolling (guided UX spec §2).
 const CONTACT_TABS_OPTIONS = [
-  { key: 'ATTRIBUTES', value: 'attributes' },
-  { key: 'HISTORY', value: 'history' },
-  { key: 'NOTES', value: 'notes' },
-  { key: 'MEDIA', value: 'media' },
-  { key: 'MERGE', value: 'merge' },
+  { key: 'ATTRIBUTES', value: 'attributes', icon: 'card' },
+  { key: 'HISTORY', value: 'history', icon: 'msg' },
+  { key: 'NOTES', value: 'notes', icon: 'pen' },
+  { key: 'MEDIA', value: 'media', icon: 'img' },
+  { key: 'MERGE', value: 'merge', icon: 'users' },
 ];
 
 const tabs = computed(() => {
   return CONTACT_TABS_OPTIONS.map(tab => ({
     label: t(`CONTACTS_LAYOUT.SIDEBAR.TABS.${tab.key}`),
     value: tab.value,
+    icon: tab.icon,
   }));
-});
-
-const activeTabIndex = computed(() => {
-  return CONTACT_TABS_OPTIONS.findIndex(v => v.value === activeTab.value);
 });
 
 const goToContactsList = () => {
@@ -152,15 +151,31 @@ onMounted(() => {
         @go-to-contacts-list="goToContactsList"
       />
       <template #sidebarHeader>
-        <div
-          class="px-5 py-3 overflow-x-auto border-b bg-n-solid-2 border-n-weak"
-        >
-          <TabBar
-            :tabs="tabs"
-            :initial-active-tab="activeTabIndex"
-            class="w-max min-w-full bg-n-alpha-1 dark:bg-n-solid-1"
-            @tab-changed="handleTabChange"
-          />
+        <div class="px-3 py-3 border-b sm:px-5 bg-n-solid-2 border-n-weak">
+          <div
+            role="tablist"
+            data-test-id="contact-tabs"
+            class="grid grid-cols-5 gap-1 p-1 rounded-xl bg-n-alpha-1 dark:bg-n-solid-1"
+          >
+            <button
+              v-for="tab in tabs"
+              :key="tab.value"
+              type="button"
+              role="tab"
+              :data-test-id="`contact-tab-${tab.value}`"
+              :aria-selected="activeTab === tab.value"
+              class="flex flex-col items-center min-w-0 gap-0.5 px-1 py-1.5 text-[11px] font-semibold leading-tight rounded-lg"
+              :class="
+                activeTab === tab.value
+                  ? 'bg-n-solid-1 dark:bg-n-solid-3 text-n-slate-12 shadow-sm'
+                  : 'text-n-slate-11 hover:text-n-slate-12'
+              "
+              @click="handleTabChange(tab)"
+            >
+              <KaloIcon :name="tab.icon" class="size-4 shrink-0" />
+              <span class="w-full text-center truncate">{{ tab.label }}</span>
+            </button>
+          </div>
         </div>
       </template>
       <template #sidebar>

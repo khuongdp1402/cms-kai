@@ -756,7 +756,7 @@
         "MESSAGE": "Thao tác này là vĩnh viễn và không thể hoàn tác."
       },
       "EDIT_DETAILS_FORM": {
-        "ERROR_MESSAGE": "Không cập nhật được liên hệ, vui lòng thử lại sau.",
+        "ERROR_MESSAGE": "Không cập nhật được khách, vui lòng thử lại sau.",
         "FORM": {
           "BIO": {
             "PLACEHOLDER": "Nhập giới thiệu"
@@ -780,8 +780,8 @@
             "PLACEHOLDER": "Nhập số điện thoại"
           }
         },
-        "SUCCESS_MESSAGE": "Đã cập nhật liên hệ",
-        "UPDATE_BUTTON": "Cập nhật liên hệ"
+        "SUCCESS_MESSAGE": "Đã cập nhật khách",
+        "UPDATE_BUTTON": "Cập nhật khách"
       },
       "SOCIAL_MEDIA": {
         "FORM": {
@@ -821,18 +821,18 @@
         }
       },
       "CREATED_AT": "Tạo {date}",
-      "DELETE_CONTACT_DESCRIPTION": "Xóa vĩnh viễn liên hệ này. Thao tác không thể hoàn tác",
+      "DELETE_CONTACT_DESCRIPTION": "Xóa vĩnh viễn khách này. Thao tác không thể hoàn tác",
       "DELETE_DIALOG": {
-        "DESCRIPTION": "Bạn có chắc muốn xóa liên hệ này?"
+        "DESCRIPTION": "Bạn có chắc muốn xóa khách này?"
       },
       "LAST_ACTIVITY": "Hoạt động {date}"
     },
     "EMPTY_STATE": {
-      "ACTIVE_EMPTY_STATE_TITLE": "Hiện không có liên hệ nào đang hoạt động 🌙",
-      "BUTTON_LABEL": "Thêm liên hệ",
-      "LIST_EMPTY_STATE_TITLE": "Chế độ xem này chưa có liên hệ nào 📋",
-      "SUBTITLE": "Bắt đầu thêm liên hệ bằng nút bên dưới",
-      "TITLE": "Tài khoản chưa có liên hệ nào"
+      "ACTIVE_EMPTY_STATE_TITLE": "Hiện không có khách nào đang hoạt động 🌙",
+      "BUTTON_LABEL": "Thêm khách",
+      "LIST_EMPTY_STATE_TITLE": "Chế độ xem này chưa có khách nào 📋",
+      "SUBTITLE": "Bắt đầu thêm khách bằng nút bên dưới",
+      "TITLE": "Tài khoản chưa có khách nào"
     },
     "FILTER": {
       "ACTIVE_FILTERS": {
@@ -850,19 +850,19 @@
     },
     "HEADER": {
       "ACTIONS": {
-        "BLOCK_ERROR_MESSAGE": "Không chặn được liên hệ, vui lòng thử lại sau.",
-        "BLOCK_SUCCESS_MESSAGE": "Đã chặn liên hệ",
+        "BLOCK_ERROR_MESSAGE": "Không chặn được khách, vui lòng thử lại sau.",
+        "BLOCK_SUCCESS_MESSAGE": "Đã chặn khách",
         "CONTACT_CREATION": {
-          "ADD_CONTACT": "Thêm liên hệ",
-          "ERROR_MESSAGE": "Không lưu được liên hệ, vui lòng thử lại sau.",
-          "EXPORT_CONTACT": "Xuất danh sách liên hệ",
-          "IMPORT_CONTACT": "Nhập danh sách liên hệ",
-          "SAVE_CONTACT": "Lưu liên hệ"
+          "ADD_CONTACT": "Thêm khách",
+          "ERROR_MESSAGE": "Không lưu được khách, vui lòng thử lại sau.",
+          "EXPORT_CONTACT": "Xuất danh sách khách",
+          "IMPORT_CONTACT": "Nhập danh sách khách",
+          "SAVE_CONTACT": "Lưu khách"
         },
         "EXPORT_CONTACT": {
           "CONFIRM": "Xuất",
-          "DESCRIPTION": "Xuất nhanh tệp CSV chứa đầy đủ thông tin liên hệ",
-          "TITLE": "Xuất danh sách liên hệ"
+          "DESCRIPTION": "Xuất nhanh tệp CSV chứa đầy đủ thông tin khách",
+          "TITLE": "Xuất danh sách khách"
         },
         "FILTERS": {
           "CREATE_SEGMENT": {
@@ -881,7 +881,7 @@
         "IMPORT_CONTACT": {
           "CHOOSE_FILE": "Chọn tệp",
           "SUCCESS_MESSAGE": "Bạn sẽ nhận email khi quá trình nhập hoàn tất.",
-          "TITLE": "Nhập danh sách liên hệ"
+          "TITLE": "Nhập danh sách khách"
         },
         "ORDER": {
           "LABEL": "Thứ tự",
@@ -895,17 +895,17 @@
             "EMAIL": "Email"
           }
         },
-        "UNBLOCK_ERROR_MESSAGE": "Không bỏ chặn được liên hệ, vui lòng thử lại sau.",
-        "UNBLOCK_SUCCESS_MESSAGE": "Đã bỏ chặn liên hệ"
+        "UNBLOCK_ERROR_MESSAGE": "Không bỏ chặn được khách, vui lòng thử lại sau.",
+        "UNBLOCK_SUCCESS_MESSAGE": "Đã bỏ chặn khách"
       },
-      "ACTIVE_TITLE": "Liên hệ đang hoạt động",
-      "BLOCK_CONTACT": "Chặn liên hệ",
-      "UNBLOCK_CONTACT": "Bỏ chặn liên hệ"
+      "ACTIVE_TITLE": "Khách đang hoạt động",
+      "BLOCK_CONTACT": "Chặn khách",
+      "UNBLOCK_CONTACT": "Bỏ chặn khách"
     },
     "LOAD_MORE": "Tải thêm",
     "SIDEBAR": {
       "ATTRIBUTES": {
-        "EMPTY_STATE": "Tài khoản chưa có thuộc tính tùy chỉnh cho liên hệ. Bạn có thể tạo trong phần cài đặt.",
+        "EMPTY_STATE": "Tài khoản chưa có thuộc tính tùy chỉnh cho khách. Bạn có thể tạo trong phần cài đặt.",
         "SEARCH_PLACEHOLDER": "Tìm thuộc tính",
         "TRIGGER": {
           "INPUT": "Nhập giá trị"
@@ -918,21 +918,21 @@
         }
       },
       "MERGE": {
-        "DESCRIPTION": "Gộp hai hồ sơ thành một, bao gồm mọi thuộc tính và cuộc trò chuyện. Nếu có xung đột, thuộc tính của liên hệ chính sẽ được giữ.",
-        "EMPTY_STATE": "Không tìm thấy liên hệ",
+        "DESCRIPTION": "Gộp hai hồ sơ thành một, bao gồm mọi thuộc tính và cuộc trò chuyện. Nếu có xung đột, thuộc tính của hồ sơ chính sẽ được giữ.",
+        "EMPTY_STATE": "Không tìm thấy khách",
         "PARENT": "Sẽ được gộp",
-        "PLACEHOLDER": "Tìm liên hệ chính",
+        "PLACEHOLDER": "Tìm hồ sơ chính",
         "PRIMARY_HELP_LABEL": "Được giữ lại",
-        "PRIMARY_REQUIRED_ERROR": "Vui lòng chọn liên hệ để gộp trước khi tiếp tục",
-        "SEARCH_ERROR_MESSAGE": "Không tìm được liên hệ, vui lòng thử lại sau."
+        "PRIMARY_REQUIRED_ERROR": "Vui lòng chọn khách để gộp trước khi tiếp tục",
+        "SEARCH_ERROR_MESSAGE": "Không tìm được khách, vui lòng thử lại sau."
       },
       "NOTES": {
         "ADD_NOTE": "Thêm ghi chú",
         "COLLAPSE": "Thu gọn",
         "CONVERSATION_EMPTY_STATE": "Chưa có ghi chú. Dùng nút Thêm ghi chú để tạo.",
-        "EMPTY_STATE": "Liên hệ này chưa có ghi chú. Hãy nhập vào ô phía trên để thêm.",
+        "EMPTY_STATE": "Khách này chưa có ghi chú. Hãy nhập vào ô phía trên để thêm.",
         "EXPAND": "Mở rộng",
-        "NO_NOTES": "Chưa có ghi chú. Bạn có thể thêm ghi chú ở trang chi tiết liên hệ.",
+        "NO_NOTES": "Chưa có ghi chú. Bạn có thể thêm ghi chú ở trang chi tiết khách.",
         "SAVE": "Lưu ghi chú",
         "WROTE": "đã viết",
         "YOU": "Bạn"
@@ -940,7 +940,7 @@
       "TABS": {
         "ATTRIBUTES": "Thuộc tính",
         "HISTORY": "Lịch sử",
-        "MEDIA": "Tệp phương tiện",
+        "MEDIA": "Tệp",
         "MERGE": "Gộp"
       }
     },
@@ -6093,12 +6093,43 @@
           "TITLE": "Bắt đầu từ hồ sơ",
           "BODY": "Điền hồ sơ thương hiệu trước để AI viết đúng giọng của shop."
         }
+      },
+      "CAMPAIGNS": {
+        "NAME": "Chiến dịch",
+        "CREATE": {
+          "TITLE": "Tạo chiến dịch",
+          "BODY": "Làm theo 6 bước: mục tiêu, khách nhận, nội dung, kênh và lịch, xem lại rồi gửi."
+        },
+        "LIST": {
+          "TITLE": "Chiến dịch của shop",
+          "BODY": "Bản nháp, chiến dịch đã hẹn giờ và đã gửi. Bấm vào một chiến dịch để xem kết quả."
+        },
+        "WEBSITE": {
+          "TITLE": "Lời chào trên website",
+          "BODY": "Đặt tin tự hiện cho khách đang xem website của bạn."
+        }
       }
     },
     "TRIAL": {
       "DAYS_LEFT": "Còn {count} ngày dùng thử",
       "EXPIRED": "Đã hết hạn dùng thử",
       "VIEW_PLANS": "Xem gói"
+    }
+  },
+  "KALO_SHELL2": {
+    "NOTIFICATIONS": {
+      "DESC": "Hội thoại được giao cho bạn và những lần bạn được nhắc tên"
+    },
+    "POS": {
+      "DESC": "Lập đơn nhanh cho khách mua trực tiếp"
+    },
+    "CAMPAIGNS": {
+      "WEBSITE": {
+        "TITLE": "Lời chào trên website",
+        "DESC": "Tin tự hiện cho khách đang xem website của bạn",
+        "ADD": "Thêm lời chào",
+        "EMPTY": "Chưa có lời chào nào. Thêm một lời chào để chào khách khi họ mở website."
+      }
     }
   }
 }
