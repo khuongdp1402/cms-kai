@@ -242,11 +242,26 @@ const buttonClass =
               "
               @click="chooseQr(order)"
             >
-              <span class="inline-flex items-center gap-2">
+              <!-- One order: the button says what it does. -->
+              <span
+                v-if="qrOptions.length === 1"
+                class="inline-flex items-center justify-center flex-1 gap-2 font-semibold"
+              >
                 <KaloIcon name="qr" class="size-4" />
-                <b>#{{ order.number }}</b>
+                {{
+                  t('KALO_POLISH4.CHAT.QR_SEND_ONE', {
+                    number: order.number,
+                    amount: formatVnd(order.total),
+                  })
+                }}
               </span>
-              <span>{{ formatVnd(order.total) }}</span>
+              <template v-else>
+                <span class="inline-flex items-center gap-2">
+                  <KaloIcon name="qr" class="size-4" />
+                  <b>#{{ order.number }}</b>
+                </span>
+                <span>{{ formatVnd(order.total) }}</span>
+              </template>
             </button>
           </li>
         </ul>

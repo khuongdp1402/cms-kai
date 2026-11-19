@@ -111,6 +111,9 @@ describe('KaloComposerActions', () => {
     expect(wrapper.find('[data-test="qr-confirm-note"]').text()).toContain(
       'Số tiền'
     );
+    expect(wrapper.find('[data-test="qr-option"]').text()).toMatch(
+      /^Gửi mã QR · #1042 · [\d.]+\s?đ$/
+    );
     await wrapper.find('[data-test="qr-option"]').trigger('click');
     await flushPromises();
     expect(sendQr.mock.calls[0][1]).toEqual({ id: 3, conversationId: 12 });

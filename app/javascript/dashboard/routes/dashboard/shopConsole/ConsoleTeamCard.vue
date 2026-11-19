@@ -1,7 +1,8 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import InboxMembersAPI from 'dashboard/api/inboxMembers';
 import { useI18n } from 'vue-i18n';
-import { useRoute } from 'vue-router';
+import { useOneShotQueryFlag } from 'dashboard/composables/useOneShotQueryFlag';
 import { useMapGetter, useStore } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
 import Avatar from 'next/avatar/Avatar.vue';
@@ -23,8 +24,7 @@ const agents = useMapGetter('agents/getAgents');
 const teams = useMapGetter('teams/getTeams');
 
 // ?invite=1 (setup checklist "Mời nhân viên") opens the invite drawer.
-const route = useRoute();
-const isInviteOpen = ref(route?.query?.invite === '1');
+const isInviteOpen = ref(useOneShotQueryFlag('invite'));
 const inboxAgent = ref(null);
 
 onMounted(() => {
@@ -35,6 +35,47 @@ onMounted(() => {
 
 const roleKey = agent =>
   agent.role === 'administrator' ? 'ADMINISTRATOR' : 'AGENT';
+
+// Which channels each agent answers: agent id -> inbox names, read from the
+// inbox members API. Null while loading or when it failed (line hidden).
+const inboxes = useMapGetter('inboxes/getInboxes');
+const agentInboxes = ref(null);
+let latestMembersLoad = 0;
+const loadAgentInboxes = async () => {
+  latestMembersLoad += 1;
+  const request = latestMembersLoad;
+  const list = inboxes.value || [];
+  if (!list.length) {
+    agentInboxes.value = null;
+    return;
+  }
+  try {
+    const results = await Promise.all(
+      list.map(inbox => InboxMembersAPI.show(inbox.id))
+    );
+    if (request !== latestMembersLoad) return;
+    const byAgent = {};
+    results.forEach(({ data }, index) => {
+      (data?.payload || []).forEach(member => {
+        byAgent[member.id] = [...(byAgent[member.id] || []), list[index].name];
+      });
+    });
+    agentInboxes.value = byAgent;
+  } catch {
+    if (request === latestMembersLoad) agentInboxes.value = null;
+  }
+};
+watch(
+  () => (inboxes.value || []).map(inbox => inbox.id).join(','),
+  loadAgentInboxes,
+  { immediate: true }
+);
+const channelsOf = agent => agentInboxes.value?.[agent.id] || [];
+
+const onAddedToInbox = () => {
+  inboxAgent.value = null;
+  loadAgentInboxes();
+};
 
 const onInvited = agent => {
   isInviteOpen.value = false;
@@ -92,6 +133,24 @@ const onInvited = agent => {
               </p>
               <p class="mb-0 text-xs truncate text-n-slate-11">
                 {{ agent.email }}
+              </p>
+              <p
+                v-if="agentInboxes"
+                :data-test="`console-agent-channels-${agent.id}`"
+                class="mb-0 text-xs truncate"
+                :class="
+                  channelsOf(agent).length
+                    ? 'text-n-slate-11'
+                    : 'text-n-amber-11'
+                "
+              >
+                {{
+                  channelsOf(agent).length
+                    ? t('KALO_POLISH4.CONSOLE.AGENT_CHANNELS', {
+                        names: channelsOf(agent).join(', '),
+                      })
+                    : t('KALO_POLISH4.CONSOLE.AGENT_NO_CHANNELS')
+                }}
               </p>
             </div>
             <span class="bg-n-alpha-2 text-n-slate-12" :class="[chipClass]">
@@ -193,7 +252,7 @@ const onInvited = agent => {
       v-if="inboxAgent"
       :agent="inboxAgent"
       @close="inboxAgent = null"
-      @added="inboxAgent = null"
+      @added="onAddedToInbox"
     />
   </KaloCard>
 </template>

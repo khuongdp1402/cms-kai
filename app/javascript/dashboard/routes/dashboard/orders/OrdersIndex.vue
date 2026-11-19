@@ -2,10 +2,10 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
-import { useRoute } from 'vue-router';
 import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useAlert } from 'dashboard/composables';
+import { useOneShotQueryFlag } from 'dashboard/composables/useOneShotQueryFlag';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
@@ -26,13 +26,12 @@ const { t } = useI18n();
 const { isOn } = useKaloFeatures();
 const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 const store = useStore();
-const route = useRoute();
 
 const status = ref(undefined);
 const delivery = ref(undefined);
 const query = ref('');
 // ?new=1 (setup checklist, "Tạo đơn" links) opens the create form.
-const showForm = ref(route?.query?.new === '1');
+const showForm = ref(useOneShotQueryFlag('new'));
 const openOrderId = ref(null);
 let searchTimer = null;
 

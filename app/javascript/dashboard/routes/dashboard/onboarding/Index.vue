@@ -25,7 +25,11 @@ import {
   REFERRAL_SOURCE_OPTIONS,
   USER_ROLE_OPTIONS,
 } from './shared/constants';
-import { translateOptions } from './shared/kaloOptionLabels';
+import {
+  kaloIndustryOptions,
+  kaloReferralOptions,
+  translateOptions,
+} from './shared/kaloOptionLabels';
 
 const { t } = useI18n();
 const router = useRouter();
@@ -71,10 +75,10 @@ const roleOptions = computed(() =>
   translateOptions(USER_ROLE_OPTIONS, 'ROLE', t)
 );
 const industryOptions = computed(() =>
-  translateOptions(INDUSTRY_OPTIONS, 'INDUSTRY', t)
+  translateOptions(kaloIndustryOptions(INDUSTRY_OPTIONS), 'INDUSTRY', t)
 );
 const referralOptions = computed(() =>
-  translateOptions(REFERRAL_SOURCE_OPTIONS, 'REFERRAL', t)
+  translateOptions(kaloReferralOptions(REFERRAL_SOURCE_OPTIONS), 'REFERRAL', t)
 );
 
 const v$ = useVuelidate(validationRules, {
