@@ -41,6 +41,12 @@ RSpec.describe Kchat::Order do
       expect(pos_qr.delivery_status).to eq('cancelled')
     end
 
+    it 'refuses to ship a POS sale' do
+      pos = build_order(attributes: { source: 'pos', payment_method: 'cash' })
+      expect { pos.transition!(:ship) }.to raise_error(described_class::InvalidTransition)
+      expect(pos.reload.status).to eq('paid')
+    end
+
     it 'follows the order status for orders that ship' do
       waiting = build_order(attributes: base.merge(payment_method: 'cash'))
       shipping = build_order(attributes: base.merge(payment_method: 'cash')).transition!(:ship)

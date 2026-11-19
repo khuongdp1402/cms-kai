@@ -37,12 +37,14 @@ const timelineSteps = computed(() => {
       completed: 4,
     }[props.order.status] || 0;
 
+  // POS sales are handed over at the counter: no delivery step.
+  const ships = props.order.delivery_status !== 'not_applicable';
   return [
     { key: 'CREATED', done: true },
     { key: 'PAID', done: rank >= 2 },
-    { key: 'SHIP', done: rank >= 3 },
+    ships ? { key: 'SHIP', done: rank >= 3 } : null,
     { key: 'COMPLETE', done: rank >= 4 },
-  ];
+  ].filter(Boolean);
 });
 
 onMounted(() => {
@@ -86,7 +88,8 @@ const canCancel = computed(() =>
     <div
       v-if="!isCancelled"
       data-test="order-timeline"
-      class="grid grid-cols-4 gap-2 p-3 border rounded-xl bg-n-solid-2 border-n-weak"
+      class="grid gap-2 p-3 border rounded-xl bg-n-solid-2 border-n-weak"
+      :class="timelineSteps.length === 3 ? 'grid-cols-3' : 'grid-cols-4'"
     >
       <div
         v-for="(step, idx) in timelineSteps"

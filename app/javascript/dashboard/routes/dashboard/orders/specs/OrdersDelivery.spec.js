@@ -5,6 +5,7 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import { kaloFeatureGetters } from 'dashboard/helper/specs/kaloFeatureGetters';
 import OrdersIndex from '../OrdersIndex.vue';
+import OrderDrawer from '../OrderDrawer.vue';
 import { deliveryChip, awaitsDelivery } from '../orderStatus';
 import { makeOrder } from './kaloOrdersFixtures';
 
@@ -117,5 +118,34 @@ describe('Order delivery for counter sales', () => {
     });
     await wrapper.find('[data-test="tab-all"]').trigger('click');
     expect(fetch.mock.calls.at(-1)[1].delivery).toBeUndefined();
+  });
+
+  it('the drawer timeline has no Giao hàng step for a POS sale', () => {
+    const i18n = createI18n({
+      legacy: false,
+      locale: 'vi',
+      messages: { vi: viMessages },
+    });
+    const mountDrawer = order =>
+      mount(OrderDrawer, {
+        props: { order },
+        global: {
+          plugins: [i18n],
+          stubs: { RouterLink: { template: '<a><slot /></a>' } },
+        },
+      });
+    const stepCount = wrapper =>
+      wrapper.findAll('[data-test="order-timeline"] > div').length;
+    const pos = mountDrawer(POS_PAID);
+    const shipLabel = viMessages.KALO_ORDERS.DRAWER.TIMELINE.SHIP;
+    expect(stepCount(pos)).toBe(3);
+    expect(pos.find('[data-test="order-timeline"]').text()).not.toContain(
+      shipLabel
+    );
+    const chat = mountDrawer(CHAT_PAID);
+    expect(stepCount(chat)).toBe(4);
+    expect(chat.find('[data-test="order-timeline"]').text()).toContain(
+      shipLabel
+    );
   });
 });
