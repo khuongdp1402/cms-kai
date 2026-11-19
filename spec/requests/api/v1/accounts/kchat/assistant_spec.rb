@@ -122,12 +122,44 @@ RSpec.describe 'Kchat assistant API', type: :request do
       expect(system_prompt).not_to include('Đối thủ')
     end
 
+    it 'ignores a non-hash profile' do
+      account.update!(custom_attributes: { 'brand_growth' => { 'profile' => 'oops' } })
+      stub_ai
+      ask(mode: 'write')
+      expect(response).to have_http_status(:ok)
+    end
+
+    it 'caps each profile field to 500 characters' do
+      account.update!(custom_attributes: { 'brand_growth' => { 'profile' => { 'brand_name' => 'Hana', 'usp' => "#{'u' * 500}ENDMARK" } } })
+      stub_ai
+      ask(mode: 'write')
+      expect(system_prompt).to include('u' * 500)
+      expect(system_prompt).not_to include('ENDMARK')
+    end
+
     it 'strips hard-banned phrases from the reply' do
       stub_ai('Giá rẻ nhất thị trường, trị khỏi 100%')
       ask(mode: 'write')
 
       expect(response.parsed_body['reply']).not_to include('rẻ nhất')
       expect(response.parsed_body['reply']).not_to include('trị khỏi 100%')
+    end
+  end
+
+  describe 'log filtering' do
+    let(:filter) { ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters) }
+
+    it 'filters message and history content for this endpoint only' do
+      params = { 'controller' => 'api/v1/accounts/kchat/assistant', 'message' => 'bí mật',
+                 'history' => [{ 'role' => 'user', 'content' => 'riêng tư' }] }
+      filtered = filter.filter(params.deep_dup)
+      expect(filtered['message']).to eq('[FILTERED]')
+      expect(filtered['history'].first).to include('content' => '[FILTERED]', 'role' => 'user')
+    end
+
+    it 'leaves other endpoints untouched' do
+      params = { 'controller' => 'api/v1/accounts/conversations/messages', 'message' => 'hello', 'content' => 'hi' }
+      expect(filter.filter(params.deep_dup)).to include('message' => 'hello', 'content' => 'hi')
     end
   end
 

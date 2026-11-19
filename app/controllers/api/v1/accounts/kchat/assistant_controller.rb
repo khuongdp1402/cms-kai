@@ -7,7 +7,8 @@ class Api::V1::Accounts::Kchat::AssistantController < Api::V1::Accounts::Kchat::
   MAX_MESSAGE_CHARS = 2_000
   MAX_HISTORY_ITEMS = 6
   MAX_HISTORY_CONTENT_CHARS = 2_000
-  GUIDE_PATH = Rails.root.join('config/kalo/assistant_guide.vi.md')
+  MAX_PROFILE_FIELD_CHARS = 500
+  GUIDE = Rails.root.join('config/kalo/assistant_guide.vi.md').read.strip.freeze
   BASE_PROMPT = 'Bạn là trợ lý AI trong ứng dụng Kalo cho chủ shop online Việt Nam. Trả lời tiếng Việt, ngắn gọn, thực tế.'
 
   before_action :require_active_subscription!
@@ -62,7 +63,7 @@ class Api::V1::Accounts::Kchat::AssistantController < Api::V1::Accounts::Kchat::
   end
 
   def help_prompt
-    "Trả lời câu hỏi cách dùng Kalo CHỈ dựa vào tài liệu sau.\n\n#{GUIDE_PATH.read.strip}"
+    "Trả lời câu hỏi cách dùng Kalo CHỈ dựa vào tài liệu sau.\n\n#{GUIDE}"
   end
 
   def insights_prompt
@@ -83,12 +84,17 @@ class Api::V1::Accounts::Kchat::AssistantController < Api::V1::Accounts::Kchat::
   end
 
   def brand_profile
-    @brand_profile ||= Current.account.custom_attributes.to_h.dig('brand_growth', 'profile').to_h
+    @brand_profile ||= begin
+      profile = Current.account.custom_attributes.to_h.dig('brand_growth', 'profile')
+      profile = {} unless profile.is_a?(Hash)
+      profile.transform_values { |v| v.is_a?(String) ? v.first(MAX_PROFILE_FIELD_CHARS) : v }
+    end
   end
 
   def banned_phrases
     bans = brand_profile['hard_bans']
     bans = bans.split(/[,;\n]/) if bans.is_a?(String)
+    bans = bans.first(50).map { |b| b.to_s.first(MAX_PROFILE_FIELD_CHARS) } if bans.is_a?(Array)
     (Ai::CustomLlmService::DEFAULT_HARD_BANS + Array(bans)).map { |b| b.to_s.strip }.compact_blank.uniq
   end
 

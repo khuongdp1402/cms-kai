@@ -12,3 +12,11 @@ filter_regex = /\A(?!.*\bwebsite_token\b).*token/i
 
 # Apply the regex for filtering
 Rails.application.config.filter_parameters += [filter_regex]
+
+# The Kalo assistant receives free-text chat from shop owners (may include customer data): keep it out of the logs.
+# Scoped by controller so `message`/`content` of other endpoints keep logging as before.
+kalo_assistant_controller = 'api/v1/accounts/kchat/assistant'
+Rails.application.config.filter_parameters << lambda { |key, value, original_params|
+  filtered = %w[message content].include?(key.to_s) && original_params['controller'] == kalo_assistant_controller
+  value.replace('[FILTERED]') if filtered && value.is_a?(String)
+}
