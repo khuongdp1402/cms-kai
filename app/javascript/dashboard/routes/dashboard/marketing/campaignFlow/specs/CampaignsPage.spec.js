@@ -6,6 +6,7 @@ import viMessages from 'dashboard/i18n/ktech/vi.json';
 import broadcastsAPI from 'dashboard/api/kchat/broadcasts';
 import CampaignsPage from '../../CampaignsPage.vue';
 import CampaignResults from '../CampaignResults.vue';
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
 
 vi.mock('dashboard/api/kchat/broadcasts', () => ({
   default: {
@@ -97,7 +98,8 @@ const mountPage = async ({
       plugins: [router, store, i18n],
       stubs: {
         RouterLink: RouterLinkStub,
-        MarketingCampaigns: { template: '<div data-test="livechat" />' },
+        // The website greetings section (live chat campaigns) of the page.
+        WebsiteCampaignsCard: { template: '<div data-test="livechat" />' },
       },
     },
   });
@@ -171,6 +173,15 @@ describe('Chiến dịch page', () => {
       1
     );
     expect(wrapper.find('[data-test="livechat"]').exists()).toBe(true);
+  });
+
+  it('renders the page targets of the Chiến dịch tour', async () => {
+    const wrapper = await mountPage();
+    // campaign-website lives in WebsiteCampaignsCard (stubbed here, own spec).
+    expectTourTargets(wrapper, 'campaigns', [
+      'campaign-create',
+      'campaign-list',
+    ]);
   });
 
   it('shows the create button with its tour anchor for admins and opens the wizard', async () => {

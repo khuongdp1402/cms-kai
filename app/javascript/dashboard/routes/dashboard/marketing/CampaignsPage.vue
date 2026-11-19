@@ -9,13 +9,13 @@ import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
-import MarketingCampaigns from './MarketingCampaigns.vue';
+import WebsiteCampaignsCard from './WebsiteCampaignsCard.vue';
 import CampaignList from './campaignFlow/CampaignList.vue';
 import CampaignWizard from './campaignFlow/CampaignWizard.vue';
 import CampaignResults from './campaignFlow/CampaignResults.vue';
 
 // Chiến dịch page (guided UX spec §5): broadcast campaigns with the A–Z
-// wizard, then the existing website (live chat) campaign list.
+// wizard, then the website greetings (live chat campaigns) section.
 const { t } = useI18n();
 const store = useStore();
 const { isAdmin } = useAdmin();
@@ -106,6 +106,7 @@ onMounted(() => {
 
     <KaloCard
       flush
+      data-tour="campaign-list"
       :title="t('KALO_CAMPAIGN_FLOW.LIST.TITLE')"
       :description="t('KALO_CAMPAIGN_FLOW.LIST.DESC')"
     >
@@ -133,7 +134,7 @@ onMounted(() => {
       />
     </KaloCard>
 
-    <MarketingCampaigns :show-broadcasts="false" />
+    <WebsiteCampaignsCard />
 
     <CampaignWizard
       v-if="wizardOpen"
