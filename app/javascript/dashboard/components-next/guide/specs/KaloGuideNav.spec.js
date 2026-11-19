@@ -4,6 +4,7 @@ import productsAPI from 'dashboard/api/kchat/products';
 import ordersAPI from 'dashboard/api/kchat/orders';
 import paymentSettingsAPI from 'dashboard/api/kchat/paymentSettings';
 import KaloGuideNav from '../KaloGuideNav.vue';
+import KaloGuideTabDot from '../KaloGuideTabDot.vue';
 import { resetKaloSetupCache } from '../useKaloSetup';
 import { resetKaloTrialCache } from '../useKaloTrial';
 import { createGuideEnv } from './guideTestEnv';
@@ -193,6 +194,45 @@ describe('KaloGuideNav', () => {
       await flushPromises();
       expect(store.state.uiSettings.kalo_setup[1].hidden).toBe(false);
       expect(router.currentRoute.value.name).toBe('kalo_overview');
+    });
+  });
+
+  describe('dot on the mobile "Thêm" tab', () => {
+    const mountDot = async envOptions => {
+      const env = createGuideEnv(envOptions);
+      await env.router.push({ name: 'home', params: { accountId: 1 } });
+      const wrapper = mount(KaloGuideTabDot, {
+        global: { plugins: [env.router, env.store, env.i18n] },
+      });
+      wrappers.push(wrapper);
+      await flushPromises();
+      return wrapper.find('[data-test-id="kalo-more-dot"]');
+    };
+
+    it('signals remaining setup steps with a screen-reader label', async () => {
+      const dot = await mountDot();
+      expect(dot.find('.sr-only').text()).toBe('Còn 5 bước thiết lập');
+      expect(dot.find('[aria-hidden="true"]').classes()).toContain(
+        'bg-n-blue-9'
+      );
+    });
+
+    it('turns red and names the trial when 3 days or fewer are left', async () => {
+      subscriptionAPI.get.mockResolvedValue(trial({ days_left: 2 }));
+      const dot = await mountDot({
+        uiSettings: { kalo_setup: { 1: { hidden: true } } },
+      });
+      expect(dot.find('.sr-only').text()).toBe('Còn 2 ngày dùng thử');
+      expect(dot.find('[aria-hidden="true"]').classes()).toContain(
+        'bg-n-ruby-9'
+      );
+    });
+
+    it('is absent when setup is hidden and the trial is not urgent', async () => {
+      const dot = await mountDot({
+        uiSettings: { kalo_setup: { 1: { hidden: true } } },
+      });
+      expect(dot.exists()).toBe(false);
     });
   });
 });
