@@ -12,6 +12,10 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B59 (2026-11-19): `rails db:migrate` ở stack dev tự sửa comment schema trong ~13 file model.**
+  - Triệu chứng: sau migrate, `git status` hiện `app/models/*.rb` bị sửa dù không ai đụng.
+  - Nguyên nhân: gem annotate chạy kèm `db:migrate` ở development và ghi lại khối `# == Schema Information`.
+  - Quy tắc: sau migrate trên dev, kiểm `git diff -U0 app/models | grep -E '^[+-]' | grep -vE '^[+-]#'` rỗng (chỉ comment) rồi hoàn tác; không commit lẫn các thay đổi đó.
 - **B65 (2026-11-19): Thêm cờ vào `config/features.yml` mà không cập nhật spec và dữ liệu cũ.**
   - Triệu chứng: `spec/models/account_spec.rb` (bảng bit của `feature_flags_ext_1`) đã hỏng sẵn trên `main` vì cờ `zalo_personal_native` được thêm mà không sửa spec. Ngoài ra cờ mới có `enabled: true` chỉ áp cho tài khoản tạo sau đó: tài khoản cũ có bit = 0 nên mất chức năng.
   - Nguyên nhân: bit của FlagShihTzu tính theo thứ tự trong cột; mặc định chỉ chạy ở `before_create` qua `ACCOUNT_LEVEL_FEATURE_DEFAULTS` (ConfigLoader nạp khi `db:migrate`).
