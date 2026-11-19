@@ -23,6 +23,12 @@ const isNotConfigured = ref(false);
 const copied = ref(false);
 
 const isExpired = computed(() => subscription.value?.status === 'expired');
+// Trial state always comes back; bank/memo/prices only when Casso is configured.
+const hasPayment = computed(
+  () =>
+    subscription.value?.billing_configured !== false &&
+    !!subscription.value?.bank
+);
 const planName = computed(() =>
   subscription.value?.plan
     ? t(`KALO_BILLING.PLANS.${subscription.value.plan}`)
@@ -137,7 +143,16 @@ onMounted(async () => {
           </div>
         </div>
 
+        <p
+          v-if="!hasPayment"
+          data-test="billing-not-configured"
+          role="status"
+          class="p-4 text-sm font-medium border rounded-2xl bg-n-amber-3 text-n-amber-11 border-n-amber-5"
+        >
+          {{ t('KALO_PAYMENT.BILLING_NOT_CONFIGURED') }}
+        </p>
         <div
+          v-if="hasPayment"
           data-test="renew"
           :data-primary="isExpired"
           class="flex flex-col gap-3 p-5 border rounded-2xl"
@@ -185,7 +200,10 @@ onMounted(async () => {
           </dl>
         </div>
 
-        <div class="p-5 border rounded-2xl bg-n-solid-1 border-n-weak">
+        <div
+          v-if="hasPayment"
+          class="p-5 border rounded-2xl bg-n-solid-1 border-n-weak"
+        >
           <h2 class="mb-3 text-base font-bold text-n-slate-12">
             {{ t('KALO_BILLING.PRICES_TITLE') }}
           </h2>

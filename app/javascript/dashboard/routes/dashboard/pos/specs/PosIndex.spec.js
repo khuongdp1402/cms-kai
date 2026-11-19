@@ -3,9 +3,15 @@ import { createStore } from 'vuex';
 import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import PosIndex from '../PosIndex.vue';
+import { routeLocationKey } from 'vue-router';
 import { makeProduct } from '../../orders/specs/kaloOrdersFixtures';
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
 
-const mountPos = (products, create = vi.fn().mockResolvedValue({})) => {
+const mountPos = (
+  products,
+  create = vi.fn().mockResolvedValue({}),
+  route = undefined
+) => {
   const store = createStore({
     modules: {
       kchatProducts: {
@@ -31,6 +37,7 @@ const mountPos = (products, create = vi.fn().mockResolvedValue({})) => {
   return mount(PosIndex, {
     global: {
       plugins: [store, i18n],
+      provide: route ? { [routeLocationKey]: route } : {},
       stubs: { RouterLink: { template: '<a><slot /></a>' } },
     },
   });
@@ -130,5 +137,19 @@ describe('PosIndex', () => {
     expect(wrapper.find('[data-test="pos-product-modal"]').exists()).toBe(
       false
     );
+  });
+
+  it('renders every target of the POS tour', async () => {
+    const wrapper = mountPos([makeProduct()]);
+    await flushPromises();
+    expectTourTargets(wrapper, 'pos');
+  });
+
+  it('opens the add-product form from ?add_product=1 (setup checklist link)', async () => {
+    const wrapper = mountPos([makeProduct()], undefined, {
+      query: { add_product: '1' },
+    });
+    await flushPromises();
+    expect(wrapper.find('[data-test="pos-product-modal"]').exists()).toBe(true);
   });
 });

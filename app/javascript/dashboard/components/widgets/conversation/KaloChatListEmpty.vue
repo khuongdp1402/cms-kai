@@ -1,6 +1,7 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloSetupChecklist from 'next/guide/KaloSetupChecklist.vue';
 
 defineProps({
   isFiltered: { type: Boolean, default: false },
@@ -44,5 +45,9 @@ const { t } = useI18n();
     >
       {{ t('KALO_CHAT_LIST.EMPTY.CLEAR') }}
     </button>
+    <!-- Mobile shows only this list, so the setup list lives here too (spec §3.1). -->
+    <div v-if="!isFiltered" class="w-full pt-2 md:hidden">
+      <KaloSetupChecklist variant="compact" />
+    </div>
   </div>
 </template>

@@ -6,6 +6,7 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import reportsAPI from 'dashboard/api/kchat/reports';
 import OverviewIndex from '../OverviewIndex.vue';
+import KaloSetupChecklist from 'dashboard/components-next/guide/KaloSetupChecklist.vue';
 
 vi.mock('dashboard/api/kchat/reports', () => ({
   default: {
@@ -187,5 +188,16 @@ describe('OverviewIndex', () => {
     await flushPromises();
     expect(reportsAPI.qualityOverview).toHaveBeenLastCalledWith('month');
     expect(wrapper.find('[data-test="overview-error"]').exists()).toBe(true);
+  });
+
+  it('puts the setup checklist first, above the KPIs', async () => {
+    reportsAPI.qualityOverview.mockResolvedValue({ data: { kpis: {} } });
+    const wrapper = await mountOverview();
+    await flushPromises();
+    const checklist = wrapper.findComponent(KaloSetupChecklist);
+    expect(checklist.exists()).toBe(true);
+    expect(checklist.props('variant')).toBe('card');
+    const html = wrapper.html();
+    expect(html.indexOf('overview-kpi-revenue')).toBeGreaterThan(-1);
   });
 });

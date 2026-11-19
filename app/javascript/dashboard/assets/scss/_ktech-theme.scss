@@ -179,6 +179,85 @@
   }
 }
 
+// Spotlight tours (driver.js, KALO_GUIDE): driver ships its own CSS
+// (imported in components-next/guide/useKaloTour.js). These rules only map its
+// popover to Kalo tokens so it follows light/dark. Unlayered and two classes
+// deep on purpose: driver.css is unlayered and uses `all: unset` on one class.
+.driver-popover.kalo-tour {
+  font-family: inherit;
+  color: rgb(var(--slate-12));
+  background-color: rgb(var(--solid-1));
+  border: 1px solid rgb(var(--border-strong));
+  border-radius: 1rem;
+  padding: 1rem 1.125rem;
+  max-width: 20rem;
+  box-shadow: 0 12px 32px rgb(0 0 0 / 0.25);
+
+  .driver-popover-title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .driver-popover-description {
+    font-size: 0.875rem;
+    color: rgb(var(--slate-11));
+  }
+
+  .driver-popover-progress-text {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: rgb(var(--slate-11));
+  }
+
+  .driver-popover-footer {
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .driver-popover-footer-btn {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-shadow: none;
+    color: rgb(var(--slate-12));
+    background-color: rgb(var(--solid-1));
+    border: 1px solid rgb(var(--border-strong));
+    border-radius: 0.625rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .driver-popover-next-btn {
+    color: #fff;
+    background-color: rgb(var(--blue-9));
+    border-color: rgb(var(--blue-9));
+  }
+
+  .kalo-tour-skip {
+    border-color: transparent;
+    color: rgb(var(--slate-11));
+  }
+
+  .driver-popover-footer-btn:focus-visible {
+    outline: 2px solid rgb(var(--blue-9));
+    outline-offset: 2px;
+  }
+
+  .driver-popover-arrow-side-left {
+    border-left-color: rgb(var(--solid-1));
+  }
+
+  .driver-popover-arrow-side-right {
+    border-right-color: rgb(var(--solid-1));
+  }
+
+  .driver-popover-arrow-side-top {
+    border-top-color: rgb(var(--solid-1));
+  }
+
+  .driver-popover-arrow-side-bottom {
+    border-bottom-color: rgb(var(--solid-1));
+  }
+}
+
 // Be Vietnam Pro, self-hosted (no Google Fonts)
 @font-face {
   font-family: 'Be Vietnam Pro';

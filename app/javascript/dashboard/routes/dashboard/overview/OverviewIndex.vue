@@ -8,6 +8,7 @@ import reportsAPI from 'dashboard/api/kchat/reports';
 import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloSetupChecklist from 'dashboard/components-next/guide/KaloSetupChecklist.vue';
 import MultiBrandOverviewBar from '../reports/MultiBrandOverviewBar.vue';
 import { formatMoney } from '../reports/formatMoney';
 
@@ -138,6 +139,8 @@ onMounted(load);
         {{ t('KALO_OVERVIEW.ACTIONS.NEW_ORDER') }}
       </router-link>
     </template>
+
+    <KaloSetupChecklist />
 
     <div
       v-if="hasError"

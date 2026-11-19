@@ -1273,6 +1273,7 @@ export default {
   />
   <div
     ref="replyEditor"
+    data-tour="chat-composer"
     class="relative mx-3 mb-3 border shadow-sm reply-box rounded-2xl transition-colors duration-150 motion-reduce:transition-none"
     :class="[
       replyBoxClass,

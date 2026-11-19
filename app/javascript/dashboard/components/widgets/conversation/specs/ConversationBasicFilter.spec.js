@@ -15,6 +15,8 @@ vi.mock('dashboard/composables/useUISettings', () => ({
   useUISettings: () => ({ updateUISettings: mockUpdateUISettings }),
 }));
 
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
+
 const setChatStatusFilter = vi.fn();
 const setChatSortFilter = vi.fn();
 
@@ -45,6 +47,10 @@ const mountFilter = ({
 const state = wrapper => wrapper.vm.$.setupState;
 
 describe('ConversationBasicFilter', () => {
+  it('renders the filters target of the Tin nhắn tour', () => {
+    expectTourTargets(mountFilter(), 'messages', ['chat-filters']);
+  });
+
   it('renders a toolbar button and keeps the menus closed by default', () => {
     const wrapper = mountFilter();
     expect(wrapper.find('button').exists()).toBe(true);

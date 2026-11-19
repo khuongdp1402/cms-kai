@@ -16,6 +16,8 @@ const OrderFormStub = {
   template: '<div data-test="order-form" />',
 };
 
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
+
 const mountIt = ({ sendQr = vi.fn(), props = {} } = {}) => {
   const store = createStore({
     modules: {
@@ -287,5 +289,10 @@ describe('KaloComposerActions', () => {
       expect(wrapper.find('[data-test="created-dialog"]').exists()).toBe(false);
       expect(document.activeElement).toBe(trigger);
     });
+  });
+
+  it('renders the order/QR target of the Tin nhắn tour', () => {
+    const { wrapper } = mountIt();
+    expectTourTargets(wrapper, 'messages', ['chat-order-qr']);
   });
 });

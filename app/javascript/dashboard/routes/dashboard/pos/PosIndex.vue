@@ -2,6 +2,7 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { useAlert } from 'dashboard/composables';
 import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
@@ -10,10 +11,12 @@ import PosCart from './PosCart.vue';
 
 const { t } = useI18n();
 const store = useStore();
+const route = useRoute();
 
 const cart = ref(null);
 const search = ref('');
-const showForm = ref(false);
+// ?add_product=1 (setup checklist) opens the add-product form.
+const showForm = ref(route?.query?.add_product === '1');
 const form = ref({ name: '', price: '', stock: '' });
 let searchTimer = null;
 
@@ -111,13 +114,17 @@ const inputClass =
   <section
     class="flex flex-col flex-1 overflow-auto md:flex-row bg-n-background"
   >
-    <div class="flex flex-col flex-1 gap-4 p-5 overflow-auto">
+    <div
+      data-tour="pos-products"
+      class="flex flex-col flex-1 gap-4 p-5 overflow-auto"
+    >
       <header class="flex flex-wrap items-center gap-3">
         <h1 class="text-lg font-extrabold text-n-slate-12">
           {{ t('KALO_POS.TITLE') }}
         </h1>
         <input
           v-model="search"
+          data-tour="pos-search"
           type="search"
           :aria-label="t('KALO_POS.SEARCH')"
           :placeholder="t('KALO_POS.SEARCH')"
@@ -129,6 +136,7 @@ const inputClass =
           v-if="!isEmpty"
           type="button"
           data-test="pos-open-product-modal"
+          data-tour="pos-add"
           class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600 whitespace-nowrap"
           @click="openProductModal"
         >
@@ -152,6 +160,7 @@ const inputClass =
         <button
           v-if="!showForm"
           type="button"
+          data-tour="pos-add"
           class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
           @click="showForm = true"
         >
@@ -187,7 +196,7 @@ const inputClass =
 
       <ProductGrid v-else :products="products" @add="cart.add($event)" />
     </div>
-    <PosCart ref="cart" />
+    <PosCart ref="cart" data-tour="pos-cart" />
 
     <div
       v-if="showForm && !isEmpty"

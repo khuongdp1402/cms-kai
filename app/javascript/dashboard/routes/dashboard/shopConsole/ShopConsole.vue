@@ -41,11 +41,11 @@ const isAdmin = computed(
       class="grid items-start gap-5 md:grid-cols-2"
       data-test="console-sections"
     >
-      <ConsoleShopCard />
-      <ConsolePlanCard />
-      <ConsoleTeamCard class="md:col-span-2" />
-      <ConsolePaymentCard />
-      <ConsoleChannelsCard />
+      <ConsoleShopCard data-tour="console-shop" />
+      <ConsolePlanCard data-tour="console-plan" />
+      <ConsoleTeamCard class="md:col-span-2" data-tour="console-team" />
+      <ConsolePaymentCard data-tour="console-payment" />
+      <ConsoleChannelsCard data-tour="console-channels" />
     </div>
 
     <KaloCard

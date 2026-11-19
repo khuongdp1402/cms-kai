@@ -3570,7 +3570,7 @@
           "TITLE": "Thêm sản phẩm đầu tiên"
         }
       },
-      "SUBTITLE": "Ba bước để bắt đầu bán hàng trên Kalo."
+      "SUBTITLE": "Tin nhắn, đơn hàng và tiền về của shop nằm chung một chỗ."
     }
   },
   "KALO_CHAT_THREAD": {
@@ -5707,5 +5707,182 @@
       "CONTEXT_TOO_LONG": "Cuộc trò chuyện đã quá dài. Bấm \"Cuộc trò chuyện mới\" rồi hỏi lại."
     },
     "NEW": "Cuộc trò chuyện mới"
+  },
+  "KALO_GUIDE": {
+    "EMPTY": {
+      "CALENDAR": "Chưa có bài nào trong lịch nội dung.",
+      "CALENDAR_ACTION": "Thêm bài đầu tiên",
+      "CALENDAR_FILTERED": "Không có bài nào khớp bộ lọc.",
+      "IDEAS": "Chưa có ý tưởng nào, hãy nhập một chủ đề để AI gợi ý.",
+      "IDEAS_ACTION": "Nhập chủ đề",
+      "TEAMS_ACTION": "Tạo nhóm",
+      "TEAM_SOLO": "Hiện chỉ có bạn trong shop, hãy mời thêm người bán cùng."
+    },
+    "FIXES": {
+      "FACEBOOK_SOON": "Sắp có — hiện dùng Zalo cá nhân"
+    },
+    "MENU": {
+      "TITLE": "Hướng dẫn",
+      "DESC": "Xem lại hướng dẫn từng phần. Mỗi hướng dẫn chỉ mất chưa tới một phút.",
+      "SETUP_LEFT": "Còn {count} bước thiết lập",
+      "SETUP_DONE": "Đã thiết lập xong",
+      "NEW": "Chưa xem",
+      "SEEN": "Đã xem",
+      "PLAY": "Xem",
+      "DESKTOP_ONLY": "Mở trên máy tính để xem hướng dẫn này"
+    },
+    "SETUP": {
+      "TITLE": "Bắt đầu với Kalo",
+      "SUBTITLE": "Làm xong 5 bước này là shop sẵn sàng nhận tin và chốt đơn.",
+      "ALL_DONE": "Shop đã thiết lập xong. Bạn có thể ẩn danh sách này.",
+      "PROGRESS": "{done}/{total}",
+      "HIDE": "Ẩn danh sách",
+      "SKIP": "Bỏ qua",
+      "UNDO_SKIP": "Làm lại",
+      "DONE": "Đã xong",
+      "SKIPPED": "Đã bỏ qua",
+      "BADGE_TOOLTIP": "Còn {count} bước thiết lập",
+      "STEPS": {
+        "CHANNEL": {
+          "TITLE": "Nối kênh",
+          "DESC": "Nối Zalo cá nhân hoặc Facebook để tin nhắn của khách về Kalo.",
+          "CTA": "Nối kênh"
+        },
+        "PRODUCT": {
+          "TITLE": "Thêm sản phẩm",
+          "DESC": "Có sẵn giá để lên đơn và báo giá nhanh.",
+          "CTA": "Thêm"
+        },
+        "PAYMENT": {
+          "TITLE": "Cài nhận tiền",
+          "DESC": "Nhập tài khoản ngân hàng để tạo mã QR chuyển khoản.",
+          "CTA": "Cài đặt"
+        },
+        "ORDER": {
+          "TITLE": "Tạo đơn và gửi QR",
+          "DESC": "Tạo đơn đầu tiên và gửi mã QR để khách chuyển khoản.",
+          "CTA": "Tạo đơn"
+        },
+        "INVITE": {
+          "TITLE": "Mời nhân viên",
+          "DESC": "Mời người cùng trả lời khách và chốt đơn.",
+          "CTA": "Mời"
+        }
+      }
+    },
+    "TOUR": {
+      "PROGRESS": "Bước {current}/{total}",
+      "NEXT": "Tiếp",
+      "BACK": "Quay lại",
+      "SKIP": "Bỏ qua",
+      "DONE": "Xong",
+      "MESSAGES": {
+        "NAME": "Tin nhắn",
+        "LIST": {
+          "TITLE": "Tin nhắn của mọi kênh",
+          "BODY": "Tin từ Zalo, Facebook và website về chung danh sách này. Tin mới nằm trên cùng."
+        },
+        "FILTERS": {
+          "TITLE": "Lọc tin nhắn",
+          "BODY": "Lọc theo trạng thái, xem tin đang chờ hoặc tin bạn được nhắc tên."
+        },
+        "COMPOSER": {
+          "TITLE": "Trả lời khách",
+          "BODY": "Gõ tin trả lời rồi bấm Gửi. Chuyển sang Ghi chú để nhắn riêng cho đồng nghiệp."
+        },
+        "ORDER_QR": {
+          "TITLE": "Tạo đơn và gửi QR",
+          "BODY": "Chốt đơn ngay trong cuộc trò chuyện, rồi gửi mã QR để khách chuyển khoản."
+        },
+        "CONTACT": {
+          "TITLE": "Thông tin khách",
+          "BODY": "Mở bảng bên phải để xem số điện thoại, đơn cũ và ghi chú của khách."
+        }
+      },
+      "ORDERS": {
+        "NAME": "Đơn hàng",
+        "CREATE": {
+          "TITLE": "Tạo đơn",
+          "BODY": "Bấm vào đây để lên đơn mới: chọn khách, sản phẩm và cách thanh toán."
+        },
+        "KPIS": {
+          "TITLE": "Số liệu nhanh",
+          "BODY": "Số đơn, đơn chờ thanh toán, đơn đang xử lý và tổng giá trị."
+        },
+        "TABS": {
+          "TITLE": "Lọc theo trạng thái",
+          "BODY": "Xem riêng đơn chờ thanh toán, đã thanh toán, đang giao hoặc đã hủy."
+        },
+        "DRAWER": {
+          "TITLE": "Chi tiết đơn",
+          "BODY": "Bấm vào một đơn để xem chi tiết, đổi trạng thái hoặc gửi lại QR."
+        }
+      },
+      "POS": {
+        "NAME": "Bán tại quầy (POS)",
+        "SEARCH": {
+          "TITLE": "Tìm sản phẩm",
+          "BODY": "Gõ tên sản phẩm để tìm nhanh."
+        },
+        "ADD": {
+          "TITLE": "Thêm sản phẩm",
+          "BODY": "Thêm sản phẩm mới với giá và tồn kho."
+        },
+        "PRODUCTS": {
+          "TITLE": "Chọn hàng",
+          "BODY": "Bấm vào sản phẩm để cho vào giỏ."
+        },
+        "CART": {
+          "TITLE": "Giỏ hàng và thanh toán",
+          "BODY": "Kiểm tra giỏ, chọn cách thanh toán rồi tạo đơn."
+        }
+      },
+      "CONSOLE": {
+        "NAME": "Console",
+        "SHOP": {
+          "TITLE": "Thông tin cửa hàng",
+          "BODY": "Đổi tên shop và ngôn ngữ."
+        },
+        "PLAN": {
+          "TITLE": "Gói và dùng thử",
+          "BODY": "Xem gói đang dùng, số ngày còn lại và cách gia hạn."
+        },
+        "TEAM": {
+          "TITLE": "Nhân viên và nhóm",
+          "BODY": "Mời nhân viên rồi thêm họ vào kênh để cùng trả lời khách."
+        },
+        "PAYMENT": {
+          "TITLE": "Nhận tiền",
+          "BODY": "Tài khoản ngân hàng dùng để tạo mã QR cho đơn hàng."
+        },
+        "CHANNELS": {
+          "TITLE": "Kênh đã nối",
+          "BODY": "Các kênh bán hàng đang nối với Kalo và trạng thái của từng kênh."
+        }
+      },
+      "COMMENTS": {
+        "NAME": "Bình luận",
+        "RULES": {
+          "TITLE": "Tự xử lý bình luận",
+          "BODY": "Chọn cách Kalo ẩn bình luận xấu và trả lời riêng cho khách hỏi giá."
+        }
+      },
+      "BRAND": {
+        "NAME": "Thương hiệu",
+        "TABS": {
+          "TITLE": "Ba phần của Thương hiệu",
+          "BODY": "Hồ sơ thương hiệu, lịch nội dung và ý tưởng bài viết bằng AI."
+        },
+        "CONTENT": {
+          "TITLE": "Bắt đầu từ hồ sơ",
+          "BODY": "Điền hồ sơ thương hiệu trước để AI viết đúng giọng của shop."
+        }
+      }
+    },
+    "TRIAL": {
+      "DAYS_LEFT": "Còn {count} ngày dùng thử",
+      "EXPIRED": "Đã hết hạn dùng thử",
+      "VIEW_PLANS": "Xem gói"
+    }
   }
 }

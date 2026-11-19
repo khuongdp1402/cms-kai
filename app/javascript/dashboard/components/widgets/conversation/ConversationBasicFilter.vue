@@ -157,6 +157,7 @@ const handleSortChange = value => {
     <button
       type="button"
       data-test-id="kalo-filter-trigger"
+      data-tour="chat-filters"
       aria-haspopup="dialog"
       aria-controls="kalo-chat-filter-panel"
       :aria-expanded="showActionsDropdown"

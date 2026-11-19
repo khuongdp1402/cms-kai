@@ -12,6 +12,6 @@ const { t } = useI18n();
     :title="t('KALO_CONSOLE_SHOP.PAGES.COMMENTS.TITLE')"
     :description="t('KALO_CONSOLE_SHOP.PAGES.COMMENTS.DESC')"
   >
-    <CommentAutomationSettings />
+    <CommentAutomationSettings data-tour="comments-rules" />
   </KaloPage>
 </template>

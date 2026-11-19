@@ -8,6 +8,7 @@ import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
 import KaloDrawer from 'next/layout/KaloDrawer.vue';
 import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
+import KaloGuideNav from 'next/guide/KaloGuideNav.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
@@ -96,6 +97,7 @@ watch(
       @close="isSheetOpen = false"
     >
       <div class="flex flex-col -mx-2 -my-2">
+        <KaloGuideNav variant="sheet" />
         <router-link
           v-for="item in sheetItems"
           :key="item.key"

@@ -14,6 +14,8 @@ import MoreActions from '../MoreActions.vue';
 import InboxName from '../../InboxName.vue';
 import { copyTextToClipboard } from 'shared/helpers/clipboard';
 
+import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTargets';
+
 const isWebWidget = ref(true);
 vi.mock('dashboard/composables/useInbox', () => ({
   useInbox: () => ({ isAWebWidgetInbox: isWebWidget }),
@@ -32,6 +34,7 @@ const mountHeader = ({
   selected = {},
   inboxes = [{ id: 1 }],
   props = {},
+  uiSettings,
 } = {}) => {
   const chatProp = {
     id: 33,
@@ -46,6 +49,7 @@ const mountHeader = ({
       'contacts/getContact': () => () => ({ name: 'Jane Doe', thumbnail: '' }),
       'inboxes/getInbox': () => () => ({ id: 1, name: 'Web' }),
       'inboxes/getInboxes': () => inboxes,
+      ...(uiSettings ? { getUISettings: () => uiSettings } : {}),
     },
   });
   return shallowMount(ConversationHeader, {
@@ -136,5 +140,10 @@ describe('ConversationHeader', () => {
       chat: { meta: { sender: { id: 5 }, hmac_verified: false } },
     });
     expect(wrapper.find('fluent-icon-stub').exists()).toBe(false);
+  });
+
+  it('renders the contact-panel target of the Tin nhắn tour', () => {
+    const wrapper = mountHeader({ uiSettings: {} });
+    expectTourTargets(wrapper, 'messages', ['chat-contact']);
   });
 });

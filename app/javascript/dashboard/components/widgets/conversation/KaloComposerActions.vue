@@ -127,7 +127,11 @@ const dialogClass =
 </script>
 
 <template>
-  <div v-if="contactId && !isReplyRestricted" class="flex items-center gap-0.5">
+  <div
+    v-if="contactId && !isReplyRestricted"
+    data-tour="chat-order-qr"
+    class="flex items-center gap-0.5"
+  >
     <button
       type="button"
       data-test="create-order"

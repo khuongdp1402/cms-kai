@@ -2,6 +2,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import { useAlert } from 'dashboard/composables';
@@ -24,10 +25,12 @@ const { t } = useI18n();
 const { isOn } = useKaloFeatures();
 const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 const store = useStore();
+const route = useRoute();
 
 const status = ref(undefined);
 const query = ref('');
-const showForm = ref(false);
+// ?new=1 (setup checklist, "Tạo đơn" links) opens the create form.
+const showForm = ref(route?.query?.new === '1');
 const openOrderId = ref(null);
 let searchTimer = null;
 
@@ -162,6 +165,7 @@ onMounted(load);
       <button
         v-if="!isEmpty"
         type="button"
+        data-tour="orders-create"
         class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
         @click="showForm = true"
       >
@@ -178,6 +182,7 @@ onMounted(load);
       <p class="text-sm text-n-slate-11">{{ t('KALO_ORDERS.EMPTY') }}</p>
       <button
         type="button"
+        data-tour="orders-create"
         class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
         @click="showForm = true"
       >
@@ -186,7 +191,10 @@ onMounted(load);
     </div>
 
     <template v-else>
-      <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div
+        data-tour="orders-kpis"
+        class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4"
+      >
         <div
           v-for="kpi in summaryKpis"
           :key="kpi.key"
@@ -201,11 +209,14 @@ onMounted(load);
         </div>
       </div>
 
-      <KaloCard flush>
+      <KaloCard flush data-tour="orders-table">
         <div
           class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b bg-n-solid-2 border-n-weak"
         >
-          <div class="inline-flex flex-wrap gap-1 p-1 rounded-xl bg-n-solid-3">
+          <div
+            data-tour="orders-tabs"
+            class="inline-flex flex-wrap gap-1 p-1 rounded-xl bg-n-solid-3"
+          >
             <button
               v-for="tab in STATUS_TABS"
               :key="tab.key"
