@@ -1,4 +1,5 @@
 <script setup>
+import { useI18n } from 'vue-i18n';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import KaloProductThumb from 'dashboard/components-next/icon/KaloProductThumb.vue';
 
@@ -6,6 +7,11 @@ defineProps({
   products: { type: Array, required: true },
 });
 const emit = defineEmits(['add']);
+const { t } = useI18n();
+
+// Products without stock tracking (stock null) show no stock line.
+const isTracked = product =>
+  product.stock !== null && product.stock !== undefined;
 </script>
 
 <template>
@@ -22,8 +28,22 @@ const emit = defineEmits(['add']);
         <KaloProductThumb :name="product.name" :image-url="product.image_url" />
       </div>
       <div class="text-sm text-n-slate-12">{{ product.name }}</div>
-      <div class="text-sm font-bold text-woot-600">
-        {{ formatVnd(product.price) }}
+      <div class="flex flex-wrap items-baseline justify-between gap-x-2">
+        <span class="text-sm font-bold text-woot-600">
+          {{ formatVnd(product.price) }}
+        </span>
+        <span
+          v-if="isTracked(product)"
+          data-test="product-card-stock"
+          class="text-xs font-semibold"
+          :class="product.stock > 0 ? 'text-n-slate-11' : 'text-n-ruby-11'"
+        >
+          {{
+            product.stock > 0
+              ? t('KALO_PRODUCTS.TILE_STOCK', { count: product.stock })
+              : t('KALO_PRODUCTS.TILE_OUT')
+          }}
+        </span>
       </div>
     </button>
   </div>

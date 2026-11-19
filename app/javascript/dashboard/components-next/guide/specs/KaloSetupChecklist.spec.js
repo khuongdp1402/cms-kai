@@ -80,14 +80,14 @@ describe('KaloSetupChecklist', () => {
       .map(a => a.attributes('href'));
     expect(hrefs).toEqual([
       '/app/accounts/1/settings_inbox_new',
-      '/app/accounts/1/kalo_pos?add_product=1',
+      '/app/accounts/1/kalo_products?new=1',
       '/app/accounts/1/kalo_payment_settings',
       '/app/accounts/1/kalo_orders?new=1',
       '/app/accounts/1/kalo_console?invite=1',
     ]);
   });
 
-  it('sends the product step to the order form when POS is off', async () => {
+  it('sends the product step to the products page even when POS is off', async () => {
     const { wrapper } = await mountChecklist({
       features: { kalo_brand: true },
     });
@@ -95,7 +95,7 @@ describe('KaloSetupChecklist', () => {
       step(wrapper, 'product')
         .find('[data-test-id="kalo-setup-cta"]')
         .attributes('href')
-    ).toBe('/app/accounts/1/kalo_orders?new=1');
+    ).toBe('/app/accounts/1/kalo_products?new=1');
   });
 
   it('skips a step per user and account, and can undo it', async () => {

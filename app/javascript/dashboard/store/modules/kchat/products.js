@@ -3,6 +3,7 @@ import KchatProductsAPI from '../../../api/kchat/products';
 const SET_UI_FLAG = 'KCHAT_PRODUCTS_SET_UI_FLAG';
 const SET_PRODUCTS = 'KCHAT_PRODUCTS_SET';
 const UPSERT_PRODUCT = 'KCHAT_PRODUCTS_UPSERT';
+const REMOVE_PRODUCT = 'KCHAT_PRODUCTS_REMOVE';
 
 export const createState = () => ({
   records: [],
@@ -48,9 +49,29 @@ export const actions = {
       return data;
     }),
 
-  update: ({ commit }, { id, ...payload }) =>
+  // `formData` (image upload) is sent as is instead of the other fields.
+  update: ({ commit }, { id, formData, ...payload }) =>
     withFlag({ commit }, 'isUpdating', async () => {
-      const { data } = await KchatProductsAPI.update(id, payload);
+      const { data } = await KchatProductsAPI.update(id, formData || payload);
+      commit(UPSERT_PRODUCT, data);
+      return data;
+    }),
+
+  // The backend deletes a product no order uses (204) and archives the others (200, active: false).
+  archive: ({ commit }, id) =>
+    withFlag({ commit }, 'isUpdating', async () => {
+      const { status, data } = await KchatProductsAPI.delete(id);
+      if (status === 204) {
+        commit(REMOVE_PRODUCT, id);
+        return { deleted: true };
+      }
+      commit(UPSERT_PRODUCT, data);
+      return { deleted: false };
+    }),
+
+  adjustStock: ({ commit }, { id, delta }) =>
+    withFlag({ commit }, 'isUpdating', async () => {
+      const { data } = await KchatProductsAPI.adjustStock(id, delta);
       commit(UPSERT_PRODUCT, data);
       return data;
     }),
@@ -71,6 +92,9 @@ export const mutations = {
           record.id === product.id ? product : record
         )
       : [...$state.records, product];
+  },
+  [REMOVE_PRODUCT]($state, id) {
+    $state.records = $state.records.filter(record => record.id !== id);
   },
 };
 

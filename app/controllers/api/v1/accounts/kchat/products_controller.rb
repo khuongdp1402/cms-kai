@@ -1,6 +1,6 @@
 class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::BaseController
-  before_action :require_active_subscription!, only: :create
-  before_action :fetch_product, only: [:update, :destroy]
+  before_action :require_active_subscription!, only: [:create, :update, :adjust_stock]
+  before_action :fetch_product, only: [:update, :destroy, :adjust_stock]
 
   def index
     authorize ::Kchat::Product
@@ -22,10 +22,34 @@ class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::B
     render :show
   end
 
+  # Relative change (stock count, restock), locked so it cannot race an order reserving stock.
+  def adjust_stock
+    authorize @product
+    delta_text = params[:delta].to_s
+    return render_kchat_error('validation_failed', :unprocessable_entity) unless delta_text.match?(/\A-?\d+\z/)
+
+    delta = delta_text.to_i
+
+    @product.with_lock do
+      stock = @product.stock.to_i + delta
+      raise ::Kchat::Order::InsufficientStock, @product.id if stock.negative?
+
+      @product.update!(stock: stock)
+    end
+    render :show
+  end
+
+  # A product that orders reference is archived (hidden from POS and the order form) so order history stays linked.
   def destroy
     authorize @product
-    @product.destroy!
-    head :no_content
+    # Locked so an order cannot start referencing the product between the check and the delete.
+    archived = @product.with_lock do
+      next @product.update!(active: false) if @product.order_items.exists?
+
+      @product.destroy!
+      false
+    end
+    archived ? render(:show) : head(:no_content)
   end
 
   private

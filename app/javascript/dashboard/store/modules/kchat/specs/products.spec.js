@@ -3,7 +3,13 @@ import products from '../products';
 import ProductsAPI from '../../../../api/kchat/products';
 
 vi.mock('../../../../api/kchat/products', () => ({
-  default: { get: vi.fn(), create: vi.fn(), update: vi.fn() },
+  default: {
+    get: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    adjustStock: vi.fn(),
+  },
 }));
 
 const makeStore = () => createStore({ modules: { kchatProducts: products } });
@@ -60,5 +66,46 @@ describe('kchatProducts store', () => {
       2,
     ]);
     expect(store.getters['kchatProducts/getUIFlags'].isFetching).toBe(false);
+  });
+
+  it('archive removes a deleted product and keeps an archived one inactive', async () => {
+    ProductsAPI.get.mockResolvedValue({
+      data: {
+        payload: [
+          { id: 1, name: 'Nến', active: true },
+          { id: 2, name: 'Cốc', active: true },
+        ],
+        meta: { count: 2 },
+      },
+    });
+    ProductsAPI.delete
+      .mockResolvedValueOnce({ status: 204, data: '' })
+      .mockResolvedValueOnce({
+        status: 200,
+        data: { id: 2, name: 'Cốc', active: false },
+      });
+    const store = makeStore();
+    await store.dispatch('kchatProducts/fetch');
+    expect(await store.dispatch('kchatProducts/archive', 1)).toEqual({
+      deleted: true,
+    });
+    expect(await store.dispatch('kchatProducts/archive', 2)).toEqual({
+      deleted: false,
+    });
+    expect(store.getters['kchatProducts/getProducts']).toEqual([
+      { id: 2, name: 'Cốc', active: false },
+    ]);
+  });
+
+  it('adjustStock sends the delta and stores the new stock', async () => {
+    ProductsAPI.adjustStock.mockResolvedValue({
+      data: { id: 3, name: 'Áo', stock: 7 },
+    });
+    const store = makeStore();
+    await store.dispatch('kchatProducts/adjustStock', { id: 3, delta: 2 });
+    expect(ProductsAPI.adjustStock).toHaveBeenCalledWith(3, 2);
+    expect(store.getters['kchatProducts/getProducts']).toEqual([
+      { id: 3, name: 'Áo', stock: 7 },
+    ]);
   });
 });

@@ -56,7 +56,8 @@ export const KALO_NAV_ITEMS = [
     labelKey: 'KALO_NAV.ORDERS',
     sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
     route: 'kalo_orders',
-    isActive: name => ['kalo_orders', 'kalo_pos'].includes(name),
+    isActive: name =>
+      ['kalo_orders', 'kalo_pos', 'kalo_products'].includes(name),
   },
   {
     key: 'campaigns',

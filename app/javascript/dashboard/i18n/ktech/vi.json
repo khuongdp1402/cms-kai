@@ -4351,6 +4351,101 @@
     "SEARCH": "Tìm sản phẩm",
     "TITLE": "Bán tại quầy"
   },
+  "KALO_PRODUCTS": {
+    "TITLE": "Sản phẩm",
+    "DESCRIPTION": "Hàng bạn bán: giá, tồn kho và trạng thái. Dùng khi tạo đơn và bán tại quầy.",
+    "OPEN": "Sản phẩm",
+    "MANAGE": "Quản lý sản phẩm",
+    "BACK": "Về Đơn hàng",
+    "OPEN_POS": "Bán tại quầy",
+    "CREATE": "Thêm sản phẩm",
+    "SEARCH": "Tìm theo tên hoặc mã",
+    "FILTERS": {
+      "ACTIVE": "Đang bán",
+      "ARCHIVED": "Đã lưu trữ",
+      "ALL": "Tất cả"
+    },
+    "COLUMNS": {
+      "PRODUCT": "Sản phẩm",
+      "PRICE": "Giá",
+      "STOCK": "Tồn kho",
+      "STATUS": "Trạng thái"
+    },
+    "STATUS": {
+      "ACTIVE": "Đang bán",
+      "ARCHIVED": "Đã lưu trữ"
+    },
+    "STOCK": {
+      "UNTRACKED": "Không theo dõi",
+      "OUT": "Hết hàng",
+      "LEFT": "Còn {count}"
+    },
+    "SKU": "Mã: {sku}",
+    "EMPTY": {
+      "ADMIN": "Chưa có sản phẩm nào đang bán. Thêm sản phẩm đầu tiên để tạo đơn và bán tại quầy nhanh hơn.",
+      "AGENT": "Chưa có sản phẩm nào đang bán. Nhờ quản trị viên của shop thêm sản phẩm."
+    },
+    "NO_RESULTS": "Không tìm thấy sản phẩm phù hợp.",
+    "READ_ONLY": "Bạn chỉ xem được danh sách. Quản trị viên của shop mới thêm hoặc sửa sản phẩm.",
+    "ACTIONS": {
+      "EDIT": "Sửa",
+      "ARCHIVE": "Lưu trữ",
+      "RESTORE": "Bán lại",
+      "ADJUST": "Nhập/xuất kho"
+    },
+    "FORM": {
+      "CREATE_TITLE": "Thêm sản phẩm",
+      "EDIT_TITLE": "Sửa sản phẩm",
+      "NAME": "Tên sản phẩm",
+      "NAME_PLACEHOLDER": "Ví dụ: Áo thun cotton",
+      "SKU": "Mã sản phẩm (không bắt buộc)",
+      "PRICE": "Giá bán (đồng)",
+      "PRICE_PLACEHOLDER": "150.000",
+      "PRICE_PREVIEW": "Khách thấy: {amount}",
+      "STOCK": "Số lượng trong kho",
+      "STOCK_HINT": "Để trống nếu bạn không theo dõi tồn kho.",
+      "IMAGE": "Ảnh sản phẩm (không bắt buộc)",
+      "IMAGE_PICK": "Chọn ảnh",
+      "IMAGE_NONE": "Chưa chọn ảnh",
+      "IMAGE_HINT": "PNG, JPG, GIF hoặc WEBP, tối đa 5 MB.",
+      "SAVE": "Lưu sản phẩm",
+      "CANCEL": "Đóng",
+      "ERRORS": {
+        "NAME_REQUIRED": "Nhập tên sản phẩm.",
+        "PRICE_INVALID": "Giá phải là số nguyên từ 0 trở lên, ví dụ 150000.",
+        "STOCK_INVALID": "Tồn kho phải là số nguyên từ 0 trở lên.",
+        "IMAGE_TYPE": "Chỉ nhận ảnh PNG, JPG, GIF hoặc WEBP.",
+        "IMAGE_SIZE": "Ảnh tối đa 5 MB."
+      }
+    },
+    "STOCK_FORM": {
+      "TITLE": "Nhập/xuất kho",
+      "CURRENT": "Tồn kho hiện tại: {count}",
+      "DELTA": "Số lượng thay đổi",
+      "DELTA_PLACEHOLDER": "+5",
+      "DELTA_HINT": "Số dương để nhập thêm, số âm để trừ bớt (ví dụ -2).",
+      "DELTA_INVALID": "Nhập số nguyên khác 0, không quá 1.000.000.000.",
+      "NEGATIVE": "Không thể trừ quá số đang có.",
+      "RESULT": "Sau khi đổi: {count}",
+      "SAVE": "Cập nhật tồn kho"
+    },
+    "ARCHIVE_DIALOG": {
+      "TITLE": "Lưu trữ sản phẩm?",
+      "BODY": "“{name}” sẽ không còn hiện ở Bán tại quầy và khi tạo đơn. Đơn cũ vẫn giữ nguyên. Sản phẩm chưa có đơn nào sẽ bị xóa hẳn.",
+      "CONFIRM": "Lưu trữ",
+      "CANCEL": "Giữ lại"
+    },
+    "TOAST": {
+      "CREATED": "Đã thêm sản phẩm",
+      "UPDATED": "Đã lưu thay đổi",
+      "ARCHIVED": "Đã lưu trữ sản phẩm",
+      "DELETED": "Đã xóa sản phẩm",
+      "RESTORED": "Sản phẩm đã được bán lại",
+      "STOCK_UPDATED": "Đã cập nhật tồn kho"
+    },
+    "TILE_STOCK": "Còn {count}",
+    "TILE_OUT": "Hết hàng"
+  },
   "KALO_REPORTS": {
     "DETAIL_LINKS_TITLE": "Báo cáo chi tiết theo bộ phận",
     "BRANDS": {
@@ -6084,6 +6179,21 @@
         "CART": {
           "TITLE": "Giỏ hàng và thanh toán",
           "BODY": "Kiểm tra giỏ, chọn cách thanh toán rồi tạo đơn."
+        }
+      },
+      "PRODUCTS": {
+        "NAME": "Sản phẩm",
+        "CREATE": {
+          "TITLE": "Thêm sản phẩm",
+          "BODY": "Nhập tên, giá và tồn kho. Sản phẩm mới hiện ngay ở Bán tại quầy và khi tạo đơn."
+        },
+        "SEARCH": {
+          "TITLE": "Tìm và lọc",
+          "BODY": "Tìm theo tên hoặc mã, xem hàng đang bán hoặc đã lưu trữ."
+        },
+        "TABLE": {
+          "TITLE": "Sửa, nhập kho, lưu trữ",
+          "BODY": "Bấm Sửa để đổi giá, ảnh. Nhập/xuất kho khi có hàng về, Lưu trữ hàng không bán nữa."
         }
       },
       "CONSOLE": {

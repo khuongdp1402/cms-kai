@@ -1,3 +1,4 @@
+# Shop administrators manage the catalog; agents only read it (POS, order form).
 class Kchat::ProductPolicy < ApplicationPolicy
   def index?
     true
@@ -8,11 +9,15 @@ class Kchat::ProductPolicy < ApplicationPolicy
   end
 
   def create?
-    true
+    @account_user.administrator?
   end
 
   def update?
-    true
+    @account_user.administrator?
+  end
+
+  def adjust_stock?
+    @account_user.administrator?
   end
 
   def destroy?

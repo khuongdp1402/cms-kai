@@ -6,6 +6,8 @@ RSpec.describe 'Kchat expired subscription gating', type: :request do
   let(:account) { create(:account, created_at: 30.days.ago) }
   let(:agent) { create(:user, account: account, role: :agent) }
   let(:headers) { agent.create_new_auth_token }
+  # Products are managed by shop administrators; agents only read them.
+  let(:admin_headers) { create(:user, account: account, role: :administrator).create_new_auth_token }
   let(:base) { "/api/v1/accounts/#{account.id}" }
 
   def expect_expired
@@ -49,11 +51,11 @@ RSpec.describe 'Kchat expired subscription gating', type: :request do
 
   it 'allows creating products during the trial and when subscribed' do
     account.update_columns(created_at: 1.day.ago) # rubocop:disable Rails/SkipsModelValidations
-    post "#{base}/kchat/products", params: { name: 'Mũ', price: 1000 }, headers: headers, as: :json
+    post "#{base}/kchat/products", params: { name: 'Mũ', price: 1000 }, headers: admin_headers, as: :json
     expect(response).to have_http_status(:created)
 
     account.update_columns(created_at: 90.days.ago, custom_attributes: { 'subscription_valid_until' => 5.days.from_now.iso8601 }) # rubocop:disable Rails/SkipsModelValidations
-    post "#{base}/kchat/products", params: { name: 'Nón', price: 1000 }, headers: headers, as: :json
+    post "#{base}/kchat/products", params: { name: 'Nón', price: 1000 }, headers: admin_headers, as: :json
     expect(response).to have_http_status(:created)
   end
 end

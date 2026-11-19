@@ -166,7 +166,13 @@ describe('KaloGuideNav', () => {
         .map(el =>
           el.attributes('data-test-id').replace('kalo-guide-tour-', '')
         );
-      expect(tours).toEqual(['messages', 'orders', 'console', 'comments']);
+      expect(tours).toEqual([
+        'messages',
+        'orders',
+        'products',
+        'console',
+        'comments',
+      ]);
       expect(drawer.text()).toContain('Bắt đầu với Kalo');
     });
 

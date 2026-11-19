@@ -19,7 +19,8 @@ Console, thẻ "Kênh đã nối", bấm "Nối kênh" rồi chọn:
 Chưa có Zalo OA hoàn chỉnh, chưa nối Shopee, TikTok Shop.
 
 ## Sản phẩm và nhận tiền
-- Thêm sản phẩm ở Đơn hàng hoặc Bán tại quầy (tên, giá, tồn kho).
+- Trang Sản phẩm: trang Đơn hàng, nút "Sản phẩm" (hoặc "Quản lý sản phẩm" trong Bán tại quầy). "Thêm sản phẩm": tên, giá, tồn kho (để trống nếu không theo dõi), mã và ảnh không bắt buộc. Mỗi dòng có Sửa, "Nhập/xuất kho" (số dương nhập thêm, số âm trừ bớt), "Lưu trữ". Chỉ Quản trị viên sửa được; Nhân viên chỉ xem.
+- Lưu trữ: sản phẩm ẩn khỏi Bán tại quầy và form tạo đơn, đơn cũ giữ nguyên; sản phẩm chưa có đơn thì bị xóa hẳn. Bộ lọc "Đã lưu trữ", nút "Bán lại" để mở lại. Chưa có biến thể (màu, cỡ): tạo mỗi biến thể một sản phẩm.
 - Console, thẻ "Nhận tiền", "Cài nhận tiền": chọn ngân hàng, số tài khoản 6 đến 19 chữ số, tên chủ tài khoản. Kalo tạo mã VietQR.
 - Kalo không tự biết khách đã chuyển tiền: chủ shop bấm "Đã nhận tiền" sau khi kiểm tra ngân hàng.
 

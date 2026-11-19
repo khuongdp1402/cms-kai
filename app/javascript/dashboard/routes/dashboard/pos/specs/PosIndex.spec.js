@@ -10,9 +10,11 @@ import { expectTourTargets } from 'dashboard/components-next/guide/specs/tourTar
 const mountPos = (
   products,
   create = vi.fn().mockResolvedValue({}),
-  route = undefined
+  route = undefined,
+  role = 'administrator'
 ) => {
   const store = createStore({
+    getters: { getCurrentRole: () => role },
     modules: {
       kchatProducts: {
         namespaced: true,
@@ -151,5 +153,46 @@ describe('PosIndex', () => {
     });
     await flushPromises();
     expect(wrapper.find('[data-test="pos-product-modal"]').exists()).toBe(true);
+  });
+
+  it('shows stock on tiles that track it', async () => {
+    const wrapper = mountPos([
+      makeProduct({ id: 1, stock: 4 }),
+      makeProduct({ id: 2, stock: 0 }),
+      makeProduct({ id: 3, stock: null }),
+    ]);
+    await flushPromises();
+    const stocks = wrapper
+      .findAll('[data-test="product-card"]')
+      .map(card => card.find('[data-test="product-card-stock"]'));
+    expect(stocks[0].text()).toBe('Còn 4');
+    expect(stocks[1].text()).toBe('Hết hàng');
+    expect(stocks[2].exists()).toBe(false);
+  });
+
+  it('links administrators to the products page', async () => {
+    const wrapper = mountPos([makeProduct()]);
+    await flushPromises();
+    expect(wrapper.find('[data-test="pos-manage-products"]').text()).toBe(
+      'Quản lý sản phẩm'
+    );
+  });
+
+  it('agents sell existing products but cannot add or manage them', async () => {
+    const agentPos = mountPos([makeProduct()], undefined, undefined, 'agent');
+    await flushPromises();
+    expect(agentPos.find('[data-test="pos-open-product-modal"]').exists()).toBe(
+      false
+    );
+    expect(agentPos.find('[data-test="pos-manage-products"]').exists()).toBe(
+      false
+    );
+
+    const emptyPos = mountPos([], undefined, undefined, 'agent');
+    await flushPromises();
+    expect(emptyPos.find('[data-test="pos-empty"] button').exists()).toBe(
+      false
+    );
+    expect(emptyPos.find('[data-test="pos-empty"] form').exists()).toBe(false);
   });
 });

@@ -52,7 +52,9 @@ Rails.application.routes.draw do
 
         scope module: :accounts do
           namespace :kchat do
-            resources :products, only: [:index, :create, :update, :destroy]
+            resources :products, only: [:index, :create, :update, :destroy] do
+              post :adjust_stock, on: :member
+            end
             resources :orders, only: [:index, :show, :create] do
               member do
                 post :transition
