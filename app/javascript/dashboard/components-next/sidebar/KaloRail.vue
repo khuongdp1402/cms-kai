@@ -1,5 +1,12 @@
 <script setup>
-import { computed, ref, watch } from 'vue';
+import {
+  computed,
+  nextTick,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  watch,
+} from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import { useMapGetter, useStore } from 'dashboard/composables/store';
@@ -101,6 +108,40 @@ const shouldRenderSectionHeading = (list, item, index) => {
   return list[index - 1]?.sectionKey !== item.sectionKey;
 };
 
+// Scroll affordance for the main group at short heights: a fade and a
+// chevron at the bottom while more items are hidden below.
+const mainGroupEl = ref(null);
+const canScrollDown = ref(false);
+const updateScrollHint = () => {
+  const el = mainGroupEl.value;
+  canScrollDown.value =
+    !!el && el.scrollHeight - el.scrollTop - el.clientHeight > 4;
+};
+const setGroupRef = (key, el) => {
+  if (key !== 'main' || mainGroupEl.value === el) return;
+  mainGroupEl.value = el;
+  updateScrollHint();
+};
+const scrollMainDown = () => {
+  const el = mainGroupEl.value;
+  if (el) el.scrollBy({ top: el.clientHeight * 0.8, behavior: 'smooth' });
+};
+let resizeObserver = null;
+onMounted(() => {
+  window.addEventListener('resize', updateScrollHint);
+  if (typeof ResizeObserver !== 'undefined' && mainGroupEl.value) {
+    resizeObserver = new ResizeObserver(updateScrollHint);
+    resizeObserver.observe(mainGroupEl.value);
+  }
+});
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', updateScrollHint);
+  resizeObserver?.disconnect();
+});
+watch([isExpanded, () => items.value.length, openSubmenus], () =>
+  nextTick(updateScrollHint)
+);
+
 const railGroups = computed(() => [
   { key: 'main', items: items.value.filter(item => !item.footer) },
   { key: 'pinned', items: items.value.filter(item => item.footer) },
@@ -111,7 +152,7 @@ const railGroups = computed(() => [
   <nav
     :aria-label="t('KALO_NAV.MAIN_NAV')"
     :data-expanded="isExpanded ? 'true' : 'false'"
-    class="relative z-30 flex flex-col shrink-0 gap-1 py-3.5 [@media(max-height:800px)]:py-2 bg-n-surface-1 border-r border-n-weak transition-[width] duration-200 ease-out"
+    class="relative z-30 flex flex-col shrink-0 gap-1 py-3.5 [@media(max-height:900px)]:py-2 bg-n-surface-1 border-r border-n-weak transition-[width] duration-200 ease-out"
     :class="
       isExpanded ? 'w-[224px] px-3 items-stretch' : 'w-[68px] items-center'
     "
@@ -166,14 +207,16 @@ const railGroups = computed(() => [
     <div
       v-for="group in railGroups"
       :key="group.key"
+      :ref="el => setGroupRef(group.key, el)"
       :data-test-id="`kalo-rail-${group.key}`"
-      class="flex flex-col gap-1 [@media(max-height:800px)]:gap-0.5"
+      class="flex flex-col gap-1 [@media(max-height:900px)]:gap-0.5"
       :class="[
         group.key === 'main'
           ? 'flex-1 min-h-0 overflow-y-auto overflow-x-hidden [scrollbar-width:thin]'
           : 'shrink-0 pt-1',
         isExpanded ? '' : 'items-center w-full',
       ]"
+      @scroll.passive="group.key === 'main' && updateScrollHint()"
     >
       <template v-if="group.key === 'pinned'">
         <KaloGuideNav :is-expanded="isExpanded" />
@@ -200,8 +243,8 @@ const railGroups = computed(() => [
               class="relative flex items-center transition-colors duration-150 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
               :class="[
                 isExpanded
-                  ? 'flex-1 min-w-0 gap-2.5 px-3 py-2 text-sm font-semibold'
-                  : 'justify-center size-11 [@media(max-height:800px)]:size-10',
+                  ? 'flex-1 min-w-0 gap-2.5 px-3 py-2 [@media(max-height:900px)]:py-1.5 text-sm font-semibold'
+                  : 'justify-center size-11 [@media(min-height:761px)_and_(max-height:800px)]:size-10 [@media(max-height:760px)]:size-9',
                 item.active
                   ? 'bg-n-blue-3 text-n-blue-11 font-semibold'
                   : 'text-n-slate-10 hover:bg-n-alpha-2 hover:text-n-slate-12',
@@ -251,6 +294,24 @@ const railGroups = computed(() => [
           />
         </KaloRailTooltip>
       </template>
+      <!-- Sticks to the bottom of the scrolling group while items are hidden
+           below; the button scrolls them into view. -->
+      <div
+        v-if="group.key === 'main' && canScrollDown"
+        data-test-id="kalo-rail-more"
+        class="sticky bottom-0 flex items-end justify-center w-full h-10 -mt-10 pointer-events-none shrink-0 bg-gradient-to-t from-n-surface-1 via-n-surface-1/80 to-transparent"
+      >
+        <button
+          type="button"
+          data-test-id="kalo-rail-more-button"
+          :aria-label="t('KALO_POLISH4.RAIL.MORE')"
+          :title="t('KALO_POLISH4.RAIL.MORE')"
+          class="grid border rounded-full shadow-sm pointer-events-auto size-6 place-content-center bg-n-solid-1 border-n-strong text-n-slate-11 hover:text-n-slate-12 focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
+          @click="scrollMainDown"
+        >
+          <KaloIcon name="chevron" class="size-3.5" />
+        </button>
+      </div>
     </div>
 
     <KaloRailFooter
