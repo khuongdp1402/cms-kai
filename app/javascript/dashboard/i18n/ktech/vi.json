@@ -5657,5 +5657,55 @@
       "CONSOLE_TITLE": "Console",
       "CONSOLE_DESC": "Cửa hàng, nhân viên, gói, nhận tiền và kênh"
     }
+  },
+  "KALO_ASSISTANT": {
+    "BUTTON": "Trợ lý AI",
+    "TITLE": "Trợ lý Kalo",
+    "DESCRIPTION": "Hỏi cách dùng, viết nội dung, tóm tắt số liệu tuần",
+    "MODES_LABEL": "Chọn việc cần trợ giúp",
+    "MODE": {
+      "HELP": "Hỏi cách dùng",
+      "WRITE": "Viết nội dung",
+      "INSIGHTS": "Tóm tắt tuần"
+    },
+    "HINT": {
+      "HELP": "Hỏi bất cứ điều gì về cách dùng Kalo.",
+      "WRITE": "Nhờ viết bài đăng, tin nhắn chiến dịch, mô tả sản phẩm.",
+      "INSIGHTS": "Trợ lý đọc số liệu 7 ngày gần nhất của cửa hàng rồi tóm tắt."
+    },
+    "STARTERS": {
+      "HELP": {
+        "ONE": "Làm sao để tạo đơn hàng đầu tiên?",
+        "TWO": "Cách nhận tiền bằng mã QR như thế nào?",
+        "THREE": "Làm sao nối Zalo hoặc Facebook vào Kalo?"
+      },
+      "WRITE": {
+        "ONE": "Viết bài đăng giới thiệu sản phẩm mới của cửa hàng",
+        "TWO": "Viết tin nhắn nhắc khách đã xem sản phẩm nhưng chưa mua",
+        "THREE": "Viết mô tả ngắn cho sản phẩm và gợi ý từ khóa SEO"
+      },
+      "INSIGHTS": {
+        "ONE": "Tuần này cửa hàng bán thế nào?",
+        "TWO": "Sản phẩm nào bán chạy nhất tuần qua?",
+        "THREE": "Tôi nên làm gì để tuần sau bán tốt hơn?"
+      }
+    },
+    "INPUT_LABEL": "Tin nhắn gửi trợ lý",
+    "PLACEHOLDER": "Nhập câu hỏi. Enter để gửi, Shift+Enter để xuống dòng",
+    "SEND": "Gửi",
+    "COPY": "Sao chép",
+    "COPIED": "Đã sao chép",
+    "THINKING": "Trợ lý đang trả lời",
+    "DISCLAIMER": "Trợ lý AI có thể sai. Hãy kiểm tra lại trước khi đăng hoặc gửi cho khách.",
+    "BILLING_LINK": "Xem gói cước",
+    "ERRORS": {
+      "EXPIRED": "Hết hạn dùng thử nên trợ lý AI tạm khóa. Gia hạn gói để dùng tiếp.",
+      "RATE_LIMITED": "Bạn gửi hơi nhanh. Đợi khoảng một phút rồi thử lại.",
+      "TOO_LONG": "Tin nhắn quá dài. Hãy rút gọn rồi gửi lại.",
+      "UNAVAILABLE": "Trợ lý tạm thời không dùng được. Thử lại sau ít phút.",
+      "GENERIC": "Chưa gửi được tin nhắn. Kiểm tra mạng rồi thử lại.",
+      "CONTEXT_TOO_LONG": "Cuộc trò chuyện đã quá dài. Bấm \"Cuộc trò chuyện mới\" rồi hỏi lại."
+    },
+    "NEW": "Cuộc trò chuyện mới"
   }
 }

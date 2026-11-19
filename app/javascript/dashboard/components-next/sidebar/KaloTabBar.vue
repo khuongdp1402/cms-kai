@@ -7,6 +7,7 @@ import { useMapGetter } from 'dashboard/composables/store';
 import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
 import KaloDrawer from 'next/layout/KaloDrawer.vue';
+import KaloAssistantButton from 'next/assistant/KaloAssistantButton.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
@@ -112,6 +113,7 @@ watch(
           </span>
           {{ t(item.labelKey) }}
         </router-link>
+        <KaloAssistantButton variant="sheet" />
         <router-link
           v-for="link in accountLinks"
           :key="link.key"
