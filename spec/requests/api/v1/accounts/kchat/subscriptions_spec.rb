@@ -20,7 +20,8 @@ RSpec.describe 'Kchat subscription API', type: :request do
 
     body = response.parsed_body
     expect(response).to have_http_status(:ok)
-    expect(body).to include('plan' => nil, 'status' => 'trial', 'memo' => "KALO #{account.id} PLAN", 'days_left' => 14)
+    expect(body).to include('plan' => nil, 'status' => 'trial', 'memo' => "KALO #{account.id} PLAN", 'days_left' => 14,
+                            'billing_configured' => true)
     expect(body['bank']).to eq('bank' => 'MB Bank', 'account_number' => '0123', 'account_name' => 'KTECH')
     expect(body['prices']).to eq('starter' => 299_000, 'growth' => 699_000, 'enterprise' => 1_990_000)
     expect(Time.zone.parse(body['valid_until'])).to be_within(1.minute).of(account.created_at + 14.days)
@@ -46,16 +47,27 @@ RSpec.describe 'Kchat subscription API', type: :request do
   end
 
   %w[CASSO_BANK_NAME CASSO_ACCOUNT_NUMBER CASSO_ACCOUNT_NAME].each do |key|
-    it "fails loudly with a JSON 503 billing_not_configured when #{key} is missing" do
+    it "still reports the trial but omits the payment block when #{key} is missing" do
       allow(Rails.logger).to receive(:error)
       with_modified_env(key => nil) do
         get url, headers: agent.create_new_auth_token, as: :json
       end
-      expect(response).to have_http_status(:service_unavailable)
-      expect(response.media_type).to eq('application/json')
-      expect(response.parsed_body).to eq('error' => 'billing_not_configured')
+      body = response.parsed_body
+      expect(response).to have_http_status(:ok)
+      expect(body).to include('plan' => nil, 'status' => 'trial', 'days_left' => 14, 'billing_configured' => false)
+      expect(Time.zone.parse(body['valid_until'])).to be_within(1.minute).of(account.created_at + 14.days)
+      expect(body.keys).not_to include('bank', 'memo', 'prices')
       expect(Rails.logger).to have_received(:error).with(/#{key}/)
     end
+  end
+
+  it 'reports an expired trial without the bank env' do
+    allow(Rails.logger).to receive(:error)
+    account.update_columns(created_at: 30.days.ago) # rubocop:disable Rails/SkipsModelValidations
+    with_modified_env(CASSO_BANK_NAME: nil) do
+      get url, headers: agent.create_new_auth_token, as: :json
+    end
+    expect(response.parsed_body).to include('status' => 'expired', 'days_left' => 0, 'billing_configured' => false)
   end
 
   it 'returns a memo that the Casso webhook matches and credits' do
