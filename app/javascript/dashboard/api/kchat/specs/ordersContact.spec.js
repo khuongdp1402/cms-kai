@@ -26,4 +26,12 @@ describe('#KchatOrdersAPI contact filter', () => {
       }
     );
   });
+
+  it('passes the delivery filter', () => {
+    ordersAPI.get({ status: 'paid', delivery: 'pending' });
+    expect(axiosMock.get.mock.calls.at(-1)[1].params).toMatchObject({
+      status: 'paid',
+      delivery: 'pending',
+    });
+  });
 });

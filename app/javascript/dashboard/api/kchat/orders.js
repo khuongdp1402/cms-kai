@@ -6,10 +6,11 @@ class KchatOrdersAPI extends ApiClient {
     super('kchat/orders', { accountScoped: true });
   }
 
-  get({ status, query, page, contactId } = {}) {
-    return axios.get(this.url, {
-      params: { status, query, page, contact_id: contactId },
-    });
+  get({ status, query, page, contactId, delivery } = {}) {
+    const params = { status, query, page, contact_id: contactId };
+    // delivery=pending: paid orders that still ship (no POS sales).
+    if (delivery) params.delivery = delivery;
+    return axios.get(this.url, { params });
   }
 
   transition(id, event) {

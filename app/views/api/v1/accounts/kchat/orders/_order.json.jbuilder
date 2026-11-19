@@ -1,6 +1,7 @@
 json.id order.id
 json.number order.number
 json.status order.status
+json.delivery_status order.delivery_status
 json.source order.source
 json.payment_method order.payment_method
 if order.contact

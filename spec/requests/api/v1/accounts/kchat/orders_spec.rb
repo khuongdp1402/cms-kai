@@ -33,6 +33,17 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(response.parsed_body['payload'].pluck('number')).to eq([1001])
     end
 
+    it 'exposes delivery_status and delivery=pending leaves POS sales out of Cần giao' do
+      shipped = make_order(extra: { payment_method: 'cash' })
+      pos = make_order(extra: { source: 'pos', payment_method: 'cash' })
+      get base, headers: headers, as: :json
+      statuses = response.parsed_body['payload'].to_h { |order| [order['id'], order['delivery_status']] }
+      expect(statuses).to eq(shipped.id => 'pending', pos.id => 'not_applicable')
+      get base, params: { delivery: 'pending' }, headers: headers, as: :json
+      expect(response.parsed_body['payload'].pluck('id')).to eq([shipped.id])
+      expect(response.parsed_body['meta']['count']).to eq(1)
+    end
+
     it 'filters by contact_id of the own account and reports paid_total' do
       contact = create(:contact, account: account)
       make_order(extra: { contact: contact })

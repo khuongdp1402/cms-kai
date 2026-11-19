@@ -31,6 +31,31 @@ RSpec.describe Kchat::Order do
     expect { build_order(items: [{ product_id: product.id, quantity: 1 }]) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
+  describe 'delivery status' do
+    it 'is not applicable for counter (POS) sales, so they never wait for delivery' do
+      pos = build_order(attributes: { source: 'pos', payment_method: 'cash' })
+      pos_qr = build_order(attributes: { source: 'pos', payment_method: 'transfer_qr' })
+      pos.transition!(:complete)
+      expect([pos.delivery_status, pos_qr.delivery_status]).to eq(%w[not_applicable not_applicable])
+      pos_qr.transition!(:cancel)
+      expect(pos_qr.delivery_status).to eq('cancelled')
+    end
+
+    it 'follows the order status for orders that ship' do
+      waiting = build_order(attributes: base.merge(payment_method: 'cash'))
+      shipping = build_order(attributes: base.merge(payment_method: 'cash')).transition!(:ship)
+      delivered = build_order(attributes: base.merge(payment_method: 'cash')).transition!(:ship).transition!(:complete)
+      expect([waiting, shipping, delivered].map(&:delivery_status)).to eq(%w[pending shipping delivered])
+    end
+
+    it 'awaiting_delivery lists paid orders that ship, never POS sales' do
+      waiting = build_order(attributes: base.merge(payment_method: 'cash'))
+      build_order(attributes: { source: 'pos', payment_method: 'cash' })
+      build_order
+      expect(described_class.awaiting_delivery).to eq([waiting])
+    end
+  end
+
   describe 'validation' do
     it 'rejects zero or negative quantity and negative price' do
       [{ unit_price: 1, quantity: 0 }, { unit_price: 1, quantity: -1 }, { unit_price: -5, quantity: 1 }].each do |attrs|

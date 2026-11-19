@@ -36,12 +36,17 @@ const withFlag = async ({ commit }, flag, run) => {
 let latestFetch = 0;
 
 export const actions = {
-  fetch: async ({ commit }, { status, query, page } = {}) => {
+  fetch: async ({ commit }, { status, query, page, delivery } = {}) => {
     latestFetch += 1;
     const requestId = latestFetch;
     commit(SET_UI_FLAG, { isFetching: true });
     try {
-      const { data } = await KchatOrdersAPI.get({ status, query, page });
+      const { data } = await KchatOrdersAPI.get({
+        status,
+        query,
+        page,
+        delivery,
+      });
       if (requestId === latestFetch) {
         commit(SET_ORDERS, { ...data, append: page > 1 });
       }

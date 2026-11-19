@@ -2,7 +2,8 @@
 export const STATUS_TABS = [
   { key: 'ALL', status: undefined },
   { key: 'PENDING_PAYMENT', status: 'pending_payment' },
-  { key: 'PAID', status: 'paid' },
+  // "Cần giao": paid orders that still ship; POS sales are handed over.
+  { key: 'PAID', status: 'paid', delivery: 'pending' },
   { key: 'SHIPPING', status: 'shipping' },
   { key: 'COMPLETED', status: 'completed' },
 ];
@@ -26,12 +27,34 @@ export const paymentChip = order => {
   return { key: 'PAID', tone: OK };
 };
 
+const isCounterSale = order =>
+  order.delivery_status
+    ? order.delivery_status === 'not_applicable'
+    : order.source === 'pos' && order.status !== 'cancelled';
+
+const chip = (key, tone) => ({
+  key,
+  tone,
+  labelKey: `KALO_ORDERS.DELIVERY_CHIP.${key}`,
+});
+
 export const deliveryChip = order => {
-  if (order.status === 'cancelled') return { key: 'CANCELLED', tone: GRAY };
-  if (order.status === 'shipping') return { key: 'SHIPPING', tone: NEW };
-  if (order.status === 'completed') return { key: 'COMPLETED', tone: OK };
-  return { key: 'NOT_SHIPPED', tone: GRAY };
+  if (order.status === 'cancelled') return chip('CANCELLED', GRAY);
+  if (isCounterSale(order)) {
+    return {
+      key: 'AT_COUNTER',
+      tone: OK,
+      labelKey: 'KALO_METRICS.DELIVERY_AT_COUNTER',
+    };
+  }
+  if (order.status === 'shipping') return chip('SHIPPING', NEW);
+  if (order.status === 'completed') return chip('COMPLETED', OK);
+  return chip('NOT_SHIPPED', GRAY);
 };
+
+// Counted in "Cần giao / Đang giao": paid or shipping orders that ship.
+export const awaitsDelivery = order =>
+  ['paid', 'shipping'].includes(order.status) && !isCounterSale(order);
 
 // One primary row action per status. A QR can only be sent into a chat.
 export const rowAction = order => {
