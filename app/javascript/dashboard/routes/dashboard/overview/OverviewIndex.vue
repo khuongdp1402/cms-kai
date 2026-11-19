@@ -177,6 +177,7 @@ onMounted(load);
       <div class="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div
           data-test="overview-kpi-revenue"
+          :title="t('KALO_METRICS.REVENUE')"
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
@@ -207,6 +208,7 @@ onMounted(load);
 
         <div
           data-test="overview-kpi-cvr"
+          :title="t('KALO_METRICS.CHAT_CONVERSION')"
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
@@ -223,7 +225,7 @@ onMounted(load);
           <span class="text-xs text-n-slate-10 tabular-nums">
             {{
               t('KALO_OVERVIEW.KPI.CHAT_SUB', {
-                orders: kpis.conversations_with_orders ?? 0,
+                orders: kpis.chat_orders_count ?? 0,
                 convs: kpis.conversations_count ?? 0,
                 pending: kpis.pending_qr_count ?? 0,
               })
@@ -400,6 +402,12 @@ onMounted(load);
               <div
                 v-for="ch in channelQuality"
                 :key="ch.channel"
+                data-test="overview-channel-row"
+                :title="
+                  ch.cvr_pct === null
+                    ? t('KALO_METRICS.COUNTER_ROW')
+                    : t('KALO_METRICS.CHANNEL_ROW')
+                "
                 class="flex flex-wrap items-center justify-between gap-3 p-3 border rounded-xl bg-n-solid-2 border-n-weak"
               >
                 <b class="text-sm font-semibold text-n-slate-12">
@@ -408,7 +416,7 @@ onMounted(load);
                 <div
                   class="flex flex-wrap items-center gap-3 text-xs text-n-slate-11 tabular-nums"
                 >
-                  <span>
+                  <span v-if="ch.cvr_pct !== null">
                     {{
                       t('KALO_OVERVIEW.CHANNEL_CHATS', {
                         count: ch.conversations_count,
@@ -422,7 +430,10 @@ onMounted(load);
                       })
                     }}
                   </span>
-                  <span class="font-bold text-n-slate-12">
+                  <span
+                    v-if="ch.cvr_pct !== null"
+                    class="font-bold text-n-slate-12"
+                  >
                     {{ t('KALO_OVERVIEW.CHANNEL_CVR', { pct: ch.cvr_pct }) }}
                   </span>
                 </div>

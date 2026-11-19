@@ -3996,6 +3996,25 @@
     "TABS_LABEL": "Marketing",
     "TITLE": "Marketing"
   },
+  "KALO_METRICS": {
+    "AI_READY": "AI đang hoạt động",
+    "AI_READY_MODEL": "AI đang hoạt động · {model}",
+    "AI_UNAVAILABLE": "AI tạm thời không phản hồi",
+    "AI_UNAVAILABLE_NOTE": "AI đang lỗi kết nối nên tạm chưa viết hộ được. Bạn vẫn soạn tay bình thường, vài phút nữa thử lại.",
+    "AOV": "Giá trị đơn trung bình = doanh thu thực thu chia cho số đơn đã nhận tiền trong kỳ.",
+    "CHAT_CONVERSION": "Tỷ lệ chốt từ chat = số hội thoại mới trong kỳ có ít nhất một đơn (trừ đơn đã hủy) chia cho số hội thoại mới trong kỳ. Đơn bán tại quầy không tính vào tỷ lệ này.",
+    "CHAT_ORDERS": "Đơn từ chat: đơn tạo trong kỳ có gắn hội thoại, trừ đơn bán tại quầy và đơn đã hủy.",
+    "CHANNEL_ROW": "Khách nhắn: hội thoại mới trong kỳ của kênh. Đơn chốt: đơn từ chat của kênh. Tỷ lệ chốt: phần trăm hội thoại có đơn. Doanh thu: tiền đã nhận trong kỳ.",
+    "COUNTER_ROW": "Đơn bán tại quầy hoặc tạo tay không qua chat. Không có hội thoại nên không tính tỷ lệ chốt.",
+    "DELIVERY_AT_COUNTER": "Nhận tại quầy",
+    "NEW_ORDERS": "Đơn mới: mọi đơn tạo trong kỳ trừ đơn đã hủy, gồm cả đơn chưa thanh toán và đơn bán tại quầy.",
+    "NOT_APPLICABLE": "—",
+    "PAID_ORDERS": "Đơn thành công: số đơn đã nhận tiền trong kỳ, đúng nhóm đơn tạo nên doanh thu.",
+    "PERIOD": "Kỳ báo cáo tính từ 0 giờ theo giờ Việt Nam.",
+    "REVENUE": "Doanh thu thực thu: tổng tiền các đơn đã nhận tiền (đã thanh toán, đang giao, hoàn tất) trong kỳ, tính theo ngày nhận tiền. Gồm cả đơn bán tại quầy.",
+    "ROW_MANUAL": "Tạo tay (không qua chat)",
+    "ROW_POS": "Bán tại quầy"
+  },
   "KALO_NAV": {
     "BRAND_NAME": "Kalo",
     "CUSTOMERS": "Khách",

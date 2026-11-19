@@ -30,8 +30,7 @@ class Kchat::QualityOverviewReport
 
     @account = account
     @range = range
-    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] ||
-            ActiveSupport::TimeZone[Kchat::Reports::DEFAULT_TIMEZONE]
+    @zone = Kchat::Metrics.zone_for(account)
   end
 
   def summary
@@ -41,20 +40,17 @@ class Kchat::QualityOverviewReport
 
   private
 
-  def window
-    @window ||= Kchat::BrandsOverviewReport.build_window(@zone, @range)
+  # Sales and chat numbers come from Kchat::Metrics, the same definitions as the Báo cáo page.
+  def metrics
+    @metrics ||= Kchat::Metrics.new(@account, @range)
   end
 
-  def paid_orders_scope
-    @paid_orders_scope ||= Kchat::Order.where(
-      account_id: @account.id,
-      status: PAID_STATUSES,
-      paid_at: window
-    )
+  def window
+    metrics.window
   end
 
   def conversations_scope
-    @conversations_scope ||= Conversation.where(account_id: @account.id, created_at: window)
+    @conversations_scope ||= metrics.conversations
   end
 
   def open_waiting_scope
@@ -66,28 +62,27 @@ class Kchat::QualityOverviewReport
   end
 
   def order_kpis
-    revenue, orders_count = paid_orders_scope.pick(Arel.sql('COALESCE(SUM(total), 0)'), Arel.sql('COUNT(*)'))
-    rev = revenue.to_i
-    cnt = orders_count.to_i
+    totals = metrics.totals
     pending_qr = Kchat::Order.where(account_id: @account.id, status: 'pending_payment', payment_method: 'transfer_qr').count
     cancelled_cnt = Kchat::Order.where(account_id: @account.id, status: 'cancelled', updated_at: window).count
 
     {
-      revenue: rev,
-      orders_count: cnt,
-      aov: cnt.positive? ? (rev.to_f / cnt).round : 0,
+      revenue: totals[:revenue],
+      orders_count: totals[:paid_orders_count],
+      aov: totals[:avg_order_value],
+      new_orders_count: totals[:new_orders_count],
       pending_qr_count: pending_qr,
       cancelled_orders_count: cancelled_cnt
     }
   end
 
   def conversation_kpis
-    total_convs = conversations_scope.count
-    with_orders = paid_orders_scope.where.not(conversation_id: nil).distinct.count(:conversation_id)
+    totals = metrics.totals
     {
-      conversations_count: total_convs,
-      conversations_with_orders: with_orders,
-      chat_to_order_cvr_pct: total_convs.positive? ? (with_orders * 100.0 / total_convs).round(1) : 0.0
+      conversations_count: totals[:chat_conversations_count],
+      conversations_with_orders: totals[:converted_conversations_count],
+      chat_orders_count: totals[:chat_orders_count],
+      chat_to_order_cvr_pct: totals[:chat_conversion_pct]
     }
   end
 
@@ -164,31 +159,21 @@ class Kchat::QualityOverviewReport
     }
   end
 
+  # Same rows as the Báo cáo funnel; counter sales (POS, manual) have cvr_pct nil. Waiting conversations are added per channel.
   def build_channel_quality
-    counts = channel_counts_by_type
-    channel_types = counts[:convs].keys | counts[:orders].keys | counts[:waiting_15m].keys
-    rows = channel_types.map { |ch_type| map_channel_row(ch_type, counts) }
-    rows.sort_by { |row| [-row[:orders_count], -row[:conversations_count], row[:channel]] }
+    waiting = waiting_over_15m_by_channel
+    rows = metrics.channel_rows.map do |row|
+      { channel: row[:channel], chat: row[:chat], conversations_count: row[:conversations], orders_count: row[:orders],
+        cvr_pct: row[:conversion_pct], waiting_over_15m_count: waiting.delete(row[:channel]).to_i }
+    end
+    rows + waiting.map do |channel, count|
+      { channel: channel, chat: true, conversations_count: 0, orders_count: 0, cvr_pct: 0.0, waiting_over_15m_count: count }
+    end
   end
 
-  def channel_counts_by_type
-    {
-      convs: Conversation.joins(:inbox).where(account_id: @account.id, created_at: window).group('inboxes.channel_type').count,
-      orders: paid_orders_scope.joins(conversation: :inbox).group('inboxes.channel_type').count,
-      waiting_15m: open_waiting_scope.joins(:inbox).where(waiting_since: ..WAIT_ALERT_MINUTES.minutes.ago).group('inboxes.channel_type').count
-    }
-  end
-
-  def map_channel_row(ch_type, counts)
-    conv_count = counts[:convs][ch_type].to_i
-    ord_count = counts[:orders][ch_type].to_i
-    {
-      channel: ch_type.to_s.demodulize.underscore,
-      conversations_count: conv_count,
-      orders_count: ord_count,
-      cvr_pct: conv_count.positive? ? (ord_count * 100.0 / conv_count).round(1) : 0.0,
-      waiting_over_15m_count: counts[:waiting_15m][ch_type].to_i
-    }
+  def waiting_over_15m_by_channel
+    open_waiting_scope.joins(:inbox).where(waiting_since: ..WAIT_ALERT_MINUTES.minutes.ago).group('inboxes.channel_type').count
+                      .transform_keys { |channel_type| Kchat::Metrics.normalize_channel(channel_type) }
   end
 
   def build_action_queue

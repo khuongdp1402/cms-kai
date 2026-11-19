@@ -62,6 +62,24 @@ RSpec.describe Kchat::QualityOverviewReport do
     expect(report[:action_queue].pluck(:key)).to include('waiting_over_15m', 'low_stock_products')
   end
 
+  it 'reports the chat order of the reported case and keeps the POS sale out of the chat conversion' do
+    chat = create(:conversation, account: account, inbox: inbox, contact: contact)
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: chat },
+                                    items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },
+                                    items: [{ name: 'Nến', unit_price: 90_000, quantity: 1 }])
+
+    report = described_class.new(account, 'today').summary
+    expect(report[:kpis]).to include(revenue: 90_000, orders_count: 1, aov: 90_000, new_orders_count: 2, conversations_count: 1,
+                                     conversations_with_orders: 1, chat_orders_count: 1, chat_to_order_cvr_pct: 100.0, pending_qr_count: 1)
+    expect(report[:channel_quality]).to eq(
+      [
+        { channel: 'web_widget', chat: true, conversations_count: 1, orders_count: 1, cvr_pct: 100.0, waiting_over_15m_count: 0 },
+        { channel: 'pos', chat: false, conversations_count: 0, orders_count: 1, cvr_pct: nil, waiting_over_15m_count: 0 }
+      ]
+    )
+  end
+
   it 'sends hidden comments to the Bình luận page (kalo_comments)' do
     conversation = create(:conversation, account: account, inbox: inbox, contact: contact)
     message = create(:message, account: account, inbox: inbox, conversation: conversation)

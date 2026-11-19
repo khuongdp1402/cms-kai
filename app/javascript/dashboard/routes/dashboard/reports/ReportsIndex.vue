@@ -92,18 +92,28 @@ const selectRange = value => {
   load();
 };
 
+// "Đơn mới" counts every non-cancelled order created in the period
+// (Kchat::Metrics); the tooltip keys state each definition.
 const kpis = computed(() => [
   {
     key: 'REVENUE',
     value: formatMoney(summary.value?.revenue ?? 0),
+    hintKey: 'KALO_METRICS.REVENUE',
   },
-  { key: 'ORDERS', value: summary.value?.orders_count ?? 0 },
+  {
+    key: 'ORDERS',
+    value: summary.value?.new_orders_count ?? summary.value?.orders_count ?? 0,
+    hintKey: 'KALO_METRICS.NEW_ORDERS',
+  },
   { key: 'WAITING', value: summary.value?.waiting_messages ?? 0 },
   { key: 'CONTACTS', value: summary.value?.new_contacts ?? 0 },
 ]);
 
 const isEmpty = computed(
-  () => summary.value && summary.value.orders_count === 0
+  () =>
+    summary.value &&
+    (summary.value.new_orders_count ?? 0) === 0 &&
+    summary.value.orders_count === 0
 );
 
 const detailReportLinks = computed(() =>
@@ -158,6 +168,8 @@ onMounted(load);
         <div
           v-for="kpi in kpis"
           :key="kpi.key"
+          :data-test="`report-kpi-${kpi.key}`"
+          :title="kpi.hintKey ? t(kpi.hintKey) : undefined"
           class="p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <p class="text-xs font-semibold text-n-slate-10">

@@ -126,6 +126,19 @@ RSpec.describe Kchat::Reports do
     expect(summary('today', utc)[:revenue]).to eq(0)
   end
 
+  it 'counts every non-cancelled order created in the period as a new order (reported case: chat QR order + POS sale)' do
+    convo = make_conversation
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: convo },
+                                    items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
+    Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },
+                                    items: [{ name: 'Nến', unit_price: 90_000, quantity: 1 }])
+    order(price: 1000, status: 'cancelled', paid_at: nil)
+
+    result = summary
+    expect(result).to include(new_orders_count: 2, orders_count: 1, revenue: 90_000)
+    expect(result[:channels]).to eq([{ channel: 'pos', orders: 1, share_pct: 50 }, { channel: 'web_widget', orders: 1, share_pct: 50 }])
+  end
+
   it 'rejects an unknown range' do
     expect { summary('year') }.to raise_error(ArgumentError)
   end

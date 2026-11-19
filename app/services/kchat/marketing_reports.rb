@@ -29,15 +29,17 @@ class Kchat::MarketingReports
 
     @account = account
     @range = range
-    @zone = ActiveSupport::TimeZone[account.reporting_timezone.to_s] || ActiveSupport::TimeZone[Kchat::Reports::DEFAULT_TIMEZONE]
+    @zone = Kchat::Metrics.zone_for(account)
   end
 
+  # Channel funnel and totals come from Kchat::Metrics (same definitions as Tổng quan). Campaign and agent rows follow them:
+  # orders = non-cancelled chat orders created in the period, conversion = conversations with an order / conversations,
+  # revenue = paid revenue in the period.
   def funnel
-    channel_data = build_channel_funnel
     {
       range: @range,
-      totals: summarize_totals(channel_data),
-      channel_funnel: channel_data,
+      totals: summarize_totals,
+      channel_funnel: metrics.channel_rows,
       campaigns: build_campaigns,
       agents: build_agents
     }
@@ -45,57 +47,24 @@ class Kchat::MarketingReports
 
   private
 
-  def window
-    @window ||= Kchat::BrandsOverviewReport.build_window(@zone, @range)
+  def metrics
+    @metrics ||= Kchat::Metrics.new(@account, @range)
   end
 
-  def paid_orders
-    Kchat::Order.where(account_id: @account.id, status: PAID_STATUSES, paid_at: window)
-  end
+  delegate :window, :paid_orders, :chat_orders, to: :metrics
 
-  def summarize_totals(channel_data)
-    convs = channel_data.sum { |row| row[:conversations] }
-    orders = channel_data.sum { |row| row[:orders] }
-    revenue = channel_data.sum { |row| row[:revenue] }
+  # conversion_pct is the overall chat close rate; counter (POS/manual) orders are reported apart and never enter it.
+  def summarize_totals
+    totals = metrics.totals
     {
-      conversations_count: convs,
-      orders_count: orders,
-      conversion_pct: percentage(orders, convs),
-      revenue: revenue,
-      avg_order_value: average(revenue, orders)
+      conversations_count: totals[:chat_conversations_count],
+      converted_conversations_count: totals[:converted_conversations_count],
+      orders_count: totals[:chat_orders_count],
+      counter_orders_count: totals[:counter_orders_count],
+      conversion_pct: totals[:chat_conversion_pct],
+      revenue: totals[:revenue],
+      avg_order_value: totals[:avg_order_value]
     }
-  end
-
-  def build_channel_funnel
-    leads = channel_lead_counts
-    orders, revenues = channel_order_totals
-    rows = (leads.keys | orders.keys).map do |channel|
-      conv_count = leads[channel]
-      order_count = orders[channel]
-      rev = revenues[channel]
-      { channel: channel, conversations: conv_count, orders: order_count,
-        conversion_pct: percentage(order_count, conv_count), revenue: rev, avg_order_value: average(rev, order_count) }
-    end
-    rows.sort_by { |row| [-row[:revenue], -row[:orders], -row[:conversations], row[:channel]] }
-  end
-
-  def channel_lead_counts
-    rows = Conversation.joins(:inbox).where(account_id: @account.id, created_at: window).group('inboxes.channel_type').count
-    rows.each_with_object(Hash.new(0)) { |(ch_type, cnt), memo| memo[normalize_channel(ch_type)] += cnt.to_i }
-  end
-
-  def channel_order_totals
-    orders = Hash.new(0)
-    revenues = Hash.new(0)
-    paid_orders.left_joins(conversation: :inbox)
-               .group('kchat_orders.source', 'inboxes.channel_type')
-               .pluck('kchat_orders.source', 'inboxes.channel_type', Arel.sql('COUNT(*)'), Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'))
-               .each do |source, channel_type, count, revenue|
-      key = channel_type.present? ? normalize_channel(channel_type) : source.to_s
-      orders[key] += count.to_i
-      revenues[key] += revenue.to_i
-    end
-    [orders, revenues]
   end
 
   def build_campaigns
@@ -103,7 +72,7 @@ class Kchat::MarketingReports
     merge_campaign_leads(buckets)
     merge_campaign_orders(buckets)
     buckets.values
-           .map { |row| row.merge(conversion_pct: percentage(row[:orders], row[:conversations])) }
+           .map { |row| row.except(:converted).merge(conversion_pct: percentage(row[:converted], row[:conversations])) }
            .sort_by { |row| [-row[:revenue], -row[:orders], -row[:conversations], row[:campaign]] }
            .first(TOP_CAMPAIGNS_LIMIT)
   end
@@ -111,25 +80,31 @@ class Kchat::MarketingReports
   def merge_campaign_leads(buckets)
     rel = Conversation.joins(:inbox).where(account_id: @account.id, created_at: window)
                       .where("#{CAMPAIGN_SQL} IS NOT NULL").group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
-                      .select(Arel.sql("#{CAMPAIGN_SQL} AS campaign_key, #{SOURCE_SQL} AS source_key, COUNT(*) AS cnt"))
-    ActiveRecord::Base.connection.select_rows(rel.to_sql).each do |campaign, source, count|
+                      .select(Arel.sql("#{CAMPAIGN_SQL} AS campaign_key, #{SOURCE_SQL} AS source_key, COUNT(*) AS cnt, " \
+                                       "#{Kchat::Metrics::CONVERTED_COUNT_SQL} AS converted"))
+    ActiveRecord::Base.connection.select_rows(rel.to_sql).each do |campaign, source, count, converted|
       row = campaign_bucket(buckets, campaign, source)
-      row[:conversations] += count.to_i if row
+      next unless row
+
+      row[:conversations] += count.to_i
+      row[:converted] += converted.to_i
     end
   end
 
   def merge_campaign_orders(buckets)
-    sel = "#{CAMPAIGN_SQL} AS c_key, #{SOURCE_SQL} AS s_key, COUNT(*) AS cnt, COALESCE(SUM(kchat_orders.total), 0) AS rev"
-    rel = paid_orders.joins(conversation: :inbox).where("#{CAMPAIGN_SQL} IS NOT NULL")
-                     .group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
-                     .select(Arel.sql(sel))
-    ActiveRecord::Base.connection.select_rows(rel.to_sql).each do |campaign, source, count, revenue|
-      row = campaign_bucket(buckets, campaign, source)
-      next unless row
-
-      row[:orders] += count.to_i
-      row[:revenue] += revenue.to_i
+    campaign_order_rows(chat_orders, 'COUNT(*)').each do |campaign, source, count|
+      campaign_bucket(buckets, campaign, source)&.then { |row| row[:orders] += count.to_i }
     end
+    campaign_order_rows(paid_orders, 'COALESCE(SUM(kchat_orders.total), 0)').each do |campaign, source, revenue|
+      campaign_bucket(buckets, campaign, source)&.then { |row| row[:revenue] += revenue.to_i }
+    end
+  end
+
+  def campaign_order_rows(scope, aggregate)
+    rel = scope.joins(conversation: :inbox).where("#{CAMPAIGN_SQL} IS NOT NULL")
+               .group(Arel.sql(CAMPAIGN_SQL), Arel.sql(SOURCE_SQL))
+               .select(Arel.sql("#{CAMPAIGN_SQL} AS c_key, #{SOURCE_SQL} AS s_key, #{aggregate} AS value"))
+    ActiveRecord::Base.connection.select_rows(rel.to_sql)
   end
 
   def campaign_bucket(buckets, campaign, source)
@@ -137,7 +112,7 @@ class Kchat::MarketingReports
     return nil if name.empty?
 
     key = [name, normalize_channel(source)]
-    buckets[key] ||= { campaign: key[0], source: key[1], conversations: 0, orders: 0, revenue: 0 }
+    buckets[key] ||= { campaign: key[0], source: key[1], conversations: 0, converted: 0, orders: 0, revenue: 0 }
   end
 
   def build_agents
@@ -148,38 +123,40 @@ class Kchat::MarketingReports
 
     names = User.where(id: buckets.keys).pluck(:id, :name).to_h
     rows = buckets.values.map do |row|
-      row.merge(name: names.fetch(row[:agent_id], "##{row[:agent_id]}"), conversion_pct: percentage(row[:orders], row[:conversations]))
+      row.except(:converted).merge(name: names.fetch(row[:agent_id], "##{row[:agent_id]}"),
+                                   conversion_pct: percentage(row[:converted], row[:conversations]))
     end
     rows.sort_by { |row| [-row[:revenue], -row[:orders], -row[:conversations], row[:agent_id]] }.first(TOP_AGENTS_LIMIT)
   end
 
   def merge_agent_leads(buckets)
-    Conversation.where(account_id: @account.id, created_at: window).where.not(assignee_id: nil).group(:assignee_id).count.each do |id, count|
-      (buckets[id] ||= { agent_id: id, conversations: 0, orders: 0, revenue: 0 })[:conversations] += count.to_i
+    metrics.conversations.where.not(assignee_id: nil).group(:assignee_id)
+           .pluck(:assignee_id, Arel.sql('COUNT(*)'), Arel.sql(Kchat::Metrics::CONVERTED_COUNT_SQL)).each do |id, count, converted|
+      row = agent_bucket(buckets, id)
+      row[:conversations] += count.to_i
+      row[:converted] += converted.to_i
     end
   end
 
   def merge_agent_orders(buckets)
-    paid_orders.joins(:conversation).where.not(conversations: { assignee_id: nil }).group('conversations.assignee_id')
-               .pluck('conversations.assignee_id', Arel.sql('COUNT(*)'), Arel.sql('COALESCE(SUM(kchat_orders.total), 0)')).each do |id, cnt, rev|
-      row = (buckets[id] ||= { agent_id: id, conversations: 0, orders: 0, revenue: 0 })
-      row[:orders] += cnt.to_i
-      row[:revenue] += rev.to_i
-    end
+    agent_order_rows(chat_orders, 'COUNT(*)').each { |id, count| agent_bucket(buckets, id)[:orders] += count.to_i }
+    agent_order_rows(paid_orders, 'COALESCE(SUM(kchat_orders.total), 0)').each { |id, rev| agent_bucket(buckets, id)[:revenue] += rev.to_i }
+  end
+
+  def agent_order_rows(scope, aggregate)
+    scope.joins(:conversation).where.not(conversations: { assignee_id: nil }).group('conversations.assignee_id')
+         .pluck('conversations.assignee_id', Arel.sql(aggregate))
+  end
+
+  def agent_bucket(buckets, id)
+    buckets[id] ||= { agent_id: id, conversations: 0, converted: 0, orders: 0, revenue: 0 }
   end
 
   def normalize_channel(value)
-    raw = value.to_s.strip
-    return 'unknown' if raw.empty?
-
-    raw.start_with?('Channel::') ? raw.demodulize.underscore : raw
+    Kchat::Metrics.normalize_channel(value)
   end
 
   def percentage(numerator, denominator)
-    denominator.to_i <= 0 ? 0.0 : (numerator.to_f * 100.0 / denominator).round(1)
-  end
-
-  def average(total, count)
-    count.to_i <= 0 ? 0 : (total.to_f / count).round
+    Kchat::Metrics.percentage(numerator, denominator)
   end
 end

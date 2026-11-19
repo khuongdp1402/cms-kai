@@ -8,7 +8,16 @@ defineProps({
 
 const { t, te } = useI18n();
 
+// Counter rows (POS, manual orders without a chat) have no conversations, so
+// no close rate (conversion_pct null, see Kchat::Metrics).
+const COUNTER_LABELS = {
+  pos: 'KALO_METRICS.ROW_POS',
+  manual: 'KALO_METRICS.ROW_MANUAL',
+};
+const isCounterRow = row => row.conversion_pct === null;
+
 const channelLabel = raw => {
+  if (COUNTER_LABELS[raw]) return t(COUNTER_LABELS[raw]);
   const key = String(raw || '')
     .replace(/^Channel::/, '')
     .replace(/([a-z])([A-Z])/g, '$1_$2')
@@ -26,7 +35,11 @@ const channelLabel = raw => {
         <h2 class="text-base font-bold text-n-slate-12">
           {{ t('KALO_REPORTS.FUNNEL.CHANNEL_TITLE') }}
         </h2>
-        <span class="text-xs font-semibold text-n-slate-11">
+        <span
+          data-test="funnel-overall-rate"
+          :title="t('KALO_METRICS.CHAT_CONVERSION')"
+          class="text-xs font-semibold text-n-slate-11"
+        >
           {{
             t('KALO_REPORTS.FUNNEL.OVERVIEW_RATE', {
               rate: funnel.totals?.conversion_pct ?? 0,
@@ -64,15 +77,30 @@ const channelLabel = raw => {
               v-for="row in funnel.channel_funnel || []"
               :key="row.channel"
               data-test="funnel-channel"
+              :title="
+                isCounterRow(row)
+                  ? t('KALO_METRICS.COUNTER_ROW')
+                  : t('KALO_METRICS.CHANNEL_ROW')
+              "
               class="border-b border-n-weak last:border-b-0 text-n-slate-12"
             >
               <td class="py-2 pr-3 font-semibold">
                 {{ channelLabel(row.channel) }}
               </td>
-              <td class="py-2 px-3 text-right">{{ row.conversations }}</td>
+              <td class="py-2 px-3 text-right">
+                {{
+                  isCounterRow(row)
+                    ? t('KALO_METRICS.NOT_APPLICABLE')
+                    : row.conversations
+                }}
+              </td>
               <td class="py-2 px-3 text-right">{{ row.orders }}</td>
               <td class="py-2 px-3 font-semibold text-right">
-                {{ row.conversion_pct }}%
+                {{
+                  isCounterRow(row)
+                    ? t('KALO_METRICS.NOT_APPLICABLE')
+                    : `${row.conversion_pct}%`
+                }}
               </td>
               <td class="py-2 px-3 font-bold text-right">
                 {{ formatMoney(row.revenue) }}
