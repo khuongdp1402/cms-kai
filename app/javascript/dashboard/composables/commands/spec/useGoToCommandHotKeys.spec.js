@@ -185,4 +185,25 @@ describe('useGoToCommandHotKeys', () => {
     );
     expect(disabledFeatureCommands.length).toBe(0);
   });
+
+  it('drops the Chatwoot report commands when kalo_detailed_reports is off', () => {
+    const reportIds = [
+      'open_reports_overview',
+      'open_conversation_reports',
+      'open_agent_reports',
+      'open_label_reports',
+      'open_inbox_reports',
+      'open_team_reports',
+    ];
+    store.getters['accounts/isFeatureEnabledonAccount'] = vi.fn(
+      (_id, flag) => flag !== 'kalo_detailed_reports'
+    );
+    const off = useGoToCommandHotKeys().goToCommandHotKeys.value.map(c => c.id);
+    reportIds.forEach(id => expect(off).not.toContain(id));
+    expect(off).toContain('goto_contacts_dashboard');
+
+    store.getters['accounts/isFeatureEnabledonAccount'] = vi.fn(() => true);
+    const on = useGoToCommandHotKeys().goToCommandHotKeys.value.map(c => c.id);
+    reportIds.forEach(id => expect(on).toContain(id));
+  });
 });

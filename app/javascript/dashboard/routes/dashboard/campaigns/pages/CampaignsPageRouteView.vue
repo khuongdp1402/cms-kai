@@ -1,9 +1,10 @@
 <script setup>
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 
 defineProps({
@@ -14,6 +15,7 @@ const store = useStore();
 const route = useRoute();
 const { t } = useI18n();
 const { accountScopedRoute } = useAccount();
+const { isRouteNameOn } = useKaloFeatures();
 
 const CHANNEL_LINKS = [
   {
@@ -29,6 +31,11 @@ const CHANNEL_LINKS = [
     labelKey: 'KALO_MARKETING.CAMPAIGN_LINKS.WHATSAPP',
   },
 ];
+
+// SMS and WhatsApp need kalo_extra_channels as well (kaloFeatures.js).
+const channelLinks = computed(() =>
+  CHANNEL_LINKS.filter(link => isRouteNameOn(link.name))
+);
 
 onMounted(() => {
   store.dispatch('campaigns/get');
@@ -53,7 +60,7 @@ onMounted(() => {
       </router-link>
       <div class="flex flex-wrap items-center gap-1.5 ltr:ml-auto rtl:mr-auto">
         <router-link
-          v-for="item in CHANNEL_LINKS"
+          v-for="item in channelLinks"
           :key="item.name"
           :to="accountScopedRoute(item.name)"
           class="px-3 py-1 text-xs font-semibold rounded-full"

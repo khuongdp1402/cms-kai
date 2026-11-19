@@ -22,6 +22,7 @@ import {
 } from 'dashboard/helper/commandbar/icons';
 import { frontendURL } from 'dashboard/helper/URLHelper';
 import { FEATURE_FLAGS } from 'dashboard/featureFlags';
+import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
 
 const GO_TO_COMMANDS = [
   {
@@ -43,6 +44,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_reports_overview',
+    kaloRoute: 'account_overview_reports',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_REPORTS_OVERVIEW',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -52,6 +54,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_conversation_reports',
+    kaloRoute: 'conversation_reports',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_CONVERSATION_REPORTS',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -61,6 +64,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_agent_reports',
+    kaloRoute: 'agent_reports_index',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_AGENT_REPORTS',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -70,6 +74,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_label_reports',
+    kaloRoute: 'label_reports_index',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_LABEL_REPORTS',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -79,6 +84,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_inbox_reports',
+    kaloRoute: 'inbox_reports_index',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_INBOX_REPORTS',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -88,6 +94,7 @@ const GO_TO_COMMANDS = [
   },
   {
     id: 'open_team_reports',
+    kaloRoute: 'team_reports_index',
     section: 'COMMAND_BAR.SECTIONS.REPORTS',
     title: 'COMMAND_BAR.COMMANDS.GO_TO_TEAM_REPORTS',
     featureFlag: FEATURE_FLAGS.REPORTS,
@@ -185,6 +192,9 @@ export function useGoToCommandHotKeys() {
     'accounts/isFeatureEnabledonAccount'
   );
 
+  // Kalo: commands into pages hidden by a kalo_* flag are not offered.
+  const { isRouteNameOn } = useKaloFeatures();
+
   const openRoute = url => {
     router.push(frontendURL(url));
   };
@@ -198,7 +208,7 @@ export function useGoToCommandHotKeys() {
         );
       }
       return true;
-    });
+    }).filter(cmd => !cmd.kaloRoute || isRouteNameOn(cmd.kaloRoute));
 
     if (!isAdmin.value) {
       commands = commands.filter(command => command.role.includes('agent'));
