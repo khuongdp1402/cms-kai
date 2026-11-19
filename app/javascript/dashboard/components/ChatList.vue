@@ -35,7 +35,7 @@ import { useConversationRequiredAttributes } from 'dashboard/composables/useConv
 import { emitter } from 'shared/helpers/mitt';
 
 import wootConstants from 'dashboard/constants/globals';
-import { shouldOpenUnassigned } from './widgets/conversation/helpers/kaloAssigneeTab';
+import { useDefaultAssigneeTab } from './widgets/conversation/helpers/kaloAssigneeTab';
 import advancedFilterOptions from './widgets/conversation/advancedFilterItems';
 import filterQueryGenerator from '../helper/filterQueryGenerator.js';
 import languages from 'dashboard/components/widgets/conversation/advancedFilterItems/languages';
@@ -606,9 +606,8 @@ function loadMoreConversations() {
 }
 
 // Tab choice: an explicit pick (click, Alt+N, empty-state button) always wins
-// over the first-load switch to "Chưa ai nhận" below.
+// over the first-load switch to "Chưa ai nhận" below, which is decided once.
 const hasUserPickedTab = ref(false);
-const hasAutoSwitchedTab = ref(false);
 
 function updateAssigneeTab(selectedTab) {
   if (activeAssigneeTab.value !== selectedTab) {
@@ -630,33 +629,15 @@ const unassignedCount = computed(
   () => conversationStats.value?.unAssignedCount || 0
 );
 
-// `beforeFetch`: on mount, before the first fetch, only flip the tab (the
-// mount fetch then loads it); later, a stats update switches and fetches.
-function maybeOpenUnassigned({ beforeFetch = false } = {}) {
-  const open = shouldOpenUnassigned({
-    activeTab: activeAssigneeTab.value,
-    hasUserPicked: hasUserPickedTab.value,
-    hasAutoSwitched: hasAutoSwitchedTab.value,
-    isFiltered: hasAppliedFiltersOrActiveFolders.value,
-    tabKeys: assigneeTabItems.value.map(item => item.key),
-    stats: conversationStats.value,
-  });
-  if (!open) return;
-  hasAutoSwitchedTab.value = true;
-  if (beforeFetch) {
-    activeAssigneeTab.value = wootConstants.ASSIGNEE_TYPE.UNASSIGNED;
-  } else {
-    updateAssigneeTab(wootConstants.ASSIGNEE_TYPE.UNASSIGNED);
-  }
-}
-
-watch(
-  () => [
-    conversationStats.value?.mineCount,
-    conversationStats.value?.unAssignedCount,
-  ],
-  () => maybeOpenUnassigned()
-);
+useDefaultAssigneeTab({
+  stats: conversationStats,
+  activeTab: activeAssigneeTab,
+  hasUserPicked: hasUserPickedTab,
+  isFiltered: hasAppliedFiltersOrActiveFolders,
+  tabKeys: computed(() => assigneeTabItems.value.map(item => item.key)),
+  openUnassigned: () =>
+    updateAssigneeTab(wootConstants.ASSIGNEE_TYPE.UNASSIGNED),
+});
 
 function onBasicFilterChange(value, type) {
   if (type === 'status') {
@@ -850,7 +831,6 @@ useEmitter('fetch_conversation_stats', () => {
 });
 
 onMounted(() => {
-  maybeOpenUnassigned({ beforeFetch: true });
   store.dispatch('setChatListFilters', conversationFilters.value);
   setFiltersFromUISettings();
   store.dispatch('setChatStatusFilter', activeStatus.value);
