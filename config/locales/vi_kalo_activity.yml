@@ -1,0 +1,47 @@
+# Kalo Vietnamese activity messages (system lines inside a conversation).
+# Upstream vi.yml is synced from Crowdin and keeps these in English, so they
+# are overridden here. The file name must sort after vi.yml: Rails loads
+# config/locales in name order and the last file wins.
+# Kchat::ActivityLocale renders them in the shop's language (account.locale).
+vi:
+  conversations:
+    activity:
+      captain:
+        resolved: '%{user_name} đã đóng hội thoại vì lâu không có tin mới'
+        resolved_with_reason: '%{user_name} đã đóng hội thoại (%{reason})'
+        resolved_by_tool: '%{user_name} đã đóng hội thoại: %{reason}'
+        open: '%{user_name} đã mở lại hội thoại'
+        open_with_reason: '%{user_name} đã mở lại hội thoại (%{reason})'
+        auto_opened_after_agent_reply: 'Hội thoại tự mở lại sau khi nhân viên trả lời'
+      agent_bot:
+        error_moved_to_open: 'Hệ thống mở lại hội thoại vì bot trả lời gặp lỗi.'
+      status:
+        auto_resolved_hours: 'Hệ thống đóng hội thoại vì %{count} giờ không có tin mới'
+        auto_resolved_minutes: 'Hệ thống đóng hội thoại vì %{count} phút không có tin mới'
+      assignee:
+        assigned: '%{user_name} đã giao hội thoại cho %{assignee_name}'
+        removed: '%{user_name} đã bỏ người phụ trách hội thoại'
+      team:
+        assigned: '%{user_name} đã giao hội thoại cho nhóm %{team_name}'
+        assigned_with_assignee: '%{user_name} đã giao hội thoại cho %{assignee_name} qua nhóm %{team_name}'
+        removed: '%{user_name} đã bỏ nhóm %{team_name} khỏi hội thoại'
+      sla:
+        added: '%{user_name} đã thêm chính sách SLA %{sla_name}'
+        removed: '%{user_name} đã bỏ chính sách SLA %{sla_name}'
+      linear:
+        issue_created: '%{user_name} đã tạo việc Linear %{issue_id}'
+        issue_linked: '%{user_name} đã liên kết việc Linear %{issue_id}'
+        issue_unlinked: '%{user_name} đã bỏ liên kết việc Linear %{issue_id}'
+      whatsapp_call:
+        permission_requested: 'Đã gửi lời xin phép gọi điện tới %{contact_name}.'
+        permission_granted: '%{contact_name} đã đồng ý cho gọi điện.'
+      csat:
+        not_sent_due_to_messaging_window: 'Chưa gửi khảo sát hài lòng vì kênh đang giới hạn tin gửi đi'
+      auto_resolve:
+        not_sent_due_to_messaging_window: 'Chưa gửi tin đóng hội thoại vì kênh đang giới hạn tin gửi đi'
+      auto_resolution_message: 'Hội thoại được đóng vì lâu không có tin mới. Bạn cần hỗ trợ thêm thì cứ nhắn tin mới nhé.'
+  auto_assignment:
+    default_policy_name: 'Hệ thống phân công tự động'
+    policy_actor: 'Hệ thống tự động (%{policy_name})'
+  automation:
+    system_name: 'Hệ thống tự động'
