@@ -49,10 +49,42 @@ const focusables = () =>
 
 const close = () => emit('close');
 
+// Esc meant for a popover or dialog layered above the drawer (usually
+// teleported to body) must not close the drawer as well.
+const isOwnKeyEvent = ({ target }) =>
+  !(target instanceof Element) ||
+  target === document.body ||
+  !!panelRef.value?.contains(target);
+
+// The drawer renders inside the page's scroll container: lock every
+// scrolling ancestor while it is open so wheel/touch over the backdrop does
+// not scroll the page behind. Only classes this drawer added are removed.
+const SCROLL_LOCK_CLASS = '!overflow-hidden';
+const rootRef = ref(null);
+let lockedElements = [];
+
+const lockScroll = () => {
+  const scrollers = [];
+  for (let el = rootRef.value?.parentElement; el; el = el.parentElement) {
+    const { overflowY } = window.getComputedStyle(el);
+    if (['auto', 'scroll'].includes(overflowY)) scrollers.push(el);
+  }
+  scrollers.push(document.body);
+  lockedElements = scrollers.filter(
+    el => !el.classList.contains(SCROLL_LOCK_CLASS)
+  );
+  lockedElements.forEach(el => el.classList.add(SCROLL_LOCK_CLASS));
+};
+
+const unlockScroll = () => {
+  lockedElements.forEach(el => el.classList.remove(SCROLL_LOCK_CLASS));
+  lockedElements = [];
+};
+
 const onKeydown = event => {
   if (openDrawers.at(-1) !== token) return;
   if (event.key === 'Escape') {
-    close();
+    if (isOwnKeyEvent(event)) close();
     return;
   }
   if (event.key !== 'Tab' || !panelRef.value) return;
@@ -85,6 +117,7 @@ const onKeydown = event => {
 onMounted(async () => {
   openDrawers.push(token);
   previouslyFocused = document.activeElement;
+  lockScroll();
   // Capture phase: also sees non-bubbling events dispatched on document.
   window.addEventListener('keydown', onKeydown, true);
   await nextTick();
@@ -96,6 +129,7 @@ onBeforeUnmount(() => {
   const index = openDrawers.indexOf(token);
   if (index !== -1) openDrawers.splice(index, 1);
   window.removeEventListener('keydown', onKeydown, true);
+  unlockScroll();
   if (previouslyFocused?.isConnected) previouslyFocused.focus();
 });
 
@@ -104,6 +138,7 @@ defineExpose({ close, panelRef });
 
 <template>
   <div
+    ref="rootRef"
     data-test-id="kalo-drawer-backdrop"
     class="fixed inset-0 z-50 flex bg-[rgb(20_15_13/0.44)] backdrop-blur-[3px]"
     :class="placement === 'bottom' ? 'items-end' : 'justify-end'"

@@ -15,7 +15,12 @@ afterEach(() => {
   document.body.innerHTML = '';
 });
 
-const mountDrawer = ({ props = {}, slots = {}, attrs = {} } = {}) => {
+const mountDrawer = ({
+  props = {},
+  slots = {},
+  attrs = {},
+  attachTo = document.body,
+} = {}) => {
   const wrapper = mount(KaloDrawer, {
     props: { title: 'Tạo đơn', ...props },
     attrs,
@@ -25,7 +30,7 @@ const mountDrawer = ({ props = {}, slots = {}, attrs = {} } = {}) => {
       footer: '<button data-test="save">Lưu</button>',
       ...slots,
     },
-    attachTo: document.body,
+    attachTo,
     global: { plugins: [i18n] },
   });
   wrappers.push(wrapper);
@@ -125,5 +130,50 @@ describe('KaloDrawer', () => {
     expect(
       wrapper.find('[data-test-id="kalo-drawer-backdrop"]').classes()
     ).toContain('items-end');
+  });
+
+  it('leaves Esc from a popover layered above it (outside the panel) to that popover', () => {
+    const wrapper = mountDrawer();
+    const popover = document.createElement('div');
+    popover.innerHTML = '<input data-test="popover-input" />';
+    document.body.appendChild(popover);
+    const outside = popover.querySelector('input');
+    outside.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
+    );
+    expect(wrapper.emitted('close')).toBeUndefined();
+
+    wrapper
+      .find('[data-test="first"]')
+      .element.dispatchEvent(
+        new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
+      );
+    expect(wrapper.emitted('close')).toHaveLength(1);
+  });
+
+  it('locks the page scroll container behind it while open', () => {
+    const scroller = document.createElement('section');
+    scroller.style.overflowY = 'auto';
+    const host = document.createElement('div');
+    scroller.appendChild(host);
+    document.body.appendChild(scroller);
+    const wrapper = mountDrawer({ attachTo: host });
+    expect(scroller.classList.contains('!overflow-hidden')).toBe(true);
+    expect(document.body.classList.contains('!overflow-hidden')).toBe(true);
+    wrapper.unmount();
+    wrappers.splice(wrappers.indexOf(wrapper), 1);
+    expect(scroller.classList.contains('!overflow-hidden')).toBe(false);
+    expect(document.body.classList.contains('!overflow-hidden')).toBe(false);
+  });
+
+  it('keeps the lock until the last of two stacked drawers closes', () => {
+    const below = mountDrawer();
+    const top = mountDrawer({ props: { title: 'Chi tiết' } });
+    top.unmount();
+    wrappers.splice(wrappers.indexOf(top), 1);
+    expect(document.body.classList.contains('!overflow-hidden')).toBe(true);
+    below.unmount();
+    wrappers.splice(wrappers.indexOf(below), 1);
+    expect(document.body.classList.contains('!overflow-hidden')).toBe(false);
   });
 });
