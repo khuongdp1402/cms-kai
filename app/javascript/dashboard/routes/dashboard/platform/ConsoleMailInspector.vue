@@ -149,7 +149,7 @@ onMounted(load);
               v-model="query"
               data-testid="mail-search"
               type="search"
-              class="w-64 py-2 pr-3 text-sm border pl-9 !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
+              class="mb-0 outline-none w-64 py-2 pr-3 text-sm border pl-9 !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
               :placeholder="t('KALO_CONSOLE.MAIL.SEARCH_PLACEHOLDER')"
             />
           </div>

@@ -146,7 +146,7 @@ onMounted(() => load(1));
           v-model="query"
           data-testid="search"
           type="search"
-          class="w-64 px-3 py-2 text-sm border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
+          class="mb-0 outline-none w-64 px-3 py-2 text-sm border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
           :placeholder="t('KALO_CONSOLE.SHOPS.SEARCH_PLACEHOLDER')"
         />
         <button
@@ -270,7 +270,7 @@ onMounted(() => load(1));
                   :min="MIN_DAYS"
                   :max="MAX_DAYS"
                   :aria-label="t('KALO_CONSOLE.SHOPS.EXTEND_DAYS')"
-                  class="w-16 px-2 py-1 text-center border rounded-lg !bg-white !text-console-ink border-console-line focus:border-console-soft focus:outline-none tabular-nums"
+                  class="mb-0 outline-none w-16 px-2 py-1 text-center border rounded-lg !bg-white !text-console-ink border-console-line focus:border-console-soft focus:outline-none tabular-nums"
                 />
                 <button
                   type="button"

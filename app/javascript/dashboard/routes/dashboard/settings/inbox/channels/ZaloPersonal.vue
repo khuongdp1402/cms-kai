@@ -546,7 +546,7 @@ onBeforeUnmount(() => {
         <input
           v-model="inboxName"
           type="text"
-          class="w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          class="mb-0 outline-none w-full px-3 py-2 text-sm border border-slate-300 dark:border-slate-700 rounded-lg bg-transparent text-slate-900 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
           :placeholder="
             $t('INBOX_MGMT.ADD.ZALO_PERSONAL.CHANNEL_NAME.PLACEHOLDER')
           "
