@@ -175,4 +175,108 @@ RSpec.describe Kchat::BroadcastsService do
       expect(service.list.first).to include('status' => 'failed')
     end
   end
+
+  describe 'safety' do
+    it 'delivers a broadcast once even when the job runs twice' do
+      ci = contact_in(zalo_inbox, name: 'Một lần')
+      record = service.create_broadcast!(user: admin, params: { title: 'Một lần', message: 'Hi', inbox_id: zalo_inbox.id })
+      service.execute_broadcast!(record['id'])
+      described_class.new(account).execute_broadcast!(record['id'])
+
+      expect(ci.conversations.last.messages.outgoing.count).to eq(1)
+      expect(service.list.first).to include('status' => 'completed', 'sent_count' => 1)
+    end
+
+    it 'sends a draft once when two requests send it at the same time' do
+      contact_in(zalo_inbox, name: 'Song song')
+      draft = service.create_broadcast!(user: admin, params: { title: 'Song song', message: 'Hi', inbox_id: zalo_inbox.id, draft: true })
+      stale = described_class.new(account)
+      stale_record = stale.find!(draft['id'])
+      allow(stale).to receive(:find!).and_return(stale_record)
+
+      expect do
+        service.update_draft!(draft['id'], user: admin, params: { draft: false })
+        expect { stale.update_draft!(draft['id'], user: admin, params: { draft: false }) }
+          .to raise_error(described_class::ValidationError)
+      end.to have_enqueued_job(Kchat::SendBroadcastJob).exactly(:once)
+    end
+
+    it 'keeps a draft when PATCH has no draft flag' do
+      draft = service.create_broadcast!(user: admin, params: { title: 'Giữ nháp', draft: true })
+      expect do
+        expect(service.update_draft!(draft['id'], user: admin, params: { message: 'Hi', inbox_id: zalo_inbox.id })['status']).to eq('draft')
+      end.not_to have_enqueued_job(Kchat::SendBroadcastJob)
+    end
+
+    it 'does not send a scheduled campaign when the trial expired before it ran' do
+      ci = contact_in(zalo_inbox, name: 'Hết hạn')
+      record = service.create_broadcast!(user: admin, params: { title: 'Hẹn', message: 'Hi', inbox_id: zalo_inbox.id,
+                                                                scheduled_at: 1.day.from_now.iso8601 })
+      account.update_columns(created_at: 30.days.ago) # rubocop:disable Rails/SkipsModelValidations
+      service.execute_broadcast!(record['id'])
+
+      expect(service.list.first).to include('status' => 'failed', 'error' => 'subscription_expired', 'sent_count' => 0)
+      expect(ci.conversations.count).to eq(0)
+    end
+
+    it 'rejects sending with a schedule in the past' do
+      expect do
+        service.create_broadcast!(user: admin, params: { title: 'Cũ', message: 'Hi', inbox_id: zalo_inbox.id,
+                                                         scheduled_at: 1.minute.ago.iso8601 })
+      end.to raise_error(described_class::ValidationError, 'schedule_in_past')
+    end
+
+    it 'gives every campaign its own tag' do
+      first = service.create_broadcast!(user: admin, params: { title: 'Tết', draft: true })
+      second = service.create_broadcast!(user: admin, params: { title: 'Tết', draft: true })
+      third = service.create_broadcast!(user: admin, params: { title: 'Tết', campaign_tag: 'tet', draft: true })
+      expect([first, second, third].pluck('campaign_tag')).to eq(%w[tet tet-2 tet-3])
+      expect(service.update_draft!(first['id'], user: admin, params: { message: 'x' })['campaign_tag']).to eq('tet')
+    end
+  end
+
+  describe 'list cap' do
+    def fill_with(status, count)
+      items = Array.new(count) { |i| { 'id' => "#{status}-#{i}", 'title' => status, 'status' => status, 'campaign_tag' => "#{status}_#{i}" } }
+      account.update!(custom_attributes: { 'kchat_broadcasts' => items })
+    end
+
+    it 'drops the oldest finished campaign, never a scheduled one or a draft' do
+      fill_with('scheduled', 29)
+      account.update!(custom_attributes: { 'kchat_broadcasts' => service.list + [{ 'id' => 'old', 'status' => 'completed' }] })
+
+      service.create_broadcast!(user: admin, params: { title: 'Mới', draft: true })
+      ids = service.list.pluck('id')
+      expect(ids.size).to eq(30)
+      expect(ids).not_to include('old')
+      expect(ids.count { |id| id.start_with?('scheduled-') }).to eq(29)
+    end
+
+    it 'refuses a new campaign when nothing can be dropped' do
+      fill_with('scheduled', 30)
+      expect { service.create_broadcast!(user: admin, params: { title: 'Đầy', draft: true }) }
+        .to raise_error(described_class::ValidationError, 'broadcast_limit_reached')
+    end
+
+    it 'moves a draft to the front when it is sent' do
+      contact_in(zalo_inbox, name: 'Lên đầu')
+      draft = service.create_broadcast!(user: admin, params: { title: 'Nháp cũ', message: 'Hi', inbox_id: zalo_inbox.id, draft: true })
+      service.create_broadcast!(user: admin, params: { title: 'Nháp mới', draft: true })
+      service.update_draft!(draft['id'], user: admin, params: { draft: false })
+      expect(service.list.first['id']).to eq(draft['id'])
+    end
+  end
+
+  it 'counts only orders placed within 7 days of the send' do
+    ci = contact_in(zalo_inbox, name: 'Muộn')
+    record = service.create_broadcast!(user: admin, params: { title: 'Cửa sổ', message: 'Hi', inbox_id: zalo_inbox.id })
+    service.execute_broadcast!(record['id'])
+    conversation = ci.conversations.last
+    travel 8.days do
+      Kchat::Order.create_with_items!(account: account,
+                                      attributes: { source: 'chat', payment_method: 'cash', conversation: conversation },
+                                      items: [{ name: 'Nến', unit_price: 100_000, quantity: 1 }])
+      expect(service.results(record['id'])[:results]).to include(orders_count: 0, attribution_days: 7)
+    end
+  end
 end

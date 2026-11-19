@@ -65,4 +65,23 @@ RSpec.describe 'Kchat broadcasts API (campaign wizard)', type: :request do
     expect(response).to have_http_status(:unprocessable_entity)
     expect(response.parsed_body['error']).to eq('Vui lòng chọn kênh gửi')
   end
+
+  it 'refuses to send a draft with 403 when the trial has expired' do
+    post base, params: { title: 'Nháp', message: 'Hi', inbox_id: inbox.id, draft: true }, headers: admin.create_new_auth_token, as: :json
+    id = response.parsed_body.dig('broadcast', 'id')
+    account.update_columns(created_at: 30.days.ago) # rubocop:disable Rails/SkipsModelValidations
+
+    expect do
+      patch "#{base}/#{id}", params: { draft: false }, headers: admin.create_new_auth_token, as: :json
+    end.not_to have_enqueued_job(Kchat::SendBroadcastJob)
+    expect(response).to have_http_status(:forbidden)
+    expect(response.parsed_body['error']).to eq('subscription_expired')
+  end
+
+  it 'answers schedule_in_past for a schedule that already passed' do
+    post base, params: { title: 'Muộn', message: 'Hi', inbox_id: inbox.id, scheduled_at: 1.hour.ago.iso8601 },
+               headers: admin.create_new_auth_token, as: :json
+    expect(response).to have_http_status(:unprocessable_entity)
+    expect(response.parsed_body['error']).to eq('schedule_in_past')
+  end
 end
