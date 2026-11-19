@@ -8,6 +8,7 @@ export const GUIDE_ROUTES = [
   'home',
   'kalo_orders',
   'kalo_pos',
+  'kalo_products',
   'kalo_console',
   'kalo_payment_settings',
   'kalo_billing',

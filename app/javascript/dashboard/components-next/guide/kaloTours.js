@@ -60,6 +60,18 @@ export const KALO_TOURS = [
     mobileSteps: [],
   },
   {
+    key: 'products',
+    icon: 'tag',
+    route: 'kalo_products',
+    matches: route => route.name === 'kalo_products',
+    steps: [
+      { target: 'products-create', key: 'CREATE', side: 'bottom' },
+      { target: 'products-search', key: 'SEARCH', side: 'bottom' },
+      { target: 'products-table', key: 'TABLE', side: 'top' },
+    ],
+    mobileSteps: ['CREATE', 'TABLE'],
+  },
+  {
     key: 'console',
     icon: 'set',
     route: 'kalo_console',

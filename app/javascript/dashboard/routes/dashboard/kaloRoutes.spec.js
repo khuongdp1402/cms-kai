@@ -4,6 +4,7 @@ describe('Kalo shell routes', () => {
   it.each([
     ['kalo_orders', '/app/accounts/1/orders'],
     ['kalo_pos', '/app/accounts/1/pos'],
+    ['kalo_products', '/app/accounts/1/orders/products'],
     ['kalo_marketing', '/app/accounts/1/marketing'],
     ['kalo_reports', '/app/accounts/1/reports'],
     ['kalo_settings_hub', '/app/accounts/1/settings/hub'],

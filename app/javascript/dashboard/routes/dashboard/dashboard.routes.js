@@ -8,6 +8,7 @@ import { routes as notificationRoutes } from './notifications/routes';
 import { routes as inboxRoutes } from './inbox/routes';
 import { routes as orderRoutes } from './orders/routes';
 import { routes as posRoutes } from './pos/routes';
+import { routes as productRoutes } from './products/routes';
 import { routes as marketingRoutes } from './marketing/routes';
 import { routes as reportRoutes } from './reports/routes';
 import { routes as overviewRoutes } from './overview/routes';
@@ -35,6 +36,7 @@ export default {
         ...captainRoutes,
         ...orderRoutes,
         ...posRoutes,
+        ...productRoutes,
         ...marketingRoutes,
         ...shopConsoleRoutes,
         ...reportRoutes,

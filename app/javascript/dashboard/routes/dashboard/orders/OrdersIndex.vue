@@ -155,6 +155,14 @@ onMounted(load);
   >
     <template #actions>
       <router-link
+        :to="{ name: 'kalo_products' }"
+        data-test="orders-open-products"
+        class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2"
+      >
+        <KaloIcon name="tag" class="size-4" />
+        {{ t('KALO_PRODUCTS.OPEN') }}
+      </router-link>
+      <router-link
         v-if="isPosOn"
         :to="{ name: 'kalo_pos' }"
         class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-solid-2"

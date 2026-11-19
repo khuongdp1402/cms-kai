@@ -5,6 +5,7 @@ import { useStore } from 'vuex';
 import { useRoute } from 'vue-router';
 import { useAlert } from 'dashboard/composables';
 import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
+import { useShopAdmin } from 'dashboard/components-next/guide/useShopAdmin';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
 import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
@@ -14,6 +15,8 @@ import PosCart from './PosCart.vue';
 const { t } = useI18n();
 const store = useStore();
 const route = useRoute();
+// Only shop administrators manage products (agents sell what exists).
+const { isAdmin } = useShopAdmin();
 
 const cart = ref(null);
 const search = ref('');
@@ -139,8 +142,17 @@ const inputClass =
         >
           {{ t('KALO_POS.EXIT') }}
         </router-link>
+        <router-link
+          v-if="isAdmin"
+          :to="{ name: 'kalo_products' }"
+          data-test="pos-manage-products"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 whitespace-nowrap"
+        >
+          <KaloIcon name="tag" class="size-4" />
+          {{ t('KALO_PRODUCTS.MANAGE') }}
+        </router-link>
         <button
-          v-if="!isEmpty"
+          v-if="!isEmpty && isAdmin"
           type="button"
           data-test="pos-open-product-modal"
           data-tour="pos-add"
@@ -164,7 +176,7 @@ const inputClass =
         >
           <p class="text-sm text-n-slate-11">{{ t('KALO_POS.EMPTY') }}</p>
           <button
-            v-if="!showForm"
+            v-if="isAdmin && !showForm"
             type="button"
             data-tour="pos-add"
             class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
@@ -173,7 +185,7 @@ const inputClass =
             {{ t('KALO_POS.ADD_PRODUCT') }}
           </button>
           <form
-            v-else
+            v-else-if="isAdmin"
             class="flex flex-col w-full max-w-sm gap-3"
             @submit.prevent="saveProduct"
           >
@@ -206,7 +218,7 @@ const inputClass =
     </div>
 
     <KaloDrawer
-      v-if="showForm && !isEmpty"
+      v-if="showForm && !isEmpty && isAdmin"
       data-test="pos-product-modal"
       :title="t('KALO_POS.PRODUCT_FORM.TITLE')"
       @close="closeProductModal"

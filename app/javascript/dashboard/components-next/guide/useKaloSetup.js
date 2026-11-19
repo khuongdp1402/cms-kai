@@ -2,8 +2,6 @@ import { computed, reactive, watch } from 'vue';
 import { useStore } from 'dashboard/composables/store';
 import { useShopAdmin } from './useShopAdmin';
 import { useAccount } from 'dashboard/composables/useAccount';
-import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
-import { FEATURE_FLAGS } from 'dashboard/featureFlags';
 import productsAPI from 'dashboard/api/kchat/products';
 import ordersAPI from 'dashboard/api/kchat/orders';
 import paymentSettingsAPI from 'dashboard/api/kchat/paymentSettings';
@@ -76,7 +74,6 @@ export function useKaloSetup() {
   const store = useStore();
   const { isAdmin } = useShopAdmin();
   const { accountId, accountScopedRoute } = useAccount();
-  const { isOn } = useKaloFeatures();
 
   const entry = computed(() => cache[accountId.value] || blankEntry());
   const uiState = computed(
@@ -93,11 +90,9 @@ export function useKaloSetup() {
     () => (store.getters['agents/getAgents'] || []).length
   );
 
-  // Products are created in POS; with POS off the order form is the way in.
+  // The products page (under Đơn hàng) is available whether POS is on or off.
   const productRoute = computed(() =>
-    isOn(FEATURE_FLAGS.KALO_POS)
-      ? accountScopedRoute('kalo_pos', {}, { add_product: '1' })
-      : accountScopedRoute('kalo_orders', {}, { new: '1' })
+    accountScopedRoute('kalo_products', {}, { new: '1' })
   );
 
   const steps = computed(() => {

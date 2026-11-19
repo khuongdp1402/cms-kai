@@ -12,6 +12,11 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B110 (2026-11-20): Siết quyền sản phẩm (chỉ Quản trị viên tạo/sửa) nhưng nút "Thêm sản phẩm" ở POS vẫn hiện cho Nhân viên.**
+  - Triệu chứng: sau khi đổi policy, POS vẫn hiện nút cho Nhân viên (điền form xong mới nhận 401) và `products_spec`/`entitlements_gating_spec` có sẵn tạo sản phẩm bằng agent nên đỏ.
+  - Nguyên nhân: policy đổi ở backend, còn lối vào ở frontend (POS, checklist, trang trống) không đọc vai trò.
+  - Quy tắc: đổi policy theo vai trò thì tìm mọi lối vào giao diện của hành động đó (`grep` tên action trong store) và ẩn theo `useShopAdmin`; spec mount phải có getter `getCurrentRole` và có ca cho vai trò bị chặn. Xóa sản phẩm đã có đơn thì lưu trữ (`active: false`), không xóa hẳn.
+
 - **B58 (2026-11-20): QA trên trình duyệt chạy nhầm bundle cũ.**
   - Triệu chứng: localhost:3005 không có checklist, tour, banner dù code đã gộp; agent QA phải tự build bundle phụ.
   - Nguyên nhân: rails chạy với `KCHAT_VITE_HOST=localhost` (mặc định compose) và không có container `vite`, nên phục vụ `public/vite-dev` build từ hôm trước.
