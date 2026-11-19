@@ -92,6 +92,19 @@ RSpec.describe Kchat::Metrics do
     expect(metrics.channel_rows.reject { |row| row[:chat] }.pluck(:channel, :conversion_pct)).to contain_exactly(['pos', nil], ['manual', nil])
   end
 
+  it 'puts chat orders whose conversation was deleted in a separate "chat" row without a rate' do
+    chat = conversation
+    order(source: 'chat', method: 'cash', conversation: chat)
+    chat.destroy!
+
+    metrics = described_class.new(account, 'today')
+    expect(metrics.totals).to include(new_orders_count: 1, chat_orders_count: 0, counter_orders_count: 1, chat_conversations_count: 0)
+    expect(metrics.channel_rows).to eq(
+      [{ channel: 'chat', chat: false, conversations: 0, converted_conversations: 0, orders: 1, conversion_pct: nil,
+         revenue: 150_000, avg_order_value: 150_000 }]
+    )
+  end
+
   it 'uses Asia/Ho_Chi_Minh day boundaries' do
     conversation(created_at: Time.utc(2026, 11, 15, 16, 59)) # 23:59 on 15 Nov in HCM: yesterday
     conversation(created_at: Time.utc(2026, 11, 15, 17, 1))  # 00:01 on 16 Nov in HCM: today

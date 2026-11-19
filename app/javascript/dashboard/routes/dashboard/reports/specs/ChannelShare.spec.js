@@ -33,7 +33,7 @@ describe('ChannelShare', () => {
     ['line', 'Line'],
     ['tiktok', 'TikTok'],
     ['api', 'Khác'],
-    ['chat', 'Tin nhắn'],
+    ['chat', 'Chat (hội thoại đã xóa)'],
     ['pos', 'Tại quầy'],
     ['manual', 'Tạo tay'],
   ])('shows %s as %s', (channel, label) => {

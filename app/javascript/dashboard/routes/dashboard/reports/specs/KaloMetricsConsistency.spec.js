@@ -7,6 +7,7 @@ import { kaloFeatureGetters } from 'dashboard/helper/specs/kaloFeatureGetters';
 import reportsAPI from 'dashboard/api/kchat/reports';
 import ReportsIndex from '../ReportsIndex.vue';
 import MarketingFunnelSection from '../MarketingFunnelSection.vue';
+import ChannelShare from '../ChannelShare.vue';
 import OverviewIndex from '../../overview/OverviewIndex.vue';
 import { createPageTestEnv } from './kaloPageTestEnv';
 
@@ -210,5 +211,55 @@ describe('Kalo metrics are consistent across Báo cáo and Tổng quan', () => {
     expect(channelRows[0].text()).toContain('CVR 100%');
     expect(channelRows[1].text()).toContain('1 đơn');
     expect(channelRows[1].text()).not.toContain('CVR');
+  });
+
+  it('labels chat orders whose conversation was deleted the same way everywhere', () => {
+    const label = viMessages.KALO_METRICS.ROW_CHAT_ORPHAN;
+    const funnel = mountWithI18n(MarketingFunnelSection, {
+      funnel: {
+        ...FUNNEL,
+        channel_funnel: [
+          {
+            channel: 'chat',
+            chat: false,
+            conversations: 0,
+            converted_conversations: 0,
+            orders: 1,
+            conversion_pct: null,
+            revenue: 0,
+            avg_order_value: 0,
+          },
+        ],
+      },
+    });
+    expect(funnel.find('[data-test="funnel-channel"]').text()).toContain(
+      label
+    );
+    const share = mountWithI18n(ChannelShare, {
+      channels: [{ channel: 'chat', orders: 1, share_pct: 100 }],
+    });
+    expect(share.text()).toContain(label);
+  });
+
+  it('Tổng quan labels the orphaned chat row the same way', async () => {
+    reportsAPI.qualityOverview.mockResolvedValue({
+      data: {
+        ...QUALITY,
+        channel_quality: [
+          {
+            channel: 'chat',
+            chat: false,
+            conversations_count: 0,
+            orders_count: 1,
+            cvr_pct: null,
+            waiting_over_15m_count: 0,
+          },
+        ],
+      },
+    });
+    const wrapper = await mountOverview();
+    expect(
+      wrapper.find('[data-test="overview-channel-row"]').text()
+    ).toContain(viMessages.KALO_METRICS.ROW_CHAT_ORPHAN);
   });
 });

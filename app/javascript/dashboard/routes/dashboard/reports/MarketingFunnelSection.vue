@@ -8,11 +8,14 @@ defineProps({
 
 const { t, te } = useI18n();
 
-// Counter rows (POS, manual orders without a chat) have no conversations, so
-// no close rate (conversion_pct null, see Kchat::Metrics).
+// Counter rows (POS, manual orders without a chat, chat orders whose
+// conversation was deleted) have no conversations, so no close rate
+// (conversion_pct null, see Kchat::Metrics).
 const COUNTER_LABELS = {
   pos: 'KALO_METRICS.ROW_POS',
   manual: 'KALO_METRICS.ROW_MANUAL',
+  chat: 'KALO_METRICS.ROW_CHAT_ORPHAN',
+  unknown: 'KALO_REPORTS.CHANNELS.OTHER',
 };
 const isCounterRow = row => row.conversion_pct === null;
 

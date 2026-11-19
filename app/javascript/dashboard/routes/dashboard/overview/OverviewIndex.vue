@@ -42,7 +42,12 @@ const formatDuration = seconds => {
   return `${mins}p ${rem}s`;
 };
 
+const ORPHAN_LABELS = {
+  chat: 'KALO_METRICS.ROW_CHAT_ORPHAN',
+  unknown: 'KALO_REPORTS.CHANNELS.OTHER',
+};
 const channelLabel = key => {
+  if (ORPHAN_LABELS[key]) return t(ORPHAN_LABELS[key]);
   const path = `KALO_OVERVIEW.CHANNELS.${String(key || '').toUpperCase()}`;
   return te(path) ? t(path) : key;
 };

@@ -8,7 +8,9 @@ defineProps({
 const { t, te } = useI18n();
 
 // Backend values are snake_case (web_widget, facebook_page) or an order source (chat, pos, manual).
+// `chat` is only left for chat orders whose conversation was deleted.
 const channelName = channel => {
+  if (channel === 'chat') return t('KALO_METRICS.ROW_CHAT_ORPHAN');
   const key = String(channel)
     .replace(/^Channel::/, '')
     .replace(/([a-z])([A-Z])/g, '$1_$2')
