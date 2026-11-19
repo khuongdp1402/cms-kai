@@ -257,3 +257,22 @@ describe('ReplyBottomPanel essentials and "+" menu', () => {
     expect(wrapper.find('[data-test="more-menu"]').exists()).toBe(false);
   });
 });
+
+describe('ReplyBottomPanel send key hint', () => {
+  let wrapper;
+  afterEach(() => wrapper?.unmount());
+
+  it('shows the send key hint in words next to the send button', () => {
+    wrapper = mountPanel({
+      sendKeyHint: 'Enter để gửi, Shift+Enter xuống dòng',
+    });
+    const hint = wrapper.find('[data-test="send-key-hint"]');
+    expect(hint.text()).toBe('Enter để gửi, Shift+Enter xuống dòng');
+    expect(hint.element.nextElementSibling.dataset.test).toBe('send');
+  });
+
+  it('renders no hint when none is given', () => {
+    wrapper = mountPanel();
+    expect(wrapper.find('[data-test="send-key-hint"]').exists()).toBe(false);
+  });
+});

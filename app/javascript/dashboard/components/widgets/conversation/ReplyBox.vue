@@ -320,6 +320,14 @@ export default {
     replyButtonHint() {
       return this.isEditorHotKeyEnabled('cmd_enter') ? this.shortcutKey : '↵';
     },
+    // Visible hint next to the send button, in words.
+    replyKeyHint() {
+      return this.isEditorHotKeyEnabled('cmd_enter')
+        ? this.$t('KALO_POLISH4.COMPOSER.CMD_ENTER_HINT', {
+            key: this.shortcutKey,
+          })
+        : this.$t('KALO_POLISH4.COMPOSER.ENTER_HINT');
+    },
     replyBoxClass() {
       return {
         'is-private': this.isPrivate,
@@ -1455,6 +1463,7 @@ export default {
         :recording-audio-state="recordingAudioState"
         :send-button-text="replyButtonLabel"
         :send-button-hint="replyButtonHint"
+        :send-key-hint="replyKeyHint"
         :show-audio-recorder="showAudioRecorder"
         :show-emoji-picker="showEmojiPicker"
         :show-file-upload="showFileUpload"

@@ -154,6 +154,26 @@ describe('ReplyBox', () => {
       expect(preventDefault).toHaveBeenCalled();
     });
 
+    it('Enter sends by default for a user who never chose a send key', async () => {
+      ({ wrapper } = mountReplyBox({ uiSettings: {} }));
+      await typeAndFocus(wrapper);
+      wrapper.vm.getKeyboardEvents().Enter.action({ preventDefault: vi.fn() });
+      await flushPromises();
+      expect(actions.createPendingMessageAndSend).toHaveBeenCalledTimes(1);
+      expect(child(wrapper, 'ReplyBottomPanel').props('sendKeyHint')).toBe(
+        'KALO_POLISH4.COMPOSER.ENTER_HINT'
+      );
+    });
+
+    it('shows the Cmd/Ctrl+Enter hint when that is the chosen send key', () => {
+      ({ wrapper } = mountReplyBox({
+        uiSettings: { editor_message_key: 'cmd_enter' },
+      }));
+      expect(child(wrapper, 'ReplyBottomPanel').props('sendKeyHint')).toBe(
+        'KALO_POLISH4.COMPOSER.CMD_ENTER_HINT'
+      );
+    });
+
     it('Enter does NOT send when the profile setting is Cmd/Ctrl+Enter', async () => {
       ({ wrapper } = mountReplyBox({
         uiSettings: { editor_message_key: 'cmd_enter' },

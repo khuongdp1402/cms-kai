@@ -141,8 +141,18 @@ describe('useUISettings', () => {
     expect(isEditorHotKeyEnabled('cmd_enter')).toBe(false);
   });
 
+  // Kalo default: Enter sends when the user never chose a key.
   it('returns correct value for isEditorHotKeyEnabled when editor_message_key is not configured', () => {
     getUISettingsMock.value.editor_message_key = undefined;
+    getUISettingsMock.value.enter_to_send_enabled = undefined;
+    const { isEditorHotKeyEnabled } = useUISettings();
+    expect(isEditorHotKeyEnabled('enter')).toBe(true);
+    expect(isEditorHotKeyEnabled('cmd_enter')).toBe(false);
+  });
+
+  it('keeps Cmd/Ctrl+Enter for a legacy explicit enter_to_send_enabled false', () => {
+    getUISettingsMock.value.editor_message_key = undefined;
+    getUISettingsMock.value.enter_to_send_enabled = false;
     const { isEditorHotKeyEnabled } = useUISettings();
     expect(isEditorHotKeyEnabled('enter')).toBe(false);
     expect(isEditorHotKeyEnabled('cmd_enter')).toBe(true);

@@ -127,7 +127,9 @@ const isEditorHotKeyEnabled = (key, uiSettings) => {
     enter_to_send_enabled: enterToSendEnabled,
   } = uiSettings.value || {};
   if (!editorMessageKey) {
-    return key === (enterToSendEnabled ? 'enter' : 'cmd_enter');
+    // Kalo: Enter sends for users who never chose (Vietnamese shop owners
+    // expect it); only an explicit legacy "off" keeps Cmd/Ctrl+Enter.
+    return key === (enterToSendEnabled === false ? 'cmd_enter' : 'enter');
   }
   return editorMessageKey === key;
 };
