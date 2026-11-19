@@ -79,6 +79,7 @@ Rails.application.routes.draw do
               patch :attribution, on: :member
             end
             resource :subscription, only: [:show]
+            resource :assistant, only: [:create], controller: 'assistant'
           end
           namespace :actions do
             resource :contact_merge, only: [:create]
