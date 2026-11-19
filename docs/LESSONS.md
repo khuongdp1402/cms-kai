@@ -12,6 +12,21 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B94 (2026-11-19): Stack thứ hai (`-p kalo-xx`) trả 500 "Vite Ruby can't find entrypoints" và `up` báo trùng cổng.**
+  - Triệu chứng: `docker compose -p kalo-t5b up` lỗi "Bind for 0.0.0.0:1025 failed" (mailhog), rồi `/app/login` trả 500 dù vite đã sẵn sàng.
+  - Nguyên nhân: các cổng mailhog/bridge/postgres/redis của stack chính đang chiếm; rails dùng `VITE_RUBY_HOST=localhost` (trong container rails thì `localhost` không có vite).
+  - Quy tắc: đặt đủ `KCHAT_RAILS_PORT KCHAT_POSTGRES_PORT KCHAT_REDIS_PORT KCHAT_SMTP_PORT KCHAT_MAILHOG_PORT KCHAT_BRIDGE_PORT` khác, giữ vite 3036 (B62) và đặt `KCHAT_VITE_HOST=vite` cho cả lệnh `up` (client host vẫn là localhost). Lần tải đầu của vite mất vài phút: chờ ô email đăng nhập hiện, đừng coi là treo.
+- **B93 (2026-11-19): Chèn tính năng mới vào file nav dùng chung (rail, thanh tab) kéo theo xung đột merge.**
+  - Triệu chứng: nhiều task cùng sửa `KaloRailFooter`/`KaloTabBar`/`useKaloNav`.
+  - Quy tắc: nút vào tính năng là một component tự chứa (`KaloAssistantButton`: tự quyết ẩn/hiện, tự giữ trạng thái mở, tự dựng drawer), mỗi file nav chỉ thêm một dòng import và một thẻ. Trong sheet "Thêm" của mobile drawer trợ lý xếp chồng lên sheet (KaloDrawer hỗ trợ ngăn xếp), không đóng sheet, vì đóng sheet sẽ gỡ luôn nút và drawer của nó.
+- **B92 (2026-11-19): Gửi tin trợ lý thất bại làm mất câu người dùng vừa gõ.**
+  - Triệu chứng: lỗi 429/502 thì ô nhập đã bị xóa, bong bóng người dùng nằm lại không có trả lời, lượt sau gửi `history` lệch vai.
+  - Quy tắc: `history` lấy từ các lượt trước khi thêm tin mới (tối đa 6 lượt, chỉ `role` và `content`); khi lỗi, bỏ lượt người dùng vừa thêm, ghi mã lỗi (`EXPIRED`, `RATE_LIMITED`, `TOO_LONG`, `UNAVAILABLE`, `GENERIC`) và trả câu chữ về ô nhập để gửi lại.
+- **B91 (2026-11-19): Nút trợ lý AI hiện ra dù AI chưa cấu hình hoặc cờ shop đang tắt.**
+  - Quy tắc: nút chỉ hiện khi `GET brand_growth/ai_health` trả `configured: true` (hỏi một lần mỗi tài khoản, lỗi mạng hoặc 4xx/5xx coi như chưa cấu hình) và cờ `kalo_ai_assistant` bật (`accounts/isFeatureEnabledonAccount`). Mặc định là ẩn: không hiện nút rồi mới báo lỗi. Spec cũ của rail/tab bar không có `window.axios` nên health lỗi và nút ẩn, không cần sửa.
+- **B90 (2026-11-19): Hiển thị câu trả lời của AI bằng `v-html`.**
+  - Quy tắc: nội dung AI và nội dung người dùng chỉ in dạng chữ (`{{ }}` kèm `whitespace-pre-wrap`), không `v-html`, không markdown tự render. Spec `KaloAssistantDrawer.spec.js` giữ ca "never injects AI output as HTML". Muốn hỗ trợ định dạng sau này thì phải qua bộ lọc HTML sẵn có của repo và thêm spec XSS.
+
 - **B59 (2026-11-19): `rails db:migrate` ở stack dev tự sửa comment schema trong ~13 file model.**
   - Triệu chứng: sau migrate, `git status` hiện `app/models/*.rb` bị sửa dù không ai đụng.
   - Nguyên nhân: gem annotate chạy kèm `db:migrate` ở development và ghi lại khối `# == Schema Information`.
