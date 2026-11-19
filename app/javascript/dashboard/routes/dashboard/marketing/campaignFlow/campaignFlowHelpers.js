@@ -28,6 +28,10 @@ const GRAY = 'bg-n-alpha-2 text-n-slate-11';
 const NEW = 'bg-woot-50 text-woot-600 dark:bg-n-blue-3 dark:text-n-blue-11';
 const BAD = 'bg-n-ruby-3 text-n-ruby-11';
 
+// The results view refreshes itself this often while a campaign is sending.
+export const RESULTS_POLL_MS = 4000;
+export const SENDING_STATUSES = ['processing', 'sending'];
+
 export const STATUS_TONES = {
   draft: GRAY,
   scheduled: WARN,
