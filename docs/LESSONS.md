@@ -12,6 +12,22 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B100 (2026-11-20): Ô nhập trong form upstream (kênh website…) mất padding, chữ dính mép trái; ô nhập Kalo (wizard chiến dịch, Thương hiệu, Bình luận) mất viền.**
+  - Nguyên nhân: B53 bọc selector input của `_base.scss` trong `:where(...)` nên độ ưu tiên về `(0,0,0)`, thua preflight của Tailwind (`input { padding: 0; margin: 0; font-size: 100% }`, `(0,0,1)`). Thêm vào đó `.field-base` đặt `border-none` (border-style), nên class `border` của Kalo chỉ đặt độ dày, viền vẫn không hiện, còn `outline-none` tắt nốt khung outline.
+  - Quy tắc: selector nền cho thẻ HTML giữ đúng `(0,0,1)`: `input:where(<điều kiện>)`, không dùng `:where(input...)` trần (thua preflight) hay `input[type]:not(...)` (thắng cả utility). Base không đặt `border-style: none`; dùng `border-0` để utility `border` hiện được. Kiểm bằng `getComputedStyle` (padding, borderStyle, outlineStyle) trên trình duyệt, spec jsdom không bắt được lỗi CSS.
+- **B101 (2026-11-20): Nút có class `border` trong drawer/thẻ Kalo không hiện viền.**
+  - Nguyên nhân: base `button { border-0 border-none }` trong `_base.scss` đặt border-style `none`; utility `border` chỉ đặt độ dày.
+  - Quy tắc: nút tự vẽ viền phải có `border border-solid`. Chưa sửa toàn cục vì nhiều nút upstream đang có `border` nhưng thiết kế dựa trên việc viền không hiện.
+- **B102 (2026-11-20): Rail thu gọn ở màn thấp (1280×720) bị các mục chân đè lên chuông, rail mở rộng đẩy "Cài đặt" ra khỏi màn hình.**
+  - Nguyên nhân: vùng mục chính không cuộn khi thu gọn (cuộn sẽ cắt tooltip `absolute`), còn khi mở rộng thì Hướng dẫn, Trợ lý, Console, Cài đặt nằm chung vùng cuộn.
+  - Quy tắc: rail chia hai nhóm: mục chính `flex-1 min-h-0 overflow-y-auto`, nhóm chân (`footer: true` + Hướng dẫn + Trợ lý) `shrink-0` không cuộn. Tooltip trong vùng cuộn dùng `position: fixed` tính từ `getBoundingClientRect` (`KaloRailTooltip`). Kiểm ở 1280×720 và 1280×860, cả thu gọn và mở rộng. `data-test-id` của nhóm không được trùng `kalo-rail-footer` (của `KaloRailFooter`).
+- **B103 (2026-11-20): Xem trước chiến dịch ghi "Chào Lan" trong khi khách nhận "Chào Chị Lan", bước Xem lại hiện nguyên `{{name}}`.**
+  - Nguyên nhân: frontend thay `{{name}}` bằng tên mẫu cố định trong i18n; backend thay bằng `contact.name` thật (hoặc "bạn").
+  - Quy tắc: biến trong tin xem trước lấy từ dữ liệu backend (`sample_name` = `Kchat::Broadcasts::Dispatcher.recipient_name` của người nhận đầu tiên), cùng một hàm với lúc gửi. Không đặt tên mẫu cố định cho biến cá nhân hóa.
+- **B104 (2026-11-20): `rails db:chatwoot_prepare` trên stack riêng sửa 13 file `app/models/*` trong worktree.**
+  - Nguyên nhân: môi trường development chạy annotate sau khi migrate, ghi chú schema vào model.
+  - Quy tắc: sau khi chuẩn bị DB cho stack trình duyệt, chạy `git status` và hoàn tác các file model chỉ đổi phần annotate (`git checkout -- app/models/` khi chưa có thay đổi của mình ở đó) trước khi commit.
+
 - **B58 (2026-11-20): QA trên trình duyệt chạy nhầm bundle cũ.**
   - Triệu chứng: localhost:3005 không có checklist, tour, banner dù code đã gộp; agent QA phải tự build bundle phụ.
   - Nguyên nhân: rails chạy với `KCHAT_VITE_HOST=localhost` (mặc định compose) và không có container `vite`, nên phục vụ `public/vite-dev` build từ hôm trước.
