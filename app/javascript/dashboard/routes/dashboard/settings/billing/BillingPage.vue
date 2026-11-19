@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import subscriptionAPI from 'dashboard/api/kchat/subscription';
+import { setKaloTrialSubscription } from 'dashboard/components-next/guide/useKaloTrial';
 import Button from 'dashboard/components-next/button/Button.vue';
 import { formatMoney } from 'dashboard/routes/dashboard/reports/formatMoney';
 
@@ -53,6 +54,8 @@ onMounted(async () => {
   try {
     const { data } = await subscriptionAPI.get();
     subscription.value = data;
+    // The rail trial banner shows the same fresh state (e.g. after paying).
+    setKaloTrialSubscription(Number(route.params.accountId), data);
   } catch {
     hasError.value = true;
   }

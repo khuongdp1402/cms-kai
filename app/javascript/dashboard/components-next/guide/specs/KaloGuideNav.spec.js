@@ -6,7 +6,12 @@ import paymentSettingsAPI from 'dashboard/api/kchat/paymentSettings';
 import KaloGuideNav from '../KaloGuideNav.vue';
 import KaloGuideTabDot from '../KaloGuideTabDot.vue';
 import { resetKaloSetupCache } from '../useKaloSetup';
-import { resetKaloTrialCache } from '../useKaloTrial';
+import {
+  FOCUS_REFRESH_MS,
+  refreshKaloTrial,
+  resetKaloTrialCache,
+  setKaloTrialSubscription,
+} from '../useKaloTrial';
 import { createGuideEnv } from './guideTestEnv';
 
 vi.mock('dashboard/api/kchat/subscription', () => ({
@@ -233,6 +238,41 @@ describe('KaloGuideNav', () => {
         uiSettings: { kalo_setup: { 1: { hidden: true } } },
       });
       expect(dot.exists()).toBe(false);
+    });
+  });
+
+  describe('trial refresh', () => {
+    it('refetches after a plan change or matched payment', async () => {
+      const { wrapper } = await mountNav({ props: { isExpanded: true } });
+      expect(subscriptionAPI.get).toHaveBeenCalledTimes(1);
+      subscriptionAPI.get.mockResolvedValue(
+        trial({ status: 'active', plan: 'growth', days_left: 30 })
+      );
+      await refreshKaloTrial(1);
+      await flushPromises();
+      expect(subscriptionAPI.get).toHaveBeenCalledTimes(2);
+      expect(banner(wrapper).exists()).toBe(false);
+    });
+
+    it('takes the fresh state the billing page loaded', async () => {
+      const { wrapper } = await mountNav({ props: { isExpanded: true } });
+      setKaloTrialSubscription(1, trial({ days_left: 1 }).data);
+      await flushPromises();
+      expect(banner(wrapper).text()).toContain('Còn 1 ngày dùng thử');
+    });
+
+    it('refetches on window focus at most every few minutes', async () => {
+      const now = vi.spyOn(Date, 'now');
+      now.mockReturnValue(1_000_000);
+      await mountNav();
+      expect(subscriptionAPI.get).toHaveBeenCalledTimes(1);
+      window.dispatchEvent(new Event('focus'));
+      expect(subscriptionAPI.get).toHaveBeenCalledTimes(1);
+      now.mockReturnValue(1_000_000 + FOCUS_REFRESH_MS);
+      window.dispatchEvent(new Event('focus'));
+      await flushPromises();
+      expect(subscriptionAPI.get).toHaveBeenCalledTimes(2);
+      now.mockRestore();
     });
   });
 });
