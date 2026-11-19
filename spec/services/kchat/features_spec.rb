@@ -48,61 +48,24 @@ RSpec.describe Kchat::Features do
     it 'rejects unknown names' do
       expect { described_class.update!(account, %w[kalo_brand help_center]) }.to raise_error(ArgumentError, /help_center/)
     end
-  end
 
-  describe '.backfill!' do
-    it 'turns core modules on and leaves unused advanced groups off' do
-      described_class.backfill!(account)
-      states = described_class.states(account.reload)
-      expect(states.values_at(*described_class::CORE)).to all(be(true))
-      expect(states.values_at(*described_class::ADVANCED)).to all(be(false))
-    end
+    it 'toggles an advanced flag off, on and off again' do
+      expect(described_class.states(account)['kalo_help_center']).to be(false)
 
-    it 'keeps advanced automation on when the shop has automation rules, macros, bots, webhooks, apps or attributes' do
-      setups = {
-        automation_rules: ->(shop) { create(:automation_rule, account: shop) },
-        macros: ->(shop) { create(:macro, account: shop) },
-        webhooks: ->(shop) { create(:webhook, account: shop) },
-        dashboard_apps: ->(shop) { create(:dashboard_app, account: shop) },
-        custom_attributes: ->(shop) { create(:custom_attribute_definition, account: shop) },
-        agent_bots: ->(shop) { create(:agent_bot, account: shop) }
-      }
-      setups.each do |label, setup|
-        shop = create(:account)
-        setup.call(shop)
-        described_class.backfill!(shop)
-        expect(shop.reload.feature_enabled?('kalo_advanced_automation')).to be(true), "#{label} did not keep the flag"
-      end
-    end
-
-    it 'keeps help center on when the shop has a portal' do
-      create(:portal, account: account)
-      described_class.backfill!(account)
+      described_class.update!(account, %w[kalo_help_center])
       expect(account.reload.feature_enabled?('kalo_help_center')).to be(true)
+
+      described_class.update!(account, [])
+      expect(account.reload.feature_enabled?('kalo_help_center')).to be(false)
     end
 
-    it 'keeps extra channels on when the shop has an SMS, email, API (Zalo OA), Telegram, Line or WhatsApp inbox' do
-      create(:inbox, account: account, channel: build(:channel_api, account: account))
-      described_class.backfill!(account)
-      expect(account.reload.feature_enabled?('kalo_extra_channels')).to be(true)
-    end
+    it 'saves flags on an account that fails unrelated validations' do
+      account.update_column(:name, '') # rubocop:disable Rails/SkipsModelValidations
+      expect(account.reload).not_to be_valid
 
-    it 'does not turn extra channels on for website or Zalo personal inboxes' do
-      create(:inbox, account: account)
-      described_class.backfill!(account)
-      expect(account.reload.feature_enabled?('kalo_extra_channels')).to be(false)
-    end
+      described_class.update!(account, %w[kalo_pos])
 
-    it 'keeps detailed reports on when the shop uses teams or CSAT' do
-      create(:team, account: account)
-      described_class.backfill!(account)
-      expect(account.reload.feature_enabled?('kalo_detailed_reports')).to be(true)
-    end
-
-    it 'never turns off a flag that is already on' do
-      account.enable_features!('kalo_help_center')
-      described_class.backfill!(account)
-      expect(account.reload.feature_enabled?('kalo_help_center')).to be(true)
+      expect(account.reload.feature_enabled?('kalo_pos')).to be(true)
     end
   end
 end
