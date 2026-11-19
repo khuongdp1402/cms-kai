@@ -2,10 +2,7 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloAssistantButton from '../KaloAssistantButton.vue';
-import {
-  AVAILABILITY_TTL_MS,
-  resetAssistantState,
-} from '../useKaloAssistant';
+import { AVAILABILITY_TTL_MS, resetAssistantState } from '../useKaloAssistant';
 import { createAssistantEnv } from './assistantTestEnv';
 
 vi.mock('dashboard/api/kchat/assistant', () => ({

@@ -4,7 +4,9 @@
 # Gemini REST is used only when AI_PROVIDER=gemini_api.
 class Ai::CustomLlmService
   class NotConfiguredError < StandardError; end
+
   class PromptTooLargeError < StandardError; end
+
   # The provider was reached but refused (bad key, 5xx, garbage body) or could not be reached at all.
   class ProviderError < StandardError
     # HTTP status of the refused call, nil when the provider could not be reached or answered garbage.
@@ -64,15 +66,7 @@ class Ai::CustomLlmService
     raise NotConfiguredError, 'AI provider is not configured' unless configured?
     raise PromptTooLargeError, 'AI prompt is too large' if messages.sum { |m| m[:content].to_s.length } > MAX_PROMPT_CHARS
 
-    text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
-    Kchat::AiHealth.clear_failure!
-    self.class.strip_think(text)
-  rescue ProviderError => e
-    Kchat::AiHealth.record_failure! if e.provider_down?
-    raise
-  rescue *NETWORK_ERRORS, JSON::ParserError => e
-    Kchat::AiHealth.record_failure!
-    raise ProviderError, "AI provider failed: #{e.class}"
+    self.class.strip_think(call_provider(messages, model || @model))
   end
 
   def generate_reply_suggestion(conversation_messages, brand_profile: {})
@@ -166,6 +160,19 @@ class Ai::CustomLlmService
   def normalize_hard_bans(custom_bans)
     parsed = custom_bans.is_a?(String) ? custom_bans.split(/[,;\n]/) : Array(custom_bans)
     (DEFAULT_HARD_BANS + parsed).map { |b| b.to_s.strip }.reject(&:empty?).uniq
+  end
+
+  # Remembers provider-side failures in Kchat::AiHealth so ai_health can report them.
+  def call_provider(messages, model)
+    text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model)
+    Kchat::AiHealth.clear_failure!
+    text
+  rescue ProviderError => e
+    Kchat::AiHealth.record_failure! if e.provider_down?
+    raise
+  rescue *NETWORK_ERRORS, JSON::ParserError => e
+    Kchat::AiHealth.record_failure!
+    raise ProviderError, "AI provider failed: #{e.class}"
   end
 
   def call_openai_compatible(messages, model)

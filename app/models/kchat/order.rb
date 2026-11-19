@@ -183,13 +183,19 @@ class Kchat::Order < ApplicationRecord
 
   def ensure_allowed!(event)
     return if pos_direct_complete?(event)
-    raise InvalidTransition, 'cannot ship a pos order' if event == :ship && source_pos?
+
+    ensure_shippable!(event)
 
     rules = TRANSITIONS.fetch(event) { raise InvalidTransition, "unknown event #{event}" }
     raise InvalidTransition, "cannot #{event} from #{status}" unless rules.key?(status)
 
     required_method = rules[status]
     raise InvalidTransition, "cannot #{event} a #{payment_method} order" if required_method && payment_method != required_method
+  end
+
+  # POS sales are handed over at the counter (delivery_status not_applicable).
+  def ensure_shippable!(event)
+    raise InvalidTransition, 'cannot ship a pos order' if event == :ship && source_pos?
   end
 
   def pos_direct_complete?(event)

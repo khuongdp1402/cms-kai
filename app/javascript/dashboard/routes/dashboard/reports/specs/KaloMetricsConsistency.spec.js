@@ -232,9 +232,7 @@ describe('Kalo metrics are consistent across Báo cáo and Tổng quan', () => {
         ],
       },
     });
-    expect(funnel.find('[data-test="funnel-channel"]').text()).toContain(
-      label
-    );
+    expect(funnel.find('[data-test="funnel-channel"]').text()).toContain(label);
     const share = mountWithI18n(ChannelShare, {
       channels: [{ channel: 'chat', orders: 1, share_pct: 100 }],
     });
@@ -258,8 +256,8 @@ describe('Kalo metrics are consistent across Báo cáo and Tổng quan', () => {
       },
     });
     const wrapper = await mountOverview();
-    expect(
-      wrapper.find('[data-test="overview-channel-row"]').text()
-    ).toContain(viMessages.KALO_METRICS.ROW_CHAT_ORPHAN);
+    expect(wrapper.find('[data-test="overview-channel-row"]').text()).toContain(
+      viMessages.KALO_METRICS.ROW_CHAT_ORPHAN
+    );
   });
 });
