@@ -59,10 +59,11 @@ describe('KaloRail', () => {
     ]);
   });
 
-  it('toggles between compact (76px) and expanded (224px) mode via toggle button', async () => {
+  it('toggles between compact (68px, icons only) and expanded (224px) mode via toggle button', async () => {
     const wrapper = await mountRail();
     const nav = wrapper.find('nav');
     expect(nav.attributes('data-expanded')).toBe('false');
+    expect(nav.classes()).toContain('w-[68px]');
     await wrapper.find('[data-test-id="kalo-rail-toggle"]').trigger('click');
     expect(nav.attributes('data-expanded')).toBe('true');
     expect(nav.classes()).toContain('w-[224px]');
@@ -148,8 +149,10 @@ describe('KaloRail', () => {
     );
   });
 
+  // Guided UX §2: submenus only exist in the expanded rail.
   it('has a filters trigger beside Tin nhắn', async () => {
     const wrapper = await mountRail();
+    await wrapper.find('[data-test-id="kalo-rail-toggle"]').trigger('click');
     expect(wrapper.find('[data-test-id="kalo-filters-trigger"]').exists()).toBe(
       true
     );

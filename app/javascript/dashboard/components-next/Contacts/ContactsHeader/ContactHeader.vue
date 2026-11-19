@@ -5,12 +5,16 @@ import Icon from 'dashboard/components-next/icon/Icon.vue';
 import ContactSortMenu from './components/ContactSortMenu.vue';
 import ContactMoreActions from './components/ContactMoreActions.vue';
 import ComposeConversation from 'dashboard/components-next/NewConversation/ComposeConversation.vue';
+import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
 
 defineProps({
   showSearch: { type: Boolean, default: true },
   searchValue: { type: String, default: '' },
   headerTitle: { type: String, required: true },
+  description: { type: String, default: '' },
   buttonLabel: { type: String, default: '' },
+  // Primary header action (KaloPage: one primary button, on the right).
+  addLabel: { type: String, default: '' },
   activeSort: { type: String, default: 'last_activity_at' },
   activeOrdering: { type: String, default: '' },
   isSegmentsView: { type: Boolean, default: false },
@@ -32,15 +36,12 @@ const emit = defineEmits([
 </script>
 
 <template>
-  <header class="sticky top-0 z-20 px-6">
-    <div
-      class="flex items-start sm:items-center justify-between w-full py-6 gap-2 mx-auto max-w-5xl"
-    >
-      <span class="text-xl font-medium truncate text-n-slate-12">
-        {{ headerTitle }}
-      </span>
-      <div class="flex items-center flex-col sm:flex-row flex-shrink-0 gap-4">
-        <div v-if="showSearch" class="flex items-center gap-2 w-full">
+  <KaloPageHeader :title="headerTitle" :description="description">
+    <template #actions>
+      <div
+        class="flex flex-wrap items-center flex-shrink-0 gap-2 max-sm:w-full"
+      >
+        <div v-if="showSearch" class="flex items-center gap-2 w-full sm:w-64">
           <Input
             :model-value="searchValue"
             type="search"
@@ -115,11 +116,24 @@ const emit = defineEmits([
           <div class="w-px h-4 bg-n-strong" />
           <ComposeConversation>
             <template #trigger>
-              <Button :label="buttonLabel" size="sm" />
+              <Button
+                :label="buttonLabel"
+                size="sm"
+                variant="outline"
+                color="slate"
+              />
             </template>
           </ComposeConversation>
+          <Button
+            v-if="addLabel"
+            data-test-id="contacts-add"
+            :label="addLabel"
+            icon="i-lucide-plus"
+            size="sm"
+            @click="emit('add')"
+          />
         </div>
       </div>
-    </div>
-  </header>
+    </template>
+  </KaloPageHeader>
 </template>

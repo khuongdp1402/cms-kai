@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
-import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import LiveChatCampaignsPage from 'dashboard/routes/dashboard/campaigns/pages/LiveChatCampaignsPage.vue';
 import BroadcastCampaignsPanel from './BroadcastCampaignsPanel.vue';
 import ContentIdeas from './ContentIdeas.vue';
@@ -46,8 +46,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <KaloPageShell :title="t('KALO_MARKETING.TITLE')">
-    <template #headerTabs>
+  <KaloPage :title="t('KALO_MARKETING.TITLE')">
+    <template #tabs>
       <div
         role="tablist"
         :aria-label="t('KALO_MARKETING.TABS_LABEL')"
@@ -104,5 +104,5 @@ onMounted(() => {
     <ContentCalendar v-else-if="activeTab === 'calendar'" />
     <CommentAutomationSettings v-else-if="activeTab === 'comments'" />
     <BrandProfileForm v-else />
-  </KaloPageShell>
+  </KaloPage>
 </template>

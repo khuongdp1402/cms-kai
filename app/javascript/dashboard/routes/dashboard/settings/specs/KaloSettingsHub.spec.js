@@ -157,4 +157,18 @@ describe('SettingsHub (Kalo groups)', () => {
     ]);
     expect(wrapper.text()).not.toContain('Cửa hàng');
   });
+
+  // Guided UX §2: settings hub in KaloPage, one KaloCard per group.
+  it('renders each group as a card in the shared page frame', async () => {
+    const { wrapper } = await mountHub();
+    expect(wrapper.find('[data-test-id="kalo-page-header"] h1').text()).toBe(
+      'Cài đặt'
+    );
+    const group = wrapper.find('[data-test="hub-group-SHOP"]');
+    expect(group.attributes('data-test-id')).toBe('kalo-card');
+    expect(group.find('h2').text()).toBe('Cửa hàng');
+    expect(
+      wrapper.find('[data-test-id="kalo-page-actions"] input').exists()
+    ).toBe(true);
+  });
 });

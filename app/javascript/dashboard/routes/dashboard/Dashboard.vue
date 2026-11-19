@@ -3,6 +3,7 @@ import { defineAsyncComponent, ref, computed } from 'vue';
 
 import KaloRail from 'next/sidebar/KaloRail.vue';
 import KaloTabBar from 'next/sidebar/KaloTabBar.vue';
+import KaloAppShell from 'next/layout/KaloAppShell.vue';
 import WootKeyShortcutModal from 'dashboard/components/widgets/modal/WootKeyShortcutModal.vue';
 import AddAccountModal from 'dashboard/components/app/AddAccountModal.vue';
 import UpgradePage from 'dashboard/routes/dashboard/upgrade/UpgradePage.vue';
@@ -30,6 +31,7 @@ export default {
   components: {
     KaloRail,
     KaloTabBar,
+    KaloAppShell,
     CommandBar,
     WootKeyShortcutModal,
     AddAccountModal,
@@ -123,47 +125,43 @@ export default {
 </script>
 
 <template>
-  <div
-    class="flex flex-grow overflow-hidden text-n-slate-12"
-    :class="{ 'flex-col': isSmallScreen }"
-  >
-    <KaloRail
-      v-if="!isSmallScreen"
-      @open-key-shortcut-modal="toggleKeyShortcutModal"
-      @close-key-shortcut-modal="closeKeyShortcutModal"
-      @show-create-account-modal="openCreateAccountModal"
+  <KaloAppShell :compact="isSmallScreen">
+    <template #sidebar>
+      <KaloRail
+        @open-key-shortcut-modal="toggleKeyShortcutModal"
+        @close-key-shortcut-modal="closeKeyShortcutModal"
+        @show-create-account-modal="openCreateAccountModal"
+      />
+    </template>
+
+    <UpgradePage
+      v-show="showUpgradePage"
+      ref="upgradePageRef"
+      :bypass-upgrade-page="bypassUpgradePage"
+    />
+    <template v-if="!showUpgradePage">
+      <router-view />
+      <CommandBar />
+      <CopilotLauncher />
+      <CopilotContainer />
+      <FloatingCallWidget v-if="hasActiveCall || hasIncomingCall" />
+    </template>
+    <AddAccountModal
+      :show="showCreateAccountModal"
+      @close-account-create-modal="closeCreateAccountModal"
+    />
+    <WootKeyShortcutModal
+      v-model:show="showShortcutModal"
+      @close="closeKeyShortcutModal"
+      @clickaway="closeKeyShortcutModal"
     />
 
-    <main
-      class="flex flex-1 h-full w-full min-h-0 px-0 overflow-hidden bg-n-background"
-    >
-      <UpgradePage
-        v-show="showUpgradePage"
-        ref="upgradePageRef"
-        :bypass-upgrade-page="bypassUpgradePage"
+    <template #tabbar>
+      <KaloTabBar
+        @open-key-shortcut-modal="toggleKeyShortcutModal"
+        @close-key-shortcut-modal="closeKeyShortcutModal"
+        @show-create-account-modal="openCreateAccountModal"
       />
-      <template v-if="!showUpgradePage">
-        <router-view />
-        <CommandBar />
-        <CopilotLauncher />
-        <CopilotContainer />
-        <FloatingCallWidget v-if="hasActiveCall || hasIncomingCall" />
-      </template>
-      <AddAccountModal
-        :show="showCreateAccountModal"
-        @close-account-create-modal="closeCreateAccountModal"
-      />
-      <WootKeyShortcutModal
-        v-model:show="showShortcutModal"
-        @close="closeKeyShortcutModal"
-        @clickaway="closeKeyShortcutModal"
-      />
-    </main>
-    <KaloTabBar
-      v-if="isSmallScreen"
-      @open-key-shortcut-modal="toggleKeyShortcutModal"
-      @close-key-shortcut-modal="closeKeyShortcutModal"
-      @show-create-account-modal="openCreateAccountModal"
-    />
-  </div>
+    </template>
+  </KaloAppShell>
 </template>

@@ -201,4 +201,36 @@ describe('OrdersIndex', () => {
       'Mã đơn, tên khách'
     );
   });
+
+  // Guided UX §2: KaloPage header and create form in a KaloDrawer.
+  it('uses the shared page header with a one-line description', async () => {
+    const { wrapper } = mountIndex([makeOrder()]);
+    await flushPromises();
+    expect(wrapper.find('h1').text()).toBe('Đơn hàng');
+    expect(
+      wrapper.find('[data-test-id="kalo-page-description"]').text()
+    ).toBeTruthy();
+    const actions = wrapper.find('[data-test-id="kalo-page-actions"]');
+    expect(actions.text()).toContain('Mở POS');
+    expect(actions.text()).toContain('Tạo đơn');
+  });
+
+  it('opens the create form in a right drawer that closes on Esc', async () => {
+    const { wrapper } = mountIndex([makeOrder()]);
+    await flushPromises();
+    await wrapper
+      .find('[data-test-id="kalo-page-actions"]')
+      .findAll('button')
+      .find(b => b.text() === 'Tạo đơn')
+      .trigger('click');
+    const drawer = wrapper.find('[data-test="order-form-drawer"]');
+    expect(drawer.attributes('role')).toBe('dialog');
+    expect(drawer.text()).toContain('Tạo đơn');
+    expect(drawer.findComponent({ name: 'OrderForm' }).exists()).toBe(true);
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    await flushPromises();
+    expect(wrapper.find('[data-test="order-form-drawer"]').exists()).toBe(
+      false
+    );
+  });
 });

@@ -35,4 +35,8 @@ export const KALO_ICON_NAMES = [
   'quote',
   'book',
   'expand',
+  'x',
+  'user',
+  'logout',
+  'panel',
 ];

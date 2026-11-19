@@ -126,7 +126,7 @@ const headerTitle = computed(() => {
   if (isActiveView.value) return t('CONTACTS_LAYOUT.HEADER.ACTIVE_TITLE');
   if (activeSegmentId.value) return activeSegment.value?.name;
   if (activeLabel.value) return `#${activeLabel.value}`;
-  return t('CONTACTS_LAYOUT.HEADER.TITLE');
+  return t('KALO_SHELL.CONTACTS.TITLE');
 });
 
 const emptyStateMessage = computed(() => {
@@ -494,7 +494,7 @@ onMounted(async () => {
 
 <template>
   <div
-    class="flex flex-col justify-between flex-1 h-full m-0 overflow-auto bg-n-surface-1"
+    class="flex flex-col flex-1 h-full min-w-0 m-0 overflow-hidden bg-n-background"
   >
     <ContactsListLayout
       :search-value="searchValue"
@@ -541,10 +541,9 @@ onMounted(async () => {
         />
         <ContactEmptyState
           v-if="showEmptyStateLayout"
-          class="pt-14"
-          :title="t('CONTACTS_LAYOUT.EMPTY_STATE.TITLE')"
-          :subtitle="t('CONTACTS_LAYOUT.EMPTY_STATE.SUBTITLE')"
-          :button-label="t('CONTACTS_LAYOUT.EMPTY_STATE.BUTTON_LABEL')"
+          :title="t('KALO_SHELL.CONTACTS.EMPTY_TITLE')"
+          :subtitle="t('KALO_SHELL.CONTACTS.EMPTY_SUBTITLE')"
+          :button-label="t('KALO_SHELL.CONTACTS.ADD')"
           @create="createContact"
         />
 
@@ -557,7 +556,7 @@ onMounted(async () => {
           </span>
         </div>
 
-        <div v-else class="flex flex-col gap-4 pt-4 pb-6">
+        <div v-else class="flex flex-col gap-4">
           <ContactsList
             :contacts="contacts"
             :selected-contact-ids="selectedContactIds"

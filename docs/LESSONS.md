@@ -36,6 +36,18 @@
   - Quy tắc: spec cần sản phẩm bán chạy phải tạo `Kchat::Product` thật và truyền `product_id`, dòng đơn tự do không lên danh sách.
 - **B74 (2026-11-19): Prompt của trợ lý chỉ chứa dữ liệu của `Current.account`.**
   - Quy tắc: không đưa dữ liệu shop khác vào prompt; chế độ `help` không chứa số liệu; mọi chế độ mới phải có spec khẳng định body gửi đi không chứa dữ liệu tài khoản khác.
+- **B60 (2026-11-19): Drawer không bắt được Esc khi sự kiện phát trên `document`.**
+  - Triệu chứng: `KaloDrawer` nghe `keydown` trên `window` (pha nổi bọt); spec phát `new KeyboardEvent('keydown', {key: 'Escape'})` trên `document` thì drawer không đóng.
+  - Nguyên nhân: sự kiện tạo tay mặc định `bubbles: false`, nên listener pha nổi bọt ở `window` không chạy; chỉ pha bắt (capture) mới thấy.
+  - Quy tắc: phím tắt toàn cục của popup nghe ở `window` với `capture: true` và không `stopPropagation`; chỉ popup mở sau cùng xử lý Esc (ngăn xếp trong `KaloDrawer`). Popup mới dùng `KaloDrawer`, không tự thêm listener `keydown` riêng.
+- **B61 (2026-11-19): Dịch khóa số nhiều của upstream bị spec overlay báo "placeholders differ".**
+  - Triệu chứng: thêm `PAGINATION_FOOTER.SHOWING` tiếng Việt một dạng thì `overrides.spec.js` hỏng.
+  - Nguyên nhân: bản tiếng Anh có hai dạng `số ít | số nhiều`; spec so cả thứ tự và số lần xuất hiện placeholder.
+  - Quy tắc: khi dịch khóa có `|` ở tiếng Anh, viết đủ hai vế (tiếng Việt lặp lại cùng câu: `A | A`).
+- **B62 (2026-11-19): Stack thứ hai đổi `KCHAT_VITE_PORT` nhưng trình duyệt vẫn tải asset từ `localhost:3036`.**
+  - Triệu chứng: chạy `docker compose -p kalo-t1` với vite ở 3136, trang vẫn gọi `localhost:3036` và HMR websocket báo lỗi, làm bẩn bảng lỗi console khi kiểm tra trình duyệt.
+  - Nguyên nhân: `VITE_RUBY_PORT` trong compose cố định 3036 cho cả server và client.
+  - Quy tắc: khi kiểm tra trình duyệt bằng stack riêng, để vite ở 3036 nếu cổng trống (hoặc chỉ đổi port rails); nếu buộc phải đổi thì route `localhost:3036` sang cổng mới trong playwright và bỏ qua lỗi websocket HMR khi đếm lỗi console.
 
 - **B53 (2026-11-19): Popup, dropdown và màn hình nhỏ lẻ lệch màu, mất viền ở Dark mode, hoặc bị CSS toàn cục đè lên Tailwind.**
   - Triệu chứng: Một số popup/dropdown ở chế độ tối dùng nền xám lạnh lệch tông espresso, mất viền (`--border-container` alpha `0`), thẻ `<dialog>` native bị viền/nền trắng mặc định; `<select>` ngoài `#app[dir]` hoặc khác padding bị mũi tên lệch góc trên trái; `<input>` bị cộng dồn `mb-4` và double-border; ảnh trong `.group` bị bóp thành `158x200`; `<body>` dùng `text-slate-600` và thiếu `dir="ltr"` trên `<html>` làm popup `<Teleport to="body">` mất màu chữ hoặc sai hướng `ltr:`.

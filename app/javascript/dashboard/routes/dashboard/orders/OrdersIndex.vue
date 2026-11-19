@@ -1,12 +1,14 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import { alertKchatError } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
-import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
+import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
+import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 import OrderForm from './OrderForm.vue';
 import OrderDrawer from './OrderDrawer.vue';
 import {
@@ -136,19 +138,14 @@ const onCreated = () => {
   load();
 };
 
-const onKeydown = event => {
-  if (event.key === 'Escape' && showForm.value) showForm.value = false;
-};
-
-onMounted(() => {
-  document.addEventListener('keydown', onKeydown);
-  load();
-});
-onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
+onMounted(load);
 </script>
 
 <template>
-  <KaloPageShell :title="t('KALO_ORDERS.TITLE')">
+  <KaloPage
+    :title="t('KALO_ORDERS.TITLE')"
+    :description="t('KALO_SHELL.ORDERS.DESCRIPTION')"
+  >
     <template #actions>
       <router-link
         :to="{ name: 'kalo_pos' }"
@@ -199,9 +196,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
         </div>
       </div>
 
-      <div
-        class="overflow-hidden border shadow-sm rounded-2xl border-n-weak bg-n-solid-1"
-      >
+      <KaloCard flush>
         <div
           class="flex flex-wrap items-center justify-between gap-3 px-4 py-3 border-b bg-n-solid-2 border-n-weak"
         >
@@ -282,7 +277,9 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
                 <td class="px-4 py-3 max-w-64 truncate text-n-slate-11">
                   {{ itemsSummary(order) }}
                 </td>
-                <td class="px-4 py-3 font-bold text-end whitespace-nowrap tabular-nums">
+                <td
+                  class="px-4 py-3 font-bold text-end whitespace-nowrap tabular-nums"
+                >
                   {{ formatVnd(order.total) }}
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap">
@@ -290,7 +287,9 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
                     class="px-2.5 py-0.5 text-xs font-semibold rounded-full"
                     :class="paymentChip(order).tone"
                   >
-                    {{ t(`KALO_ORDERS.PAYMENT_CHIP.${paymentChip(order).key}`) }}
+                    {{
+                      t(`KALO_ORDERS.PAYMENT_CHIP.${paymentChip(order).key}`)
+                    }}
                   </span>
                 </td>
                 <td class="px-4 py-3 whitespace-nowrap">
@@ -331,7 +330,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
             </tbody>
           </table>
         </div>
-      </div>
+      </KaloCard>
 
       <p
         v-if="!orders.length && !uiFlags.isFetching"
@@ -352,20 +351,14 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
       </button>
     </template>
 
-    <div
+    <KaloDrawer
       v-if="showForm"
-      class="fixed inset-0 z-50 grid p-4 overflow-auto bg-black/50 backdrop-blur-sm place-items-center"
-      @click.self="showForm = false"
+      data-test="order-form-drawer"
+      :title="t('KALO_ORDERS.FORM.TITLE')"
+      @close="showForm = false"
     >
-      <div
-        role="dialog"
-        aria-modal="true"
-        :aria-label="t('KALO_ORDERS.FORM.TITLE')"
-        class="w-full max-w-lg p-6 border shadow-2xl rounded-2xl border-n-strong bg-n-solid-1"
-      >
-        <OrderForm @created="onCreated" @cancel="showForm = false" />
-      </div>
-    </div>
+      <OrderForm in-drawer @created="onCreated" @cancel="showForm = false" />
+    </KaloDrawer>
 
     <OrderDrawer
       v-if="openOrder"
@@ -374,5 +367,5 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
       @close="openOrderId = null"
       @action="runAction(openOrder, $event)"
     />
-  </KaloPageShell>
+  </KaloPage>
 </template>

@@ -41,6 +41,8 @@ export const createKaloTestEnv = ({
   labels = [],
   teams = [],
   folders = [],
+  // When given, the store has the real uiSettings getter/action pair.
+  uiSettings,
 } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -75,7 +77,23 @@ export const createKaloTestEnv = ({
       'globalConfig/isOnChatwootCloud': () => false,
       'accounts/isFeatureEnabledonAccount': () => () => true,
       'conversationUnreadCounts/getAllUnreadCount': () => unread,
+      ...(uiSettings ? { getUISettings: state => state.uiSettings } : {}),
     },
+    ...(uiSettings
+      ? {
+          state: { uiSettings: { ...uiSettings } },
+          mutations: {
+            setUISettings(state, value) {
+              state.uiSettings = value;
+            },
+          },
+          actions: {
+            updateUISettings: vi.fn(({ commit }, { uiSettings: next }) =>
+              commit('setUISettings', next)
+            ),
+          },
+        }
+      : {}),
     modules: {
       notifications: {
         namespaced: true,

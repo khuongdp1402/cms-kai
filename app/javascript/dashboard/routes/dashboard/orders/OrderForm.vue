@@ -9,6 +9,8 @@ const props = defineProps({
   contactId: { type: Number, default: null },
   // Conversation display_id, as used by the dashboard routes.
   conversationId: { type: Number, default: null },
+  // Inside a KaloDrawer: the drawer shows the title, the buttons stick to the bottom.
+  inDrawer: { type: Boolean, default: false },
 });
 const emit = defineEmits(['created', 'cancel']);
 
@@ -87,15 +89,19 @@ const submit = async () => {
 onMounted(() => store.dispatch('kchatProducts/fetch', { active: true }));
 
 const inputClass =
-  'w-full px-3 py-2 mb-0 text-sm border rounded-lg outline-none border-n-weak bg-n-solid-1 text-n-slate-12 focus:border-woot-500';
+  'w-full px-3 py-2 mb-0 text-sm border border-solid rounded-lg outline-none border-n-strong bg-n-solid-1 text-n-slate-12 focus:border-woot-500';
 // The global select arrow (_base.scss) is positioned only under [dir] and
 // relative to the content box, which px-3 shrinks: pin it to the right here.
 const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.75rem_center]`;
 </script>
 
 <template>
-  <form class="flex flex-col gap-4" @submit.prevent="submit">
-    <h2 class="text-lg font-extrabold text-n-slate-12">
+  <form
+    class="flex flex-col gap-4"
+    :class="{ 'flex-1': inDrawer }"
+    @submit.prevent="submit"
+  >
+    <h2 v-if="!inDrawer" class="text-lg font-extrabold text-n-slate-12">
       {{ t('KALO_ORDERS.FORM.TITLE') }}
     </h2>
 
@@ -188,7 +194,13 @@ const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.
       {{ errorMessage }}
     </p>
 
-    <div class="flex items-center gap-3">
+    <div
+      class="flex items-center gap-3"
+      :class="{
+        'sticky bottom-0 -mx-5 -mb-5 px-5 py-3.5 mt-auto border-t sm:-mx-6 sm:px-6 border-n-weak bg-n-solid-2':
+          inDrawer,
+      }"
+    >
       <span class="text-sm text-n-slate-11">
         {{ t('KALO_ORDERS.FORM.TOTAL') }}
         <b class="text-n-slate-12">{{ formatVnd(total) }}</b>

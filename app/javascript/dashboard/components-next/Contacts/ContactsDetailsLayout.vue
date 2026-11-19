@@ -7,6 +7,8 @@ import Button from 'dashboard/components-next/button/Button.vue';
 import Breadcrumb from 'dashboard/components-next/breadcrumb/Breadcrumb.vue';
 import ComposeConversation from 'dashboard/components-next/NewConversation/ComposeConversation.vue';
 import VoiceCallButton from 'dashboard/components-next/Contacts/VoiceCallButton.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
+import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
 
 const props = defineProps({
   selectedContact: {
@@ -32,7 +34,7 @@ const selectedContactName = computed(() => props.selectedContact?.name);
 const breadcrumbItems = computed(() => {
   const items = [
     {
-      label: t('CONTACTS_LAYOUT.HEADER.BREADCRUMB.CONTACTS'),
+      label: t('KALO_SHELL.CONTACTS.TITLE'),
       link: '#',
     },
   ];
@@ -56,17 +58,16 @@ const toggleBlock = () => {
 </script>
 
 <template>
-  <section
-    class="flex flex-col w-full h-full min-w-0 overflow-y-auto bg-n-background"
+  <KaloPage
+    :right-title="t('KALO_SHELL.CONTACTS.DETAILS_PANEL')"
+    right-width-class="w-[440px]"
   >
-    <header
-      class="sticky top-0 z-20 border-b shrink-0 bg-n-surface-1/95 backdrop-blur-md border-n-weak"
-    >
-      <div
-        class="flex flex-wrap items-center justify-between w-full gap-3 px-5 py-3.5 mx-auto max-w-[1360px] sm:px-6 lg:px-8"
-      >
-        <Breadcrumb :items="breadcrumbItems" @click="handleBreadcrumbClick" />
-        <div class="flex flex-wrap items-center gap-2">
+    <template #header="{ isDesktop, open }">
+      <KaloPageHeader>
+        <template #title>
+          <Breadcrumb :items="breadcrumbItems" @click="handleBreadcrumbClick" />
+        </template>
+        <template #actions>
           <Button
             :label="
               !isContactBlocked
@@ -86,6 +87,15 @@ const toggleBlock = () => {
             :label="$t('CONTACT_PANEL.CALL')"
             size="sm"
           />
+          <Button
+            v-if="slots.sidebar && !isDesktop"
+            data-test-id="contact-open-details"
+            :label="t('KALO_SHELL.CONTACTS.DETAILS_PANEL')"
+            size="sm"
+            variant="outline"
+            slate
+            @click="open('right')"
+          />
           <ComposeConversation :contact-id="contactId">
             <template #trigger>
               <Button
@@ -94,34 +104,26 @@ const toggleBlock = () => {
               />
             </template>
           </ComposeConversation>
-        </div>
-      </div>
-    </header>
+        </template>
+      </KaloPageHeader>
+    </template>
 
-    <main class="w-full px-5 py-6 mx-auto max-w-[1360px] sm:px-6 lg:px-8">
+    <div class="min-w-0" :class="{ 'max-w-3xl': !slots.sidebar }">
+      <slot name="default" />
+    </div>
+
+    <template v-if="slots.sidebar" #right>
       <div
-        :class="
-          slots.sidebar
-            ? 'grid grid-cols-1 gap-6 xl:grid-cols-[5fr_7fr] items-start'
-            : 'max-w-3xl'
-        "
+        data-test-id="contact-details-panel"
+        class="flex flex-col min-w-0 overflow-hidden border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
       >
-        <div class="min-w-0">
-          <slot name="default" />
+        <div class="shrink-0">
+          <slot name="sidebarHeader" />
         </div>
-
-        <aside
-          v-if="slots.sidebar"
-          class="flex flex-col min-w-0 overflow-hidden border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak xl:sticky xl:top-20"
-        >
-          <div class="shrink-0">
-            <slot name="sidebarHeader" />
-          </div>
-          <div class="flex-1 min-h-0 py-4 overflow-y-auto max-h-[calc(100dvh-11rem)]">
-            <slot name="sidebar" />
-          </div>
-        </aside>
+        <div class="flex-1 min-h-0 py-4">
+          <slot name="sidebar" />
+        </div>
       </div>
-    </main>
-  </section>
+    </template>
+  </KaloPage>
 </template>

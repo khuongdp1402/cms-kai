@@ -9,6 +9,8 @@ import ComposeConversation from 'dashboard/components-next/NewConversation/Compo
 
 defineProps({
   inline: { type: Boolean, default: false },
+  // Submenu under "Tin nhắn" in the expanded rail (implies inline).
+  nested: { type: Boolean, default: false },
 });
 
 const { t } = useI18n();
@@ -70,7 +72,7 @@ const sections = computed(() =>
     data-test-id="kalo-message-filters"
   >
     <button
-      v-if="!inline"
+      v-if="!inline && !nested"
       type="button"
       data-test-id="kalo-filters-trigger"
       :title="t('KALO_NAV.FILTERS.OPEN')"
@@ -81,7 +83,43 @@ const sections = computed(() =>
       <span class="i-lucide-chevron-down size-4" />
     </button>
     <div
-      v-if="inline || isOpen"
+      v-if="nested"
+      data-test-id="kalo-filters-submenu"
+      class="flex flex-col gap-2 py-1 mt-0.5 ltr:ml-5 rtl:mr-5 ltr:pl-2 rtl:pr-2 ltr:border-l rtl:border-r border-n-weak max-h-72 overflow-y-auto"
+    >
+      <ComposeConversation align="start">
+        <template #trigger>
+          <button
+            type="button"
+            data-test-id="kalo-new-conversation"
+            class="flex items-center gap-1.5 w-full px-2 py-1.5 text-[13px] font-semibold rounded-lg text-n-blue-11 hover:bg-n-alpha-2"
+          >
+            <KaloIcon name="plus" class="size-4" />
+            <span class="truncate">
+              {{ t('KALO_NAV.FILTERS.NEW_CONVERSATION') }}
+            </span>
+          </button>
+        </template>
+      </ComposeConversation>
+      <div v-for="section in sections" :key="section.key">
+        <h3
+          class="px-2 mb-0.5 text-[11px] font-bold tracking-wider uppercase text-n-slate-10"
+        >
+          {{ t(`KALO_NAV.FILTERS.${section.key}`) }}
+        </h3>
+        <router-link
+          v-for="link in section.links"
+          :key="link.id"
+          :to="link.to"
+          class="block px-2 py-1 text-sm truncate rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12"
+          exact-active-class="!bg-n-blue-3 !text-n-blue-11 font-semibold"
+        >
+          {{ link.label }}
+        </router-link>
+      </div>
+    </div>
+    <div
+      v-else-if="inline || isOpen"
       class="flex flex-col gap-3 p-3 overflow-y-auto max-h-80 bg-n-surface-1 border border-n-weak rounded-xl"
       :class="inline ? '' : 'absolute z-50 left-full top-0 ml-2 w-64 shadow-lg'"
     >

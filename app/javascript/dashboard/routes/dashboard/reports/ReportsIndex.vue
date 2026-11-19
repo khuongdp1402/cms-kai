@@ -6,7 +6,7 @@ import { useAccount } from 'dashboard/composables/useAccount';
 import reportsAPI from 'dashboard/api/kchat/reports';
 import Button from 'dashboard/components-next/button/Button.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
-import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import { formatMoney } from './formatMoney';
 import SalesChart from './SalesChart.vue';
 import ChannelShare from './ChannelShare.vue';
@@ -114,7 +114,7 @@ onMounted(load);
 </script>
 
 <template>
-  <KaloPageShell :title="t('KALO_REPORTS.TITLE')">
+  <KaloPage :title="t('KALO_REPORTS.TITLE')">
     <template #actions>
       <div
         role="tablist"
@@ -219,5 +219,5 @@ onMounted(load);
         </router-link>
       </div>
     </section>
-  </KaloPageShell>
+  </KaloPage>
 </template>
