@@ -71,12 +71,14 @@ class SuperAdmin::AccountsController < SuperAdmin::ApplicationController
   def kalo_features
     enabled = Array(params[:kalo_features]).compact_blank
     before = Kchat::Features.states(requested_resource)
-    Kchat::Features.update!(requested_resource, enabled)
+    begin
+      Kchat::Features.update!(requested_resource, enabled)
+    rescue ArgumentError => e
+      return render plain: e.message, status: :unprocessable_entity
+    end
     Rails.logger.info("[kalo_features] super_admin=#{current_super_admin.email} account=#{requested_resource.id} " \
                       "before=#{before.select { |_n, on| on }.keys} after=#{enabled}")
     redirect_to [namespace, requested_resource], notice: t('kalo_super_admin.kalo_features.saved')
-  rescue ArgumentError => e
-    render plain: e.message, status: :unprocessable_entity
   end
 
   def destroy

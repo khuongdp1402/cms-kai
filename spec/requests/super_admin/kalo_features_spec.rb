@@ -74,6 +74,36 @@ RSpec.describe 'Super admin Kalo features', type: :request do
     end
   end
 
+  context 'with CSRF protection on (as in production)' do
+    around do |example|
+      original = ActionController::Base.allow_forgery_protection
+      ActionController::Base.allow_forgery_protection = true
+      example.run
+    ensure
+      ActionController::Base.allow_forgery_protection = original
+    end
+
+    before { sign_in(super_admin, scope: :super_admin) }
+
+    it 'rejects a PATCH without a token and leaves flags unchanged' do
+      patch path, params: { kalo_features: %w[kalo_help_center] }
+
+      # ActionController::InvalidAuthenticityToken, rescued to 422 by ActionDispatch.
+      expect(response).to have_http_status(:unprocessable_entity)
+      expect(kalo_states.select { |_n, on| on }.keys).to contain_exactly('kalo_pos', 'kalo_brand')
+    end
+
+    it 'accepts a PATCH with the token rendered in the form' do
+      get "/super_admin/accounts/#{account.id}"
+      token = Nokogiri::HTML(response.body).at_css('#kalo-features input[name=authenticity_token]')['value']
+
+      patch path, params: { kalo_features: %w[kalo_help_center], authenticity_token: token }
+
+      expect(response).to redirect_to("/super_admin/accounts/#{account.id}")
+      expect(kalo_states.select { |_n, on| on }.keys).to contain_exactly('kalo_help_center')
+    end
+  end
+
   context 'when not a super admin' do
     it 'redirects an anonymous visitor to the super admin login without changing flags' do
       patch path, params: { kalo_features: %w[kalo_help_center] }
