@@ -12,6 +12,19 @@
 
 ## B. Lỗi kỹ thuật đã gặp
 
+- **B70 (2026-11-19): Tài liệu hướng dẫn cho AI dễ hứa tính năng chưa có.**
+  - Triệu chứng: yêu cầu giao việc nhắc "chiến dịch A–Z", nhưng wizard đó (T4) chưa được xây khi viết trợ lý.
+  - Nguyên nhân: brief viết theo spec đích, không theo mã hiện có.
+  - Quy tắc: `config/kalo/assistant_guide.vi.md` chỉ mô tả tính năng có controller/route thật, và ghi rõ cái chưa có. Khi T3/T4 xong thì cập nhật file này (T5b/T6 phải rà lại).
+- **B71 (2026-11-19): `Ai::CustomLlmService::MAX_PROMPT_CHARS` (20.000 ký tự) gồm cả system prompt.**
+  - Quy tắc: guide + tóm tắt + 6 lượt lịch sử x 2000 + tin nhắn 2000 phải còn dưới trần; guide giữ dưới khoảng 4.500 ký tự (có spec ca xấu nhất). Thêm nội dung vào guide thì chạy lại spec đó.
+- **B72 (2026-11-19): Throttle trợ lý tách khóa riêng.**
+  - Quy tắc: `kchat_assistant/controller:<account_id>`, giới hạn `KCHAT_ASSISTANT_LIMIT` (mặc định 30/phút), không dùng chung bộ đếm `brand_growth_ai`; khóa luôn theo `Current.account.id`.
+- **B73 (2026-11-19): `top_products` của `Kchat::Reports` chỉ tính dòng đơn có `product_id`.**
+  - Quy tắc: spec cần sản phẩm bán chạy phải tạo `Kchat::Product` thật và truyền `product_id`, dòng đơn tự do không lên danh sách.
+- **B74 (2026-11-19): Prompt của trợ lý chỉ chứa dữ liệu của `Current.account`.**
+  - Quy tắc: không đưa dữ liệu shop khác vào prompt; chế độ `help` không chứa số liệu; mọi chế độ mới phải có spec khẳng định body gửi đi không chứa dữ liệu tài khoản khác.
+
 - **B53 (2026-11-19): Popup, dropdown và màn hình nhỏ lẻ lệch màu, mất viền ở Dark mode, hoặc bị CSS toàn cục đè lên Tailwind.**
   - Triệu chứng: Một số popup/dropdown ở chế độ tối dùng nền xám lạnh lệch tông espresso, mất viền (`--border-container` alpha `0`), thẻ `<dialog>` native bị viền/nền trắng mặc định; `<select>` ngoài `#app[dir]` hoặc khác padding bị mũi tên lệch góc trên trái; `<input>` bị cộng dồn `mb-4` và double-border; ảnh trong `.group` bị bóp thành `158x200`; `<body>` dùng `text-slate-600` và thiếu `dir="ltr"` trên `<html>` làm popup `<Teleport to="body">` mất màu chữ hoặc sai hướng `ltr:`.
   - Nguyên nhân: `_ktech-theme.scss` thiếu override `--alpha-1..3`, `--border-container`, `--button-color` (đang đặt cam đậm), `--solid-purple`/`--text-purple`; `_base.scss` import sau `@import 'tailwindcss/utilities'` mà không bọc `@layer base` và selector input có specificity `(0,13,1)`; `_woot.scss` đặt rule `.group img` với `!important`; `vueapp.html.erb` thiếu `dir="ltr"` trên `<html>`.

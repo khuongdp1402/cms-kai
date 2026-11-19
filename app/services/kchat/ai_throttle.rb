@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# Counter store behind the per-account AI rate limit enforced in Api::V1::Accounts::BrandGrowthController.
+# Counter store behind the per-account AI rate limits enforced in Api::V1::Accounts::BrandGrowthController
+# and Api::V1::Accounts::Kchat::AssistantController (each uses its own key prefix).
 # Production uses the Rack::Attack cache store (shared Redis, so the count is the same across processes).
 # The store is injectable: specs install a private MemoryStore so they never touch the shared Redis.
 module Kchat::AiThrottle
