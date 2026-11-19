@@ -6287,10 +6287,11 @@
       }
     },
     "CHAT": {
-      "QR_CONFIRM": "Kalo sẽ gửi mã QR thanh toán của đơn này vào cuộc trò chuyện. Tin đã gửi thì không thu hồi được.",
+      "QR_CONFIRM": "Số tiền {amount}. Mã QR sẽ được gửi vào cuộc trò chuyện, tin đã gửi không thu hồi được.",
       "UNASSIGNED_WAITING": "Có {count} tin chưa ai nhận",
       "UNASSIGNED_HINT": "Tin mới của khách nằm ở tab Chưa ai nhận cho tới khi có người nhận trả lời.",
-      "OPEN_UNASSIGNED": "Xem tin chưa ai nhận"
+      "OPEN_UNASSIGNED": "Xem tin chưa ai nhận",
+      "QR_CONFIRM_TITLE": "Gửi mã QR cho đơn #{number}?"
     }
   },
   "CAPTAIN": {

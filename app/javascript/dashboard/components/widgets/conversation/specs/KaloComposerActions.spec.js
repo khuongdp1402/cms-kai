@@ -105,7 +105,12 @@ describe('KaloComposerActions', () => {
     });
     // A QR is a chat message: the order and amount are shown before it goes out.
     expect(sendQr).not.toHaveBeenCalled();
-    expect(wrapper.find('[data-test="qr-confirm-note"]').exists()).toBe(true);
+    expect(wrapper.find('[data-test="qr-picker"] h2').text()).toBe(
+      'Gửi mã QR cho đơn #1042?'
+    );
+    expect(wrapper.find('[data-test="qr-confirm-note"]').text()).toContain(
+      'Số tiền'
+    );
     await wrapper.find('[data-test="qr-option"]').trigger('click');
     await flushPromises();
     expect(sendQr.mock.calls[0][1]).toEqual({ id: 3, conversationId: 12 });

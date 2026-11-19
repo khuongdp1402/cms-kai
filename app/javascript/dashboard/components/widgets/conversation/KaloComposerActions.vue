@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useStore } from 'vuex';
 import { useAlert } from 'dashboard/composables';
@@ -106,6 +106,15 @@ const chooseQr = async order => {
   if (await sendQr(order.id)) closeDialogs();
 };
 
+// One pending order: a light confirm that names it ("Gửi mã QR cho đơn #…?").
+const qrTitle = computed(() =>
+  qrOptions.value?.length === 1
+    ? t('KALO_POLISH3.CHAT.QR_CONFIRM_TITLE', {
+        number: qrOptions.value[0].number,
+      })
+    : t('KALO_CHAT.QR_PICKER.TITLE')
+);
+
 defineExpose({ openForm, pickQr });
 
 const buttonClass =
@@ -197,7 +206,7 @@ const buttonClass =
            before the QR goes out. Several: pick one. -->
       <KaloDrawer
         v-if="qrOptions"
-        :title="t('KALO_CHAT.QR_PICKER.TITLE')"
+        :title="qrTitle"
         data-test="qr-picker"
         @close="closeDialogs"
       >
@@ -213,7 +222,11 @@ const buttonClass =
           data-test="qr-confirm-note"
           class="mb-0 text-sm text-n-slate-11"
         >
-          {{ t('KALO_POLISH3.CHAT.QR_CONFIRM') }}
+          {{
+            t('KALO_POLISH3.CHAT.QR_CONFIRM', {
+              amount: formatVnd(qrOptions[0].total),
+            })
+          }}
         </p>
         <ul v-if="qrOptions.length" class="flex flex-col gap-2 list-none">
           <li v-for="order in qrOptions" :key="order.id">
