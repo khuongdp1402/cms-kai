@@ -98,6 +98,23 @@ RSpec.describe Ai::CustomLlmService do
       expect(service.health_status[:available]).to be(true)
     end
 
+    [401, 403, 500, 502, 503].each do |code|
+      it "marks the provider unavailable on HTTP #{code} and exposes the status on the error" do
+        stub_request(:post, url).to_return(status: code)
+        expect { service.complete([{ role: 'user', content: 'hi' }]) }
+          .to raise_error(described_class::ProviderError) { |e| expect(e.status).to eq(code) }
+        expect(service.health_status[:available]).to be(false)
+      end
+    end
+
+    [400, 413, 422, 429].each do |code|
+      it "keeps the provider available on HTTP #{code} (a problem with this request, not the provider)" do
+        stub_request(:post, url).to_return(status: code)
+        expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)
+        expect(service.health_status[:available]).to be(true)
+      end
+    end
+
     it 'records network failures too' do
       stub_request(:post, url).to_raise(SocketError)
       expect { service.complete([{ role: 'user', content: 'hi' }]) }.to raise_error(described_class::ProviderError)

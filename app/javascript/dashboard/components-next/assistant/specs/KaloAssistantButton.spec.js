@@ -2,7 +2,10 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { createStore } from 'vuex';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloAssistantButton from '../KaloAssistantButton.vue';
-import { resetAssistantState } from '../useKaloAssistant';
+import {
+  AVAILABILITY_TTL_MS,
+  resetAssistantState,
+} from '../useKaloAssistant';
 import { createAssistantEnv } from './assistantTestEnv';
 
 vi.mock('dashboard/api/kchat/assistant', () => ({
@@ -59,6 +62,31 @@ describe('KaloAssistantButton visibility', () => {
     wrappers.push(wrapper);
     await flushPromises();
     expect(button(wrapper).exists()).toBe(false);
+  });
+
+  it('re-checks an unavailable AI after 5 minutes instead of hiding it for the whole session', async () => {
+    vi.useFakeTimers();
+    try {
+      brandGrowthAPI.aiHealth
+        .mockResolvedValueOnce({ data: { configured: true, available: false } })
+        .mockResolvedValue({ data: { configured: true, available: true } });
+      const wrapper = mount(KaloAssistantButton, {
+        attachTo: document.body,
+        global: { plugins: createAssistantEnv({ flagOn: true }).plugins },
+      });
+      wrappers.push(wrapper);
+      await flushPromises();
+      expect(button(wrapper).exists()).toBe(false);
+
+      await vi.advanceTimersByTimeAsync(AVAILABILITY_TTL_MS - 1000);
+      expect(brandGrowthAPI.aiHealth).toHaveBeenCalledTimes(1);
+      await vi.advanceTimersByTimeAsync(1000);
+      await flushPromises();
+      expect(brandGrowthAPI.aiHealth).toHaveBeenCalledTimes(2);
+      expect(button(wrapper).exists()).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it('is hidden when the health check fails', async () => {

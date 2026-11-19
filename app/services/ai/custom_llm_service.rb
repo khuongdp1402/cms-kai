@@ -6,7 +6,20 @@ class Ai::CustomLlmService
   class NotConfiguredError < StandardError; end
   class PromptTooLargeError < StandardError; end
   # The provider was reached but refused (bad key, 5xx, garbage body) or could not be reached at all.
-  class ProviderError < StandardError; end
+  class ProviderError < StandardError
+    # HTTP status of the refused call, nil when the provider could not be reached or answered garbage.
+    attr_reader :status
+
+    def initialize(message = nil, status: nil)
+      @status = status
+      super(message)
+    end
+
+    # 400/413/422/429 are about this request (or the shop's quota), not a broken provider.
+    def provider_down?
+      status.nil? || [401, 403].include?(status) || status >= 500
+    end
+  end
 
   NETWORK_ERRORS = [Timeout::Error, SocketError, SystemCallError, OpenSSL::SSL::SSLError, EOFError, HTTParty::Error].freeze
 
@@ -54,8 +67,8 @@ class Ai::CustomLlmService
     text = gemini? ? call_gemini(messages) : call_openai_compatible(messages, model || @model)
     Kchat::AiHealth.clear_failure!
     self.class.strip_think(text)
-  rescue ProviderError
-    Kchat::AiHealth.record_failure!
+  rescue ProviderError => e
+    Kchat::AiHealth.record_failure! if e.provider_down?
     raise
   rescue *NETWORK_ERRORS, JSON::ParserError => e
     Kchat::AiHealth.record_failure!
@@ -162,7 +175,7 @@ class Ai::CustomLlmService
       body: { model: model, messages: messages, temperature: 0.7 }.to_json,
       timeout: 35
     )
-    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError.new("AI provider error: HTTP #{response.code}", status: response.code) unless response.success?
 
     JSON.parse(response.body).dig('choices', 0, 'message', 'content')
   end
@@ -179,7 +192,7 @@ class Ai::CustomLlmService
       body: { system_instruction: { parts: [{ text: system_text }] }, contents: contents }.to_json,
       timeout: 35
     )
-    raise ProviderError, "AI provider error: HTTP #{response.code}" unless response.success?
+    raise ProviderError.new("AI provider error: HTTP #{response.code}", status: response.code) unless response.success?
 
     JSON.parse(response.body).dig('candidates', 0, 'content', 'parts', 0, 'text')
   end
