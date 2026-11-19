@@ -164,4 +164,46 @@ describe('KaloRail shell behaviour', () => {
     });
     expect(nav(wrapper).attributes('data-expanded')).toBe('false');
   });
+
+  it('gives the collapsed footer icons the same name tooltip on hover and focus', async () => {
+    const { wrapper } = await mountRail();
+    const footer = wrapper.find('[data-test-id="kalo-rail-footer"]');
+    const search = footer.find('[data-test-id="kalo-search"]');
+    await search.trigger('focusin');
+    await flushPromises();
+    const tip = footer.find('[data-test-id="kalo-rail-tooltip"]');
+    expect(tip.text()).toBe('Tìm kiếm');
+    expect(search.attributes('aria-describedby')).toBe(tip.attributes('id'));
+    await search.trigger('focusout');
+    await flushPromises();
+    expect(footer.find('[data-test-id="kalo-rail-tooltip"]').exists()).toBe(
+      false
+    );
+    expect(search.attributes('aria-describedby')).toBeUndefined();
+
+    const bell = footer.find('button[aria-label="Thông báo"]');
+    await bell.element.parentElement.dispatchEvent(
+      new MouseEvent('mouseenter')
+    );
+    await flushPromises();
+    expect(footer.find('[data-test-id="kalo-rail-tooltip"]').text()).toBe(
+      'Thông báo'
+    );
+
+    const profile = footer.find('button[title="Lan"]');
+    await profile.trigger('focusin');
+    await flushPromises();
+    expect(
+      footer.findAll('[data-test-id="kalo-rail-tooltip"]').map(t => t.text())
+    ).toContain('Lan');
+  });
+
+  it('shows no footer tooltips when expanded', async () => {
+    const { wrapper } = await mountRail();
+    await wrapper.find('[data-test-id="kalo-rail-toggle"]').trigger('click');
+    await wrapper.find('[data-test-id="kalo-search"]').trigger('focusin');
+    expect(wrapper.find('[data-test-id="kalo-rail-tooltip"]').exists()).toBe(
+      false
+    );
+  });
 });

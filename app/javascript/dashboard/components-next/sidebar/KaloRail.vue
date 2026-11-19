@@ -9,6 +9,7 @@ import KaloIcon from 'next/icon/KaloIcon.vue';
 import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
 import KaloRailFooter from './KaloRailFooter.vue';
+import KaloRailTooltip from './KaloRailTooltip.vue';
 import { useKaloNav } from './useKaloNav';
 
 const emit = defineEmits([
@@ -79,18 +80,6 @@ const onItemClick = item => {
   setExpanded(true);
   setSubmenu(item.key, true);
 };
-
-// Tooltip with the item name while collapsed, on hover and on keyboard focus.
-const tooltipKey = ref(null);
-const showTooltip = key => {
-  tooltipKey.value = key;
-};
-const hideTooltip = key => {
-  if (tooltipKey.value === key) tooltipKey.value = null;
-};
-watch(isExpanded, () => {
-  tooltipKey.value = null;
-});
 
 const showAccountBadge = computed(() => (userAccounts.value || []).length > 1);
 const activeShopName = computed(
@@ -177,24 +166,16 @@ const shouldRenderSectionHeading = (item, index) => {
         >
           {{ t(item.sectionKey) }}
         </p>
-        <div
-          class="relative"
+        <KaloRailTooltip
+          :label="t(item.labelKey)"
+          :enabled="!isExpanded"
           :class="{ 'w-full': isExpanded }"
-          @mouseenter="showTooltip(item.key)"
-          @mouseleave="hideTooltip(item.key)"
-          @focusin="showTooltip(item.key)"
-          @focusout="hideTooltip(item.key)"
         >
           <div class="flex items-center gap-0.5">
             <router-link
               :to="item.to"
               :data-test-id="`kalo-nav-${item.key}`"
               :aria-current="item.active ? 'page' : undefined"
-              :aria-describedby="
-                !isExpanded && tooltipKey === item.key
-                  ? `kalo-rail-tooltip-${item.key}`
-                  : undefined
-              "
               class="relative flex items-center transition-colors duration-150 rounded-xl focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
               :class="[
                 isExpanded
@@ -243,20 +224,11 @@ const shouldRenderSectionHeading = (item, index) => {
               />
             </button>
           </div>
-          <span
-            v-if="!isExpanded && tooltipKey === item.key"
-            :id="`kalo-rail-tooltip-${item.key}`"
-            role="tooltip"
-            data-test-id="kalo-rail-tooltip"
-            class="absolute z-50 px-2.5 py-1.5 text-xs font-semibold -translate-y-1/2 rounded-lg shadow-lg pointer-events-none top-1/2 ltr:left-full rtl:right-full ltr:ml-3 rtl:mr-3 whitespace-nowrap bg-n-slate-12 text-n-solid-1"
-          >
-            {{ t(item.labelKey) }}
-          </span>
           <KaloMessageFilters
             v-if="item.key === 'messages' && isSubmenuOpen(item.key)"
             nested
           />
-        </div>
+        </KaloRailTooltip>
       </template>
     </div>
 
