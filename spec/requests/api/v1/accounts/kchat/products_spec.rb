@@ -177,6 +177,15 @@ RSpec.describe 'Kchat products API', type: :request do
       expect(product.reload.stock).to eq(5)
     end
 
+    it 'rejects underscore syntax and a stock outside the integer column range' do
+      ['1_000', '99999999999', 99_999_999_999].each do |delta|
+        post url, params: { delta: delta }, headers: admin.create_new_auth_token, as: :json
+        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response.parsed_body['error']).to eq('validation_failed')
+      end
+      expect(product.reload.stock).to eq(5)
+    end
+
     it 'returns 404 for a product of another account' do
       post "#{base}/#{foreign.id}/adjust_stock", params: { delta: 1 }, headers: admin.create_new_auth_token, as: :json
       expect(response).to have_http_status(:not_found)

@@ -4424,7 +4424,7 @@
       "DELTA": "Số lượng thay đổi",
       "DELTA_PLACEHOLDER": "+5",
       "DELTA_HINT": "Số dương để nhập thêm, số âm để trừ bớt (ví dụ -2).",
-      "DELTA_INVALID": "Nhập số nguyên khác 0.",
+      "DELTA_INVALID": "Nhập số nguyên khác 0, không quá 1.000.000.000.",
       "NEGATIVE": "Không thể trừ quá số đang có.",
       "RESULT": "Sau khi đổi: {count}",
       "SAVE": "Cập nhật tồn kho"

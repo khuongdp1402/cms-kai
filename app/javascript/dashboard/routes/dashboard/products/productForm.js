@@ -60,7 +60,7 @@ export const validateForm = form => {
 export const buildPayload = form => {
   const fields = {
     name: form.name.trim(),
-    sku: form.sku.trim(),
+    sku: form.sku.trim() || null,
     price: parseVnd(form.price),
     stock: wholeOrBlank(form.stock).value,
   };
@@ -73,12 +73,15 @@ export const buildPayload = form => {
   return data;
 };
 
-// Parses "+3", "-2", "5"; 0 and non integers → null.
+// Larger stock moves are typos; the backend column is a 4-byte integer.
+export const MAX_DELTA = 1e9;
+
+// Parses "+3", "-2", "5"; 0, non integers and |delta| > MAX_DELTA → null.
 export const parseDelta = value => {
   const text = String(value ?? '')
     .trim()
     .replace(/^\+/, '');
   if (!/^-?\d+$/.test(text)) return null;
   const delta = Number(text);
-  return delta === 0 ? null : delta;
+  return delta === 0 || Math.abs(delta) > MAX_DELTA ? null : delta;
 };

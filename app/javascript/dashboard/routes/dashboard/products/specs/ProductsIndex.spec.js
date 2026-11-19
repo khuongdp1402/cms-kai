@@ -162,7 +162,7 @@ describe('ProductsIndex', () => {
     await flushPromises();
     expect(spies.create).toHaveBeenCalledWith({
       name: 'Mũ len',
-      sku: '',
+      sku: null,
       price: 150000,
       stock: null,
     });
@@ -284,6 +284,13 @@ describe('ProductsIndex', () => {
     expect(spies.adjustStock).not.toHaveBeenCalled();
     expect(drawer.find('[data-test="stock-error"]').text()).toBe(
       'Không thể trừ quá số đang có.'
+    );
+
+    await drawer.find('[data-test="stock-delta"]').setValue('99999999999');
+    await drawer.find('form').trigger('submit');
+    expect(spies.adjustStock).not.toHaveBeenCalled();
+    expect(drawer.find('[data-test="stock-error"]').text()).toBe(
+      'Nhập số nguyên khác 0, không quá 1.000.000.000.'
     );
 
     await drawer.find('[data-test="stock-delta"]').setValue('+9');

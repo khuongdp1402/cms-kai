@@ -27,6 +27,9 @@ describe('productForm helpers', () => {
     ['0', null],
     ['1.5', null],
     ['', null],
+    ['1000000000', 1000000000],
+    ['-1000000001', null],
+    ['99999999999', null],
   ])('parseDelta(%s) = %s', (input, expected) => {
     expect(parseDelta(input)).toBe(expected);
   });
@@ -43,6 +46,6 @@ describe('productForm helpers', () => {
   it('builds JSON without an image', () => {
     expect(
       buildPayload({ ...emptyForm(), name: 'Áo', price: '1.000', stock: '4' })
-    ).toEqual({ name: 'Áo', sku: '', price: 1000, stock: 4 });
+    ).toEqual({ name: 'Áo', sku: null, price: 1000, stock: 4 });
   });
 });

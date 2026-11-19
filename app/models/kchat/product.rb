@@ -24,6 +24,8 @@
 class Kchat::Product < ApplicationRecord
   IMAGE_CONTENT_TYPES = %w[image/png image/jpeg image/gif image/webp].freeze
   IMAGE_MAX_SIZE = 5.megabytes
+  # stock is a 4-byte integer column.
+  MAX_STOCK = 2_147_483_647
 
   belongs_to :account
   has_one_attached :image
@@ -32,7 +34,7 @@ class Kchat::Product < ApplicationRecord
   validates :name, presence: true
   validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validate :acceptable_image, if: -> { image.changed? }
-  validates :stock, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
+  validates :stock, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: MAX_STOCK }, allow_nil: true
 
   private
 

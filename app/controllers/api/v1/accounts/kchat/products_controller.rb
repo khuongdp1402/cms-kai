@@ -25,8 +25,10 @@ class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::B
   # Relative change (stock count, restock), locked so it cannot race an order reserving stock.
   def adjust_stock
     authorize @product
-    delta = Integer(params[:delta].to_s, 10, exception: false)
-    return render_kchat_error('validation_failed', :unprocessable_entity) if delta.nil?
+    delta_text = params[:delta].to_s
+    return render_kchat_error('validation_failed', :unprocessable_entity) unless delta_text.match?(/\A-?\d+\z/)
+
+    delta = delta_text.to_i
 
     @product.with_lock do
       stock = @product.stock.to_i + delta
@@ -40,13 +42,14 @@ class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::B
   # A product that orders reference is archived (hidden from POS and the order form) so order history stays linked.
   def destroy
     authorize @product
-    if @product.order_items.exists?
-      @product.update!(active: false)
-      render :show
-    else
+    # Locked so an order cannot start referencing the product between the check and the delete.
+    archived = @product.with_lock do
+      next @product.update!(active: false) if @product.order_items.exists?
+
       @product.destroy!
-      head :no_content
+      false
     end
+    archived ? render(:show) : head(:no_content)
   end
 
   private
