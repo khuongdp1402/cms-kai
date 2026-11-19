@@ -2,14 +2,16 @@
 
 class Kchat::Broadcasts::Dispatcher
   MAX_RECIPIENTS_PER_RUN = 500
-  META_24H_CHANNELS = %w[Channel::FacebookPage Channel::Instagram].freeze
+  META_24H_CHANNELS = Kchat::Broadcasts::Channels::META_24H_CHANNELS
 
   def initialize(account)
     @account = account
   end
 
-  def partition_recipients(inbox:, labels:, enforce_24h:)
+  # contact_ids: nil means no segment restriction; an array (possibly empty) restricts recipients to those contacts.
+  def partition_recipients(inbox:, labels:, enforce_24h:, contact_ids: nil)
     scope = base_contact_inbox_scope(inbox)
+    scope = scope.where(contact_id: contact_ids) unless contact_ids.nil?
     if labels.any?
       matching_contact_ids = filtered_contact_ids(inbox.id, labels)
       return { eligible: [], skipped_24h: [] } if matching_contact_ids.empty?
@@ -21,9 +23,9 @@ class Kchat::Broadcasts::Dispatcher
     split_by_24h_window(candidates, inbox.id, enforce_24h)
   end
 
-  def deliver_batch(record, inbox:, sender:)
+  def deliver_batch(record, inbox:, sender:, contact_ids: nil)
     enforce_24h = ActiveModel::Type::Boolean.new.cast(record['only_24h']) || META_24H_CHANNELS.include?(inbox.channel_type)
-    partitioned = partition_recipients(inbox: inbox, labels: Array(record['labels']), enforce_24h: enforce_24h)
+    partitioned = partition_recipients(inbox: inbox, labels: Array(record['labels']), enforce_24h: enforce_24h, contact_ids: contact_ids)
     ensure_campaign_label(record['campaign_tag'])
     hard_bans = @account.custom_attributes.to_h.dig('brand_growth', 'profile', 'hard_bans')
 
@@ -75,11 +77,19 @@ class Kchat::Broadcasts::Dispatcher
     tag_conversation(conversation, record['campaign_tag'])
     text = personalize_message(record['message'], contact_inbox.contact, hard_bans)
     msg_params = ActionController::Parameters.new(content: text, message_type: 'outgoing', private: false)
-    Messages::MessageBuilder.new(sender, conversation, msg_params).perform
+    message = Messages::MessageBuilder.new(sender, conversation, msg_params).perform
+    mark_broadcast_message(message, record['id'])
     true
   rescue StandardError => e
     Rails.logger.warn("[Kchat::Broadcasts] delivery failed contact_inbox=#{contact_inbox.id}: #{e.message}")
     false
+  end
+
+  # Lets the results view find exactly the messages of this broadcast (read status, replies after it).
+  # update_columns: a plain marker, no message-updated event or channel resend.
+  def mark_broadcast_message(message, broadcast_id)
+    attrs = message.additional_attributes.to_h.merge('kchat_broadcast_id' => broadcast_id)
+    message.update_columns(additional_attributes: attrs) # rubocop:disable Rails/SkipsModelValidations
   end
 
   def find_or_create_conversation(contact_inbox)
