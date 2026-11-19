@@ -4405,6 +4405,8 @@
       "STOCK": "Số lượng trong kho",
       "STOCK_HINT": "Để trống nếu bạn không theo dõi tồn kho.",
       "IMAGE": "Ảnh sản phẩm (không bắt buộc)",
+      "IMAGE_PICK": "Chọn ảnh",
+      "IMAGE_NONE": "Chưa chọn ảnh",
       "IMAGE_HINT": "PNG, JPG, GIF hoặc WEBP, tối đa 5 MB.",
       "SAVE": "Lưu sản phẩm",
       "CANCEL": "Đóng",

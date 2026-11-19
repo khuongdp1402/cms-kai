@@ -269,7 +269,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
 
       <ul v-else class="divide-y divide-n-weak">
         <li
-          class="hidden px-4 py-2 text-xs font-semibold uppercase md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_auto] md:gap-4 bg-n-solid-2 text-n-slate-11"
+          class="hidden px-4 py-2 text-xs font-semibold uppercase md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_16rem] md:gap-4 bg-n-solid-2 text-n-slate-11"
           aria-hidden="true"
         >
           <span>{{ t('KALO_PRODUCTS.COLUMNS.PRODUCT') }}</span>
@@ -282,7 +282,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
           v-for="product in products"
           :key="product.id"
           data-test="product-row"
-          class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_auto]"
+          class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_16rem]"
         >
           <div
             class="flex items-center flex-1 min-w-0 gap-3 basis-full md:basis-auto"
@@ -394,7 +394,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
 
     <div
       v-if="archiving"
-      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40"
+      class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[rgb(20_15_13/0.44)] backdrop-blur-[3px]"
       @click.self="archiving = null"
     >
       <div

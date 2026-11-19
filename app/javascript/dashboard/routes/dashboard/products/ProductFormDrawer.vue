@@ -188,13 +188,30 @@ const labelClass = 'block text-sm font-semibold text-n-slate-12';
         </div>
         <label :class="labelClass" class="flex-1 min-w-0">
           {{ t('KALO_PRODUCTS.FORM.IMAGE') }}
+          <!-- The native file button is in the browser language: hide it
+               behind a Vietnamese button (the label opens the picker). -->
           <input
             type="file"
             data-test="product-form-image"
             :accept="IMAGE_TYPES.join(',')"
-            class="block w-full mt-1 mb-0 text-sm text-n-slate-11 file:mr-3 file:px-3 file:py-1.5 file:text-sm file:font-semibold file:border file:border-solid file:rounded-lg file:border-n-strong file:bg-n-solid-2 file:text-n-slate-12"
+            class="sr-only peer"
             @change="onImage"
           />
+          <span
+            class="flex items-center min-w-0 gap-2 mt-1 text-sm font-normal peer-focus-visible:ring-2 peer-focus-visible:ring-n-brand/40 rounded-lg"
+          >
+            <span
+              class="px-3 py-1.5 font-semibold border border-solid rounded-lg cursor-pointer shrink-0 border-n-strong bg-n-solid-2 text-n-slate-12 hover:bg-n-solid-3"
+            >
+              {{ t('KALO_PRODUCTS.FORM.IMAGE_PICK') }}
+            </span>
+            <span
+              data-test="product-form-image-name"
+              class="truncate text-n-slate-11"
+            >
+              {{ form.image?.name || t('KALO_PRODUCTS.FORM.IMAGE_NONE') }}
+            </span>
+          </span>
           <span
             v-if="shownErrors.image"
             data-test="product-form-error-image"
