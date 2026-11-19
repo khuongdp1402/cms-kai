@@ -943,6 +943,9 @@
         "MEDIA": "Tệp phương tiện",
         "MERGE": "Gộp"
       }
+    },
+    "PAGINATION_FOOTER": {
+      "SHOWING": "Đang xem {startItem} - {endItem} trên {totalItems} khách | Đang xem {startItem} - {endItem} trên {totalItems} khách"
     }
   },
   "CONTACT_FORM": {
@@ -5493,5 +5496,27 @@
     "API": {
       "ERROR_MESSAGE": "Không kết nối được máy chủ. Vui lòng thử lại."
     }
+  },
+  "KALO_SHELL": {
+    "CLOSE": "Đóng",
+    "PAGE": {
+      "LEFT": "Bộ lọc",
+      "RIGHT": "Chi tiết"
+    },
+    "ORDERS": {
+      "DESCRIPTION": "Đơn từ chat, POS và đơn tạo tay; gửi mã QR để khách trả tiền"
+    },
+    "CONTACTS": {
+      "TITLE": "Khách",
+      "DESCRIPTION": "Người đã nhắn tin hoặc mua hàng ở cửa hàng của bạn",
+      "ADD": "Thêm khách",
+      "EMPTY_TITLE": "Chưa có khách nào",
+      "EMPTY_SUBTITLE": "Khách nhắn tin qua kênh đã nối sẽ tự vào đây, hoặc bạn thêm khách bằng tay.",
+      "DETAILS_PANEL": "Ghi chú và lịch sử"
+    }
+  },
+  "PAGINATION_FOOTER": {
+    "SHOWING": "Đang xem {startItem} - {endItem} trên {totalItems} mục | Đang xem {startItem} - {endItem} trên {totalItems} mục",
+    "CURRENT_PAGE_INFO": "{currentPage} / {totalPages} trang | {currentPage} / {totalPages} trang"
   }
 }

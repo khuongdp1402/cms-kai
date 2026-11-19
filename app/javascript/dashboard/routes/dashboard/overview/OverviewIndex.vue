@@ -3,7 +3,8 @@ import { computed, onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAccount } from 'dashboard/composables/useAccount';
 import reportsAPI from 'dashboard/api/kchat/reports';
-import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
+import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import MultiBrandOverviewBar from '../reports/MultiBrandOverviewBar.vue';
 import { formatMoney } from '../reports/formatMoney';
@@ -90,9 +91,9 @@ onMounted(load);
 </script>
 
 <template>
-  <KaloPageShell
+  <KaloPage
     :title="t('KALO_OVERVIEW.TITLE')"
-    :subtitle="t('KALO_OVERVIEW.SUBTITLE')"
+    :description="t('KALO_OVERVIEW.SUBTITLE')"
   >
     <template #actions>
       <div
@@ -294,27 +295,19 @@ onMounted(load);
       <!-- Row 2: SKU Quality & Action Queue -->
       <div class="grid gap-5 lg:grid-cols-[7fr_5fr] items-start">
         <div class="flex flex-col gap-5 min-w-0">
-          <div
-            class="overflow-hidden border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
+          <KaloCard
+            flush
+            :title="t('KALO_OVERVIEW.SKU.TITLE')"
+            :description="t('KALO_OVERVIEW.SKU.SUBTITLE')"
           >
-            <div
-              class="flex items-center justify-between gap-3 px-5 py-4 border-b border-n-weak"
-            >
-              <div>
-                <h2 class="text-base font-bold text-n-slate-12">
-                  {{ t('KALO_OVERVIEW.SKU.TITLE') }}
-                </h2>
-                <p class="text-xs text-n-slate-10">
-                  {{ t('KALO_OVERVIEW.SKU.SUBTITLE') }}
-                </p>
-              </div>
+            <template #actions>
               <router-link
                 :to="accountScopedRoute('kalo_orders')"
                 class="px-3 py-1.5 text-xs font-semibold border rounded-lg border-n-strong text-n-slate-12 hover:bg-n-solid-2 shrink-0"
               >
                 {{ t('KALO_OVERVIEW.ACTIONS.VIEW_ORDERS') }}
               </router-link>
-            </div>
+            </template>
             <p
               v-if="!skuQuality.length"
               class="px-5 py-8 text-sm text-center text-n-slate-10"
@@ -386,14 +379,9 @@ onMounted(load);
                 </tbody>
               </table>
             </div>
-          </div>
+          </KaloCard>
 
-          <div
-            class="p-5 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
-          >
-            <h2 class="mb-3 text-base font-bold text-n-slate-12">
-              {{ t('KALO_OVERVIEW.CHANNEL_TITLE') }}
-            </h2>
+          <KaloCard :title="t('KALO_OVERVIEW.CHANNEL_TITLE')">
             <p
               v-if="!channelQuality.length"
               class="py-4 text-sm text-center text-n-slate-10"
@@ -432,66 +420,62 @@ onMounted(load);
                 </div>
               </div>
             </div>
-          </div>
+          </KaloCard>
         </div>
 
         <!-- Actionable Queue -->
-        <div
-          class="flex flex-col gap-3 p-5 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
-        >
-          <div class="flex items-center justify-between">
-            <h2 class="text-base font-bold text-n-slate-12">
-              {{ t('KALO_OVERVIEW.QUEUE.TITLE') }}
-            </h2>
+        <KaloCard :title="t('KALO_OVERVIEW.QUEUE.TITLE')">
+          <template v-if="actionQueue.length" #actions>
             <span
-              v-if="actionQueue.length"
               class="px-2 py-0.5 text-xs font-bold rounded-full bg-n-blue-3 text-n-blue-11 tabular-nums"
             >
               {{ actionQueue.length }}
             </span>
-          </div>
-          <p
-            v-if="!actionQueue.length"
-            data-test="overview-queue-empty"
-            class="p-4 text-sm border rounded-xl bg-n-solid-2 border-n-weak text-n-slate-10"
-          >
-            {{ t('KALO_OVERVIEW.EMPTY_QUEUE') }}
-          </p>
-          <div
-            v-for="item in actionQueue"
-            :key="item.key"
-            :data-test="`queue-item-${item.key}`"
-            class="flex items-center justify-between gap-3 p-3.5 border rounded-xl bg-n-solid-2 border-n-weak"
-          >
-            <div class="min-w-0">
-              <div class="flex items-center gap-2">
-                <span
-                  class="px-2 py-0.5 text-[11px] font-bold rounded-full tabular-nums"
-                  :class="toneBadgeClass(item.tone)"
-                >
-                  {{ item.count }}
-                </span>
-                <b class="text-sm font-semibold truncate text-n-slate-12">
-                  {{
-                    t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.TITLE`, {
-                      count: item.count,
-                    })
-                  }}
-                </b>
-              </div>
-              <p class="mt-0.5 text-xs text-n-slate-10">
-                {{ t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.DESC`) }}
-              </p>
-            </div>
-            <router-link
-              :to="accountScopedRoute(item.route)"
-              class="px-3 py-1.5 text-xs font-semibold border rounded-lg shrink-0 bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-blue-3 hover:text-n-blue-11 hover:border-n-brand/30"
+          </template>
+          <div class="flex flex-col gap-3">
+            <p
+              v-if="!actionQueue.length"
+              data-test="overview-queue-empty"
+              class="p-4 text-sm border rounded-xl bg-n-solid-2 border-n-weak text-n-slate-10"
             >
-              {{ t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.CTA`) }}
-            </router-link>
+              {{ t('KALO_OVERVIEW.EMPTY_QUEUE') }}
+            </p>
+            <div
+              v-for="item in actionQueue"
+              :key="item.key"
+              :data-test="`queue-item-${item.key}`"
+              class="flex items-center justify-between gap-3 p-3.5 border rounded-xl bg-n-solid-2 border-n-weak"
+            >
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="px-2 py-0.5 text-[11px] font-bold rounded-full tabular-nums"
+                    :class="toneBadgeClass(item.tone)"
+                  >
+                    {{ item.count }}
+                  </span>
+                  <b class="text-sm font-semibold truncate text-n-slate-12">
+                    {{
+                      t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.TITLE`, {
+                        count: item.count,
+                      })
+                    }}
+                  </b>
+                </div>
+                <p class="mt-0.5 text-xs text-n-slate-10">
+                  {{ t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.DESC`) }}
+                </p>
+              </div>
+              <router-link
+                :to="accountScopedRoute(item.route)"
+                class="px-3 py-1.5 text-xs font-semibold border rounded-lg shrink-0 bg-n-solid-1 border-n-strong text-n-slate-12 hover:bg-n-blue-3 hover:text-n-blue-11 hover:border-n-brand/30"
+              >
+                {{ t(`KALO_OVERVIEW.QUEUE.ITEMS.${item.key}.CTA`) }}
+              </router-link>
+            </div>
           </div>
-        </div>
+        </KaloCard>
       </div>
     </template>
-  </KaloPageShell>
+  </KaloPage>
 </template>

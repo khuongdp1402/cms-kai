@@ -9,6 +9,8 @@ const props = defineProps({
   contactId: { type: Number, default: null },
   // Conversation display_id, as used by the dashboard routes.
   conversationId: { type: Number, default: null },
+  // Inside a KaloDrawer: the drawer shows the title, the buttons stick to the bottom.
+  inDrawer: { type: Boolean, default: false },
 });
 const emit = defineEmits(['created', 'cancel']);
 
@@ -95,7 +97,7 @@ const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.
 
 <template>
   <form class="flex flex-col gap-4" @submit.prevent="submit">
-    <h2 class="text-lg font-extrabold text-n-slate-12">
+    <h2 v-if="!inDrawer" class="text-lg font-extrabold text-n-slate-12">
       {{ t('KALO_ORDERS.FORM.TITLE') }}
     </h2>
 
@@ -188,7 +190,13 @@ const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.
       {{ errorMessage }}
     </p>
 
-    <div class="flex items-center gap-3">
+    <div
+      class="flex items-center gap-3"
+      :class="{
+        'sticky bottom-0 -mx-5 -mb-5 px-5 py-3.5 mt-auto border-t sm:-mx-6 sm:px-6 border-n-weak bg-n-solid-2':
+          inDrawer,
+      }"
+    >
       <span class="text-sm text-n-slate-11">
         {{ t('KALO_ORDERS.FORM.TOTAL') }}
         <b class="text-n-slate-12">{{ formatVnd(total) }}</b>

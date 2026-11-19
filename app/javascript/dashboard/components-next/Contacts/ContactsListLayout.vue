@@ -7,6 +7,7 @@ import KaloContactsQuickBar from 'dashboard/components-next/Contacts/KaloContact
 import ContactsActiveFiltersPreview from 'dashboard/components-next/Contacts/ContactsHeader/components/ContactsActiveFiltersPreview.vue';
 import PaginationFooter from 'dashboard/components-next/pagination/PaginationFooter.vue';
 import ContactsLoadMore from 'dashboard/components-next/Contacts/ContactsLoadMore.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 
 const props = defineProps({
   searchValue: { type: String, default: '' },
@@ -78,10 +79,8 @@ const showPagination = computed(() => {
 </script>
 
 <template>
-  <section
-    class="flex w-full h-full gap-4 overflow-hidden justify-evenly bg-n-background"
-  >
-    <div class="flex flex-col w-full h-full transition-all duration-300">
+  <KaloPage>
+    <template #header>
       <ContactListHeaderWrapper
         ref="contactListHeaderWrapper"
         :show-search="isNotSegmentView && !isActiveView"
@@ -99,34 +98,32 @@ const showPagination = computed(() => {
         @apply-filter="emit('applyFilter', $event)"
         @clear-filters="emit('clearFilters')"
       />
+    </template>
+    <template #subHeader>
       <KaloContactsQuickBar />
-      <main class="flex-1 overflow-y-auto px-5 sm:px-6 lg:px-8">
-        <div class="w-full mx-auto max-w-[1360px]">
-          <ContactsActiveFiltersPreview
-            v-if="showActiveFiltersPreview"
-            :active-segment="activeSegment"
-            class="mb-1"
-            @clear-filters="emit('clearFilters')"
-            @open-filter="openFilter"
-          />
-          <slot name="default" />
-          <ContactsLoadMore
-            v-if="showLoadMore"
-            :is-loading="isLoadingMore"
-            @load-more="emit('loadMore')"
-          />
-        </div>
-      </main>
-      <footer v-if="showPagination" class="sticky bottom-0 z-0">
-        <PaginationFooter
-          current-page-info="CONTACTS_LAYOUT.PAGINATION_FOOTER.SHOWING"
-          :current-page="currentPage"
-          :total-items="totalItems"
-          class="max-w-[67rem]"
-          :items-per-page="itemsPerPage"
-          @update:current-page="updateCurrentPage"
-        />
-      </footer>
-    </div>
-  </section>
+    </template>
+
+    <ContactsActiveFiltersPreview
+      v-if="showActiveFiltersPreview"
+      :active-segment="activeSegment"
+      @clear-filters="emit('clearFilters')"
+      @open-filter="openFilter"
+    />
+    <slot name="default" />
+    <ContactsLoadMore
+      v-if="showLoadMore"
+      :is-loading="isLoadingMore"
+      @load-more="emit('loadMore')"
+    />
+
+    <template v-if="showPagination" #footer>
+      <PaginationFooter
+        current-page-info="CONTACTS_LAYOUT.PAGINATION_FOOTER.SHOWING"
+        :current-page="currentPage"
+        :total-items="totalItems"
+        :items-per-page="itemsPerPage"
+        @update:current-page="updateCurrentPage"
+      />
+    </template>
+  </KaloPage>
 </template>

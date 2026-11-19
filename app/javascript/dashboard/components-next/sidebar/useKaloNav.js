@@ -23,6 +23,8 @@ export const KALO_NAV_ITEMS = [
     labelKey: 'KALO_NAV.MESSAGES',
     sectionKey: 'KALO_NAV.SECTIONS.OPERATIONS',
     route: 'home',
+    // Inboxes, labels, teams and saved folders (KaloMessageFilters).
+    hasSubmenu: true,
     isActive: name => CONVERSATION_ROUTES.test(name),
   },
   {

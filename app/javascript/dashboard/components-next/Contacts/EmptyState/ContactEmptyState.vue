@@ -1,12 +1,12 @@
 <script setup>
 import { ref } from 'vue';
 
-import EmptyStateLayout from 'dashboard/components-next/EmptyStateLayout.vue';
 import CreateNewContactDialog from 'dashboard/components-next/Contacts/ContactsForm/CreateNewContactDialog.vue';
 import Button from 'dashboard/components-next/button/Button.vue';
-import ContactsCard from 'dashboard/components-next/Contacts/ContactsCard/ContactsCard.vue';
-import contactContent from 'dashboard/components-next/Contacts/EmptyState/contactEmptyStateContent';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 
+// Kalo empty state (guided UX spec §3): one sentence and one action, no fake
+// demo contacts behind it.
 defineProps({
   title: {
     type: String,
@@ -36,31 +36,27 @@ const onClick = () => {
 </script>
 
 <template>
-  <EmptyStateLayout :title="title" :subtitle="subtitle">
-    <template #empty-state-item>
-      <div class="grid grid-cols-1 gap-4 p-px overflow-hidden">
-        <ContactsCard
-          v-for="contact in contactContent.slice(0, 5)"
-          :id="contact.id"
-          :key="contact.id"
-          :name="contact.name"
-          :email="contact.email"
-          :thumbnail="contact.thumbnail"
-          :phone-number="contact.phoneNumber"
-          :additional-attributes="contact.additionalAttributes"
-          :is-expanded="0 === contact.id"
-          @toggle="toggleExpanded(contact.id)"
-        />
-      </div>
-    </template>
-    <template #actions>
-      <div v-if="showButton">
-        <Button :label="buttonLabel" icon="i-lucide-plus" @click="onClick" />
-        <CreateNewContactDialog
-          ref="createNewContactDialogRef"
-          @create="emit('create', $event)"
-        />
-      </div>
-    </template>
-  </EmptyStateLayout>
+  <section
+    data-test-id="contacts-empty-state"
+    class="flex flex-col items-center gap-4 px-6 py-16 text-center border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
+  >
+    <span
+      class="grid rounded-2xl size-12 place-items-center bg-n-blue-3 text-n-blue-11"
+    >
+      <KaloIcon name="users" class="size-6" />
+    </span>
+    <div class="flex flex-col gap-1">
+      <h2 class="text-lg font-bold text-n-slate-12">{{ title }}</h2>
+      <p v-if="subtitle" class="max-w-md text-sm text-n-slate-11">
+        {{ subtitle }}
+      </p>
+    </div>
+    <div v-if="showButton">
+      <Button :label="buttonLabel" icon="i-lucide-plus" @click="onClick" />
+      <CreateNewContactDialog
+        ref="createNewContactDialogRef"
+        @create="emit('create', $event)"
+      />
+    </div>
+  </section>
 </template>

@@ -87,7 +87,9 @@ describe('KaloTabBar', () => {
       false
     );
     await wrapper.find('[data-test-id="kalo-tab-more"]').trigger('click');
-    await wrapper.find('[data-test-id="kalo-sheet-backdrop"]').trigger('click');
+    await wrapper
+      .find('[data-test-id="kalo-drawer-backdrop"]')
+      .trigger('click');
     expect(wrapper.find('[data-test-id="kalo-more-sheet"]').exists()).toBe(
       false
     );

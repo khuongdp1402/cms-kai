@@ -165,4 +165,45 @@ describe('OrderDrawer', () => {
       .element.parentElement.click();
     expect(wrapper.emitted('close')).toHaveLength(2);
   });
+
+  // Guided UX §2 / v3 ch.1: one status chip next to the number, QR loading
+  // text only while the request runs.
+  it('shows one status chip in the header next to the order number', async () => {
+    OrdersAPI.qr.mockResolvedValue({ data: new Blob(['png']) });
+    const wrapper = mountDrawer(makeOrder({ number: 1001 }));
+    await flushPromises();
+    const header = wrapper.find('[role="dialog"] header');
+    expect(header.find('h2').text()).toBe('#1001');
+    expect(header.findAll('.rounded-full')).toHaveLength(1);
+    expect(header.text()).toContain('Chờ thanh toán');
+  });
+
+  it('shows the QR loading text only while the QR request runs', async () => {
+    let resolve;
+    OrdersAPI.qr.mockReturnValue(
+      new Promise(r => {
+        resolve = r;
+      })
+    );
+    const wrapper = mountDrawer(makeOrder());
+    await flushPromises();
+    expect(wrapper.find('[data-test="drawer-qr-loading"]').text()).toBe(
+      'Đang tạo mã QR…'
+    );
+    resolve({ data: new Blob(['png']) });
+    await flushPromises();
+    expect(wrapper.find('[data-test="drawer-qr-loading"]').exists()).toBe(
+      false
+    );
+    expect(wrapper.find('img[data-test="drawer-qr"]').exists()).toBe(true);
+  });
+
+  it('puts the actions in the sticky drawer footer', async () => {
+    OrdersAPI.qr.mockResolvedValue({ data: new Blob(['png']) });
+    const wrapper = mountDrawer(makeOrder());
+    await flushPromises();
+    const footer = wrapper.find('[data-test-id="kalo-drawer-footer"]');
+    expect(footer.find('[data-test="primary"]').exists()).toBe(true);
+    expect(footer.find('[data-test="cancel"]').exists()).toBe(true);
+  });
 });

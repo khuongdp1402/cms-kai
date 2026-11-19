@@ -41,7 +41,7 @@ const onLabelChange = event => {
     class="w-full border-b border-n-weak bg-n-surface-1"
   >
     <div
-      class="flex flex-wrap items-center w-full max-w-5xl gap-1.5 px-6 py-2.5 mx-auto"
+      class="flex flex-wrap items-center w-full max-w-[1360px] gap-1.5 px-4 sm:px-6 lg:px-8 py-2.5 mx-auto"
     >
       <router-link
         :to="accountScopedRoute('contacts_dashboard_index')"

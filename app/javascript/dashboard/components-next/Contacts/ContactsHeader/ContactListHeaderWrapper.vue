@@ -282,6 +282,8 @@ defineExpose({
     :is-active-view="isActiveView"
     :has-active-filters="hasAppliedFilters"
     :button-label="t('CONTACTS_LAYOUT.HEADER.MESSAGE_BUTTON')"
+    :description="t('KALO_SHELL.CONTACTS.DESCRIPTION')"
+    :add-label="t('KALO_SHELL.CONTACTS.ADD')"
     @search="emit('search', $event)"
     @update:sort="emit('update:sort', $event)"
     @add="openCreateNewContactDialog"

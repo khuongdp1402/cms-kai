@@ -6,7 +6,8 @@ import { useAccount } from 'dashboard/composables/useAccount';
 import { useMapGetter } from 'dashboard/composables/store';
 import { getUserPermissions } from 'dashboard/helper/permissionsHelper';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
-import KaloPageShell from 'dashboard/components-next/layout/KaloPageShell.vue';
+import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
+import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import KaloSettingsRow from './components/KaloSettingsRow.vue';
 
 const { t } = useI18n();
@@ -133,9 +134,9 @@ const groups = computed(() => {
 </script>
 
 <template>
-  <KaloPageShell
+  <KaloPage
     :title="t('KALO_SETTINGS_UI.HUB.TITLE')"
-    :subtitle="t('KALO_SETTINGS_UI.HUB.SUBTITLE')"
+    :description="t('KALO_SETTINGS_UI.HUB.SUBTITLE')"
   >
     <template #leading>
       <span
@@ -169,19 +170,13 @@ const groups = computed(() => {
       {{ t('KALO_SETTINGS_UI.HUB.NO_MATCH') }}
     </p>
     <div v-else class="grid items-start gap-5 md:grid-cols-2 xl:grid-cols-3">
-      <section
+      <KaloCard
         v-for="group in groups"
         :key="group.key"
         :data-test="`hub-group-${group.key}`"
-        class="overflow-hidden border shadow-sm rounded-2xl border-n-weak bg-n-solid-1"
+        :title="t(`KALO_SETTINGS_UI.HUB.GROUPS.${group.key}`)"
+        flush
       >
-        <div class="px-4 py-2.5 border-b bg-n-solid-2 border-n-weak">
-          <h2
-            class="text-xs font-bold tracking-wider uppercase text-n-slate-10"
-          >
-            {{ t(`KALO_SETTINGS_UI.HUB.GROUPS.${group.key}`) }}
-          </h2>
-        </div>
         <ul class="flex flex-col list-none divide-y divide-n-weak bg-n-solid-1">
           <li v-for="item in group.links" :key="`${group.key}-${item.key}`">
             <router-link :to="item.to" class="block">
@@ -195,7 +190,7 @@ const groups = computed(() => {
             </router-link>
           </li>
         </ul>
-      </section>
+      </KaloCard>
     </div>
-  </KaloPageShell>
+  </KaloPage>
 </template>

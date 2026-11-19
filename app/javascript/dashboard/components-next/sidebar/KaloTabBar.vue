@@ -6,6 +6,7 @@ import { useI18n } from 'vue-i18n';
 import { useMapGetter } from 'dashboard/composables/store';
 import Auth from 'dashboard/api/auth';
 import KaloIcon from 'next/icon/KaloIcon.vue';
+import KaloDrawer from 'next/layout/KaloDrawer.vue';
 import SidebarAccountSwitcher from './SidebarAccountSwitcher.vue';
 import KaloMessageFilters from './KaloMessageFilters.vue';
 import { useSidebarKeyboardShortcuts } from './useSidebarKeyboardShortcuts';
@@ -38,10 +39,13 @@ const showAccountMenu = computed(
 const accountLinks = [
   { key: 'notifications', icon: 'bell', name: 'notifications_index' },
   { key: 'search', icon: 'search', name: 'search' },
-  { key: 'profile', icon: 'users', name: 'profile_settings_index' },
+  { key: 'profile', icon: 'user', name: 'profile_settings_index' },
 ];
 
 const isSheetOpen = ref(false);
+const sheetRowClass =
+  'flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-xl';
+const sheetIconClass = 'grid size-8 shrink-0 place-content-center';
 const primaryItems = computed(() =>
   items.value.filter(item => PRIMARY_KEYS.includes(item.key))
 );
@@ -67,67 +71,82 @@ watch(
     :aria-label="t('KALO_NAV.MAIN_NAV')"
     class="relative flex justify-around shrink-0 px-1.5 pt-2 pb-5 bg-n-surface-1 border-t border-n-weak"
   >
-    <div
-      v-if="isSheetOpen"
-      data-test-id="kalo-sheet-backdrop"
-      class="fixed inset-0 z-40"
-      @click="isSheetOpen = false"
-    />
-    <div
+    <KaloDrawer
       v-if="isSheetOpen"
       data-test-id="kalo-more-sheet"
-      role="dialog"
-      aria-modal="true"
+      placement="bottom"
+      :title="t('KALO_NAV.MORE')"
       :aria-label="t('KALO_NAV.MORE')"
-      class="z-50 absolute bottom-full inset-x-0 flex flex-col p-2 bg-n-surface-1 border-t border-n-weak shadow-lg"
+      @close="isSheetOpen = false"
     >
-      <router-link
-        v-for="item in sheetItems"
-        :key="item.key"
-        :to="item.to"
-        :aria-current="item.active ? 'page' : undefined"
-        class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl"
-        :class="item.active ? 'bg-n-blue-3 text-n-blue-11' : 'text-n-slate-12'"
-      >
-        <KaloIcon :name="item.icon" class="size-6" />
-        {{ t(item.labelKey) }}
-      </router-link>
-      <router-link
-        v-for="link in accountLinks"
-        :key="link.key"
-        :to="{ name: link.name }"
-        :data-test-id="`kalo-sheet-${link.key}`"
-        class="flex items-center gap-3 px-3 py-3 text-sm font-medium rounded-xl text-n-slate-12"
-      >
-        <KaloIcon :name="link.icon" class="size-6" />
-        {{ t(`KALO_NAV.${link.key.toUpperCase()}`) }}
-      </router-link>
-      <KaloMessageFilters inline />
-      <div
-        v-if="showAccountMenu"
-        data-test-id="kalo-sheet-switch-account"
-        class="flex items-center gap-3 px-3 py-1 text-sm font-medium text-n-slate-12"
-      >
-        <SidebarAccountSwitcher
-          is-collapsed
-          @show-create-account-modal="$emit('showCreateAccountModal')"
-        />
-        {{
-          t(
-            hasManyAccounts ? 'KALO_NAV.SWITCH_ACCOUNT' : 'KALO_NAV.NEW_ACCOUNT'
-          )
-        }}
+      <div class="flex flex-col -mx-2 -my-2">
+        <router-link
+          v-for="item in sheetItems"
+          :key="item.key"
+          :to="item.to"
+          :aria-current="item.active ? 'page' : undefined"
+          :class="[
+            sheetRowClass,
+            item.active
+              ? 'bg-n-blue-3 text-n-blue-11'
+              : 'text-n-slate-12 hover:bg-n-alpha-2',
+          ]"
+        >
+          <span :class="sheetIconClass">
+            <KaloIcon :name="item.icon" class="size-5" />
+          </span>
+          {{ t(item.labelKey) }}
+        </router-link>
+        <router-link
+          v-for="link in accountLinks"
+          :key="link.key"
+          :to="{ name: link.name }"
+          :data-test-id="`kalo-sheet-${link.key}`"
+          class="text-n-slate-12 hover:bg-n-alpha-2"
+          :class="[sheetRowClass]"
+        >
+          <span :class="sheetIconClass">
+            <KaloIcon :name="link.icon" class="size-5" />
+          </span>
+          {{ t(`KALO_NAV.${link.key.toUpperCase()}`) }}
+        </router-link>
+        <div
+          v-if="showAccountMenu"
+          data-test-id="kalo-sheet-switch-account"
+          class="text-n-slate-12"
+          :class="[sheetRowClass]"
+        >
+          <span :class="sheetIconClass">
+            <SidebarAccountSwitcher
+              is-collapsed
+              @show-create-account-modal="$emit('showCreateAccountModal')"
+            />
+          </span>
+          {{
+            t(
+              hasManyAccounts
+                ? 'KALO_NAV.SWITCH_ACCOUNT'
+                : 'KALO_NAV.NEW_ACCOUNT'
+            )
+          }}
+        </div>
+        <button
+          type="button"
+          data-test-id="kalo-sheet-logout"
+          class="w-full text-start text-n-ruby-11 hover:bg-n-ruby-3/50"
+          :class="[sheetRowClass]"
+          @click="Auth.logout()"
+        >
+          <span :class="sheetIconClass">
+            <KaloIcon name="logout" class="size-5" />
+          </span>
+          {{ t('KALO_NAV.LOGOUT') }}
+        </button>
+        <div class="px-2 pt-3 mt-2 border-t border-n-weak">
+          <KaloMessageFilters inline />
+        </div>
       </div>
-      <button
-        type="button"
-        data-test-id="kalo-sheet-logout"
-        class="flex items-center gap-3 px-3 py-3 text-sm font-medium text-left rounded-xl text-n-slate-12"
-        @click="Auth.logout()"
-      >
-        <KaloIcon name="arrow" class="size-6" />
-        {{ t('KALO_NAV.LOGOUT') }}
-      </button>
-    </div>
+    </KaloDrawer>
     <router-link
       v-for="item in primaryItems"
       :key="item.key"
