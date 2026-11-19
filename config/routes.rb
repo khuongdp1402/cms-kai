@@ -72,8 +72,12 @@ Rails.application.routes.draw do
               end
             end
             resource :comment_rules, only: [:show, :update]
-            resources :broadcasts, only: [:index, :create] do
-              get :preview, on: :collection
+            resources :broadcasts, only: [:index, :show, :create, :update, :destroy] do
+              collection do
+                get :preview
+                get :audience
+                post :check_content
+              end
             end
             resources :conversations, only: [] do
               patch :attribution, on: :member

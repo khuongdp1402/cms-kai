@@ -15,6 +15,7 @@ export const createPageTestEnv = ({
     routes: [
       'kalo_orders',
       'kalo_billing',
+      'kalo_campaigns',
       'campaigns_sms_index',
       'campaigns_whatsapp_index',
     ].map(name => ({

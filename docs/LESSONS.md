@@ -34,6 +34,23 @@
   - Triệu chứng: danh sách thiết lập, banner dùng thử không hiện trong spec cũ (Overview, sidebar) nên không bắt được lỗi hiển thị.
   - Nguyên nhân: các phần này chỉ dành cho quản trị viên shop (chỉ họ nối kênh, cài nhận tiền, trả tiền gói) và fixture cũ không có `getCurrentRole`.
   - Quy tắc: spec của phần chỉ dành cho admin phải có fixture `getCurrentRole: 'administrator'` riêng (`guide/specs/guideTestEnv.js`) và một ca kiểm nhân viên không thấy.
+
+- **B85 (2026-11-20): `Message...distinct.pluck` báo "for SELECT DISTINCT, ORDER BY expressions must appear in select list".**
+  - Nguyên nhân: `Message` có default scope sắp xếp theo `created_at`.
+  - Quy tắc: truy vấn đếm/distinct trên `Message` luôn bắt đầu bằng `Message.reorder(nil)` (như dispatcher). Tương tự, `tagged_with(...)` không dùng làm subquery `where(id: ...select(:id))` được ("subquery has too many columns"): lấy `pluck(:id)` trước.
+- **B86 (2026-11-20): Nhóm khách (bộ lọc đã lưu) đếm ra 0 dù có khách khớp điều kiện.**
+  - Nguyên nhân: `Contacts::FilterService` lọc trên `Contact.resolved_contacts`: chỉ khách có email, điện thoại hoặc mã định danh. Khách Zalo cá nhân thường chỉ có tên.
+  - Quy tắc: wizard ghi rõ giới hạn này ở bước Khách nhận; spec tạo khách cho nhóm phải có email. Không tự viết lại bộ lọc riêng để "đếm được nhiều hơn" trang Khách.
+- **B87 (2026-11-20): Hiện "Đã xem" cho Zalo cá nhân là số giả.**
+  - Nguyên nhân: hợp đồng bridge có `message.read`/`message.delivered` nhưng adapter zca-js không bao giờ phát; Chatwoot chỉ nhận trạng thái đọc ở Messenger, Instagram, WhatsApp, TikTok và khung chat website.
+  - Quy tắc: chỉ hiện "Đã xem" khi `read_status` của kênh là `true` (`Kchat::Broadcasts::Channels`), API trả `read_count: null` cho kênh còn lại. "Đã gửi" trừ tin kênh từ chối sau đó (`status=failed`, ví dụ bridge Zalo chưa có phiên); bridge đổi giới hạn tốc độ thì sửa cả `ZALO_PERSONAL_RATE`.
+- **B88 (2026-11-20): Chụp màn hình bằng Playwright hỏng giữa chừng ("navigated to … " hai lần, không thấy phần tử).**
+  - Nguyên nhân: sửa file Vue/JSON trong lúc script đang chạy nên vite HMR tải lại trang.
+  - Quy tắc: không sửa code frontend khi đang chạy script trình duyệt; sửa xong thì chạy lại cả lượt chụp.
+- **B89 (2026-11-20): Trang Chiến dịch hiện chữ "CAMPAIGN HEADER".**
+  - Nguyên nhân: `MarketingCampaigns.vue` gọi khóa `CAMPAIGN.HEADER` không có ở cả bản tiếng Anh lẫn overlay; spec stub component nên không bắt được. Ngoài ra `docker compose -p kalo-t4 up` lặp lỗi "container name already in use" do daemon giữ tên container ma: chạy `up -d <service>` từng service rồi `docker start` container đã ở trạng thái Created.
+  - Quy tắc: khóa i18n mới dùng trong component phải có trong `vi.json` (hoặc locale en); kiểm trang thật trên trình duyệt trước khi báo xong.
+
 - **B75 (2026-11-19): Ẩn chức năng theo cờ làm hỏng hàng loạt spec dựng store tối giản.**
   - Triệu chứng: sau khi OrdersIndex, ReportsIndex, MarketingIndex, ConversationBox đọc cờ `kalo_*`, các spec cũ báo `isFeatureEnabledonAccount is not a function` hoặc `Cannot read properties of undefined (reading 'params')`.
   - Nguyên nhân: store của spec không có getter `accounts/*`; bản đầu của `useKaloFeatures` đi qua `useAccount()` nên cần router, mà spec OrdersIndex mount không có router.

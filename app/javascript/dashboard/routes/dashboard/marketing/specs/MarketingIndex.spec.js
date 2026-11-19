@@ -485,4 +485,27 @@ describe('MarketingIndex', () => {
       'Sale Tết'
     );
   });
+
+  it('leaves drafts to the Chiến dịch page and links to it', async () => {
+    broadcastsAPI.list.mockResolvedValue({
+      data: {
+        broadcasts: [
+          { id: 'd', title: 'Nháp', status: 'draft' },
+          {
+            id: 's',
+            title: 'Đang chạy',
+            status: 'sending',
+            inbox_name: 'Zalo Shop',
+          },
+        ],
+      },
+    });
+    const { wrapper } = await mountPage();
+    const items = wrapper.findAll('[data-test="broadcast-item"]');
+    expect(items).toHaveLength(1);
+    expect(items[0].text()).toContain('Đang gửi');
+    expect(
+      wrapper.find('[data-test="broadcast-open-campaigns"]').exists()
+    ).toBe(true);
+  });
 });

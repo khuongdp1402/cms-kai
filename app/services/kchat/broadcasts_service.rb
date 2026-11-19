@@ -3,140 +3,149 @@
 class Kchat::BroadcastsService
   class ValidationError < StandardError; end
 
-  MAX_BROADCASTS = 30
+  MAX_BROADCASTS = Kchat::Broadcasts::Store::MAX_BROADCASTS
   MAX_TITLE_CHARS = 120
   MAX_MESSAGE_CHARS = 2_000
   META_24H_CHANNELS = Kchat::Broadcasts::Dispatcher::META_24H_CHANNELS
+  FAILED_RUN = { 'status' => 'failed', 'sent_count' => 0, 'failed_count' => 0, 'skipped_24h_count' => 0 }.freeze
 
   def initialize(account)
     @account = account
     @dispatcher = Kchat::Broadcasts::Dispatcher.new(account)
+    @store = Kchat::Broadcasts::Store.new(account)
   end
 
+  # Reaps stalled runs first so a lost job never leaves a campaign "Đang gửi" forever.
   def list
-    Array(@account.custom_attributes.to_h['kchat_broadcasts'])
+    @store.reap_stalled!
+    @store.list
   end
 
-  def preview(inbox_id:, labels: [], only_24h: false)
-    inbox = @account.inboxes.find(inbox_id)
-    enforce_24h = boolean_cast(only_24h) || META_24H_CHANNELS.include?(inbox.channel_type)
-    partitioned = @dispatcher.partition_recipients(inbox: inbox, labels: normalize_labels(labels), enforce_24h: enforce_24h)
+  # List rows plus how many of each broadcast's messages the channel later rejected (e.g. Zalo bridge send failure).
+  def list_with_delivery_stats
+    items = list
+    failed = delivery_failures(items)
+    items.map { |item| item.merge('delivery_failed_count' => failed[item['id']].to_i) }
+  end
 
-    {
-      inbox_id: inbox.id,
-      inbox_name: inbox.name,
-      channel_type: inbox.channel_type.demodulize.underscore,
-      requires_24h_window: META_24H_CHANNELS.include?(inbox.channel_type),
-      eligible_count: partitioned[:eligible].size,
-      skipped_24h_count: partitioned[:skipped_24h].size
-    }
+  def find!(broadcast_id)
+    list.find { |item| item['id'] == broadcast_id } || raise(ActiveRecord::RecordNotFound, "Broadcast #{broadcast_id} not found")
+  end
+
+  def preview(inbox_id:, labels: [], only_24h: false, segment_id: nil)
+    inbox = @account.inboxes.find(inbox_id)
+    audience.inbox_stats(inbox, labels: Kchat::Broadcasts::RecordBuilder.normalize_labels(labels),
+                                contact_ids: audience.segment_contact_ids(segment_id), only_24h: boolean_cast(only_24h))
+  end
+
+  # Who the chosen labels/segment reach overall, and how many of them each inbox can actually message.
+  def audience_summary(labels: [], segment_id: nil)
+    audience.summary(labels: Kchat::Broadcasts::RecordBuilder.normalize_labels(labels), segment_id: segment_id)
+  end
+
+  # Same guardrail the dispatcher applies at send time (default bans + brand profile hard_bans).
+  def check_content(message)
+    check = Ai::CustomLlmService.new.enforce_brand_guardrails(message.to_s, brand_hard_bans)
+    { blocked_phrases: check[:blocked_phrases] }
   end
 
   def create_broadcast!(user:, params:)
     attrs = params.to_h.with_indifferent_access
-    record = build_broadcast_record(user, attrs)
-    persist_broadcast!(record)
-    enqueue_job(record['id'], scheduled_at: record['status'] == 'scheduled' ? parse_scheduled_at(attrs[:scheduled_at]) : nil)
+    record = build(user, attrs, keep_draft: boolean_cast(attrs[:draft]))
+    @store.add!(record)
+    enqueue_for(record)
     record
   end
 
-  def execute_broadcast!(broadcast_id)
-    record = list.find { |item| item['id'] == broadcast_id }
-    return if record.nil? || record['status'] == 'completed'
+  # Drafts are editable; `draft: false` validates everything and sends (or schedules) it. A missing
+  # `draft` keeps it a draft. The status check happens again inside the lock, so two sends of the
+  # same draft enqueue once.
+  def update_draft!(broadcast_id, user:, params:)
+    current = find!(broadcast_id)
+    raise ValidationError, 'Chỉ sửa được chiến dịch nháp' unless current['status'] == 'draft'
 
-    inbox = @account.inboxes.find_by(id: record['inbox_id'])
-    sender = @account.users.find_by(id: record['sender_id']) || @account.administrators.first
-    result = if inbox && sender
-               @dispatcher.deliver_batch(record, inbox: inbox, sender: sender)
-             else
-               { status: 'failed', sent_count: 0, failed_count: 0, skipped_24h_count: 0 }
-             end
-    finalize_broadcast!(broadcast_id, result)
+    attrs = current.slice('title', 'message', 'inbox_id', 'labels', 'segment_id', 'goal', 'campaign_tag', 'only_24h', 'scheduled_at')
+                   .merge(params.to_h.stringify_keys).with_indifferent_access
+    keep_draft = !attrs.key?(:draft) || attrs[:draft].nil? || boolean_cast(attrs[:draft])
+    built = build(user, attrs, keep_draft: keep_draft)
+    record = @store.update!(broadcast_id, to_front: !keep_draft) do |locked|
+      raise ValidationError, 'Chỉ sửa được chiến dịch nháp' unless locked['status'] == 'draft'
+
+      built.merge('id' => locked['id'], 'created_at' => locked['created_at'])
+    end
+    enqueue_for(record)
+    record
+  end
+
+  def destroy_draft!(broadcast_id)
+    @store.delete!(broadcast_id) do |locked|
+      raise ValidationError, 'Chỉ xóa được chiến dịch nháp' unless locked['status'] == 'draft'
+    end
+  end
+
+  def results(broadcast_id)
+    Kchat::Broadcasts::Results.new(@account, find!(broadcast_id)).summary
+  end
+
+  # Runs once per broadcast: the store claims processing/scheduled → sending under the account lock.
+  def execute_broadcast!(broadcast_id)
+    record = @store.claim!(broadcast_id)
+    return if record.nil?
+
+    @store.merge!(broadcast_id, deliver(record).transform_keys(&:to_s).merge('completed_at' => Time.current.iso8601))
   end
 
   private
 
-  def build_broadcast_record(user, attrs)
-    parsed = extract_broadcast_inputs(attrs)
-    stats = preview(inbox_id: attrs[:inbox_id], labels: parsed[:labels], only_24h: parsed[:only_24h])
-    scheduled_future = parsed[:scheduled_at].present? && parsed[:scheduled_at] > Time.current
+  def delivery_failures(items)
+    started = items.filter_map { |item| item['started_at'] }.min
+    return {} if started.nil?
 
-    parsed.except(:scheduled_at).transform_keys(&:to_s).merge(
-      'id' => SecureRandom.uuid, 'inbox_id' => stats[:inbox_id], 'inbox_name' => stats[:inbox_name],
-      'channel_type' => stats[:channel_type], 'requires_24h_window' => stats[:requires_24h_window],
-      'status' => scheduled_future ? 'scheduled' : 'processing',
-      'scheduled_at' => parsed[:scheduled_at]&.iso8601,
-      'eligible_count' => stats[:eligible_count], 'skipped_24h_count' => stats[:skipped_24h_count],
-      'sent_count' => 0, 'failed_count' => 0, 'sender_id' => user.id, 'created_at' => Time.current.iso8601
+    Message.reorder(nil)
+           .where(account_id: @account.id, message_type: :outgoing, status: :failed, created_at: Time.zone.parse(started)..)
+           .where(inbox_id: items.filter_map { |item| item['inbox_id'] }.uniq)
+           .where("messages.additional_attributes->>'kchat_broadcast_id' IN (?)", items.pluck('id'))
+           .group(Arel.sql("messages.additional_attributes->>'kchat_broadcast_id'")).count
+  end
+
+  def deliver(record)
+    return FAILED_RUN.merge('error' => 'subscription_expired') if Kchat::Entitlements.status(@account) == :expired
+
+    inbox = @account.inboxes.find_by(id: record['inbox_id'])
+    sender = @account.users.find_by(id: record['sender_id']) || @account.administrators.first
+    return FAILED_RUN unless inbox && sender
+
+    @dispatcher.deliver_batch(record, inbox: inbox, sender: sender, contact_ids: audience.segment_contact_ids(record['segment_id']))
+  rescue StandardError => e
+    Rails.logger.error("[Kchat::Broadcasts] broadcast #{record['id']} failed: #{e.message}")
+    FAILED_RUN
+  end
+
+  def build(user, attrs, keep_draft:)
+    builder = Kchat::Broadcasts::RecordBuilder.new(
+      @account,
+      stats: lambda { |a|
+        preview(inbox_id: a[:inbox_id], labels: a[:labels], only_24h: a[:only_24h], segment_id: a[:segment_id])
+      }
     )
+    keep_draft ? builder.draft(user, attrs) : builder.ready(user, attrs)
   end
 
-  def extract_broadcast_inputs(attrs)
-    title = validate_presence_and_length!(attrs[:title], 'tiêu đề chiến dịch', MAX_TITLE_CHARS)
-    {
-      title: title,
-      message: validate_presence_and_length!(attrs[:message], 'nội dung tin nhắn', MAX_MESSAGE_CHARS),
-      labels: normalize_labels(attrs[:labels]),
-      only_24h: boolean_cast(attrs[:only_24h]),
-      campaign_tag: normalize_campaign_tag(attrs[:campaign_tag].presence || title),
-      scheduled_at: parse_scheduled_at(attrs[:scheduled_at])
-    }
-  end
-
-  def persist_broadcast!(record)
-    @account.with_lock do
-      attrs = @account.custom_attributes.to_h.deep_dup
-      items = Array(attrs['kchat_broadcasts'])
-      attrs['kchat_broadcasts'] = ([record] + items).first(MAX_BROADCASTS)
-      @account.update!(custom_attributes: attrs)
+  def enqueue_for(record)
+    case record['status']
+    when 'scheduled'
+      Kchat::SendBroadcastJob.set(wait_until: Time.zone.parse(record['scheduled_at'])).perform_later(@account.id, record['id'])
+    when 'processing'
+      Kchat::SendBroadcastJob.perform_later(@account.id, record['id'])
     end
   end
 
-  def finalize_broadcast!(broadcast_id, result)
-    @account.with_lock do
-      attrs = @account.custom_attributes.to_h.deep_dup
-      target = Array(attrs['kchat_broadcasts']).find { |item| item['id'] == broadcast_id }
-      if target
-        target.merge!(result.transform_keys(&:to_s))['completed_at'] = Time.current.iso8601
-        @account.update!(custom_attributes: attrs)
-      end
-      target
-    end
+  def audience
+    @audience ||= Kchat::Broadcasts::Audience.new(@account, dispatcher: @dispatcher)
   end
 
-  def enqueue_job(broadcast_id, scheduled_at: nil)
-    if scheduled_at.present?
-      Kchat::SendBroadcastJob.set(wait_until: scheduled_at).perform_later(@account.id, broadcast_id)
-    else
-      Kchat::SendBroadcastJob.perform_later(@account.id, broadcast_id)
-    end
-  end
-
-  def validate_presence_and_length!(value, field_label, max_length)
-    str = value.to_s.strip
-    raise ValidationError, "Vui lòng nhập #{field_label}" if str.empty?
-    raise ValidationError, "#{field_label} tối đa #{max_length} ký tự" if str.length > max_length
-
-    str
-  end
-
-  def normalize_labels(raw)
-    list = raw.is_a?(String) ? raw.split(/[,;\n]/) : Array(raw)
-    list.map { |item| item.to_s.strip.downcase }.reject(&:empty?).uniq
-  end
-
-  def normalize_campaign_tag(raw)
-    slug = raw.to_s.unicode_normalize(:nfkd).gsub(/[\u0300-\u036f]/, '').tr('đĐ', 'dd')
-              .downcase.gsub(/[^a-z0-9_-]+/, '_').gsub(/\A[_-]+|[_-]+\z/, '').first(50)
-    slug.presence || 'broadcast'
-  end
-
-  def parse_scheduled_at(raw)
-    return nil if raw.blank?
-
-    Time.zone.parse(raw.to_s) || raise(ValidationError, 'Thời gian hẹn gửi không hợp lệ')
-  rescue ArgumentError
-    raise ValidationError, 'Thời gian hẹn gửi không hợp lệ'
+  def brand_hard_bans
+    @account.custom_attributes.to_h.dig('brand_growth', 'profile', 'hard_bans')
   end
 
   def boolean_cast(val)

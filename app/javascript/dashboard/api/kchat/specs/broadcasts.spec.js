@@ -37,4 +37,37 @@ describe('#KchatBroadcastsAPI', () => {
       { title: 'Test', inbox_id: 3, message: 'Hi' }
     );
   });
+
+  it('calls the campaign wizard endpoints', () => {
+    window.axios.patch = vi.fn(() => Promise.resolve());
+    window.axios.delete = vi.fn(() => Promise.resolve());
+
+    broadcastsAPI.results('b-1');
+    expect(axiosMock.get).toHaveBeenCalledWith(
+      expect.stringMatching(/\/kchat\/broadcasts\/b-1$/)
+    );
+
+    broadcastsAPI.audience({ labels: 'vip', segment_id: 4 });
+    expect(axiosMock.get).toHaveBeenCalledWith(
+      expect.stringMatching(/\/kchat\/broadcasts\/audience$/),
+      { params: { labels: 'vip', segment_id: 4 } }
+    );
+
+    broadcastsAPI.checkContent('Xin chào');
+    expect(axiosMock.post).toHaveBeenCalledWith(
+      expect.stringMatching(/\/kchat\/broadcasts\/check_content$/),
+      { message: 'Xin chào' }
+    );
+
+    broadcastsAPI.updateDraft('b-1', { draft: false });
+    expect(window.axios.patch).toHaveBeenCalledWith(
+      expect.stringMatching(/\/kchat\/broadcasts\/b-1$/),
+      { draft: false }
+    );
+
+    broadcastsAPI.destroyDraft('b-1');
+    expect(window.axios.delete).toHaveBeenCalledWith(
+      expect.stringMatching(/\/kchat\/broadcasts\/b-1$/)
+    );
+  });
 });

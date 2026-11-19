@@ -26,10 +26,10 @@ Kalo không có Zalo OA hoàn chỉnh và các sàn Shopee, TikTok Shop chưa n�
 Trang Bán tại quầy dùng để lập đơn nhanh cho khách mua trực tiếp. Chỉ là POS nội bộ của Kalo, chưa nối KiotViet, Sapo.
 
 ## Chiến dịch và Marketing
-- Gửi hàng loạt (chỉ Quản trị viên được tạo): chọn hộp thư, lọc khách theo nhãn, soạn tin, gửi ngay hoặc hẹn giờ. Facebook và Instagram chỉ gửi được cho khách đã nhắn trong 24 giờ gần nhất, Kalo tự bỏ qua khách ngoài hạn và báo số lượng.
+- Trang Chiến dịch, nút "Tạo chiến dịch" (chỉ Quản trị viên): 6 bước Mục tiêu, Khách nhận (mọi khách, nhóm khách đã lưu hoặc nhãn), Nội dung (AI viết nếu có, chặn từ cấm), Kênh và lịch (gửi ngay hoặc hẹn giờ Việt Nam), Xem lại, Kết quả. Lưu nháp ở bước nào cũng được. Facebook/Instagram chỉ gửi cho khách nhắn trong 24 giờ.
 - Marketing còn có ý tưởng nội dung và lịch nội dung. Kalo không đăng bài tự động và không quản lý quảng cáo (Meta Ads, TikTok Ads); chỉ gợi ý nội dung để chủ shop tự đăng.
 - Bình luận Facebook/Instagram: Quản trị viên có thể bật quy tắc tự ẩn bình luận chứa số điện thoại hoặc từ khóa, và tự nhắn riêng cho người bình luận.
-- Chưa có màn "chiến dịch từ A đến Z" trọn gói. Kalo cũng chưa đo hiệu quả chiến dịch bằng số liệu riêng; chỉ nói số liệu có thật trong Báo cáo.
+- Kết quả chiến dịch: đã gửi, gửi lỗi, khách trả lời, đơn phát sinh; "đã xem" chỉ có ở kênh báo đọc (không có ở Zalo cá nhân).
 
 ## Hồ sơ thương hiệu
 Ở Marketing, điền Hồ sơ thương hiệu: tên, định vị, điểm khác biệt, khách mục tiêu, giọng văn và "Từ ngữ cấm". AI viết nội dung theo hồ sơ này và không dùng từ ngữ cấm.
