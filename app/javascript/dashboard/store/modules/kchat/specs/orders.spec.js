@@ -19,7 +19,9 @@ describe('kchatOrders store', () => {
   beforeEach(() => vi.clearAllMocks());
 
   it('fetch passes the delivery filter of the Cần giao tab', async () => {
-    OrdersAPI.get.mockResolvedValue({ data: { payload: [], meta: { count: 0 } } });
+    OrdersAPI.get.mockResolvedValue({
+      data: { payload: [], meta: { count: 0 } },
+    });
     const store = makeStore();
     await store.dispatch('kchatOrders/fetch', {
       status: 'paid',

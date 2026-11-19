@@ -70,10 +70,15 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
   def filtered_orders
     scope = ::Kchat::Order.where(account_id: Current.account.id).includes(:items, :contact, :conversation).order(number: :desc)
-    scope = scope.where(status: params[:status]) if params[:status].present?
-    scope = scope.awaiting_delivery if params[:delivery] == 'pending'
     scope = scope.where(contact_id: params[:contact_id]) if params[:contact_id].present?
+    scope = filter_status(scope)
     params[:query].present? ? search(scope, params[:query].to_s.strip) : scope
+  end
+
+  # delivery=pending: the Cần giao tab, paid orders that still ship (POS sales are handed over at the counter).
+  def filter_status(scope)
+    scope = scope.where(status: params[:status]) if params[:status].present?
+    params[:delivery] == 'pending' ? scope.awaiting_delivery : scope
   end
 
   def search(scope, query)

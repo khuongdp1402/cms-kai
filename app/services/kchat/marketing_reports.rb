@@ -122,11 +122,13 @@ class Kchat::MarketingReports
     return [] if buckets.empty?
 
     names = User.where(id: buckets.keys).pluck(:id, :name).to_h
-    rows = buckets.values.map do |row|
-      row.except(:converted).merge(name: names.fetch(row[:agent_id], "##{row[:agent_id]}"),
-                                   conversion_pct: percentage(row[:converted], row[:conversations]))
-    end
+    rows = buckets.values.map { |row| agent_row(row, names) }
     rows.sort_by { |row| [-row[:revenue], -row[:orders], -row[:conversations], row[:agent_id]] }.first(TOP_AGENTS_LIMIT)
+  end
+
+  def agent_row(row, names)
+    row.except(:converted).merge(name: names.fetch(row[:agent_id], "##{row[:agent_id]}"),
+                                 conversion_pct: percentage(row[:converted], row[:conversations]))
   end
 
   def merge_agent_leads(buckets)

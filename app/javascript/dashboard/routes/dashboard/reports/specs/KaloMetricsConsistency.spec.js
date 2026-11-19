@@ -131,13 +131,11 @@ const mountWithI18n = (component, props = {}) => {
 const mountOverview = async () => {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: ['kalo_overview', 'kalo_orders', 'kalo_pos', 'home'].map(
-      name => ({
-        name,
-        path: `/app/accounts/:accountId/${name}`,
-        component: { template: '<div />' },
-      })
-    ),
+    routes: ['kalo_overview', 'kalo_orders', 'kalo_pos', 'home'].map(name => ({
+      name,
+      path: `/app/accounts/:accountId/${name}`,
+      component: { template: '<div />' },
+    })),
   });
   await router.push({ name: 'kalo_overview', params: { accountId: 1 } });
   const store = createStore({

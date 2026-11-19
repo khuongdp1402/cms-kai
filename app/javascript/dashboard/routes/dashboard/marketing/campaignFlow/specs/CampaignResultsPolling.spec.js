@@ -75,16 +75,16 @@ describe('CampaignResults polling', () => {
     expect(broadcastsAPI.results).toHaveBeenCalledTimes(2);
     expect(status(wrapper)).toBe('Đang gửi');
     // The numbers stay on screen while refreshing in the background.
-    expect(
-      wrapper.find('[data-test="campaign-results-tiles"]').exists()
-    ).toBe(true);
+    expect(wrapper.find('[data-test="campaign-results-tiles"]').exists()).toBe(
+      true
+    );
 
     await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS);
     expect(broadcastsAPI.results).toHaveBeenCalledTimes(3);
     expect(status(wrapper)).not.toBe('Đang gửi');
-    expect(
-      wrapper.find('[data-test="campaign-result-sent"]').text()
-    ).toContain('10');
+    expect(wrapper.find('[data-test="campaign-result-sent"]').text()).toContain(
+      '10'
+    );
 
     await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS * 3);
     expect(broadcastsAPI.results).toHaveBeenCalledTimes(3);

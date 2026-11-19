@@ -75,8 +75,8 @@ RSpec.describe 'Api::V1::Accounts::BrandGrowth', type: :request do
       expect(response.parsed_body).to include('configured' => true, 'available' => true)
 
       stub_request(:post, gateway).to_return(status: 401)
-      post "/api/v1/accounts/#{account.id}/kchat/assistant", params: { message: 'hi', mode: 'help' },
-                                                              headers: agent.create_new_auth_token, as: :json
+      assistant = "/api/v1/accounts/#{account.id}/kchat/assistant"
+      post assistant, params: { message: 'hi', mode: 'help' }, headers: agent.create_new_auth_token, as: :json
       expect(response).to have_http_status(:bad_gateway)
 
       get "#{base}/ai_health", headers: agent.create_new_auth_token, as: :json

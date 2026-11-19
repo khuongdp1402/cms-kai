@@ -62,7 +62,8 @@ RSpec.describe Kchat::MarketingReports do
   it 'reported case: overall close rate matches the rows and the POS sale is a separate row without a rate' do
     inbox = create(:inbox, account: account)
     contact = create(:contact, account: account)
-    chat = create(:conversation, account: account, inbox: inbox, contact: contact, contact_inbox: create(:contact_inbox, contact: contact, inbox: inbox))
+    chat = create(:conversation, account: account, inbox: inbox, contact: contact,
+                                 contact_inbox: create(:contact_inbox, contact: contact, inbox: inbox))
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: chat },
                                     items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },
