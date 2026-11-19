@@ -11,7 +11,7 @@ class Api::V1::Accounts::Kchat::BroadcastsController < Api::V1::Accounts::Kchat:
   end
 
   def index
-    render json: { broadcasts: service.list }
+    render json: { broadcasts: service.list_with_delivery_stats }
   end
 
   def show

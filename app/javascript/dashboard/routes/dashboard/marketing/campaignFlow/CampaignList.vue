@@ -27,6 +27,10 @@ const onDelete = item => {
   armedDelete.value = item.id;
 };
 
+// Not created (dispatcher) plus rejected later by the channel.
+const failedOf = item =>
+  (item.failed_count || 0) + (item.delivery_failed_count || 0);
+
 const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
 </script>
 
@@ -68,7 +72,7 @@ const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
       <button
         type="button"
         data-test="campaign-row-open"
-        class="flex flex-col flex-1 min-w-0 gap-1 text-start group"
+        class="flex flex-col w-full min-w-0 gap-1 sm:w-auto sm:flex-1 text-start group"
         @click="emit('open', item)"
       >
         <span class="flex flex-wrap items-center min-w-0 gap-2">
@@ -106,18 +110,20 @@ const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
           >
             {{
               t('KALO_CAMPAIGN_FLOW.LIST.SENT', {
-                sent: item.sent_count || 0,
+                sent: Math.max(
+                  0,
+                  (item.sent_count || 0) - (item.delivery_failed_count || 0)
+                ),
                 eligible: item.eligible_count || 0,
               })
             }}
           </span>
           <span
-            v-if="item.status === 'completed' && item.failed_count"
+            v-if="item.status === 'completed' && failedOf(item)"
+            data-test="campaign-row-failed"
             class="font-semibold text-n-ruby-11"
           >
-            {{
-              t('KALO_CAMPAIGN_FLOW.LIST.FAILED', { count: item.failed_count })
-            }}
+            {{ t('KALO_CAMPAIGN_FLOW.LIST.FAILED', { count: failedOf(item) }) }}
           </span>
           <span v-if="item.status === 'scheduled' && item.scheduled_at">
             {{
@@ -134,7 +140,7 @@ const statusOf = item => (STATUS_TONES[item.status] ? item.status : 'failed');
           </span>
         </span>
       </button>
-      <div class="flex items-center gap-2 shrink-0">
+      <div class="flex items-center gap-2 ms-auto shrink-0">
         <button
           v-if="item.status === 'draft' && isAdmin"
           type="button"

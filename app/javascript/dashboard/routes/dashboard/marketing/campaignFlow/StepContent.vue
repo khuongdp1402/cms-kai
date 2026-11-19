@@ -24,7 +24,7 @@ const aiGuardrail = ref(false);
 const utmUrl = ref('');
 
 const INPUT_CLASS =
-  'px-3 py-2 mb-0 text-sm font-normal border rounded-[10px] outline-none bg-n-solid-1 border-n-strong text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
+  'w-full px-3 py-2 mb-0 text-sm font-normal border rounded-[10px] outline-none bg-n-solid-1 border-n-strong text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
 
 const VARIABLES = [
   { token: '{{name}}', labelKey: 'VAR_NAME' },
@@ -115,7 +115,7 @@ const onInput = () => {
 
 <template>
   <div
-    class="grid gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"
+    class="grid grid-cols-[minmax(0,1fr)] gap-5 lg:grid-cols-[minmax(0,1fr)_240px]"
     data-test="campaign-step-content"
   >
     <div class="flex flex-col gap-4 min-w-0">
@@ -264,7 +264,7 @@ const onInput = () => {
       </details>
     </div>
 
-    <aside class="flex flex-col gap-3" data-test="campaign-preview">
+    <aside class="flex flex-col min-w-0 gap-3" data-test="campaign-preview">
       <span
         class="text-xs font-semibold tracking-wide uppercase text-n-slate-10"
       >
@@ -280,7 +280,7 @@ const onInput = () => {
           {{ t(`KALO_CAMPAIGN_FLOW.CHANNELS.${key}`) }}
         </span>
         <p
-          class="self-end max-w-full px-3 py-2 text-sm rounded-2xl rounded-br-md whitespace-pre-wrap break-words"
+          class="self-end max-w-full px-3 py-2 text-sm rounded-2xl rounded-br-md whitespace-pre-wrap [overflow-wrap:anywhere]"
           :class="bubbleTone(key)"
         >
           {{

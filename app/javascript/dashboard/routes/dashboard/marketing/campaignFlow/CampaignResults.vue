@@ -47,7 +47,10 @@ const tiles = computed(() => {
   if (!r) return [];
   return [
     { key: 'ELIGIBLE', value: r.eligible_count },
-    { key: 'SENT', value: r.sent_count },
+    {
+      key: 'SENT',
+      value: Math.max(0, r.sent_count - r.delivery_failed_count),
+    },
     { key: 'FAILED_COUNT', value: r.failed_count + r.delivery_failed_count },
     broadcast.value?.requires_24h_window
       ? { key: 'SKIPPED_24H', value: r.skipped_24h_count }

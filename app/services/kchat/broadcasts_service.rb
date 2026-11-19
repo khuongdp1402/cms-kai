@@ -18,6 +18,15 @@ class Kchat::BroadcastsService
     Array(@account.custom_attributes.to_h['kchat_broadcasts'])
   end
 
+  # List rows plus how many of each broadcast's messages the channel later rejected (e.g. Zalo bridge send failure).
+  def list_with_delivery_stats
+    items = list
+    failed = Message.reorder(nil).where(account_id: @account.id, message_type: :outgoing, status: :failed)
+                    .where("messages.additional_attributes->>'kchat_broadcast_id' IN (?)", items.pluck('id').presence || [''])
+                    .group(Arel.sql("messages.additional_attributes->>'kchat_broadcast_id'")).count
+    items.map { |item| item.merge('delivery_failed_count' => failed[item['id']].to_i) }
+  end
+
   def find!(broadcast_id)
     list.find { |item| item['id'] == broadcast_id } || raise(ActiveRecord::RecordNotFound, "Broadcast #{broadcast_id} not found")
   end

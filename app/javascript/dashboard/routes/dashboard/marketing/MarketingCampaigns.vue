@@ -45,7 +45,7 @@ const campaignLinks = computed(() =>
       <span
         class="px-3 py-1.5 text-xs sm:text-sm font-semibold rounded-lg bg-n-solid-1 text-n-slate-12 shadow-sm border border-n-weak"
       >
-        {{ t('CAMPAIGN.HEADER') }}
+        {{ t('KALO_CAMPAIGN_FLOW.WEBSITE_CAMPAIGNS') }}
       </span>
       <router-link
         v-for="link in campaignLinks"

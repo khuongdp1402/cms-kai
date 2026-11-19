@@ -89,7 +89,7 @@ const rows = computed(() =>
           {{ t(`KALO_CAMPAIGN_FLOW.REVIEW_STEP.${row.key}`) }}
         </dt>
         <dd
-          class="text-sm font-semibold break-words text-n-slate-12"
+          class="text-sm font-semibold [overflow-wrap:anywhere] text-n-slate-12"
           :data-test="row.test ? `campaign-review-${row.test}` : undefined"
         >
           {{ row.value }}
@@ -102,7 +102,7 @@ const rows = computed(() =>
         {{ t('KALO_CAMPAIGN_FLOW.REVIEW_STEP.MESSAGE') }}
       </span>
       <p
-        class="p-3 text-sm border rounded-xl whitespace-pre-wrap break-words border-n-weak bg-n-solid-1 text-n-slate-12"
+        class="p-3 text-sm border rounded-xl whitespace-pre-wrap [overflow-wrap:anywhere] border-n-weak bg-n-solid-1 text-n-slate-12"
       >
         {{ campaign.message.trim() }}
       </p>

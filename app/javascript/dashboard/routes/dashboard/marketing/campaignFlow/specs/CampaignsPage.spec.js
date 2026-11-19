@@ -41,6 +41,7 @@ const ROWS = [
     sent_count: 8,
     eligible_count: 10,
     failed_count: 2,
+    delivery_failed_count: 1,
   },
   { id: 'f', title: 'Kênh mất', status: 'failed' },
 ];
@@ -145,8 +146,8 @@ describe('Chiến dịch page', () => {
       .map(chip => chip.text());
     expect(chips).toEqual(['Nháp', 'Đã hẹn', 'Đang gửi', 'Đã gửi', 'Lỗi']);
     const rows = wrapper.findAll('[data-test="campaign-row"]');
-    expect(rows[3].text()).toContain('Đã gửi 8/10 khách');
-    expect(rows[3].text()).toContain('2 lỗi');
+    expect(rows[3].text()).toContain('Đã gửi 7/10 khách');
+    expect(rows[3].text()).toContain('3 lỗi');
     expect(rows[1].text()).toContain('Gửi lúc');
     expect(rows[1].text()).toContain('09:00');
     expect(wrapper.findAll('[data-test="campaign-row-numbers"]')).toHaveLength(
@@ -251,6 +252,10 @@ describe('CampaignResults', () => {
     ).toContain('3');
     expect(wrapper.find('[data-test="campaign-result-read"]').text()).toContain(
       '5'
+    );
+    // 8 handed to the channel, 1 rejected by it afterwards.
+    expect(wrapper.find('[data-test="campaign-result-sent"]').text()).toContain(
+      '7'
     );
     expect(
       wrapper.find('[data-test="campaign-result-revenue"]').text()

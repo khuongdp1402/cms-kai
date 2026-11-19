@@ -327,7 +327,7 @@ onMounted(() => {
           "
         />
       </div>
-      <ol class="hidden grid-cols-6 gap-1 sm:grid">
+      <ol class="hidden grid-cols-6 gap-1 p-0 m-0 list-none sm:grid">
         <li v-for="(key, index) in STEPS" :key="key">
           <button
             type="button"

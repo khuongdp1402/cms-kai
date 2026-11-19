@@ -159,6 +159,15 @@ RSpec.describe Kchat::BroadcastsService do
       end
     end
 
+    it 'adds channel delivery failures to the list rows' do
+      contact_in(zalo_inbox, name: 'Lỗi gửi')
+      record = service.create_broadcast!(user: admin, params: { title: 'Zalo', message: 'Hi', inbox_id: zalo_inbox.id })
+      service.execute_broadcast!(record['id'])
+      Message.where("additional_attributes->>'kchat_broadcast_id' = ?", record['id']).find_each { |m| m.update!(status: :failed) }
+
+      expect(service.list_with_delivery_stats.first).to include('id' => record['id'], 'sent_count' => 1, 'delivery_failed_count' => 1)
+    end
+
     it 'marks the broadcast failed when delivery raises' do
       record = service.create_broadcast!(user: admin, params: { title: 'Lỗi', message: 'Hi', inbox_id: zalo_inbox.id })
       allow_any_instance_of(Kchat::Broadcasts::Dispatcher).to receive(:deliver_batch).and_raise(StandardError, 'boom') # rubocop:disable RSpec/AnyInstance

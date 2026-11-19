@@ -5517,6 +5517,7 @@
   },
   "KALO_CAMPAIGN_FLOW": {
     "CREATE": "Tạo chiến dịch",
+    "WEBSITE_CAMPAIGNS": "Lời chào tự động trên website",
     "READONLY": "Chỉ quản trị viên tạo và gửi được chiến dịch. Bạn vẫn xem được kết quả.",
     "LIST": {
       "TITLE": "Chiến dịch nhắn tin",
@@ -5673,7 +5674,7 @@
       "ORDERS": "Đơn phát sinh",
       "REVENUE": "Doanh thu đã thanh toán",
       "NO_READ": "{channel} không báo trạng thái đã xem nên Kalo không hiện số này.",
-      "SENT_NOTE": "Đã gửi là tin Kalo đã chuyển đi. Tin bị kênh từ chối sau đó được tính vào Gửi lỗi.",
+      "SENT_NOTE": "Đã gửi là tin Kalo đã chuyển cho kênh và kênh không báo lỗi. Tin kênh từ chối được tính vào Gửi lỗi.",
       "ORDERS_NOTE": "Đơn tạo sau khi gửi, trong cuộc trò chuyện của chiến dịch hoặc đến từ link có mã {tag}.",
       "REPLIED_NOTE": "Khách nhắn lại trong cuộc trò chuyện nhận tin, sau khi gửi."
     },

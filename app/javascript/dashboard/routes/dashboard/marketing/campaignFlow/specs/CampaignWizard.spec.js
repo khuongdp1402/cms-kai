@@ -309,7 +309,7 @@ describe('CampaignWizard', () => {
     });
     expect(wrapper.emitted('saved')[0][0]).toEqual(SENT);
     expect(stepTitle(wrapper)).toBe('Kết quả');
-    expect(find(wrapper, 'campaign-result-sent').text()).toContain('70');
+    expect(find(wrapper, 'campaign-result-sent').text()).toContain('69');
     expect(find(wrapper, 'campaign-result-failed_count').text()).toContain('1');
     expect(find(wrapper, 'campaign-result-read').exists()).toBe(false);
     expect(find(wrapper, 'campaign-results-no-read').text()).toContain(
