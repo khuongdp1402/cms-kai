@@ -11,6 +11,7 @@ import CommentsPage from '../marketing/CommentsPage.vue';
 import CampaignsPage from '../marketing/CampaignsPage.vue';
 import BrandPage from '../marketing/BrandPage.vue';
 import ChannelList from '../settings/inbox/ChannelList.vue';
+import CampaignsPageRouteView from '../campaigns/pages/CampaignsPageRouteView.vue';
 import IntegrationsIndex from '../settings/integrations/Index.vue';
 
 vi.mock('dashboard/api/kchat/reports', () => ({
@@ -52,8 +53,10 @@ const mountWith = async (
       'kalo_page',
       'kalo_overview',
       'kalo_billing',
+      'campaigns_livechat_index',
       'campaigns_sms_index',
       'campaigns_whatsapp_index',
+      'kalo_campaigns',
       ...REPORT_ROUTES,
     ].map(name => ({
       name,
@@ -145,6 +148,17 @@ describe('Kalo feature flags in pages', () => {
       expect(wrapper.find('[data-test="comments-body"]').exists()).toBe(true);
     });
 
+    it('renders nothing until the account flags are loaded (no flash of hidden tabs)', async () => {
+      const wrapper = await mountWith(MarketingIndex, {
+        stubs: MARKETING_STUBS,
+        getters: { 'accounts/getAccount': () => () => ({ id: 1 }) },
+      });
+      expect(wrapper.find('[role="tab"]').exists()).toBe(false);
+      expect(wrapper.find('[data-test="kalo-feature-off"]').exists()).toBe(
+        false
+      );
+    });
+
     it('shows the feature-off page when every module is off', async () => {
       const wrapper = await mountWith(MarketingIndex, {
         features: {},
@@ -189,6 +203,31 @@ describe('Kalo feature flags in pages', () => {
       expect(wrapper.find('[data-test="calendar-body"]').exists()).toBe(true);
       await tabButtons[2].trigger('click');
       expect(wrapper.find('[data-test="ideas-body"]').exists()).toBe(true);
+    });
+  });
+
+  describe('campaign pages channel chips (kalo_extra_channels)', () => {
+    const chips = wrapper =>
+      wrapper
+        .findAll('nav a')
+        .map(a => a.attributes('href'))
+        .filter(href => href.includes('campaigns_'));
+
+    it('hides SMS and WhatsApp when extra channels are off', async () => {
+      const wrapper = await mountWith(CampaignsPageRouteView, {
+        features: { ...ALL_ON, kalo_extra_channels: false },
+        stubs: { RouterView: true },
+      });
+      expect(chips(wrapper)).toEqual([
+        '/app/accounts/1/campaigns_livechat_index',
+      ]);
+    });
+
+    it('shows them when on', async () => {
+      const wrapper = await mountWith(CampaignsPageRouteView, {
+        stubs: { RouterView: true },
+      });
+      expect(chips(wrapper)).toHaveLength(3);
     });
   });
 

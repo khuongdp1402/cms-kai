@@ -69,7 +69,7 @@ onMounted(() => {
 
 <template>
   <KaloFeatureOff v-if="isLoaded && !tabs.length" />
-  <KaloPage v-else :title="t('KALO_MARKETING.TITLE')">
+  <KaloPage v-else-if="isLoaded" :title="t('KALO_MARKETING.TITLE')">
     <template #tabs>
       <div
         role="tablist"
