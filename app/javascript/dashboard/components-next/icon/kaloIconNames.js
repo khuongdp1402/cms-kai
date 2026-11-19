@@ -39,4 +39,5 @@ export const KALO_ICON_NAMES = [
   'user',
   'logout',
   'panel',
+  'copy',
 ];
