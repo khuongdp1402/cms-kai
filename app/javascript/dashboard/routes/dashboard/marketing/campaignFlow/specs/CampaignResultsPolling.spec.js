@@ -18,6 +18,7 @@ const payload = status => ({
       channel_type: 'zalo_personal',
       requires_24h_window: false,
       campaign_tag: 'ra_mat_nen',
+      scheduled_at: '2026-11-21T02:00:00Z',
     },
     results: {
       eligible_count: 10,
