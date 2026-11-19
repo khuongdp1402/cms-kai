@@ -19,6 +19,7 @@ export function useCaptain() {
   const { isCloudFeatureEnabled, currentAccount } = useAccount();
   const { isEnterprise } = useConfig();
   const uiFlags = useMapGetter('accounts/getUIFlags');
+  const globalConfig = useMapGetter('globalConfig/get');
   const currentChat = useMapGetter('getSelectedChat');
   const replyMode = useMapGetter('draftMessages/getReplyEditorMode');
   const conversationId = computed(() => currentChat.value?.id);
@@ -32,8 +33,13 @@ export function useCaptain() {
     return isCloudFeatureEnabled(FEATURE_FLAGS.CAPTAIN);
   });
 
+  // Kalo: the account flag alone is not enough; Captain tasks also need the
+  // installation OpenAI key, otherwise every call fails with 422.
   const captainTasksEnabled = computed(() => {
-    return isCloudFeatureEnabled(FEATURE_FLAGS.CAPTAIN_TASKS);
+    return (
+      isCloudFeatureEnabled(FEATURE_FLAGS.CAPTAIN_TASKS) &&
+      !!globalConfig.value?.kaloCaptainTasksReady
+    );
   });
 
   // === Limits (Enterprise) ===
@@ -76,10 +82,9 @@ export function useCaptain() {
     ) {
       return;
     }
-    const errorMessage =
-      error.response?.data?.error ||
-      t('INTEGRATION_SETTINGS.OPEN_AI.GENERATE_ERROR');
-    useAlert(errorMessage);
+    // Kalo: backend errors are English/technical; shop owners get one
+    // Vietnamese sentence instead.
+    useAlert(t('KALO_POLISH4.AI.TASK_FAILED'));
   };
 
   /**
