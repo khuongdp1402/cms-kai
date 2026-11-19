@@ -30,6 +30,8 @@ const BAD = 'bg-n-ruby-3 text-n-ruby-11';
 
 // The results view refreshes itself this often while a campaign is sending.
 export const RESULTS_POLL_MS = 4000;
+// Failed refreshes back off (8 s, 16 s, …) up to this.
+export const RESULTS_POLL_MAX_MS = 30000;
 export const SENDING_STATUSES = ['processing', 'sending'];
 
 export const STATUS_TONES = {

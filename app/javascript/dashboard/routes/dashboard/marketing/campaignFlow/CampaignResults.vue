@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import broadcastsAPI from 'dashboard/api/kchat/broadcasts';
 import { formatVnd } from 'dashboard/helper/formatVnd';
 import {
+  RESULTS_POLL_MAX_MS,
   RESULTS_POLL_MS,
   SENDING_STATUSES,
   STATUS_TONES,
@@ -24,6 +25,9 @@ const results = ref(null);
 const state = ref('loading');
 let pollTimer = null;
 let isUnmounted = false;
+// Only the latest request may update the view (refresh, campaign change).
+let latestRequest = 0;
+let failedPolls = 0;
 
 const stopPolling = () => {
   clearTimeout(pollTimer);
@@ -32,28 +36,41 @@ const stopPolling = () => {
 
 // While the campaign is sending, refresh every RESULTS_POLL_MS until it is
 // done or the view closes (unmount), so it never stays on "Đang gửi".
+// Failed refreshes wait twice as long each time, up to RESULTS_POLL_MAX_MS.
 const schedulePoll = () => {
   stopPolling();
   if (isUnmounted || !SENDING_STATUSES.includes(broadcast.value?.status)) {
     return;
   }
+  const delay = Math.min(
+    RESULTS_POLL_MS * 2 ** failedPolls,
+    RESULTS_POLL_MAX_MS
+  );
   // eslint-disable-next-line no-use-before-define
-  pollTimer = setTimeout(() => load({ silent: true }), RESULTS_POLL_MS);
+  pollTimer = setTimeout(() => load({ silent: true }), delay);
 };
 
 const load = async ({ silent = false } = {}) => {
   stopPolling();
-  if (!silent) state.value = 'loading';
+  latestRequest += 1;
+  const request = latestRequest;
+  if (!silent) {
+    state.value = 'loading';
+    failedPolls = 0;
+  }
   try {
     const { data } = await broadcastsAPI.results(props.broadcastId);
-    if (isUnmounted) return;
+    if (isUnmounted || request !== latestRequest) return;
     broadcast.value = data.broadcast;
     results.value = data.results;
     state.value = 'ready';
+    failedPolls = 0;
     emit('loaded', data.broadcast);
   } catch {
+    if (isUnmounted || request !== latestRequest) return;
     // A failed background refresh keeps the last numbers on screen.
-    if (!silent) state.value = 'error';
+    if (silent) failedPolls += 1;
+    else state.value = 'error';
   }
   schedulePoll();
 };

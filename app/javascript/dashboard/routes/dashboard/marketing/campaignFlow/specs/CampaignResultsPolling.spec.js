@@ -3,7 +3,10 @@ import { createI18n } from 'vue-i18n';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
 import broadcastsAPI from 'dashboard/api/kchat/broadcasts';
 import CampaignResults from '../CampaignResults.vue';
-import { RESULTS_POLL_MS as POLL_INTERVAL_MS } from '../campaignFlowHelpers';
+import {
+  RESULTS_POLL_MS as POLL_INTERVAL_MS,
+  RESULTS_POLL_MAX_MS,
+} from '../campaignFlowHelpers';
 
 vi.mock('dashboard/api/kchat/broadcasts', () => ({
   default: { results: vi.fn() },
@@ -36,9 +39,9 @@ const payload = status => ({
   },
 });
 
-const mountResults = () =>
+const mountResults = (broadcastId = 'c') =>
   mount(CampaignResults, {
-    props: { broadcastId: 'c' },
+    props: { broadcastId },
     global: {
       plugins: [
         createI18n({
@@ -117,8 +120,52 @@ describe('CampaignResults polling', () => {
     await flushPromises();
     await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS);
     expect(status(wrapper)).toBe('Đang gửi');
-    await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS);
+    // After an error the next try waits twice as long.
+    await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS * 2);
     expect(broadcastsAPI.results).toHaveBeenCalledTimes(3);
     expect(status(wrapper)).not.toBe('Đang gửi');
+  });
+
+  it('backs off exponentially on repeated errors, capped at 30 s', async () => {
+    expect(RESULTS_POLL_MAX_MS).toBe(30000);
+    broadcastsAPI.results
+      .mockResolvedValueOnce(payload('sending'))
+      .mockRejectedValue(new Error('network'));
+    mountResults();
+    await flushPromises();
+    const callsAfter = async ms => {
+      await vi.advanceTimersByTimeAsync(ms);
+      return broadcastsAPI.results.mock.calls.length;
+    };
+    expect(await callsAfter(POLL_INTERVAL_MS)).toBe(2); // first error
+    expect(await callsAfter(POLL_INTERVAL_MS * 2 - 1)).toBe(2);
+    expect(await callsAfter(1)).toBe(3); // waited 8 s
+    expect(await callsAfter(POLL_INTERVAL_MS * 4)).toBe(4); // 16 s
+    expect(await callsAfter(RESULTS_POLL_MAX_MS - 1)).toBe(4); // capped at 30 s, not 32 s
+    expect(await callsAfter(1)).toBe(5);
+    expect(await callsAfter(RESULTS_POLL_MAX_MS)).toBe(6);
+  });
+
+  it('ignores a slower stale response after the campaign changed', async () => {
+    let resolveOld;
+    broadcastsAPI.results.mockReturnValueOnce(
+      new Promise(resolve => {
+        resolveOld = resolve;
+      })
+    );
+    const fresh = payload('completed');
+    fresh.data.broadcast.title = 'Chiến dịch mới';
+    broadcastsAPI.results.mockResolvedValueOnce(fresh);
+    const wrapper = mountResults('c');
+    await wrapper.setProps({ broadcastId: 'd' });
+    await flushPromises();
+    const stale = payload('sending');
+    stale.data.broadcast.title = 'Chiến dịch cũ';
+    resolveOld(stale);
+    await flushPromises();
+    expect(wrapper.text()).toContain('Chiến dịch mới');
+    expect(wrapper.text()).not.toContain('Chiến dịch cũ');
+    await vi.advanceTimersByTimeAsync(POLL_INTERVAL_MS * 3);
+    expect(broadcastsAPI.results).toHaveBeenCalledTimes(2);
   });
 });
