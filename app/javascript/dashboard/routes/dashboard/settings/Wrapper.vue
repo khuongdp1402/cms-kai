@@ -1,7 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import SettingsHeader from './SettingsHeader.vue';
+import BackButton from 'dashboard/components/widgets/BackButton.vue';
+import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
+
 const props = defineProps({
   headerTitle: { type: String, default: '' },
   icon: { type: String, default: '' },
@@ -17,22 +19,32 @@ const showSettingsHeader = computed(
 );
 </script>
 
+<!-- Multi-step settings flows (new inbox, team, macro editor, inbox settings)
+     inside the KaloPage frame (guided UX spec §2): sticky KaloPageHeader with
+     the back button, the step body on the canvas. -->
 <template>
-  <div class="flex flex-col h-full m-0 bg-n-surface-1 w-full">
-    <SettingsHeader
+  <section
+    data-test-id="kalo-page"
+    class="flex flex-col flex-1 w-full h-full min-w-0 m-0 overflow-y-auto bg-n-background"
+  >
+    <KaloPageHeader
       v-if="showSettingsHeader"
-      :icon="icon"
-      :header-title="t(headerTitle)"
-      :show-back-button="showBackButton"
-      :back-url="backUrl"
-      class="z-20 max-w-7xl w-full mx-auto"
-    />
+      :title="headerTitle ? t(headerTitle) : ''"
+      max-width-class="max-w-7xl"
+    >
+      <template v-if="showBackButton" #leading>
+        <BackButton compact :back-url="backUrl" />
+      </template>
+    </KaloPageHeader>
 
-    <router-view v-slot="{ Component }" class="px-4 overflow-hidden">
+    <router-view
+      v-slot="{ Component }"
+      class="w-full min-w-0 px-4 py-4 mx-auto sm:px-6 lg:px-8 max-w-7xl"
+    >
       <component :is="Component" v-if="!keepAlive" :key="$route.fullPath" />
       <keep-alive v-else>
         <component :is="Component" :key="$route.fullPath" />
       </keep-alive>
     </router-view>
-  </div>
+  </section>
 </template>

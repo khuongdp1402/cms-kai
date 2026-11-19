@@ -37,7 +37,13 @@ describe('Profile hotkey cards', () => {
       global: {
         plugins: [i18n, store],
         mocks: { $route: { hash: '' } },
-        stubs: { SectionLayout: { template: '<div><slot /></div>' } },
+        stubs: {
+          SectionLayout: { template: '<div><slot /></div>' },
+          // The page sits in the KaloPage frame (SettingsLayout).
+          SettingsLayout: {
+            template: '<div><slot name="header" /><slot /></div>',
+          },
+        },
       },
     });
     const descriptions = () =>

@@ -6,6 +6,8 @@ import { useRoute } from 'vue-router';
 import { useAlert } from 'dashboard/composables';
 import { kchatErrorKey } from 'dashboard/helper/kchatErrors';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
+import KaloPageHeader from 'dashboard/components-next/layout/KaloPageHeader.vue';
+import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 import ProductGrid from './ProductGrid.vue';
 import PosCart from './PosCart.vue';
 
@@ -112,26 +114,31 @@ const inputClass =
 
 <template>
   <section
-    class="flex flex-col flex-1 overflow-auto md:flex-row bg-n-background"
+    data-test-id="kalo-page"
+    class="flex flex-col flex-1 min-w-0 overflow-auto md:overflow-hidden bg-n-background"
   >
-    <div
-      data-tour="pos-products"
-      class="flex flex-col flex-1 gap-4 p-5 overflow-auto"
+    <KaloPageHeader
+      :title="t('KALO_POS.TITLE')"
+      :description="t('KALO_SHELL2.POS.DESC')"
+      max-width-class="max-w-none"
     >
-      <header class="flex flex-wrap items-center gap-3">
-        <h1 class="text-lg font-extrabold text-n-slate-12">
-          {{ t('KALO_POS.TITLE') }}
-        </h1>
+      <template #actions>
         <input
           v-model="search"
           data-tour="pos-search"
           type="search"
           :aria-label="t('KALO_POS.SEARCH')"
           :placeholder="t('KALO_POS.SEARCH')"
-          class="flex-1 min-w-44"
+          class="flex-1 sm:w-64 min-w-44"
           :class="[inputClass]"
           @input="onSearch"
         />
+        <router-link
+          :to="{ name: 'kalo_orders' }"
+          class="px-3.5 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 whitespace-nowrap"
+        >
+          {{ t('KALO_POS.EXIT') }}
+        </router-link>
         <button
           v-if="!isEmpty"
           type="button"
@@ -143,98 +150,45 @@ const inputClass =
           <KaloIcon name="plus" class="size-4" />
           {{ t('KALO_POS.ADD_PRODUCT') }}
         </button>
-        <router-link
-          :to="{ name: 'kalo_orders' }"
-          class="px-3.5 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2 whitespace-nowrap"
-        >
-          {{ t('KALO_POS.EXIT') }}
-        </router-link>
-      </header>
-
+      </template>
+    </KaloPageHeader>
+    <div class="flex flex-col flex-1 min-h-0 md:flex-row">
       <div
-        v-if="isEmpty"
-        data-test="pos-empty"
-        class="flex flex-col items-center gap-4 py-16"
+        data-tour="pos-products"
+        class="flex flex-col flex-1 gap-4 p-5 md:overflow-auto"
       >
-        <p class="text-sm text-n-slate-11">{{ t('KALO_POS.EMPTY') }}</p>
-        <button
-          v-if="!showForm"
-          type="button"
-          data-tour="pos-add"
-          class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
-          @click="showForm = true"
+        <div
+          v-if="isEmpty"
+          data-test="pos-empty"
+          class="flex flex-col items-center gap-4 py-16"
         >
-          {{ t('KALO_POS.ADD_PRODUCT') }}
-        </button>
-        <form
-          v-else
-          class="flex flex-col w-full max-w-sm gap-3"
-          @submit.prevent="saveProduct"
-        >
-          <input
-            v-for="field in PRODUCT_FIELDS"
-            :key="field.key"
-            v-model="form[field.key]"
-            :type="field.type"
-            :min="field.min"
-            :step="field.step"
-            :data-test="field.dataTest"
-            :aria-label="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
-            :placeholder="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
-            :class="inputClass"
-          />
+          <p class="text-sm text-n-slate-11">{{ t('KALO_POS.EMPTY') }}</p>
           <button
-            type="submit"
-            data-test="product-save"
-            :disabled="!canSave"
-            class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600 disabled:opacity-50"
+            v-if="!showForm"
+            type="button"
+            data-tour="pos-add"
+            class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600"
+            @click="showForm = true"
           >
-            {{ t('KALO_POS.PRODUCT_FORM.SUBMIT') }}
+            {{ t('KALO_POS.ADD_PRODUCT') }}
           </button>
-        </form>
-      </div>
-
-      <ProductGrid v-else :products="products" @add="cart.add($event)" />
-    </div>
-    <PosCart ref="cart" data-tour="pos-cart" />
-
-    <div
-      v-if="showForm && !isEmpty"
-      data-test="pos-product-modal"
-      class="fixed inset-0 z-50 grid p-4 overflow-auto bg-black/50 backdrop-blur-sm place-items-center"
-      @click.self="closeProductModal"
-    >
-      <div
-        role="dialog"
-        aria-modal="true"
-        :aria-label="t('KALO_POS.PRODUCT_FORM.TITLE')"
-        class="w-full max-w-md p-6 border shadow-2xl rounded-2xl border-n-weak bg-n-solid-1"
-      >
-        <h2 class="mb-4 text-lg font-extrabold text-n-slate-12">
-          {{ t('KALO_POS.PRODUCT_FORM.TITLE') }}
-        </h2>
-        <form class="flex flex-col gap-3" @submit.prevent="saveProduct">
-          <input
-            v-for="field in PRODUCT_FIELDS"
-            :key="field.key"
-            v-model="form[field.key]"
-            :type="field.type"
-            :min="field.min"
-            :step="field.step"
-            :data-test="field.dataTest"
-            :aria-label="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
-            :placeholder="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
-            :class="inputClass"
-          />
-          <div class="flex items-center justify-end gap-2 pt-2">
-            <button
-              type="button"
-              data-test="product-cancel"
-              class="px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2"
-              @click="closeProductModal"
-            >
-              {{ t('KALO_POS.PRODUCT_FORM.CANCEL') }}
-            </button>
+          <form
+            v-else
+            class="flex flex-col w-full max-w-sm gap-3"
+            @submit.prevent="saveProduct"
+          >
+            <input
+              v-for="field in PRODUCT_FIELDS"
+              :key="field.key"
+              v-model="form[field.key]"
+              :type="field.type"
+              :min="field.min"
+              :step="field.step"
+              :data-test="field.dataTest"
+              :aria-label="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
+              :placeholder="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
+              :class="inputClass"
+            />
             <button
               type="submit"
               data-test="product-save"
@@ -243,9 +197,59 @@ const inputClass =
             >
               {{ t('KALO_POS.PRODUCT_FORM.SUBMIT') }}
             </button>
-          </div>
-        </form>
+          </form>
+        </div>
+
+        <ProductGrid v-else :products="products" @add="cart.add($event)" />
       </div>
+      <PosCart ref="cart" data-tour="pos-cart" />
     </div>
+
+    <KaloDrawer
+      v-if="showForm && !isEmpty"
+      data-test="pos-product-modal"
+      :title="t('KALO_POS.PRODUCT_FORM.TITLE')"
+      @close="closeProductModal"
+    >
+      <form
+        id="pos-product-form"
+        class="flex flex-col gap-3"
+        @submit.prevent="saveProduct"
+      >
+        <input
+          v-for="field in PRODUCT_FIELDS"
+          :key="field.key"
+          v-model="form[field.key]"
+          :type="field.type"
+          :min="field.min"
+          :step="field.step"
+          :data-test="field.dataTest"
+          :aria-label="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
+          :placeholder="t(`KALO_POS.PRODUCT_FORM.${field.labelKey}`)"
+          :class="inputClass"
+        />
+      </form>
+      <template #footer>
+        <div class="flex items-center justify-end gap-2">
+          <button
+            type="button"
+            data-test="product-cancel"
+            class="px-4 py-2 text-sm font-semibold border rounded-[10px] border-n-weak text-n-slate-12 hover:bg-n-alpha-2"
+            @click="closeProductModal"
+          >
+            {{ t('KALO_POS.PRODUCT_FORM.CANCEL') }}
+          </button>
+          <button
+            type="submit"
+            form="pos-product-form"
+            data-test="product-save"
+            :disabled="!canSave"
+            class="px-4 py-2 text-sm font-semibold text-white rounded-[10px] bg-woot-500 hover:bg-woot-600 disabled:opacity-50"
+          >
+            {{ t('KALO_POS.PRODUCT_FORM.SUBMIT') }}
+          </button>
+        </div>
+      </template>
+    </KaloDrawer>
   </section>
 </template>
