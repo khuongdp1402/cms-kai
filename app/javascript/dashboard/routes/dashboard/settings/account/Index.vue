@@ -63,6 +63,7 @@ export default {
       uiFlags: 'accounts/getUIFlags',
       isFeatureEnabledonAccount: 'accounts/isFeatureEnabledonAccount',
       isOnChatwootCloud: 'globalConfig/isOnChatwootCloud',
+      currentUser: 'getCurrentUser',
     }),
     showAudioTranscriptionConfig() {
       return this.isFeatureEnabledonAccount(
@@ -262,7 +263,8 @@ export default {
       <div v-if="!uiFlags.isFetchingItem && isOnChatwootCloud">
         <AccountDelete />
       </div>
-      <BuildInfo />
+      <!-- Version and build are platform details: SuperAdmin only. -->
+      <BuildInfo v-if="currentUser?.type === 'SuperAdmin'" />
     </div>
   </SettingsLayout>
 </template>

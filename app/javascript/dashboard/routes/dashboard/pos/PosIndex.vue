@@ -109,7 +109,7 @@ const PRODUCT_FIELDS = [
 ];
 
 const inputClass =
-  'w-full px-3 py-2 mb-0 text-sm border rounded-[10px] outline-none border-n-strong bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
+  'w-full px-3 py-2 mb-0 text-sm border border-solid rounded-[10px] outline-none border-n-strong bg-n-solid-1 text-n-slate-12 focus:border-n-brand focus:ring-2 focus:ring-n-brand/15';
 </script>
 
 <template>

@@ -768,7 +768,8 @@
             "PLACEHOLDER": "Chọn quốc gia"
           },
           "EMAIL_ADDRESS": {
-            "PLACEHOLDER": "Nhập địa chỉ email"
+            "PLACEHOLDER": "Nhập địa chỉ email",
+            "DUPLICATE": "Email này đang dùng cho một khách khác."
           },
           "FIRST_NAME": {
             "PLACEHOLDER": "Nhập tên"
@@ -777,11 +778,13 @@
             "PLACEHOLDER": "Nhập họ"
           },
           "PHONE_NUMBER": {
-            "PLACEHOLDER": "Nhập số điện thoại"
+            "PLACEHOLDER": "Nhập số điện thoại",
+            "DUPLICATE": "Số điện thoại này đang dùng cho một khách khác."
           }
         },
         "SUCCESS_MESSAGE": "Đã cập nhật khách",
-        "UPDATE_BUTTON": "Cập nhật khách"
+        "UPDATE_BUTTON": "Cập nhật khách",
+        "TITLE": "Thông tin khách"
       },
       "SOCIAL_MEDIA": {
         "FORM": {
@@ -823,16 +826,22 @@
       "CREATED_AT": "Tạo {date}",
       "DELETE_CONTACT_DESCRIPTION": "Xóa vĩnh viễn khách này. Thao tác không thể hoàn tác",
       "DELETE_DIALOG": {
-        "DESCRIPTION": "Bạn có chắc muốn xóa khách này?"
+        "DESCRIPTION": "Bạn có chắc muốn xóa khách này?",
+        "API": {
+          "SUCCESS_MESSAGE": "Đã xóa khách",
+          "ERROR_MESSAGE": "Chưa xóa được khách, bạn thử lại sau."
+        }
       },
-      "LAST_ACTIVITY": "Hoạt động {date}"
+      "LAST_ACTIVITY": "Hoạt động {date}",
+      "DELETE_CONTACT": "Xóa khách"
     },
     "EMPTY_STATE": {
       "ACTIVE_EMPTY_STATE_TITLE": "Hiện không có khách nào đang hoạt động 🌙",
       "BUTTON_LABEL": "Thêm khách",
       "LIST_EMPTY_STATE_TITLE": "Chế độ xem này chưa có khách nào 📋",
       "SUBTITLE": "Bắt đầu thêm khách bằng nút bên dưới",
-      "TITLE": "Tài khoản chưa có khách nào"
+      "TITLE": "Tài khoản chưa có khách nào",
+      "SEARCH_EMPTY_STATE_TITLE": "Không có khách nào khớp với tìm kiếm 🔍"
     },
     "FILTER": {
       "ACTIVE_FILTERS": {
@@ -846,7 +855,8 @@
       "SEGMENT": {
         "INPUT_PLACEHOLDER": "Nhập tên phân khúc",
         "LABEL": "Tên phân khúc"
-      }
+      },
+      "TITLE": "Lọc khách"
     },
     "HEADER": {
       "ACTIONS": {
@@ -857,7 +867,10 @@
           "ERROR_MESSAGE": "Không lưu được khách, vui lòng thử lại sau.",
           "EXPORT_CONTACT": "Xuất danh sách khách",
           "IMPORT_CONTACT": "Nhập danh sách khách",
-          "SAVE_CONTACT": "Lưu khách"
+          "SAVE_CONTACT": "Lưu khách",
+          "EMAIL_ADDRESS_DUPLICATE": "Email này đang dùng cho một khách khác.",
+          "PHONE_NUMBER_DUPLICATE": "Số điện thoại này đang dùng cho một khách khác.",
+          "SUCCESS_MESSAGE": "Đã lưu khách"
         },
         "EXPORT_CONTACT": {
           "CONFIRM": "Xuất",
@@ -881,7 +894,8 @@
         "IMPORT_CONTACT": {
           "CHOOSE_FILE": "Chọn tệp",
           "SUCCESS_MESSAGE": "Bạn sẽ nhận email khi quá trình nhập hoàn tất.",
-          "TITLE": "Nhập danh sách khách"
+          "TITLE": "Nhập danh sách khách",
+          "DESCRIPTION": "Nhập danh sách khách từ tệp CSV."
         },
         "ORDER": {
           "LABEL": "Thứ tự",
@@ -900,7 +914,12 @@
       },
       "ACTIVE_TITLE": "Khách đang hoạt động",
       "BLOCK_CONTACT": "Chặn khách",
-      "UNBLOCK_CONTACT": "Bỏ chặn khách"
+      "UNBLOCK_CONTACT": "Bỏ chặn khách",
+      "TITLE": "Khách",
+      "SEARCH_TITLE": "Tìm khách",
+      "BREADCRUMB": {
+        "CONTACTS": "Khách"
+      }
     },
     "LOAD_MORE": "Tải thêm",
     "SIDEBAR": {
@@ -924,7 +943,14 @@
         "PLACEHOLDER": "Tìm hồ sơ chính",
         "PRIMARY_HELP_LABEL": "Được giữ lại",
         "PRIMARY_REQUIRED_ERROR": "Vui lòng chọn khách để gộp trước khi tiếp tục",
-        "SEARCH_ERROR_MESSAGE": "Không tìm được khách, vui lòng thử lại sau."
+        "SEARCH_ERROR_MESSAGE": "Không tìm được khách, vui lòng thử lại sau.",
+        "TITLE": "Gộp hồ sơ khách",
+        "PRIMARY": "Hồ sơ chính",
+        "SEARCH_PLACEHOLDER": "Tìm khách",
+        "SUCCESS_MESSAGE": "Đã gộp hồ sơ khách",
+        "BUTTONS": {
+          "CONFIRM": "Gộp hồ sơ"
+        }
       },
       "NOTES": {
         "ADD_NOTE": "Thêm ghi chú",
@@ -942,6 +968,9 @@
         "HISTORY": "Lịch sử",
         "MEDIA": "Tệp",
         "MERGE": "Gộp"
+      },
+      "HISTORY": {
+        "EMPTY_STATE": "Khách này chưa có cuộc trò chuyện nào trước đây"
       }
     },
     "PAGINATION_FOOTER": {
@@ -1656,6 +1685,10 @@
       "AUTO_RESOLVE_IGNORE_WAITING": {
         "HELP": "Khi bật, hệ thống sẽ bỏ qua việc giải quyết các cuộc trò chuyện vẫn đang chờ nhân viên phản hồi.",
         "LABEL": "Loại trừ các cuộc trò chuyện chưa được xử lý"
+      },
+      "ACCOUNT_ID": {
+        "TITLE": "Mã cửa hàng",
+        "NOTE": "Dùng khi kết nối Kalo với phần mềm khác qua API."
       }
     },
     "LIMITS_UPGRADE": "Tài khoản của bạn đã vượt quá giới hạn sử dụng, vui lòng nâng cấp gói để tiếp tục sử dụng",
