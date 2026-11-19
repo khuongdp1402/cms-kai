@@ -175,6 +175,12 @@ describe('Kalo metrics are consistent across Báo cáo and Tổng quan', () => {
     expect(
       wrapper.find('[data-test="report-kpi-REVENUE"]').attributes('title')
     ).toBe(viMessages.KALO_METRICS.REVENUE);
+    const contacts = wrapper.find('[data-test="report-kpi-CONTACTS"]');
+    expect(contacts.text()).toContain('1');
+    expect(contacts.attributes('title')).toBe(
+      viMessages.KALO_METRICS.NEW_CUSTOMERS
+    );
+    expect(viMessages.KALO_METRICS.NEW_CUSTOMERS).toBeTruthy();
     expect(wrapper.find('[data-test="empty"]').exists()).toBe(false);
   });
 

@@ -19,13 +19,14 @@ class Kchat::Reports
   end
 
   # revenue/orders_count: paid orders (the orders behind the revenue); new_orders_count: every non-cancelled order created
-  # in the period ("Đơn mới"). Definitions live in Kchat::Metrics, shared with Tổng quan.
+  # in the period ("Đơn mới"); new_contacts: contacts created in the period who wrote or bought ("Khách mới"). Definitions
+  # live in Kchat::Metrics, shared with Tổng quan.
   def summary
     totals = metrics.totals
     {
       range: @range, today: today.iso8601, revenue: totals[:revenue], orders_count: totals[:paid_orders_count],
       new_orders_count: totals[:new_orders_count],
-      new_contacts: Contact.where(account_id: @account.id, created_at: window).count,
+      new_contacts: metrics.new_customers_count,
       waiting_messages: Conversation.where(account_id: @account.id, status: :open).where.not(waiting_since: nil).count,
       channels: channels, daily: daily, top_products: top_products
     }

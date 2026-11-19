@@ -6,7 +6,14 @@ RSpec.describe Kchat::QualityOverviewReport do
   let(:account) { create(:account) }
   let(:inbox) { create(:inbox, account: account) }
   let(:contact) { create(:contact, account: account) }
+  let(:agent) { create(:user, account: account) }
 
+  def message(conversation, type, at:)
+    create(:message, account: account, inbox: inbox, conversation: conversation, message_type: type, created_at: at,
+                     sender: type == :incoming ? contact : agent)
+  end
+
+  # First response: customer's first message → first staff reply (2 minutes for conv_ok).
   it 'computes order KPIs, chat-to-order CVR, SLA, marketing counts, and SKU quality from real records' do
     prod = Kchat::Product.create!(account: account, name: 'Nến trầm', price: 200_000, stock: 2, active: true)
     conv_ok = create(
@@ -17,7 +24,7 @@ RSpec.describe Kchat::QualityOverviewReport do
       created_at: 10.minutes.ago,
       first_reply_created_at: 8.minutes.ago,
       waiting_since: nil
-    )
+    ).tap { |conv| [[:incoming, 10], [:outgoing, 8]].each { |type, minutes| message(conv, type, at: minutes.minutes.ago) } }
     create(
       :conversation,
       account: account,
@@ -26,7 +33,7 @@ RSpec.describe Kchat::QualityOverviewReport do
       status: :open,
       created_at: 25.minutes.ago,
       waiting_since: 20.minutes.ago
-    )
+    ).tap { |waiting| message(waiting, :incoming, at: 25.minutes.ago) }
     Kchat::Order.create_with_items!(
       account: account,
       attributes: { source: 'chat', payment_method: 'cash', conversation_id: conv_ok.id, contact_id: contact.id },
@@ -64,6 +71,7 @@ RSpec.describe Kchat::QualityOverviewReport do
 
   it 'reports the chat order of the reported case and keeps the POS sale out of the chat conversion' do
     chat = create(:conversation, account: account, inbox: inbox, contact: contact)
+    message(chat, :incoming, at: Time.current)
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'chat', payment_method: 'transfer_qr', conversation: chat },
                                     items: [{ name: 'Nến', unit_price: 150_000, quantity: 1 }])
     Kchat::Order.create_with_items!(account: account, attributes: { source: 'pos', payment_method: 'cash' },

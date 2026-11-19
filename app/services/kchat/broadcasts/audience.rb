@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 # Resolves who a broadcast targets (labels and/or a saved contact segment) and how many of them each inbox can reach.
+# Only contacts who wrote to the shop count (see Kchat::Broadcasts::Dispatcher): labels and segments are intersected with them.
 class Kchat::Broadcasts::Audience
   EXCLUDED_CHANNELS = %w[Channel::Voice].freeze
   FILTER_ERRORS = [
@@ -52,12 +53,20 @@ class Kchat::Broadcasts::Audience
   private
 
   def contacts_scope(labels, contact_ids)
-    scope = @account.contacts
+    scope = @account.contacts.where(id: chatted_contact_ids)
     scope = scope.where(id: contact_ids) unless contact_ids.nil?
     return scope if labels.empty?
 
     tagged_ids = @account.contacts.tagged_with(labels, any: true).pluck(:id) +
                  @account.conversations.tagged_with(labels, any: true).pluck(:contact_id)
     scope.where(id: tagged_ids.uniq)
+  end
+
+  def chatted_contact_ids
+    ContactInbox.joins(:inbox)
+                .where(inboxes: { account_id: @account.id }).where.not(inboxes: { channel_type: EXCLUDED_CHANNELS })
+                .where("contact_inboxes.source_id NOT LIKE 'comment:%'")
+                .where(Kchat::Broadcasts::Dispatcher::CHATTED_SQL)
+                .select(:contact_id)
   end
 end

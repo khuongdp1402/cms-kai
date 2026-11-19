@@ -84,7 +84,14 @@ RSpec.describe Kchat::Reports do
   end
 
   it 'counts new contacts in range and waiting conversations' do
-    create(:contact, account: account, created_at: now - 1.hour)
+    # "Khách mới" = contacts created in the period who wrote or bought; an anonymous widget visitor is not one.
+    writer = create(:contact, account: account, created_at: now - 1.hour)
+    writer_inbox = create(:inbox, account: account)
+    chat = create(:conversation, account: account, inbox: writer_inbox, contact: writer,
+                                 contact_inbox: create(:contact_inbox, contact: writer, inbox: writer_inbox))
+    create(:message, account: account, inbox: writer_inbox, conversation: chat, sender: writer, message_type: :incoming)
+    chat.update!(waiting_since: nil) # answered: only the conversation below waits
+    create(:contact, account: account, name: 'lingering-grass-348', created_at: now - 1.hour)
     create(:contact, account: account, created_at: now - 3.days)
     make_conversation.update!(waiting_since: now - 1.hour)
     make_conversation.update!(waiting_since: nil)

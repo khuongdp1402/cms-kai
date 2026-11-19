@@ -42,7 +42,7 @@ RSpec.describe Kchat::BroadcastsService do
     zalo_inbox = create(:inbox, account: account, channel: zalo_channel)
 
     make_contact_with_inbox(inbox: zalo_inbox, name: 'Minh Thư', label: 'vip', incoming_at: 10.days.ago)
-    make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: nil)
+    make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: 30.days.ago)
 
     preview = service.preview(inbox_id: zalo_inbox.id, labels: ['vip'])
     expect(preview[:requires_24h_window]).to be(false)
@@ -53,7 +53,7 @@ RSpec.describe Kchat::BroadcastsService do
     zalo_channel = create(:channel_zalo_personal, account: account)
     zalo_inbox = create(:inbox, account: account, channel: zalo_channel)
     ci1 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Minh Thư', label: 'vip', incoming_at: 10.days.ago)
-    ci2 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: nil)
+    ci2 = make_contact_with_inbox(inbox: zalo_inbox, name: 'Quốc Bảo', label: 'vip', incoming_at: 30.days.ago)
 
     record = service.create_broadcast!(
       user: admin,
@@ -66,7 +66,8 @@ RSpec.describe Kchat::BroadcastsService do
     expect(updated).to include('status' => 'completed', 'sent_count' => 2, 'failed_count' => 0)
     expect(ci1.conversations.last.messages.outgoing.last.content).to eq('Chào Minh Thư, Kalo Candles tặng bạn mã giảm 20%!')
     expect(ci2.conversations.last.messages.outgoing.last.content).to eq('Chào Quốc Bảo, Kalo Candles tặng bạn mã giảm 20%!')
-    expect(ci1.conversations.last.additional_attributes).to include('utm_source' => 'broadcast', 'utm_campaign' => 'uu_dai_tet_2027')
+    expect(ci1.conversations.last.additional_attributes).to include('kchat_broadcast_tag' => 'uu_dai_tet_2027')
+    expect(ci1.conversations.last.additional_attributes['kchat_campaign_at']).to be_present
     expect(ci1.conversations.last.label_list).to include('uu_dai_tet_2027')
   end
 end

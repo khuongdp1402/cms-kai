@@ -49,10 +49,6 @@ class Kchat::QualityOverviewReport
     metrics.window
   end
 
-  def conversations_scope
-    @conversations_scope ||= metrics.conversations
-  end
-
   def open_waiting_scope
     @open_waiting_scope ||= Conversation.where(account_id: @account.id, status: :open).where.not(waiting_since: nil)
   end
@@ -96,16 +92,9 @@ class Kchat::QualityOverviewReport
     }
   end
 
+  # Customer's first message → first staff reply, broadcasts excluded (definition in Kchat::Metrics).
   def replied_sla_metrics
-    row = conversations_scope.where.not(first_reply_created_at: nil).pick(
-      Arel.sql('AVG(GREATEST(EXTRACT(EPOCH FROM (first_reply_created_at - created_at)), 0))'),
-      Arel.sql("SUM(CASE WHEN EXTRACT(EPOCH FROM (first_reply_created_at - created_at)) <= #{SLA_TARGET_SECONDS} THEN 1 ELSE 0 END)"),
-      Arel.sql('COUNT(*)')
-    )
-    replied_total = row[2].to_i
-    return [nil, nil] unless replied_total.positive?
-
-    [row[0].to_f.round, (row[1].to_i * 100.0 / replied_total).round(1)]
+    metrics.first_response_stats(SLA_TARGET_SECONDS)
   end
 
   def marketing_kpis
