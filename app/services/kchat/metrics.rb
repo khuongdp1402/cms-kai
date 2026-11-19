@@ -33,14 +33,19 @@ class Kchat::Metrics
     EXISTS (SELECT 1 FROM messages incoming_messages WHERE incoming_messages.conversation_id = conversations.id
     AND incoming_messages.message_type = #{INCOMING})
   SQL
+  # Each EXISTS is filtered by the contact's account so it stays on that account's rows (no OR across tables).
   CUSTOMER_SQL = <<~SQL.squish.freeze
     EXISTS (SELECT 1 FROM conversations customer_conversations JOIN messages customer_messages
     ON customer_messages.conversation_id = customer_conversations.id
-    WHERE customer_conversations.contact_id = contacts.id AND customer_messages.message_type = #{INCOMING})
+    WHERE customer_conversations.account_id = contacts.account_id AND customer_conversations.contact_id = contacts.id
+    AND customer_messages.message_type = #{INCOMING})
     OR EXISTS (SELECT 1 FROM kchat_orders customer_orders
-    LEFT JOIN conversations order_conversations ON order_conversations.id = customer_orders.conversation_id
-    WHERE customer_orders.status <> 'cancelled'
-    AND (customer_orders.contact_id = contacts.id OR order_conversations.contact_id = contacts.id))
+    WHERE customer_orders.account_id = contacts.account_id AND customer_orders.contact_id = contacts.id
+    AND customer_orders.status <> 'cancelled')
+    OR EXISTS (SELECT 1 FROM conversations order_conversations JOIN kchat_orders conversation_orders
+    ON conversation_orders.conversation_id = order_conversations.id
+    WHERE order_conversations.account_id = contacts.account_id AND order_conversations.contact_id = contacts.id
+    AND conversation_orders.account_id = contacts.account_id AND conversation_orders.status <> 'cancelled')
   SQL
   FIRST_INCOMING_JOIN = <<~SQL.squish.freeze
     CROSS JOIN LATERAL (SELECT MIN(first_messages.created_at) AS asked_at FROM messages first_messages
