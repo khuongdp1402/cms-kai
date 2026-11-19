@@ -162,18 +162,22 @@ describe('KaloSetupChecklist', () => {
     );
     // Remounting the card triggers a refresh; the card must not disappear.
     const { wrapper: second } = await mountChecklist();
-    expect(
-      second.find('[data-test-id="kalo-setup-checklist"]').exists()
-    ).toBe(true);
+    expect(second.find('[data-test-id="kalo-setup-checklist"]').exists()).toBe(
+      true
+    );
     release({ data: { payload: [{ id: 1 }] } });
     await flushPromises();
     expect(
-      second.find('[data-test-id="kalo-setup-step-product"]').attributes('data-state')
+      second
+        .find('[data-test-id="kalo-setup-step-product"]')
+        .attributes('data-state')
     ).toBe('done');
   });
 
   it('does not fetch while the list is hidden', async () => {
-    await mountChecklist({ uiSettings: { kalo_setup: { 1: { hidden: true } } } });
+    await mountChecklist({
+      uiSettings: { kalo_setup: { 1: { hidden: true } } },
+    });
     expect(productsAPI.get).not.toHaveBeenCalled();
   });
 });

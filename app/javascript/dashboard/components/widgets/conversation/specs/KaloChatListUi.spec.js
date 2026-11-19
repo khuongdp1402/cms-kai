@@ -124,9 +124,9 @@ describe('KaloChatListEmpty', () => {
     window.innerWidth = 400;
     const wrapper = await mountWith(KaloChatListEmpty);
     await flushPromises();
-    expect(
-      wrapper.find('[data-test-id="kalo-setup-checklist"]').exists()
-    ).toBe(true);
+    expect(wrapper.find('[data-test-id="kalo-setup-checklist"]').exists()).toBe(
+      true
+    );
     const filtered = await mountWith(KaloChatListEmpty, {
       props: { isFiltered: true },
     });
@@ -138,9 +138,9 @@ describe('KaloChatListEmpty', () => {
     window.innerWidth = 1280;
     const desktop = await mountWith(KaloChatListEmpty);
     await flushPromises();
-    expect(
-      desktop.findComponent({ name: 'KaloSetupChecklist' }).exists()
-    ).toBe(false);
+    expect(desktop.findComponent({ name: 'KaloSetupChecklist' }).exists()).toBe(
+      false
+    );
     window.innerWidth = originalWidth;
   });
 

@@ -87,10 +87,10 @@ describe('Kalo tours', () => {
     expect(stepsForWidth(findTour('pos'), 400)).toEqual([]);
   });
 
-  it('runs driver.js with Kalo buttons, "Bước x/y" and a Bỏ qua button', () => {
+  it('runs driver.js with Kalo buttons, "Bước x/y" and a Bỏ qua button', async () => {
     addTargets(['orders-create', 'orders-tabs']);
     const onClose = vi.fn();
-    expect(runTour(findTour('orders'), { t, onClose })).toBe(true);
+    expect(await runTour(findTour('orders'), { t, onClose })).toBe(true);
     expect(lastConfig).toMatchObject({
       popoverClass: 'kalo-tour',
       showProgress: true,
@@ -118,9 +118,42 @@ describe('Kalo tours', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it('does not start when no target is on the page', () => {
-    expect(runTour(findTour('orders'), { t })).toBe(false);
+  it('does not start when no target is on the page', async () => {
+    expect(await runTour(findTour('orders'), { t })).toBe(false);
     expect(driver).not.toHaveBeenCalled();
+  });
+
+  it('turns off driver arrow keys (typing in the composer) and closes on Esc', async () => {
+    addTargets(['chat-composer', 'chat-order-qr']);
+    const onClose = vi.fn();
+    await runTour(findTour('messages'), { t, onClose });
+    expect(lastConfig.allowKeyboardControl).toBe(false);
+    const instance = driver.mock.results[0].value;
+
+    const input = document.createElement('textarea');
+    document.body.appendChild(input);
+    input.focus();
+    input.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true })
+    );
+    expect(instance.destroy).not.toHaveBeenCalled();
+
+    input.dispatchEvent(
+      new KeyboardEvent('keydown', { key: 'Escape', bubbles: true })
+    );
+    expect(instance.destroy).toHaveBeenCalledTimes(1);
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    // The listener is gone once the tour has ended.
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(instance.destroy).toHaveBeenCalledTimes(1);
+  });
+
+  it('loads driver.js only when a tour runs', async () => {
+    expect(driver).not.toHaveBeenCalled();
+    addTargets(['orders-create']);
+    await runTour(findTour('orders'), { t });
+    expect(driver).toHaveBeenCalledTimes(1);
   });
 
   describe('KaloTourHost', () => {
