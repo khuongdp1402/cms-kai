@@ -88,6 +88,42 @@ en:
       manage: Manage
       features: Features
       agent_overage: "The system has %{count} agents. Please add more licenses to add more users."
+    kalo_features:
+      title: Features
+      intro: Turn feature groups on or off for this shop. Turning one off only hides it in the app; data and APIs stay.
+      submit: Save features
+      saved: Shop features saved.
+      groups:
+        core: Core modules (on for new shops)
+        advanced: Advanced features (hidden for new shops)
+      flags:
+        kalo_comments:
+          name: Comments
+          description: Collect Facebook/Instagram comments, hide bad ones and reply privately.
+        kalo_campaigns:
+          name: Campaigns
+          description: Step-by-step messaging campaigns with revenue tracking.
+        kalo_brand:
+          name: Brand
+          description: Brand profile, content calendar and AI ideas.
+        kalo_ai_assistant:
+          name: AI assistant
+          description: Assistant that answers how-to questions and explains shop numbers.
+        kalo_pos:
+          name: Point of sale (POS)
+          description: Counter sales screen for quick orders and payments.
+        kalo_advanced_automation:
+          name: Advanced operations
+          description: Automation, macros, custom attributes, bots, webhooks and dashboard apps.
+        kalo_help_center:
+          name: Help center
+          description: Write articles and publish them on the shop help center.
+        kalo_detailed_reports:
+          name: Detailed reports
+          description: Agent, label, team, inbox and CSAT reports.
+        kalo_extra_channels:
+          name: Extra channels
+          description: SMS, Email, API, Telegram, Line, WhatsApp and Zalo OA (token).
     account_actions:
       seed_intro: Generate demo seed data in this account.
       seed_warning: "Note: this clears all existing data in this account."

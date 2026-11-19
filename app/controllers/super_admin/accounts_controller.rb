@@ -1,5 +1,6 @@
 class SuperAdmin::AccountsController < SuperAdmin::ApplicationController
   before_action :validate_suspension_metadata, only: :update
+  before_action :verify_authenticity_token, only: :kalo_features
 
   # Overwrite any of the RESTful controller actions to implement custom behavior
   # For example, you may want to send an email after a foo is updated.
@@ -64,6 +65,18 @@ class SuperAdmin::AccountsController < SuperAdmin::ApplicationController
     # rubocop:disable Rails/I18nLocaleTexts
     redirect_back(fallback_location: [namespace, requested_resource], notice: 'Cache keys cleared')
     # rubocop:enable Rails/I18nLocaleTexts
+  end
+
+  # Kalo feature groups (ADR-023). The super admin skips CSRF globally (upstream); this form checks it.
+  def kalo_features
+    enabled = Array(params[:kalo_features]).compact_blank
+    before = Kchat::Features.states(requested_resource)
+    Kchat::Features.update!(requested_resource, enabled)
+    Rails.logger.info("[kalo_features] super_admin=#{current_super_admin.email} account=#{requested_resource.id} " \
+                      "before=#{before.select { |_n, on| on }.keys} after=#{enabled}")
+    redirect_to [namespace, requested_resource], notice: t('kalo_super_admin.kalo_features.saved')
+  rescue ArgumentError => e
+    render plain: e.message, status: :unprocessable_entity
   end
 
   def destroy

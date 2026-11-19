@@ -429,6 +429,58 @@ body.kalo-admin {
   &:focus { border-color: var(--kalo-action); box-shadow: var(--kalo-focus); outline: 2px solid transparent; }
 }
 
+// ---- Account features (ADR-023) ----
+.kalo-features {
+  background: var(--kalo-surface);
+  border: 1px solid var(--kalo-line);
+  border-radius: var(--kalo-radius);
+  box-shadow: var(--kalo-shadow);
+  padding: 20px;
+}
+.kalo-features__title { color: var(--kalo-ink); font-size: 18px; font-weight: 700; margin: 0 0 4px; }
+.kalo-features__intro { color: var(--kalo-muted); margin: 0 0 16px; }
+.kalo-features__group { border: 0; margin: 0 0 16px; padding: 0; }
+.kalo-admin .kalo-features__legend { color: var(--kalo-ink); font-size: 14px; font-weight: 600; margin-bottom: 8px; padding: 0; }
+.kalo-switch {
+  align-items: flex-start;
+  border-top: 1px solid var(--kalo-line);
+  cursor: pointer;
+  display: flex;
+  gap: 12px;
+  padding: 12px 0;
+  position: relative;
+}
+.kalo-switch__input { height: 1px; opacity: 0; position: absolute; width: 1px; }
+.kalo-switch__track {
+  background: var(--kalo-muted);
+  border-radius: 999px;
+  flex: none;
+  height: 24px;
+  margin-top: 2px;
+  position: relative;
+  transition: background .15s;
+  width: 42px;
+
+  &::after {
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 2px rgba(24, 19, 17, .25);
+    content: '';
+    height: 18px;
+    left: 3px;
+    position: absolute;
+    top: 3px;
+    transition: transform .15s;
+    width: 18px;
+  }
+}
+.kalo-switch__input:checked + .kalo-switch__track { background: var(--kalo-action); }
+.kalo-switch__input:checked + .kalo-switch__track::after { transform: translateX(18px); }
+.kalo-switch__input:focus-visible + .kalo-switch__track { box-shadow: var(--kalo-focus); }
+.kalo-switch__text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.kalo-switch__name { color: var(--kalo-ink); font-weight: 600; }
+.kalo-switch__hint { color: var(--kalo-muted); font-size: 13px; }
+
 // ---- Login ----
 .kalo-login { background: var(--kalo-bg); min-height: 100vh; }
 .kalo-login__main { align-items: center; display: flex; flex-direction: column; gap: 24px; justify-content: center; min-height: 100vh; padding: 32px 16px; }
