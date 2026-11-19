@@ -9,6 +9,7 @@ import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloSetupChecklist from 'dashboard/components-next/guide/KaloSetupChecklist.vue';
+import KaloInfoHint from 'dashboard/components-next/guide/KaloInfoHint.vue';
 import MultiBrandOverviewBar from '../reports/MultiBrandOverviewBar.vue';
 import { formatMoney } from '../reports/formatMoney';
 
@@ -186,8 +187,14 @@ onMounted(load);
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-semibold text-n-slate-10">
+            <span
+              class="inline-flex items-center gap-1 text-xs font-semibold text-n-slate-10"
+            >
               {{ t('KALO_OVERVIEW.KPI.REVENUE') }}
+              <KaloInfoHint
+                :label="t('KALO_POLISH3.HINT_LABEL')"
+                :text="t('KALO_OVERVIEW.KPI.REVENUE_HINT')"
+              />
             </span>
             <span
               class="px-2 py-0.5 text-[11px] font-semibold rounded-full bg-n-teal-3 text-n-teal-11 tabular-nums"
@@ -217,8 +224,14 @@ onMounted(load);
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-semibold text-n-slate-10">
+            <span
+              class="inline-flex items-center gap-1 text-xs font-semibold text-n-slate-10"
+            >
               {{ t('KALO_OVERVIEW.KPI.CHAT_CVR') }}
+              <KaloInfoHint
+                :label="t('KALO_POLISH3.HINT_LABEL')"
+                :text="t('KALO_OVERVIEW.KPI.CHAT_CVR_HINT')"
+              />
             </span>
             <KaloIcon name="bag" class="size-4 text-n-slate-10" />
           </div>
@@ -243,8 +256,14 @@ onMounted(load);
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-semibold text-n-slate-10">
+            <span
+              class="inline-flex items-center gap-1 text-xs font-semibold text-n-slate-10"
+            >
               {{ t('KALO_OVERVIEW.KPI.CSKH_SLA') }}
+              <KaloInfoHint
+                :label="t('KALO_POLISH3.HINT_LABEL')"
+                :text="t('KALO_OVERVIEW.KPI.CSKH_SLA_HINT')"
+              />
             </span>
             <span
               class="px-2 py-0.5 text-[11px] font-semibold rounded-full tabular-nums"
@@ -281,8 +300,14 @@ onMounted(load);
           class="flex flex-col gap-1.5 p-4 border shadow-sm rounded-2xl bg-n-solid-1 border-n-weak"
         >
           <div class="flex items-center justify-between gap-2">
-            <span class="text-xs font-semibold text-n-slate-10">
+            <span
+              class="inline-flex items-center gap-1 text-xs font-semibold text-n-slate-10"
+            >
               {{ t('KALO_OVERVIEW.KPI.CONTENT_TITLE') }}
+              <KaloInfoHint
+                :label="t('KALO_POLISH3.HINT_LABEL')"
+                :text="t('KALO_OVERVIEW.KPI.CONTENT_HINT')"
+              />
             </span>
             <KaloIcon name="spark" class="size-4 text-n-brand" />
           </div>

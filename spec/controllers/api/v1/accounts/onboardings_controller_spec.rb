@@ -59,6 +59,18 @@ RSpec.describe 'Onboarding API', type: :request do
         expect(attrs['company_size']).to eq('10-50')
       end
 
+      it 'finishes self-hosted onboarding without a website (Kalo: website is optional)' do
+        patch "/api/v1/accounts/#{account.id}/onboarding",
+              params: { name: 'Shop Hoa Mai', industry: 'retail', onboarding_step: 'account_details' },
+              headers: admin.create_new_auth_token, as: :json
+
+        expect(response).to have_http_status(:success)
+        attrs = account.reload.custom_attributes
+        expect(attrs).not_to have_key('onboarding_step')
+        expect(attrs['website']).to be_nil
+        expect(account.inboxes).to be_empty
+      end
+
       context 'when on cloud (inbox setup is a cloud-only step)' do
         before { allow(ChatwootApp).to receive(:chatwoot_cloud?).and_return(true) }
 

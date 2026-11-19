@@ -1,5 +1,6 @@
 import { mount } from '@vue/test-utils';
 import ReportDrilldownCard from '../ReportDrilldownCard.vue';
+import TimeAgo from 'dashboard/components/ui/TimeAgo.vue';
 
 vi.mock('vue-router', () => ({
   useRoute: () => ({
@@ -127,7 +128,9 @@ describe('ReportDrilldownCard.vue', () => {
       .find(label => label.includes('Message created at'));
 
     expect(wrapper.text()).toContain('2m');
-    expect(wrapper.text()).not.toContain('4d • 4d');
+    // No conversation TimeAgo on message rows (it shows one time when the
+    // created and last-activity times read the same).
+    expect(wrapper.findComponent(TimeAgo).exists()).toBe(false);
     expect(messageCreatedLabel).toContain('Message created at');
   });
 
@@ -169,7 +172,8 @@ describe('ReportDrilldownCard.vue', () => {
     });
 
     expect(wrapper.text()).toContain('Latest reply');
-    expect(wrapper.text()).toContain('4d • 4d');
+    // TimeAgo shows "4d" once when created and last activity match.
+    expect(wrapper.findComponent(TimeAgo).text()).toBe('4d');
   });
 
   it('renders event time alongside TimeAgo for event-backed conversation rows', () => {
@@ -188,7 +192,8 @@ describe('ReportDrilldownCard.vue', () => {
       .find(label => label.includes('Event occurred at'));
 
     expect(wrapper.text()).toContain('Latest reply');
-    expect(wrapper.text()).toContain('4d • 4d');
+    // TimeAgo shows "4d" once when created and last activity match.
+    expect(wrapper.findComponent(TimeAgo).text()).toBe('4d');
     expect(wrapper.text()).toContain('2m');
     expect(eventOccurredLabel).toContain('Event occurred at');
   });

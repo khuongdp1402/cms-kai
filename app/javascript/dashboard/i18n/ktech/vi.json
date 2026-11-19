@@ -665,7 +665,8 @@
   "COMPONENTS": {
     "CODE": {
       "CODEPEN": "Mở trong CodePen",
-      "COPY_SUCCESSFUL": "Đã sao chép"
+      "COPY_SUCCESSFUL": "Đã sao chép",
+      "BUTTON_TEXT": "Sao chép"
     },
     "FILE_BUBBLE": {
       "INSTAGRAM_STORY_REPLY": "Đã trả lời story của bạn:"
@@ -1126,7 +1127,8 @@
         "SUCCESS": "Cảm ơn bạn đã báo lỗi.",
         "TITLE": "Báo lỗi tin nhắn của AI"
       },
-      "TRANSLATE": "Dịch"
+      "TRANSLATE": "Dịch",
+      "COPY": "Sao chép"
     },
     "CUSTOM_SNOOZE": {
       "APPLY": "Hoãn"
@@ -1261,7 +1263,8 @@
       "REJECT_CALL": "Từ chối",
       "UNMUTE": "Bật mic",
       "VIEW_CHAT_HISTORY": "Xem lịch sử trò chuyện"
-    }
+    },
+    "UNVERIFIED_SESSION": "Chưa xác minh được người nhắn: khách chat qua website mà không đăng nhập, nên tên có thể do khách tự gõ. Hỏi lại trước khi gửi thông tin riêng như đơn cũ hay địa chỉ."
   },
   "CONVERSATION_PARTICIPANTS": {
     "ADD_PARTICIPANTS": "Chọn người tham gia",
@@ -2660,6 +2663,12 @@
         "CHANNEL_WEBHOOK_URL": {
           "LABEL": "Đường dẫn webhook",
           "PLACEHOLDER": "Nhập đường dẫn webhook"
+        },
+        "CHANNEL_DOMAIN": {
+          "PLACEHOLDER": "Tên miền trang web (ví dụ: shopcuaban.vn)"
+        },
+        "CHANNEL_GREETING_MESSAGE": {
+          "PLACEHOLDER": "Shop thường trả lời trong vài phút."
         }
       },
       "WHATSAPP": {
@@ -2746,6 +2755,9 @@
       },
       "ZALO_PERSONAL": {
         "DESC": "Kết nối Zalo cá nhân để gửi và nhận tin nhắn ngay trong ứng dụng."
+      },
+      "WEBSITE_NAME": {
+        "PLACEHOLDER": "Tên cửa hàng"
       }
     },
     "AGENTS": {
@@ -2826,7 +2838,12 @@
         "BODY": "Chọn nhà cung cấp bạn muốn kết nối."
       },
       "FINISH": {
-        "TITLE": "Xong rồi!"
+        "TITLE": "Xong rồi!",
+        "BODY": "Kênh đã sẵn sàng nhận tin."
+      },
+      "INBOX": {
+        "TITLE": "Tạo kênh",
+        "BODY": "Điền thông tin để tạo kênh nhận tin."
       }
     },
     "CSAT": {
@@ -2943,7 +2960,9 @@
     "FINISH": {
       "MESSENGER_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Messenger",
       "TELEGRAM_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh Telegram",
-      "WHATSAPP_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh WhatsApp"
+      "WHATSAPP_QR_INSTRUCTION": "Quét mã QR ở trên để thử nhanh kênh WhatsApp",
+      "BUTTON_TEXT": "Đến kênh",
+      "MORE_SETTINGS": "Cài đặt thêm"
     },
     "HELP_CENTER": {
       "LABEL": "Trung tâm trợ giúp",
@@ -3143,7 +3162,10 @@
         "WIDGET_BUBBLE_LAUNCHER_TITLE": {
           "LABEL": "Tiêu đề nút mở"
         },
-        "WIDGET_BUBBLE_POSITION_LABEL": "Vị trí:"
+        "WIDGET_BUBBLE_POSITION_LABEL": "Vị trí:",
+        "WEBSITE_NAME": {
+          "PLACE_HOLDER": "Tên cửa hàng"
+        }
       },
       "WIDGET_SCREEN": {
         "CHAT": "Chế độ chat"
@@ -3939,7 +3961,7 @@
     },
     "COMMENTS": {
       "AUTO_HIDE_PHONE": "Tự động ẩn bình luận chứa số điện thoại (chống đối thủ cướp khách)",
-      "AUTO_PRIVATE_REPLY": "Tự động gửi tin nhắn riêng (Private Reply) khi khách bình luận",
+      "AUTO_PRIVATE_REPLY": "Tự động nhắn riêng cho khách khi họ bình luận",
       "DESC": "Tự động kéo bình luận Facebook Page & Instagram về Hộp thư, ẩn SĐT và nhắn riêng tư vấn ngay.",
       "ENABLED": "Bật tự động thu thập bình luận Facebook & Instagram về Hộp thư",
       "KEYWORDS": "Từ khóa nhạy cảm cần tự động ẩn (ngăn bởi dấu phẩy hoặc xuống dòng)",
@@ -4225,23 +4247,27 @@
     },
     "EMPTY_CHANNEL": "Chưa phát sinh hội thoại hoặc đơn hàng theo kênh trong kỳ này.",
     "EMPTY_QUEUE": "Mọi hội thoại và đơn hàng đang vận hành ổn định, không có tồn đọng.",
-    "EMPTY_SKU": "Chưa có dữ liệu đơn sản phẩm trong kỳ này.",
-    "ERROR": "Chưa tải được dữ liệu tổng quan chất lượng.",
+    "EMPTY_SKU": "Chưa có đơn nào có sản phẩm trong kỳ này.",
+    "ERROR": "Chưa tải được số liệu tổng quan.",
     "KPI": {
       "AOV": "TB {amount}/đơn",
-      "CALENDAR": "{scheduled}/{total} lịch bài · {approved} kịch bản AI duyệt",
-      "CHAT_CVR": "Chuyển đổi Chat → Đơn",
+      "CALENDAR": "{scheduled}/{total} bài đã lên lịch · {approved} nội dung AI đã duyệt",
+      "CHAT_CVR": "Chat ra đơn",
       "CHAT_SUB": "{orders} đơn / {convs} hội thoại · {pending} chờ QR",
-      "CONTENT_TITLE": "Đầu ra Nội dung & Bảo vệ SĐT",
-      "CSKH_SLA": "Chất lượng CSKH (FRT)",
+      "CONTENT_TITLE": "Bình luận & nội dung",
+      "CSKH_SLA": "Tốc độ trả lời khách",
       "NO_REPLY_YET": "Chưa có phản hồi",
       "ORDERS_COUNT": "{count} đơn thành công",
       "PHONES_HIDDEN": "{count} SĐT bình luận đã ẩn",
-      "REVENUE": "Doanh thu thực thu",
-      "SLA_ALERT_BADGE": "{count} >15p",
-      "SLA_SUB": "{sla}% đạt < 5p · {waiting} chờ > 15p"
+      "REVENUE": "Doanh thu đã nhận",
+      "SLA_ALERT_BADGE": "{count} chờ lâu",
+      "SLA_SUB": "{sla}% trả lời dưới 5 phút · {waiting} khách chờ quá 15 phút",
+      "REVENUE_HINT": "Tổng tiền của các đơn đã thanh toán trong kỳ. Dòng dưới là giá trị trung bình mỗi đơn.",
+      "CHAT_CVR_HINT": "Trong các cuộc trò chuyện của kỳ này, bao nhiêu phần trăm có đơn hàng. Số chờ QR là đơn chuyển khoản chưa nhận được tiền.",
+      "CSKH_SLA_HINT": "Thời gian trung bình từ lúc khách nhắn đến lúc shop trả lời lần đầu. Nên dưới 5 phút; khách chờ quá 15 phút dễ bỏ đi.",
+      "CONTENT_HINT": "Số bình luận có số điện thoại đã được tự ẩn để người khác không lấy được khách của shop, kèm số bài đã lên lịch và nội dung AI đã được duyệt."
     },
-    "LOADING": "Đang tổng hợp chỉ số chất lượng…",
+    "LOADING": "Đang tổng hợp số liệu…",
     "QUEUE": {
       "ITEMS": {
         "low_stock_products": {
@@ -4281,11 +4307,11 @@
       "SOLD": "Đã bán",
       "STATUS": "Đánh giá",
       "STOCK": "Tồn {count}",
-      "SUBTITLE": "Phát hiện sớm sản phẩm có tỷ lệ hủy cao (>=15%) hoặc sắp hết hàng",
-      "TITLE": "Chất lượng sản phẩm & hoàn hủy theo SKU"
+      "SUBTITLE": "Sản phẩm bị hủy nhiều (từ 15% số đơn) hoặc sắp hết hàng sẽ được đánh dấu để bạn kiểm tra",
+      "TITLE": "Sản phẩm: bán được và bị hủy"
     },
-    "SUBTITLE": "Đo lường doanh thu thực, tốc độ phục vụ CSKH và đầu ra nội dung thương hiệu",
-    "TITLE": "Tổng quan & Chất lượng Đầu ra"
+    "SUBTITLE": "Doanh thu, tốc độ trả lời khách và nội dung của shop",
+    "TITLE": "Tổng quan"
   },
   "KALO_PAYMENT": {
     "BILLING_NOT_CONFIGURED": "Chưa cấu hình thanh toán gói cước, bạn liên hệ quản trị Kalo để được hỗ trợ.",
@@ -4949,7 +4975,8 @@
       "STEP1_DESCRIPTION": "Dùng Google Authenticator, Authy hoặc ứng dụng TOTP bất kỳ",
       "STEP1_TITLE": "Quét mã QR bằng ứng dụng xác thực",
       "SUCCESS": "Đã bật xác thực hai bước",
-      "VERIFY_BUTTON": "Xác minh và tiếp tục"
+      "VERIFY_BUTTON": "Xác minh và tiếp tục",
+      "COPY": "Sao chép"
     },
     "STATUS_DESCRIPTION": "Quản lý xác thực hai bước và mã dự phòng",
     "STATUS_ENABLED": "Xác thực hai bước đang bật",
@@ -5044,22 +5071,22 @@
     "WHATSAPP_CONNECTED": "Kết nối WhatsApp thành công"
   },
   "ONBOARDING_NEXT": {
-    "COMPANY_DETAILS": "Thông tin công ty",
+    "COMPANY_DETAILS": "Thông tin cửa hàng",
     "CONTINUE": "Tiếp tục",
     "EMAIL_VERIFIED": "Email đã được xác minh",
     "ERROR": "Không thể lưu thông tin. Vui lòng thử lại.",
     "FIELDS": {
-      "COMPANY_SIZE": "Quy mô công ty",
+      "COMPANY_SIZE": "Số người trong shop",
       "EMAIL": "Email",
       "INDUSTRY": "Ngành nghề",
       "REFERRAL_SOURCE": "Bạn biết đến chúng tôi qua đâu?",
-      "WEBSITE": "Trang web",
+      "WEBSITE": "Website",
       "YOUR_ROLE": "Vai trò của bạn"
     },
     "GREETING": "Xin chào {name}!",
     "PLACEHOLDERS": {
-      "ENTER_WEBSITE": "www.example.com",
-      "SELECT_COMPANY_SIZE": "Chọn quy mô công ty",
+      "ENTER_WEBSITE": "shopcuaban.vn (không bắt buộc)",
+      "SELECT_COMPANY_SIZE": "Chọn số người",
       "SELECT_INDUSTRY": "Chọn ngành nghề",
       "SELECT_LANGUAGE": "Chọn ngôn ngữ",
       "SELECT_REFERRAL_SOURCE": "Chọn nguồn giới thiệu",
@@ -5118,7 +5145,8 @@
         "PAID_PLAN_NOTE": "Access token API chỉ có ở gói trả phí.",
         "RESET": "Tạo lại",
         "RESET_ERROR": "Không tạo lại được access token, vui lòng thử lại",
-        "RESET_SUCCESS": "Đã tạo lại access token"
+        "RESET_SUCCESS": "Đã tạo lại access token",
+        "COPY": "Sao chép"
       },
       "AUDIO_NOTIFICATIONS_SECTION": {
         "ALERT_COMBINATIONS": {
@@ -5468,6 +5496,9 @@
       },
       "WIZARD_CREATE": {
         "BODY": "Tạo một nhóm nhân viên mới."
+      },
+      "WIZARD_FINISH": {
+        "BODY": "Nhóm đã sẵn sàng."
       }
     },
     "DELETE": {
@@ -5485,6 +5516,9 @@
       "EDIT_WIZARD_AGENTS": {
         "BODY": "Sửa danh sách nhân viên trong nhóm.",
         "TITLE": "Sửa nhân viên"
+      },
+      "EDIT_WIZARD_FINISH": {
+        "BODY": "Nhóm đã được cập nhật."
       }
     },
     "LEARN_MORE": "Tìm hiểu về nhóm",
@@ -5732,7 +5766,7 @@
     "GOAL_STEP": {
       "NAME": "Tên chiến dịch",
       "NAME_PLACEHOLDER": "Ví dụ: Ưu đãi cuối tuần",
-      "NAME_HINT": "Tên này cũng là mã theo dõi: {tag}",
+      "NAME_HINT": "Mã để đếm đơn từ chiến dịch này: {tag}. Kalo tự tạo từ tên, bạn không cần làm gì thêm.",
       "GOAL": "Mục tiêu của chiến dịch"
     },
     "AUDIENCE_STEP": {
@@ -5771,14 +5805,14 @@
       "PREVIEW": "Xem trước",
       "PREVIEW_NAME": "Lan",
       "PREVIEW_EMPTY": "Nội dung sẽ hiện ở đây.",
-      "UTM_TITLE": "Gắn link theo dõi (không bắt buộc)",
+      "UTM_TITLE": "Link đếm đơn (không bắt buộc)",
       "UTM_DESC": "Dán link sản phẩm trên website. Khách bấm link rồi nhắn qua khung chat website thì cuộc trò chuyện và đơn hàng được tính cho chiến dịch này.",
       "UTM_URL": "Link trên website",
       "UTM_URL_PLACEHOLDER": "shopcuaban.vn/san-pham",
-      "UTM_RESULT": "Link đã gắn mã",
+      "UTM_RESULT": "Link đã gắn mã chiến dịch",
       "UTM_INVALID": "Link chưa đúng, cần dạng shopcuaban.vn/trang",
       "UTM_INSERT": "Chèn vào tin nhắn",
-      "TAG_LOCKED": "Mã theo dõi giữ là {tag} vì tin đã có link gắn mã này."
+      "TAG_LOCKED": "Mã chiến dịch giữ là {tag} vì tin đã có link gắn mã này."
     },
     "CHANNEL_STEP": {
       "PICK": "Gửi qua kênh",
@@ -5802,7 +5836,7 @@
       "AUDIENCE_SEGMENT": "Nhóm khách: {name}",
       "AUDIENCE_LABELS": "Nhãn: {labels}",
       "CHANNEL": "Kênh",
-      "TAG": "Mã theo dõi",
+      "TAG": "Mã để đếm đơn",
       "RECIPIENTS": "Số khách sẽ nhận",
       "WHEN": "Thời điểm",
       "WHEN_NOW": "Ngay sau khi bấm gửi",
@@ -6313,6 +6347,84 @@
       "CONTACT_TITLE": "Cần thêm trợ giúp?",
       "CONTACT_DESC_CLOUD": "Nếu mất cả ứng dụng xác thực lẫn mã dự phòng, hãy liên hệ bộ phận hỗ trợ Kalo.",
       "CONTACT_DESC_SELF_HOSTED": "Nếu mất cả ứng dụng xác thực lẫn mã dự phòng, hãy liên hệ quản trị viên để được hỗ trợ."
+    }
+  },
+  "KALO_POLISH3": {
+    "HINT_LABEL": "Giải thích chỉ số",
+    "COMMENTS": {
+      "NO_CHANNEL_TITLE": "Chưa nối Facebook hoặc Instagram",
+      "NO_CHANNEL_BODY": "Kalo chỉ tự xử lý bình luận trên Trang Facebook và tài khoản Instagram đã nối với shop. Nối kênh xong, bạn quay lại đây để bật tự ẩn số điện thoại và tự nhắn riêng cho khách.",
+      "NO_CHANNEL_CTA": "Nối Facebook hoặc Instagram",
+      "VARS_LABEL": "Chèn vào tin:",
+      "VAR_NAME": "Tên khách",
+      "VAR_SHOP": "Tên shop",
+      "VARS_EXAMPLE": "Khi gửi, {token} được thay bằng tên khách. Ví dụ: “Chào {token}” thành “Chào Lan”."
+    },
+    "CAMPAIGN": {
+      "FALLBACK_NAME": "bạn",
+      "REVIEW_SAMPLE": "Tin khách nhận được, ví dụ với khách tên {name}:"
+    },
+    "ONBOARDING": {
+      "ROLE": {
+        "FOUNDER": "Chủ shop",
+        "PRODUCT_MANAGER": "Quản lý sản phẩm",
+        "ENGINEERING": "Kỹ thuật",
+        "SUPPORT_LEAD": "Trưởng nhóm chăm sóc khách",
+        "MARKETING": "Marketing",
+        "SALES": "Bán hàng",
+        "OTHER": "Khác"
+      },
+      "INDUSTRY": {
+        "AEROSPACE": "Hàng không, quốc phòng",
+        "AGRICULTURE": "Nông sản, thực phẩm",
+        "AUTOMOTIVE": "Xe cộ, vận tải",
+        "CHEMICALS": "Hóa chất, vật liệu",
+        "CONSTRUCTION": "Xây dựng, nội thất",
+        "CPG": "Hàng tiêu dùng",
+        "EDUCATION": "Giáo dục",
+        "ENTERTAINMENT": "Giải trí",
+        "FINANCE": "Tài chính",
+        "GOVERNMENT": "Cơ quan, tổ chức phi lợi nhuận",
+        "HEALTHCARE": "Sức khỏe, làm đẹp",
+        "HOSPITALITY": "Du lịch, nhà hàng, khách sạn",
+        "INDUSTRIAL": "Công nghiệp, năng lượng",
+        "LEGAL": "Luật, pháp lý",
+        "LIFESTYLE": "Đời sống, sở thích",
+        "LOGISTICS": "Giao vận, kho bãi",
+        "FASHION": "Thời trang, phụ kiện",
+        "MEDIA": "Báo chí, truyền thông",
+        "SERVICES": "Dịch vụ, agency",
+        "REAL_ESTATE": "Bất động sản",
+        "RETAIL": "Bán lẻ, bán hàng online",
+        "SPORTS": "Thể thao",
+        "TECHNOLOGY": "Công nghệ",
+        "TELECOM": "Viễn thông",
+        "OTHER": "Khác"
+      },
+      "REFERRAL": {
+        "GOOGLE": "Google",
+        "REDDIT": "Reddit",
+        "TWITTER": "Twitter/X",
+        "LINKEDIN": "LinkedIn",
+        "FRIEND": "Bạn bè, đồng nghiệp",
+        "BLOG": "Bài viết, blog",
+        "GITHUB": "GitHub",
+        "OTHER": "Khác"
+      }
+    },
+    "CHAT": {
+      "QR_CONFIRM": "Số tiền {amount}. Mã QR sẽ được gửi vào cuộc trò chuyện, tin đã gửi không thu hồi được.",
+      "UNASSIGNED_WAITING": "Có {count} tin chưa ai nhận",
+      "UNASSIGNED_HINT": "Tin mới của khách nằm ở tab Chưa ai nhận cho tới khi có người nhận trả lời.",
+      "OPEN_UNASSIGNED": "Xem tin chưa ai nhận",
+      "QR_CONFIRM_TITLE": "Gửi mã QR cho đơn #{number}?"
+    }
+  },
+  "CAPTAIN": {
+    "DOCUMENTS": {
+      "DETAILS": {
+        "COPY_CONTENT": "Sao chép"
+      }
     }
   }
 }

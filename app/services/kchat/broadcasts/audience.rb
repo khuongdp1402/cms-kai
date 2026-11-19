@@ -30,7 +30,9 @@ class Kchat::Broadcasts::Audience
     {
       inbox_id: inbox.id, inbox_name: inbox.name, channel_type: inbox.channel_type.demodulize.underscore,
       requires_24h_window: caps[:requires_24h_window], read_status: caps[:read_status], rate_limit: caps[:rate_limit],
-      eligible_count: partitioned[:eligible].size, skipped_24h_count: partitioned[:skipped_24h].size
+      eligible_count: partitioned[:eligible].size, skipped_24h_count: partitioned[:skipped_24h].size,
+      # {{name}} as the first recipient will see it, so the wizard preview matches what is sent.
+      sample_name: Kchat::Broadcasts::Dispatcher.recipient_name(partitioned[:eligible].first&.contact)
     }
   end
 

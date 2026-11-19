@@ -95,18 +95,23 @@ const toggleLabel = computed(() =>
   isExpanded.value ? t('KALO_NAV.TOGGLE_COLLAPSE') : t('KALO_NAV.TOGGLE_EXPAND')
 );
 
-const shouldRenderSectionHeading = (item, index) => {
+const shouldRenderSectionHeading = (list, item, index) => {
   if (!isExpanded.value || !item.sectionKey) return false;
   if (index === 0) return true;
-  return items.value[index - 1]?.sectionKey !== item.sectionKey;
+  return list[index - 1]?.sectionKey !== item.sectionKey;
 };
+
+const railGroups = computed(() => [
+  { key: 'main', items: items.value.filter(item => !item.footer) },
+  { key: 'pinned', items: items.value.filter(item => item.footer) },
+]);
 </script>
 
 <template>
   <nav
     :aria-label="t('KALO_NAV.MAIN_NAV')"
     :data-expanded="isExpanded ? 'true' : 'false'"
-    class="relative z-30 flex flex-col shrink-0 gap-1 py-3.5 bg-n-surface-1 border-r border-n-weak transition-[width] duration-200 ease-out"
+    class="relative z-30 flex flex-col shrink-0 gap-1 py-3.5 [@media(max-height:800px)]:py-2 bg-n-surface-1 border-r border-n-weak transition-[width] duration-200 ease-out"
     :class="
       isExpanded ? 'w-[224px] px-3 items-stretch' : 'w-[68px] items-center'
     "
@@ -156,19 +161,28 @@ const shouldRenderSectionHeading = (item, index) => {
       </span>
     </div>
 
+    <!-- Main items scroll at short heights; the footer group below never
+         scrolls, so it cannot overlap the bell or leave the screen. -->
     <div
-      class="flex flex-col flex-1 min-h-0 gap-1"
-      :class="isExpanded ? 'overflow-y-auto' : 'items-center'"
+      v-for="group in railGroups"
+      :key="group.key"
+      :data-test-id="`kalo-rail-${group.key}`"
+      class="flex flex-col gap-1 [@media(max-height:800px)]:gap-0.5"
+      :class="[
+        group.key === 'main'
+          ? 'flex-1 min-h-0 overflow-y-auto overflow-x-hidden [scrollbar-width:thin]'
+          : 'shrink-0 pt-1',
+        isExpanded ? '' : 'items-center w-full',
+      ]"
     >
-      <template v-for="(item, index) in items" :key="item.key">
-        <template v-if="item.footer && !items[index - 1]?.footer">
-          <div class="flex-1" />
-          <KaloGuideNav :is-expanded="isExpanded" />
-          <!-- Spec §4 footer order: Trợ lý AI, Console/Cài đặt, Thông báo, Hồ sơ. -->
-          <KaloAssistantButton :is-expanded="isExpanded" />
-        </template>
+      <template v-if="group.key === 'pinned'">
+        <KaloGuideNav :is-expanded="isExpanded" />
+        <!-- Spec §4 footer order: Trợ lý AI, Console/Cài đặt, Thông báo, Hồ sơ. -->
+        <KaloAssistantButton :is-expanded="isExpanded" />
+      </template>
+      <template v-for="(item, index) in group.items" :key="item.key">
         <p
-          v-if="shouldRenderSectionHeading(item, index)"
+          v-if="shouldRenderSectionHeading(group.items, item, index)"
           class="px-2.5 pt-2 pb-0.5 mb-0 text-[10.5px] font-bold tracking-wider uppercase text-n-slate-10"
         >
           {{ t(item.sectionKey) }}
@@ -187,7 +201,7 @@ const shouldRenderSectionHeading = (item, index) => {
               :class="[
                 isExpanded
                   ? 'flex-1 min-w-0 gap-2.5 px-3 py-2 text-sm font-semibold'
-                  : 'justify-center size-11',
+                  : 'justify-center size-11 [@media(max-height:800px)]:size-10',
                 item.active
                   ? 'bg-n-blue-3 text-n-blue-11 font-semibold'
                   : 'text-n-slate-10 hover:bg-n-alpha-2 hover:text-n-slate-12',

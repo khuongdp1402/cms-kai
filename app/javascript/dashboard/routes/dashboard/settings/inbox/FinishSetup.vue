@@ -296,7 +296,7 @@ onMounted(() => {
           >
             <NextButton
               solid
-              teal
+              blue
               :label="$t('INBOX_MGMT.FINISH.BUTTON_TEXT')"
             />
           </router-link>

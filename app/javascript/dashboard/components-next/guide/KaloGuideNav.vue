@@ -50,7 +50,7 @@ const sheetRowClass =
 const sheetIconClass = 'grid size-8 shrink-0 place-content-center';
 const railItemClass = computed(() =>
   isCollapsed.value
-    ? 'relative grid size-11 place-content-center rounded-xl'
+    ? 'relative grid size-11 [@media(max-height:800px)]:size-10 place-content-center rounded-xl'
     : 'relative flex items-center w-full gap-2.5 px-3 py-2 text-sm font-semibold rounded-xl'
 );
 </script>
@@ -82,7 +82,7 @@ const railItemClass = computed(() =>
           :class="[
             trialTone,
             isCollapsed
-              ? 'grid size-11 place-content-center rounded-xl'
+              ? 'grid size-11 [@media(max-height:800px)]:size-10 place-content-center rounded-xl'
               : 'flex flex-col gap-0.5 px-3 py-2 rounded-xl text-xs',
           ]"
         >

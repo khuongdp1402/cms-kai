@@ -716,7 +716,7 @@ export default {
               <input
                 v-model="zaloOaImei"
                 type="text"
-                class="w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
+                class="mb-0 outline-none w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
                 placeholder="zalo_oa_imei_xxx"
               />
             </div>
@@ -756,7 +756,7 @@ export default {
           <input
             v-model="zaloPersonalBridgeUrl"
             type="text"
-            class="w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
+            class="mb-0 outline-none w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
             placeholder="http://localhost:5001"
           />
         </SettingsFieldSection>
@@ -799,7 +799,7 @@ export default {
           <input
             v-model="zaloOaId"
             type="text"
-            class="w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
+            class="mb-0 outline-none w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
             :placeholder="$t('INBOX_MGMT.ADD.ZALO_CHANNEL.PLACEHOLDERS.OA_ID')"
           />
         </SettingsFieldSection>
@@ -811,7 +811,7 @@ export default {
           <input
             v-model="zaloAppId"
             type="text"
-            class="w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
+            class="mb-0 outline-none w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
             :placeholder="$t('INBOX_MGMT.ADD.ZALO_CHANNEL.PLACEHOLDERS.APP_ID')"
           />
         </SettingsFieldSection>
@@ -823,7 +823,7 @@ export default {
           <input
             v-model="zaloAppSecret"
             type="password"
-            class="w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
+            class="mb-0 outline-none w-full px-3 py-2 border border-n-weak rounded-xl bg-n-solid-1 text-n-slate-12 text-sm focus:outline-none focus:border-n-blue-9"
             :placeholder="$t('INBOX_MGMT.ADD.ZALO_CHANNEL.PLACEHOLDERS.APP_SECRET')"
           />
         </SettingsFieldSection>

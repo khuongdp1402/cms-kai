@@ -7,6 +7,8 @@ import {
   channelKey,
   estimateSendMinutes,
   formatVietnamTime,
+  personalize,
+  sampleRecipientName,
   vietnamLocalToIso,
 } from './campaignFlowHelpers';
 
@@ -40,6 +42,22 @@ const whenText = computed(() =>
   campaign.scheduleMode === 'later' && campaign.scheduledLocal
     ? formatVietnamTime(vietnamLocalToIso(campaign.scheduledLocal))
     : t('KALO_CAMPAIGN_FLOW.REVIEW_STEP.WHEN_NOW')
+);
+
+// The message as the first recipient gets it: same {{name}} rule as the backend.
+const fallbackName = computed(() => t('KALO_POLISH3.CAMPAIGN.FALLBACK_NAME'));
+const sampleName = computed(() =>
+  sampleRecipientName(
+    channel.value ? [channel.value] : [],
+    campaign.inboxId,
+    fallbackName.value
+  )
+);
+const sentMessage = computed(() =>
+  personalize(campaign.message.trim(), {
+    name: sampleName.value,
+    shopName: flow.shopName.value,
+  })
 );
 
 const minutes = computed(() =>
@@ -102,10 +120,18 @@ const rows = computed(() =>
       <span class="text-sm font-semibold text-n-slate-12">
         {{ t('KALO_CAMPAIGN_FLOW.REVIEW_STEP.MESSAGE') }}
       </span>
-      <p
-        class="p-3 text-sm border rounded-xl whitespace-pre-wrap [overflow-wrap:anywhere] border-n-weak bg-n-solid-1 text-n-slate-12"
+      <span
+        v-if="sampleName !== fallbackName"
+        data-test="campaign-review-sample"
+        class="text-xs text-n-slate-11"
       >
-        {{ campaign.message.trim() }}
+        {{ t('KALO_POLISH3.CAMPAIGN.REVIEW_SAMPLE', { name: sampleName }) }}
+      </span>
+      <p
+        data-test="campaign-review-message"
+        class="p-3 mb-0 text-sm border rounded-xl whitespace-pre-wrap [overflow-wrap:anywhere] border-n-weak bg-n-solid-1 text-n-slate-12"
+      >
+        {{ sentMessage }}
       </p>
     </div>
 

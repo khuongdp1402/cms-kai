@@ -280,6 +280,16 @@ export const aiPrompt = ({ goalLabel, title, shopName }) =>
     'Chỉ trả về nội dung tin nhắn, không giải thích.',
   ].join('\n');
 
+// Name used for {{name}} in previews: the first recipient on the chosen channel
+// (or the first channel that reaches anyone), as the API reports it in
+// `sample_name` (Kchat::Broadcasts::Dispatcher.recipient_name). `fallback` when
+// nobody is reached yet.
+export const sampleRecipientName = (channels, inboxId, fallback) => {
+  const reached = (channels || []).filter(row => row.eligible_count > 0);
+  const row = reached.find(item => item.inbox_id === inboxId) || reached[0];
+  return row?.sample_name || fallback;
+};
+
 export const personalize = (message, { name, shopName }) =>
   String(message || '')
     .replaceAll('{{name}}', name)

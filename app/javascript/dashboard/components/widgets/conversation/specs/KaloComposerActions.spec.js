@@ -92,7 +92,7 @@ describe('KaloComposerActions', () => {
     expect(wrapper.find('[data-test="created-send-qr"]').exists()).toBe(false);
   });
 
-  it('Mã QR sends the only pending transfer_qr order of the contact', async () => {
+  it('Mã QR sends the only pending transfer_qr order of the contact after a light confirm', async () => {
     OrdersAPI.get.mockResolvedValue({
       data: { payload: [makeOrder({ id: 3 })], meta: {} },
     });
@@ -103,7 +103,18 @@ describe('KaloComposerActions', () => {
       status: 'pending_payment',
       contactId: 7,
     });
+    // A QR is a chat message: the order and amount are shown before it goes out.
+    expect(sendQr).not.toHaveBeenCalled();
+    expect(wrapper.find('[data-test="qr-picker"] h2').text()).toBe(
+      'Gửi mã QR cho đơn #1042?'
+    );
+    expect(wrapper.find('[data-test="qr-confirm-note"]').text()).toContain(
+      'Số tiền'
+    );
+    await wrapper.find('[data-test="qr-option"]').trigger('click');
+    await flushPromises();
     expect(sendQr.mock.calls[0][1]).toEqual({ id: 3, conversationId: 12 });
+    expect(wrapper.find('[data-test="qr-picker"]').exists()).toBe(false);
   });
 
   it('Mã QR opens a picker when several orders are pending and ignores cod orders', async () => {
@@ -190,6 +201,8 @@ describe('KaloComposerActions', () => {
     const { wrapper } = mountIt({ sendQr });
     await wrapper.find('[data-test="pick-qr"]').trigger('click');
     await flushPromises();
+    await wrapper.find('[data-test="qr-option"]').trigger('click');
+    await flushPromises();
     expect(alertMock).toHaveBeenCalledWith(
       viMessages.KALO_ORDERS.ERRORS.PAYMENT_SETTINGS_MISSING,
       expect.objectContaining({
@@ -216,6 +229,8 @@ describe('KaloComposerActions', () => {
       const { wrapper } = mountIt({ sendQr });
       await wrapper.find('[data-test="pick-qr"]').trigger('click');
       await flushPromises();
+      await wrapper.find('[data-test="qr-option"]').trigger('click');
+      await flushPromises();
       expect(alertMock).toHaveBeenCalledWith(
         viMessages.KALO_ORDERS.ERRORS[code.toUpperCase()]
       );
@@ -233,6 +248,9 @@ describe('KaloComposerActions', () => {
       await wrapper.find('[data-test="create-order"]').trigger('click');
       await flushPromises();
       const dialog = wrapper.find('[role="dialog"]');
+      // Guided UX §2: the create-order popup is a KaloDrawer.
+      expect(dialog.attributes('data-test')).toBe('order-form-drawer');
+      expect(dialog.classes()).toContain('h-full');
       expect(dialog.attributes('aria-modal')).toBe('true');
       expect(dialog.attributes('aria-label')).toBe(
         viMessages.KALO_ORDERS.FORM.TITLE

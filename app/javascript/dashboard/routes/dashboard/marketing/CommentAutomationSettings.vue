@@ -1,10 +1,11 @@
 <script setup>
-import { computed, onMounted, ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useAlert } from 'dashboard/composables';
 import { useAdmin } from 'dashboard/composables/useAdmin';
 import commentRulesAPI from 'dashboard/api/kchat/commentRules';
 import Button from 'dashboard/components-next/button/Button.vue';
+import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 
 const { t } = useI18n();
 const { isAdmin } = useAdmin();
@@ -23,9 +24,19 @@ const form = ref({
 const isLoading = ref(false);
 const isSaving = ref(false);
 
-const templateVarsHint = computed(() =>
-  t('KALO_MARKETING.COMMENTS.VARS_HINT', { vars: '{{name}}, {{shop_name}}' })
-);
+// Placeholders the backend fills when it sends the private reply
+// (Kchat::SocialComments::IngestService): customer name and shop name.
+const NAME_TOKEN = '{{name}}';
+const TEMPLATE_VARS = [
+  { token: NAME_TOKEN, labelKey: 'KALO_POLISH3.COMMENTS.VAR_NAME' },
+  { token: '{{shop_name}}', labelKey: 'KALO_POLISH3.COMMENTS.VAR_SHOP' },
+];
+
+const insertVar = token => {
+  const current = form.value.private_reply_template;
+  const glue = current && !current.endsWith(' ') ? ' ' : '';
+  form.value.private_reply_template = `${current}${glue}${token}`;
+};
 
 const loadRules = async () => {
   if (typeof commentRulesAPI.get !== 'function') return;
@@ -135,8 +146,25 @@ onMounted(loadRules);
         :placeholder="t('KALO_MARKETING.COMMENTS.PRIVATE_TEMPLATE_PLACEHOLDER')"
         :class="INPUT_CLASS"
       />
+      <span
+        class="flex flex-wrap items-center gap-1.5 text-xs font-normal text-n-slate-11"
+      >
+        {{ t('KALO_POLISH3.COMMENTS.VARS_LABEL') }}
+        <button
+          v-for="item in TEMPLATE_VARS"
+          :key="item.token"
+          type="button"
+          data-test="rules-template-var"
+          :disabled="!isAdmin || isLoading"
+          class="inline-flex items-center gap-1 px-2 py-0.5 m-0 text-xs font-semibold border border-solid rounded-full border-n-weak bg-n-alpha-1 text-n-slate-12 hover:bg-n-alpha-2"
+          @click="insertVar(item.token)"
+        >
+          <KaloIcon name="plus" class="size-3" />
+          {{ t(item.labelKey) }}
+        </button>
+      </span>
       <span class="text-xs font-normal text-n-slate-11">
-        {{ templateVarsHint }}
+        {{ t('KALO_POLISH3.COMMENTS.VARS_EXAMPLE', { token: NAME_TOKEN }) }}
       </span>
     </label>
 

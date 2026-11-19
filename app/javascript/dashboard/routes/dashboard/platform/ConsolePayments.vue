@@ -203,7 +203,7 @@ onMounted(() => load(1));
                     v-model="search"
                     data-testid="account-search"
                     type="search"
-                    class="w-64 px-3 py-2 border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
+                    class="mb-0 outline-none w-64 px-3 py-2 border !bg-white !text-console-ink placeholder:!text-console-muted rounded-xl border-console-line focus:border-console-soft focus:outline-none"
                     :placeholder="t('KALO_CONSOLE.PAYMENTS.ASSIGN_SEARCH')"
                   />
                   <button

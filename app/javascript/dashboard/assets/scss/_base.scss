@@ -71,7 +71,7 @@
 // Field base styles (Input, TextArea, Select)
 @layer components {
   .field-base {
-    @apply block box-border w-full transition-colors duration-150 ease-in-out focus:outline-n-brand dark:focus:outline-n-brand focus:ring-2 focus:ring-n-brand/15 appearance-none mx-0 mt-0 mb-4 py-2 px-3 rounded-[10px] text-sm font-normal bg-n-solid-1 placeholder:text-n-slate-10 dark:placeholder:text-n-slate-10 text-n-slate-12 border-none outline outline-1 outline-n-strong dark:outline-n-strong hover:outline-n-slate-6 dark:hover:outline-n-slate-6;
+    @apply block box-border w-full transition-colors duration-150 ease-in-out focus:outline-n-brand dark:focus:outline-n-brand focus:ring-2 focus:ring-n-brand/15 appearance-none mx-0 mt-0 mb-4 py-2 px-3 rounded-[10px] text-sm font-normal bg-n-solid-1 placeholder:text-n-slate-10 dark:placeholder:text-n-slate-10 text-n-slate-12 border-0 outline outline-1 outline-n-strong dark:outline-n-strong hover:outline-n-slate-6 dark:hover:outline-n-slate-6;
   }
 
   .field-disabled {
@@ -85,6 +85,14 @@
 
 $form-input-selector: "input[type]:not([type='file']):not([type='checkbox']):not([type='radio']):not([type='range']):not([type='button']):not([type='submit']):not([type='reset']):not([type='color']):not([type='image']):not([type='hidden']):not(.reset-base):not(.no-margin)";
 
+// Text-like inputs, in two rules (LESSONS B53, B100):
+// - the look (outline, hover/focus/dark variants, background…) at specificity
+//   0 via `:where(...)`, so any utility on the element (`outline-none`,
+//   `focus:outline-none`, `border`) wins. Raising this selector raises every
+//   @apply'd hover:/focus:/dark: variant with it and gives double frames.
+// - only what Tailwind preflight resets (`input { padding: 0; margin: 0;
+//   font: inherit; color: inherit }`, specificity (0,0,1)) at (0,0,1) with
+//   `input:where(...)`, so it beats preflight and still loses to utilities.
 @layer base {
   :where(#{$form-input-selector}) {
     @apply field-base h-10;
@@ -96,6 +104,16 @@ $form-input-selector: "input[type]:not([type='file']):not([type='checkbox']):not
     &.error {
       @apply field-error mb-1;
     }
+  }
+
+  input:where(#{$form-input-selector}) {
+    @apply mx-0 mt-0 mb-4 py-2 px-3 text-sm font-normal text-n-slate-12;
+  }
+
+  // Native radios and checkboxes take the brand colour (Kalo orange) instead
+  // of the browser blue. Zero specificity: an `accent-*` utility still wins.
+  :where(input[type='radio'], input[type='checkbox']) {
+    @apply accent-n-brand;
   }
 
   input[type='file'] {
@@ -118,13 +136,17 @@ $form-input-selector: "input[type]:not([type='file']):not([type='checkbox']):not
     }
   }
 
-  // Textarea
-  textarea {
+  // Textarea: same split as the inputs above.
+  :where(textarea) {
     @apply field-base h-16;
 
     &[disabled] {
       @apply field-disabled;
     }
+  }
+
+  textarea {
+    @apply mx-0 mt-0 mb-4 py-2 px-3 text-sm font-normal text-n-slate-12;
   }
 
   // Code styling

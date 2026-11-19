@@ -35,6 +35,7 @@ import { useConversationRequiredAttributes } from 'dashboard/composables/useConv
 import { emitter } from 'shared/helpers/mitt';
 
 import wootConstants from 'dashboard/constants/globals';
+import { useDefaultAssigneeTab } from './widgets/conversation/helpers/kaloAssigneeTab';
 import advancedFilterOptions from './widgets/conversation/advancedFilterItems';
 import filterQueryGenerator from '../helper/filterQueryGenerator.js';
 import languages from 'dashboard/components/widgets/conversation/advancedFilterItems/languages';
@@ -604,6 +605,10 @@ function loadMoreConversations() {
   }
 }
 
+// Tab choice: an explicit pick (click, Alt+N, empty-state button) always wins
+// over the first-load switch to "Chưa ai nhận" below, which is decided once.
+const hasUserPickedTab = ref(false);
+
 function updateAssigneeTab(selectedTab) {
   if (activeAssigneeTab.value !== selectedTab) {
     resetBulkActions();
@@ -614,6 +619,25 @@ function updateAssigneeTab(selectedTab) {
     }
   }
 }
+
+function onUserTabChange(selectedTab) {
+  hasUserPickedTab.value = true;
+  updateAssigneeTab(selectedTab);
+}
+
+const unassignedCount = computed(
+  () => conversationStats.value?.unAssignedCount || 0
+);
+
+useDefaultAssigneeTab({
+  stats: conversationStats,
+  activeTab: activeAssigneeTab,
+  hasUserPicked: hasUserPickedTab,
+  isFiltered: hasAppliedFiltersOrActiveFolders,
+  tabKeys: computed(() => assigneeTabItems.value.map(item => item.key)),
+  openUnassigned: () =>
+    updateAssigneeTab(wootConstants.ASSIGNEE_TYPE.UNASSIGNED),
+});
 
 function onBasicFilterChange(value, type) {
   if (type === 'status') {
@@ -932,13 +956,20 @@ watch(conversationFilters, (newVal, oldVal) => {
       v-if="!hasAppliedFiltersOrActiveFolders"
       :items="assigneeTabItems"
       :active-tab="activeAssigneeTab"
-      @chat-tab-change="updateAssigneeTab"
+      @chat-tab-change="onUserTabChange"
     />
 
     <KaloChatListEmpty
       v-if="!chatListLoading && !conversationList.length"
       :is-filtered="hasAppliedFilters"
+      :unassigned-count="
+        activeAssigneeTab === wootConstants.ASSIGNEE_TYPE.ME &&
+        !hasAppliedFiltersOrActiveFolders
+          ? unassignedCount
+          : 0
+      "
       @clear-filters="resetAndFetchData"
+      @open-unassigned="onUserTabChange(wootConstants.ASSIGNEE_TYPE.UNASSIGNED)"
     />
     <ConversationBulkActions
       :conversations="selectedConversations"

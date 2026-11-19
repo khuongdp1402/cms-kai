@@ -58,7 +58,7 @@ watch(accountId, load, { immediate: true });
         :class="
           isExpanded
             ? 'w-full px-3 py-2 !flex items-center justify-start gap-2.5 text-sm font-semibold'
-            : 'size-11'
+            : 'size-11 [@media(max-height:800px)]:size-10'
         "
         @click="isOpen = true"
       >
