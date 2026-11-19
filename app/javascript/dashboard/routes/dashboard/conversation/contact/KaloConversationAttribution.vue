@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { useAlert } from 'dashboard/composables';
 import conversationAttributionAPI from 'dashboard/api/kchat/conversationAttribution';
 import Button from 'dashboard/components-next/button/Button.vue';
+import { formatLocalized } from 'shared/helpers/dateLocale';
 
 const props = defineProps({
   conversation: { type: Object, default: () => ({}) },
@@ -30,6 +31,17 @@ const isSocialComment = computed(
 const hasUtm = computed(() =>
   Boolean(attrs.value?.utm_source || attrs.value?.utm_campaign)
 );
+
+// Kalo campaign that reached this conversation (kept apart from the ad UTM).
+const broadcastTag = computed(() => attrs.value?.kchat_broadcast_tag || '');
+const broadcastSentAt = computed(() => {
+  const at = attrs.value?.kchat_campaign_at;
+  const date = at ? new Date(at) : null;
+  return date && !Number.isNaN(date.getTime())
+    ? formatLocalized(date, 'HH:mm dd/MM/yyyy')
+    : '';
+});
+const hasAttribution = computed(() => hasUtm.value || !!broadcastTag.value);
 
 const syncFormFromProps = () => {
   localAttrs.value = null;
@@ -126,7 +138,7 @@ const save = async () => {
     </div>
 
     <div
-      v-if="hasUtm && !isEditing"
+      v-if="hasAttribution && !isEditing"
       data-test="utm-chips"
       class="flex flex-wrap gap-1.5 text-xs"
     >
@@ -144,8 +156,26 @@ const save = async () => {
         {{ t('KALO_CHAT.ATTRIBUTION.CAMPAIGN') }}:
         <strong>{{ attrs.utm_campaign }}</strong>
       </span>
+      <span
+        v-if="broadcastTag"
+        data-test="broadcast-chip"
+        class="px-2 py-0.5 rounded-full bg-n-alpha-2 text-n-slate-12"
+      >
+        {{ t('KALO_CHAT.ATTRIBUTION.BROADCAST') }}:
+        <strong>{{ broadcastTag }}</strong>
+        <template v-if="broadcastSentAt">
+          {{
+            t('KALO_CHAT.ATTRIBUTION.BROADCAST_SENT_AT', {
+              time: broadcastSentAt,
+            })
+          }}
+        </template>
+      </span>
     </div>
-    <p v-else-if="!hasUtm && !isEditing" class="text-xs text-n-slate-11">
+    <p
+      v-else-if="!hasAttribution && !isEditing"
+      class="text-xs text-n-slate-11"
+    >
       {{ t('KALO_CHAT.ATTRIBUTION.EMPTY') }}
     </p>
 

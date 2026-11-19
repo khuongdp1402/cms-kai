@@ -3504,6 +3504,8 @@
       "LABEL": "Gợi ý trả lời"
     },
     "ATTRIBUTION": {
+      "BROADCAST": "Chiến dịch đã gửi",
+      "BROADCAST_SENT_AT": "· lúc {time}",
       "CAMPAIGN": "Chiến dịch",
       "CAMPAIGN_PLACEHOLDER": "Ví dụ: tet_2027",
       "CANCEL": "Hủy",
