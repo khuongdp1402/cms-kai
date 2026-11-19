@@ -23,11 +23,13 @@
 - **B82 (2026-11-20): driver.js tự mang CSS và đè được Tailwind.**
   - Triệu chứng: popover tour nền trắng chữ xám ở chế độ tối; class Tailwind gắn qua `popoverClass` không ăn.
   - Nguyên nhân: `driver.css` không nằm trong `@layer` và đặt `all: unset` trên `.driver-popover`; CSS không layer luôn thắng CSS trong layer. Mũi tên dùng `border-color` trong suốt theo từng cạnh.
-  - Quy tắc: import `driver.js/dist/driver.css` một lần (`guide/useKaloTour.js`), override bằng token Kalo trong `_ktech-theme.scss`, ngoài `@layer`, selector hai class `.driver-popover.kalo-tour`; mũi tên chỉ đổi màu cạnh hiện (`.driver-popover-arrow-side-*`), không đặt `border-color` chung.
+  - Quy tắc: nạp `driver.js` và `driver.js/dist/driver.css` bằng `import()` lúc chạy tour (`guide/useKaloTour.js`), override bằng token Kalo trong `_ktech-theme.scss`, ngoài `@layer`, selector hai class `.driver-popover.kalo-tour`; mũi tên chỉ đổi màu cạnh hiện (`.driver-popover-arrow-side-*`), không đặt `border-color` chung.
 - **B83 (2026-11-20): Stack trình duyệt thứ hai không chạy được vite vì cổng 3036 đang bị task song song dùng, còn `bin/vite build` bị SIGKILL.**
   - Triệu chứng: `kalo-t4` giữ vite 3036 (B62 bắt buộc 3036); build bundle dev trong container bị kill khi vitest cả bộ đang chạy.
   - Nguyên nhân: Docker 8 GB không đủ cho vitest cả bộ, stack của task khác và vite build cùng lúc.
   - Quy tắc: khi 3036 bận, build bundle dev (`bin/vite build --mode development`, NODE_OPTIONS 4 GB) rồi chạy stack không có profile `hmr` (rails đọc `public/vite-dev`); build sau khi vitest xong, không chạy song song.
+  - Bổ sung: build lại bundle thì phải restart container rails của stack, nếu không rails vẫn trỏ manifest cũ (file asset cũ đã bị xóa) và app không lên.
+  - Bổ sung: không chạy `pnpm add`/`pnpm install` từ một worktree vào volume `cms-kai_node_modules` dùng chung (mọi worktree và `script/ktech/vitest.sh` mount chung volume này): pnpm cắt `node_modules` theo lockfile của worktree đó, xóa gói mà task song song vừa thêm. Thêm thư viện thì sửa `package.json` + lockfile trong nhánh và báo controller cài lại sau khi gộp; nếu buộc phải cài để chạy spec thì ghi rõ trong báo cáo.
 - **B84 (2026-11-20): Danh sách thiết lập và banner dùng thử chỉ dành cho admin, nhưng spec cũ dùng store không có vai trò.**
   - Triệu chứng: danh sách thiết lập, banner dùng thử không hiện trong spec cũ (Overview, sidebar) nên không bắt được lỗi hiển thị.
   - Nguyên nhân: các phần này chỉ dành cho quản trị viên shop (chỉ họ nối kênh, cài nhận tiền, trả tiền gói) và fixture cũ không có `getCurrentRole`.
