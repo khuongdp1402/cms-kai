@@ -1,5 +1,6 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { ref, watch } from 'vue';
+import { useMapGetter } from 'dashboard/composables/store';
 import { useI18n } from 'vue-i18n';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloRailTooltip from 'dashboard/components-next/sidebar/KaloRailTooltip.vue';
@@ -25,7 +26,8 @@ const { t } = useI18n();
 const { isAvailable, load } = useKaloAssistantAvailability();
 const isOpen = ref(false);
 
-onMounted(load);
+const accountId = useMapGetter('getCurrentAccountId');
+watch(accountId, load, { immediate: true });
 </script>
 
 <template>

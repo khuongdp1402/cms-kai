@@ -162,6 +162,54 @@ describe('KaloAssistantDrawer', () => {
     expect(id(wrapper, 'loading').exists()).toBe(false);
   });
 
+  it.each([
+    ['isComposing', { key: 'Enter', isComposing: true }],
+    ['keyCode 229 (Safari IME)', { key: 'Enter', keyCode: 229 }],
+  ])('does not send on IME commit Enter: %s', async (_name, eventInit) => {
+    const wrapper = mountDrawer();
+    await id(wrapper, 'input').setValue('xin chao');
+    await id(wrapper, 'input').trigger('keydown', eventInit);
+    await flushPromises();
+    expect(assistantAPI.send).not.toHaveBeenCalled();
+  });
+
+  it('starts a new conversation with the reset button', async () => {
+    assistantAPI.send.mockResolvedValue({ data: { reply: 'Ok' } });
+    const wrapper = mountDrawer();
+    expect(id(wrapper, 'new').exists()).toBe(false);
+    await typeAndSend(wrapper, 'Hỏi');
+    await id(wrapper, 'new').trigger('click');
+    expect(id(wrapper, 'user').exists()).toBe(false);
+    expect(id(wrapper, 'starters').exists()).toBe(true);
+    expect(id(wrapper, 'new').exists()).toBe(false);
+  });
+
+  it('suggests a new conversation on prompt_too_large', async () => {
+    assistantAPI.send.mockRejectedValueOnce(apiError(422, 'prompt_too_large'));
+    const wrapper = mountDrawer();
+    await typeAndSend(wrapper, 'Hỏi');
+    expect(id(wrapper, 'error').text()).toContain('Cuộc trò chuyện mới');
+  });
+
+  it('uses the copy icon and clears the copy timer on unmount', async () => {
+    Object.assign(navigator, {
+      clipboard: { writeText: vi.fn(() => Promise.resolve()) },
+    });
+    assistantAPI.send.mockResolvedValue({ data: { reply: 'Nội dung' } });
+    const wrapper = mountDrawer();
+    await typeAndSend(wrapper, 'Hỏi');
+    expect(id(wrapper, 'copy').find('use').attributes('href')).toContain(
+      '#i-copy'
+    );
+    const spy = vi.spyOn(window, 'clearTimeout');
+    await id(wrapper, 'copy').trigger('click');
+    await flushPromises();
+    wrapper.unmount();
+    wrappers.pop();
+    expect(spy).toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
   it('focuses the input when it opens', async () => {
     const wrapper = mountDrawer();
     await flushPromises();

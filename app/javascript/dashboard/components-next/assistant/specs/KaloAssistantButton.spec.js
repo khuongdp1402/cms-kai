@@ -1,4 +1,5 @@
 import { mount, flushPromises } from '@vue/test-utils';
+import { createStore } from 'vuex';
 import brandGrowthAPI from 'dashboard/api/kchat/brandGrowth';
 import KaloAssistantButton from '../KaloAssistantButton.vue';
 import { resetAssistantState } from '../useKaloAssistant';
@@ -73,6 +74,34 @@ describe('KaloAssistantButton visibility', () => {
     await mountButton({ configured: true });
     await mountButton({ configured: true });
     expect(brandGrowthAPI.aiHealth).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('KaloAssistantButton account switch', () => {
+  it('loads availability again when the current account changes', async () => {
+    brandGrowthAPI.aiHealth.mockResolvedValue({ data: { configured: true } });
+    const env = createAssistantEnv();
+    const store = createStore({
+      state: { accountId: 1 },
+      getters: {
+        getCurrentAccountId: state => state.accountId,
+        'accounts/isFeatureEnabledonAccount': () => () => true,
+      },
+      mutations: {
+        setAccount(state, value) {
+          state.accountId = value;
+        },
+      },
+    });
+    const wrapper = mount(KaloAssistantButton, {
+      global: { plugins: [env.router, store, env.i18n] },
+    });
+    wrappers.push(wrapper);
+    await flushPromises();
+    expect(brandGrowthAPI.aiHealth).toHaveBeenCalledTimes(1);
+    store.commit('setAccount', 2);
+    await flushPromises();
+    expect(brandGrowthAPI.aiHealth).toHaveBeenCalledTimes(2);
   });
 });
 

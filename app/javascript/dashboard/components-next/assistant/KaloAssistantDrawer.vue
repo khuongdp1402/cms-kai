@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
@@ -15,7 +15,8 @@ const DOT_DELAYS = [
 ];
 
 const { t } = useI18n();
-const { messages, mode, isLoading, error, setMode, send } = useKaloAssistant();
+const { messages, mode, isLoading, error, setMode, send, reset } =
+  useKaloAssistant();
 
 const draft = ref('');
 const copiedIndex = ref(-1);
@@ -42,10 +43,18 @@ const submit = async text => {
 };
 
 const onEnter = event => {
-  if (event.shiftKey || event.isComposing) return;
+  // keyCode 229: Safari fires the IME commit-Enter after compositionend.
+  if (event.shiftKey || event.isComposing || event.keyCode === 229) return;
   event.preventDefault();
   submit();
 };
+
+const startNew = () => {
+  reset();
+  draft.value = '';
+};
+
+onBeforeUnmount(() => clearTimeout(copiedTimer));
 
 const copy = async (content, index) => {
   try {
@@ -145,7 +154,7 @@ const copy = async (content, index) => {
           @click="copy(message.content, index)"
         >
           <KaloIcon
-            :name="copiedIndex === index ? 'check' : 'clip'"
+            :name="copiedIndex === index ? 'check' : 'copy'"
             class="size-4"
           />
           {{
@@ -170,6 +179,16 @@ const copy = async (content, index) => {
         />
       </li>
     </ul>
+
+    <button
+      v-if="messages.length"
+      type="button"
+      data-test-id="kalo-assistant-new"
+      class="self-start px-3 py-1.5 text-sm font-semibold rounded-full bg-n-alpha-1 text-n-slate-12 hover:bg-n-alpha-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-n-brand"
+      @click="startNew"
+    >
+      {{ t('KALO_ASSISTANT.NEW') }}
+    </button>
 
     <div
       v-if="error"

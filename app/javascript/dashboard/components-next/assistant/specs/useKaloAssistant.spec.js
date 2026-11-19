@@ -54,7 +54,7 @@ describe('errorKey', () => {
     [apiError(403, 'subscription_expired'), 'EXPIRED'],
     [apiError(429, 'rate_limited'), 'RATE_LIMITED'],
     [apiError(422, 'message_too_long'), 'TOO_LONG'],
-    [apiError(422, 'prompt_too_large'), 'TOO_LONG'],
+    [apiError(422, 'prompt_too_large'), 'CONTEXT_TOO_LONG'],
     [apiError(502, 'ai_unavailable'), 'UNAVAILABLE'],
     [apiError(503, 'ai_not_configured'), 'UNAVAILABLE'],
     [apiError(500), 'GENERIC'],

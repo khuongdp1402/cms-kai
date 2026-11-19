@@ -33,8 +33,8 @@ export const errorKey = error => {
   const code = error?.response?.data?.error;
   if (status === 403 && code === 'subscription_expired') return 'EXPIRED';
   if (status === 429) return 'RATE_LIMITED';
-  if (status === 422 && ['message_too_long', 'prompt_too_large'].includes(code))
-    return 'TOO_LONG';
+  if (status === 422 && code === 'message_too_long') return 'TOO_LONG';
+  if (status === 422 && code === 'prompt_too_large') return 'CONTEXT_TOO_LONG';
   if (status === 502 || status === 503) return 'UNAVAILABLE';
   return 'GENERIC';
 };

@@ -5564,7 +5564,9 @@
       "RATE_LIMITED": "Bạn gửi hơi nhanh. Đợi khoảng một phút rồi thử lại.",
       "TOO_LONG": "Tin nhắn quá dài. Hãy rút gọn rồi gửi lại.",
       "UNAVAILABLE": "Trợ lý tạm thời không dùng được. Thử lại sau ít phút.",
-      "GENERIC": "Chưa gửi được tin nhắn. Kiểm tra mạng rồi thử lại."
-    }
+      "GENERIC": "Chưa gửi được tin nhắn. Kiểm tra mạng rồi thử lại.",
+      "CONTEXT_TOO_LONG": "Cuộc trò chuyện đã quá dài. Bấm \"Cuộc trò chuyện mới\" rồi hỏi lại."
+    },
+    "NEW": "Cuộc trò chuyện mới"
   }
 }
