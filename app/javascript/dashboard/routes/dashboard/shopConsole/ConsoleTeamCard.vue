@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 import { useMapGetter, useStore } from 'dashboard/composables/store';
 import { useAccount } from 'dashboard/composables/useAccount';
 import Avatar from 'next/avatar/Avatar.vue';
@@ -21,7 +22,9 @@ const { accountScopedRoute } = useAccount();
 const agents = useMapGetter('agents/getAgents');
 const teams = useMapGetter('teams/getTeams');
 
-const isInviteOpen = ref(false);
+// ?invite=1 (setup checklist "Mời nhân viên") opens the invite drawer.
+const route = useRoute();
+const isInviteOpen = ref(route?.query?.invite === '1');
 const inboxAgent = ref(null);
 
 onMounted(() => {
@@ -112,6 +115,24 @@ const onInvited = agent => {
             </button>
           </li>
         </ul>
+        <div
+          v-if="agents.length === 1"
+          data-test="console-team-empty"
+          class="flex flex-wrap items-center gap-x-4 gap-y-2 px-5 py-3 border-t border-n-weak"
+        >
+          <p class="mb-0 text-sm text-n-slate-11">
+            {{ t('KALO_GUIDE.EMPTY.TEAM_SOLO') }}
+          </p>
+          <button
+            type="button"
+            data-test="console-team-empty-invite"
+            :class="secondaryButtonClass"
+            @click="isInviteOpen = true"
+          >
+            <KaloIcon name="plus" class="size-4" />
+            {{ t('KALO_CONSOLE_SHOP.TEAM.INVITE') }}
+          </button>
+        </div>
       </section>
       <section class="min-w-0 border-t lg:border-t-0 border-n-weak">
         <h3
@@ -119,9 +140,22 @@ const onInvited = agent => {
         >
           {{ t('KALO_CONSOLE_SHOP.TEAM.TEAMS') }}
         </h3>
-        <p v-if="!teams.length" class="px-5 py-3 mb-0 text-sm text-n-slate-11">
-          {{ t('KALO_CONSOLE_SHOP.TEAM.NO_TEAMS') }}
-        </p>
+        <div
+          v-if="!teams.length"
+          data-test="console-teams-empty"
+          class="flex flex-col items-start gap-2 px-5 py-3"
+        >
+          <p class="mb-0 text-sm text-n-slate-11">
+            {{ t('KALO_CONSOLE_SHOP.TEAM.NO_TEAMS') }}
+          </p>
+          <router-link
+            :to="accountScopedRoute('settings_teams_list')"
+            data-test="console-teams-empty-create"
+            :class="secondaryButtonClass"
+          >
+            {{ t('KALO_GUIDE.EMPTY.TEAMS_ACTION') }}
+          </router-link>
+        </div>
         <ul v-else class="flex flex-col px-5 py-2 list-none">
           <li
             v-for="team in teams"

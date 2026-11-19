@@ -41,9 +41,15 @@ export default {
   },
   mounted() {
     this.color = getRandomColor();
-    this.title = this.prefillTitle.toLowerCase();
+    this.title = this.prefillTitle.toLowerCase().replace(/\s/g, '-');
   },
   methods: {
+    // The label API rejects spaces: swap them for '-' while typing, and show
+    // the validation message live.
+    onTitleInput(value) {
+      this.title = String(value).replace(/\s/g, '-');
+      this.v$.title.$touch();
+    },
     onClose() {
       this.$emit('close');
     },
@@ -75,14 +81,14 @@ export default {
     />
     <form class="flex flex-wrap mx-0" @submit.prevent="addLabel">
       <woot-input
-        v-model="title"
+        :model-value="title"
         :class="{ error: v$.title.$error }"
         class="w-full label-name--input"
         :label="$t('LABEL_MGMT.FORM.NAME.LABEL')"
         :placeholder="$t('LABEL_MGMT.FORM.NAME.PLACEHOLDER')"
         :error="labelTitleErrorMessage"
         data-testid="label-title"
-        @input="v$.title.$touch"
+        @input="onTitleInput"
         @blur="v$.title.$touch"
       />
 

@@ -22,6 +22,8 @@ export const setDateLocale = code => {
     : { code: 'default', locale: undefined };
 };
 
+export const getDateLocaleCode = () => current.value.code;
+
 const withLocale = (options = {}) =>
   current.value.locale ? { ...options, locale: current.value.locale } : options;
 

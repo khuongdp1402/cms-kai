@@ -8,6 +8,7 @@ import {
   relativeDayTimestamp,
   shortTimestamp,
 } from 'shared/helpers/timeHelper';
+import { setDateLocale } from 'shared/helpers/dateLocale';
 
 beforeEach(() => {
   process.env.TZ = 'UTC';
@@ -119,6 +120,27 @@ describe('#shortTimestamp', () => {
     expect(shortTimestamp('a year ago', true)).toEqual('1y ago');
     expect(shortTimestamp('1 year ago', true)).toEqual('1y ago');
     expect(shortTimestamp('4 years ago', true)).toEqual('4y ago');
+  });
+});
+
+describe('#shortTimestamp in Vietnamese', () => {
+  beforeEach(() => setDateLocale('vi'));
+  afterEach(() => setDateLocale('en'));
+
+  it('returns Vietnamese short forms', () => {
+    expect(shortTimestamp('less than a minute ago')).toEqual('vừa xong');
+    expect(shortTimestamp('a minute ago')).toEqual('1 phút');
+    expect(shortTimestamp('12 minutes ago')).toEqual('12 phút');
+    expect(shortTimestamp('about 1 hour ago')).toEqual('1 giờ');
+    expect(shortTimestamp('2 hours ago')).toEqual('2 giờ');
+    expect(shortTimestamp('3 days ago')).toEqual('3 ngày');
+    expect(shortTimestamp('a month ago')).toEqual('1 tháng');
+    expect(shortTimestamp('over 1 year ago')).toEqual('1 năm');
+    expect(shortTimestamp('almost 2 years ago')).toEqual('2 năm');
+  });
+
+  it('appends trước when withAgo is true', () => {
+    expect(shortTimestamp('5 minutes ago', true)).toEqual('5 phút trước');
   });
 });
 
