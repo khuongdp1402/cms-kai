@@ -39,7 +39,39 @@ Kế hoạch chi tiết: [plans/2026-11-16-kalo-launch.md](plans/2026-11-16-kalo
 | CI đẩy image lên registry (`kalo_docker_build.yml` chỉ build) | Task 6 |
 | Hardening Nginx (I-2), loại `.superpowers/` `docs/` khỏi image (I-4), giới hạn signup nhiều account lấy trial (I-8, khi mở signup) | Review bảo mật |
 | Kiểm chứng runtime hạ tầng (healthcheck, certbot, full `compose up`) trên staging | deploy.md mục 10 |
-| Tích hợp POS ngoài (KiotViet, Sapo), Ads API, đăng bài tự động, SMS Brandname/ZNS, video MMO, affiliate | Ngoài phạm vi launch |
+| Tích hợp POS ngoài (KiotViet, Sapo), Ads API, SMS Brandname/ZNS, video MMO, affiliate (đăng bài tự động đã chuyển sang Phase AP) | Ngoài phạm vi launch |
+
+## Phase BL — Khởi tạo thương hiệu đa nền tảng (`proposed`, 2026-11-22)
+
+Kế hoạch: [plans/2026-11-22-brand-launch-plan.md](plans/2026-11-22-brand-launch-plan.md) · ADR-030. Wizard 5 bước trong Marketing → Thương hiệu: thông tin thương hiệu → AI soạn bộ hồ sơ trang → hướng dẫn tạo trang FB/IG/TikTok → kết nối vào Kalo (tự điền hồ sơ Fanpage) → chấm điểm hoàn thiện. Nền tảng không cho tạo trang bằng API nên Kalo chuẩn bị và hướng dẫn, không tạo thay.
+
+| ID | Việc |
+|---|---|
+| BL-0 | (Chủ dự án) Meta App + app TikTok, khoá trong `.env`, webhook |
+| BL-1 | Mở rộng hồ sơ thương hiệu, `Kchat::BrandAsset` (logo, ảnh) |
+| BL-2 | `config/kalo/social_profile_specs.yml` (giới hạn ký tự, ảnh, danh mục), xác minh API đọc hồ sơ TikTok |
+| BL-3 | AI soạn bộ hồ sơ trang + 9 bài đầu vào Lịch nội dung |
+| BL-4 | Áp dụng hồ sơ lên Fanpage qua Graph API (có màn so sánh, người xác nhận) |
+| BL-5 | Đọc lại hồ sơ FB/IG(/TikTok), điểm hoàn thiện |
+| BL-6 | UI wizard 5 bước |
+| BL-7 | Mục "Khởi tạo thương hiệu" trong checklist người mới |
+| BL-8 | QA cả bộ + thử trọn luồng với trang test |
+
+## Phase AP — Kế hoạch PR bằng AI + tự đăng bài lên Fanpage (`proposed`, 2026-11-22)
+
+Kế hoạch: [plans/2026-11-22-auto-posting-plan.md](plans/2026-11-22-auto-posting-plan.md) · ADR-031. AI lập kế hoạch và bài nháp → shop tải ảnh/video, ghép template → admin duyệt → Kalo tự đăng lên Facebook Page đúng giờ. Đợt đầu chỉ Facebook. Thứ tự: BL-1 → AP-1…AP-8 → BL-2…BL-8.
+
+| ID | Việc |
+|---|---|
+| AP-0 | (Chủ dự án) Meta App có `pages_manage_posts`, `pages_read_engagement`; Fanpage thử |
+| AP-1 | `kchat_content_plans`, `kchat_posts` + media, máy trạng thái, duyệt, chuyển lịch cũ |
+| AP-2 | `FacebookPublisher`: chữ, 1 ảnh, nhiều ảnh, video |
+| AP-3 | Job đăng đúng giờ + cron quét, chống trùng, thử lại, thông báo lỗi |
+| AP-4 | AI lập kế hoạch PR + sửa từng bài |
+| AP-5 | Thư viện media + ảnh theo template |
+| AP-6 | UI lịch đăng, soạn bài, xem trước, chờ duyệt, kết quả |
+| AP-7 | Chỉ số sau đăng 24h/72h |
+| AP-8 | Cờ `kalo_auto_posting`, quyền Meta, QA, thử thật trên Fanpage |
 
 ## Phase B — KTech branding trên giao diện Chatwoot
 
@@ -192,3 +224,5 @@ Ký hiệu task: `P<phase>-<số>`. Ước lượng tính cho 2–3 dev frontend
 | 2026-09-29 | Thêm P0-07 (chiến lược nhánh), P0-08 (K8s toàn stack), P1-09/P1-10 (làm cứng và dọn Zalo bridge), P4-08/P4-09 (tích hợp CRM/ERP KTech); mở rộng P0-06 (dọn CI thừa hưởng từ Chatwoot) | Rà soát kế hoạch do Antigravity đề xuất: giữ ADR-001, chỉ lấy các mục roadmap còn thiếu |
 | 2026-11-17 | Phase K: mã nguồn xong, thêm backlog "Sau launch" | Kết thúc đợt Kalo launch; việc hoãn lấy từ ledger SDD và rà soát bảo mật |
 | 2026-11-18 | Đợt 2 giao diện Kalo xong, thêm việc đợt sau | Lột giao diện Chatwoot khỏi chat, Cài đặt, super admin; ghi các việc còn lại |
+| 2026-11-22 | Thêm Phase BL (khởi tạo thương hiệu: hồ sơ thương hiệu, tạo trang FB/IG/TikTok có hướng dẫn, kết nối, tự điền Fanpage) | Chủ dự án yêu cầu; không làm phần bản quyền/nhãn hiệu |
+| 2026-11-22 | Thêm Phase AP (AI lập kế hoạch PR, duyệt rồi tự đăng Facebook Page); "đăng bài tự động" ra khỏi backlog "Sau launch" | Chủ dự án yêu cầu: tự tạo Fanpage, hệ thống lập kế hoạch và đăng bài; ảnh/video do shop tải lên + template; Facebook trước |

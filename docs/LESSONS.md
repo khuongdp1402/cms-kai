@@ -9,8 +9,19 @@
 - **A2 (2026-09-28): Không gọi bất kỳ API/dịch vụ nào của DSF**, cả trong lúc làm việc lẫn trong code của dự án này: `dsfsoft.vn`, repo GitHub `dsf-software/*`, gateway, endpoint lấy từ code DSF. Không copy secrets/URL/ENV của DSF sang đây.
 - **A3 (2026-09-28): Bám sát plan.** Làm theo `docs/STATUS.md`, cập nhật trạng thái sau mỗi bước. Có việc chen ngang thì ghi vào STATUS (và ROADMAP nếu đổi phạm vi).
 - **A4 (2026-09-28): Mọi lỗi gặp phải đều ghi vào file này** để lần sau không lặp lại.
+- **A5 (2026-11-22): Tính năng thương hiệu là thiết lập thông tin thương hiệu và tạo/kết nối trang trên Facebook, Instagram, TikTok.** Không đưa phần bản quyền, nhãn hiệu, tra cứu NOIP vào kế hoạch hay giao diện của tính năng này.
 
 ## B. Lỗi kỹ thuật đã gặp
+
+- **B127 (2026-11-22): Studio `mmo` trỏ LLM mặc định về dịch vụ DSF và từng có module tải lại video người khác.**
+  - Triệu chứng: `mmo/config/app.yaml` có `llm_base_url: https://9router.dsfsoft.vn/v1`; nhánh `main` cũ của mmo có `remake/` (tải Douyin bỏ watermark, biến đổi để "defeat duplicate detection").
+  - Quy tắc: tích hợp với mmo chỉ qua API `/kchat/studio/*` (ADR-032). Không chạy mmo với cấu hình DSF trong phiên làm việc, không chép URL/khóa của nó vào Kalo, không nối luồng `remake` hay tự động hoá tài khoản web vào Kalo. Phía mmo gửi caption từ metadata (không gọi LLM) khi giao cho Kalo.
+- **B126 (2026-11-22): Máy Windows `d:\PROJECT\CMS` không có Docker, Ruby, WSL.**
+  - Triệu chứng: không chạy được `script/ktech/rspec.sh`, `vitest.sh`, rubocop, `db:migrate`; `db/schema.rb` phải sửa tay theo migration.
+  - Quy tắc: khi làm trên máy này, ghi rõ code "chưa chạy test" trong STATUS và báo chủ dự án. Không đánh dấu task `done` trước khi chạy cả bộ rspec + vitest trên máy có Docker. Sau khi có Docker, chạy `db:migrate` rồi so `schema.rb` sinh ra với bản sửa tay.
+- **B125 (2026-11-22): Lập kế hoạch trên `main` cũ và nhánh cũ, không fetch lại trước.**
+  - Triệu chứng: viết kế hoạch "Social & Marketing" dựa trên STATUS ngày 2026-09-30 (KTech, ADR-007), trong khi remote `main` đã có 310 commit mới (Kalo, ADR-017…029, đã có Bình luận FB/IG, hồ sơ thương hiệu, lịch nội dung). Kế hoạch phải bỏ (cất trong `git stash`).
+  - Quy tắc: trước khi lập kế hoạch hay làm việc, chạy `git fetch --all --prune` rồi `git log --all --oneline -15`, đọc STATUS/DECISIONS trên nhánh có commit mới nhất. Kiểm tính năng đã có bằng code (`Glob`/`Grep` service, controller, view), không dựa vào docs cũ.
 
 - **B115 (2026-11-20): Chiến dịch "Mọi khách đã nhắn shop" gửi cho khách vãng lai website ("Chào lingering-grass-348 ơi") và mở hội thoại mới cho họ.**
   - Triệu chứng: số người nhận gồm cả contact mà widget tự tạo khi khách mở trang (tên Haikunator, chưa nhắn tin nào); dispatcher tạo hội thoại mới cho người chưa từng có hội thoại.

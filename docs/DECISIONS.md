@@ -307,3 +307,37 @@
   3. Nâng cấp `Kchat::Order` hỗ trợ `deposit_amount` (`payable_amount` cho VietQR thu cọc), `note`, `external_id`/`external_source`/`external_status`, `source: 'external'`, bỏ trừ kho cho hàng `preorder`/`custom`; thêm `PATCH /kchat/orders/:id` cập nhật ghi chú/vận đơn ngay ở `OrderDrawer`, outbound webhook (`kchat_order_created`, `kchat_order_updated` qua `WebhookJob`) và inbound sync (`POST /kchat/pos_sync/{products,orders}`).
   4. Mở rộng `CannedResponse` thêm cột `tags` (`jsonb`), chuẩn hóa `/` ở `short_code`, tìm kiếm cả theo tag khi gõ `/{keyword}` và mở nút lưu mọi tin nhắn trong `Message.vue`; thêm Chatbot cơ bản theo nhu cầu (`Kchat::DemandBotService` + `KchatDemandBotListener` + `/app/accounts/:id/settings/kalo-bot`) tự gắn nhãn hội thoại, chèn `formatted_pitch` sản phẩm, tạm dừng khi nhân viên đang trả lời và không làm sai lệch SLA nhân viên (`automation_rule_id = 'kchat_demand_bot'`).
 - **Đánh đổi:** Hướng dẫn sử dụng của trợ lý AI (`config/kalo/assistant_guide.vi.md`) được cập nhật đồng bộ; quy trình vận chuyển vẫn cập nhật thủ công hoặc nhận từ POS ngoài qua `pos_sync/orders` (chưa nối trực tiếp SDK riêng của GHN/GHTK).
+
+## ADR-030 — Khởi tạo thương hiệu đa nền tảng: chuẩn bị + hướng dẫn + kết nối, không tạo trang thay người dùng · `proposed` (2026-11-22)
+- **Bối cảnh:** chủ dự án muốn shop thiết lập thông tin thương hiệu rồi tạo fanpage/trang cho thương hiệu trên Facebook, Instagram, TikTok, không làm phần bản quyền/nhãn hiệu. Tài liệu chính thức (kiểm 2026-11-22): Pages API chỉ quản lý Page đã có; IG User "Creating/Updating: not supported"; TikTok không có API tạo hay sửa hồ sơ. Facebook Page sửa được `about`, `description`, `website`, `phone`, danh mục, ảnh bìa qua `POST /{page_id}`.
+- **Quyết định:**
+  1. Kalo **không tạo tài khoản thay người dùng** và không dùng giả lập trình duyệt (vi phạm điều khoản, dễ bị khoá). Wizard 5 bước: thông tin thương hiệu → AI soạn bộ hồ sơ theo giới hạn từng nền tảng → hướng dẫn tạo trang (sao chép từng trường, liên kết, QR) → kết nối bằng luồng kênh sẵn có → đọc lại hồ sơ và chấm điểm.
+  2. Chỉ Facebook được **ghi hồ sơ tự động**, có màn so sánh và người xác nhận. Instagram/TikTok chỉ đọc lại để chấm điểm.
+  3. Lưu trạng thái trong `account.custom_attributes['brand_growth']` (`profile` mở rộng + `launch_kit`), như ADR-021/025. Ảnh dùng model mới `Kchat::BrandAsset` (ActiveStorage). Token trang dùng lại của kênh đã nối.
+  4. Giới hạn ký tự, kích thước ảnh, danh mục gom trong `config/kalo/social_profile_specs.yml`.
+  5. Nằm sau cờ `kalo_brand` (ADR-023); `generate` áp `Kchat::Entitlements` và throttle AI như các endpoint `brand_growth` khác.
+- **Đánh đổi:** người dùng vẫn phải tự bấm tạo trang trên từng nền tảng. Đổi lại không phụ thuộc API không tồn tại và không gây rủi ro khoá tài khoản. Muốn chạy thật cần Meta App và app TikTok (BL-0).
+- Kế hoạch: [plans/2026-11-22-brand-launch-plan.md](plans/2026-11-22-brand-launch-plan.md).
+
+## ADR-031 — Kế hoạch PR bằng AI và tự đăng bài lên Facebook Page · `proposed` (2026-11-22)
+- **Bối cảnh:** chủ dự án tự tạo Fanpage và muốn Kalo lập kế hoạch PR (nội dung, ảnh, video) rồi tự đăng. Lịch nội dung hiện có chỉ là danh sách tiêu đề trong jsonb, không đăng thật. AI hiện chỉ tạo chữ.
+- **Quyết định (chủ dự án chốt 2026-11-22):**
+  1. **Duyệt rồi tự đăng:** AI soạn nháp, quản trị viên shop duyệt từng bài hoặc cả tuần, Kalo đăng đúng giờ. Không có chế độ AI tự đăng không qua duyệt.
+  2. **Ảnh/video do shop tải lên**, ghép template thương hiệu trên trình duyệt. AI viết kịch bản video và mô tả ảnh cần chụp. Chưa tích hợp AI tạo ảnh/video.
+  3. **Đợt đầu chỉ Facebook Page** (Graph API `feed`/`photos`/`videos`, quyền `pages_manage_posts`, `pages_read_engagement`).
+  4. Thêm bảng `kchat_content_plans`, `kchat_posts` (ActiveStorage cho media), vì bài đăng cần file, giờ chính xác và trạng thái tin cậy cho job. Lịch cũ trong `custom_attributes` được chuyển sang bảng này.
+  5. Hẹn giờ do Kalo giữ (Sidekiq `wait_until` + cron quét mỗi phút), không dùng hẹn giờ của Facebook. Chuyển `approved → publishing` trong khoá dòng để không đăng trùng (như ADR-025).
+  6. Cờ `kalo_auto_posting` thêm ở cuối `features.yml`, mặc định tắt (ADR-023).
+- **Đánh đổi:** phụ thuộc Sidekiq chạy đúng giờ (cron bù). Thêm một bước duyệt nhưng tránh đăng sai thông tin thương hiệu. Shop ngoài nhóm quản trị app phải chờ Meta duyệt quyền.
+- Kế hoạch: [plans/2026-11-22-auto-posting-plan.md](plans/2026-11-22-auto-posting-plan.md).
+
+## ADR-032 — Kết nối studio sản xuất video/ảnh (Omni-Viral Studio, repo `mmo`) · `proposed` (2026-11-22)
+- **Bối cảnh:** chủ dự án có app riêng làm video/ảnh (`github.com/khuongdp1402/mmo`, Python + Streamlit + ffmpeg + Remotion, chạy trên máy cá nhân, không có HTTP API, đã có gói export `facebook_reels` và client đăng Reels). Cần đưa sản phẩm của studio vào luồng duyệt và tự đăng của Kalo (ADR-031).
+- **Quyết định:**
+  1. **Studio sản xuất, Kalo duyệt và đăng.** Studio không đăng thay Kalo để không có hai nơi cùng đăng một Fanpage.
+  2. **Studio luôn là bên gọi** (Kalo ở server, studio ở máy cá nhân): dùng `api_access_token` của một user Kalo. API `/kchat/studio/*`: `GET requests` (bài có yêu cầu sản xuất + hồ sơ thương hiệu), `POST requests/:id/claim|deliver|fail`, `POST posts` (video studio tự làm → bản nháp mới, idempotent theo `source_ref`). Phía Kalo: `POST /kchat/posts/:id/request_media` (cần `media_brief`).
+  3. Media studio gửi về **luôn thành bản nháp** chờ người duyệt; `ai_label` của studio → `ai_generated`; một video → định dạng `reel` (thêm vào `FacebookPublisher`: `video_reels` start → rupload → finish).
+  4. Phía studio: `channels/kalo.py` + `omni kalo requests|claim|deliver|fail|push`, gửi file từ gói export `facebook_reels` (caption lấy từ metadata, không gọi LLM).
+  5. **Không nối** các phần sau của studio: tải lại video Douyin/TikTok của người khác và biến đổi để qua mặt phát hiện trùng lặp (module `remake/` trên nhánh `main` cũ, đã không còn ở `rebuild/phase0`); tự động hoá tài khoản web (Muse.ai/Gemini qua Chrome CDP) không đi qua Kalo. Lý do: vi phạm bản quyền/điều khoản nền tảng và bị Meta giảm phân phối nội dung không nguyên bản.
+  6. Studio mặc định trỏ LLM về `9router.dsfsoft.vn` (dịch vụ DSF): Kalo không gọi và không chép cấu hình đó (LESSONS A2); chủ dự án tự quyết định LLM của studio.
+- **Đánh đổi:** chưa có thông báo đẩy từ Kalo sang studio: studio phải chạy `omni kalo requests` (hoặc vòng lặp sau này) để thấy yêu cầu mới.
