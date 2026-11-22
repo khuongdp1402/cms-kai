@@ -3,6 +3,7 @@ import MarketingIndex from './MarketingIndex.vue';
 import CommentsPage from './CommentsPage.vue';
 import CampaignsPage from './CampaignsPage.vue';
 import BrandPage from './BrandPage.vue';
+import PostsPage from './publishing/PostsPage.vue';
 
 const meta = { permissions: ['administrator', 'agent', 'custom_role'] };
 
@@ -30,5 +31,11 @@ export const routes = [
     name: 'kalo_brand',
     meta,
     component: BrandPage,
+  },
+  {
+    path: frontendURL('accounts/:accountId/marketing/posts'),
+    name: 'kalo_posts',
+    meta,
+    component: PostsPage,
   },
 ];

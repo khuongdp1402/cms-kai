@@ -6656,5 +6656,153 @@
         "TIKTOK": "TikTok"
       }
     }
+  },
+  "KALO_PUBLISHING": {
+    "NAV": "Đăng bài",
+    "TITLE": "Lịch đăng bài",
+    "DESC": "Soạn bài, gửi duyệt, rồi Kalo tự đăng lên Fanpage đúng giờ.",
+    "NEW_POST": "Soạn bài",
+    "TABS": {
+      "LABEL": "Xem bài đăng",
+      "CALENDAR": "Lịch",
+      "QUEUE": "Chờ duyệt",
+      "RESULTS": "Đã đăng và lỗi"
+    },
+    "CALENDAR": {
+      "PREV": "Tháng trước",
+      "NEXT": "Tháng sau",
+      "TODAY": "Hôm nay",
+      "ADD_ON_DAY": "Soạn bài cho ngày này",
+      "MORE": "+{count} bài khác",
+      "WEEKDAYS": {
+        "MON": "T2",
+        "TUE": "T3",
+        "WED": "T4",
+        "THU": "T5",
+        "FRI": "T6",
+        "SAT": "T7",
+        "SUN": "CN"
+      }
+    },
+    "STATUS": {
+      "DRAFT": "Nháp",
+      "PENDING_APPROVAL": "Chờ duyệt",
+      "APPROVED": "Đã duyệt, chờ đăng",
+      "PUBLISHING": "Đang đăng",
+      "PUBLISHED": "Đã đăng",
+      "FAILED": "Lỗi"
+    },
+    "FORMAT": {
+      "TEXT": "Chữ",
+      "PHOTO": "1 ảnh",
+      "ALBUM": "Album ảnh",
+      "VIDEO": "Video",
+      "REEL": "Reels"
+    },
+    "MEDIA_REQUEST": {
+      "REQUESTED": "Đã gửi studio",
+      "IN_PRODUCTION": "Studio đang làm",
+      "DELIVERED": "Studio đã giao",
+      "FAILED": "Studio báo lỗi"
+    },
+    "EDITOR": {
+      "TITLE_NEW": "Soạn bài mới",
+      "TITLE_EDIT": "Bài đăng",
+      "PAGE": "Fanpage",
+      "PAGE_PLACEHOLDER": "Chọn Fanpage",
+      "NO_PAGE": "Chưa nối Fanpage nào. Nối Fanpage ở Console, mục Kênh đã nối, rồi quay lại đây.",
+      "SCHEDULE": "Giờ đăng",
+      "TIMEZONE_NOTE": "Theo giờ trên máy của bạn.",
+      "FORMAT": "Loại bài",
+      "CAPTION": "Nội dung",
+      "CAPTION_PLACEHOLDER": "Viết nội dung bài đăng, hashtag và lời kêu gọi.",
+      "CAPTION_COUNT": "{count} ký tự",
+      "LINK": "Liên kết (không bắt buộc)",
+      "MEDIA": "Ảnh và video",
+      "MEDIA_HINT": {
+        "PHOTO": "1 ảnh JPG, PNG hoặc GIF, tối đa 10 MB.",
+        "ALBUM": "Từ 2 đến 10 ảnh, theo đúng thứ tự bạn thêm.",
+        "VIDEO": "1 video MP4 hoặc MOV, tối đa 500 MB.",
+        "REEL": "1 video dọc 9:16, dài 3 đến 90 giây."
+      },
+      "MEDIA_ADD": "Thêm file",
+      "MEDIA_REMOVE": "Bỏ file này",
+      "MEDIA_BRIEF": "Mô tả ảnh hoặc video cần làm",
+      "MEDIA_BRIEF_PLACEHOLDER": "Ví dụ: Reels 20 giây, cận cảnh pha trà, ánh sáng tự nhiên, chữ to ở 3 giây đầu.",
+      "MEDIA_BRIEF_HINT": "Có mô tả thì bấm Gửi studio sản xuất để studio làm video hoặc ảnh cho bài này.",
+      "PILLAR": "Nhóm nội dung",
+      "PILLAR_PLACEHOLDER": "Ví dụ: Kiến thức, Sản phẩm, Khách hàng thật, Khuyến mãi",
+      "PREVIEW": "Xem trước",
+      "PREVIEW_EMPTY": "Chưa có nội dung",
+      "AI_LABEL": "Có nhãn nội dung tạo bằng AI",
+      "REVIEW_NOTE": "Ghi chú của người duyệt",
+      "REJECT_NOTE": "Lý do trả về (người soạn sẽ thấy)",
+      "READONLY": "Bài đã đăng hoặc đang đăng nên không sửa được.",
+      "EDIT_RESETS": "Sửa bài đang chờ duyệt hoặc đã duyệt sẽ đưa bài về nháp, cần duyệt lại.",
+      "PERMALINK": "Xem bài trên Facebook"
+    },
+    "ACTIONS": {
+      "SAVE": "Lưu nháp",
+      "SUBMIT": "Gửi duyệt",
+      "APPROVE": "Duyệt",
+      "APPROVE_ALL": "Duyệt tất cả ({count})",
+      "REJECT": "Trả về",
+      "REJECT_CONFIRM": "Xác nhận trả về",
+      "UNAPPROVE": "Bỏ duyệt",
+      "RETRY": "Đăng lại ngay",
+      "RETRY_UNKNOWN_CONFIRM": "Kalo không rõ bài đã lên Fanpage hay chưa. Hãy mở Fanpage kiểm tra trước. Vẫn đăng lại?",
+      "REQUEST_MEDIA": "Gửi studio sản xuất",
+      "DELETE": "Xóa bài",
+      "DELETE_CONFIRM": "Xóa bài này khỏi lịch?"
+    },
+    "BLOCKERS": {
+      "TITLE": "Bài chưa gửi duyệt được vì:",
+      "INBOX_REQUIRED": "Chưa chọn Fanpage.",
+      "SCHEDULE_REQUIRED": "Chưa chọn giờ đăng.",
+      "SCHEDULE_IN_PAST": "Giờ đăng đã qua. Chọn giờ mới rồi gửi duyệt lại.",
+      "CONTENT_REQUIRED": "Bài chữ cần nội dung hoặc liên kết.",
+      "MEDIA_NOT_ALLOWED": "Bài chữ không kèm ảnh hay video. Đổi loại bài hoặc bỏ file.",
+      "PHOTO_REQUIRES_ONE_IMAGE": "Loại 1 ảnh cần đúng 1 ảnh.",
+      "ALBUM_REQUIRES_2_TO_10_IMAGES": "Album cần từ 2 đến 10 ảnh.",
+      "VIDEO_REQUIRES_ONE_VIDEO": "Loại video cần đúng 1 video.",
+      "REEL_REQUIRES_ONE_VIDEO": "Reels cần đúng 1 video.",
+      "BANNED_PHRASES": "Nội dung có từ cấm của thương hiệu.",
+      "MEDIA_BRIEF_REQUIRED": "Cần mô tả ảnh hoặc video trước khi gửi studio."
+    },
+    "ERRORS": {
+      "LOAD": "Không tải được bài đăng. Thử tải lại trang.",
+      "UNKNOWN": "Có lỗi, chưa lưu được. Thử lại sau.",
+      "NOT_PUBLISHABLE": "Bài chưa đủ điều kiện, xem danh sách bên dưới.",
+      "INVALID_TRANSITION": "Bài vừa đổi trạng thái. Đóng rồi mở lại để xem bản mới.",
+      "VALIDATION_FAILED": "Thông tin chưa hợp lệ, kiểm tra lại Fanpage, liên kết và file.",
+      "FEATURE_DISABLED": "Shop chưa bật chức năng Tự đăng bài.",
+      "SUBSCRIPTION_EXPIRED": "Gói đã hết hạn nên chưa soạn hay duyệt bài được.",
+      "NOT_FOUND": "Không tìm thấy bài này."
+    },
+    "PUBLISH_ERRORS": {
+      "TOKEN_INVALID": "Kết nối Fanpage đã hết hạn. Kết nối lại Fanpage rồi bấm Đăng lại ngay.",
+      "PERMISSION_DENIED": "Fanpage chưa cấp quyền đăng bài cho Kalo. Kết nối lại Fanpage và đồng ý quyền đăng bài.",
+      "TEMPORARY_ERROR": "Facebook đang bận, Kalo đã thử lại nhưng chưa được.",
+      "NETWORK_ERROR": "Không kết nối được tới Facebook.",
+      "PUBLISH_UNKNOWN": "Không rõ bài đã lên Fanpage hay chưa. Kiểm tra Fanpage trước khi đăng lại.",
+      "FEATURE_DISABLED": "Chức năng Tự đăng bài đã tắt nên bài không được đăng.",
+      "SUBSCRIPTION_EXPIRED": "Gói hết hạn lúc đến giờ đăng nên bài không được đăng.",
+      "INBOX_NOT_FACEBOOK_PAGE": "Fanpage của bài đã bị gỡ khỏi Kalo."
+    },
+    "LIST": {
+      "NO_SCHEDULE": "Chưa có giờ đăng",
+      "QUEUE_EMPTY": "Không có bài nào chờ duyệt.",
+      "RESULTS_EMPTY": "Chưa có bài nào đã đăng hoặc bị lỗi.",
+      "ADMIN_ONLY": "Chỉ quản trị viên của shop được duyệt bài."
+    },
+    "TOASTS": {
+      "SAVED": "Đã lưu nháp",
+      "SUBMITTED": "Đã gửi duyệt",
+      "APPROVED": "Đã duyệt. Kalo sẽ đăng đúng giờ.",
+      "APPROVED_MANY": "Đã duyệt {ok} trên {total} bài",
+      "REJECTED": "Đã trả bài về cho người soạn",
+      "RETRIED": "Đã xếp bài để đăng lại",
+      "MEDIA_REQUESTED": "Đã gửi yêu cầu sang studio"
+    }
   }
 }

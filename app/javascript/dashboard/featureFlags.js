@@ -63,6 +63,7 @@ export const FEATURE_FLAGS = {
   KALO_HELP_CENTER: 'kalo_help_center',
   KALO_DETAILED_REPORTS: 'kalo_detailed_reports',
   KALO_EXTRA_CHANNELS: 'kalo_extra_channels',
+  KALO_AUTO_POSTING: 'kalo_auto_posting',
 };
 
 export const PREMIUM_FEATURES = [

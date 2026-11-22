@@ -81,6 +81,15 @@ export const KALO_NAV_ITEMS = [
     isActive: name => name === 'kalo_brand',
   },
   {
+    key: 'posts',
+    icon: 'send',
+    labelKey: 'KALO_PUBLISHING.NAV',
+    sectionKey: 'KALO_NAV.SECTIONS.GROWTH',
+    route: 'kalo_posts',
+    feature: FEATURE_FLAGS.KALO_AUTO_POSTING,
+    isActive: name => name === 'kalo_posts',
+  },
+  {
     key: 'reports',
     icon: 'chart',
     labelKey: 'KALO_NAV.REPORTS',

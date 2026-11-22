@@ -44,7 +44,7 @@ const mountRail = async ({ route = 'home', ...envOptions } = {}) => {
 
 describe('KaloRail', () => {
   // Guided UX spec §4: Vận hành, Tăng trưởng, then the footer items.
-  it('renders the spec §4 order: Tổng quan, Tin nhắn, Bình luận, Khách, Đơn hàng, Chiến dịch, Thương hiệu, Báo cáo, Console, Cài đặt', async () => {
+  it('renders the spec §4 order: Tổng quan, Tin nhắn, Bình luận, Khách, Đơn hàng, Chiến dịch, Thương hiệu, Đăng bài, Báo cáo, Console, Cài đặt', async () => {
     const wrapper = await mountRail();
     const labels = wrapper
       .findAll('[data-test-id^="kalo-nav-"]')
@@ -57,6 +57,7 @@ describe('KaloRail', () => {
       'Đơn hàng',
       'Chiến dịch',
       'Thương hiệu',
+      'Đăng bài',
       'Báo cáo',
       'Console',
       'Cài đặt',
@@ -73,6 +74,7 @@ describe('KaloRail', () => {
     expect(keys).toContain('kalo-nav-campaigns');
     expect(keys).not.toContain('kalo-nav-comments');
     expect(keys).not.toContain('kalo-nav-brand');
+    expect(keys).not.toContain('kalo-nav-posts');
   });
 
   it('shows Console to shop administrators only', async () => {

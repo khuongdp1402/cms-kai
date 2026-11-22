@@ -15,6 +15,7 @@ const names = [
   'kalo_comments',
   'kalo_campaigns',
   'kalo_brand',
+  'kalo_posts',
   'kalo_console',
   'kalo_platform_overview',
   'kalo_reports',

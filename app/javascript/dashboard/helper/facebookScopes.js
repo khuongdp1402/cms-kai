@@ -4,6 +4,8 @@ export const FACEBOOK_PAGE_SCOPES = [
   'pages_messaging',
   'pages_show_list',
   'pages_read_engagement',
+  // Kalo auto posting (ADR-031): publish approved posts to the Page.
+  'pages_manage_posts',
 ];
 
 export const INSTAGRAM_SCOPES = [

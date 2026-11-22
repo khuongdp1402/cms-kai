@@ -9,6 +9,7 @@ describe('requiredKaloFeatures', () => {
     ['kalo_pos', ['kalo_pos']],
     ['kalo_comments', ['kalo_comments']],
     ['kalo_brand', ['kalo_brand']],
+    ['kalo_posts', ['kalo_auto_posting']],
     ['kalo_campaigns', ['kalo_campaigns']],
     ['campaigns_livechat_index', ['kalo_campaigns']],
     ['campaigns_sms_index', ['kalo_campaigns', 'kalo_extra_channels']],

@@ -56,11 +56,12 @@ describe('KaloTabBar', () => {
       .findAll('[data-test-id^="kalo-sheet-"]')
       .map(el => el.attributes('data-test-id'))
       .filter(id => id !== 'kalo-sheet-section');
-    expect(order.slice(0, 7)).toEqual([
+    expect(order.slice(0, 8)).toEqual([
       'kalo-sheet-item-overview',
       'kalo-sheet-item-comments',
       'kalo-sheet-item-campaigns',
       'kalo-sheet-item-brand',
+      'kalo-sheet-item-posts',
       'kalo-sheet-item-console',
       'kalo-sheet-item-settings',
       'kalo-sheet-notifications',

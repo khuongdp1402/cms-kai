@@ -11,12 +11,14 @@ const {
   KALO_HELP_CENTER,
   KALO_DETAILED_REPORTS,
   KALO_EXTRA_CHANNELS,
+  KALO_AUTO_POSTING,
 } = FEATURE_FLAGS;
 
 const ROUTES_BY_FEATURE = {
   [KALO_POS]: ['kalo_pos'],
   [KALO_COMMENTS]: ['kalo_comments'],
   [KALO_BRAND]: ['kalo_brand'],
+  [KALO_AUTO_POSTING]: ['kalo_posts'],
   [KALO_CAMPAIGNS]: [
     'kalo_campaigns',
     'campaigns_ongoing_index',
