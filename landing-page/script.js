@@ -1,4 +1,7 @@
 export function appUrl(hostname) {
+  if (hostname === 'localhost' || hostname === '127.0.0.1') {
+    return `http://${hostname}:3005`;
+  }
   return `https://app.${hostname.replace(/^www\./, '')}`;
 }
 

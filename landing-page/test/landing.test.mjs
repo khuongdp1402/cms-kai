@@ -57,6 +57,7 @@ test('script.js computes the app url from the hostname', async () => {
   const { appUrl } = await import(pathToFileURL(join(root, 'script.js')).href);
   assert.equal(appUrl('www.example.vn'), 'https://app.example.vn');
   assert.equal(appUrl('example.vn'), 'https://app.example.vn');
+  assert.equal(appUrl('localhost'), 'http://localhost:3005');
 });
 
 test('plan cards contain no vague unverifiable promises', () => {
