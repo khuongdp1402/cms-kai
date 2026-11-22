@@ -344,4 +344,27 @@ describe('ProductsIndex', () => {
     await flushPromises();
     expectTourTargets(wrapper, 'products');
   });
+
+  it('shows availability badge and category for preorder items, hiding stock adjust, and opens import drawer', async () => {
+    const { wrapper } = mountIndex([
+      makeProduct({
+        id: 11,
+        name: 'Tour 3N2Đ',
+        category: 'Tour',
+        availability_mode: 'preorder',
+        stock: null,
+      }),
+    ]);
+    await flushPromises();
+    expect(wrapper.find('[data-test="product-category"]').text()).toBe('Tour');
+    expect(wrapper.find('[data-test="product-stock"]').text()).toBe(
+      'Đặt trước / Booking'
+    );
+    expect(wrapper.find('[data-test="product-adjust"]').exists()).toBe(false);
+
+    await wrapper.find('[data-test="products-import"]').trigger('click');
+    expect(wrapper.find('[data-test="product-import-drawer"]').exists()).toBe(
+      true
+    );
+  });
 });

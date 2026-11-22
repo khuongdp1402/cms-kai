@@ -280,4 +280,23 @@ RSpec.describe Kchat::Order do
       end
     end
   end
+
+  describe 'preorder and deposit_amount' do
+    it 'never raises InsufficientStock or decrements stock for preorder/custom products' do
+      preorder = Kchat::Product.create!(account: account, name: 'Phòng Deluxe', price: 2_000_000, stock: 0, availability_mode: 'preorder')
+      custom = Kchat::Product.create!(account: account, name: 'Tour thiết kế', price: 5_000_000, availability_mode: 'custom')
+
+      order = build_order(items: [{ product_id: preorder.id, quantity: 3 }, { product_id: custom.id, quantity: 1 }])
+      expect(order.total).to eq(11_000_000)
+      expect(preorder.reload.stock).to eq(0)
+    end
+
+    it 'uses deposit_amount as payable_amount when positive and below total, and rejects deposit above total' do
+      order = build_order(attributes: base.merge(deposit_amount: 500), items: [free_item])
+      expect(order.payable_amount).to eq(500)
+
+      expect { build_order(attributes: base.merge(deposit_amount: 5000), items: [free_item]) }
+        .to raise_error(ActiveRecord::RecordInvalid)
+    end
+  end
 end

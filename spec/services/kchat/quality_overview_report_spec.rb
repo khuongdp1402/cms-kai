@@ -98,4 +98,12 @@ RSpec.describe Kchat::QualityOverviewReport do
 
     expect(item).to include(count: 1, route: 'kalo_comments', tone: 'ok')
   end
+
+  it 'ignores preorder products in low_stock_products and routes low stock items to kalo_products' do
+    Kchat::Product.create!(account: account, name: 'Hàng có sẵn ít', price: 100_000, stock: 1, availability_mode: 'in_stock')
+    Kchat::Product.create!(account: account, name: 'Tour đặt trước', price: 2_000_000, stock: 0, availability_mode: 'preorder')
+
+    item = described_class.new(account, '7d').summary[:action_queue].find { |entry| entry[:key] == 'low_stock_products' }
+    expect(item).to include(count: 1, route: 'kalo_products', tone: 'err')
+  end
 end

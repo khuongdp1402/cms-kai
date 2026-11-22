@@ -30,17 +30,32 @@ const withFlag = async ({ commit }, flag, run) => {
 let latestFetch = 0;
 
 export const actions = {
-  fetch: async ({ commit }, { query, active } = {}) => {
+  fetch: async (
+    { commit },
+    { query, active, category, availabilityMode } = {}
+  ) => {
     latestFetch += 1;
     const requestId = latestFetch;
     commit(SET_UI_FLAG, { isFetching: true });
     try {
-      const { data } = await KchatProductsAPI.get({ query, active });
+      const { data } = await KchatProductsAPI.get({
+        query,
+        active,
+        category,
+        availabilityMode,
+      });
       if (requestId === latestFetch) commit(SET_PRODUCTS, data);
     } finally {
       if (requestId === latestFetch) commit(SET_UI_FLAG, { isFetching: false });
     }
   },
+
+  importProducts: ({ commit, dispatch }, payload) =>
+    withFlag({ commit }, 'isCreating', async () => {
+      const { data } = await KchatProductsAPI.importProducts(payload);
+      await dispatch('fetch', { active: true });
+      return data;
+    }),
 
   create: ({ commit }, payload) =>
     withFlag({ commit }, 'isCreating', async () => {

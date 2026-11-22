@@ -68,6 +68,13 @@ export const actions = {
     return data;
   },
 
+  update: ({ commit }, { id, ...payload }) =>
+    withFlag({ commit }, 'isUpdating', async () => {
+      const { data } = await KchatOrdersAPI.update(id, payload);
+      commit(UPSERT_ORDER, data);
+      return data;
+    }),
+
   transition: ({ commit }, { id, event }) =>
     withFlag({ commit }, 'isUpdating', async () => {
       const { data } = await KchatOrdersAPI.transition(id, event);

@@ -20,6 +20,7 @@ class AsyncDispatcher < BaseDispatcher
       Conversations::UnreadCounts::Listener.instance,
       ReportingEventListener.instance,
       WebhookListener.instance,
+      KchatDemandBotListener.instance,
       ZaloListener.instance
     ]
   end

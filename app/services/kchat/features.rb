@@ -6,9 +6,9 @@
 # Existing accounts were backfilled by migration 20261119000001_backfill_kalo_feature_flags.
 module Kchat::Features
   # On for new shops.
-  CORE = %w[kalo_comments kalo_campaigns kalo_brand kalo_ai_assistant kalo_pos].freeze
+  CORE = %w[kalo_comments kalo_campaigns kalo_brand kalo_ai_assistant].freeze
   # Off for new shops; a Super Admin turns them on per shop.
-  ADVANCED = %w[kalo_advanced_automation kalo_help_center kalo_detailed_reports kalo_extra_channels].freeze
+  ADVANCED = %w[kalo_pos kalo_advanced_automation kalo_help_center kalo_detailed_reports kalo_extra_channels].freeze
   ALL = (CORE + ADVANCED).freeze
 
   module_function

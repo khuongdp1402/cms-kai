@@ -383,4 +383,44 @@ RSpec.describe 'Kchat orders API', type: :request do
       expect(response).to have_http_status(:not_found)
     end
   end
+
+  describe 'PATCH update, deposit QR and outbound webhooks' do
+    it 'updates note, shipping_carrier and tracking_code' do
+      order = make_order
+      patch "#{base}/#{order.id}", params: { note: 'Check-in 25/12', shipping_carrier: 'Vietjet', tracking_code: 'PNR-999' },
+                                   headers: headers, as: :json
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to include('note' => 'Check-in 25/12', 'shipping_carrier' => 'Vietjet', 'tracking_code' => 'PNR-999')
+    end
+
+    it 'generates deposit QR message when deposit_amount is smaller than total' do
+      account.update!(locale: 'vi', custom_attributes: { 'payment' => payment })
+      conversation = make_conversation
+      order = make_order(extra: { deposit_amount: 1000 }, items: [{ name: 'Tour', unit_price: 5000, quantity: 1 }])
+
+      post "#{base}/#{order.id}/send_qr", params: { conversation_id: conversation.display_id }, headers: headers, as: :json
+      expect(response).to have_http_status(:created)
+      expect(conversation.messages.reload.last.content).to include('đặt cọc', '1.000đ', '5.000đ', "DH#{order.number}")
+    end
+
+    it 'enqueues WebhookJob for kchat_order_created and kchat_order_updated' do
+      account.enable_features!('api_and_webhooks')
+      account.save!
+      create(:webhook, account: account, url: 'https://pos.example.com/hook',
+                       subscriptions: %w[kchat_order_created kchat_order_updated])
+
+      expect do
+        post base, params: attrs.merge(items: [free_item], note: 'Pre-order'), headers: headers, as: :json
+      end.to have_enqueued_job(WebhookJob).with(
+        'https://pos.example.com/hook', hash_including(event: 'kchat_order_created'), :account_webhook, anything
+      )
+
+      order_id = response.parsed_body['id']
+      expect do
+        post "#{base}/#{order_id}/transition", params: { event: 'mark_paid' }, headers: headers, as: :json
+      end.to have_enqueued_job(WebhookJob).with(
+        'https://pos.example.com/hook', hash_including(event: 'kchat_order_updated'), :account_webhook, anything
+      )
+    end
+  end
 end

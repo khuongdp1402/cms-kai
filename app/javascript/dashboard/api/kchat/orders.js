@@ -13,6 +13,10 @@ class KchatOrdersAPI extends ApiClient {
     return axios.get(this.url, { params });
   }
 
+  update(id, payload) {
+    return axios.patch(`${this.url}/${id}`, payload);
+  }
+
   transition(id, event) {
     return axios.post(`${this.url}/${id}/transition`, { event });
   }

@@ -10,6 +10,7 @@ import KaloIcon from 'dashboard/components-next/icon/KaloIcon.vue';
 import TeleportWithDirection from 'dashboard/components-next/TeleportWithDirection.vue';
 import KaloDrawer from 'dashboard/components-next/layout/KaloDrawer.vue';
 import OrderForm from 'dashboard/routes/dashboard/orders/OrderForm.vue';
+import KaloProductPitchDrawer from './KaloProductPitchDrawer.vue';
 
 const props = defineProps({
   contactId: { type: Number, default: null },
@@ -18,10 +19,14 @@ const props = defineProps({
   isReplyRestricted: { type: Boolean, default: false },
 });
 
+const emit = defineEmits(['insertText', 'sendText']);
+
 const { t } = useI18n();
 const store = useStore();
 
+const showPitchDrawer = ref(false);
 const showForm = ref(false);
+const pitchedItems = ref([]);
 const createdOrder = ref(null);
 const qrOptions = ref(null);
 const isSending = ref(false);
@@ -46,18 +51,47 @@ const sendQr = async orderId => {
   }
 };
 
+const openPitchDrawer = () => {
+  if (!props.contactId) return;
+  opener = document.activeElement;
+  showPitchDrawer.value = true;
+};
+
 const openForm = () => {
   if (!props.contactId) return;
   opener = document.activeElement;
+  pitchedItems.value = [];
   showForm.value = true;
 };
 
 const closeDialogs = () => {
-  const wasOpen = showForm.value || createdOrder.value || qrOptions.value;
+  const wasOpen =
+    showPitchDrawer.value ||
+    showForm.value ||
+    createdOrder.value ||
+    qrOptions.value;
+  showPitchDrawer.value = false;
   showForm.value = false;
+  pitchedItems.value = [];
   createdOrder.value = null;
   qrOptions.value = null;
   if (wasOpen) opener?.focus?.();
+};
+
+const onInsertPitch = text => {
+  showPitchDrawer.value = false;
+  emit('insertText', text);
+};
+
+const onSendPitch = text => {
+  showPitchDrawer.value = false;
+  emit('sendText', text);
+};
+
+const onCreateOrderFromPitch = items => {
+  showPitchDrawer.value = false;
+  pitchedItems.value = items;
+  showForm.value = true;
 };
 
 const onKeydown = event => {
@@ -68,6 +102,7 @@ onBeforeUnmount(() => document.removeEventListener('keydown', onKeydown));
 
 const onCreated = order => {
   showForm.value = false;
+  pitchedItems.value = [];
   if (order.payment_method === 'transfer_qr') {
     createdOrder.value = order;
   } else {
@@ -92,8 +127,6 @@ const pickQr = async () => {
     const payable = data.payload.filter(
       order => order.payment_method === 'transfer_qr'
     );
-    // Even a single order gets a light confirm (order number and amount):
-    // the QR is a chat message, it cannot be taken back once sent.
     qrOptions.value = payable;
   } catch (error) {
     alertKchatError(error, t);
@@ -106,7 +139,8 @@ const chooseQr = async order => {
   if (await sendQr(order.id)) closeDialogs();
 };
 
-// One pending order: a light confirm that names it ("Gửi mã QR cho đơn #…?").
+const orderPayableAmount = order => order.payable_amount ?? order.total;
+
 const qrTitle = computed(() =>
   qrOptions.value?.length === 1
     ? t('KALO_POLISH3.CHAT.QR_CONFIRM_TITLE', {
@@ -115,7 +149,7 @@ const qrTitle = computed(() =>
     : t('KALO_CHAT.QR_PICKER.TITLE')
 );
 
-defineExpose({ openForm, pickQr });
+defineExpose({ openForm, openPitchDrawer, pickQr });
 
 const buttonClass =
   'inline-flex items-center gap-1.5 h-8 px-2 text-sm font-medium rounded-lg text-n-slate-11 hover:bg-n-alpha-2 hover:text-n-slate-12 transition-colors duration-150 motion-reduce:transition-none';
@@ -127,6 +161,19 @@ const buttonClass =
     data-tour="chat-order-qr"
     class="flex items-center gap-0.5"
   >
+    <button
+      type="button"
+      data-test="pitch-products"
+      :class="buttonClass"
+      :title="t('KALO_CHAT.ACTIONS.PITCH_PRODUCTS')"
+      :aria-label="t('KALO_CHAT.ACTIONS.PITCH_PRODUCTS')"
+      @click="openPitchDrawer"
+    >
+      <KaloIcon name="spark" class="size-4" />
+      <span class="hidden sm:inline">{{
+        t('KALO_CHAT.ACTIONS.PITCH_PRODUCTS')
+      }}</span>
+    </button>
     <button
       type="button"
       data-test="create-order"
@@ -152,9 +199,15 @@ const buttonClass =
       <span class="hidden sm:inline">{{ t('KALO_CHAT.ACTIONS.QR') }}</span>
     </button>
 
-    <!-- Create, created and QR popups are KaloDrawers (guided UX spec §2):
-         460px on the right on desktop, full screen on mobile. -->
     <TeleportWithDirection to="body">
+      <KaloProductPitchDrawer
+        v-if="showPitchDrawer"
+        @close="closeDialogs"
+        @insert="onInsertPitch"
+        @send="onSendPitch"
+        @create-order="onCreateOrderFromPitch"
+      />
+
       <KaloDrawer
         v-if="showForm"
         :title="t('KALO_ORDERS.FORM.TITLE')"
@@ -165,6 +218,7 @@ const buttonClass =
         <OrderForm
           :contact-id="contactId"
           :conversation-id="conversationId"
+          v-bind="pitchedItems.length ? { initialItems: pitchedItems } : {}"
           in-drawer
           @created="onCreated"
           @cancel="closeDialogs"
@@ -178,7 +232,7 @@ const buttonClass =
         @close="closeDialogs"
       >
         <p class="mb-0 text-sm text-n-slate-11">
-          {{ formatVnd(createdOrder.total) }}
+          {{ formatVnd(orderPayableAmount(createdOrder)) }}
         </p>
         <template #footer>
           <div class="flex justify-end gap-2">
@@ -202,8 +256,6 @@ const buttonClass =
         </template>
       </KaloDrawer>
 
-      <!-- One pending order: a light confirm that names the order and amount
-           before the QR goes out. Several: pick one. -->
       <KaloDrawer
         v-if="qrOptions"
         :title="qrTitle"
@@ -224,7 +276,7 @@ const buttonClass =
         >
           {{
             t('KALO_POLISH3.CHAT.QR_CONFIRM', {
-              amount: formatVnd(qrOptions[0].total),
+              amount: formatVnd(orderPayableAmount(qrOptions[0])),
             })
           }}
         </p>
@@ -242,7 +294,6 @@ const buttonClass =
               "
               @click="chooseQr(order)"
             >
-              <!-- One order: the button says what it does. -->
               <span
                 v-if="qrOptions.length === 1"
                 class="inline-flex items-center justify-center flex-1 gap-2 font-semibold"
@@ -251,7 +302,7 @@ const buttonClass =
                 {{
                   t('KALO_POLISH4.CHAT.QR_SEND_ONE', {
                     number: order.number,
-                    amount: formatVnd(order.total),
+                    amount: formatVnd(orderPayableAmount(order)),
                   })
                 }}
               </span>
@@ -260,7 +311,7 @@ const buttonClass =
                   <KaloIcon name="qr" class="size-4" />
                   <b>#{{ order.number }}</b>
                 </span>
-                <span>{{ formatVnd(order.total) }}</span>
+                <span>{{ formatVnd(orderPayableAmount(order)) }}</span>
               </template>
             </button>
           </li>

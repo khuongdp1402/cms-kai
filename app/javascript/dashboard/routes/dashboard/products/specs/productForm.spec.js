@@ -48,4 +48,33 @@ describe('productForm helpers', () => {
       buildPayload({ ...emptyForm(), name: 'Áo', price: '1.000', stock: '4' })
     ).toEqual({ name: 'Áo', sku: null, price: 1000, stock: 4 });
   });
+
+  it('validates image_remote_url and drops stock when preorder/custom is selected', () => {
+    expect(
+      validateForm({
+        ...emptyForm(),
+        name: 'Phòng',
+        price: '1000',
+        image_remote_url: 'ftp://invalid',
+      })
+    ).toEqual({ image_remote_url: 'IMAGE_URL_INVALID' });
+
+    expect(
+      buildPayload({
+        ...emptyForm(),
+        name: 'Phòng Deluxe',
+        price: '2.400.000',
+        stock: '10',
+        availability_mode: 'preorder',
+        category: 'Khách sạn',
+      })
+    ).toEqual({
+      name: 'Phòng Deluxe',
+      sku: null,
+      price: 2400000,
+      stock: null,
+      availability_mode: 'preorder',
+      category: 'Khách sạn',
+    });
+  });
 });

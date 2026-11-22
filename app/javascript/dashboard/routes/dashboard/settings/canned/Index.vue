@@ -34,18 +34,38 @@ const cannedResponseAPI = ref({ message: '' });
 
 const sortOrder = ref('asc');
 const searchQuery = ref('');
+const selectedTag = ref('');
 
 const records = computed(() =>
   getters.getSortedCannedResponses.value(sortOrder.value)
 );
 
+const allTags = computed(() => [
+  ...new Set(
+    records.value.flatMap(item => (Array.isArray(item.tags) ? item.tags : []))
+  ),
+]);
+
 const filteredRecords = computed(() => {
-  const query = searchQuery.value.trim();
-  if (!query) return records.value;
-  return picoSearch(records.value, query, [
+  const byTag = selectedTag.value
+    ? records.value.filter(
+        item =>
+          Array.isArray(item.tags) && item.tags.includes(selectedTag.value)
+      )
+    : records.value;
+  const query = searchQuery.value.trim().replace(/^\/+/, '');
+  if (!query) return byTag;
+  const matched = picoSearch(byTag, query, [
     { name: 'short_code', weight: 4 },
     'content',
   ]);
+  const tagMatched = byTag.filter(
+    item =>
+      Array.isArray(item.tags) &&
+      item.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase())) &&
+      !matched.some(m => m.id === item.id)
+  );
+  return [...matched, ...tagMatched];
 });
 const uiFlags = computed(() => getters.getUIFlags.value);
 
@@ -188,8 +208,39 @@ const confirmDeletion = () => {
     </template>
 
     <template #body>
+      <div v-if="allTags.length" class="flex flex-wrap gap-1.5 mb-3">
+        <button
+          type="button"
+          data-test="canned-tag-all"
+          class="px-3 py-1 text-xs font-semibold border rounded-full transition-colors"
+          :class="
+            !selectedTag
+              ? 'bg-n-brand text-white border-transparent'
+              : 'bg-n-solid-1 border-n-weak text-n-slate-11 hover:text-n-slate-12'
+          "
+          @click="selectedTag = ''"
+        >
+          {{ t('KALO_CANNED.FILTER_ALL') }}
+        </button>
+        <button
+          v-for="tag in allTags"
+          :key="tag"
+          type="button"
+          data-test="canned-tag-chip"
+          class="px-3 py-1 text-xs font-semibold border rounded-full transition-colors"
+          :class="
+            selectedTag === tag
+              ? 'bg-n-brand text-white border-transparent'
+              : 'bg-n-solid-1 border-n-weak text-n-slate-11 hover:text-n-slate-12'
+          "
+          @click="selectedTag = tag"
+        >
+          {{ tag }}
+        </button>
+      </div>
+
       <span
-        v-if="!filteredRecords.length && searchQuery"
+        v-if="!filteredRecords.length && (searchQuery || selectedTag)"
         class="flex items-center justify-center flex-1 py-16 text-sm text-center text-n-slate-11"
       >
         {{ $t('KALO_SETTINGS_UI.COMMON.NO_RESULTS') }}
@@ -204,7 +255,20 @@ const confirmDeletion = () => {
                 <KaloIcon name="send" class="size-5" />
               </span>
             </template>
-            <template #title>{{ cannedItem.short_code }}</template>
+            <template #title>
+              <div class="flex flex-wrap items-center gap-2">
+                <code class="text-sm font-bold text-n-brand">
+                  {{ `/${cannedItem.short_code}` }}
+                </code>
+                <span
+                  v-for="tag in cannedItem.tags || []"
+                  :key="tag"
+                  class="px-2 py-0.5 text-[11px] font-medium rounded-full bg-n-solid-2 border border-n-weak text-n-slate-11"
+                >
+                  {{ tag }}
+                </span>
+              </div>
+            </template>
             <template #description>
               <p class="mb-0 whitespace-normal line-clamp-2">
                 {{ getPlainText(cannedItem.content) }}
@@ -246,6 +310,7 @@ const confirmDeletion = () => {
         :id="activeResponse.id"
         :edshort-code="activeResponse.short_code"
         :edcontent="activeResponse.content"
+        :edtags="activeResponse.tags || []"
         :on-close="hideEditPopup"
       />
     </woot-modal>

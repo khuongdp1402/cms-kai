@@ -99,14 +99,20 @@ const variableKey = (item = {}) => {
             >
               {{ getPlainText(item.description) }}
             </p>
-            <p
-              class="max-w-full min-w-0 mb-0 overflow-hidden text-xs text-n-slate-11 group-hover:text-n-slate-12 text-ellipsis whitespace-nowrap"
-              :class="{
-                'text-n-slate-12': index === selectedIndex,
-              }"
-            >
-              {{ variableKey(item) }}
-            </p>
+            <div class="flex flex-wrap items-center max-w-full gap-1.5">
+              <p
+                class="min-w-0 mb-0 overflow-hidden text-xs font-semibold text-n-brand text-ellipsis whitespace-nowrap"
+              >
+                {{ variableKey(item) }}
+              </p>
+              <span
+                v-for="tag in item.tags || []"
+                :key="tag"
+                class="px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-n-solid-2 border border-n-weak text-n-slate-11"
+              >
+                {{ tag }}
+              </span>
+            </div>
           </slot>
         </button>
       </woot-dropdown-item>

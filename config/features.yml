@@ -292,7 +292,7 @@
   column: feature_flags_ext_1
 - name: kalo_pos
   display_name: Kalo POS
-  enabled: true
+  enabled: false
   column: feature_flags_ext_1
 - name: kalo_advanced_automation
   display_name: Kalo Advanced Automation

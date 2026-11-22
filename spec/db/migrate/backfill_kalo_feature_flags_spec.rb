@@ -23,7 +23,7 @@ RSpec.describe BackfillKaloFeatureFlags do
   it 'turns core modules on and leaves unused advanced groups off' do
     account = create(:account)
     migrate_up
-    expect(enabled_kalo(account)).to match_array(Kchat::Features::CORE)
+    expect(enabled_kalo(account)).to match_array(described_class::CORE_BITS.keys.map(&:to_s))
   end
 
   it 'keeps advanced automation on when the shop has automation rules, macros, bots, webhooks, apps or attributes' do

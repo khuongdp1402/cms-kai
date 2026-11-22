@@ -1,5 +1,5 @@
 class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::BaseController
-  before_action :require_active_subscription!, only: [:create, :update, :adjust_stock]
+  before_action :require_active_subscription!, only: [:create, :update, :adjust_stock, :import]
   before_action :fetch_product, only: [:update, :destroy, :adjust_stock]
 
   def index
@@ -13,6 +13,15 @@ class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::B
     return render_invalid(@product) unless @product.save
 
     render :show, status: :created
+  end
+
+  def import
+    authorize ::Kchat::Product, :import?
+    csv_text = params[:file].respond_to?(:read) ? params[:file].read : params[:csv_text]
+    result = ::Kchat::ProductImportService.new(Current.account).call(csv_text: csv_text, products: import_products_param)
+    render json: result
+  rescue ArgumentError => e
+    render_kchat_error(e.message == 'limit_exceeded' ? 'import_limit_exceeded' : 'validation_failed', :unprocessable_entity)
   end
 
   def update
@@ -61,14 +70,34 @@ class Api::V1::Accounts::Kchat::ProductsController < Api::V1::Accounts::Kchat::B
 
   def filtered_products
     scope = ::Kchat::Product.where(account_id: Current.account.id).with_attached_image.order(:name, :id)
+    apply_query_filter(apply_attribute_filters(scope))
+  end
+
+  def apply_attribute_filters(scope)
     scope = scope.where(active: ActiveModel::Type::Boolean.new.cast(params[:active])) if params[:active].present?
+    scope = scope.where(category: params[:category].to_s.strip) if params[:category].present?
+    scope = scope.where(availability_mode: params[:availability_mode].to_s) if params[:availability_mode].present?
+    scope
+  end
+
+  def apply_query_filter(scope)
     return scope if params[:query].blank?
 
     pattern = "%#{::Kchat::Product.sanitize_sql_like(params[:query])}%"
-    scope.where('name ILIKE :q OR sku ILIKE :q', q: pattern)
+    scope.where('name ILIKE :q OR sku ILIKE :q OR category ILIKE :q', q: pattern)
   end
 
   def product_params
-    params.permit(:name, :price, :sku, :stock, :active, :image)
+    params.permit(
+      :name, :price, :sku, :stock, :active, :image,
+      :availability_mode, :category, :description, :pitch_template, :external_id, :image_remote_url
+    )
+  end
+
+  def import_products_param
+    return nil unless params[:products].is_a?(Array)
+
+    params.permit(products: [:name, :sku, :price, :availability_mode, :stock, :category, :description, :pitch_template,
+                             :external_id, :image_url, :image_remote_url])[:products].map(&:to_h)
   end
 end

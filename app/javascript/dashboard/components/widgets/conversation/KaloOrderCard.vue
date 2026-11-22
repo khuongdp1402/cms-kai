@@ -43,6 +43,12 @@ const canSendQr = computed(
     order.value.payment_method === 'transfer_qr'
 );
 
+const hasDeposit = computed(
+  () =>
+    Number(order.value?.deposit_amount) > 0 &&
+    Number(order.value?.deposit_amount) < Number(order.value?.total)
+);
+
 const sendQr = async () => {
   if (isSending.value) return;
   isSending.value = true;
@@ -120,6 +126,16 @@ onMounted(async () => {
       <span>{{ t('KALO_CHAT.CARD.TOTAL') }}</span>
       <span>{{ formatVnd(order.total) }}</span>
     </div>
+    <div
+      v-if="hasDeposit"
+      class="flex justify-between text-xs font-semibold text-n-brand"
+    >
+      <span>{{ t('KALO_CHAT.CARD.DEPOSIT') }}</span>
+      <span>{{ formatVnd(order.deposit_amount) }}</span>
+    </div>
+    <p v-if="order.note" class="mb-0 text-xs text-n-slate-11 line-clamp-2">
+      {{ `${t('KALO_CHAT.CARD.NOTE')}: ${order.note}` }}
+    </p>
     <button
       v-if="canSendQr"
       type="button"

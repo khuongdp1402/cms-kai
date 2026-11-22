@@ -14,6 +14,7 @@ import auditlogs from './auditlogs/audit.routes';
 import billing from './billing/billing.routes';
 import BillingPage from './billing/BillingPage.vue';
 import PaymentSettingsPage from './payment/PaymentSettingsPage.vue';
+import KaloBotSettings from './kaloBot/KaloBotSettings.vue';
 import canned from './canned/canned.routes';
 import inbox from './inbox/inbox.routes';
 import integrations from './integrations/integrations.routes';
@@ -60,6 +61,12 @@ export default {
       name: 'kalo_payment_settings',
       meta: { permissions: ['administrator'] },
       component: PaymentSettingsPage,
+    },
+    {
+      path: frontendURL('accounts/:accountId/settings/kalo-bot'),
+      name: 'kalo_bot_settings',
+      meta: { permissions: ['administrator'] },
+      component: KaloBotSettings,
     },
     ...canned.routes,
     ...inbox.routes,

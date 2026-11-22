@@ -3,6 +3,10 @@
 # Table name: kchat_orders
 #
 #  id               :bigint           not null, primary key
+#  deposit_amount   :bigint           default(0), not null
+#  external_source  :string
+#  external_status  :string
+#  note             :text
 #  number           :integer          not null
 #  paid_at          :datetime
 #  payment_method   :string           not null
@@ -19,15 +23,19 @@
 #  account_id       :bigint           not null
 #  contact_id       :bigint
 #  conversation_id  :bigint
+#  external_id      :string
 #
 # Indexes
 #
-#  index_kchat_orders_on_account_id              (account_id)
-#  index_kchat_orders_on_account_id_and_number   (account_id,number) UNIQUE
-#  index_kchat_orders_on_account_id_and_paid_at  (account_id,paid_at)
-#  index_kchat_orders_on_account_id_and_status   (account_id,status)
-#  index_kchat_orders_on_contact_id              (contact_id)
-#  index_kchat_orders_on_conversation_id         (conversation_id)
+#  index_kchat_orders_on_account_id                  (account_id)
+# rubocop:disable Layout/LineLength
+#  index_kchat_orders_on_account_id_and_external_id  (account_id,external_id) UNIQUE WHERE ((external_id IS NOT NULL) AND ((external_id)::text <> ''::text))
+# rubocop:enable Layout/LineLength
+#  index_kchat_orders_on_account_id_and_number       (account_id,number) UNIQUE
+#  index_kchat_orders_on_account_id_and_paid_at      (account_id,paid_at)
+#  index_kchat_orders_on_account_id_and_status       (account_id,status)
+#  index_kchat_orders_on_contact_id                  (contact_id)
+#  index_kchat_orders_on_conversation_id             (conversation_id)
 #
 # Foreign Keys
 #
@@ -65,13 +73,19 @@ class Kchat::Order < ApplicationRecord
 
   enum :status, { pending_payment: 'pending_payment', paid: 'paid', shipping: 'shipping', completed: 'completed', cancelled: 'cancelled' },
        validate: true
-  enum :source, { chat: 'chat', pos: 'pos', manual: 'manual' }, prefix: true, validate: true
+  enum :source, { chat: 'chat', pos: 'pos', manual: 'manual', external: 'external' }, prefix: true, validate: true
   enum :payment_method, { transfer_qr: 'transfer_qr', cod: 'cod', cash: 'cash', card: 'card' }, prefix: true, validate: true
 
   validates :number, presence: true
   validates :items, presence: true
   validates :shipping_fee, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+  validates :deposit_amount, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :total, numericality: { only_integer: true, less_than_or_equal_to: MAX_TOTAL }
+  validates :note, length: { maximum: 2_000 }, allow_blank: true
+  validates :external_id, length: { maximum: 120 }, allow_blank: true, uniqueness: { scope: :account_id, allow_blank: true }
+  validates :external_source, length: { maximum: 60 }, allow_blank: true
+  validates :external_status, length: { maximum: 80 }, allow_blank: true
+  validate :deposit_within_total
   validate :contact_and_conversation_belong_to_account
   validate :products_active, on: :create
 
@@ -125,12 +139,17 @@ class Kchat::Order < ApplicationRecord
 
     def reserve_stock!(lines)
       wanted = wanted_quantities(lines)
-      Kchat::Product.where(id: wanted.keys).where.not(stock: nil).order(:id).lock.each do |product|
+      Kchat::Product.where(id: wanted.keys, availability_mode: 'in_stock').where.not(stock: nil).order(:id).lock.each do |product|
         raise InsufficientStock, product.id if product.stock < wanted[product.id]
 
         product.update!(stock: product.stock - wanted[product.id])
       end
     end
+  end
+
+  def payable_amount
+    dep = deposit_amount.to_i
+    dep.positive? && dep < total.to_i ? dep : total.to_i
   end
 
   def transition!(event)
@@ -179,6 +198,12 @@ class Kchat::Order < ApplicationRecord
     errors.add(:base, 'conversation_wrong_account') if conversation && conversation.account_id != account_id
   end
 
+  def deposit_within_total
+    return unless deposit_amount.to_i.positive? && total.present?
+
+    errors.add(:deposit_amount, 'cannot exceed total') if deposit_amount.to_i > total.to_i
+  end
+
   private
 
   def ensure_allowed!(event)
@@ -208,8 +233,8 @@ class Kchat::Order < ApplicationRecord
 
   def restore_stock!
     quantities = items.select(&:product_id).group_by(&:product_id).transform_values { |is| is.sum(&:quantity) }
-    Kchat::Product.where(id: quantities.keys).order(:id).lock.each do |product|
-      product.update!(stock: product.stock + quantities[product.id]) unless product.stock.nil?
+    Kchat::Product.where(id: quantities.keys, availability_mode: 'in_stock').where.not(stock: nil).order(:id).lock.each do |product|
+      product.update!(stock: product.stock + quantities[product.id])
     end
   end
 end

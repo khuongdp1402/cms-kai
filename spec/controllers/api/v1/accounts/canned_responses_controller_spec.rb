@@ -72,6 +72,29 @@ RSpec.describe 'Canned Responses API', type: :request do
         expect(response).to have_http_status(:success)
         expect(account.canned_responses.count).to eq(2)
       end
+
+      it 'normalizes leading slash on short_code, saves tags, and searches by tag' do
+        post "/api/v1/accounts/#{account.id}/canned_responses",
+             params: { short_code: '/gia_phong', content: 'Phòng Deluxe 2.400.000đ', tags: ['khách sạn', 'báo giá'] },
+             headers: agent.create_new_auth_token,
+             as: :json
+
+        expect(response).to have_http_status(:success)
+        expect(response.parsed_body['short_code']).to eq('gia_phong')
+        expect(response.parsed_body['tags']).to eq(['khách sạn', 'báo giá'])
+
+        get "/api/v1/accounts/#{account.id}/canned_responses",
+            params: { search: '/khách' },
+            headers: agent.create_new_auth_token,
+            as: :json
+        expect(response.parsed_body.pluck('short_code')).to eq(['gia_phong'])
+
+        get "/api/v1/accounts/#{account.id}/canned_responses",
+            params: { tag: 'báo giá' },
+            headers: agent.create_new_auth_token,
+            as: :json
+        expect(response.parsed_body.pluck('short_code')).to eq(['gia_phong'])
+      end
     end
   end
 

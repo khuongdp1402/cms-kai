@@ -28,17 +28,24 @@ class Api::V1::Accounts::CannedResponsesController < Api::V1::Accounts::BaseCont
   end
 
   def canned_response_params
-    params.require(:canned_response).permit(:short_code, :content)
+    permitted = params.permit(:short_code, :content, :tags, tags: [])
+    if params[:canned_response].is_a?(ActionController::Parameters)
+      permitted = params.require(:canned_response).permit(:short_code, :content, :tags, tags: [])
+    end
+    permitted
   end
 
   def canned_responses
-    if params[:search]
-      Current.account.canned_responses
-             .where('short_code ILIKE :search OR content ILIKE :search', search: "%#{params[:search]}%")
-             .order_by_search(params[:search])
+    scope = Current.account.canned_responses
+    scope = scope.with_tag(params[:tag]) if params[:tag].present?
+    term = params[:search].to_s.strip.sub(%r{\A/+}, '')
+    return scope if term.blank?
 
-    else
-      Current.account.canned_responses
-    end
+    pattern = "%#{term}%"
+    scope.where(
+      'short_code ILIKE :search OR content ILIKE :search OR ' \
+      'EXISTS (SELECT 1 FROM jsonb_array_elements_text(canned_responses.tags) AS t WHERE t ILIKE :search)',
+      search: pattern
+    ).order_by_search(term)
   end
 end

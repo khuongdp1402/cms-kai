@@ -206,4 +206,28 @@ describe('OrderDrawer', () => {
     expect(footer.find('[data-test="primary"]').exists()).toBe(true);
     expect(footer.find('[data-test="cancel"]').exists()).toBe(true);
   });
+
+  it('shows partial deposit, external POS status, and note in the drawer', async () => {
+    OrdersAPI.qr.mockResolvedValue({ data: new Blob(['png']) });
+    const wrapper = mountDrawer(
+      makeOrder({
+        deposit_amount: 100000,
+        total: 403000,
+        note: 'Booking phòng view biển',
+        external_id: 'POS-88',
+        external_source: 'kiotviet',
+        external_status: 'Đang giữ phòng',
+      })
+    );
+    await flushPromises();
+    expect(wrapper.find('[data-test="drawer-deposit"]').text()).toContain(
+      '100.000đ'
+    );
+    expect(wrapper.find('[data-test="drawer-note"]').text()).toBe(
+      'Booking phòng view biển'
+    );
+    expect(wrapper.find('[data-test="drawer-external"]').text()).toContain(
+      'Đang giữ phòng'
+    );
+  });
 });

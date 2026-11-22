@@ -7,6 +7,21 @@ import NextButton from 'dashboard/components-next/button/Button.vue';
 import Modal from '../../../../components/Modal.vue';
 import WootMessageEditor from 'dashboard/components/widgets/WootWriter/Editor.vue';
 
+const QUICK_TAGS = [
+  'khách sạn',
+  'tour',
+  'vé máy bay',
+  'báo giá',
+  'đặt cọc',
+  'chăm sóc',
+];
+
+const parseTags = raw =>
+  String(raw || '')
+    .split(',')
+    .map(t => t.trim())
+    .filter(Boolean);
+
 export default {
   name: 'AddCanned',
   components: {
@@ -31,12 +46,24 @@ export default {
     return {
       shortCode: '',
       content: this.responseContent || '',
+      tagsInput: '',
       addCanned: {
         showLoading: false,
         message: '',
       },
       show: true,
     };
+  },
+  computed: {
+    quickTags() {
+      return QUICK_TAGS;
+    },
+    parsedTags() {
+      return [...new Set(parseTags(this.tagsInput))];
+    },
+    normalizedShortCode() {
+      return this.shortCode.trim().replace(/^\/+/, '');
+    },
   },
   validations: {
     shortCode: {
@@ -48,23 +75,29 @@ export default {
     },
   },
   methods: {
+    toggleQuickTag(tag) {
+      const current = this.parsedTags;
+      const next = current.includes(tag)
+        ? current.filter(item => item !== tag)
+        : [...current, tag];
+      this.tagsInput = next.join(', ');
+    },
     resetForm() {
       this.shortCode = '';
       this.content = '';
+      this.tagsInput = '';
       this.v$.shortCode.$reset();
       this.v$.content.$reset();
     },
     addCannedResponse() {
-      // Show loading on button
       this.addCanned.showLoading = true;
-      // Make API Calls
       this.$store
         .dispatch('createCannedResponse', {
-          short_code: this.shortCode,
+          short_code: this.normalizedShortCode,
           content: this.content,
+          tags: this.parsedTags,
         })
         .then(() => {
-          // Reset Form, Show success message
           this.addCanned.showLoading = false;
           useAlert(this.$t('CANNED_MGMT.ADD.API.SUCCESS_MESSAGE'));
           this.resetForm();
@@ -92,13 +125,60 @@ export default {
         <div class="w-full">
           <label :class="{ error: v$.shortCode.$error }">
             {{ $t('CANNED_MGMT.ADD.FORM.SHORT_CODE.LABEL') }}
+            <div class="relative flex items-center mt-1">
+              <span
+                class="absolute left-3 text-sm font-bold pointer-events-none text-n-slate-10"
+              >
+                {{ '/' }}
+              </span>
+              <input
+                v-model="shortCode"
+                type="text"
+                class="!pl-6 !mb-0"
+                :placeholder="$t('CANNED_MGMT.ADD.FORM.SHORT_CODE.PLACEHOLDER')"
+                @blur="v$.shortCode.$touch"
+              />
+            </div>
+          </label>
+          <p class="mt-1 mb-2 text-xs text-n-slate-11">
+            {{
+              $t('KALO_CANNED.KEYWORD_HINT', {
+                code: normalizedShortCode || 'keyword',
+              })
+            }}
+          </p>
+        </div>
+
+        <div class="w-full mb-3">
+          <label>
+            {{ $t('KALO_CANNED.TAGS_LABEL') }}
             <input
-              v-model="shortCode"
+              v-model="tagsInput"
               type="text"
-              :placeholder="$t('CANNED_MGMT.ADD.FORM.SHORT_CODE.PLACEHOLDER')"
-              @blur="v$.shortCode.$touch"
+              data-test="canned-tags-input"
+              :placeholder="$t('KALO_CANNED.TAGS_PLACEHOLDER')"
             />
           </label>
+          <div class="flex flex-wrap items-center gap-1.5 mt-1">
+            <span class="text-xs text-n-slate-11">
+              {{ $t('KALO_CANNED.SUGGESTED_TAGS') }}
+            </span>
+            <button
+              v-for="tag in quickTags"
+              :key="tag"
+              type="button"
+              data-test="canned-quick-tag"
+              class="px-2 py-0.5 text-xs font-medium border rounded-full transition-colors"
+              :class="
+                parsedTags.includes(tag)
+                  ? 'bg-n-brand text-white border-transparent'
+                  : 'bg-n-solid-2 border-n-weak text-n-slate-11 hover:text-n-slate-12'
+              "
+              @click="toggleQuickTag(tag)"
+            >
+              {{ tag }}
+            </button>
+          </div>
         </div>
 
         <div class="w-full">

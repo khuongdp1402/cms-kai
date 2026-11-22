@@ -19,6 +19,7 @@ const ROUTES = {
   settings_teams_list: { permissions: ADMIN },
   labels_list: { permissions: ADMIN },
   canned_list: { permissions: ALL },
+  kalo_bot_settings: { permissions: ADMIN },
   general_settings_index: { permissions: ADMIN },
   kalo_billing: { permissions: ADMIN },
   kalo_payment_settings: { permissions: ADMIN },

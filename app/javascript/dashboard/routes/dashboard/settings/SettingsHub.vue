@@ -49,6 +49,7 @@ const GROUPS = [
     links: [
       ['LABELS', 'tag', 'labels_list'],
       ['CANNED', 'send', 'canned_list'],
+      ['KALO_BOT', 'spark', 'kalo_bot_settings', { adminOnly: true }],
     ],
   },
   {

@@ -3554,7 +3554,25 @@
     "ACTIONS": {
       "CLOSE": "Đóng",
       "CREATE_ORDER": "Tạo đơn",
+      "PITCH_PRODUCTS": "Giới thiệu SP",
       "QR": "Mã QR"
+    },
+    "PRODUCT_PITCH": {
+      "TITLE": "Chọn sản phẩm giới thiệu khách",
+      "SUBTITLE": "Chọn một hoặc nhiều lựa chọn phù hợp để gửi nhanh thông tin tư vấn.",
+      "SEARCH": "Tìm theo tên, mã hoặc nhóm dịch vụ…",
+      "ALL_CATEGORIES": "Tất cả",
+      "SELECTED_COUNT": "Đã chọn {count} mặt hàng",
+      "PREVIEW_LABEL": "Nội dung tin nhắn tư vấn (có thể sửa trước khi gửi)",
+      "PREVIEW_PLACEHOLDER": "Chọn ít nhất một sản phẩm ở trên để tạo mẫu giới thiệu…",
+      "INCLUDE_IMAGE_LINKS": "Kèm link ảnh sản phẩm",
+      "EMPTY": "Chưa có sản phẩm nào đang bán trong danh mục.",
+      "NO_MATCH": "Không tìm thấy sản phẩm phù hợp.",
+      "INSERT": "Chèn vào ô chat",
+      "SEND_NOW": "Gửi ngay",
+      "CREATE_ORDER": "Lập phiếu chốt",
+      "SENT": "Đã gửi thông tin sản phẩm cho khách",
+      "SEND_ERROR": "Chưa gửi được tin nhắn, bạn thử lại nhé"
     },
     "AI": {
       "LABEL": "Gợi ý trả lời"
@@ -3579,7 +3597,9 @@
       "TITLE": "Nguồn chiến dịch"
     },
     "CARD": {
+      "DEPOSIT": "Cần đặt cọc",
       "LINE": "{quantity} × {price}",
+      "NOTE": "Ghi chú",
       "SENDING": "Đang gửi…",
       "SEND_QR": "Gửi mã QR",
       "SHIPPING": "Phí giao",
@@ -4195,12 +4215,25 @@
     },
     "DRAWER": {
       "ADDRESS": "Địa chỉ giao",
+      "BALANCE_DUE": "Còn lại sau cọc",
+      "CARRIER": "Đơn vị xử lý / vận chuyển",
+      "CARRIER_PLACEHOLDER": "Ví dụ: Viettel Post, Hãng bay VJ…",
       "CONFIRM_CANCEL": "Hủy đơn này? Hàng sẽ được trả lại kho.",
       "CONTACT": "Khách",
+      "DEPOSIT": "Đặt cọc",
+      "EXTERNAL_ID": "Mã POS ngoài",
+      "EXTERNAL_SECTION": "Đồng bộ từ hệ thống ngoài",
+      "EXTERNAL_STATUS": "Trạng thái POS",
+      "FULFILLMENT_EDIT": "Cập nhật ghi chú & vận chuyển",
+      "FULFILLMENT_SAVE": "Lưu cập nhật",
+      "FULFILLMENT_SAVED": "Đã cập nhật thông tin đơn",
       "ITEMS": "Sản phẩm",
       "LABEL": "Chi tiết đơn",
+      "NOTE": "Ghi chú chốt đơn / Booking",
+      "NOTE_PLACEHOLDER": "Ngày nhận phòng, hạng vé, màu sắc hoặc ghi chú CTV…",
       "PAYMENT_SECTION": "Thanh toán bằng mã QR chuyển khoản",
       "QR_ALT": "Mã QR thanh toán",
+      "QR_DEPOSIT_HINT": "Mã QR đang thu số tiền đặt cọc {amount}.",
       "QR_HINT": "Khách quét mã bằng app ngân hàng để thanh toán tự động.",
       "QR_LOADING": "Đang tạo mã QR…",
       "SHIPPING_FEE": "Phí giao",
@@ -4212,7 +4245,9 @@
         "PAID": "Thanh toán",
         "SHIP": "Giao hàng"
       },
-      "TOTAL": "Tổng"
+      "TOTAL": "Tổng",
+      "TRACKING_CODE": "Mã vận đơn / Mã đặt chỗ",
+      "TRACKING_PLACEHOLDER": "Ví dụ: PNR-ABC123 hoặc mã vận đơn"
     },
     "EMPTY": "Chưa có đơn nào, tạo đơn đầu tiên của bạn.",
     "ERRORS": {
@@ -4227,12 +4262,17 @@
       "VALIDATION_FAILED": "Thông tin chưa đúng, hãy kiểm tra lại"
     },
     "FORM": {
-      "ADDRESS": "Địa chỉ giao",
+      "ADDRESS": "Địa chỉ giao / Nhận dịch vụ",
       "ADD_ITEM": "Thêm hàng",
       "CUSTOM_ITEM": "Hàng khác",
+      "DEPOSIT": "Tiền đặt cọc (không bắt buộc)",
+      "DEPOSIT_HINT": "Nếu khách cọc trước một phần, mã QR sẽ thu đúng số tiền cọc.",
+      "DEPOSIT_TOO_HIGH": "Tiền đặt cọc không được lớn hơn tổng đơn",
       "METHOD_COD": "Thu khi giao",
       "METHOD_QR": "Mã QR",
       "NAME": "Tên hàng",
+      "NOTE": "Ghi chú chốt đơn / Booking (ngày đi, hạng phòng, màu sắc…)",
+      "NOTE_PLACEHOLDER": "Ví dụ: Check-in 25/12 - 27/12, 2 người lớn, CTV Minh chốt",
       "PAYMENT_METHOD": "Cách trả",
       "PRICE": "Giá",
       "PRODUCT": "Sản phẩm",
@@ -4264,6 +4304,7 @@
     "SEARCH": "Mã đơn, tên khách",
     "SOURCE": {
       "CHAT": "Tin nhắn",
+      "EXTERNAL": "POS ngoài",
       "MANUAL": "Tạo tay",
       "POS": "Tại quầy"
     },
@@ -4453,14 +4494,41 @@
     "TITLE": "Bán tại quầy"
   },
   "KALO_PRODUCTS": {
-    "TITLE": "Sản phẩm",
-    "DESCRIPTION": "Hàng bạn bán: giá, tồn kho và trạng thái. Dùng khi tạo đơn và bán tại quầy.",
+    "TITLE": "Danh mục sản phẩm & dịch vụ",
+    "DESCRIPTION": "Quản lý hàng bán, khách sạn, tour, vé máy bay và mẫu tin giới thiệu nhanh khi chat.",
     "OPEN": "Sản phẩm",
     "MANAGE": "Quản lý sản phẩm",
     "BACK": "Về Đơn hàng",
     "OPEN_POS": "Bán tại quầy",
+    "BOT_CONFIG": "Chatbot tư vấn",
+    "IMPORT_POS": "Nhập nhanh / POS",
     "CREATE": "Thêm sản phẩm",
-    "SEARCH": "Tìm theo tên hoặc mã",
+    "SEARCH": "Tìm theo tên, mã hoặc nhóm",
+    "ALL_CATEGORIES": "Tất cả nhóm",
+    "AVAILABILITY": {
+      "in_stock": "Có sẵn",
+      "preorder": "Đặt trước / Booking",
+      "custom": "Theo yêu cầu"
+    },
+    "IMPORT": {
+      "TITLE": "Nhập nhanh & Đồng bộ POS",
+      "TAB_CSV": "Nhập CSV / Excel",
+      "TAB_POS": "Kết nối POS & Webhook",
+      "CSV_HINT": "Dán bảng copy từ Excel/Google Sheets hoặc tải tệp CSV lên. Hỗ trợ các cột: Tên, Nhóm, Loại (in_stock / preorder / custom), Giá, Tồn kho, Mô tả, Tin nhắn mẫu, Link ảnh, Mã POS.",
+      "DOWNLOAD_SAMPLE": "Tải file CSV mẫu",
+      "PICK_FILE": "Chọn tệp .csv",
+      "PASTE_LABEL": "Hoặc dán dữ liệu CSV / bảng Excel tại đây",
+      "SUBMIT": "Nhập danh mục",
+      "IMPORTING": "Đang nhập…",
+      "SUCCESS": "Đã nhập {imported} mặt hàng (tạo mới {created}, cập nhật {updated}).",
+      "PARTIAL_ERRORS": "Có {count} dòng lỗi không nhập được.",
+      "POS_INTRO": "Kết nối phần mềm bán hàng / đặt chỗ bên ngoài với Kalo theo 2 chiều qua REST API và Webhook.",
+      "POS_PRODUCTS_ENDPOINT": "1. Đồng bộ danh mục từ POS về Kalo (POST)",
+      "POS_ORDERS_ENDPOINT": "2. Đồng bộ đơn & trạng thái thực tế từ POS về Kalo (POST)",
+      "POS_WEBHOOK_TITLE": "3. Webhook đẩy đơn Pre-order từ Kalo sang POS",
+      "POS_WEBHOOK_DESC": "Trong Cài đặt → Kết nối ứng dụng / Webhook, chọn sự kiện kchat_order_created và kchat_order_updated để nhận ngay đơn vừa chốt trên chat.",
+      "COPIED": "Đã sao chép"
+    },
     "FILTERS": {
       "ACTIVE": "Đang bán",
       "ARCHIVED": "Đã lưu trữ",
@@ -4495,28 +4563,43 @@
       "ADJUST": "Nhập/xuất kho"
     },
     "FORM": {
+      "AVAILABILITY": "Hình thức bán",
+      "CATEGORY": "Nhóm / Tag dịch vụ (không bắt buộc)",
+      "CATEGORY_PLACEHOLDER": "Ví dụ: Khách sạn, Tour, Vé máy bay, Xe…",
       "CREATE_TITLE": "Thêm sản phẩm",
+      "DESCRIPTION": "Mô tả chi tiết / Lịch trình / Thông số (không bắt buộc)",
+      "DESCRIPTION_PLACEHOLDER": "Ghi thông số, hạng phòng, chính sách hủy đổi hoặc điểm nổi bật…",
       "EDIT_TITLE": "Sửa sản phẩm",
+      "EXTERNAL_ID": "Mã đồng bộ POS ngoài (không bắt buộc)",
+      "EXTERNAL_ID_PLACEHOLDER": "Ví dụ: POS-KS-001",
+      "GENERATE_PITCH": "Tạo mẫu tự động",
+      "IMAGE": "Ảnh sản phẩm (không bắt buộc)",
+      "IMAGE_HINT": "PNG, JPG, GIF hoặc WEBP, tối đa 5 MB.",
+      "IMAGE_NONE": "Chưa chọn ảnh",
+      "IMAGE_PICK": "Chọn ảnh",
+      "IMAGE_REMOTE_URL": "Hoặc dán link ảnh từ URL",
+      "IMAGE_REMOTE_PLACEHOLDER": "https://example.com/anh-san-pham.jpg",
       "NAME": "Tên sản phẩm",
-      "NAME_PLACEHOLDER": "Ví dụ: Áo thun cotton",
-      "SKU": "Mã sản phẩm (không bắt buộc)",
+      "NAME_PLACEHOLDER": "Ví dụ: Phòng Deluxe Hướng Biển 2N1Đ",
+      "PITCH_HINT": "Hỗ trợ biến {name}, {price}, {category}, {sku}, {description}. Nếu để trống, Kalo tự ghép mẫu gọn khi bạn bấm giới thiệu trong chat.",
+      "PITCH_PLACEHOLDER": "Dạ bên em gửi anh/chị thông tin {name} giá {price}…",
+      "PITCH_TEMPLATE": "Tin nhắn mẫu giới thiệu khách (không bắt buộc)",
       "PRICE": "Giá bán (đồng)",
       "PRICE_PLACEHOLDER": "150.000",
       "PRICE_PREVIEW": "Khách thấy: {amount}",
-      "STOCK": "Số lượng trong kho",
-      "STOCK_HINT": "Để trống nếu bạn không theo dõi tồn kho.",
-      "IMAGE": "Ảnh sản phẩm (không bắt buộc)",
-      "IMAGE_PICK": "Chọn ảnh",
-      "IMAGE_NONE": "Chưa chọn ảnh",
-      "IMAGE_HINT": "PNG, JPG, GIF hoặc WEBP, tối đa 5 MB.",
       "SAVE": "Lưu sản phẩm",
       "CANCEL": "Đóng",
+      "SKU": "Mã sản phẩm (không bắt buộc)",
+      "STOCK": "Số lượng trong kho",
+      "STOCK_HINT": "Để trống nếu bạn không theo dõi tồn kho.",
+      "STOCK_NOT_APPLICABLE": "Mục Đặt trước / Theo yêu cầu không giới hạn tồn kho.",
       "ERRORS": {
+        "IMAGE_SIZE": "Ảnh tối đa 5 MB.",
+        "IMAGE_TYPE": "Chỉ nhận ảnh PNG, JPG, GIF hoặc WEBP.",
+        "IMAGE_URL_INVALID": "Link ảnh phải bắt đầu bằng http:// hoặc https://.",
         "NAME_REQUIRED": "Nhập tên sản phẩm.",
         "PRICE_INVALID": "Giá phải là số nguyên từ 0 trở lên, ví dụ 150000.",
-        "STOCK_INVALID": "Tồn kho phải là số nguyên từ 0 trở lên.",
-        "IMAGE_TYPE": "Chỉ nhận ảnh PNG, JPG, GIF hoặc WEBP.",
-        "IMAGE_SIZE": "Ảnh tối đa 5 MB."
+        "STOCK_INVALID": "Tồn kho phải là số nguyên từ 0 trở lên."
       }
     },
     "STOCK_FORM": {
@@ -4687,6 +4770,10 @@
         "CANNED": {
           "DESC": "Câu trả lời mẫu, gõ / khi chat để chèn",
           "TITLE": "Trả lời nhanh"
+        },
+        "KALO_BOT": {
+          "DESC": "Tự chào khách, gợi ý sản phẩm theo từ khóa nhu cầu",
+          "TITLE": "Chatbot tư vấn cơ bản"
         },
         "DATA_IMPORT": {
           "DESC": "Chuyển khách và hội thoại từ nơi khác sang",
@@ -6486,6 +6573,54 @@
         "COPY_CONTENT": "Sao chép"
       }
     }
+  },
+  "KALO_CANNED": {
+    "TAGS_LABEL": "Nhãn phân loại (Tags, cách nhau bởi dấu phẩy)",
+    "TAGS_PLACEHOLDER": "khách sạn, tour, vé máy bay, báo giá",
+    "SUGGESTED_TAGS": "Gợi ý nhanh:",
+    "FILTER_ALL": "Tất cả thẻ",
+    "KEYWORD_HINT": "Gõ /{code} hoặc từ khóa thẻ trong ô chat để chèn nhanh mẫu này.",
+    "QUICK_TAGS": [
+      "khách sạn",
+      "tour",
+      "vé máy bay",
+      "báo giá",
+      "đặt cọc",
+      "chăm sóc"
+    ]
+  },
+  "KALO_BOT": {
+    "TITLE": "Chatbot tư vấn cơ bản",
+    "DESC": "Tự động chào khách và gửi mẫu sản phẩm, kịch bản theo từ khóa nhu cầu trước khi nhân viên tiếp nhận.",
+    "BACK": "Về Cài đặt",
+    "SAVE": "Lưu cấu hình Chatbot",
+    "SAVED": "Đã lưu cấu hình Chatbot",
+    "SAVE_ERROR": "Chưa lưu được cấu hình Chatbot.",
+    "LOAD_ERROR": "Chưa tải được cấu hình Chatbot.",
+    "GENERAL_TITLE": "Thiết lập chung",
+    "ENABLED": "Bật Chatbot tự động trả lời theo nhu cầu",
+    "PAUSE_ON_AGENT": "Tự tạm dừng 30 phút nếu nhân viên đang nhắn trong hội thoại",
+    "AUTO_SUGGEST": "Tự gợi ý sản phẩm trong danh mục khớp câu hỏi khách",
+    "WELCOME_ENABLED": "Gửi lời chào tự động cho khách nhắn lần đầu",
+    "WELCOME_MESSAGE": "Nội dung lời chào",
+    "HANDOFF_ENABLED": "Kèm câu hẹn nhân viên tiếp nhận",
+    "HANDOFF_MESSAGE": "Nội dung hẹn tiếp nhận",
+    "RULES_TITLE": "Kịch bản trả lời theo từ khóa nhu cầu",
+    "RULES_DESC": "Khi khách nhắn chứa từ khóa, bot tự gửi câu trả lời kèm thông tin sản phẩm đính kèm và gắn nhãn hội thoại.",
+    "ADD_RULE": "Thêm kịch bản",
+    "ADD_PRESET_HOTEL": "Mẫu Khách sạn",
+    "ADD_PRESET_TOUR": "Mẫu Tour",
+    "ADD_PRESET_FLIGHT": "Mẫu Vé máy bay",
+    "RULE_NAME": "Tên kịch bản",
+    "RULE_KEYWORDS": "Từ khóa nhận diện (cách nhau dấu phẩy)",
+    "RULE_KEYWORDS_PLACEHOLDER": "phòng, khách sạn, resort, check-in",
+    "RULE_REPLY": "Tin nhắn trả lời",
+    "RULE_REPLY_HINT": "Có thể dùng {token} để chèn tên khách.",
+    "RULE_PRODUCTS": "Đính kèm sản phẩm giới thiệu",
+    "RULE_LABELS": "Tự gắn nhãn hội thoại (cách nhau dấu phẩy)",
+    "RULE_LABELS_PLACEHOLDER": "khach_san, can_tu_van",
+    "RULE_REMOVE": "Xóa",
+    "RULE_EMPTY": "Chưa có kịch bản nào. Bấm “Thêm kịch bản” hoặc chọn mẫu nhanh bên trên."
   },
   "KALO_POLISH4": {
     "AI": {

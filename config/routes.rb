@@ -53,15 +53,19 @@ Rails.application.routes.draw do
         scope module: :accounts do
           namespace :kchat do
             resources :products, only: [:index, :create, :update, :destroy] do
+              post :import, on: :collection
               post :adjust_stock, on: :member
             end
-            resources :orders, only: [:index, :show, :create] do
+            resources :orders, only: [:index, :show, :create, :update] do
               member do
                 post :transition
                 post :send_qr
                 get :qr
               end
             end
+            post 'pos_sync/products', to: 'pos_sync#products'
+            post 'pos_sync/orders', to: 'pos_sync#orders'
+            resource :bot_config, only: [:show, :update], controller: 'bot_config'
             resource :payment_settings, only: [:show, :update] do
               get :preview_qr
             end

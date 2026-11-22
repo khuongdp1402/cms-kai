@@ -18,6 +18,7 @@ class Kchat::QualityOverviewReport
     'kchat_products.id AS product_id',
     'kchat_products.name AS name',
     'kchat_products.stock AS stock',
+    'kchat_products.availability_mode AS availability_mode',
     "COALESCE(SUM(CASE WHEN kchat_orders.status IN ('paid','shipping','completed') " \
     'THEN kchat_order_items.quantity ELSE 0 END), 0) AS sold_qty',
     "COALESCE(SUM(CASE WHEN kchat_orders.status = 'cancelled' THEN kchat_order_items.quantity ELSE 0 END), 0) AS cancelled_qty",
@@ -121,7 +122,7 @@ class Kchat::QualityOverviewReport
     Kchat::OrderItem.joins(:order)
                     .joins('INNER JOIN kchat_products ON kchat_products.id = kchat_order_items.product_id')
                     .where(kchat_orders: { account_id: @account.id, created_at: window })
-                    .group('kchat_products.id', 'kchat_products.name', 'kchat_products.stock')
+                    .group('kchat_products.id', 'kchat_products.name', 'kchat_products.stock', 'kchat_products.availability_mode')
                     .select(SKU_SELECT)
                     .order(Arel.sql('revenue DESC, sold_qty DESC, kchat_products.id ASC'))
                     .limit(6)
@@ -129,12 +130,13 @@ class Kchat::QualityOverviewReport
   end
 
   def map_sku_row(row)
-    product_id, name, stock, sold_qty, cancelled_qty, revenue = row
+    product_id, name, stock, availability_mode, sold_qty, cancelled_qty, revenue = row
     sold = sold_qty.to_i
     cancelled = cancelled_qty.to_i
     total_units = sold + cancelled
     cancel_pct = total_units.positive? ? (cancelled * 100.0 / total_units).round(1) : 0.0
     stock_val = stock&.to_i
+    low_stock = availability_mode.to_s == 'in_stock' && !stock_val.nil? && stock_val <= LOW_STOCK_THRESHOLD
 
     {
       product_id: product_id.to_i,
@@ -144,7 +146,7 @@ class Kchat::QualityOverviewReport
       cancel_rate_pct: cancel_pct,
       revenue: revenue.to_i,
       stock: stock_val,
-      needs_attention: cancel_pct >= CANCEL_ATTENTION_PCT || (!stock_val.nil? && stock_val <= LOW_STOCK_THRESHOLD)
+      needs_attention: cancel_pct >= CANCEL_ATTENTION_PCT || low_stock
     }
   end
 
@@ -171,8 +173,9 @@ class Kchat::QualityOverviewReport
     items << { key: 'waiting_over_15m', count: w15, route: 'home', tone: 'warn' } if w15.positive?
     qr_cnt = Kchat::Order.where(account_id: @account.id, status: 'pending_payment', payment_method: 'transfer_qr').count
     items << { key: 'pending_qr_orders', count: qr_cnt, route: 'kalo_orders', tone: 'warn' } if qr_cnt.positive?
-    low_stock = Kchat::Product.where(account_id: @account.id, active: true).where('stock IS NOT NULL AND stock <= ?', LOW_STOCK_THRESHOLD).count
-    items << { key: 'low_stock_products', count: low_stock, route: 'kalo_pos', tone: 'err' } if low_stock.positive?
+    low_stock = Kchat::Product.where(account_id: @account.id, active: true, availability_mode: 'in_stock')
+                              .where('stock IS NOT NULL AND stock <= ?', LOW_STOCK_THRESHOLD).count
+    items << { key: 'low_stock_products', count: low_stock, route: 'kalo_products', tone: 'err' } if low_stock.positive?
     hidden_cnt = Message.where(account_id: @account.id, created_at: window).where("#{CONTENT_ATTRS}->>'comment_hidden' = 'true'").count
     items << { key: 'phones_protected', count: hidden_cnt, route: 'kalo_comments', tone: 'ok' } if hidden_cnt.positive?
     items

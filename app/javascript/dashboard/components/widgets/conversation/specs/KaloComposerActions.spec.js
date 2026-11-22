@@ -45,10 +45,31 @@ const mountIt = ({ sendQr = vi.fn(), props = {} } = {}) => {
 describe('KaloComposerActions', () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it('renders Tạo đơn and Mã QR buttons', () => {
+  it('renders Giới thiệu SP, Tạo đơn and Mã QR buttons', () => {
     const { wrapper } = mountIt();
+    expect(wrapper.find('[data-test="pitch-products"]').text()).toBe(
+      'Giới thiệu SP'
+    );
     expect(wrapper.find('[data-test="create-order"]').text()).toBe('Tạo đơn');
     expect(wrapper.find('[data-test="pick-qr"]').text()).toBe('Mã QR');
+  });
+
+  it('opens the product pitch drawer and forwards insert/send events', async () => {
+    const { wrapper } = mountIt();
+    await wrapper.find('[data-test="pitch-products"]').trigger('click');
+    expect(wrapper.find('[data-test="product-pitch-drawer"]').exists()).toBe(
+      true
+    );
+    wrapper
+      .findComponent({ name: 'KaloProductPitchDrawer' })
+      .vm.$emit('insert', '• Phòng Deluxe — 2.400.000đ');
+    await flushPromises();
+    expect(wrapper.emitted('insertText')[0][0]).toBe(
+      '• Phòng Deluxe — 2.400.000đ'
+    );
+    expect(wrapper.find('[data-test="product-pitch-drawer"]').exists()).toBe(
+      false
+    );
   });
 
   it('keeps an accessible name when the labels collapse to icons on narrow screens', () => {

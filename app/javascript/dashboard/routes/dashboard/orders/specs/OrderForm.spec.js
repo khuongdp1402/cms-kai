@@ -58,6 +58,27 @@ describe('OrderForm', () => {
     expect(wrapper.emitted('created')[0][0].number).toBe(1042);
   });
 
+  it('submits deposit_amount, note and prefilled initialItems when provided', async () => {
+    const create = vi.fn().mockResolvedValue(makeOrder());
+    const wrapper = mountForm(
+      {
+        contactId: 7,
+        conversationId: 12,
+        initialItems: [{ id: 1 }],
+      },
+      create
+    );
+    await wrapper.find('[data-test="order-deposit"]').setValue('100000');
+    await wrapper.find('[data-test="order-note"]').setValue('Check-in 25/12');
+    await wrapper.find('form').trigger('submit');
+    await flushPromises();
+    expect(create.mock.calls[0][1]).toMatchObject({
+      deposit_amount: 100000,
+      note: 'Check-in 25/12',
+      items: [{ product_id: 1, quantity: 1 }],
+    });
+  });
+
   it('shows insufficient_stock as "Không đủ hàng"', async () => {
     const create = vi.fn().mockRejectedValue({
       response: { data: { error: 'insufficient_stock' } },

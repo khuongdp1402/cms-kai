@@ -24,8 +24,14 @@ end
 json.subtotal order.subtotal
 json.shipping_fee order.shipping_fee
 json.total order.total
+json.deposit_amount order.deposit_amount
+json.payable_amount order.payable_amount
+json.note order.note
 json.shipping_address order.shipping_address
 json.shipping_carrier order.shipping_carrier
 json.tracking_code order.tracking_code
+json.external_id order.external_id
+json.external_source order.external_source
+json.external_status order.external_status
 json.paid_at order.paid_at&.iso8601
 json.created_at order.created_at.iso8601

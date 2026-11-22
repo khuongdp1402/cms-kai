@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_19_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_21_000001) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -346,6 +346,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_19_000001) do
     t.text "content"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.jsonb "tags", default: [], null: false
   end
 
   create_table "captain_assistant_responses", force: :cascade do |t|
@@ -1140,6 +1141,12 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_19_000001) do
     t.datetime "paid_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "note"
+    t.bigint "deposit_amount", default: 0, null: false
+    t.string "external_id"
+    t.string "external_source"
+    t.string "external_status"
+    t.index ["account_id", "external_id"], name: "index_kchat_orders_on_account_id_and_external_id", unique: true, where: "((external_id IS NOT NULL) AND ((external_id)::text <> ''::text))"
     t.index ["account_id", "number"], name: "index_kchat_orders_on_account_id_and_number", unique: true
     t.index ["account_id", "paid_at"], name: "index_kchat_orders_on_account_id_and_paid_at"
     t.index ["account_id", "status"], name: "index_kchat_orders_on_account_id_and_status"
@@ -1173,7 +1180,15 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_19_000001) do
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "availability_mode", default: "in_stock", null: false
+    t.string "category"
+    t.text "description"
+    t.text "pitch_template"
+    t.string "external_id"
+    t.string "image_remote_url"
     t.index ["account_id", "active"], name: "index_kchat_products_on_account_id_and_active"
+    t.index ["account_id", "category"], name: "index_kchat_products_on_account_id_and_category"
+    t.index ["account_id", "external_id"], name: "index_kchat_products_on_account_id_and_external_id", unique: true, where: "((external_id IS NOT NULL) AND ((external_id)::text <> ''::text))"
     t.index ["account_id"], name: "index_kchat_products_on_account_id"
   end
 

@@ -2,8 +2,8 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
   PER_PAGE = 25
   PAID_STATUSES = %w[paid shipping completed].freeze
 
-  before_action :require_active_subscription!, only: :create
-  before_action :fetch_order, only: [:show, :transition, :send_qr, :qr]
+  before_action :require_active_subscription!, only: [:create, :update]
+  before_action :fetch_order, only: [:show, :update, :transition, :send_qr, :qr]
 
   def index
     authorize ::Kchat::Order
@@ -30,14 +30,24 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
     return render_contact_mismatch if conversation && contact && conversation.contact_id != contact.id
 
     @order = ::Kchat::Order.create_with_items!(account: Current.account, attributes: order_attributes(contact, conversation), items: item_params)
+    ::Kchat::OrderWebhookNotifier.notify(@order, 'kchat_order_created')
     render :show, status: :created
   rescue ActiveRecord::RecordNotFound
     render_not_found
   end
 
+  def update
+    authorize @order
+    return render_invalid(@order) unless @order.update(update_order_params)
+
+    ::Kchat::OrderWebhookNotifier.notify(@order, 'kchat_order_updated')
+    render :show
+  end
+
   def transition
     authorize @order
     @order.transition!(params[:event].to_s)
+    ::Kchat::OrderWebhookNotifier.notify(@order, 'kchat_order_updated')
     render :show
   end
 
@@ -101,7 +111,20 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
   end
 
   def order_attributes(contact, conversation)
-    params.permit(:source, :payment_method, :shipping_address, :shipping_fee).to_h.merge(contact: contact, conversation: conversation)
+    params.permit(
+      :source, :payment_method, :shipping_address, :shipping_fee,
+      :note, :deposit_amount, :shipping_carrier, :tracking_code,
+      :external_id, :external_source, :external_status
+    ).to_h.merge(contact: contact, conversation: conversation)
+  end
+
+  def update_order_params
+    permitted = params.permit(
+      :note, :shipping_address, :shipping_carrier, :tracking_code,
+      :external_id, :external_source, :external_status
+    ).to_h
+    permitted[:deposit_amount] = params[:deposit_amount] if @order.pending_payment? && params.key?(:deposit_amount)
+    permitted
   end
 
   def item_params
@@ -117,7 +140,7 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
   def qr_error_code
     return 'invalid_payment_method' unless @order.payment_method_transfer_qr?
     return 'order_not_payable' unless @order.pending_payment?
-    return 'invalid_amount' unless @order.total.positive?
+    return 'invalid_amount' unless @order.payable_amount.positive?
 
     'payment_settings_missing' unless ::Kchat::PaymentSettings.complete?(Current.account)
   end
@@ -128,7 +151,8 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
 
   def qr_png
     settings = ::Kchat::PaymentSettings.for(Current.account)
-    payload = ::Kchat::VietQr.payload(bin: settings['bank_bin'], account_number: settings['account_number'], amount: @order.total, memo: memo)
+    payload = ::Kchat::VietQr.payload(bin: settings['bank_bin'], account_number: settings['account_number'],
+                                      amount: @order.payable_amount, memo: memo)
     ::Kchat::VietQr.png(payload)
   end
 
@@ -143,16 +167,22 @@ class Api::V1::Accounts::Kchat::OrdersController < Api::V1::Accounts::Kchat::Bas
   end
 
   def qr_message_params(upload)
+    key = deposit_qr? ? 'kchat.orders.qr_deposit_message' : 'kchat.orders.qr_message'
     {
       message_type: 'outgoing',
-      content: I18n.t('kchat.orders.qr_message', number: @order.number, amount: formatted_amount, memo: memo),
+      content: I18n.t(key, number: @order.number, amount: formatted_vnd(@order.payable_amount),
+                           total: formatted_vnd(@order.total), memo: memo),
       content_attributes: { kchat_order_id: @order.id },
       attachments: [upload]
     }
   end
 
-  def formatted_amount
-    "#{ActiveSupport::NumberHelper.number_to_delimited(@order.total, delimiter: '.')}đ"
+  def deposit_qr?
+    @order.deposit_amount.to_i.positive? && @order.deposit_amount.to_i < @order.total.to_i
+  end
+
+  def formatted_vnd(value)
+    "#{ActiveSupport::NumberHelper.number_to_delimited(value, delimiter: '.')}đ"
   end
 
   def render_contact_mismatch

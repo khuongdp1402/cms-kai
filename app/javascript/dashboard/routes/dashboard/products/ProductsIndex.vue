@@ -14,16 +14,15 @@ import KaloProductThumb from 'dashboard/components-next/icon/KaloProductThumb.vu
 import KaloPage from 'dashboard/components-next/layout/KaloPage.vue';
 import KaloCard from 'dashboard/components-next/layout/KaloCard.vue';
 import ProductFormDrawer from './ProductFormDrawer.vue';
+import ProductImportDrawer from './ProductImportDrawer.vue';
 import StockAdjustDrawer from './StockAdjustDrawer.vue';
 
-// "Sản phẩm" (under Đơn hàng): the shop catalog. Administrators add, edit,
-// adjust stock and archive; agents see the list read-only.
+// Sales catalog: retail stock, booking/pre-order items, and custom services.
 const FILTERS = [
   { key: 'ACTIVE', active: true },
   { key: 'ARCHIVED', active: false },
   { key: 'ALL', active: undefined },
 ];
-// Stock at or below this shows in amber (same as the quality report).
 const LOW_STOCK = 3;
 
 const { t } = useI18n();
@@ -34,8 +33,8 @@ const isPosOn = computed(() => isOn(FEATURE_FLAGS.KALO_POS));
 
 const filter = ref(FILTERS[0]);
 const query = ref('');
-// ?new=1 (setup checklist, POS) opens the create drawer.
 const editing = ref(useOneShotQueryFlag('new') ? { product: null } : null);
+const showImport = ref(false);
 const adjusting = ref(null);
 const archiving = ref(null);
 let searchTimer = null;
@@ -66,7 +65,13 @@ const onSearch = () => {
   searchTimer = setTimeout(load, 300);
 };
 
+const isStockMode = product =>
+  !product.availability_mode || product.availability_mode === 'in_stock';
+
 const stockLabel = product => {
+  if (!isStockMode(product)) {
+    return t(`KALO_PRODUCTS.AVAILABILITY.${product.availability_mode}`);
+  }
   if (product.stock === null || product.stock === undefined) {
     return t('KALO_PRODUCTS.STOCK.UNTRACKED');
   }
@@ -74,6 +79,9 @@ const stockLabel = product => {
   return t('KALO_PRODUCTS.STOCK.LEFT', { count: product.stock });
 };
 const stockClass = product => {
+  if (!isStockMode(product)) {
+    return 'text-n-blue-11 font-medium';
+  }
   if (product.stock === null || product.stock === undefined) {
     return 'text-n-slate-11';
   }
@@ -92,6 +100,10 @@ const openEdit = product => {
 const onSaved = () => {
   editing.value = null;
   adjusting.value = null;
+  load();
+};
+const onImported = () => {
+  showImport.value = false;
   load();
 };
 
@@ -176,6 +188,25 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
         <KaloIcon name="store" class="size-4" />
         {{ t('KALO_PRODUCTS.OPEN_POS') }}
       </router-link>
+      <router-link
+        v-if="isAdmin"
+        :to="{ name: 'kalo_bot_settings' }"
+        data-test="products-bot"
+        :class="secondaryButton"
+      >
+        <KaloIcon name="spark" class="size-4" />
+        {{ t('KALO_PRODUCTS.BOT_CONFIG') }}
+      </router-link>
+      <button
+        v-if="isAdmin"
+        type="button"
+        data-test="products-import"
+        :class="secondaryButton"
+        @click="showImport = true"
+      >
+        <KaloIcon name="arrow" class="size-4" />
+        {{ t('KALO_PRODUCTS.IMPORT_POS') }}
+      </button>
       <button
         v-if="isAdmin && !isEmpty"
         type="button"
@@ -268,7 +299,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
 
       <ul v-else class="divide-y divide-n-weak">
         <li
-          class="hidden px-4 py-2 text-xs font-semibold uppercase md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_16rem] md:gap-4 bg-n-solid-2 text-n-slate-11"
+          class="hidden px-4 py-2 text-xs font-semibold uppercase md:grid md:grid-cols-[minmax(0,1fr)_8rem_10rem_8rem_16rem] md:gap-4 bg-n-solid-2 text-n-slate-11"
           aria-hidden="true"
         >
           <span>{{ t('KALO_PRODUCTS.COLUMNS.PRODUCT') }}</span>
@@ -281,7 +312,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
           v-for="product in products"
           :key="product.id"
           data-test="product-row"
-          class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 md:grid md:grid-cols-[minmax(0,1fr)_8rem_8rem_8rem_16rem]"
+          class="flex flex-wrap items-center gap-x-4 gap-y-2 px-4 py-3 md:grid md:grid-cols-[minmax(0,1fr)_8rem_10rem_8rem_16rem]"
         >
           <div
             class="flex items-center flex-1 min-w-0 gap-3 basis-full md:basis-auto"
@@ -296,8 +327,20 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
               <div class="text-sm font-semibold truncate text-n-slate-12">
                 {{ product.name }}
               </div>
-              <div v-if="product.sku" class="text-xs truncate text-n-slate-11">
-                {{ t('KALO_PRODUCTS.SKU', { sku: product.sku }) }}
+              <div class="flex flex-wrap items-center gap-1.5 mt-0.5">
+                <span
+                  v-if="product.category"
+                  data-test="product-category"
+                  class="px-1.5 py-0.5 text-[11px] font-medium rounded bg-n-solid-2 border border-n-weak text-n-slate-11"
+                >
+                  {{ product.category }}
+                </span>
+                <span
+                  v-if="product.sku"
+                  class="text-xs truncate text-n-slate-11"
+                >
+                  {{ t('KALO_PRODUCTS.SKU', { sku: product.sku }) }}
+                </span>
               </div>
             </div>
           </div>
@@ -347,6 +390,7 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
             </button>
             <template v-if="product.active">
               <button
+                v-if="isStockMode(product)"
                 type="button"
                 data-test="product-adjust"
                 :class="rowButton"
@@ -383,6 +427,11 @@ const rowButtonDanger = `${rowButtonBase} text-n-ruby-11`;
       :product="editing.product"
       @close="editing = null"
       @saved="onSaved"
+    />
+    <ProductImportDrawer
+      v-if="showImport && isAdmin"
+      @close="showImport = false"
+      @imported="onImported"
     />
     <StockAdjustDrawer
       v-if="adjusting"

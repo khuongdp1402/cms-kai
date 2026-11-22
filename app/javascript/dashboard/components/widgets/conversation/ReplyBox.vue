@@ -963,6 +963,11 @@ export default {
       this.updateEditorSelectionWith = content;
       this.onFocus();
     },
+    async sendQuickPitchMessage(text) {
+      if (!text?.trim()) return;
+      await this.sendMessage(this.getMessagePayload(text.trim()));
+      useAlert(this.$t('KALO_CHAT.PRODUCT_PITCH.SENT'));
+    },
     // The canned menu only opens when "/" follows whitespace or starts the line.
     insertCannedTrigger() {
       const before = this.messageEditor?.charBeforeCursor?.() ?? '';
@@ -1487,6 +1492,8 @@ export default {
             :contact-id="currentChat.meta?.sender?.id"
             :conversation-id="currentChat.id"
             :is-reply-restricted="isReplyRestricted"
+            @insert-text="addIntoEditor"
+            @send-text="sendQuickPitchMessage"
           />
         </template>
       </ReplyBottomPanel>

@@ -24,7 +24,7 @@ class Kchat::Metrics
   NON_CHAT_KEYS = Kchat::Order.sources.keys.freeze
   CONVERTED_SQL = <<~SQL.squish.freeze
     EXISTS (SELECT 1 FROM kchat_orders converted_orders WHERE converted_orders.conversation_id = conversations.id
-    AND converted_orders.status <> 'cancelled' AND converted_orders.source <> 'pos')
+    AND converted_orders.status <> 'cancelled' AND converted_orders.source NOT IN ('pos', 'external'))
   SQL
   CONVERTED_COUNT_SQL = "COUNT(*) FILTER (WHERE #{CONVERTED_SQL})".freeze
   INCOMING = Message.message_types[:incoming]
@@ -61,7 +61,7 @@ class Kchat::Metrics
   SQL
   # Chat orders are grouped under their conversation's inbox channel, every other order under its source.
   ORDER_CHANNEL_SQL = <<~SQL.squish.freeze
-    CASE WHEN kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source <> 'pos'
+    CASE WHEN kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source NOT IN ('pos', 'external')
     THEN COALESCE(inboxes.channel_type, 'unknown') ELSE kchat_orders.source END
   SQL
   # Aliased on purpose: plucking the bare expression makes Rails cast the value with the `source` enum type, which turns
@@ -118,7 +118,7 @@ class Kchat::Metrics
   end
 
   def chat_orders
-    new_orders.where.not(conversation_id: nil).where.not(source: 'pos')
+    new_orders.where.not(conversation_id: nil).where.not(source: %w[pos external])
   end
 
   def conversations
@@ -150,7 +150,8 @@ class Kchat::Metrics
     @totals ||= begin
       revenue, paid_count = paid_orders.pick(Arel.sql('COALESCE(SUM(kchat_orders.total), 0)'), Arel.sql('COUNT(*)'))
       new_count, chat_count = new_orders.pick(
-        Arel.sql('COUNT(*)'), Arel.sql("COUNT(*) FILTER (WHERE kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source <> 'pos')")
+        Arel.sql('COUNT(*)'),
+        Arel.sql("COUNT(*) FILTER (WHERE kchat_orders.conversation_id IS NOT NULL AND kchat_orders.source NOT IN ('pos', 'external'))")
       )
       convs, converted = conversations.pick(Arel.sql('COUNT(*)'), Arel.sql(CONVERTED_COUNT_SQL))
       {

@@ -21,7 +21,11 @@ RSpec.describe 'Kchat products API', type: :request do
       expect(response).to have_http_status(:ok)
       names = response.parsed_body['payload'].pluck('name')
       expect(names).to contain_exactly('Áo thun', 'Quần')
-      expect(response.parsed_body['payload'].first.keys).to contain_exactly('id', 'name', 'sku', 'price', 'stock', 'active', 'image_url')
+      expect(response.parsed_body['payload'].first.keys).to contain_exactly(
+        'id', 'name', 'sku', 'price', 'stock', 'active',
+        'availability_mode', 'category', 'description', 'pitch_template',
+        'external_id', 'image_remote_url', 'formatted_pitch', 'image_url'
+      )
     end
 
     it 'filters by query and active' do
@@ -226,6 +230,44 @@ RSpec.describe 'Kchat products API', type: :request do
       product.update!(active: false)
       patch "#{base}/#{product.id}", params: { active: true }, headers: admin.create_new_auth_token, as: :json
       expect(product.reload.active).to be true
+    end
+  end
+
+  describe 'sales catalog fields and POST import' do
+    it 'stores availability_mode, category, description, pitch_template, and image_remote_url' do
+      post base, params: {
+        name: 'Phòng Deluxe 2N1Đ',
+        price: 2_400_000,
+        availability_mode: 'preorder',
+        category: 'Khách sạn',
+        description: 'Gồm ăn sáng buffet',
+        pitch_template: 'Gửi bạn {name} giá {price} ({category})',
+        image_remote_url: 'https://example.com/room.jpg'
+      }, headers: admin.create_new_auth_token, as: :json
+
+      expect(response).to have_http_status(:created)
+      expect(response.parsed_body).to include(
+        'availability_mode' => 'preorder',
+        'category' => 'Khách sạn',
+        'formatted_pitch' => 'Gửi bạn Phòng Deluxe 2N1Đ giá 2.400.000đ (Khách sạn)',
+        'image_url' => 'https://example.com/room.jpg'
+      )
+    end
+
+    it 'bulk-imports CSV text with upsert by external_id/sku and blocks agents' do
+      csv = <<~CSV
+        name,category,availability_mode,price,sku,external_id,description
+        Tour Đà Lạt 3N2Đ,Tour,preorder,3290000,TOUR-DL,POS-T1,Xe Limousine 4 sao
+        Áo thun mới,Thời trang,in_stock,199000,AT1,POS-AT1,Cotton 100%
+      CSV
+
+      post "#{base}/import", params: { csv_text: csv }, headers: agent.create_new_auth_token, as: :json
+      expect(response).to have_http_status(:unauthorized)
+
+      post "#{base}/import", params: { csv_text: csv }, headers: admin.create_new_auth_token, as: :json
+      expect(response).to have_http_status(:ok)
+      expect(response.parsed_body).to include('imported_count' => 2, 'created_count' => 1, 'updated_count' => 1, 'errors' => [])
+      expect(product.reload).to have_attributes(name: 'Áo thun mới', price: 199_000, external_id: 'POS-AT1')
     end
   end
 end

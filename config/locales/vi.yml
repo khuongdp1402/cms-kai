@@ -617,3 +617,4 @@ vi:
   kchat:
     orders:
       qr_message: 'Quý khách vui lòng quét mã QR để thanh toán đơn #%{number}, số tiền %{amount}. Nội dung chuyển khoản: %{memo}'
+      qr_deposit_message: 'Quý khách vui lòng quét mã QR để đặt cọc đơn #%{number}, số tiền cọc %{amount} (tổng giá trị %{total}). Nội dung chuyển khoản: %{memo}'

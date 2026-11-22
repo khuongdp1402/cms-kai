@@ -12,6 +12,10 @@ class Kchat::ProductPolicy < ApplicationPolicy
     @account_user.administrator?
   end
 
+  def import?
+    @account_user.administrator?
+  end
+
   def update?
     @account_user.administrator?
   end

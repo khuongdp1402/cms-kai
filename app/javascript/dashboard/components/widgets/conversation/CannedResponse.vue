@@ -20,6 +20,7 @@ export default {
         label: cannedMessage.short_code,
         key: cannedMessage.short_code,
         description: cannedMessage.content,
+        tags: Array.isArray(cannedMessage.tags) ? cannedMessage.tags : [],
       }));
     },
   },

@@ -9,6 +9,8 @@ const props = defineProps({
   contactId: { type: Number, default: null },
   // Conversation display_id, as used by the dashboard routes.
   conversationId: { type: Number, default: null },
+  // Prefilled products when jumping from chat pitch drawer.
+  initialItems: { type: Array, default: () => [] },
   // Inside a KaloDrawer: the drawer shows the title, the buttons stick to the bottom.
   inDrawer: { type: Boolean, default: false },
 });
@@ -18,10 +20,22 @@ const { t } = useI18n();
 const store = useStore();
 
 const emptyLine = () => ({ productId: '', name: '', price: '', quantity: 1 });
-const lines = ref([emptyLine()]);
+const initialLines = () =>
+  props.initialItems?.length
+    ? props.initialItems.map(item => ({
+        productId: String(item.id),
+        name: '',
+        price: '',
+        quantity: Number(item.quantity || 1),
+      }))
+    : [emptyLine()];
+
+const lines = ref(initialLines());
 const paymentMethod = ref('transfer_qr');
 const shippingAddress = ref('');
 const shippingFee = ref('');
+const depositAmount = ref('');
+const note = ref('');
 const errorMessage = ref('');
 
 const products = computed(() => store.getters['kchatProducts/getProducts']);
@@ -31,6 +45,15 @@ const isCreating = computed(
 
 const productById = id => products.value.find(p => p.id === Number(id));
 const isCustom = line => line.productId === 'custom';
+
+const productOptionLabel = product => {
+  const mode = product.availability_mode;
+  const suffix =
+    mode && mode !== 'in_stock'
+      ? ` · ${t(`KALO_PRODUCTS.AVAILABILITY.${mode}`)}`
+      : '';
+  return `${product.name} · ${formatVnd(product.price)}${suffix}`;
+};
 
 const isLineValid = line => {
   if (!line.productId || Number(line.quantity) < 1) return false;
@@ -65,6 +88,11 @@ const toPayloadItem = line =>
 const submit = async () => {
   if (!canSubmit.value) return;
   errorMessage.value = '';
+  const deposit = Number(depositAmount.value) || 0;
+  if (deposit > total.value) {
+    errorMessage.value = t('KALO_ORDERS.FORM.DEPOSIT_TOO_HIGH');
+    return;
+  }
   const payload = {
     source: props.conversationId ? 'chat' : 'manual',
     payment_method: paymentMethod.value,
@@ -78,6 +106,12 @@ const submit = async () => {
   if (Number(shippingFee.value) > 0) {
     payload.shipping_fee = Number(shippingFee.value);
   }
+  if (deposit > 0) {
+    payload.deposit_amount = deposit;
+  }
+  if (note.value.trim()) {
+    payload.note = note.value.trim();
+  }
   try {
     const order = await store.dispatch('kchatOrders/create', payload);
     emit('created', order);
@@ -90,8 +124,6 @@ onMounted(() => store.dispatch('kchatProducts/fetch', { active: true }));
 
 const inputClass =
   'w-full px-3 py-2 mb-0 text-sm border border-solid rounded-lg outline-none border-n-strong bg-n-solid-1 text-n-slate-12 focus:border-woot-500';
-// The global select arrow (_base.scss) is positioned only under [dir] and
-// relative to the content box, which px-3 shrinks: pin it to the right here.
 const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.75rem_center]`;
 </script>
 
@@ -119,7 +151,7 @@ const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.
         >
           <option value="" />
           <option v-for="p in products" :key="p.id" :value="String(p.id)">
-            {{ p.name }} · {{ formatVnd(p.price) }}
+            {{ productOptionLabel(p) }}
           </option>
           <option value="custom">
             {{ t('KALO_ORDERS.FORM.CUSTOM_ITEM') }}
@@ -177,13 +209,46 @@ const selectClass = `${inputClass} pr-8 bg-origin-padding !bg-[position:right_0.
         <option value="cod">{{ t('KALO_ORDERS.FORM.METHOD_COD') }}</option>
       </select>
     </label>
+
+    <div class="grid gap-3 sm:grid-cols-2">
+      <label class="text-xs font-medium text-n-slate-11">
+        {{ t('KALO_ORDERS.FORM.DEPOSIT') }}
+        <input
+          v-model="depositAmount"
+          type="number"
+          min="0"
+          data-test="order-deposit"
+          :class="inputClass"
+        />
+        <span class="block mt-1 font-normal text-[11px] text-n-slate-10">
+          {{ t('KALO_ORDERS.FORM.DEPOSIT_HINT') }}
+        </span>
+      </label>
+      <label class="text-xs font-medium text-n-slate-11">
+        {{ t('KALO_ORDERS.FORM.SHIPPING_FEE') }}
+        <input
+          v-model="shippingFee"
+          type="number"
+          min="0"
+          :class="inputClass"
+        />
+      </label>
+    </div>
+
     <label class="text-xs font-medium text-n-slate-11">
       {{ t('KALO_ORDERS.FORM.ADDRESS') }}
       <input v-model="shippingAddress" type="text" :class="inputClass" />
     </label>
+
     <label class="text-xs font-medium text-n-slate-11">
-      {{ t('KALO_ORDERS.FORM.SHIPPING_FEE') }}
-      <input v-model="shippingFee" type="number" min="0" :class="inputClass" />
+      {{ t('KALO_ORDERS.FORM.NOTE') }}
+      <textarea
+        v-model="note"
+        rows="2"
+        data-test="order-note"
+        :placeholder="t('KALO_ORDERS.FORM.NOTE_PLACEHOLDER')"
+        :class="inputClass"
+      />
     </label>
 
     <p

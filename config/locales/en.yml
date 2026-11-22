@@ -656,3 +656,4 @@ en:
   kchat:
     orders:
       qr_message: 'Please scan the QR code to pay order #%{number}, amount %{amount}. Transfer memo: %{memo}'
+      qr_deposit_message: 'Please scan the QR code to pay the deposit for order #%{number}, deposit %{amount} (total %{total}). Transfer memo: %{memo}'
