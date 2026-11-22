@@ -78,6 +78,22 @@ Rails.application.routes.draw do
               end
             end
             resource :comment_rules, only: [:show, :update]
+            resources :posts, only: [:index, :show, :create, :update, :destroy] do
+              member do
+                post :submit
+                post :approve
+                post :reject
+                post :unapprove
+                post :retry_publish
+                post :request_media
+              end
+            end
+            # Media studio link (ADR-032)
+            get 'studio/requests', to: 'studio#requests'
+            post 'studio/requests/:id/claim', to: 'studio#claim'
+            post 'studio/requests/:id/deliver', to: 'studio#deliver'
+            post 'studio/requests/:id/fail', to: 'studio#fail_request'
+            post 'studio/posts', to: 'studio#create_post'
             resources :broadcasts, only: [:index, :show, :create, :update, :destroy] do
               collection do
                 get :preview

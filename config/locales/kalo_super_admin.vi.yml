@@ -145,6 +145,9 @@ vi:
         kalo_extra_channels:
           name: Kênh bổ sung
           description: SMS, Email, API, Telegram, Line, WhatsApp và Zalo OA bằng token.
+        kalo_auto_posting:
+          name: Tự đăng bài
+          description: Lên lịch bài, duyệt và tự đăng lên Fanpage Facebook đúng giờ.
     account_actions:
       seed_intro: Tạo dữ liệu mẫu trong tài khoản này để demo.
       seed_warning: "Lưu ý: toàn bộ dữ liệu hiện có của tài khoản sẽ bị xóa."

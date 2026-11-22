@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_11_21_000001) do
+ActiveRecord::Schema[7.1].define(version: 2026_11_22_000001) do
   # These extensions should be enabled to support this database
   enable_extension "pg_stat_statements"
   enable_extension "pg_trgm"
@@ -1112,6 +1112,21 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_21_000001) do
     t.jsonb "settings", default: {}
   end
 
+  create_table "kchat_content_plans", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.string "title", null: false
+    t.string "goal"
+    t.date "starts_on"
+    t.date "ends_on"
+    t.integer "posts_per_week"
+    t.jsonb "pillars", default: [], null: false
+    t.jsonb "brief", default: {}, null: false
+    t.string "status", default: "draft", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id"], name: "index_kchat_content_plans_on_account_id"
+  end
+
   create_table "kchat_order_items", force: :cascade do |t|
     t.bigint "order_id", null: false
     t.bigint "product_id"
@@ -1169,6 +1184,49 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_21_000001) do
     t.index ["received_at"], name: "index_kchat_payment_events_on_received_at"
     t.index ["status"], name: "index_kchat_payment_events_on_status"
     t.index ["tid"], name: "index_kchat_payment_events_on_tid", unique: true
+  end
+
+  create_table "kchat_posts", force: :cascade do |t|
+    t.bigint "account_id", null: false
+    t.bigint "inbox_id"
+    t.bigint "content_plan_id"
+    t.bigint "created_by_id"
+    t.bigint "approved_by_id"
+    t.string "status", default: "draft", null: false
+    t.string "post_format", default: "text", null: false
+    t.text "caption"
+    t.string "link_url"
+    t.string "pillar"
+    t.text "media_brief"
+    t.text "review_note"
+    t.datetime "scheduled_at"
+    t.datetime "approved_at"
+    t.datetime "publishing_started_at"
+    t.datetime "published_at"
+    t.string "external_post_id"
+    t.string "permalink"
+    t.string "error_code"
+    t.text "error_message"
+    t.integer "attempts", default: 0, null: false
+    t.jsonb "metrics", default: {}, null: false
+    t.boolean "ai_generated", default: false, null: false
+    t.string "source", default: "kalo", null: false
+    t.string "source_ref"
+    t.string "media_request_status"
+    t.text "media_request_note"
+    t.datetime "media_requested_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "media_request_status"], name: "index_kchat_posts_on_account_id_and_media_request_status"
+    t.index ["account_id", "scheduled_at"], name: "index_kchat_posts_on_account_id_and_scheduled_at"
+    t.index ["account_id", "source", "source_ref"], name: "index_kchat_posts_on_account_id_and_source_and_source_ref", unique: true, where: "(source_ref IS NOT NULL)"
+    t.index ["account_id", "status"], name: "index_kchat_posts_on_account_id_and_status"
+    t.index ["account_id"], name: "index_kchat_posts_on_account_id"
+    t.index ["approved_by_id"], name: "index_kchat_posts_on_approved_by_id"
+    t.index ["content_plan_id"], name: "index_kchat_posts_on_content_plan_id"
+    t.index ["created_by_id"], name: "index_kchat_posts_on_created_by_id"
+    t.index ["inbox_id"], name: "index_kchat_posts_on_inbox_id"
+    t.index ["status", "scheduled_at"], name: "index_kchat_posts_on_status_and_scheduled_at"
   end
 
   create_table "kchat_products", force: :cascade do |t|
@@ -1767,12 +1825,18 @@ ActiveRecord::Schema[7.1].define(version: 2026_11_21_000001) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "channel_zalo_personal", "accounts", on_delete: :cascade
   add_foreign_key "inboxes", "portals"
+  add_foreign_key "kchat_content_plans", "accounts", on_delete: :cascade
   add_foreign_key "kchat_order_items", "kchat_orders", column: "order_id", on_delete: :cascade
   add_foreign_key "kchat_order_items", "kchat_products", column: "product_id", on_delete: :nullify
   add_foreign_key "kchat_orders", "accounts", on_delete: :cascade
   add_foreign_key "kchat_orders", "contacts", on_delete: :nullify
   add_foreign_key "kchat_orders", "conversations", on_delete: :nullify
   add_foreign_key "kchat_payment_events", "accounts", on_delete: :nullify
+  add_foreign_key "kchat_posts", "accounts", on_delete: :cascade
+  add_foreign_key "kchat_posts", "inboxes", on_delete: :nullify
+  add_foreign_key "kchat_posts", "kchat_content_plans", column: "content_plan_id", on_delete: :nullify
+  add_foreign_key "kchat_posts", "users", column: "approved_by_id", on_delete: :nullify
+  add_foreign_key "kchat_posts", "users", column: "created_by_id", on_delete: :nullify
   add_foreign_key "kchat_products", "accounts", on_delete: :cascade
   add_foreign_key "user_sessions", "users"
   add_foreign_key "zalo_inbound_events", "zalo_integrations", column: "integration_id", name: "zalo_inbound_events_integration_id_fkey", on_delete: :cascade

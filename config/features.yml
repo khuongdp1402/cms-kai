@@ -310,3 +310,7 @@
   display_name: Kalo Extra Channels
   enabled: false
   column: feature_flags_ext_1
+- name: kalo_auto_posting
+  display_name: Kalo Auto Posting
+  enabled: false
+  column: feature_flags_ext_1

@@ -89,6 +89,13 @@ cleanup_zalo_personal_events_job:
   class: 'ZaloPersonal::CleanupStaleDataJob'
   queue: housekeeping
 
+# executed every minute
+# to publish approved Kalo posts that are due and fail stalled publish runs (ADR-031)
+kchat_publish_due_posts_job:
+  cron: '* * * * *'
+  class: 'Kchat::Publishing::DuePostsJob'
+  queue: scheduled_jobs
+
 # executed every 20 hours
 # to refresh Zalo API tokens
 refresh_zalo_tokens_job:

@@ -124,6 +124,9 @@ en:
         kalo_extra_channels:
           name: Extra channels
           description: SMS, Email, API, Telegram, Line, WhatsApp and Zalo OA (token).
+        kalo_auto_posting:
+          name: Auto posting
+          description: Schedule, approve and auto-publish posts to Facebook Pages on time.
     account_actions:
       seed_intro: Generate demo seed data in this account.
       seed_warning: "Note: this clears all existing data in this account."

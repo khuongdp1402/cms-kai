@@ -132,7 +132,8 @@ RSpec.describe Account do
         feature_kalo_advanced_automation: 1 << 11,
         feature_kalo_help_center: 1 << 12,
         feature_kalo_detailed_reports: 1 << 13,
-        feature_kalo_extra_channels: 1 << 14
+        feature_kalo_extra_channels: 1 << 14,
+        feature_kalo_auto_posting: 1 << 15
       )
       expect(described_class.flag_mapping['feature_flags_ext_1'][:feature_whatsapp_manual_transfer]).to eq(1)
       expect(described_class.flag_mapping['feature_flags_ext_1'][:feature_data_import]).to eq(2)

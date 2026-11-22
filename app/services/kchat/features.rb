@@ -8,7 +8,7 @@ module Kchat::Features
   # On for new shops.
   CORE = %w[kalo_comments kalo_campaigns kalo_brand kalo_ai_assistant].freeze
   # Off for new shops; a Super Admin turns them on per shop.
-  ADVANCED = %w[kalo_pos kalo_advanced_automation kalo_help_center kalo_detailed_reports kalo_extra_channels].freeze
+  ADVANCED = %w[kalo_pos kalo_advanced_automation kalo_help_center kalo_detailed_reports kalo_extra_channels kalo_auto_posting].freeze
   ALL = (CORE + ADVANCED).freeze
 
   module_function
