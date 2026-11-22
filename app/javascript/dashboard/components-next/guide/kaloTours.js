@@ -12,6 +12,8 @@ import { FEATURE_FLAGS } from 'dashboard/featureFlags';
  */
 export const TOUR_UI_KEY = 'kalo_tours_seen';
 export const MOBILE_BREAKPOINT = 768;
+export const BLOCKING_OVERLAY_SELECTOR =
+  '[data-test-id="kalo-drawer-backdrop"], dialog[open], .modal-mask, [role="alertdialog"]';
 
 const isConversationRoute = route =>
   Boolean(route.params?.conversation_id) &&
@@ -134,8 +136,16 @@ export const stepsForWidth = (tour, width) =>
     ? tour.steps.filter(step => tour.mobileSteps.includes(step.key))
     : tour.steps;
 
-const isShown = el => Boolean(el) && el.getClientRects().length > 0;
+export const isTourElementShown = el =>
+  Boolean(el) && el.getClientRects().length > 0;
+
+export const hasBlockingOverlay = (root = document) =>
+  [...root.querySelectorAll(BLOCKING_OVERLAY_SELECTOR)].some(
+    el => el.matches?.('dialog[open]') || isTourElementShown(el)
+  );
 
 // Steps whose target is on screen now (a page can lack some, e.g. no orders yet).
 export const presentSteps = (steps, root = document) =>
-  steps.filter(step => isShown(root.querySelector(tourSelector(step.target))));
+  steps.filter(step =>
+    isTourElementShown(root.querySelector(tourSelector(step.target)))
+  );

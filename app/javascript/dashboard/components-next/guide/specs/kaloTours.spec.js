@@ -1,3 +1,4 @@
+import { ref } from 'vue';
 import { mount, flushPromises } from '@vue/test-utils';
 import { driver } from 'driver.js';
 import viMessages from 'dashboard/i18n/ktech/vi.json';
@@ -12,11 +13,18 @@ vi.mock('driver.js/dist/driver.css', () => ({}));
 // driver.js stand-in: records the config and lets the spec end the tour.
 let lastConfig;
 const fakeDriver = () => {
+  let activeEl = null;
+  let activeIdx = 0;
   const instance = {
     active: false,
-    drive: vi.fn(() => {
+    drive: vi.fn((idx = 0) => {
       instance.active = true;
+      activeIdx = idx;
+      const step = lastConfig?.steps?.[idx];
+      activeEl = step ? document.querySelector(step.element) : null;
     }),
+    getActiveElement: () => activeEl,
+    getActiveIndex: () => activeIdx,
     isActive: () => instance.active,
     isLastStep: vi.fn(() => false),
     destroy: vi.fn(() => {
@@ -273,5 +281,59 @@ describe('Kalo tours', () => {
       expect(pos.store.state.uiSettings.kalo_tours_seen).toBeUndefined();
       pos.wrapper.unmount();
     });
+
+    it('holds the tour while a KaloDrawer backdrop is open and runs after it closes', async () => {
+      addTargets(['products-create', 'products-search', 'products-table']);
+      const backdrop = document.createElement('div');
+      backdrop.dataset.testId = 'kalo-drawer-backdrop';
+      document.body.appendChild(backdrop);
+
+      const { wrapper } = await mountHost({ route: 'kalo_products' });
+      await vi.advanceTimersByTimeAsync(6000);
+      expect(driver).not.toHaveBeenCalled();
+
+      backdrop.remove();
+      await vi.advanceTimersByTimeAsync(300);
+      expect(driver).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+    });
+
+    it('waits until initial page fetch completes before starting the tour', async () => {
+      const productsFetching = ref(true);
+      addTargets(['products-create', 'products-search', 'products-table']);
+      const { wrapper } = await mountHost({
+        route: 'kalo_products',
+        productsFetching,
+      });
+      await vi.advanceTimersByTimeAsync(600);
+      expect(driver).not.toHaveBeenCalled();
+
+      productsFetching.value = false;
+      await vi.advanceTimersByTimeAsync(300);
+      expect(driver).toHaveBeenCalledTimes(1);
+      wrapper.unmount();
+    });
+  });
+
+  it('destroys an active tour when a blocking drawer opens and re-anchors replaced targets', async () => {
+    addTargets(['products-create', 'products-search', 'products-table']);
+    await runTour(findTour('products'), { t });
+    const instance = driver.mock.results[0].value;
+    expect(instance.drive).toHaveBeenCalledTimes(1);
+
+    const oldTarget = document.querySelector('[data-tour="products-create"]');
+    oldTarget.remove();
+    const newTarget = document.createElement('button');
+    newTarget.dataset.tour = 'products-create';
+    document.body.appendChild(newTarget);
+    await flushPromises();
+    expect(instance.drive).toHaveBeenCalledTimes(2);
+    expect(instance.drive).toHaveBeenLastCalledWith(0);
+
+    const backdrop = document.createElement('div');
+    backdrop.dataset.testId = 'kalo-drawer-backdrop';
+    document.body.appendChild(backdrop);
+    await flushPromises();
+    expect(instance.destroy).toHaveBeenCalledTimes(1);
   });
 });

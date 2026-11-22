@@ -4,11 +4,12 @@ import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useShopAdmin } from './useShopAdmin';
 import { useKaloFeatures } from 'dashboard/composables/useKaloFeatures';
-import { useMapGetter } from 'dashboard/composables/store';
+import { useMapGetter, useStore } from 'dashboard/composables/store';
 import {
   KALO_TOURS,
   MOBILE_BREAKPOINT,
   findTour,
+  hasBlockingOverlay,
   presentSteps,
   stepsForWidth,
 } from './kaloTours';
@@ -24,14 +25,22 @@ import {
 // once in the app shell.
 const POLL_MS = 250;
 const MAX_WAIT_MS = 4000;
+const FETCHING_GETTERS = ['kchatProducts/getUIFlags', 'kchatOrders/getUIFlags'];
+const ACTION_QUERY_KEYS = ['new', 'invite', 'add_product'];
 
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
+const store = useStore();
 const { isAdmin } = useShopAdmin();
 const { isLoaded, isOn } = useKaloFeatures();
 const { isSeen, markSeen } = useKaloTourSeen();
 const currentUser = useMapGetter('getCurrentUser');
+
+const isPageFetching = () =>
+  FETCHING_GETTERS.some(key => Boolean(store.getters[key]?.isFetching));
+const hasActionQuery = () =>
+  ACTION_QUERY_KEYS.some(key => Boolean(route.query?.[key]));
 
 let timer = null;
 const clearTimer = () => {
@@ -72,10 +81,15 @@ const start = (tour, forced) => {
 };
 
 // Pages render parts after their data (the chat composer comes after the
-// list): wait until every target is on screen, at most MAX_WAIT_MS.
+// list) and links with ?new=1/?invite=1 open a KaloDrawer on arrival: hold the
+// spotlight tour until drawers/modals close and initial fetches finish.
 const startWhenReady = ({ tour, forced }, waited = 0) => {
+  if (hasBlockingOverlay() || hasActionQuery()) {
+    timer = setTimeout(() => startWhenReady({ tour, forced }, 0), POLL_MS);
+    return;
+  }
   const steps = stepsForWidth(tour, window.innerWidth);
-  if (presentSteps(steps).length === steps.length) {
+  if (!isPageFetching() && presentSteps(steps).length === steps.length) {
     start(tour, forced);
     return;
   }

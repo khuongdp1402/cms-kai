@@ -25,6 +25,7 @@ export const createGuideEnv = ({
   inboxes = [],
   agents = [{ id: 1 }],
   uiSettings = {},
+  productsFetching = { value: false },
 } = {}) => {
   const router = createRouter({
     history: createMemoryHistory(),
@@ -49,6 +50,9 @@ export const createGuideEnv = ({
         features ? Boolean(features[name]) : true,
       'inboxes/getInboxes': () => inboxes,
       'agents/getAgents': () => agents,
+      'kchatProducts/getUIFlags': () => ({
+        isFetching: Boolean(productsFetching?.value),
+      }),
     },
     mutations: {
       setUISettings(state, value) {

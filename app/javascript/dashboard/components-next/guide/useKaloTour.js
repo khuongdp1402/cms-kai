@@ -2,6 +2,8 @@ import { computed, ref } from 'vue';
 import { useStore } from 'dashboard/composables/store';
 import {
   TOUR_UI_KEY,
+  hasBlockingOverlay,
+  isTourElementShown,
   presentSteps,
   stepsForWidth,
   tourSelector,
@@ -11,8 +13,11 @@ export const activeTourKey = ref(null);
 
 let activeDriver = null;
 let removeKeyListener = null;
+let stopDomObserver = null;
 
 export const stopActiveTour = () => {
+  stopDomObserver?.();
+  stopDomObserver = null;
   if (activeDriver?.isActive()) activeDriver.destroy();
   activeDriver = null;
   // Also frees the slot of a tour still loading driver.js.
@@ -41,6 +46,45 @@ const listenForEscape = instance => {
   return () => window.removeEventListener('keydown', onKeydown, true);
 };
 
+const watchTourContext = (instance, steps) => {
+  if (typeof MutationObserver === 'undefined' || !document.body) {
+    return () => {};
+  }
+  const observer = new MutationObserver(() => {
+    if (!instance.isActive()) return;
+    if (hasBlockingOverlay()) {
+      instance.destroy();
+      return;
+    }
+    const activeEl = instance.getActiveElement?.();
+    const activeIndex = instance.getActiveIndex?.();
+    if (
+      activeEl &&
+      activeEl.id !== 'driver-dummy-element' &&
+      !activeEl.isConnected &&
+      typeof activeIndex === 'number'
+    ) {
+      const step = steps[activeIndex];
+      const replacement =
+        step && document.querySelector(tourSelector(step.target));
+      if (
+        replacement &&
+        replacement !== activeEl &&
+        isTourElementShown(replacement)
+      ) {
+        instance.drive(activeIndex);
+      }
+    }
+  });
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ['open', 'class'],
+  });
+  return () => observer.disconnect();
+};
+
 /**
  * Runs `tour` with driver.js. Buttons: Quay lại / Tiếp / Xong plus a "Bỏ qua"
  * button added to the footer; progress "Bước x/y". Calls `onClose` once,
@@ -51,12 +95,15 @@ export const runTour = async (
   { t, width = window.innerWidth, onClose }
 ) => {
   const steps = presentSteps(stepsForWidth(tour, width));
-  if (!steps.length) return false;
+  if (!steps.length || hasBlockingOverlay()) return false;
   stopActiveTour();
   // Claim the slot before the lazy import so the host does not start it twice.
   activeTourKey.value = tour.key;
   const driver = await loadDriver();
-  if (activeTourKey.value !== tour.key) return false;
+  if (activeTourKey.value !== tour.key || hasBlockingOverlay()) {
+    if (activeTourKey.value === tour.key) activeTourKey.value = null;
+    return false;
+  }
 
   const instance = driver({
     popoverClass: 'kalo-tour',
@@ -70,9 +117,10 @@ export const runTour = async (
     doneBtnText: t('KALO_GUIDE.TOUR.DONE'),
     showButtons: ['next', 'previous'],
     allowKeyboardControl: false,
-    stagePadding: 6,
+    stagePadding: 8,
     stageRadius: 14,
-    overlayOpacity: 0.6,
+    overlayColor: '#181210',
+    overlayOpacity: 0.45,
     onPopoverRender: (popover, { driver: current }) => {
       if (current.isLastStep()) return;
       const skip = document.createElement('button');
@@ -84,6 +132,8 @@ export const runTour = async (
       popover.footer.insertBefore(skip, popover.footer.firstChild);
     },
     onDestroyed: () => {
+      stopDomObserver?.();
+      stopDomObserver = null;
       removeKeyListener?.();
       removeKeyListener = null;
       activeDriver = null;
@@ -105,6 +155,8 @@ export const runTour = async (
   activeDriver = instance;
   removeKeyListener?.();
   removeKeyListener = listenForEscape(instance);
+  stopDomObserver?.();
+  stopDomObserver = watchTourContext(instance, steps);
   instance.drive();
   return true;
 };

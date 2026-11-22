@@ -57,7 +57,7 @@ defineExpose({ open, close });
 <template>
   <section
     data-test-id="kalo-page"
-    class="flex flex-col flex-1 w-full h-full min-w-0 overflow-y-auto bg-n-background"
+    class="flex flex-col flex-1 w-full h-full min-w-0 overflow-y-auto scroll-pt-20 bg-n-background"
   >
     <slot name="header" :is-desktop="isDesktop" :open="open">
       <KaloPageHeader

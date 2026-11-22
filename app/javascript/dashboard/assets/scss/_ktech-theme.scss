@@ -183,6 +183,14 @@
 // (imported in components-next/guide/useKaloTour.js). These rules only map its
 // popover to Kalo tokens so it follows light/dark. Unlayered and two classes
 // deep on purpose: driver.css is unlayered and uses `all: unset` on one class.
+.driver-active .driver-active-element {
+  opacity: 1 !important;
+  filter: none !important;
+  scroll-margin-top: 5rem;
+  outline: 2px solid rgb(var(--blue-9) / 0.85);
+  outline-offset: 2px;
+}
+
 .driver-popover.kalo-tour {
   font-family: inherit;
   color: rgb(var(--slate-12));
